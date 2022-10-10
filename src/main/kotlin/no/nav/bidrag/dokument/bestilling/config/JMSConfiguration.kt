@@ -48,7 +48,7 @@ class JMSConfiguration(private val mqProperties: MQProperties) {
     @Throws(JMSException::class)
     fun mqQueueConnectionFactory(): ConnectionFactory {
         val connectionFactory = MQQueueConnectionFactory()
-        connectionFactory.hostName = mqProperties.hostName
+        connectionFactory.hostName = mqProperties.hostname
         connectionFactory.port = mqProperties.port
         connectionFactory.setBooleanProperty(JmsConstants.USER_AUTHENTICATION_MQCSP, false)
         connectionFactory.queueManager = mqProperties.name

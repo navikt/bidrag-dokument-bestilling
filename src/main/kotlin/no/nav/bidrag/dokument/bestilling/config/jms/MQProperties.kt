@@ -4,7 +4,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties
 
 @ConfigurationProperties(prefix = "mq")
 data class MQProperties(
-    var hostName: String? = null,
+    var hostname: String? = null,
     var port: Int = 0,
     var name: String? = null,
     var appname: String? = null,
