@@ -4,6 +4,7 @@ import com.ibm.mq.constants.CMQC
 import com.ibm.mq.jms.MQQueueConnectionFactory
 import com.ibm.msg.client.jms.JmsConstants
 import com.ibm.msg.client.wmq.common.CommonConstants
+import no.nav.bidrag.dokument.bestilling.config.jms.LoggingMarshallingMessageConverter
 import no.nav.bidrag.dokument.bestilling.config.jms.MQProperties
 import no.nav.bidrag.dokument.bestilling.model.BrevBestilling
 import org.springframework.beans.factory.annotation.Value
@@ -15,7 +16,6 @@ import org.springframework.context.annotation.Scope
 import org.springframework.jms.annotation.EnableJms
 import org.springframework.jms.connection.UserCredentialsConnectionFactoryAdapter
 import org.springframework.jms.core.JmsTemplate
-import org.springframework.jms.support.converter.MarshallingMessageConverter
 import org.springframework.oxm.jaxb.Jaxb2Marshaller
 import java.util.Locale
 import javax.jms.ConnectionFactory
@@ -39,7 +39,7 @@ class JMSConfiguration(private val mqProperties: MQProperties) {
         baseJmsTemplate.defaultDestinationName = queueName
         val jaxb2Marshaller = Jaxb2Marshaller()
         jaxb2Marshaller.setClassesToBeBound(BrevBestilling::class.java)
-        baseJmsTemplate.messageConverter = MarshallingMessageConverter(jaxb2Marshaller)
+        baseJmsTemplate.messageConverter = LoggingMarshallingMessageConverter(jaxb2Marshaller)
         return baseJmsTemplate
     }
 
