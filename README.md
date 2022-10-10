@@ -15,7 +15,8 @@ Applikasjonen bruker noen hemmeligheter som må settes opp før deploy til NAIS
 ```
 kubectl create secret generic bidrag-dokument-bestilling-secrets \
   --from-literal=MQ_USER_USERNAME=username \
-  --from-literal=MQ_USER_PASSWORD=pass
+  --from-literal=MQ_USER_PASSWORD=pass \
+  --from-literal=BREVSERVER_PASSORD=pass
 ```
 ## Kjøre applikasjonen lokalt
 
