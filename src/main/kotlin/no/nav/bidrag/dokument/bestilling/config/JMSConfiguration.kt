@@ -1,0 +1,64 @@
+package no.nav.bidrag.dokument.bestilling.config
+
+import com.ibm.mq.constants.CMQC
+import com.ibm.mq.jms.MQQueueConnectionFactory
+import com.ibm.msg.client.jms.JmsConstants
+import com.ibm.msg.client.wmq.common.CommonConstants
+import no.nav.bidrag.dokument.bestilling.config.jms.MQProperties
+import no.nav.bidrag.dokument.bestilling.model.BrevBestilling
+import org.springframework.beans.factory.annotation.Value
+import org.springframework.boot.context.properties.ConfigurationPropertiesScan
+import org.springframework.context.annotation.Bean
+import org.springframework.context.annotation.Configuration
+import org.springframework.context.annotation.Profile
+import org.springframework.context.annotation.Scope
+import org.springframework.jms.annotation.EnableJms
+import org.springframework.jms.connection.UserCredentialsConnectionFactoryAdapter
+import org.springframework.jms.core.JmsTemplate
+import org.springframework.jms.support.converter.MarshallingMessageConverter
+import org.springframework.oxm.jaxb.Jaxb2Marshaller
+import java.util.Locale
+import javax.jms.ConnectionFactory
+import javax.jms.JMSException
+
+@Configuration
+@EnableJms
+@ConfigurationPropertiesScan
+class JMSConfiguration(private val mqProperties: MQProperties) {
+
+    @Bean
+    @Scope("prototype")
+    fun baseJmsTemplate(mqQueueConnectionFactory: ConnectionFactory): JmsTemplate{
+        val template = JmsTemplate()
+        template.connectionFactory = mqQueueConnectionFactory
+        return template
+    }
+    @Bean
+    @Throws(JMSException::class)
+    fun onlinebrevTemplate(baseJmsTemplate: JmsTemplate, @Value("\${BREVSERVER_ONLINEBREV_QUEUE}") queueName: String): JmsTemplate {
+        baseJmsTemplate.defaultDestinationName = queueName
+        val jaxb2Marshaller = Jaxb2Marshaller()
+        jaxb2Marshaller.setClassesToBeBound(BrevBestilling::class.java)
+        baseJmsTemplate.messageConverter = MarshallingMessageConverter(jaxb2Marshaller)
+        return baseJmsTemplate
+    }
+
+    @Bean
+    @Profile("nais")
+    @Throws(JMSException::class)
+    fun mqQueueConnectionFactory(): ConnectionFactory {
+        val connectionFactory = MQQueueConnectionFactory()
+        connectionFactory.hostName = mqProperties.hostName
+        connectionFactory.port = mqProperties.port
+        connectionFactory.setBooleanProperty(JmsConstants.USER_AUTHENTICATION_MQCSP, false)
+        connectionFactory.queueManager = mqProperties.name
+        connectionFactory.channel = mqProperties.channel.uppercase(Locale.getDefault())
+        connectionFactory.transportType = CommonConstants.WMQ_CM_CLIENT
+        connectionFactory.setIntProperty(JmsConstants.JMS_IBM_ENCODING, CMQC.MQENC_NATIVE)
+        val credentialQueueConnectionFactory = UserCredentialsConnectionFactoryAdapter()
+        credentialQueueConnectionFactory.setUsername(mqProperties.username)
+        credentialQueueConnectionFactory.setPassword(mqProperties.password)
+        credentialQueueConnectionFactory.setTargetConnectionFactory(connectionFactory)
+        return credentialQueueConnectionFactory
+    }
+}

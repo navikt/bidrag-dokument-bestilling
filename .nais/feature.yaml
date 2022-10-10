@@ -1,0 +1,22 @@
+name: bidrag-dokument-bestilling-feature
+ingresses:
+  - https://bidrag-dokument-bestilling-feature.dev.intern.nav.no
+env:
+  BIDRAG_PERSON_URL: https://bidrag-person.dev-fss-pub.nais.io/bidrag-person
+  BIDRAG_PERSON_SCOPE: dev-fss.bidrag.bidrag-person-feature
+
+  BIDRAG_DOKUMENT_URL: https://bidrag-dokument-feature.dev-fss-pub.nais.io/bidrag-dokument
+  BIDRAG_DOKUMENT_SCOPE: dev-fss.bidrag.bidrag-dokument-feature
+
+  BIDRAG_ORGANISASJON_URL: https://bidrag-organisasjon-feature.dev-fss-pub.nais.io/bidrag-organisasjon
+  BIDRAG_ORGANiSASJON_SCOPE: dev-fss.bidrag.bidrag-organisasjon-feature
+
+  BIDRAG_SAK_URL: https://bidrag-sak-feature.dev-fss-pub.nais.io/bidrag-sak
+  BIDRAG_SAK_SCOPE: dev-fss.bidrag.bidrag-sak-feature
+
+  BREVSERVER_ONLINEBREV_QUEUE: QA.Q475.BREVSERVER_ONLINEBREV
+  MQ_QUEUE_MANAGER: MQLS02
+  MQ_PORT: 1413
+  MQ_HOSTNAME: b27apvl220.preprod.local
+  MQ_CHANNEL: Q1_BDJOURNALPOST
+  JAVA_OPTS: -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005

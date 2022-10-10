@@ -1,0 +1,6 @@
+name: bidrag-dokument-bestilling
+ingresses:
+  - https://bidrag-dokument-bestilling.intern.nav.no
+azure:
+  person: bidrag-person.prod-fss-pub.nais.io
+  person_clientid: prod-fss.bidrag.bidrag-person
