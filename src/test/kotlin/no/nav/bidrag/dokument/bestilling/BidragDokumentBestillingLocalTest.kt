@@ -12,10 +12,10 @@ import org.springframework.test.context.ActiveProfiles
 @SpringBootApplication(exclude = [SecurityAutoConfiguration::class, ManagementWebSecurityAutoConfiguration::class])
 @EnableAspectJAutoProxy
 @EnableJwtTokenValidation(ignore = ["org.springframework", "org.springdoc"])
-class BidragDokumentBestillingLocal
+class BidragDokumentBestillingLocalTest
 
 fun main(args: Array<String>) {
-    val app = SpringApplication(BidragDokumentBestillingLocal::class.java)
-    app.setAdditionalProfiles("local", "nais")
+    val app = SpringApplication(BidragDokumentBestillingLocalTest::class.java)
+    app.setAdditionalProfiles("local")
     app.run(*args)
 }

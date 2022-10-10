@@ -5,6 +5,7 @@ import com.github.tomakehurst.wiremock.client.WireMock
 import no.nav.bidrag.commons.web.EnhetFilter.X_ENHET_HEADER
 import no.nav.bidrag.commons.web.test.HttpHeaderTestRestTemplate
 import no.nav.bidrag.dokument.bestilling.BidragDokumentBestillingLocal
+import no.nav.bidrag.dokument.bestilling.BidragDokumentBestillingLocalTest
 import no.nav.bidrag.dokument.bestilling.JmsTestConfig
 import no.nav.bidrag.dokument.bestilling.model.DokumentBestillingRequest
 import no.nav.bidrag.dokument.bestilling.model.DokumentBestillingResponse
@@ -32,7 +33,7 @@ import javax.jms.Queue
 
 
 @ActiveProfiles("test")
-@SpringBootTest(classes = [BidragDokumentBestillingLocal::class, StubUtils::class, JmsTestConfig::class], webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@SpringBootTest(classes = [BidragDokumentBestillingLocalTest::class, StubUtils::class, JmsTestConfig::class], webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureWireMock(port = 0)
 @EnableMockOAuth2Server
 class DokumentBestillingControllerTest {

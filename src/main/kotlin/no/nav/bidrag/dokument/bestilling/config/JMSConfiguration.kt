@@ -50,7 +50,7 @@ class JMSConfiguration(private val mqProperties: MQProperties) {
         val connectionFactory = MQQueueConnectionFactory()
         connectionFactory.hostName = mqProperties.hostname
         connectionFactory.port = mqProperties.port
-        connectionFactory.setBooleanProperty(JmsConstants.USER_AUTHENTICATION_MQCSP, false)
+        connectionFactory.setBooleanProperty(JmsConstants.USER_AUTHENTICATION_MQCSP, true)
         connectionFactory.queueManager = mqProperties.name
         connectionFactory.channel = mqProperties.channel.uppercase(Locale.getDefault())
         connectionFactory.transportType = CommonConstants.WMQ_CM_CLIENT

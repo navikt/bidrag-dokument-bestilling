@@ -3,6 +3,7 @@ package no.nav.bidrag.dokument.bestilling.utils
 import no.nav.bidrag.dokument.bestilling.model.BrevBestilling
 import org.apache.activemq.command.ActiveMQBytesMessage
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.context.annotation.Profile
 import org.springframework.jms.core.JmsTemplate
 import org.springframework.oxm.jaxb.Jaxb2Marshaller
 import org.springframework.stereotype.Component
@@ -13,6 +14,7 @@ import javax.jms.Session
 import javax.xml.bind.JAXB
 
 @Component
+@Profile("!nais")
 class JmsTestConsumer {
     @Autowired
     private lateinit var onlineBrevQueue: Queue
