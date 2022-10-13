@@ -15,17 +15,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: navikt/bidrag-docker/exists@v1
-        id: dockerimage
-        with:
-          image_name: bidrag-dokument-bestilling
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - uses: actions/checkout@v2
-      - uses: actions/setup-java@v1
+      - uses: actions/checkout@v3
+      - uses: actions/setup-java@v2
         with:
           java-version: '17'
-      - uses: actions/cache@v1
+      - uses: actions/cache@v3
         with:
           path: ~/.m2
           key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
@@ -52,7 +46,7 @@ jobs:
     needs: build
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           path: deploy
       - name: Deploy main branch to dev-gcp
