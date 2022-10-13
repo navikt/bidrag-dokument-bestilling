@@ -13,6 +13,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter
 
 
 var BREV_DATETIME_FORMAT = DateTimeFormatter.ofPattern("ddMMyy")
+var BREV_SOKNAD_DATETIME_FORMAT = DateTimeFormatter.ofPattern("yyyyMMdd")
 
 @XmlRootElement(name = "rtv-brev")
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -228,14 +229,14 @@ class Soknad {
     @XmlElement(name = "indexRegDato", nillable = true)
     var indexRegDato: String? = null
     @XmlElement(name = "indexRegPro", nillable = true)
-    var indexRegPro: String? = null
+    var indexRegPro: String? = "00000"
 
     @XmlElement(name = "hgKode", nillable = true)
-    var hgKode: String? = null
+    var hgKode: String? = "XX"
     @XmlElement(name = "ugKode", nillable = true)
     var ugKode: String? = null
     @XmlElement(name = "datoSakReg", nillable = true)
-    var datoSakReg: String? = null
+    var datoSakReg: String? = LocalDate.now().format(BREV_SOKNAD_DATETIME_FORMAT)
     @XmlElement(name = "resKode", nillable = true)
     var resKode: String? = null
     @XmlElement(name = "datoVtak", nillable = true)
@@ -247,9 +248,9 @@ class Soknad {
     @XmlJavaTypeAdapter(BooleanAdapter::class)
     var forskUtBet: Boolean? = false
     @XmlElement(name = "sendtDato")
-    var sendtDato: String? = LocalDate.now().format(BREV_DATETIME_FORMAT)
+    var sendtDato: String? = LocalDate.now().format(BREV_SOKNAD_DATETIME_FORMAT)
     @XmlElement(name = "gebyrsats", nillable = true)
-    var gebyrsats: String? = null
+    var gebyrsats: String? = "01223.0"
     @XmlElement(name = "innkrSamtid")
     @XmlJavaTypeAdapter(BooleanAdapter::class)
     var innkrSamtid: Boolean? = false
