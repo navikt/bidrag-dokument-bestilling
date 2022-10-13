@@ -61,19 +61,16 @@ class Brev {
     lateinit var spraak: String
     @XmlAttribute
     lateinit var brevref: String
-
     @XmlElement(name = "brevMottaker")
     var mottaker: BrevMottaker? = null
-    @XmlElement(name = "soknBost")
-    var soknad: Soknad? = null
-
     @XmlElement(name = "parter")
     var parter: Parter? = null
-    @XmlElement(name = "Saksbehandl")
-    var saksbehandler: BrevSaksbehandler? = null
-
+    @XmlElement(name = "soknBost")
+    var soknad: Soknad? = null
     @XmlElement(name = "Kontaktinfo")
     var kontaktInfo: BrevKontaktinfo? = null
+    @XmlElement(name = "Saksbehandl")
+    var saksbehandler: BrevSaksbehandler? = null
 }
 
 
@@ -90,16 +87,8 @@ class BrevSaksbehandler() {
 @XmlRootElement(name = "brevMottaker")
 @XmlAccessorType(XmlAccessType.FIELD)
 class BrevMottaker {
-    var spraak: String? = null
+    @XmlElement(name = "navn", nillable = true)
     var navn: String? = null
-
-    @XmlElement(name = "fnr", nillable = true)
-    var fodselsnummer: String? = null
-    @XmlElement(name = "bidrRolle", nillable = true)
-    var rolle: String? = null
-    @XmlElement(name = "fdato", nillable = true)
-    var fodselsdato: String? = null
-
     @XmlElement(name = "adr1", nillable = true)
     var adresselinje1: String? = null
     @XmlElement(name = "adr2", nillable = true)
@@ -108,12 +97,20 @@ class BrevMottaker {
     var adresselinje3: String? = null
     @XmlElement(name = "adr4", nillable = true)
     var adresselinje4: String? = null
+    @XmlElement(name = "boligNr", nillable = true)
     var boligNr: String? = null
+    @XmlElement(name = "bidrRolle", nillable = true)
+    var rolle: String? = null
+    @XmlElement(name = "fnr", nillable = true)
+    var fodselsnummer: String? = null
+    @XmlElement(name = "fdato", nillable = true)
+    var fodselsdato: String? = null
     @XmlElement(name = "postnr", nillable = true)
     var postnummer: String? = null
-
     @XmlElement(name = "landKd", nillable = true)
     var landkode: String? = null
+    @XmlElement(name = "spraak", nillable = true)
+    var spraak: String? = null
 
 }
 
@@ -198,11 +195,8 @@ class Parter {
     @XmlElement(name = "bpKravFremAv", nillable = true)
     var bpkravfremav: String? = null
     @XmlElement(name = "bpbelopGebyr", nillable = true)
-    var bpgebyr: String? = null
-    @XmlElement(name = "bpLandKd", nillable = true)
-    var bplandkode: String? = null
-    @XmlElement(name = "bpDatoDod", nillable = true)
-    var bpdatodod: String? = null
+    var bpgebyr: String? = "00000000000"
+
 
     @XmlElement(name = "bmfnr", nillable = true)
     var bmfnr: String? = null
@@ -216,8 +210,12 @@ class Parter {
     var bmgebyr: String? = null
     @XmlElement(name = "bmLandKd", nillable = true)
     var bmlandkode: String? = null
+    @XmlElement(name = "bpLandKd", nillable = true)
+    var bplandkode: String? = null
     @XmlElement(name = "bmDatoDod", nillable = true)
     var bmdatodod: String? = null
+    @XmlElement(name = "bpDatoDod", nillable = true)
+    var bpdatodod: String? = null
 }
 
 @Suppress("unused")
