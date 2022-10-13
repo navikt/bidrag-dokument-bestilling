@@ -77,7 +77,7 @@ class Brev {
 @Suppress("unused")
 @XmlRootElement(name = "Saksbehandl")
 @XmlAccessorType(XmlAccessType.FIELD)
-class BrevSaksbehandler() {
+class BrevSaksbehandler {
 
     @XmlElement(name = "saksbNavn")
     var navn: String? = null
@@ -111,7 +111,6 @@ class BrevMottaker {
     var landkode: String? = null
     @XmlElement(name = "spraak", nillable = true)
     var spraak: String? = null
-
 }
 
 @Suppress("unused")

@@ -10,6 +10,8 @@ import no.nav.bidrag.dokument.bestilling.model.DokumentBestillingRequest
 import no.nav.bidrag.dokument.bestilling.model.DokumentBestillingResponse
 import no.nav.bidrag.dokument.bestilling.service.DokumentBestillingService
 import no.nav.security.token.support.core.api.Protected
+import org.springframework.http.ResponseEntity
+import org.springframework.jms.core.JmsTemplate
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
@@ -19,8 +21,9 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 @Protected
 class DokumentBestillingController(
-    var dokumentBestillingService: DokumentBestillingService
-) {
+    var dokumentBestillingService: DokumentBestillingService,
+    var onlinebrevTemplate: JmsTemplate,
+    ) {
 
     @PostMapping("/bestill/{brevKode}")
     @Operation(
@@ -40,6 +43,12 @@ class DokumentBestillingController(
     )
     fun hentDialog(@RequestBody request: DokumentBestillingRequest, @PathVariable brevKode: BrevKode, @RequestHeader(EnhetFilter.X_ENHET_HEADER) enhet: String): DokumentBestillingResponse? {
         return dokumentBestillingService.bestill(request, brevKode, enhet)
+    }
+
+    @PostMapping("/bestill/raw")
+    fun bestillRaw(@RequestBody request: String): ResponseEntity<Void> {
+        onlinebrevTemplate.send { it.createTextMessage(request) }
+        return ResponseEntity.ok().build()
     }
 
 }
