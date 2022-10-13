@@ -18,6 +18,7 @@ class CacheConfig {
         const val PERSON_ADRESSE_CACHE = "PERSON_ADRESSE_CACHE"
         const val SAKSBEHANDLERINFO_CACHE = "SAKSBEHANDLERINFO_CACHE"
         const val ENHETINFO_CACHE = "ENHETINFO_CACHE"
+        const val ENHETKONTAKTINFO_CACHE = "ENHETKONTAKTINFO_CACHE"
     }
 
     @Bean
@@ -27,6 +28,7 @@ class CacheConfig {
         caffeineCacheManager.registerCustomCache(PERSON_CACHE, Caffeine.newBuilder().expireAfterWrite(24, TimeUnit.HOURS).build())
         caffeineCacheManager.registerCustomCache(SAKSBEHANDLERINFO_CACHE, Caffeine.newBuilder().expireAfterWrite(24, TimeUnit.HOURS).build())
         caffeineCacheManager.registerCustomCache(ENHETINFO_CACHE, Caffeine.newBuilder().expireAfterWrite(24, TimeUnit.HOURS).build())
+        caffeineCacheManager.registerCustomCache(ENHETKONTAKTINFO_CACHE, Caffeine.newBuilder().expireAfterWrite(24, TimeUnit.HOURS).build())
         return caffeineCacheManager;
     }
 

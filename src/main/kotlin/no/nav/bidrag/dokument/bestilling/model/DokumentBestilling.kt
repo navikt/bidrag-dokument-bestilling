@@ -16,9 +16,14 @@ data class DokumentBestilling(
     var tittel: String? = null,
     var enhet: String? = null,
     var saksnummer: String? = null,
-    var spraak: String? = null
+    var spraak: String? = null,
+    var roller: List<Rolle> = emptyList()
 )
 
+data class Rolle(
+    val rolle: RolleType,
+    val fodselsnummer: String? = null
+)
 data class SoknadsPart(
     val bidragsPliktigInfo: PartInfo? = null,
     val bidragsMottakerInfo: PartInfo? = null,
@@ -53,7 +58,7 @@ data class Mottaker(
     var navn: String,
     val adresse: Adresse,
     val rolle: RolleType?,
-    val fodselsdato: LocalDate,
+    val fodselsdato: LocalDate?,
 )
 
 data class Adresse(

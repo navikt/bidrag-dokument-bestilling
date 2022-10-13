@@ -47,6 +47,7 @@ class DokumentMetadataCollector(
 
         sak = sakService.hentSak(request.saksnummer)
             .orElseThrow { FantIkkeSakException("Fant ikke sak ${request.saksnummer}") }
+
         return this
     }
 
@@ -61,8 +62,8 @@ class DokumentMetadataCollector(
         val bidragsmottaker = if (hentRolle(mottaker.ident) == RolleType.BM) mottaker else if (hentRolle(gjelder.ident) == RolleType.BM) gjelder else null
         dokumentBestilling.parter = listOf(
             SoknadsPart(
-                bidragsMottakerInfo = if(bidragsmottaker!=null) PartInfo(fnr = bidragsmottaker.ident, navn = bidragsmottaker.navn, fodselsdato = LocalDate.now()) else null,
-                bidragsPliktigInfo = if(bidragspliktig!=null) PartInfo(fnr = bidragspliktig.ident, navn = bidragspliktig.navn, fodselsdato = LocalDate.now()) else null
+                bidragsMottakerInfo = if(bidragsmottaker!=null) PartInfo(fnr = bidragsmottaker.ident, navn = bidragsmottaker.navn, fodselsdato = bidragsmottaker.foedselsdato) else null,
+                bidragsPliktigInfo = if(bidragspliktig!=null) PartInfo(fnr = bidragspliktig.ident, navn = bidragspliktig.navn, fodselsdato = bidragspliktig.foedselsdato) else null
             )
         )
 
@@ -83,7 +84,7 @@ class DokumentMetadataCollector(
                 adresselinje2 = adresse.adresselinje2,
                 adresselinje3 = adresse.adresselinje3,
                 poststed = adresse.poststed,
-                postnummer = adresse.postnummer!!,
+                postnummer = adresse.postnummer,
                 landkode = adresse.land
             )
         )
@@ -97,7 +98,7 @@ class DokumentMetadataCollector(
 
         dokumentBestilling.mottaker = Mottaker(
             fodselsnummer = person.ident,
-            fodselsdato = LocalDate.now(),
+            fodselsdato = person.foedselsdato,
             navn = person.navn,
             rolle = hentRolle(person.ident),
             adresse = Adresse(
@@ -105,7 +106,7 @@ class DokumentMetadataCollector(
                 adresselinje2 = adresse.adresselinje2,
                 adresselinje3 = adresse.adresselinje3,
                 poststed = adresse.poststed,
-                postnummer = adresse.postnummer!!,
+                postnummer = adresse.postnummer,
                 landkode = adresse.land
             )
         )
@@ -117,11 +118,16 @@ class DokumentMetadataCollector(
             FantIkkePersonException("Fant ikke enhet $enhet")
         }
 
+        val enhetKontaktInfo = organisasjonService.hentEnhetKontaktInfo(enhet).orElseThrow {
+            FantIkkePersonException("Fant ikke enhet $enhet")
+        }
+
         dokumentBestilling.kontaktInfo = EnhetKontaktInfo(
             navn = enhetInfo.enhetNavn,
-            telefonnummer = "MISSING",
+            telefonnummer = enhetKontaktInfo.telefonnummer ?: "",
             returAdresse = Adresse(
-                adresselinje1 = "MISSING"
+                adresselinje1 = enhetKontaktInfo.postadresse?.adresselinje ?: "",
+                postnummer = enhetKontaktInfo.postadresse?.postnummer
             ),
             enhetId = enhet
         )

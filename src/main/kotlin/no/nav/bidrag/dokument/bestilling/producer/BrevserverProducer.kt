@@ -2,6 +2,7 @@ package no.nav.bidrag.dokument.bestilling.producer
 
 import no.nav.bidrag.dokument.bestilling.config.SaksbehandlerInfoManager
 import no.nav.bidrag.dokument.bestilling.consumer.BidragDokumentConsumer
+import no.nav.bidrag.dokument.bestilling.model.BREV_DATETIME_FORMAT
 import no.nav.bidrag.dokument.bestilling.model.BestillingSystem
 import no.nav.bidrag.dokument.bestilling.model.BrevBestilling
 import no.nav.bidrag.dokument.bestilling.model.BrevKode
@@ -31,7 +32,6 @@ import org.springframework.jms.core.JmsTemplate
 import org.springframework.stereotype.Component
 import java.time.format.DateTimeFormatter
 
-var BREV_DATETIME_FORMAT = DateTimeFormatter.ofPattern("ddMMyy")
 @Component(BestillingSystem.BREVSERVER)
 class BrevserverProducer(
     var onlinebrevTemplate: JmsTemplate,
@@ -109,7 +109,7 @@ class BrevserverProducer(
             bpnavn = bp?.fodselsdato?.format(BREV_DATETIME_FORMAT)
             bmfnr = bm?.fnr
             bmnavn = bm?.navn
-            bmfodselsdato = bm?.fodselsdato?.format(BREV_DATETIME_FORMAT)
+            bmfodselsdato = bm?.fodselsdato?.format(BREV_DATETIME_FORMAT) ?: ""
         }
     }
     fun mapKontaktInfo(_kontaktInfo: EnhetKontaktInfo?): BrevKontaktinfo? {
@@ -119,8 +119,7 @@ class BrevserverProducer(
                 enhet = kontaktInfo.enhetId
                 navn = kontaktInfo.navn.substring(0, kontaktInfo.navn.length.coerceAtMost(30))
                 telefon = if(kontaktInfo.navn.length > 30) kontaktInfo.navn.substring(30, kontaktInfo.navn.length) else null
-                adresselinje1 = kontaktInfo.returAdresse.adresselinje1
-                adresselinje2 = kontaktInfo.returAdresse.adresselinje2
+                adresselinje2 = kontaktInfo.returAdresse.adresselinje1
                 postnummer = kontaktInfo.returAdresse.postnummer
                 poststed = kontaktInfo.returAdresse.poststed
                 land = kontaktInfo.returAdresse.landkode
@@ -148,14 +147,14 @@ class BrevserverProducer(
                 RolleType.FR -> "05"
                 else -> null
             }
-            fodselsdato = mottaker.fodselsdato.format(BREV_DATETIME_FORMAT)
+            fodselsdato = mottaker.fodselsdato?.format(BREV_DATETIME_FORMAT)
 
             val adresse = mottaker.adresse
             val postnummerSted = "${adresse.postnummer} ${adresse.poststed}"
             adresselinje1 = adresse.adresselinje1
             adresselinje2 = adresse.adresselinje2
             adresselinje3 = adresse.adresselinje3 ?: postnummerSted
-            adresselinje4 = postnummerSted
+            adresselinje4 = if (adresselinje3 == postnummerSted) null else postnummerSted
             boligNr = adresse.boligNr
             postnummer = adresse.postnummer
             landkode = adresse.landkode

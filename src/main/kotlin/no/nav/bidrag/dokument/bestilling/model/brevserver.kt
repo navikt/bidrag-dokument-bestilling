@@ -1,10 +1,18 @@
 package no.nav.bidrag.dokument.bestilling.model
 
+import java.text.ParseException
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 import javax.xml.bind.annotation.XmlAccessType
 import javax.xml.bind.annotation.XmlAccessorType
 import javax.xml.bind.annotation.XmlAttribute
 import javax.xml.bind.annotation.XmlElement
 import javax.xml.bind.annotation.XmlRootElement
+import javax.xml.bind.annotation.adapters.XmlAdapter
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter
+
+
+var BREV_DATETIME_FORMAT = DateTimeFormatter.ofPattern("ddMMyy")
 
 @XmlRootElement(name = "rtv-brev")
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -78,26 +86,26 @@ class BrevMottaker {
     var spraak: String? = null
     var navn: String? = null
 
-    @XmlElement(name = "fnr")
+    @XmlElement(name = "fnr", nillable = true)
     var fodselsnummer: String? = null
-    @XmlElement(name = "bidrRolle")
+    @XmlElement(name = "bidrRolle", nillable = true)
     var rolle: String? = null
-    @XmlElement(name = "fdato")
+    @XmlElement(name = "fdato", nillable = true)
     var fodselsdato: String? = null
 
-    @XmlElement(name = "adr1")
+    @XmlElement(name = "adr1", nillable = true)
     var adresselinje1: String? = null
-    @XmlElement(name = "adr2")
+    @XmlElement(name = "adr2", nillable = true)
     var adresselinje2: String? = null
-    @XmlElement(name = "adr3")
+    @XmlElement(name = "adr3", nillable = true)
     var adresselinje3: String? = null
-    @XmlElement(name = "adr4")
+    @XmlElement(name = "adr4", nillable = true)
     var adresselinje4: String? = null
     var boligNr: String? = null
-    @XmlElement(name = "postnr")
+    @XmlElement(name = "postnr", nillable = true)
     var postnummer: String? = null
 
-    @XmlElement(name = "landKd")
+    @XmlElement(name = "landKd", nillable = true)
     var landkode: String? = null
 
 }
@@ -108,42 +116,42 @@ class BrevMottaker {
 class BrevKontaktinfo {
     var avsender: Avsender? = null
     var tlfAvsender: TlfAvsender? = null
-    @XmlElement(name = "Returadr")
+    @XmlElement(name = "Returadr", nillable = true)
     var returAdresse: Adresse? = null
-    @XmlElement(name = "Postadr")
+    @XmlElement(name = "Postadr", nillable = true)
     var postadresse: Adresse? = null
 
     @XmlRootElement(name = "NavnAvsender")
     @XmlAccessorType(XmlAccessType.FIELD)
     class Avsender {
-        @XmlElement(name = "NavnAvsEnh")
+        @XmlElement(name = "NavnAvsEnh", nillable = true)
         var navn: String? = null
     }
 
     @XmlRootElement(name = "TelfAvsender")
     @XmlAccessorType(XmlAccessType.FIELD)
     class TlfAvsender {
-        @XmlElement(name = "TelfAvsEnh")
+        @XmlElement(name = "TelfAvsEnh", nillable = true)
         var telefonnummer: String? = null
     }
 
     @XmlAccessorType(XmlAccessType.FIELD)
     class Adresse {
-        @XmlElement(name = "NavEnhId")
+        @XmlElement(name = "NavEnhId", nillable = true)
         var enhet: String? = null
-        @XmlElement(name = "NavEnhNavn")
+        @XmlElement(name = "NavEnhNavn", nillable = true)
         var navn: String? = null
-        @XmlElement(name = "Telefon")
+        @XmlElement(name = "Telefon", nillable = true)
         var telefon: String? = null
-        @XmlElement(name = "AdrLinje1")
+        @XmlElement(name = "AdrLinje1", nillable = true)
         var adresselinje1: String? = null
-        @XmlElement(name = "AdrLinje2")
+        @XmlElement(name = "AdrLinje2", nillable = true)
         var adresselinje2: String? = null
-        @XmlElement(name = "PostNr")
+        @XmlElement(name = "PostNr", nillable = true)
         var postnummer: String? = null
-        @XmlElement(name = "PostSted")
+        @XmlElement(name = "PostSted", nillable = true)
         var poststed: String? = null
-        @XmlElement(name = "Land")
+        @XmlElement(name = "Land", nillable = true)
         var land: String? = null
     }
 
@@ -172,34 +180,34 @@ class BrevKontaktinfo {
 @XmlRootElement(name = "parter")
 @XmlAccessorType(XmlAccessType.FIELD)
 class Parter {
-    @XmlElement(name = "bpfnr")
+    @XmlElement(name = "bpfnr", nillable = true)
     var bpfnr: String? = null
-    @XmlElement(name = "bpNavn")
+    @XmlElement(name = "bpNavn", nillable = true)
     var bpnavn: String? = null
-    @XmlElement(name = "bpfDato")
+    @XmlElement(name = "bpfDato", nillable = true)
     var bpfodselsdato: String? = null
-    @XmlElement(name = "bpKravFremAv")
+    @XmlElement(name = "bpKravFremAv", nillable = true)
     var bpkravfremav: String? = null
-    @XmlElement(name = "bpbelopGebyr")
+    @XmlElement(name = "bpbelopGebyr", nillable = true)
     var bpgebyr: String? = null
-    @XmlElement(name = "bpLandKd")
+    @XmlElement(name = "bpLandKd", nillable = true)
     var bplandkode: String? = null
-    @XmlElement(name = "bpDatoDod")
+    @XmlElement(name = "bpDatoDod", nillable = true)
     var bpdatodod: String? = null
 
-    @XmlElement(name = "bmfnr")
+    @XmlElement(name = "bmfnr", nillable = true)
     var bmfnr: String? = null
-    @XmlElement(name = "bmNavn")
+    @XmlElement(name = "bmNavn", nillable = true)
     var bmnavn: String? = null
-    @XmlElement(name = "bmfDato")
+    @XmlElement(name = "bmfDato", nillable = true)
     var bmfodselsdato: String? = null
-    @XmlElement(name = "bmKravFremAv")
+    @XmlElement(name = "bmKravFremAv", nillable = true)
     var bmkravkfremav: String? = null
-    @XmlElement(name = "bmbelopGebyr")
+    @XmlElement(name = "bmbelopGebyr", nillable = true)
     var bmgebyr: String? = null
-    @XmlElement(name = "bmLandKd")
+    @XmlElement(name = "bmLandKd", nillable = true)
     var bmlandkode: String? = null
-    @XmlElement(name = "bmDatoDod")
+    @XmlElement(name = "bmDatoDod", nillable = true)
     var bmdatodod: String? = null
 }
 
@@ -207,63 +215,65 @@ class Parter {
 @XmlRootElement(name = "soknBost")
 @XmlAccessorType(XmlAccessType.FIELD)
 class Soknad {
-    @XmlElement(name = "saksnr")
+    @XmlElement(name = "saksnr", nillable = true)
     var saksnr: String? = null
-    @XmlElement(name = "BBFogd")
+    @XmlElement(name = "BBFogd", nillable = true)
     var bbfogd: String? = null
-    @XmlElement(name = "BPFogd")
+    @XmlElement(name = "BPFogd", nillable = true)
     var bpfogd: String? = null
-    @XmlElement(name = "sakstype")
+    @XmlElement(name = "sakstype", nillable = true)
     var sakstype: String? = null
-    @XmlElement(name = "jounalkode")
+    @XmlElement(name = "jounalkode", nillable = true)
     var bpgebyr: String? = null
-    @XmlElement(name = "indexRegDato")
+    @XmlElement(name = "indexRegDato", nillable = true)
     var indexRegDato: String? = null
-    @XmlElement(name = "indexRegPro")
+    @XmlElement(name = "indexRegPro", nillable = true)
     var indexRegPro: String? = null
 
-    @XmlElement(name = "hgKode")
+    @XmlElement(name = "hgKode", nillable = true)
     var hgKode: String? = null
-    @XmlElement(name = "ugKode")
+    @XmlElement(name = "ugKode", nillable = true)
     var ugKode: String? = null
-    @XmlElement(name = "datoSakReg")
+    @XmlElement(name = "datoSakReg", nillable = true)
     var datoSakReg: String? = null
-    @XmlElement(name = "resKode")
+    @XmlElement(name = "resKode", nillable = true)
     var resKode: String? = null
-    @XmlElement(name = "datoVtak")
+    @XmlElement(name = "datoVtak", nillable = true)
     var datoVedtak: String? = null
-    @XmlElement(name = "rmISak")
-    var rmISak: String? = null
-    @XmlElement(name = "forskUtBet")
-    var forskUtBet: String? = null
+    @XmlElement(name = "rmISak", nillable = true)
+    @XmlJavaTypeAdapter(BooleanAdapter::class)
+    var rmISak: Boolean? = false
+    @XmlElement(name = "forskUtBet", nillable = true)
+    @XmlJavaTypeAdapter(BooleanAdapter::class)
+    var forskUtBet: Boolean? = false
     @XmlElement(name = "sendtDato")
-    var sendtDato: String? = null
-    @XmlElement(name = "gebyrsats")
+    var sendtDato: String? = LocalDate.now().format(BREV_DATETIME_FORMAT)
+    @XmlElement(name = "gebyrsats", nillable = true)
     var gebyrsats: String? = null
     @XmlElement(name = "innkrSamtid")
-    var innkrSamtid: String? = null
-    @XmlElement(name = "mottDato")
+    @XmlJavaTypeAdapter(BooleanAdapter::class)
+    var innkrSamtid: Boolean? = false
+    @XmlElement(name = "mottDato", nillable = true)
     var mottatDato: String? = null
-    @XmlElement(name = "virknDato")
+    @XmlElement(name = "virknDato", nillable = true)
     var virkningsDato: String? = null
-    @XmlElement(name = "myndighet")
+    @XmlElement(name = "myndighet", nillable = true)
     var myndighet: String? = null
-    @XmlElement(name = "ffuRefNr")
+    @XmlElement(name = "ffuRefNr", nillable = true)
     var ffuRefNr: String? = null
-    @XmlElement(name = "konv")
+    @XmlElement(name = "konv", nillable = true)
     var konv: String? = null
-    @XmlElement(name = "soknGrKode")
+    @XmlElement(name = "soknGrKode", nillable = true)
     var soknGrKode: String? = null
-    @XmlElement(name = "soknFraKode")
+    @XmlElement(name = "soknFraKode", nillable = true)
     var soknFraKode: String? = null
-    @XmlElement(name = "soknType")
+    @XmlElement(name = "soknType", nillable = true)
     var soknType: String? = null
-    @XmlElement(name = "b4Kode")
-    var b4Kode: String? = null
-    @XmlElement(name = "b4Belop")
-    var b4Belop: String? = null
+    @XmlElement(name = "b4Kode", nillable = true)
+    var b4Kode: String? = "0"
+    @XmlElement(name = "b4Belop", nillable = true)
+    var b4Belop: String? = "00000000000"
 }
-
 fun brevbestilling(init: BrevBestilling.() -> Unit): BrevBestilling {
     val brevBestilling = BrevBestilling()
     brevBestilling.init()
@@ -298,4 +308,16 @@ fun brevKontaktinfo(init: BrevKontaktinfo.() -> Unit): BrevKontaktinfo {
     val brevKontaktinfo = BrevKontaktinfo()
     brevKontaktinfo.init()
     return brevKontaktinfo
+}
+
+
+class BooleanAdapter: XmlAdapter<String, Boolean?>() {
+    override fun marshal(v: Boolean?): String {
+        return if (v == true) "J" else "N"
+    }
+
+    @Throws(ParseException::class)
+    override fun unmarshal(v: String): Boolean {
+        return v == "J"
+    }
 }

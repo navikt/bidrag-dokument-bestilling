@@ -4,12 +4,15 @@ import com.github.tomakehurst.wiremock.client.ResponseDefinitionBuilder
 import com.github.tomakehurst.wiremock.client.WireMock
 import com.github.tomakehurst.wiremock.client.WireMock.aResponse
 import no.nav.bidrag.dokument.bestilling.model.EnhetInfo
+import no.nav.bidrag.dokument.bestilling.model.EnhetKontaktInfo
+import no.nav.bidrag.dokument.bestilling.model.EnhetKontaktInfoDto
 import no.nav.bidrag.dokument.bestilling.model.HentPersonResponse
 import no.nav.bidrag.dokument.bestilling.model.HentPostadresseResponse
 import no.nav.bidrag.dokument.bestilling.model.HentSakResponse
 import no.nav.bidrag.dokument.bestilling.model.SaksbehandlerInfoResponse
 import no.nav.bidrag.dokument.bestilling.utils.BM_PERSON_ID_1
 import no.nav.bidrag.dokument.bestilling.utils.BM_PERSON_NAVN_1
+import no.nav.bidrag.dokument.bestilling.utils.createEnhetKontaktInformasjon
 import no.nav.bidrag.dokument.bestilling.utils.createOpprettJournalpostResponse
 import no.nav.bidrag.dokument.bestilling.utils.createPostAdresseResponse
 import no.nav.bidrag.dokument.bestilling.utils.createSakResponse
@@ -77,6 +80,16 @@ class StubUtils {
     fun stubEnhetInfo(response: EnhetInfo = EnhetInfo("4806", "Nav Drammen")){
         WireMock.stubFor(
             WireMock.get(WireMock.urlMatching("/organisasjon/enhet/info/.*")).willReturn(
+                aClosedJsonResponse()
+                    .withStatus(HttpStatus.OK.value())
+                    .withBody(convertObjectToString(response))
+            )
+        )
+    }
+
+    fun stubEnhetKontaktInfo(response: EnhetKontaktInfoDto = createEnhetKontaktInformasjon()){
+        WireMock.stubFor(
+            WireMock.get(WireMock.urlMatching("/organisasjon/enhet/kontaktinfo/.*")).willReturn(
                 aClosedJsonResponse()
                     .withStatus(HttpStatus.OK.value())
                     .withBody(convertObjectToString(response))

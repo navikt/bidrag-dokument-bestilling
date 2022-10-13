@@ -5,14 +5,13 @@ BIDRAG_DOKUMENT_URL: https://bidrag-dokument-feature.dev-fss-pub.nais.io/bidrag-
 BIDRAG_DOKUMENT_SCOPE: dev-fss.bidrag.bidrag-dokument-feature
 
 BIDRAG_ORGANISASJON_URL: https://bidrag-organisasjon-feature.dev-fss-pub.nais.io/bidrag-organisasjon
-BIDRAG_ORGANiSASJON_SCOPE: dev-fss.bidrag.bidrag-organisasjon-feature
+BIDRAG_ORGANISASJON_SCOPE: dev-fss.bidrag.bidrag-organisasjon-feature
 
 BIDRAG_SAK_URL: https://bidrag-sak-feature.dev-fss-pub.nais.io/bidrag-sak
 BIDRAG_SAK_SCOPE: dev-fss.bidrag.bidrag-sak-feature
 
 AZURE_APP_TENANT_ID: 966ac572-f5b7-4bbe-aa88-c76419c0f851
-AZURE_APP_CLIENT_ID: <app_client_id>
-AZURE_APP_CLIENT_SECRET: unset
+
 server.port: 8999
 NAIS_APP_NAME: bidrag-dokument-bestilling
 
@@ -20,7 +19,9 @@ MQ_QUEUE_MANAGER: MQLS02
 MQ_PORT: 1413
 MQ_HOSTNAME: b27apvl220.preprod.local
 MQ_CHANNEL: Q1_BDJOURNALPOST
-BREVSERVER_ONLINEBREV_QUEUE: test
+BREVSERVER_ONLINEBREV_QUEUE: QA.Q475.BREVSERVER_ONLINEBREV
 BREVSERVER_PASSORD: test
 MQ_USER_USERNAME: srvbdjournalpost
-MQ_USER_PASSWORD: srvbdjournalpost
+#MQ_USER_PASSWORD: srvbdjournalpost
+#AZURE_APP_CLIENT_ID: <app_client_id>
+#AZURE_APP_CLIENT_SECRET: unset

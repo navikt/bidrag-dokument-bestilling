@@ -1,5 +1,7 @@
 package no.nav.bidrag.dokument.bestilling.utils
 
+import no.nav.bidrag.dokument.bestilling.model.EnhetKontaktInfoDto
+import no.nav.bidrag.dokument.bestilling.model.EnhetPostadresseDto
 import no.nav.bidrag.dokument.bestilling.model.HentPostadresseResponse
 import no.nav.bidrag.dokument.bestilling.model.HentSakResponse
 import no.nav.bidrag.dokument.bestilling.model.RolleType
@@ -50,5 +52,19 @@ fun createOpprettJournalpostResponse(tittel: String = "Tittel på dokument", jou
             )
         ),
         journalpostId = journalpostId
+    )
+}
+
+fun createEnhetKontaktInformasjon(): EnhetKontaktInfoDto {
+
+    return EnhetKontaktInfoDto(
+        enhetIdent = "4806",
+        telefonnummer = "55553333",
+        postadresse = EnhetPostadresseDto(
+            adresselinje = "Postboks 1583",
+            postboksnummer = "1583",
+            postnummer = "3040",
+            postboksanlegg = "Drammen"
+        )
     )
 }

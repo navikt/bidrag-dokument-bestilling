@@ -29,6 +29,7 @@ import org.springframework.http.HttpMethod
 import org.springframework.http.HttpStatus
 import org.springframework.jms.core.JmsTemplate
 import org.springframework.test.context.ActiveProfiles
+import java.time.LocalDate
 import javax.jms.Queue
 
 
@@ -61,11 +62,12 @@ class DokumentBestillingControllerTest {
     }
     @Test
     fun `Skal hente persondata`(){
-        stubUtils.stubHentPerson(BP_PERSON_ID_1, HentPersonResponse(BP_PERSON_ID_1, BP_PERSON_NAVN_1, "213213213"))
-        stubUtils.stubHentPerson(BM_PERSON_ID_1, HentPersonResponse(BM_PERSON_ID_1, BM_PERSON_NAVN_1, "213213213"))
+        stubUtils.stubHentPerson(BP_PERSON_ID_1, HentPersonResponse(BP_PERSON_ID_1, BP_PERSON_NAVN_1, LocalDate.parse("2020-05-06"), "213213213"))
+        stubUtils.stubHentPerson(BM_PERSON_ID_1, HentPersonResponse(BM_PERSON_ID_1, BM_PERSON_NAVN_1, LocalDate.parse("2020-05-06"), "213213213"))
         stubUtils.stubHentAdresse()
         stubUtils.stubOpprettJournalpost()
         stubUtils.stubEnhetInfo()
+        stubUtils.stubEnhetKontaktInfo()
         stubUtils.stubHentSaksbehandlerInfo()
         stubUtils.stubHentSak()
         val headers = HttpHeaders()

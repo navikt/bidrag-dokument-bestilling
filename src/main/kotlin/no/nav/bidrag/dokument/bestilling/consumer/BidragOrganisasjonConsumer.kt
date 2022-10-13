@@ -2,8 +2,10 @@ package no.nav.bidrag.dokument.bestilling.consumer
 
 import no.nav.bidrag.commons.security.service.SecurityTokenService
 import no.nav.bidrag.dokument.bestilling.config.CacheConfig.Companion.ENHETINFO_CACHE
+import no.nav.bidrag.dokument.bestilling.config.CacheConfig.Companion.ENHETKONTAKTINFO_CACHE
 import no.nav.bidrag.dokument.bestilling.config.CacheConfig.Companion.SAKSBEHANDLERINFO_CACHE
 import no.nav.bidrag.dokument.bestilling.model.EnhetInfo
+import no.nav.bidrag.dokument.bestilling.model.EnhetKontaktInfoDto
 import no.nav.bidrag.dokument.bestilling.model.SaksbehandlerInfoResponse
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.cache.annotation.Cacheable
@@ -36,6 +38,16 @@ class BidragOrganisasjonConsumer(
             HttpMethod.GET,
             null,
             EnhetInfo::class.java
+        ).body)
+    }
+
+    @Cacheable(ENHETKONTAKTINFO_CACHE)
+    fun hentEnhetKontaktinfo(enhetId: String): Optional<EnhetKontaktInfoDto> {
+        return Optional.ofNullable(restTemplate.exchange(
+            "/enhet/kontaktinfo/$enhetId",
+            HttpMethod.GET,
+            null,
+            EnhetKontaktInfoDto::class.java
         ).body)
     }
 

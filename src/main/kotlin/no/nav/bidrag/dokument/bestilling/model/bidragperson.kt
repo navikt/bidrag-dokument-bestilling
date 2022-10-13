@@ -1,10 +1,12 @@
 package no.nav.bidrag.dokument.bestilling.model
 
 import io.swagger.v3.oas.annotations.media.Schema
+import java.time.LocalDate
 
 data class HentPersonResponse(
     val ident: String,
     val navn: String,
+    val foedselsdato: LocalDate?,
     val aktoerId: String
 )
 
