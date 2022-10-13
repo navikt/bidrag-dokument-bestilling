@@ -62,11 +62,17 @@ class Brev {
     @XmlAttribute
     lateinit var brevref: String
 
+    @XmlElement(name = "brevMottaker")
     var mottaker: BrevMottaker? = null
+    @XmlElement(name = "soknBost")
     var soknad: Soknad? = null
+
+    @XmlElement(name = "parter")
     var parter: Parter? = null
+    @XmlElement(name = "Saksbehandl")
     var saksbehandler: BrevSaksbehandler? = null
 
+    @XmlElement(name = "Kontaktinfo")
     var kontaktInfo: BrevKontaktinfo? = null
 }
 
@@ -74,10 +80,10 @@ class Brev {
 @Suppress("unused")
 @XmlRootElement(name = "Saksbehandl")
 @XmlAccessorType(XmlAccessType.FIELD)
-class BrevSaksbehandler {
+class BrevSaksbehandler() {
 
     @XmlElement(name = "saksbNavn")
-    lateinit var navn: String
+    var navn: String? = null
 
 }
 
@@ -309,6 +315,12 @@ fun brevKontaktinfo(init: BrevKontaktinfo.() -> Unit): BrevKontaktinfo {
     val brevKontaktinfo = BrevKontaktinfo()
     brevKontaktinfo.init()
     return brevKontaktinfo
+}
+
+fun brevSaksbehandler(init: BrevSaksbehandler.() -> Unit): BrevSaksbehandler {
+    val brevSaksbehandler = BrevSaksbehandler()
+    brevSaksbehandler.init()
+    return brevSaksbehandler
 }
 
 

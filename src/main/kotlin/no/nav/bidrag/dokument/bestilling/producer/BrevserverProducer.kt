@@ -8,6 +8,7 @@ import no.nav.bidrag.dokument.bestilling.model.BrevBestilling
 import no.nav.bidrag.dokument.bestilling.model.BrevKode
 import no.nav.bidrag.dokument.bestilling.model.BrevKontaktinfo
 import no.nav.bidrag.dokument.bestilling.model.BrevMottaker
+import no.nav.bidrag.dokument.bestilling.model.BrevSaksbehandler
 import no.nav.bidrag.dokument.bestilling.model.BrevType
 import no.nav.bidrag.dokument.bestilling.model.DokumentBestilling
 import no.nav.bidrag.dokument.bestilling.model.DokumentBestillingResult
@@ -15,9 +16,11 @@ import no.nav.bidrag.dokument.bestilling.model.EnhetKontaktInfo
 import no.nav.bidrag.dokument.bestilling.model.Mottaker
 import no.nav.bidrag.dokument.bestilling.model.Parter
 import no.nav.bidrag.dokument.bestilling.model.RolleType
+import no.nav.bidrag.dokument.bestilling.model.Saksbehandler
 import no.nav.bidrag.dokument.bestilling.model.SoknadsPart
 import no.nav.bidrag.dokument.bestilling.model.brev
 import no.nav.bidrag.dokument.bestilling.model.brevKontaktinfo
+import no.nav.bidrag.dokument.bestilling.model.brevSaksbehandler
 import no.nav.bidrag.dokument.bestilling.model.brevbestilling
 import no.nav.bidrag.dokument.bestilling.model.brevmottaker
 import no.nav.bidrag.dokument.bestilling.model.parter
@@ -79,6 +82,7 @@ class BrevserverProducer(
 
     private fun mapToBrevserverMessage(dokumentBestilling: DokumentBestilling, brevKode: BrevKode): BrevBestilling {
         val dokumentSpraak = dokumentBestilling.spraak ?: "NB"
+        val saksbehandlerNavn = saksbehandlerInfoManager.hentSaksbehandler().orElse(Saksbehandler("", "")).navn
         return brevbestilling {
             malpakke = "BI01.${brevKode.name}"
             passord = brevPassord
@@ -94,6 +98,9 @@ class BrevserverProducer(
                     sakstype = "E"
                 }
                 parter = mapPart(dokumentBestilling.parter)
+                saksbehandler = brevSaksbehandler {
+                    navn = saksbehandlerNavn
+                }
             }
         }
     }
