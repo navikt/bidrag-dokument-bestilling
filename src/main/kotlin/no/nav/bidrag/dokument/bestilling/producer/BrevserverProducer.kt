@@ -82,7 +82,7 @@ class BrevserverProducer(
 
     private fun mapToBrevserverMessage(dokumentBestilling: DokumentBestilling, brevKode: BrevKode): BrevBestilling {
         val dokumentSpraak = dokumentBestilling.spraak ?: "NB"
-        val saksbehandlerNavn = saksbehandlerInfoManager.hentSaksbehandler().orElse(Saksbehandler("", "")).navn
+        val saksbehandlerNavn = saksbehandlerInfoManager.hentSaksbehandler().orElse(null)?.navn ?: saksbehandlerInfoManager.hentSaksbehandlerBrukerId()
         return brevbestilling {
             malpakke = "BI01.${brevKode.name}"
             passord = brevPassord

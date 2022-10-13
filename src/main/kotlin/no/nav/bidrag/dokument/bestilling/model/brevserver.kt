@@ -121,7 +121,9 @@ class BrevMottaker {
 @XmlRootElement(name = "Kontaktinfo")
 @XmlAccessorType(XmlAccessType.FIELD)
 class BrevKontaktinfo {
+    @XmlElement(name = "NavnAvsender", nillable = true)
     var avsender: Avsender? = null
+    @XmlElement(name = "TelfAvsender", nillable = true)
     var tlfAvsender: TlfAvsender? = null
     @XmlElement(name = "Returadr", nillable = true)
     var returAdresse: Adresse? = null
