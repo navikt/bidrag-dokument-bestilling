@@ -60,6 +60,7 @@ class DokumentBestillingController(
             message.jmsDestination = null
             message.setIntProperty(JmsConstants.JMS_IBM_ENCODING, CMQC.MQENC_S390)
             message.setIntProperty(JmsConstants.JMS_IBM_CHARACTER_SET, 277)
+            message.setIntProperty(JmsConstants.JMS_PRIORITY, 0)
             message.jmsPriority = 0
             message
         }
