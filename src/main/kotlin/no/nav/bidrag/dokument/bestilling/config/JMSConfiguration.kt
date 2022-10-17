@@ -57,8 +57,8 @@ class JMSConfiguration(private val mqProperties: MQProperties) {
         connectionFactory.channel = mqProperties.channel.uppercase(Locale.getDefault())
         connectionFactory.transportType = CommonConstants.WMQ_CM_CLIENT
         connectionFactory.setIntProperty(JmsConstants.JMS_IBM_ENCODING, CMQC.MQENC_S390)
-        connectionFactory.setStringProperty(JmsConstants.JMS_IBM_CHARACTER_SET, "IBM277")
-        connectionFactory.setStringProperty(JmsConstants.JMS_REPLYTO, replyQueueName)
+//        connectionFactory.setStringProperty(JmsConstants.JMS_IBM_CHARACTER_SET, "IBM277")
+//        connectionFactory.setStringProperty(JmsConstants.JMS_REPLYTO, replyQueueName)
         val credentialQueueConnectionFactory = UserCredentialsConnectionFactoryAdapter()
         credentialQueueConnectionFactory.setUsername(mqProperties.username)
         credentialQueueConnectionFactory.setPassword(mqProperties.password)

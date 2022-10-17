@@ -58,9 +58,9 @@ class DokumentBestillingController(
             val rq = com.ibm.mq.jms.MQQueue("MRQ1", replyQueueName)
             rq.targetClient = 1
             msg.jmsReplyTo = rq
-            msg.jmsDestination = null
-            msg.setIntProperty(JmsConstants.JMS_IBM_ENCODING, CMQC.MQENC_S390)
-            msg.setStringProperty(JmsConstants.JMS_IBM_CHARACTER_SET, "IBM277")
+//            msg.jmsDestination = null
+//            msg.setIntProperty(JmsConstants.JMS_IBM_ENCODING, CMQC.MQENC_S390)
+//            msg.setStringProperty(JmsConstants.JMS_IBM_CHARACTER_SET, "IBM277")
             msg
         }
         return ResponseEntity.ok().build()
