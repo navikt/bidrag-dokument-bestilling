@@ -1,6 +1,7 @@
 package no.nav.bidrag.dokument.bestilling.config.jms
 
 import com.ibm.mq.constants.CMQC
+import com.ibm.mq.headers.CCSID
 import com.ibm.mq.jms.MQQueue
 import com.ibm.msg.client.jms.JmsConstants
 import com.ibm.msg.client.jms.JmsDestination
@@ -31,16 +32,16 @@ class LoggingMarshallingMessageConverter(jaxb2Marshaller: Jaxb2Marshaller, var r
         val streamResult = StreamResult(bos)
         marshaller.marshal(o, streamResult)
         val message = session.createBytesMessage()
-        val barray = bos.toByteArray()
-        SECURE_LOGGER.info("Sending message ${String(barray)}")
-        message.writeBytes(barray)
+        message.setIntProperty(JmsConstants.JMS_IBM_ENCODING, CMQC.MQENC_S390)
+        message.setIntProperty(JmsConstants.JMS_IBM_CHARACTER_SET, 277)
         val rq = MQQueue("MRQ1", replyQueue)
         rq.targetClient = 1
         message.jmsReplyTo = rq
         message.jmsDestination = null
-        message.setIntProperty(JmsConstants.JMS_IBM_ENCODING, CMQC.MQENC_S390)
-        message.setIntProperty(JmsConstants.JMS_IBM_CHARACTER_SET, 277)
         message.jmsPriority = 0
+        val barray = bos.toByteArray()
+        SECURE_LOGGER.info("Sending message ${String(barray)}")
+        message.writeBytes(barray)
         return message
     }
     override fun marshalToTextMessage(o: Any, session: Session, marshaller: Marshaller): TextMessage {

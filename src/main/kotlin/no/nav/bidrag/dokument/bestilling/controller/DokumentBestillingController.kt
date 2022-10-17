@@ -1,6 +1,7 @@
 package no.nav.bidrag.dokument.bestilling.controller
 
 import com.ibm.mq.constants.CMQC
+import com.ibm.mq.headers.Charsets
 import com.ibm.msg.client.jms.JmsConstants
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.responses.ApiResponse
@@ -52,8 +53,7 @@ class DokumentBestillingController(
     @PostMapping("/bestill/raw")
     fun bestillRaw(@RequestBody request: String): ResponseEntity<Void> {
         onlinebrevTemplate.send {
-
-            val message = it.createTextMessage(request)
+            val message = it.createBytesMessage()
             val rq = com.ibm.mq.jms.MQQueue("MRQ1", replyQueueName)
             rq.targetClient = 1
             message.jmsReplyTo = rq
@@ -62,6 +62,7 @@ class DokumentBestillingController(
             message.setIntProperty(JmsConstants.JMS_IBM_CHARACTER_SET, 277)
             message.setIntProperty(JmsConstants.JMS_PRIORITY, 0)
             message.jmsPriority = 0
+            message.writeBytes(Charsets.convert(request, 277))
             message
         }
         return ResponseEntity.ok().build()
