@@ -36,12 +36,12 @@ class JMSConfiguration(private val mqProperties: MQProperties) {
     }
     @Bean
     @Throws(JMSException::class)
-    fun onlinebrevTemplate(baseJmsTemplate: JmsTemplate, @Value("\${BREVSERVER_ONLINEBREV_QUEUE}") queueName: String): JmsTemplate {
+    fun onlinebrevTemplate(baseJmsTemplate: JmsTemplate, @Value("\${BREVSERVER_ONLINEBREV_QUEUE}") queueName: String, @Value("\${BREVSERVER_KVITTERING_QUEUE}") replyQueueName: String): JmsTemplate {
         baseJmsTemplate.defaultDestinationName = queueName
         val jaxb2Marshaller = Jaxb2Marshaller()
         jaxb2Marshaller.setClassesToBeBound(BrevBestilling::class.java)
         jaxb2Marshaller.setMarshallerProperties(mapOf(Marshaller.JAXB_ENCODING to "ISO-8859-1"))
-        baseJmsTemplate.messageConverter = LoggingMarshallingMessageConverter(jaxb2Marshaller)
+        baseJmsTemplate.messageConverter = LoggingMarshallingMessageConverter(jaxb2Marshaller, replyQueueName)
         return baseJmsTemplate
     }
 
