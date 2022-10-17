@@ -38,8 +38,8 @@ class LoggingMarshallingMessageConverter(jaxb2Marshaller: Jaxb2Marshaller, var r
         rq.targetClient = 1
         message.jmsReplyTo = rq
         message.jmsDestination = null
-//        message.setIntProperty(JmsConstants.JMS_IBM_ENCODING, CMQC.MQENC_S390)
-//        message.setIntProperty(WMQConstants.JMS_IBM_CHARACTER_SET, 277)
+        message.setIntProperty(JmsConstants.JMS_IBM_ENCODING, CMQC.MQENC_S390)
+        message.setIntProperty(JmsConstants.JMS_IBM_CHARACTER_SET, 277)
         message.jmsPriority = 0
         return message
     }
