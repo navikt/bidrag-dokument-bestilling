@@ -5,6 +5,7 @@ import com.ibm.mq.jms.MQQueue
 import com.ibm.msg.client.jms.JmsConstants
 import com.ibm.msg.client.jms.JmsDestination
 import com.ibm.msg.client.jms.JmsQueue
+import com.ibm.msg.client.wmq.WMQConstants
 import no.nav.bidrag.dokument.bestilling.SECURE_LOGGER
 import org.slf4j.LoggerFactory
 import org.springframework.jms.support.converter.MarshallingMessageConverter
@@ -38,7 +39,8 @@ class LoggingMarshallingMessageConverter(jaxb2Marshaller: Jaxb2Marshaller, var r
         message.jmsReplyTo = rq
         message.jmsDestination = null
         message.setIntProperty(JmsConstants.JMS_IBM_ENCODING, CMQC.MQENC_S390)
-        message.setStringProperty(JmsConstants.JMS_IBM_CHARACTER_SET, "IBM277")
+        message.setIntProperty(WMQConstants.JMS_IBM_CHARACTER_SET, 277)
+        message.jmsPriority = 0
         return message
     }
     override fun marshalToTextMessage(o: Any, session: Session, marshaller: Marshaller): TextMessage {
