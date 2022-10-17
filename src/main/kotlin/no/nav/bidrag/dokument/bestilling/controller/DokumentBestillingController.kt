@@ -1,5 +1,8 @@
 package no.nav.bidrag.dokument.bestilling.controller
 
+import com.ibm.mq.MQQueue
+import com.ibm.mq.constants.CMQC
+import com.ibm.msg.client.jms.JmsConstants
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.responses.ApiResponses
@@ -10,6 +13,7 @@ import no.nav.bidrag.dokument.bestilling.model.DokumentBestillingRequest
 import no.nav.bidrag.dokument.bestilling.model.DokumentBestillingResponse
 import no.nav.bidrag.dokument.bestilling.service.DokumentBestillingService
 import no.nav.security.token.support.core.api.Protected
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.ResponseEntity
 import org.springframework.jms.core.JmsTemplate
 import org.springframework.web.bind.annotation.PathVariable
@@ -23,6 +27,7 @@ import org.springframework.web.bind.annotation.RestController
 class DokumentBestillingController(
     var dokumentBestillingService: DokumentBestillingService,
     var onlinebrevTemplate: JmsTemplate,
+    @Value("\${BREVSERVER_KVITTERING_QUEUE}") var replyQueueName: String
     ) {
 
     @PostMapping("/bestill/{brevKode}")
@@ -47,7 +52,14 @@ class DokumentBestillingController(
 
     @PostMapping("/bestill/raw")
     fun bestillRaw(@RequestBody request: String): ResponseEntity<Void> {
-        onlinebrevTemplate.send { it.createTextMessage(request) }
+        onlinebrevTemplate.send {
+
+            val msg = it.createTextMessage(request)
+            msg.jmsReplyTo = com.ibm.mq.jms.MQQueue(replyQueueName)
+            msg.setIntProperty(JmsConstants.JMS_IBM_ENCODING, CMQC.MQENC_S390)
+            msg.setStringProperty(JmsConstants.JMS_IBM_CHARACTER_SET, "IBM277")
+            msg
+        }
         return ResponseEntity.ok().build()
     }
 
