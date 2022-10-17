@@ -1,7 +1,6 @@
 package no.nav.bidrag.dokument.bestilling.controller
 
 import com.ibm.mq.constants.CMQC
-import com.ibm.mq.headers.Charsets
 import com.ibm.msg.client.jms.JmsConstants
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.responses.ApiResponse
@@ -60,7 +59,7 @@ class DokumentBestillingController(
             message.jmsDestination = null
             message.setIntProperty(JmsConstants.JMS_IBM_ENCODING, CMQC.MQENC_S390)
             message.setIntProperty(JmsConstants.JMS_IBM_CHARACTER_SET, 277)
-            message.writeBytes(Charsets.convert(request, 277))
+            message.writeBytes(request.toByteArray(charset = Charsets.ISO_8859_1))
             message
         }
         return ResponseEntity.ok().build()
