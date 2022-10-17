@@ -33,7 +33,10 @@ class LoggingMarshallingMessageConverter(jaxb2Marshaller: Jaxb2Marshaller, var r
         val barray = bos.toByteArray()
         SECURE_LOGGER.info("Sending message ${String(barray)}")
         message.writeBytes(barray)
-        message.jmsReplyTo = MQQueue(replyQueue)
+        val rq = MQQueue("MRQ1", replyQueue)
+        rq.targetClient = 1
+        message.jmsReplyTo = rq
+        message.jmsDestination = null
         message.setIntProperty(JmsConstants.JMS_IBM_ENCODING, CMQC.MQENC_S390)
         message.setStringProperty(JmsConstants.JMS_IBM_CHARACTER_SET, "IBM277")
         return message
