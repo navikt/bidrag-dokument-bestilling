@@ -29,9 +29,8 @@ class JMSConfiguration(private val mqProperties: MQProperties) {
 
     @Bean
     @Scope("prototype")
-    fun baseJmsTemplate(mqQueueConnectionFactory: MQQueueConnectionFactory): JmsTemplate{
+    fun baseJmsTemplate(mqQueueConnectionFactory: ConnectionFactory): JmsTemplate{
         val template = JmsTemplate()
-        mqQueueConnectionFactory.setIntProperty(JmsConstants.JMS_IBM_ENCODING, CMQC.MQENC_NATIVE)
         template.connectionFactory = mqQueueConnectionFactory
         return template
     }
@@ -49,7 +48,6 @@ class JMSConfiguration(private val mqProperties: MQProperties) {
     @Bean
     @Profile("nais")
     @Throws(JMSException::class)
-    @Scope("prototype")
     fun mqQueueConnectionFactory(@Value("\${BREVSERVER_KVITTERING_QUEUE}") replyQueueName: String): ConnectionFactory {
         val connectionFactory = MQQueueConnectionFactory()
         connectionFactory.hostName = mqProperties.hostname
