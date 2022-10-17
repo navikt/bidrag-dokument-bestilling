@@ -28,17 +28,17 @@ class LoggingMarshallingMessageConverter(jaxb2Marshaller: Jaxb2Marshaller, var r
 
 
     override fun marshalToBytesMessage(o: Any, session: Session, marshaller: Marshaller): BytesMessage {
+        val rq = MQQueue("MRQ1", replyQueue)
+        rq.targetClient = 1
+
         val bos = ByteArrayOutputStream(1024)
         val streamResult = StreamResult(bos)
         marshaller.marshal(o, streamResult)
         val message = session.createBytesMessage()
         message.setIntProperty(JmsConstants.JMS_IBM_ENCODING, CMQC.MQENC_S390)
         message.setIntProperty(JmsConstants.JMS_IBM_CHARACTER_SET, 277)
-        val rq = MQQueue("MRQ1", replyQueue)
-        rq.targetClient = 1
         message.jmsReplyTo = rq
         message.jmsDestination = null
-        message.jmsPriority = 0
         val barray = bos.toByteArray()
         SECURE_LOGGER.info("Sending message ${String(barray)}")
         message.writeBytes(barray)
