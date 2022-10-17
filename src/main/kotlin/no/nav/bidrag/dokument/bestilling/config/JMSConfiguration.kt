@@ -29,8 +29,9 @@ class JMSConfiguration(private val mqProperties: MQProperties) {
 
     @Bean
     @Scope("prototype")
-    fun baseJmsTemplate(mqQueueConnectionFactory: ConnectionFactory): JmsTemplate{
+    fun baseJmsTemplate(mqQueueConnectionFactory: MQQueueConnectionFactory): JmsTemplate{
         val template = JmsTemplate()
+        mqQueueConnectionFactory.setIntProperty(JmsConstants.JMS_IBM_ENCODING, CMQC.MQENC_NATIVE)
         template.connectionFactory = mqQueueConnectionFactory
         return template
     }
@@ -48,7 +49,8 @@ class JMSConfiguration(private val mqProperties: MQProperties) {
     @Bean
     @Profile("nais")
     @Throws(JMSException::class)
-    fun mqQueueConnectionFactory(): ConnectionFactory {
+    @Scope("prototype")
+    fun mqQueueConnectionFactory(@Value("\${BREVSERVER_KVITTERING_QUEUE}") replyQueueName: String): ConnectionFactory {
         val connectionFactory = MQQueueConnectionFactory()
         connectionFactory.hostName = mqProperties.hostname
         connectionFactory.port = mqProperties.port
@@ -56,7 +58,9 @@ class JMSConfiguration(private val mqProperties: MQProperties) {
         connectionFactory.queueManager = mqProperties.name
         connectionFactory.channel = mqProperties.channel.uppercase(Locale.getDefault())
         connectionFactory.transportType = CommonConstants.WMQ_CM_CLIENT
-        connectionFactory.setIntProperty(JmsConstants.JMS_IBM_ENCODING, CMQC.MQENC_NATIVE)
+        connectionFactory.setIntProperty(JmsConstants.JMS_IBM_ENCODING, CMQC.MQENC_S390)
+        connectionFactory.setStringProperty(JmsConstants.JMS_IBM_CHARACTER_SET, "IBM277")
+        connectionFactory.setStringProperty(JmsConstants.JMS_REPLYTO, replyQueueName)
         val credentialQueueConnectionFactory = UserCredentialsConnectionFactoryAdapter()
         credentialQueueConnectionFactory.setUsername(mqProperties.username)
         credentialQueueConnectionFactory.setPassword(mqProperties.password)
