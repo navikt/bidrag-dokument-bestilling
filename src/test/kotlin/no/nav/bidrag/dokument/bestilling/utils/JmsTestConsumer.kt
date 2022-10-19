@@ -2,6 +2,7 @@ package no.nav.bidrag.dokument.bestilling.utils
 
 import no.nav.bidrag.dokument.bestilling.model.BrevBestilling
 import org.apache.activemq.command.ActiveMQBytesMessage
+import org.apache.activemq.command.ActiveMQTextMessage
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Profile
 import org.springframework.jms.core.JmsTemplate
@@ -50,10 +51,11 @@ class JmsTestConsumer {
         }
 
         fun getMessageAsString(): String {
-            val message: ActiveMQBytesMessage = consumer?.receive(1000) as ActiveMQBytesMessage
-            val byteArr = ByteArray(message.bodyLength.toInt())
-            message.readBytes(byteArr)
-            return String(byteArr)
+            val message: ActiveMQTextMessage = consumer?.receive(1000) as ActiveMQTextMessage
+//            val byteArr = ByteArray(message.bodyLength.toInt())
+//            message.readBytes(byteArr)
+//            return String(byteArr)
+            return message.text
         }
 
         fun <T> getMessageAsObject(o: Class<T>): T? {
