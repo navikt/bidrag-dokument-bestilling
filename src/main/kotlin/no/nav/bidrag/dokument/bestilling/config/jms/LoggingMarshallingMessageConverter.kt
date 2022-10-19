@@ -64,6 +64,8 @@ class LoggingMarshallingMessageConverter(jaxb2Marshaller: Jaxb2Marshaller, var r
         val message =  session.createTextMessage(cleanedMessageString)
         message.setIntProperty(JmsConstants.JMS_IBM_ENCODING, CMQC.MQENC_S390)
         message.setIntProperty(JmsConstants.JMS_IBM_CHARACTER_SET, 277)
+        message.setIntProperty(JmsConstants.JMS_IBM_MSGTYPE, CMQC.MQMT_DATAGRAM)
+        message.setIntProperty(JmsConstants.JMS_IBM_PUTAPPLTYPE, CMQC.MQAT_CICS)
         message.jmsReplyTo = rq
         return message
     }
