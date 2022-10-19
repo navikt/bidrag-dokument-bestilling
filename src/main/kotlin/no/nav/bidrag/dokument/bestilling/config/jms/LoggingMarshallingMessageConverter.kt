@@ -59,7 +59,7 @@ class LoggingMarshallingMessageConverter(jaxb2Marshaller: Jaxb2Marshaller, var r
         val cleanedMessageString = messageString
             .replace("xsi:nil=\"true\"", "")
             .replace("xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"", "")
-            .replace("\\s".toRegex(), "")
+            .replace("\\s{2,}".toRegex(), "")
         SECURE_LOGGER.info("Sending message $cleanedMessageString")
         val message =  session.createTextMessage(cleanedMessageString)
         message.setIntProperty(JmsConstants.JMS_IBM_ENCODING, CMQC.MQENC_S390)
