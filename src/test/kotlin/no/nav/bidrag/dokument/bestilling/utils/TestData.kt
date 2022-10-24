@@ -11,10 +11,16 @@ import no.nav.bidrag.dokument.dto.OpprettJournalpostResponse
 
 
 var BM_PERSON_ID_1 = "123123123123"
-var BM_PERSON_NAVN_1 = "Navn Bidragsmottaker"
+var BM_PERSON_NAVN_1 = "Etternavn, BMFornavn Bidragsmottaker"
 
 var BP_PERSON_ID_1 = "444213123123"
-var BP_PERSON_NAVN_1 = "Navn Bidragspliktig"
+var BP_PERSON_NAVN_1 = "Etternavn, BPFornavn Bidragspliktig"
+
+var BARN_ID_1 = "3323213"
+var BARN_NAVN_1 = "Etternavn, Barn1 Mellomnavn"
+
+var BARN_ID_2 = "333333323213"
+var BARN_NAVN_2 = "Etternavn, Barn2 Mellomnavn"
 
 var SAKSNUMMER1 = "123213123"
 fun createSakResponse(): HentSakResponse{
@@ -28,6 +34,14 @@ fun createSakResponse(): HentSakResponse{
             SakRolle(
                 foedselsnummer = BP_PERSON_ID_1,
                 rolleType = RolleType.BP
+            ),
+            SakRolle(
+                foedselsnummer = BARN_ID_1,
+                rolleType = RolleType.BA
+            ),
+            SakRolle(
+                foedselsnummer = BARN_ID_2,
+                rolleType = RolleType.BA
             )
         )
     )

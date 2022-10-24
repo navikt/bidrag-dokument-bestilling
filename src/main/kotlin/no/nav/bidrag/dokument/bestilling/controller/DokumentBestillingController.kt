@@ -52,14 +52,14 @@ class DokumentBestillingController(
     @PostMapping("/bestill/raw")
     fun bestillRaw(@RequestBody request: String): ResponseEntity<Void> {
         onlinebrevTemplate.send {
-            val message = it.createBytesMessage()
+            val message = it.createObjectMessage()
             val rq = com.ibm.mq.jms.MQQueue("MRQ1", replyQueueName)
             rq.targetClient = 1
             message.jmsReplyTo = rq
             message.jmsDestination = null
             message.setIntProperty(JmsConstants.JMS_IBM_ENCODING, CMQC.MQENC_S390)
             message.setIntProperty(JmsConstants.JMS_IBM_CHARACTER_SET, 277)
-            message.writeBytes(request.toByteArray(charset = Charsets.ISO_8859_1))
+            message.`object` = request
             message
         }
         return ResponseEntity.ok().build()

@@ -65,6 +65,8 @@ class Brev {
     var mottaker: BrevMottaker? = null
     @XmlElement(name = "parter")
     var parter: Parter? = null
+    @XmlElement(name = "barniSak")
+    var barnISak: List<BarnISak> = emptyList()
     @XmlElement(name = "soknBost")
     var soknad: Soknad? = null
     @XmlElement(name = "Kontaktinfo")
@@ -104,7 +106,8 @@ class BrevMottaker {
     @XmlElement(name = "fnr", nillable = true)
     var fodselsnummer: String? = null
     @XmlElement(name = "fdato", nillable = true)
-    var fodselsdato: String? = null
+    @XmlJavaTypeAdapter(BirthDateAdapter::class)
+    var fodselsdato: LocalDate? = null
     @XmlElement(name = "postnr", nillable = true)
     var postnummer: String? = null
     @XmlElement(name = "landKd", nillable = true)
@@ -190,11 +193,12 @@ class Parter {
     @XmlElement(name = "bpNavn", nillable = true)
     var bpnavn: String? = null
     @XmlElement(name = "bpfDato", nillable = true)
-    var bpfodselsdato: String? = null
+    @XmlJavaTypeAdapter(BirthDateAdapter::class)
+    var bpfodselsdato: LocalDate? = null
     @XmlElement(name = "bpKravFremAv", nillable = true)
     var bpkravfremav: String? = null
     @XmlElement(name = "bpbelopGebyr", nillable = true)
-    var bpgebyr: String? = "00000000000"
+    var bpgebyr: String? = null
 
 
     @XmlElement(name = "bmfnr", nillable = true)
@@ -202,7 +206,8 @@ class Parter {
     @XmlElement(name = "bmNavn", nillable = true)
     var bmnavn: String? = null
     @XmlElement(name = "bmfDato", nillable = true)
-    var bmfodselsdato: String? = null
+    @XmlJavaTypeAdapter(BirthDateAdapter::class)
+    var bmfodselsdato: LocalDate? = null
     @XmlElement(name = "bmKravFremAv", nillable = true)
     var bmkravkfremav: String? = null
     @XmlElement(name = "bmbelopGebyr", nillable = true)
@@ -212,9 +217,11 @@ class Parter {
     @XmlElement(name = "bpLandKd", nillable = true)
     var bplandkode: String? = null
     @XmlElement(name = "bmDatoDod", nillable = true)
-    var bmdatodod: String? = null
+    @XmlJavaTypeAdapter(BirthDateAdapter::class)
+    var bmdatodod: LocalDate? = null
     @XmlElement(name = "bpDatoDod", nillable = true)
-    var bpdatodod: String? = null
+    @XmlJavaTypeAdapter(BirthDateAdapter::class)
+    var bpdatodod: LocalDate? = null
 }
 
 @Suppress("unused")
@@ -232,16 +239,17 @@ class Soknad {
     @XmlElement(name = "jounalkode", nillable = true)
     var bpgebyr: String? = null
     @XmlElement(name = "indexRegDato", nillable = true)
-    var indexRegDato: String? = null
+    var indexRegDato: String? = null //TODO: Date format?
     @XmlElement(name = "indexRegPro", nillable = true)
-    var indexRegPro: String? = "00000"
+    var indexRegPro: String? = null
 
     @XmlElement(name = "hgKode", nillable = true)
-    var hgKode: String? = "XX"
+    var hgKode: String? = null
     @XmlElement(name = "ugKode", nillable = true)
     var ugKode: String? = null
     @XmlElement(name = "datoSakReg", nillable = true)
-    var datoSakReg: String? = LocalDate.now().format(BREV_SOKNAD_DATETIME_FORMAT)
+    @XmlJavaTypeAdapter(DateAdapter::class)
+    var datoSakReg: LocalDate? = LocalDate.now()
     @XmlElement(name = "resKode", nillable = true)
     var resKode: String? = null
     @XmlElement(name = "datoVtak", nillable = true)
@@ -253,16 +261,18 @@ class Soknad {
     @XmlJavaTypeAdapter(BooleanAdapter::class)
     var forskUtBet: Boolean? = false
     @XmlElement(name = "sendtDato")
-    var sendtDato: String? = LocalDate.now().format(BREV_SOKNAD_DATETIME_FORMAT)
+    @XmlJavaTypeAdapter(DateAdapter::class)
+    var sendtDato: LocalDate? = LocalDate.now()
     @XmlElement(name = "gebyrsats", nillable = true)
-    var gebyrsats: String? = "01223.0"
+    var gebyrsats: String? = null
     @XmlElement(name = "innkrSamtid")
     @XmlJavaTypeAdapter(BooleanAdapter::class)
     var innkrSamtid: Boolean? = false
     @XmlElement(name = "mottDato", nillable = true)
-    var mottatDato: String? = null
+    @XmlJavaTypeAdapter(BirthDateAdapter::class)
+    var mottatDato: LocalDate? = null
     @XmlElement(name = "virknDato", nillable = true)
-    var virkningsDato: String? = null
+    var virkningsDato: String? = null //TODO: Date format?
     @XmlElement(name = "myndighet", nillable = true)
     var myndighet: String? = null
     @XmlElement(name = "ffuRefNr", nillable = true)
@@ -276,9 +286,32 @@ class Soknad {
     @XmlElement(name = "soknType", nillable = true)
     var soknType: String? = null
     @XmlElement(name = "b4Kode", nillable = true)
-    var b4Kode: String? = "0"
+    var b4Kode: String? = null
     @XmlElement(name = "b4Belop", nillable = true)
-    var b4Belop: String? = "00000000000"
+    var b4Belop: String? = null
+}
+
+@Suppress("unused")
+@XmlRootElement(name = "barniSak")
+@XmlAccessorType(XmlAccessType.FIELD)
+class BarnISak {
+    @XmlElement(name = "fnr")
+    var fnr: String? = null
+    @XmlElement(name = "fornavn")
+    var fornavn: String? = null
+    @XmlElement(name = "navn")
+    @XmlJavaTypeAdapter(BirthDateAdapter::class)
+    var fDato: LocalDate? = null
+    @XmlElement(name = "navn")
+    var navn: String? = null
+    @XmlElement(name = "personIdRm")
+    var personIdRm: String? = null
+    @XmlElement(name = "belopGebyrRm")
+    var belopGebyrRm: String? = null
+    @XmlElement(name = "belForskudd")
+    var belForskudd: String? = null
+    @XmlElement(name = "belBidrag")
+    var belBidrag: String? = null
 }
 fun brevbestilling(init: BrevBestilling.() -> Unit): BrevBestilling {
     val brevBestilling = BrevBestilling()
@@ -322,6 +355,34 @@ fun brevSaksbehandler(init: BrevSaksbehandler.() -> Unit): BrevSaksbehandler {
     return brevSaksbehandler
 }
 
+fun barnISak(init: BarnISak.() -> Unit): BarnISak {
+    val barnISak = BarnISak()
+    barnISak.init()
+    return barnISak
+}
+
+
+class BirthDateAdapter: XmlAdapter<String, LocalDate?>() {
+    override fun marshal(date: LocalDate?): String? {
+        return date?.format(BREV_DATETIME_FORMAT)
+    }
+
+    @Throws(ParseException::class)
+    override fun unmarshal(v: String): LocalDate {
+        return LocalDate.parse(v, BREV_DATETIME_FORMAT)
+    }
+}
+
+class DateAdapter: XmlAdapter<String, LocalDate?>() {
+    override fun marshal(date: LocalDate?): String? {
+        return date?.format(BREV_SOKNAD_DATETIME_FORMAT)
+    }
+
+    @Throws(ParseException::class)
+    override fun unmarshal(v: String): LocalDate {
+        return LocalDate.parse(v, BREV_SOKNAD_DATETIME_FORMAT)
+    }
+}
 
 class BooleanAdapter: XmlAdapter<String, Boolean?>() {
     override fun marshal(v: Boolean?): String {

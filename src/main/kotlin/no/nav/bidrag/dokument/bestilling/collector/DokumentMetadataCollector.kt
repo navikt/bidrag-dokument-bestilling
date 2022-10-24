@@ -2,6 +2,7 @@ package no.nav.bidrag.dokument.bestilling.collector
 
 import no.nav.bidrag.dokument.bestilling.SECURE_LOGGER
 import no.nav.bidrag.dokument.bestilling.model.Adresse
+import no.nav.bidrag.dokument.bestilling.model.Barn
 import no.nav.bidrag.dokument.bestilling.model.DokumentBestilling
 import no.nav.bidrag.dokument.bestilling.model.DokumentBestillingRequest
 import no.nav.bidrag.dokument.bestilling.model.EnhetKontaktInfo
@@ -13,6 +14,7 @@ import no.nav.bidrag.dokument.bestilling.model.HentPostadresseResponse
 import no.nav.bidrag.dokument.bestilling.model.HentSakResponse
 import no.nav.bidrag.dokument.bestilling.model.Mottaker
 import no.nav.bidrag.dokument.bestilling.model.PartInfo
+import no.nav.bidrag.dokument.bestilling.model.Rolle
 import no.nav.bidrag.dokument.bestilling.model.RolleType
 import no.nav.bidrag.dokument.bestilling.model.SoknadsPart
 import no.nav.bidrag.dokument.bestilling.service.OrganisasjonService
@@ -20,7 +22,6 @@ import no.nav.bidrag.dokument.bestilling.service.PersonService
 import no.nav.bidrag.dokument.bestilling.service.SakService
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
-import java.time.LocalDate
 
 @Component
 class DokumentMetadataCollector(
@@ -35,6 +36,8 @@ class DokumentMetadataCollector(
     lateinit var request: DokumentBestillingRequest
     lateinit var enhet: String
     lateinit var sak: HentSakResponse
+    lateinit var mottakerData: PersonData
+    lateinit var gjelderData: PersonData
     var dokumentBestilling: DokumentBestilling = DokumentBestilling()
 
     fun init(request: DokumentBestillingRequest, enhet: String): DokumentMetadataCollector {
@@ -48,6 +51,14 @@ class DokumentMetadataCollector(
         sak = sakService.hentSak(request.saksnummer)
             .orElseThrow { FantIkkeSakException("Fant ikke sak ${request.saksnummer}") }
 
+        val mottaker = hentMottaker()
+        val gjelder = hentGjelder()
+        val gadresse = hentGjelderAdresse()
+        val madresse = hentMottakerAdresse()
+
+        mottakerData = PersonData(madresse, mottaker)
+        gjelderData = PersonData(gadresse, gjelder)
+
         return this
     }
 
@@ -55,25 +66,47 @@ class DokumentMetadataCollector(
         return sak.roller.find { it.foedselsnummer == fnr }?.rolleType
     }
 
-    fun addPart(): DokumentMetadataCollector {
-        val mottaker = hentMottaker()
-        val gjelder = hentGjelder()
-        val bidragspliktig = if (hentRolle(mottaker.ident) == RolleType.BP) mottaker else if (hentRolle(gjelder.ident) == RolleType.BP) gjelder else null
-        val bidragsmottaker = if (hentRolle(mottaker.ident) == RolleType.BM) mottaker else if (hentRolle(gjelder.ident) == RolleType.BM) gjelder else null
-        dokumentBestilling.parter = listOf(
-            SoknadsPart(
-                bidragsMottakerInfo = if(bidragsmottaker!=null) PartInfo(fnr = bidragsmottaker.ident, navn = bidragsmottaker.navn, fodselsdato = bidragsmottaker.foedselsdato) else null,
-                bidragsPliktigInfo = if(bidragspliktig!=null) PartInfo(fnr = bidragspliktig.ident, navn = bidragspliktig.navn, fodselsdato = bidragspliktig.foedselsdato) else null
+    fun addPartOgBarn(): DokumentMetadataCollector {
+        val mottaker = mottakerData.person
+        val gjelder = gjelderData.person
+        val bidragspliktig =
+            if (hentRolle(mottaker.ident) == RolleType.BP) mottaker else if (hentRolle(gjelder.ident) == RolleType.BP) gjelder else null
+        val bidragsmottaker =
+            if (hentRolle(mottaker.ident) == RolleType.BM) mottaker else if (hentRolle(gjelder.ident) == RolleType.BM) gjelder else null
+
+        val barn = sak.roller.filter { it.rolleType == RolleType.BA }
+        if (bidragsmottaker != null) dokumentBestilling.roller.add(
+            PartInfo(
+                rolle = RolleType.BM,
+                fodselsnummer = bidragsmottaker.ident,
+                navn = bidragsmottaker.navn,
+                fodselsdato = bidragsmottaker.foedselsdato
             )
         )
+
+        if (bidragspliktig != null) dokumentBestilling.roller.add(PartInfo(
+                    rolle = RolleType.BP,
+                    fodselsnummer = bidragspliktig.ident,
+                    navn = bidragspliktig.navn,
+                    fodselsdato = bidragspliktig.foedselsdato
+                )
+        )
+
+        barn.filter { !it.foedselsnummer.isNullOrEmpty() }.forEach{
+            val barnInfo = personService.hentPerson(it.foedselsnummer!!, "Barn")
+            dokumentBestilling.roller.add(Barn(
+                    fodselsnummer = barnInfo.ident,
+                    navn = barnInfo.navn,
+                    fodselsdato = barnInfo.foedselsdato
+            ))
+        }
 
         return this
     }
 
     fun addGjelder(): DokumentMetadataCollector {
-        val person = hentGjelder()
-
-        val adresse = hentGjelderAdresse()
+        val person = gjelderData.person
+        val adresse = gjelderData.adresse
 
         dokumentBestilling.gjelder = Gjelder(
             fodselsnummer = person.ident,
@@ -92,9 +125,8 @@ class DokumentMetadataCollector(
     }
 
     fun addMottaker(): DokumentMetadataCollector {
-        val person = hentMottaker()
-
-        val adresse = hentMottakerAdresse()
+        val person = mottakerData.person
+        val adresse = mottakerData.adresse
 
         dokumentBestilling.mottaker = Mottaker(
             fodselsnummer = person.ident,
@@ -114,16 +146,12 @@ class DokumentMetadataCollector(
     }
 
     fun addKontaktInfo(): DokumentMetadataCollector {
-        val enhetInfo = organisasjonService.hentEnhetInfo(enhet).orElseThrow {
-            FantIkkePersonException("Fant ikke enhet $enhet")
-        }
-
         val enhetKontaktInfo = organisasjonService.hentEnhetKontaktInfo(enhet).orElseThrow {
             FantIkkePersonException("Fant ikke enhet $enhet")
         }
 
         dokumentBestilling.kontaktInfo = EnhetKontaktInfo(
-            navn = enhetInfo.enhetNavn,
+            navn = enhetKontaktInfo.enhetNavn ?: "",
             telefonnummer = enhetKontaktInfo.telefonnummer ?: "",
             returAdresse = Adresse(
                 adresselinje1 = enhetKontaktInfo.postadresse?.adresselinje ?: "",
@@ -142,29 +170,29 @@ class DokumentMetadataCollector(
 
 
     private fun hentMottaker(): HentPersonResponse {
-        return personService.hentPerson(request.mottakerId).orElseThrow {
-            SECURE_LOGGER.warn("Fant ikke mottaker ${request.mottakerId}")
-            FantIkkePersonException("Fant ikke mottaker")
-        }
+        return personService.hentPerson(request.mottakerId, "Mottaker")
     }
 
     private fun hentMottakerAdresse(): HentPostadresseResponse {
-        return personService.hentPersonAdresse(request.mottakerId).orElseThrow {
-            SECURE_LOGGER.warn("Fant ikke mottaker adresse ${request.mottakerId}")
-            FantIkkePersonException("Fant ikke mottaker adresse")
-        }
+        return personService.hentPersonAdresse(request.mottakerId, "Mottaker")
     }
+
     private fun hentGjelder(): HentPersonResponse {
-        return personService.hentPerson(request.gjelderId).orElseThrow {
-            SECURE_LOGGER.warn("Fant ikke gjelder ${request.gjelderId}")
-            FantIkkePersonException("Fant ikke gjelder")
+        if (request.mottakerId == request.gjelderId) {
+            return hentMottaker()
         }
+        return personService.hentPerson(request.gjelderId, "Gjelder")
     }
 
     private fun hentGjelderAdresse(): HentPostadresseResponse {
-        return personService.hentPersonAdresse(request.gjelderId).orElseThrow {
-            SECURE_LOGGER.warn("Fant ikke gjelder adresse ${request.gjelderId}")
-            FantIkkePersonException("Fant ikke gjelder adresse")
+        if (request.mottakerId == request.gjelderId) {
+            return hentMottakerAdresse()
         }
+        return personService.hentPersonAdresse(request.gjelderId, "Gjelder")
     }
 }
+
+data class PersonData(
+    var adresse: HentPostadresseResponse,
+    var person: HentPersonResponse
+)

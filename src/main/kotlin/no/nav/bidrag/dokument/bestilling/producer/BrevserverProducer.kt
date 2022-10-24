@@ -2,13 +2,11 @@ package no.nav.bidrag.dokument.bestilling.producer
 
 import no.nav.bidrag.dokument.bestilling.config.SaksbehandlerInfoManager
 import no.nav.bidrag.dokument.bestilling.consumer.BidragDokumentConsumer
-import no.nav.bidrag.dokument.bestilling.model.BREV_DATETIME_FORMAT
 import no.nav.bidrag.dokument.bestilling.model.BestillingSystem
 import no.nav.bidrag.dokument.bestilling.model.BrevBestilling
 import no.nav.bidrag.dokument.bestilling.model.BrevKode
 import no.nav.bidrag.dokument.bestilling.model.BrevKontaktinfo
 import no.nav.bidrag.dokument.bestilling.model.BrevMottaker
-import no.nav.bidrag.dokument.bestilling.model.BrevSaksbehandler
 import no.nav.bidrag.dokument.bestilling.model.BrevType
 import no.nav.bidrag.dokument.bestilling.model.DokumentBestilling
 import no.nav.bidrag.dokument.bestilling.model.DokumentBestillingResult
@@ -16,8 +14,8 @@ import no.nav.bidrag.dokument.bestilling.model.EnhetKontaktInfo
 import no.nav.bidrag.dokument.bestilling.model.Mottaker
 import no.nav.bidrag.dokument.bestilling.model.Parter
 import no.nav.bidrag.dokument.bestilling.model.RolleType
-import no.nav.bidrag.dokument.bestilling.model.Saksbehandler
-import no.nav.bidrag.dokument.bestilling.model.SoknadsPart
+import no.nav.bidrag.dokument.bestilling.model.Roller
+import no.nav.bidrag.dokument.bestilling.model.barnISak
 import no.nav.bidrag.dokument.bestilling.model.brev
 import no.nav.bidrag.dokument.bestilling.model.brevKontaktinfo
 import no.nav.bidrag.dokument.bestilling.model.brevSaksbehandler
@@ -33,7 +31,6 @@ import no.nav.bidrag.dokument.dto.OpprettJournalpostRequest
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.jms.core.JmsTemplate
 import org.springframework.stereotype.Component
-import java.time.format.DateTimeFormatter
 
 @Component(BestillingSystem.BREVSERVER)
 class BrevserverProducer(
@@ -97,26 +94,33 @@ class BrevserverProducer(
                     saksnr = dokumentBestilling.saksnummer
                     sakstype = "E"
                 }
-                parter = mapPart(dokumentBestilling.parter)
+                parter = mapParter(dokumentBestilling.roller)
                 saksbehandler = brevSaksbehandler {
                     navn = saksbehandlerNavn
+                }
+                barnISak = dokumentBestilling.roller.barn.map {
+                    barnISak {
+                        fnr = it.fodselsnummer
+                        navn = it.navn
+                        fDato = it.fodselsdato
+                        fornavn = it.hentFornavn()
+                    }
                 }
             }
         }
     }
 
-    fun mapPart(_part: List<SoknadsPart>): Parter? {
-        val part = if (_part.isNotEmpty()) _part[0] else return null
-        val bp = part.bidragsPliktigInfo
-        val bm = part.bidragsMottakerInfo
+    fun mapParter(roller: Roller): Parter? {
+        val bp = roller.bidragspliktig
+        val bm = roller.bidragsmottaker
 
         return parter {
-            bpfnr = bp?.fnr
+            bpfnr = bp?.fodselsnummer
             bpnavn = bp?.navn
-            bpnavn = bp?.fodselsdato?.format(BREV_DATETIME_FORMAT)
-            bmfnr = bm?.fnr
+            bpfodselsdato = bp?.fodselsdato
+            bmfnr = bm?.fodselsnummer
             bmnavn = bm?.navn
-            bmfodselsdato = bm?.fodselsdato?.format(BREV_DATETIME_FORMAT) ?: ""
+            bmfodselsdato = bm?.fodselsdato
         }
     }
     fun mapKontaktInfo(_kontaktInfo: EnhetKontaktInfo?): BrevKontaktinfo? {
@@ -154,7 +158,7 @@ class BrevserverProducer(
                 RolleType.FR -> "05"
                 else -> null
             }
-            fodselsdato = mottaker.fodselsdato?.format(BREV_DATETIME_FORMAT)
+            fodselsdato = mottaker.fodselsdato
 
             val adresse = mottaker.adresse
             val postnummerSted = "${adresse.postnummer} ${adresse.poststed}"

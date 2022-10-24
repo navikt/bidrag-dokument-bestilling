@@ -19,14 +19,14 @@ class DokumentMap(val applicationContext: ApplicationContext): MutableMap<BrevKo
            withMetadataCollector(bestilling, enhet)
                .addMottaker()
                .addGjelder()
-               .addPart()
+               .addPartOgBarn()
                .addKontaktInfo()
         })
         add(BrevKode.BI01S02 to { bestilling, enhet ->
             withMetadataCollector(bestilling, enhet)
                 .addMottaker()
                 .addGjelder()
-                .addPart()
+                .addPartOgBarn()
                 .addKontaktInfo()
         })
     }

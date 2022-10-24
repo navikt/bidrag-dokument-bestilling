@@ -16,6 +16,6 @@ class BidragDokumentBestillingLocal
 
 fun main(args: Array<String>) {
     val app = SpringApplication(BidragDokumentBestillingLocal::class.java)
-    app.setAdditionalProfiles("local", "nais")
+    app.setAdditionalProfiles("local")
     app.run(*args)
 }

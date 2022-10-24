@@ -40,7 +40,7 @@ class JMSConfiguration(private val mqProperties: MQProperties) {
         baseJmsTemplate.defaultDestinationName = queueName
         val jaxb2Marshaller = Jaxb2Marshaller()
         jaxb2Marshaller.setClassesToBeBound(BrevBestilling::class.java)
-        jaxb2Marshaller.setMarshallerProperties(mapOf(Marshaller.JAXB_ENCODING to "ISO-8859-1"))
+        jaxb2Marshaller.setMarshallerProperties(mapOf(Marshaller.JAXB_ENCODING to "ISO-8859-1", Marshaller.JAXB_FORMATTED_OUTPUT to true))
         baseJmsTemplate.messageConverter = LoggingMarshallingMessageConverter(jaxb2Marshaller, replyQueueName)
         return baseJmsTemplate
     }
@@ -57,8 +57,6 @@ class JMSConfiguration(private val mqProperties: MQProperties) {
         connectionFactory.channel = mqProperties.channel.uppercase(Locale.getDefault())
         connectionFactory.transportType = CommonConstants.WMQ_CM_CLIENT
         connectionFactory.setIntProperty(JmsConstants.JMS_IBM_ENCODING, CMQC.MQENC_S390)
-//        connectionFactory.setStringProperty(JmsConstants.JMS_IBM_CHARACTER_SET, "IBM277")
-//        connectionFactory.setStringProperty(JmsConstants.JMS_REPLYTO, replyQueueName)
         val credentialQueueConnectionFactory = UserCredentialsConnectionFactoryAdapter()
         credentialQueueConnectionFactory.setUsername(mqProperties.username)
         credentialQueueConnectionFactory.setPassword(mqProperties.password)

@@ -10,6 +10,10 @@ import no.nav.bidrag.dokument.bestilling.JmsTestConfig
 import no.nav.bidrag.dokument.bestilling.model.DokumentBestillingRequest
 import no.nav.bidrag.dokument.bestilling.model.DokumentBestillingResponse
 import no.nav.bidrag.dokument.bestilling.model.HentPersonResponse
+import no.nav.bidrag.dokument.bestilling.utils.BARN_ID_1
+import no.nav.bidrag.dokument.bestilling.utils.BARN_ID_2
+import no.nav.bidrag.dokument.bestilling.utils.BARN_NAVN_1
+import no.nav.bidrag.dokument.bestilling.utils.BARN_NAVN_2
 import no.nav.bidrag.dokument.bestilling.utils.JmsTestConsumer
 import no.nav.bidrag.dokument.bestilling.utils.BM_PERSON_ID_1
 import no.nav.bidrag.dokument.bestilling.utils.BM_PERSON_NAVN_1
@@ -64,6 +68,8 @@ class DokumentBestillingControllerTest {
     fun `Skal hente persondata`(){
         stubUtils.stubHentPerson(BP_PERSON_ID_1, HentPersonResponse(BP_PERSON_ID_1, BP_PERSON_NAVN_1, LocalDate.parse("2020-05-06"), "213213213"))
         stubUtils.stubHentPerson(BM_PERSON_ID_1, HentPersonResponse(BM_PERSON_ID_1, BM_PERSON_NAVN_1, LocalDate.parse("2020-05-06"), "213213213"))
+        stubUtils.stubHentPerson(BARN_ID_1, HentPersonResponse(BARN_ID_1, BARN_NAVN_1, LocalDate.parse("2020-05-06"), "213213213"))
+        stubUtils.stubHentPerson(BARN_ID_2, HentPersonResponse(BARN_ID_2, BARN_NAVN_2, LocalDate.parse("2020-05-06"), "213213213"))
         stubUtils.stubHentAdresse()
         stubUtils.stubOpprettJournalpost()
         stubUtils.stubEnhetInfo()

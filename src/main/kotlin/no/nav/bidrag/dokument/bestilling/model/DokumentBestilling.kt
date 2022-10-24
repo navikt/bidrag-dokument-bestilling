@@ -17,27 +17,52 @@ data class DokumentBestilling(
     var enhet: String? = null,
     var saksnummer: String? = null,
     var spraak: String? = null,
-    var roller: List<Rolle> = emptyList()
+    var roller: Roller = Roller()
 )
 
-data class Rolle(
-    val rolle: RolleType,
-    val fodselsnummer: String? = null
-)
+class Roller: MutableList<Rolle> by mutableListOf() {
+    val barn: List<Barn> get() =  filterIsInstance<Barn>()
+    val bidragsmottaker get() = filterIsInstance<PartInfo>().find { it.rolle == RolleType.BM }
+    val bidragspliktig get() = filterIsInstance<PartInfo>().find { it.rolle == RolleType.BP }
+}
+interface Rolle {
+    val rolle: RolleType
+    val fodselsnummer: String?
+    val navn: String
+    val fodselsdato: LocalDate?
+}
+
+data class Barn(
+    override val rolle: RolleType = RolleType.BA,
+    override val fodselsnummer: String?,
+    override val navn: String,
+    override val fodselsdato: LocalDate?,
+    val bidragsbelop: Number? = null,
+    val forskuddsbelop: Number? = null,
+    val gebyrRm: Number? = null,
+    val fodselsnummerRm: String? = null
+): Rolle {
+    fun hentFornavn(): String {
+        val navnSplit = navn.split(",")
+        val fornavnMellomnavn = if (navnSplit.size == 2) navnSplit[1] else navnSplit[0]
+        return fornavnMellomnavn.trim().split(" ")[0]
+    }
+}
 data class SoknadsPart(
     val bidragsPliktigInfo: PartInfo? = null,
     val bidragsMottakerInfo: PartInfo? = null,
 )
 
 data class PartInfo(
-    val fnr: String,
-    val navn: String,
-    val fodselsdato: LocalDate? = null,
+    override var rolle: RolleType,
+    override val fodselsnummer: String? = null,
+    override val navn: String,
+    override val fodselsdato: LocalDate? = null,
     val landkode: String? = null,
     val datoDod: LocalDate? = null,
     val gebyr: Number? = null,
     val kravFremAv: String? = null
-)
+): Rolle
 data class EnhetKontaktInfo(
     val navn: String,
     val telefonnummer: String,
