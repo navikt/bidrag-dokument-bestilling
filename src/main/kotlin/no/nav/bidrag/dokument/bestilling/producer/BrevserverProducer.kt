@@ -88,7 +88,6 @@ class BrevserverProducer(
                 kontaktInfo = mapKontaktInfo(this, dokumentBestilling.kontaktInfo)
                 soknad {
                     saksnr = dokumentBestilling.saksnummer
-                    sakstype = "E"
                 }
                 parter {
                     bpfnr = bp?.fodselsnummer
@@ -141,7 +140,7 @@ class BrevserverProducer(
             rolle = when(mottaker.rolle){
                 RolleType.BM -> "01"
                 RolleType.BP -> "02"
-                RolleType.BA -> "03"
+//                RolleType.BA -> "03"
                 else -> null
             }
             fodselsdato = mottaker.fodselsdato

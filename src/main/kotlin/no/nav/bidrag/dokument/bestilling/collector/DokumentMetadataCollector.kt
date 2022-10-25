@@ -135,8 +135,7 @@ class DokumentMetadataCollector(
             navn = enhetKontaktInfo.enhetNavn ?: "",
             telefonnummer = enhetKontaktInfo.telefonnummer ?: "",
             returAdresse = Adresse(
-                adresselinje1 = enhetKontaktInfo.postadresse?.adresselinje ?: "",
-                postnummer = enhetKontaktInfo.postadresse?.postnummer
+                adresselinje1 = enhetKontaktInfo.postadresse?.adresselinje ?: ""
             ),
             enhetId = enhet
         )

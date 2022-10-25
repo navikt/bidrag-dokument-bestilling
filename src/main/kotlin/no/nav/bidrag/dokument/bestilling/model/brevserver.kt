@@ -260,7 +260,7 @@ class Parter {
     @XmlElement(name = "bmKravFremAv", nillable = true)
     var bmkravkfremav: String? = null
     @XmlElement(name = "bmbelopGebyr", nillable = true)
-    var bmgebyr: String? = "00000000000"
+    var bmgebyr: String? = null
     @XmlElement(name = "bmLandKd", nillable = true)
     var bmlandkode: String? = null
     @XmlElement(name = "bpLandKd", nillable = true)
