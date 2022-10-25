@@ -6,9 +6,10 @@ import no.nav.bidrag.dokument.bestilling.model.FantIkkePersonException
 import no.nav.bidrag.dokument.bestilling.model.HentPersonResponse
 import no.nav.bidrag.dokument.bestilling.model.HentPostadresseResponse
 import org.springframework.stereotype.Service
-import java.util.Optional
+import org.springframework.web.context.annotation.RequestScope
 
 @Service
+@RequestScope
 class PersonService(private var bidragPersonConsumer: BidragPersonConsumer) {
 
     fun hentPerson(personId: String, rolle: String? = "UKJENT"): HentPersonResponse {

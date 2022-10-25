@@ -3,6 +3,7 @@ package no.nav.bidrag.dokument.bestilling.producer
 import no.nav.bidrag.dokument.bestilling.config.SaksbehandlerInfoManager
 import no.nav.bidrag.dokument.bestilling.consumer.BidragDokumentConsumer
 import no.nav.bidrag.dokument.bestilling.model.BestillingSystem
+import no.nav.bidrag.dokument.bestilling.model.Brev
 import no.nav.bidrag.dokument.bestilling.model.BrevBestilling
 import no.nav.bidrag.dokument.bestilling.model.BrevKode
 import no.nav.bidrag.dokument.bestilling.model.BrevKontaktinfo
@@ -12,17 +13,8 @@ import no.nav.bidrag.dokument.bestilling.model.DokumentBestilling
 import no.nav.bidrag.dokument.bestilling.model.DokumentBestillingResult
 import no.nav.bidrag.dokument.bestilling.model.EnhetKontaktInfo
 import no.nav.bidrag.dokument.bestilling.model.Mottaker
-import no.nav.bidrag.dokument.bestilling.model.Parter
 import no.nav.bidrag.dokument.bestilling.model.RolleType
-import no.nav.bidrag.dokument.bestilling.model.Roller
-import no.nav.bidrag.dokument.bestilling.model.barnISak
-import no.nav.bidrag.dokument.bestilling.model.brev
-import no.nav.bidrag.dokument.bestilling.model.brevKontaktinfo
-import no.nav.bidrag.dokument.bestilling.model.brevSaksbehandler
 import no.nav.bidrag.dokument.bestilling.model.brevbestilling
-import no.nav.bidrag.dokument.bestilling.model.brevmottaker
-import no.nav.bidrag.dokument.bestilling.model.parter
-import no.nav.bidrag.dokument.bestilling.model.soknad
 import no.nav.bidrag.dokument.dto.AktorDto
 import no.nav.bidrag.dokument.dto.AvsenderMottakerDto
 import no.nav.bidrag.dokument.dto.JournalpostType
@@ -81,24 +73,35 @@ class BrevserverProducer(
         val dokumentSpraak = dokumentBestilling.spraak ?: "NB"
         val saksbehandlerNavn = saksbehandlerInfoManager.hentSaksbehandler().orElse(null)?.navn ?: saksbehandlerInfoManager.hentSaksbehandlerBrukerId()
         return brevbestilling {
+            val roller = dokumentBestilling.roller
+            val bp = roller.bidragspliktig
+            val bm = roller.bidragsmottaker
+
             malpakke = "BI01.${brevKode.name}"
             passord = brevPassord
             saksbehandler = saksbehandlerInfoManager.hentSaksbehandlerBrukerId()
-            brev = brev {
+            brev {
                 brevref = dokumentBestilling.dokumentReferanse!!
                 spraak = dokumentSpraak
                 tknr = dokumentBestilling.enhet!!
-                mottaker = mapBrevmottaker(dokumentBestilling.mottaker!!, dokumentSpraak)
-                kontaktInfo = mapKontaktInfo(dokumentBestilling.kontaktInfo)
-                soknad = soknad {
+                mottaker = mapBrevmottaker(this, dokumentBestilling.mottaker!!, dokumentSpraak)
+                kontaktInfo = mapKontaktInfo(this, dokumentBestilling.kontaktInfo)
+                soknad {
                     saksnr = dokumentBestilling.saksnummer
                     sakstype = "E"
                 }
-                parter = mapParter(dokumentBestilling.roller)
-                saksbehandler = brevSaksbehandler {
+                parter {
+                    bpfnr = bp?.fodselsnummer
+                    bpnavn = bp?.navn
+                    bpfodselsdato = bp?.fodselsdato
+                    bmfnr = bm?.fodselsnummer
+                    bmnavn = bm?.navn
+                    bmfodselsdato = bm?.fodselsdato
+                }
+                brevSaksbehandler {
                     navn = saksbehandlerNavn
                 }
-                barnISak = dokumentBestilling.roller.barn.map {
+                dokumentBestilling.roller.barn.forEach {
                     barnISak {
                         fnr = it.fodselsnummer
                         navn = it.navn
@@ -110,23 +113,10 @@ class BrevserverProducer(
         }
     }
 
-    fun mapParter(roller: Roller): Parter? {
-        val bp = roller.bidragspliktig
-        val bm = roller.bidragsmottaker
-
-        return parter {
-            bpfnr = bp?.fodselsnummer
-            bpnavn = bp?.navn
-            bpfodselsdato = bp?.fodselsdato
-            bmfnr = bm?.fodselsnummer
-            bmnavn = bm?.navn
-            bmfodselsdato = bm?.fodselsdato
-        }
-    }
-    fun mapKontaktInfo(_kontaktInfo: EnhetKontaktInfo?): BrevKontaktinfo? {
+    fun mapKontaktInfo(brev: Brev, _kontaktInfo: EnhetKontaktInfo?): BrevKontaktinfo? {
         val kontaktInfo = _kontaktInfo ?: return null
-        return brevKontaktinfo {
-            val mappedAdresse = adresse {
+        return brev.brevKontaktinfo {
+            returOgPostadresse {
                 enhet = kontaktInfo.enhetId
                 navn = kontaktInfo.navn.substring(0, kontaktInfo.navn.length.coerceAtMost(30))
                 telefon = if(kontaktInfo.navn.length > 30) kontaktInfo.navn.substring(30, kontaktInfo.navn.length) else null
@@ -141,12 +131,10 @@ class BrevserverProducer(
             tlfAvsender = tlfAvsender {
                 telefonnummer = kontaktInfo.telefonnummer
             }
-            returAdresse = mappedAdresse
-            postadresse = mappedAdresse
         }
     }
-    fun mapBrevmottaker(mottaker: Mottaker, brevSpraak: String): BrevMottaker {
-        return brevmottaker {
+    fun mapBrevmottaker(brev: Brev, mottaker: Mottaker, brevSpraak: String): BrevMottaker {
+        return brev.brevmottaker {
             navn = mottaker.navn
             spraak = brevSpraak
             fodselsnummer = mottaker.fodselsnummer

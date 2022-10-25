@@ -1,6 +1,5 @@
 package no.nav.bidrag.dokument.bestilling.collector
 
-import no.nav.bidrag.dokument.bestilling.SECURE_LOGGER
 import no.nav.bidrag.dokument.bestilling.model.Adresse
 import no.nav.bidrag.dokument.bestilling.model.Barn
 import no.nav.bidrag.dokument.bestilling.model.DokumentBestilling
@@ -14,9 +13,8 @@ import no.nav.bidrag.dokument.bestilling.model.HentPostadresseResponse
 import no.nav.bidrag.dokument.bestilling.model.HentSakResponse
 import no.nav.bidrag.dokument.bestilling.model.Mottaker
 import no.nav.bidrag.dokument.bestilling.model.PartInfo
-import no.nav.bidrag.dokument.bestilling.model.Rolle
 import no.nav.bidrag.dokument.bestilling.model.RolleType
-import no.nav.bidrag.dokument.bestilling.model.SoknadsPart
+import no.nav.bidrag.dokument.bestilling.model.SakRolle
 import no.nav.bidrag.dokument.bestilling.service.OrganisasjonService
 import no.nav.bidrag.dokument.bestilling.service.PersonService
 import no.nav.bidrag.dokument.bestilling.service.SakService
@@ -36,8 +34,6 @@ class DokumentMetadataCollector(
     lateinit var request: DokumentBestillingRequest
     lateinit var enhet: String
     lateinit var sak: HentSakResponse
-    lateinit var mottakerData: PersonData
-    lateinit var gjelderData: PersonData
     var dokumentBestilling: DokumentBestilling = DokumentBestilling()
 
     fun init(request: DokumentBestillingRequest, enhet: String): DokumentMetadataCollector {
@@ -51,30 +47,13 @@ class DokumentMetadataCollector(
         sak = sakService.hentSak(request.saksnummer)
             .orElseThrow { FantIkkeSakException("Fant ikke sak ${request.saksnummer}") }
 
-        val mottaker = hentMottaker()
-        val gjelder = hentGjelder()
-        val gadresse = hentGjelderAdresse()
-        val madresse = hentMottakerAdresse()
-
-        mottakerData = PersonData(madresse, mottaker)
-        gjelderData = PersonData(gadresse, gjelder)
-
         return this
     }
 
-    private fun hentRolle(fnr: String): RolleType? {
-        return sak.roller.find { it.foedselsnummer == fnr }?.rolleType
-    }
+    fun addRoller(): DokumentMetadataCollector {
+        val bidragspliktig = hentBidragspliktig()
+        val bidragsmottaker = hentBidragsmottaker()
 
-    fun addPartOgBarn(): DokumentMetadataCollector {
-        val mottaker = mottakerData.person
-        val gjelder = gjelderData.person
-        val bidragspliktig =
-            if (hentRolle(mottaker.ident) == RolleType.BP) mottaker else if (hentRolle(gjelder.ident) == RolleType.BP) gjelder else null
-        val bidragsmottaker =
-            if (hentRolle(mottaker.ident) == RolleType.BM) mottaker else if (hentRolle(gjelder.ident) == RolleType.BM) gjelder else null
-
-        val barn = sak.roller.filter { it.rolleType == RolleType.BA }
         if (bidragsmottaker != null) dokumentBestilling.roller.add(
             PartInfo(
                 rolle = RolleType.BM,
@@ -84,7 +63,8 @@ class DokumentMetadataCollector(
             )
         )
 
-        if (bidragspliktig != null) dokumentBestilling.roller.add(PartInfo(
+        if (bidragspliktig != null) dokumentBestilling.roller.add(
+            PartInfo(
                     rolle = RolleType.BP,
                     fodselsnummer = bidragspliktig.ident,
                     navn = bidragspliktig.navn,
@@ -92,6 +72,7 @@ class DokumentMetadataCollector(
                 )
         )
 
+        val barn = sak.roller.filter { it.rolleType == RolleType.BA }
         barn.filter { !it.foedselsnummer.isNullOrEmpty() }.forEach{
             val barnInfo = personService.hentPerson(it.foedselsnummer!!, "Barn")
             dokumentBestilling.roller.add(Barn(
@@ -105,8 +86,8 @@ class DokumentMetadataCollector(
     }
 
     fun addGjelder(): DokumentMetadataCollector {
-        val person = gjelderData.person
-        val adresse = gjelderData.adresse
+        val person = hentMottaker()
+        val adresse = hentMottakerAdresse()
 
         dokumentBestilling.gjelder = Gjelder(
             fodselsnummer = person.ident,
@@ -125,8 +106,8 @@ class DokumentMetadataCollector(
     }
 
     fun addMottaker(): DokumentMetadataCollector {
-        val person = mottakerData.person
-        val adresse = mottakerData.adresse
+        val person = hentGjelder()
+        val adresse = hentGjelderAdresse()
 
         dokumentBestilling.mottaker = Mottaker(
             fodselsnummer = person.ident,
@@ -168,6 +149,22 @@ class DokumentMetadataCollector(
 
     fun getBestillingData(): DokumentBestilling = dokumentBestilling
 
+    private fun hentRolle(fnr: String): RolleType? {
+        return sak.roller.find { it.foedselsnummer == fnr }?.rolleType
+    }
+
+    private fun hentIdentForRolle(rolle: RolleType): String? {
+        return sak.roller.find { it.rolleType == rolle }?.foedselsnummer
+    }
+    private fun hentBidragsmottaker(): HentPersonResponse? {
+        val fnr = hentIdentForRolle(RolleType.BM)
+        return if(!fnr.isNullOrEmpty()) personService.hentPerson(fnr, "Bidragsmottaker") else null
+    }
+
+    private fun hentBidragspliktig(): HentPersonResponse? {
+        val fnr = hentIdentForRolle(RolleType.BP)
+        return if(!fnr.isNullOrEmpty()) personService.hentPerson(fnr, "Bidragspliktig") else null
+    }
 
     private fun hentMottaker(): HentPersonResponse {
         return personService.hentPerson(request.mottakerId, "Mottaker")
@@ -192,7 +189,9 @@ class DokumentMetadataCollector(
     }
 }
 
+typealias PersonIdent = String
 data class PersonData(
-    var adresse: HentPostadresseResponse,
-    var person: HentPersonResponse
+    var adresse: Map<PersonIdent, HentPersonResponse>,
+    var personer: Map<PersonIdent, HentPersonResponse>,
+    var roller: List<SakRolle>
 )

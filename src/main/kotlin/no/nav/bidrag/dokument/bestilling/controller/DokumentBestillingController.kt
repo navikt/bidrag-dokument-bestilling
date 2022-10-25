@@ -20,9 +20,11 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestHeader
 import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.context.annotation.RequestScope
 
 @RestController
 @Protected
+@RequestScope
 class DokumentBestillingController(
     var dokumentBestillingService: DokumentBestillingService,
     var onlinebrevTemplate: JmsTemplate,
@@ -31,13 +33,13 @@ class DokumentBestillingController(
 
     @PostMapping("/bestill/{brevKode}")
     @Operation(
-        description = "Bestiller dokument for oppgitt brevkode",
+        description = "Bestiller dokument for oppgitt brevkode/dokumentKode",
         security = [SecurityRequirement(name = "bearer-key")],
     )
     @ApiResponses(
         value = [
-            ApiResponse(responseCode = "200", description = "Hentet person data"),
-            ApiResponse(responseCode = "404", description = "Fant ikke person"),
+            ApiResponse(responseCode = "200", description = "Dokument er bestilt for oppgitt brevkode/dokumentKode"),
+            ApiResponse(responseCode = "400", description = "Dokument ble bestilt med ugyldig data"),
             ApiResponse(responseCode = "401", description = "Sikkerhetstoken er ikke gyldig"),
             ApiResponse(
                 responseCode = "403",
@@ -52,14 +54,14 @@ class DokumentBestillingController(
     @PostMapping("/bestill/raw")
     fun bestillRaw(@RequestBody request: String): ResponseEntity<Void> {
         onlinebrevTemplate.send {
-            val message = it.createObjectMessage()
-            val rq = com.ibm.mq.jms.MQQueue("MRQ1", replyQueueName)
-            rq.targetClient = 1
+            val message = it.createTextMessage()
+            val rq = com.ibm.mq.jms.MQQueue(replyQueueName)
             message.jmsReplyTo = rq
-            message.jmsDestination = null
             message.setIntProperty(JmsConstants.JMS_IBM_ENCODING, CMQC.MQENC_S390)
             message.setIntProperty(JmsConstants.JMS_IBM_CHARACTER_SET, 277)
-            message.`object` = request
+            message.setIntProperty(JmsConstants.JMS_IBM_MSGTYPE, CMQC.MQMT_DATAGRAM)
+            message.setIntProperty(JmsConstants.JMS_IBM_PUTAPPLTYPE, CMQC.MQAT_CICS)
+            message.text = request
             message
         }
         return ResponseEntity.ok().build()

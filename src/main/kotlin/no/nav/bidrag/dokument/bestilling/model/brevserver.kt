@@ -50,6 +50,13 @@ class BrevBestilling {
     lateinit var saksbehandler: String
 
     var brev: Brev? = null
+
+    fun brev(init: Brev.() -> Unit): Brev {
+        val initBrev = Brev()
+        initBrev.init()
+        brev = initBrev
+        return initBrev
+    }
 }
 
 @XmlRootElement(name = "brev")
@@ -66,13 +73,53 @@ class Brev {
     @XmlElement(name = "parter")
     var parter: Parter? = null
     @XmlElement(name = "barniSak")
-    var barnISak: List<BarnISak> = emptyList()
+    var barnISak: MutableList<BarnISak> = mutableListOf()
     @XmlElement(name = "soknBost")
     var soknad: Soknad? = null
     @XmlElement(name = "Kontaktinfo")
     var kontaktInfo: BrevKontaktinfo? = null
     @XmlElement(name = "Saksbehandl")
     var saksbehandler: BrevSaksbehandler? = null
+
+    fun brevKontaktinfo(init: BrevKontaktinfo.() -> Unit): BrevKontaktinfo {
+        val brevKontaktinfo = BrevKontaktinfo()
+        brevKontaktinfo.init()
+        kontaktInfo = brevKontaktinfo
+        return brevKontaktinfo
+    }
+    fun brevSaksbehandler(init: BrevSaksbehandler.() -> Unit): BrevSaksbehandler {
+        val brevSaksbehandler = BrevSaksbehandler()
+        brevSaksbehandler.init()
+        saksbehandler = brevSaksbehandler
+        return brevSaksbehandler
+    }
+    fun soknad(init: Soknad.() -> Unit): Soknad {
+        val initSoknad = Soknad()
+        initSoknad.init()
+        soknad = initSoknad
+        return initSoknad
+    }
+
+    fun barnISak(init: BarnISak.() -> Unit): BarnISak {
+        val initBarnISak = BarnISak()
+        initBarnISak.init()
+        barnISak.add(initBarnISak)
+        return initBarnISak
+    }
+
+    fun brevmottaker(init: BrevMottaker.() -> Unit): BrevMottaker {
+        val brevMottaker = BrevMottaker()
+        brevMottaker.init()
+        mottaker = brevMottaker
+        return brevMottaker
+    }
+
+    fun parter(init: Parter.() -> Unit): Parter {
+        val initParter = Parter()
+        initParter.init()
+        parter = initParter
+        return initParter
+    }
 }
 
 
@@ -88,7 +135,7 @@ class BrevSaksbehandler {
 
 @XmlRootElement(name = "brevMottaker")
 @XmlAccessorType(XmlAccessType.FIELD)
-class BrevMottaker {
+class BrevMottaker() {
     @XmlElement(name = "navn", nillable = true)
     var navn: String? = null
     @XmlElement(name = "adr1", nillable = true)
@@ -164,9 +211,11 @@ class BrevKontaktinfo {
     }
 
 
-    fun adresse(init: Adresse.() -> Unit): Adresse {
+    fun returOgPostadresse(init: Adresse.() -> Unit): Adresse {
         val adresse = Adresse()
         adresse.init()
+        returAdresse = adresse
+        postadresse = adresse
         return adresse
     }
 
@@ -295,70 +344,33 @@ class Soknad {
 @XmlRootElement(name = "barniSak")
 @XmlAccessorType(XmlAccessType.FIELD)
 class BarnISak {
-    @XmlElement(name = "fnr")
+    @XmlElement(name = "fnr", nillable = true)
     var fnr: String? = null
-    @XmlElement(name = "fornavn")
+    @XmlElement(name = "fornavn", nillable = true)
     var fornavn: String? = null
-    @XmlElement(name = "navn")
+    @XmlElement(name = "fDato", nillable = true)
     @XmlJavaTypeAdapter(BirthDateAdapter::class)
     var fDato: LocalDate? = null
-    @XmlElement(name = "navn")
+    @XmlElement(name = "navn", nillable = true)
     var navn: String? = null
-    @XmlElement(name = "personIdRm")
+    @XmlElement(name = "personIdRm", nillable = true)
     var personIdRm: String? = null
-    @XmlElement(name = "belopGebyrRm")
+    @XmlElement(name = "belopGebyrRm", nillable = true)
     var belopGebyrRm: String? = null
-    @XmlElement(name = "belForskudd")
+    @XmlElement(name = "belForskudd", nillable = true)
     var belForskudd: String? = null
-    @XmlElement(name = "belBidrag")
+    @XmlElement(name = "belBidrag", nillable = true)
     var belBidrag: String? = null
 }
+
+@DslMarker
+annotation class BrevBestillingMarker
+
+@BrevBestillingMarker
 fun brevbestilling(init: BrevBestilling.() -> Unit): BrevBestilling {
     val brevBestilling = BrevBestilling()
     brevBestilling.init()
     return brevBestilling
-}
-
-fun brev(init: Brev.() -> Unit): Brev {
-    val brev = Brev()
-    brev.init()
-    return brev
-}
-
-fun brevmottaker(init: BrevMottaker.() -> Unit): BrevMottaker {
-    val brevMottaker = BrevMottaker()
-    brevMottaker.init()
-    return brevMottaker
-}
-
-fun soknad(init: Soknad.() -> Unit): Soknad {
-    val soknad = Soknad()
-    soknad.init()
-    return soknad
-}
-
-fun parter(init: Parter.() -> Unit): Parter {
-    val parter = Parter()
-    parter.init()
-    return parter
-}
-
-fun brevKontaktinfo(init: BrevKontaktinfo.() -> Unit): BrevKontaktinfo {
-    val brevKontaktinfo = BrevKontaktinfo()
-    brevKontaktinfo.init()
-    return brevKontaktinfo
-}
-
-fun brevSaksbehandler(init: BrevSaksbehandler.() -> Unit): BrevSaksbehandler {
-    val brevSaksbehandler = BrevSaksbehandler()
-    brevSaksbehandler.init()
-    return brevSaksbehandler
-}
-
-fun barnISak(init: BarnISak.() -> Unit): BarnISak {
-    val barnISak = BarnISak()
-    barnISak.init()
-    return barnISak
 }
 
 
