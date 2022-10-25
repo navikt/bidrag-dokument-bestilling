@@ -7,6 +7,7 @@ import no.nav.bidrag.dokument.dto.OpprettJournalpostRequest
 import no.nav.bidrag.dokument.dto.OpprettJournalpostResponse
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.cache.annotation.Cacheable
+import org.springframework.http.HttpEntity
 import org.springframework.http.HttpMethod
 import org.springframework.stereotype.Service
 import org.springframework.web.client.RestTemplate
@@ -22,7 +23,7 @@ class BidragDokumentConsumer(
         return restTemplate.exchange(
             "/journalpost/BIDRAG",
             HttpMethod.POST,
-            null,
+            HttpEntity(opprettJournalpostRequest),
             OpprettJournalpostResponse::class.java
         ).body
     }

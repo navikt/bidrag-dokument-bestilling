@@ -139,11 +139,9 @@ class BrevserverProducer(
             spraak = brevSpraak
             fodselsnummer = mottaker.fodselsnummer
             rolle = when(mottaker.rolle){
-                RolleType.BP -> "01"
-                RolleType.BM -> "02"
+                RolleType.BM -> "01"
+                RolleType.BP -> "02"
                 RolleType.BA -> "03"
-                RolleType.RM -> "04"
-                RolleType.FR -> "05"
                 else -> null
             }
             fodselsdato = mottaker.fodselsdato

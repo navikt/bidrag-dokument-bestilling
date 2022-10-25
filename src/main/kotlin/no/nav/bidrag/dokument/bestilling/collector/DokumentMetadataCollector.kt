@@ -157,8 +157,8 @@ class DokumentMetadataCollector(
         return sak.roller.find { it.rolleType == rolle }?.foedselsnummer
     }
     private fun hentBidragsmottaker(): HentPersonResponse? {
-        val fnr = hentIdentForRolle(RolleType.BM)
-        return if(!fnr.isNullOrEmpty()) personService.hentPerson(fnr, "Bidragsmottaker") else null
+        val bmFnr = hentIdentForRolle(RolleType.BM) ?: hentIdentForRolle(RolleType.RM)
+        return if(!bmFnr.isNullOrEmpty()) personService.hentPerson(bmFnr, "Bidragsmottaker") else null
     }
 
     private fun hentBidragspliktig(): HentPersonResponse? {
