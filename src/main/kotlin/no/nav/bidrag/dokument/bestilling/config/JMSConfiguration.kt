@@ -40,7 +40,7 @@ class JMSConfiguration(private val mqProperties: MQProperties) {
         baseJmsTemplate.defaultDestinationName = queueName
         val jaxb2Marshaller = Jaxb2Marshaller()
         jaxb2Marshaller.setClassesToBeBound(BrevBestilling::class.java)
-        jaxb2Marshaller.setMarshallerProperties(mapOf(Marshaller.JAXB_ENCODING to "ISO-8859-1", Marshaller.JAXB_FORMATTED_OUTPUT to true))
+        jaxb2Marshaller.setMarshallerProperties(mapOf(Marshaller.JAXB_ENCODING to "ISO-8859-1"))
         baseJmsTemplate.messageConverter = LoggingMarshallingMessageConverter(jaxb2Marshaller, replyQueueName)
         return baseJmsTemplate
     }
