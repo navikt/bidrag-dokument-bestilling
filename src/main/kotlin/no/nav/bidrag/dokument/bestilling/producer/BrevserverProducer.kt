@@ -117,8 +117,7 @@ class BrevserverProducer(
         return brev.brevKontaktinfo {
             returOgPostadresse {
                 enhet = kontaktInfo.enhetId
-                navn = kontaktInfo.navn.substring(0, kontaktInfo.navn.length.coerceAtMost(30))
-                telefon = if(kontaktInfo.navn.length > 30) kontaktInfo.navn.substring(30, kontaktInfo.navn.length) else null
+                navn = kontaktInfo.navn
                 adresselinje2 = kontaktInfo.returAdresse.adresselinje1
                 postnummer = kontaktInfo.returAdresse.postnummer
                 poststed = kontaktInfo.returAdresse.poststed
