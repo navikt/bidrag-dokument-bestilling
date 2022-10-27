@@ -34,9 +34,10 @@ class DokumentMetadataCollector(
     lateinit var request: DokumentBestillingRequest
     lateinit var enhet: String
     lateinit var sak: HentSakResponse
-    var dokumentBestilling: DokumentBestilling = DokumentBestilling()
+    lateinit var dokumentBestilling: DokumentBestilling
 
     fun init(request: DokumentBestillingRequest): DokumentMetadataCollector {
+        this.dokumentBestilling = DokumentBestilling()
         this.request = request
         dokumentBestilling.dokumentReferanse = request.dokumentReferanse
         dokumentBestilling.tittel = request.tittel
