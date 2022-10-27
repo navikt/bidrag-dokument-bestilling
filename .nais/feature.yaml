@@ -21,3 +21,7 @@ env:
   MQ_HOSTNAME: b27apvl220.preprod.local
   MQ_CHANNEL: Q1_BDJOURNALPOST
   JAVA_OPTS: -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005
+azure_access_inbound:
+  - application: bisys
+    namespace: bidrag
+    cluster: dev-fss

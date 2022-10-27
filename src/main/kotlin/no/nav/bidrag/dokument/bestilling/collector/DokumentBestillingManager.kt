@@ -17,8 +17,8 @@ class DokumentBestillingManager(var applicationContext: ApplicationContext, val 
         private val LOGGER = LoggerFactory.getLogger(DokumentBestillingManager::class.java)
     }
 
-    fun bestill(reqest: DokumentBestillingRequest, brevKode: BrevKode, enhet: String): DokumentBestillingResult {
-        val bestillingData = buildDokumentBestilling(reqest, brevKode, enhet)
+    fun bestill(reqest: DokumentBestillingRequest, brevKode: BrevKode): DokumentBestillingResult {
+        val bestillingData = buildDokumentBestilling(reqest, brevKode)
         val dokumentProducer = fetchProducer(brevKode)
         return dokumentProducer.produce(bestillingData, brevKode)
     }
@@ -27,9 +27,9 @@ class DokumentBestillingManager(var applicationContext: ApplicationContext, val 
         return applicationContext.getBean(brevKode.bestillingSystem, DokumentProducer::class.java)
     }
 
-    private fun buildDokumentBestilling(dokumentBestilling: DokumentBestillingRequest, brevKode: BrevKode, enhet: String): DokumentBestilling {
+    private fun buildDokumentBestilling(dokumentBestilling: DokumentBestillingRequest, brevKode: BrevKode): DokumentBestilling {
         val metadataCollector = dokumentMap[brevKode] ?: throw ProduksjonAvDokumentStottesIkke(brevKode)
-        return metadataCollector.invoke(dokumentBestilling, enhet).getBestillingData()
+        return metadataCollector.invoke(dokumentBestilling).getBestillingData()
     }
 
 }

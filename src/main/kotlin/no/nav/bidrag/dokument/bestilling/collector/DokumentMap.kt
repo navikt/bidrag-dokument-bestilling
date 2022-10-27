@@ -6,7 +6,7 @@ import org.springframework.context.ApplicationContext
 import org.springframework.stereotype.Component
 import java.util.EnumMap
 
-typealias DokumentMetadataCollectorFun = (dokumentBestilling: DokumentBestillingRequest, enhet: String) -> DokumentMetadataCollector
+typealias DokumentMetadataCollectorFun = (dokumentBestilling: DokumentBestillingRequest) -> DokumentMetadataCollector
 
 @Component
 class DokumentMap(val applicationContext: ApplicationContext): MutableMap<BrevKode, DokumentMetadataCollectorFun> by EnumMap(BrevKode::class.java) {
@@ -15,22 +15,22 @@ class DokumentMap(val applicationContext: ApplicationContext): MutableMap<BrevKo
         put(pair.first, pair.second)
     }
     init {
-        add(BrevKode.BI01B01 to { bestilling, enhet ->
-           withMetadataCollector(bestilling, enhet)
+        add(BrevKode.BI01B01 to {
+           withMetadataCollector(it)
                .addMottaker()
                .addGjelder()
                .addRoller()
                .addKontaktInfo()
         })
-        add(BrevKode.BI01P18 to { bestilling, enhet ->
-            withMetadataCollector(bestilling, enhet)
+        add(BrevKode.BI01P18 to {
+            withMetadataCollector(it)
                 .addMottaker()
                 .addGjelder()
                 .addRoller()
                 .addKontaktInfo()
         })
-        add(BrevKode.BI01S02 to { bestilling, enhet ->
-            withMetadataCollector(bestilling, enhet)
+        add(BrevKode.BI01S02 to {
+            withMetadataCollector(it)
                 .addMottaker()
                 .addGjelder()
                 .addRoller()
@@ -38,7 +38,7 @@ class DokumentMap(val applicationContext: ApplicationContext): MutableMap<BrevKo
         })
     }
 
-    private fun withMetadataCollector(dokumentBestilling: DokumentBestillingRequest, enhet: String): DokumentMetadataCollector {
-        return applicationContext.getBean(DokumentMetadataCollector::class.java).init(dokumentBestilling, enhet)
+    private fun withMetadataCollector(dokumentBestilling: DokumentBestillingRequest): DokumentMetadataCollector {
+        return applicationContext.getBean(DokumentMetadataCollector::class.java).init(dokumentBestilling)
     }
 }

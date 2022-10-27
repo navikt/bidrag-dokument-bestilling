@@ -47,8 +47,8 @@ class DokumentBestillingController(
             ),
         ]
     )
-    fun hentDialog(@RequestBody request: DokumentBestillingRequest, @PathVariable brevKode: BrevKode, @RequestHeader(EnhetFilter.X_ENHET_HEADER) enhet: String): DokumentBestillingResponse? {
-        return dokumentBestillingService.bestill(request, brevKode, enhet)
+    fun hentDialog(@RequestBody request: DokumentBestillingRequest, @PathVariable brevKode: BrevKode): DokumentBestillingResponse? {
+        return dokumentBestillingService.bestill(request, brevKode)
     }
 
     @PostMapping("/bestill/raw")

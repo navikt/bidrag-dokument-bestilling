@@ -17,10 +17,10 @@ class DokumentBestillingService(var dokumentBestillingManager: DokumentBestillin
         private val LOGGER = LoggerFactory.getLogger(DokumentBestillingService::class.java)
     }
 
-    fun bestill(bestillingRequest: DokumentBestillingRequest, brevKode: BrevKode, enhet: String): DokumentBestillingResponse {
-        LOGGER.info("Bestiller dokument for brevkode $brevKode og enhet $enhet")
-        SECURE_LOGGER.info("Bestiller dokument for brevkode $brevKode med data $bestillingRequest og enhet $enhet")
-        val result = dokumentBestillingManager.bestill(bestillingRequest, brevKode, enhet)
+    fun bestill(bestillingRequest: DokumentBestillingRequest, brevKode: BrevKode): DokumentBestillingResponse {
+        LOGGER.info("Bestiller dokument for brevkode $brevKode og enhet ${bestillingRequest.enhet}")
+        SECURE_LOGGER.info("Bestiller dokument for brevkode $brevKode med data $bestillingRequest og enhet ${bestillingRequest.enhet}")
+        val result = dokumentBestillingManager.bestill(bestillingRequest, brevKode)
         return DokumentBestillingResponse(
             dokumentId = result.dokumentReferanse,
             journalpostId =result.journalpostId

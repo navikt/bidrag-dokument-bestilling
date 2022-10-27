@@ -1,6 +1,26 @@
 name: bidrag-dokument-bestilling
 ingresses:
   - https://bidrag-dokument-bestilling.intern.nav.no
-azure:
-  person: bidrag-person.prod-fss-pub.nais.io
-  person_clientid: prod-fss.bidrag.bidrag-person
+env:
+  BIDRAG_PERSON_URL: https://bidrag-person.prod-fss-pub.nais.io/bidrag-person
+  BIDRAG_PERSON_SCOPE: prod-fss.bidrag.bidrag-person
+
+  BIDRAG_DOKUMENT_URL: https://bidrag-dokument.prod-fss-pub.nais.io/bidrag-dokument
+  BIDRAG_DOKUMENT_SCOPE: prod-fss.bidrag.bidrag-dokument
+
+  BIDRAG_ORGANISASJON_URL: https://bidrag-organisasjon.prod-fss-pub.nais.io/bidrag-organisasjon
+  BIDRAG_ORGANISASJON_SCOPE: prod-fss.bidrag.bidrag-organisasjon
+
+  BIDRAG_SAK_URL: https://bidrag-sak.prod-fss-pub.nais.io/bidrag-sak
+  BIDRAG_SAK_SCOPE: prod-fss.bidrag.bidrag-sak
+
+  BREVSERVER_ONLINEBREV_QUEUE: QA.Q2_475.BREVSERVER_ONLINEBREV
+  BREVSERVER_KVITTERING_QUEUE: QA.Q2_464.BREV_REPLY_QUE
+  MQ_QUEUE_MANAGER: MQLS02
+  MQ_PORT: 1413
+  MQ_HOSTNAME: b27apvl220.preprod.local
+  MQ_CHANNEL: Q2_BDJOURNALPOST
+azure_access_inbound:
+  - application: bisys
+    namespace: bidrag
+    cluster: prod-fss

@@ -36,16 +36,17 @@ class DokumentMetadataCollector(
     lateinit var sak: HentSakResponse
     var dokumentBestilling: DokumentBestilling = DokumentBestilling()
 
-    fun init(request: DokumentBestillingRequest, enhet: String): DokumentMetadataCollector {
-        this.enhet = enhet
+    fun init(request: DokumentBestillingRequest): DokumentMetadataCollector {
         this.request = request
         dokumentBestilling.dokumentReferanse = request.dokumentReferanse
         dokumentBestilling.tittel = request.tittel
         dokumentBestilling.saksnummer = request.saksnummer
-        dokumentBestilling.enhet = enhet
 
         sak = sakService.hentSak(request.saksnummer)
             .orElseThrow { FantIkkeSakException("Fant ikke sak ${request.saksnummer}") }
+
+        this.enhet = request.enhet ?: sak.eierfogd ?: "9999"
+        dokumentBestilling.enhet = enhet
 
         return this
     }

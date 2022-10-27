@@ -7,6 +7,8 @@ data class DokumentBestillingRequest(
     var vedtaksId: String? = null,
     var dokumentReferanse: String? = null,
     var tittel: String? = null,
+    var enhet: String? = null,
+    var spraak: String? = null,
 )
 
 data class DokumentBestillingResponse(
