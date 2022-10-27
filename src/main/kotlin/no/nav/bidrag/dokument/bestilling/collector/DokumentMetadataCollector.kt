@@ -19,9 +19,13 @@ import no.nav.bidrag.dokument.bestilling.service.OrganisasjonService
 import no.nav.bidrag.dokument.bestilling.service.PersonService
 import no.nav.bidrag.dokument.bestilling.service.SakService
 import org.slf4j.LoggerFactory
+import org.springframework.context.annotation.Scope
 import org.springframework.stereotype.Component
+import java.time.LocalDate
+import java.time.LocalDateTime
 
 @Component
+@Scope("prototype")
 class DokumentMetadataCollector(
     var personService: PersonService,
     var sakService: SakService,
@@ -36,7 +40,10 @@ class DokumentMetadataCollector(
     lateinit var sak: HentSakResponse
     lateinit var dokumentBestilling: DokumentBestilling
 
+    var test = LocalDateTime.now()
+
     fun init(request: DokumentBestillingRequest): DokumentMetadataCollector {
+        LOGGER.info("INIT $test")
         this.dokumentBestilling = DokumentBestilling()
         this.request = request
         dokumentBestilling.dokumentReferanse = request.dokumentReferanse
