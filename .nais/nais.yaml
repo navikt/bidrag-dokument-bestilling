@@ -16,10 +16,10 @@ spec:
   accessPolicy:
     inbound:
       rules:
-      {{#each azure.inbound.rules}}
-         - application: {{this.application}}
-           namespace: {{this.namespace}}
-           cluster: {{this.cluster}}
+      {{#each azure_access_inbound}}
+          - application: {{this.application}}
+            namespace: {{this.namespace}}
+            cluster: {{this.cluster}}
       {{/each}}
   secureLogs:
     enabled: true
