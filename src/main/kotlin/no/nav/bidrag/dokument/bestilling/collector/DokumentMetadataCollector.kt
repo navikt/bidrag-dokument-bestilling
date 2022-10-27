@@ -41,6 +41,7 @@ class DokumentMetadataCollector(
         dokumentBestilling.dokumentReferanse = request.dokumentReferanse
         dokumentBestilling.tittel = request.tittel
         dokumentBestilling.saksnummer = request.saksnummer
+        dokumentBestilling.spraak = request.spraak
 
         sak = sakService.hentSak(request.saksnummer)
             .orElseThrow { FantIkkeSakException("Fant ikke sak ${request.saksnummer}") }
