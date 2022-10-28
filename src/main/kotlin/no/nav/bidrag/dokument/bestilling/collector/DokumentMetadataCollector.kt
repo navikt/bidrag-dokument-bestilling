@@ -15,6 +15,7 @@ import no.nav.bidrag.dokument.bestilling.model.Mottaker
 import no.nav.bidrag.dokument.bestilling.model.PartInfo
 import no.nav.bidrag.dokument.bestilling.model.RolleType
 import no.nav.bidrag.dokument.bestilling.model.SakRolle
+import no.nav.bidrag.dokument.bestilling.model.SamhandlerManglerKontaktinformasjon
 import no.nav.bidrag.dokument.bestilling.service.OrganisasjonService
 import no.nav.bidrag.dokument.bestilling.service.PersonService
 import no.nav.bidrag.dokument.bestilling.service.SakService
@@ -68,7 +69,7 @@ class DokumentMetadataCollector(
             PartInfo(
                 rolle = RolleType.BM,
                 fodselsnummer = bidragsmottaker.ident,
-                navn = bidragsmottaker.navn,
+                navn = bidragsmottaker.fornavnEtternavn,
                 fodselsdato = bidragsmottaker.foedselsdato
             )
         )
@@ -77,7 +78,7 @@ class DokumentMetadataCollector(
             PartInfo(
                     rolle = RolleType.BP,
                     fodselsnummer = bidragspliktig.ident,
-                    navn = bidragspliktig.navn,
+                    navn = bidragspliktig.fornavnEtternavn,
                     fodselsdato = bidragspliktig.foedselsdato
                 )
         )
@@ -87,8 +88,9 @@ class DokumentMetadataCollector(
             val barnInfo = personService.hentPerson(it.foedselsnummer!!, "Barn")
             dokumentBestilling.roller.add(Barn(
                     fodselsnummer = barnInfo.ident,
-                    navn = barnInfo.navn,
-                    fodselsdato = barnInfo.foedselsdato
+                    navn = barnInfo.fornavnEtternavn,
+                    fodselsdato = barnInfo.foedselsdato,
+                    fornavn = barnInfo.fornavn
             ))
         }
 
@@ -116,23 +118,41 @@ class DokumentMetadataCollector(
     }
 
     fun addMottaker(): DokumentMetadataCollector {
-        val person = hentGjelder()
-        val adresse = hentGjelderAdresse()
-
-        dokumentBestilling.mottaker = Mottaker(
-            fodselsnummer = person.ident,
-            fodselsdato = person.foedselsdato,
-            navn = person.navn,
-            rolle = hentRolle(person.ident),
-            adresse = Adresse(
-                adresselinje1 = adresse.adresselinje1!!,
-                adresselinje2 = adresse.adresselinje2,
-                adresselinje3 = adresse.adresselinje3,
-                poststed = adresse.poststed,
-                postnummer = adresse.postnummer,
-                landkode = adresse.land
+        if (request.isMottakerSamhandler()){
+            val kontaktInfo = request.mottakerKontaktInformasjon ?: throw SamhandlerManglerKontaktinformasjon("Samhandler med id ${request.mottakerId} mangler kontaktinformasjon")
+            dokumentBestilling.mottaker = Mottaker(
+                fodselsnummer = request.mottakerId,
+                fodselsdato = null,
+                rolle = null,
+                navn = kontaktInfo.navn ?: "Ukjent",
+                adresse = Adresse(
+                    adresselinje1 = kontaktInfo.adresselinje1 ?: "",
+                    adresselinje2 = kontaktInfo.adresselinje2 ?: "",
+                    adresselinje3 = kontaktInfo.adresselinje3 ?: "",
+                    postnummer = kontaktInfo.postnummer,
+                    landkode = kontaktInfo.landkode
+                )
             )
-        )
+        } else {
+            val person = hentGjelder()
+            val adresse = hentGjelderAdresse()
+
+            dokumentBestilling.mottaker = Mottaker(
+                fodselsnummer = person.ident,
+                fodselsdato = person.foedselsdato,
+                navn = person.navn,
+                rolle = hentRolle(person.ident),
+                adresse = Adresse(
+                    adresselinje1 = adresse.adresselinje1!!,
+                    adresselinje2 = adresse.adresselinje2,
+                    adresselinje3 = adresse.adresselinje3,
+                    poststed = adresse.poststed,
+                    postnummer = adresse.postnummer,
+                    landkode = adresse.land
+                )
+            )
+        }
+
         return this
     }
 

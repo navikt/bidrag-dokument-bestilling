@@ -37,17 +37,12 @@ data class Barn(
     override val fodselsnummer: String?,
     override val navn: String,
     override val fodselsdato: LocalDate?,
+    val fornavn: String? = null,
     val bidragsbelop: Number? = null,
     val forskuddsbelop: Number? = null,
     val gebyrRm: Number? = null,
     val fodselsnummerRm: String? = null
-): Rolle {
-    fun hentFornavn(): String {
-        val navnSplit = navn.split(",")
-        val fornavnMellomnavn = if (navnSplit.size == 2) navnSplit[1] else navnSplit[0]
-        return fornavnMellomnavn.trim().split(" ")[0]
-    }
-}
+): Rolle
 data class SoknadsPart(
     val bidragsPliktigInfo: PartInfo? = null,
     val bidragsMottakerInfo: PartInfo? = null,

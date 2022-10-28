@@ -105,7 +105,7 @@ class BrevserverProducer(
                         fnr = it.fodselsnummer
                         navn = it.navn
                         fDato = it.fodselsdato
-                        fornavn = it.hentFornavn()
+                        fornavn = it.fornavn
                     }
                 }
             }

@@ -3,6 +3,7 @@ package no.nav.bidrag.dokument.bestilling.aop
 import no.nav.bidrag.dokument.bestilling.model.FantIkkePersonException
 import no.nav.bidrag.dokument.bestilling.model.FantIkkeSakException
 import no.nav.bidrag.dokument.bestilling.model.ProduksjonAvDokumentStottesIkke
+import no.nav.bidrag.dokument.bestilling.model.SamhandlerManglerKontaktinformasjon
 import no.nav.security.token.support.spring.validation.interceptor.JwtTokenUnauthorizedException
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpHeaders
@@ -19,7 +20,7 @@ class DefaultRestControllerAdvice {
     }
 
     @ResponseBody
-    @ExceptionHandler(value = [FantIkkePersonException::class, FantIkkeSakException::class])
+    @ExceptionHandler(value = [FantIkkePersonException::class, FantIkkeSakException::class, SamhandlerManglerKontaktinformasjon::class])
     fun fantIkkeData(exception: RuntimeException): ResponseEntity<*> {
         LOGGER.warn(exception.message)
         return ResponseEntity

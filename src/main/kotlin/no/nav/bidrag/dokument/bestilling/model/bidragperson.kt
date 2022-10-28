@@ -1,6 +1,5 @@
 package no.nav.bidrag.dokument.bestilling.model
 
-import io.swagger.v3.oas.annotations.media.Schema
 import java.time.LocalDate
 
 data class HentPersonResponse(
@@ -8,7 +7,20 @@ data class HentPersonResponse(
     val navn: String,
     val foedselsdato: LocalDate?,
     val aktoerId: String
-)
+){
+    val fornavnEtternavn get () = run {
+            val navnSplit = navn.split(",")
+            val fornavnMellomnavn = if (navnSplit.size == 2) navnSplit[1] else navnSplit[0]
+            val etternavn = if (navnSplit.size == 2) navnSplit[0] else ""
+            "$fornavnMellomnavn $etternavn"
+        }
+
+    val fornavn get() = run {
+        val navnSplit = navn.split(",")
+        val fornavnMellomnavn = if (navnSplit.size == 2) navnSplit[1] else navnSplit[0]
+        fornavnMellomnavn.trim().split(" ")[0]
+    }
+}
 
 data class HentPostadresseRequest(
     var ident: String
