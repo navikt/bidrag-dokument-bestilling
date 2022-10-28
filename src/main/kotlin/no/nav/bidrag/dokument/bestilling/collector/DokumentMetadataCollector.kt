@@ -98,9 +98,8 @@ class DokumentMetadataCollector(
     }
 
     fun addGjelder(): DokumentMetadataCollector {
-        val person = hentMottaker()
-        val adresse = hentMottakerAdresse()
-
+        val person = hentGjelder()
+        val adresse = hentGjelderAdresse()
         dokumentBestilling.gjelder = Gjelder(
             fodselsnummer = person.ident,
             navn = person.navn,
@@ -134,8 +133,8 @@ class DokumentMetadataCollector(
                 )
             )
         } else {
-            val person = hentGjelder()
-            val adresse = hentGjelderAdresse()
+            val person = hentMottaker()
+            val adresse = hentMottakerAdresse()
 
             dokumentBestilling.mottaker = Mottaker(
                 fodselsnummer = person.ident,
