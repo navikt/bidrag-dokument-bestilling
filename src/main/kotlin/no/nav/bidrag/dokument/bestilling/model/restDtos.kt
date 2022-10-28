@@ -1,17 +1,29 @@
 package no.nav.bidrag.dokument.bestilling.model
 
 data class DokumentBestillingRequest(
-    var mottakerId: String,
-    var mottakerKontaktInformasjon: Kontaktinformasjon? = null,
-    var gjelderId: String,
-    var saksnummer: String,
-    var vedtaksId: String? = null,
-    var dokumentReferanse: String? = null,
-    var tittel: String? = null,
-    var enhet: String? = null,
-    var spraak: String? = null,
+    val mottakerId: String,
+    val mottakerKontaktInformasjon: Kontaktinformasjon? = null,
+    val gjelderId: String,
+    val saksnummer: String,
+    val vedtaksId: String? = null,
+    val dokumentReferanse: String? = null,
+    val tittel: String? = null,
+    val enhet: String? = null,
+    val spraak: String? = null,
 ){
     fun isMottakerSamhandler() = mottakerId.matches("^[8-9][0-9]{10}$".toRegex())
+    fun hentRiktigSpraakkode(): String {
+        if (spraak.isNullOrEmpty()){
+            return SpraakKoder.BOKMAL
+        }
+       return when(spraak){
+           FeilSpraakKoder.BOKMAL -> SpraakKoder.BOKMAL
+           FeilSpraakKoder.NYNORSK -> SpraakKoder.NYNORSK
+           FeilSpraakKoder.TYSK -> SpraakKoder.TYSK
+           else -> spraak
+       }
+
+    }
 }
 
 data class DokumentBestillingResponse(

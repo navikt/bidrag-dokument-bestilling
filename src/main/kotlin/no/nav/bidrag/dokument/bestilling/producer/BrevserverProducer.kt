@@ -88,6 +88,7 @@ class BrevserverProducer(
                 kontaktInfo = mapKontaktInfo(this, dokumentBestilling.kontaktInfo)
                 soknad {
                     saksnr = dokumentBestilling.saksnummer
+                    sakstype = "E" // "X" hvis det er en ukjent part i saken, "U" hvis parter levde adskilt, "E" i alle andre tilfeller
                 }
                 parter {
                     bpfnr = bp?.fodselsnummer

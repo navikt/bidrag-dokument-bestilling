@@ -16,14 +16,13 @@ import no.nav.bidrag.dokument.bestilling.model.PartInfo
 import no.nav.bidrag.dokument.bestilling.model.RolleType
 import no.nav.bidrag.dokument.bestilling.model.SakRolle
 import no.nav.bidrag.dokument.bestilling.model.SamhandlerManglerKontaktinformasjon
+import no.nav.bidrag.dokument.bestilling.model.SpraakKoder
 import no.nav.bidrag.dokument.bestilling.service.OrganisasjonService
 import no.nav.bidrag.dokument.bestilling.service.PersonService
 import no.nav.bidrag.dokument.bestilling.service.SakService
 import org.slf4j.LoggerFactory
 import org.springframework.context.annotation.Scope
 import org.springframework.stereotype.Component
-import java.time.LocalDate
-import java.time.LocalDateTime
 
 @Component
 @Scope("prototype")
@@ -41,16 +40,13 @@ class DokumentMetadataCollector(
     lateinit var sak: HentSakResponse
     lateinit var dokumentBestilling: DokumentBestilling
 
-    var test = LocalDateTime.now()
-
     fun init(request: DokumentBestillingRequest): DokumentMetadataCollector {
-        LOGGER.info("INIT $test")
         this.dokumentBestilling = DokumentBestilling()
         this.request = request
         dokumentBestilling.dokumentReferanse = request.dokumentReferanse
         dokumentBestilling.tittel = request.tittel
         dokumentBestilling.saksnummer = request.saksnummer
-        dokumentBestilling.spraak = request.spraak
+        dokumentBestilling.spraak = request.hentRiktigSpraakkode()
 
         sak = sakService.hentSak(request.saksnummer)
             .orElseThrow { FantIkkeSakException("Fant ikke sak ${request.saksnummer}") }
@@ -69,7 +65,7 @@ class DokumentMetadataCollector(
             PartInfo(
                 rolle = RolleType.BM,
                 fodselsnummer = bidragsmottaker.ident,
-                navn = bidragsmottaker.fornavnEtternavn,
+                navn = if (bidragsmottaker.isKode6) "" else bidragsmottaker.fornavnEtternavn,
                 fodselsdato = bidragsmottaker.foedselsdato
             )
         )
@@ -78,7 +74,7 @@ class DokumentMetadataCollector(
             PartInfo(
                     rolle = RolleType.BP,
                     fodselsnummer = bidragspliktig.ident,
-                    navn = bidragspliktig.fornavnEtternavn,
+                    navn = if (bidragspliktig.isKode6) "" else bidragspliktig.fornavnEtternavn,
                     fodselsdato = bidragspliktig.foedselsdato
                 )
         )
@@ -88,9 +84,9 @@ class DokumentMetadataCollector(
             val barnInfo = personService.hentPerson(it.foedselsnummer!!, "Barn")
             dokumentBestilling.roller.add(Barn(
                     fodselsnummer = barnInfo.ident,
-                    navn = barnInfo.fornavnEtternavn,
+                    navn = if (barnInfo.isKode6) hentKode6NavnBarn(barnInfo) else barnInfo.fornavnEtternavn,
                     fodselsdato = barnInfo.foedselsdato,
-                    fornavn = barnInfo.fornavn
+                    fornavn = if (barnInfo.isKode6) hentKode6NavnBarn(barnInfo) else barnInfo.fornavn
             ))
         }
 
@@ -177,6 +173,14 @@ class DokumentMetadataCollector(
 
     fun getBestillingData(): DokumentBestilling = dokumentBestilling
 
+    private fun hentKode6NavnBarn(person: HentPersonResponse): String {
+        val fodtaar = person.foedselsdato?.year
+        return when(dokumentBestilling.spraak){
+            SpraakKoder.BOKMAL -> if(fodtaar==null) "(BARN)" else "(BARN FØDT I $fodtaar)"
+            SpraakKoder.NYNORSK -> if(fodtaar==null) "(BARN)" else "(BARN FØDD I $fodtaar)"
+            else -> if(fodtaar==null) "(CHILD)" else "(CHILD BORN IN $fodtaar)"
+        }
+    }
     private fun hentRolle(fnr: String): RolleType? {
         return sak.roller.find { it.foedselsnummer == fnr }?.rolleType
     }

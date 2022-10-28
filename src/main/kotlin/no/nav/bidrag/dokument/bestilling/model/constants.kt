@@ -1,0 +1,15 @@
+package no.nav.bidrag.dokument.bestilling.model
+
+const val DISREKSJONSKODE_KODE_6 = "SPSF"
+object SpraakKoder {
+    val BOKMAL = "NB"
+    val NYNORSK = "NN"
+    val TYSK = "DE"
+    val ENGELSK = "EN"
+}
+
+object FeilSpraakKoder {
+    val BOKMAL = "NO"
+    val NYNORSK = "NY"
+    val TYSK = "TY"
+}
