@@ -142,12 +142,12 @@ class BrevserverProducer(
                 RolleType.BM -> "01"
                 RolleType.BP -> "02"
 //                RolleType.BA -> "03"
-                else -> null
+                else -> "00"
             }
             fodselsdato = mottaker.fodselsdato
 
             val adresse = mottaker.adresse
-            val postnummerSted = "${adresse.postnummer} ${adresse.poststed}"
+            val postnummerSted = "${adresse.postnummer} ${adresse.poststed ?: ""}"
             adresselinje1 = adresse.adresselinje1
             adresselinje2 = adresse.adresselinje2
             adresselinje3 = adresse.adresselinje3 ?: postnummerSted
