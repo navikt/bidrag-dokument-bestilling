@@ -2,6 +2,7 @@ package no.nav.bidrag.dokument.bestilling.producer
 
 import no.nav.bidrag.dokument.bestilling.config.SaksbehandlerInfoManager
 import no.nav.bidrag.dokument.bestilling.consumer.BidragDokumentConsumer
+import no.nav.bidrag.dokument.bestilling.model.BRUKSHENETSNUMMER_STANDARD
 import no.nav.bidrag.dokument.bestilling.model.BestillingSystem
 import no.nav.bidrag.dokument.bestilling.model.Brev
 import no.nav.bidrag.dokument.bestilling.model.BrevBestilling
@@ -154,7 +155,7 @@ class BrevserverProducer(
             adresselinje2 = adresse.adresselinje2
             adresselinje3 = adresse.adresselinje3 ?: postnummerSted
             adresselinje4 = if (adresselinje3 == postnummerSted) null else postnummerSted
-            boligNr = adresse.boligNr
+            boligNr = if (adresse.bruksenhetsnummer == BRUKSHENETSNUMMER_STANDARD) null else adresse.bruksenhetsnummer
             postnummer = adresse.postnummer
             landkode = adresse.landkode
         }
