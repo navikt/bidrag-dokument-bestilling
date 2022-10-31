@@ -62,12 +62,16 @@ class DokumentMetadataCollector(
         val bidragspliktig = hentBidragspliktig()
         val bidragsmottaker = hentBidragsmottaker()
 
+        val bidragspliktigAdresse = hentBidragspliktigAdresse()
+        val bidragsmottakerAdresse = hentBidragsmottakerAdresse()
+
         if (bidragsmottaker != null) dokumentBestilling.roller.add(
             PartInfo(
                 rolle = RolleType.BM,
                 fodselsnummer = bidragsmottaker.ident,
                 navn = if (bidragsmottaker.isKode6) "" else bidragsmottaker.fornavnEtternavn,
-                fodselsdato = bidragsmottaker.foedselsdato
+                fodselsdato = bidragsmottaker.foedselsdato,
+                landkode = bidragsmottakerAdresse?.land
             )
         )
 
@@ -76,7 +80,8 @@ class DokumentMetadataCollector(
                     rolle = RolleType.BP,
                     fodselsnummer = bidragspliktig.ident,
                     navn = if (bidragspliktig.isKode6) "" else bidragspliktig.fornavnEtternavn,
-                    fodselsdato = bidragspliktig.foedselsdato
+                    fodselsdato = bidragspliktig.foedselsdato,
+                    landkode = bidragspliktigAdresse?.land
                 )
         )
 
@@ -201,6 +206,16 @@ class DokumentMetadataCollector(
     private fun hentBidragspliktig(): HentPersonResponse? {
         val fnr = hentIdentForRolle(RolleType.BP)
         return if(!fnr.isNullOrEmpty()) personService.hentPerson(fnr, "Bidragspliktig") else null
+    }
+
+    private fun hentBidragspliktigAdresse(): HentPostadresseResponse? {
+        val fnr = hentIdentForRolle(RolleType.BP)
+        return if(!fnr.isNullOrEmpty()) personService.hentPersonAdresse(fnr, "Bidragspliktig adresse") else null
+    }
+
+    private fun hentBidragsmottakerAdresse(): HentPostadresseResponse? {
+        val fnr = hentIdentForRolle(RolleType.BM)
+        return if(!fnr.isNullOrEmpty()) personService.hentPersonAdresse(fnr, "Bidragsmottaker adresse") else null
     }
 
     private fun hentMottaker(): HentPersonResponse {

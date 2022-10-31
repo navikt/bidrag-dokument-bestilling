@@ -19,7 +19,7 @@ env:
   MQ_QUEUE_MANAGER: MQLS02
   MQ_PORT: 1413
   MQ_HOSTNAME: b27apvl220.preprod.local
-  MQ_CHANNEL: Q1_BDJOURNALPOST
+  MQ_CHANNEL: Q1_BDBESTILLING
   JAVA_OPTS: -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005
 azure_access_inbound:
   - application: bisys
