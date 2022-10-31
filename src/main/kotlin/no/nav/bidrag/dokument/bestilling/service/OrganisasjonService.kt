@@ -13,7 +13,7 @@ class OrganisasjonService(private var bidragOrganisasjonConsumer: BidragOrganisa
        return bidragOrganisasjonConsumer.hentEnhetInfo(enhetId)
     }
 
-    fun hentEnhetKontaktInfo(enhetId: String): Optional<EnhetKontaktInfoDto> {
-        return bidragOrganisasjonConsumer.hentEnhetKontaktinfo(enhetId)
+    fun hentEnhetKontaktInfo(enhetId: String, spraak: String?): Optional<EnhetKontaktInfoDto> {
+        return bidragOrganisasjonConsumer.hentEnhetKontaktinfo(enhetId, spraak?:"NB")
     }
 }

@@ -88,6 +88,7 @@ class BrevserverProducer(
                 kontaktInfo = mapKontaktInfo(this, dokumentBestilling.kontaktInfo)
                 soknad {
                     saksnr = dokumentBestilling.saksnummer
+                    rmISak = dokumentBestilling.rmISak
                     sakstype = "E" // "X" hvis det er en ukjent part i saken, "U" hvis parter levde adskilt, "E" i alle andre tilfeller
                 }
                 parter {
@@ -119,10 +120,10 @@ class BrevserverProducer(
             returOgPostadresse {
                 enhet = kontaktInfo.enhetId
                 navn = kontaktInfo.navn
-                adresselinje2 = kontaktInfo.returAdresse.adresselinje1
-                postnummer = kontaktInfo.returAdresse.postnummer
-                poststed = kontaktInfo.returAdresse.poststed
-                land = kontaktInfo.returAdresse.landkode
+                adresselinje2 = kontaktInfo.postadresse.adresselinje1
+                postnummer = kontaktInfo.postadresse.postnummer
+                poststed = kontaktInfo.postadresse.poststed
+                land = kontaktInfo.postadresse.land
             }
             avsender = avsender {
                 navn = kontaktInfo.navn

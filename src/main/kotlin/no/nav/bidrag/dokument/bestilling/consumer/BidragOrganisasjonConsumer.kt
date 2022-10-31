@@ -42,9 +42,9 @@ class BidragOrganisasjonConsumer(
     }
 
     @Cacheable(ENHETKONTAKTINFO_CACHE)
-    fun hentEnhetKontaktinfo(enhetId: String): Optional<EnhetKontaktInfoDto> {
+    fun hentEnhetKontaktinfo(enhetId: String, spraak: String): Optional<EnhetKontaktInfoDto> {
         return Optional.ofNullable(restTemplate.exchange(
-            "/enhet/kontaktinfo/$enhetId",
+            "/enhet/kontaktinfo/$enhetId/$spraak",
             HttpMethod.GET,
             null,
             EnhetKontaktInfoDto::class.java

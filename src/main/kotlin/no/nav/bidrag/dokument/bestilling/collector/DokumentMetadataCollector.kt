@@ -53,6 +53,7 @@ class DokumentMetadataCollector(
 
         this.enhet = request.enhet ?: sak.eierfogd ?: "9999"
         dokumentBestilling.enhet = enhet
+        dokumentBestilling.rmISak = sak.roller.any { it.rolleType == RolleType.RM }
 
         return this
     }
@@ -152,15 +153,19 @@ class DokumentMetadataCollector(
     }
 
     fun addKontaktInfo(): DokumentMetadataCollector {
-        val enhetKontaktInfo = organisasjonService.hentEnhetKontaktInfo(enhet).orElseThrow {
-            FantIkkePersonException("Fant ikke enhet $enhet")
+        val enhetKontaktInfo = organisasjonService.hentEnhetKontaktInfo(enhet, dokumentBestilling.spraak).orElseThrow {
+            FantIkkePersonException("Fant ikke enhet $enhet med spraak ${dokumentBestilling.spraak}")
         }
 
         dokumentBestilling.kontaktInfo = EnhetKontaktInfo(
             navn = enhetKontaktInfo.enhetNavn ?: "",
             telefonnummer = enhetKontaktInfo.telefonnummer ?: "",
-            returAdresse = Adresse(
-                adresselinje1 = enhetKontaktInfo.postadresse?.adresselinje ?: ""
+            postadresse = Adresse(
+                adresselinje1 = enhetKontaktInfo.postadresse?.adresselinje1 ?: "",
+                adresselinje2 = enhetKontaktInfo.postadresse?.adresselinje2,
+                poststed = enhetKontaktInfo.postadresse?.poststed,
+                postnummer = enhetKontaktInfo.postadresse?.postnummer,
+                land = enhetKontaktInfo.postadresse?.land,
             ),
             enhetId = enhet
         )

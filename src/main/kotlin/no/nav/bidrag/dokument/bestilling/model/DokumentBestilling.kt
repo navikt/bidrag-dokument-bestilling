@@ -11,13 +11,13 @@ data class DokumentBestilling(
     var mottaker: Mottaker? = null,
     var gjelder: Gjelder? = null,
     var kontaktInfo: EnhetKontaktInfo? = null,
-    var parter: List<SoknadsPart> = emptyList(),
     var dokumentReferanse: String? = null,
     var tittel: String? = null,
     var enhet: String? = null,
     var saksnummer: String? = null,
     var spraak: String? = null,
-    var roller: Roller = Roller()
+    var roller: Roller = Roller(),
+    var rmISak: Boolean? = false
 )
 
 class Roller: MutableList<Rolle> by mutableListOf() {
@@ -61,7 +61,7 @@ data class PartInfo(
 data class EnhetKontaktInfo(
     val navn: String,
     val telefonnummer: String,
-    val returAdresse: Adresse,
+    val postadresse: Adresse,
     val enhetId: String
 )
 
@@ -88,5 +88,6 @@ data class Adresse(
     val boligNr: String? = null,
     val postnummer: String? = null,
     val poststed: String? = null,
-    val landkode: String? = null
+    val landkode: String? = null,
+    val land: String? = null
 )

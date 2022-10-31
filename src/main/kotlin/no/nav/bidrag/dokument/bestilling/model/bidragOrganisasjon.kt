@@ -15,13 +15,15 @@ data class EnhetKontaktInfoDto(
     var enhetIdent: String? = null,
     var enhetNavn: String? = null,
     var telefonnummer: String? = null,
-    var postadresse: EnhetPostadresseDto? = null
+    var postadresse: EnhetPostadresseDto? = null,
 )
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 data class EnhetPostadresseDto(
     var postnummer: String? = null,
-    var postboksnummer: String? = null,
-    var postboksanlegg: String? = null,
-    var adresselinje: String? = null,
+    var adresselinje1: String? = null,
+    var adresselinje2: String? = null,
+    var poststed: String? = null,
+    var land: String? = null,
+    var kommunenr: String? = null,
 )

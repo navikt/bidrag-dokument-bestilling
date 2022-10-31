@@ -80,7 +80,7 @@ class DokumentBestillingControllerTest {
         headers.set(X_ENHET_HEADER, "4806")
 
         val request = DokumentBestillingRequest(
-            mottakerId = "80000840922",
+            mottakerId = BM_PERSON_ID_1,
             gjelderId = BP_PERSON_ID_1,
             saksnummer = "123213",
         )

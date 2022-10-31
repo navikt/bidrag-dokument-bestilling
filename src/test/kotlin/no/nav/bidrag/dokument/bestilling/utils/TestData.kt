@@ -76,10 +76,10 @@ fun createEnhetKontaktInformasjon(): EnhetKontaktInfoDto {
         enhetNavn = "NAV Familie- og pensjonsytelser Drammen",
         telefonnummer = "55553333",
         postadresse = EnhetPostadresseDto(
-            adresselinje = "Postboks 1583",
-            postboksnummer = "1583",
+            adresselinje1 = "Postboks 1583",
             postnummer = "3040",
-            postboksanlegg = "Drammen"
+            poststed = "Drammen",
+            land = "Norge"
         )
     )
 }
