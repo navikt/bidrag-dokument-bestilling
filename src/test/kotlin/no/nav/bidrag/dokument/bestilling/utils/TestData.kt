@@ -53,7 +53,8 @@ fun createPostAdresseResponse(): HentPostadresseResponse{
         adresselinje3 = "Adresselinje3",
         postnummer = "3030",
         poststed = "Drammen",
-        land = "NO"
+        land = "NO",
+        bruksenhetsnummer = "H0101"
     )
 }
 
