@@ -10,8 +10,8 @@ enum class BrevType {
 }
 typealias BestillingSystemType = String
 
-enum class BrevKode(val beskrivelse: String, var brevtype: BrevType, val bestillingSystem: BestillingSystemType) {
+enum class BrevKode(val beskrivelse: String, var brevtype: BrevType, val bestillingSystem: BestillingSystemType, val enabled: Boolean = true) {
     BI01S02("Fritekstbrev", BrevType.UTGAAENDE, BestillingSystem.BREVSERVER),
-    BI01B01("Vedtaksbrev", BrevType.UTGAAENDE, BestillingSystem.BREVSERVER),
+    BI01B01("Vedtaksbrev", BrevType.UTGAAENDE, BestillingSystem.BREVSERVER, false),
     BI01P18("Saksbehandlingsnotat", BrevType.NOTAT, BestillingSystem.BREVSERVER)
 }

@@ -27,6 +27,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.web.server.LocalServerPort
 import org.springframework.cloud.contract.wiremock.AutoConfigureWireMock
+import org.springframework.core.io.ClassPathResource
 import org.springframework.http.HttpEntity
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpMethod
@@ -65,17 +66,18 @@ class DokumentBestillingControllerTest {
         WireMock.reset()
     }
     @Test
-    fun `Skal hente persondata`(){
-        stubUtils.stubHentPerson(BP_PERSON_ID_1, HentPersonResponse(BP_PERSON_ID_1, BP_PERSON_NAVN_1, LocalDate.parse("2020-05-06"), "213213213"))
-        stubUtils.stubHentPerson(BM_PERSON_ID_1, HentPersonResponse(BM_PERSON_ID_1, BM_PERSON_NAVN_1, LocalDate.parse("2020-05-06"), "213213213"))
-        stubUtils.stubHentPerson(BARN_ID_1, HentPersonResponse(BARN_ID_1, BARN_NAVN_1, LocalDate.parse("2020-05-06"), "213213213"))
-        stubUtils.stubHentPerson(BARN_ID_2, HentPersonResponse(BARN_ID_2, BARN_NAVN_2, LocalDate.parse("2020-05-06"), "213213213"))
+    fun `skal produsere XML for fritekstsbrev`(){
+        stubUtils.stubHentPerson(BP_PERSON_ID_1, HentPersonResponse(BP_PERSON_ID_1, BP_PERSON_NAVN_1, LocalDate.parse("2020-05-06"), null, "213213213"))
+        stubUtils.stubHentPerson(BM_PERSON_ID_1, HentPersonResponse(BM_PERSON_ID_1, BM_PERSON_NAVN_1, LocalDate.parse("2020-05-06"), null, "213213213"))
+        stubUtils.stubHentPerson(BARN_ID_1, HentPersonResponse(BARN_ID_1, BARN_NAVN_1, LocalDate.parse("2020-05-06"), null, "213213213"))
+        stubUtils.stubHentPerson(BARN_ID_2, HentPersonResponse(BARN_ID_2, BARN_NAVN_2, LocalDate.parse("2020-05-06"), null, "213213213"))
         stubUtils.stubHentAdresse()
-        stubUtils.stubOpprettJournalpost()
         stubUtils.stubEnhetInfo()
         stubUtils.stubEnhetKontaktInfo()
         stubUtils.stubHentSaksbehandlerInfo()
         stubUtils.stubHentSak()
+
+        stubUtils.stubOpprettJournalpost()
         val headers = HttpHeaders()
         headers.set(X_ENHET_HEADER, "4806")
 
@@ -87,15 +89,16 @@ class DokumentBestillingControllerTest {
 
 
         jmsTestConsumer.withOnlinebrev {
-            val response = httpHeaderTestRestTemplate.exchange("${rootUri()}/bestill/BI01S02",    HttpMethod.POST, HttpEntity(request, headers), DokumentBestillingResponse::class.java)
+            val response = httpHeaderTestRestTemplate.exchange("${rootUri()}/bestill/BI01S02", HttpMethod.POST, HttpEntity(request, headers), DokumentBestillingResponse::class.java)
 
             assertThat(response.statusCode).isEqualTo(HttpStatus.OK)
 
             val message = this.getMessageAsString()
 
             println(message)
-//           assertThat(message).isEqualTo("")
+            assertThat(message).isEqualTo(readFile("simpel_fritekstbrev.xml"))
 
+            stubUtils.Verify().verifyHentEnhetKontaktInfoCalledWith()
         }
 
 
@@ -103,6 +106,10 @@ class DokumentBestillingControllerTest {
 
     fun rootUri(): String{
         return "http://localhost:$port"
+    }
+
+    fun readFile(filename: String): String{
+        return String(ClassPathResource("testdata/xml/$filename").inputStream.readAllBytes())
     }
 
 }

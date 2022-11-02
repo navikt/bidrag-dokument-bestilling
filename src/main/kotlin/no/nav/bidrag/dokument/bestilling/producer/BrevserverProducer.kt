@@ -101,6 +101,8 @@ class BrevserverProducer(
                     bmfodselsdato = bm?.fodselsdato
                     bmlandkode = if (bm?.landkode.isNullOrEmpty() || bm?.landkode == "NO") null else bm?.landkode
                     bplandkode = if (bp?.landkode.isNullOrEmpty() || bp?.landkode == "NO") null else bp?.landkode
+                    bpdatodod = bp?.doedsdato
+                    bmdatodod = bm?.doedsdato
                 }
                 brevSaksbehandler {
                     navn = saksbehandlerNavn

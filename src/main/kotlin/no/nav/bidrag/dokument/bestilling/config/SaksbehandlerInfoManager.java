@@ -21,7 +21,7 @@ public class SaksbehandlerInfoManager {
 
   public String hentSaksbehandlerBrukerId(){
     try {
-      return TokenUtils.henteSubject(oidcTokenManager.fetchTokenAsString());
+      return TokenUtils.fetchSubject(oidcTokenManager.fetchTokenAsString());
     } catch (Exception e){
       return null;
     }

@@ -6,6 +6,7 @@ data class HentPersonResponse(
     val ident: String,
     val navn: String,
     val foedselsdato: LocalDate?,
+    val doedsdato: LocalDate?,
     val aktoerId: String,
     val diskresjonskode: String? = null,
     ){

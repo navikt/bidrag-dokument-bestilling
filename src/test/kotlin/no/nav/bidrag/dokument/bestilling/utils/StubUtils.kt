@@ -3,6 +3,8 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.github.tomakehurst.wiremock.client.ResponseDefinitionBuilder
 import com.github.tomakehurst.wiremock.client.WireMock
 import com.github.tomakehurst.wiremock.client.WireMock.aResponse
+import com.github.tomakehurst.wiremock.matching.ContainsPattern
+import com.github.tomakehurst.wiremock.matching.RequestPatternBuilder
 import no.nav.bidrag.dokument.bestilling.model.EnhetInfo
 import no.nav.bidrag.dokument.bestilling.model.EnhetKontaktInfo
 import no.nav.bidrag.dokument.bestilling.model.EnhetKontaktInfoDto
@@ -22,6 +24,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Component
+import java.util.Arrays
 
 
 @Component
@@ -105,6 +108,27 @@ class StubUtils {
                     .withBody(convertObjectToString(response))
             )
         )
+    }
+
+    inner class Verify {
+
+        fun verifyHentPersonCalled(fnr: String?){
+            val verify = WireMock.getRequestedFor(
+                WireMock.urlMatching("/person/informasjon/$fnr")
+            )
+            WireMock.verify(verify)
+        }
+        fun verifyHentEnhetKontaktInfoCalledWith(spraak: String? = "NB", vararg contains: String) {
+            val verify = WireMock.getRequestedFor(
+                WireMock.urlMatching("/organisasjon/enhet/kontaktinfo/.*/$spraak")
+            )
+            verifyContains(verify, *contains)
+        }
+
+        private fun verifyContains(verify: RequestPatternBuilder, vararg contains: String){
+            Arrays.stream(contains).forEach { verify.withRequestBody(ContainsPattern(it)) }
+            WireMock.verify(verify)
+        }
     }
 
     fun <T> convertObjectToString(o: T): String {

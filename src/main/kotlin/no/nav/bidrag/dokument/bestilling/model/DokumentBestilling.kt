@@ -53,6 +53,7 @@ data class PartInfo(
     override val fodselsnummer: String? = null,
     override val navn: String,
     override val fodselsdato: LocalDate? = null,
+    val doedsdato: LocalDate? = null,
     val landkode: String? = null,
     val datoDod: LocalDate? = null,
     val gebyr: Number? = null,

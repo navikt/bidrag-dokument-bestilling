@@ -71,6 +71,7 @@ class DokumentMetadataCollector(
                 fodselsnummer = bidragsmottaker.ident,
                 navn = if (bidragsmottaker.isKode6) "" else bidragsmottaker.fornavnEtternavn,
                 fodselsdato = bidragsmottaker.foedselsdato,
+                doedsdato = bidragsmottaker.doedsdato,
                 landkode = bidragsmottakerAdresse?.land
             )
         )
@@ -81,6 +82,7 @@ class DokumentMetadataCollector(
                     fodselsnummer = bidragspliktig.ident,
                     navn = if (bidragspliktig.isKode6) "" else bidragspliktig.fornavnEtternavn,
                     fodselsdato = bidragspliktig.foedselsdato,
+                    doedsdato = bidragspliktig.doedsdato,
                     landkode = bidragspliktigAdresse?.land
                 )
         )

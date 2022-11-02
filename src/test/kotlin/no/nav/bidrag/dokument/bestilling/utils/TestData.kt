@@ -50,11 +50,11 @@ fun createPostAdresseResponse(): HentPostadresseResponse{
     return HentPostadresseResponse(
         adresselinje1 = "Adresselinje1",
         adresselinje2 = "Adresselinje2",
-        adresselinje3 = "Adresselinje3",
+        adresselinje3 = null,
         postnummer = "3030",
         poststed = "Drammen",
         land = "NO",
-        bruksenhetsnummer = "H0101"
+        bruksenhetsnummer = "H0201"
     )
 }
 
