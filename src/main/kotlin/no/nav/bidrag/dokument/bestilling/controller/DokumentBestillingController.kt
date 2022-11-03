@@ -12,6 +12,7 @@ import no.nav.bidrag.dokument.bestilling.model.DokumentBestillingResponse
 import no.nav.bidrag.dokument.bestilling.service.DokumentBestillingService
 import no.nav.security.token.support.core.api.Protected
 import no.nav.security.token.support.core.api.Unprotected
+import no.nav.security.token.support.spring.SpringTokenValidationContextHolder
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.ResponseEntity
@@ -50,7 +51,6 @@ class DokumentBestillingController(
         description = "Henter brevkoder som er støttet av applikasjonen",
         security = [SecurityRequirement(name = "bearer-key")],
     )
-    @Unprotected
     fun hentStottedeBrevkoder(): List<String> {
         LOGGER.info("Henter støttede brevkoder")
         return BrevKode.values().filter { it.enabled }.map { it.name }
