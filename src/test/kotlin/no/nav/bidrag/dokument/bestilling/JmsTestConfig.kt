@@ -34,6 +34,7 @@ class JmsTestConfig {
     }
 
     @Bean
+    @Profile("test")
     fun cacheManager(): CacheManager {
         return NoOpCacheManager()
     }
