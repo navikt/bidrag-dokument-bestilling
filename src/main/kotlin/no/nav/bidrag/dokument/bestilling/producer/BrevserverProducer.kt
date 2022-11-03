@@ -160,7 +160,7 @@ class BrevserverProducer(
             adresselinje4 = if (!adresse.landkode.isNullOrEmpty() && adresse.landkode != LANDKODE3_NORGE) adresse.land else null
             boligNr = if (adresse.bruksenhetsnummer == BRUKSHENETSNUMMER_STANDARD) null else adresse.bruksenhetsnummer
             postnummer = adresse.postnummer ?: ""
-            landkode = hentLandkode(adresse.landkode)
+            landkode = hentLandkode(adresse.landkode3)
         }
     }
 
