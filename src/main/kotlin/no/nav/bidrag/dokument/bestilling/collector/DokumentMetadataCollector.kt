@@ -23,6 +23,7 @@ import no.nav.bidrag.dokument.bestilling.service.SakService
 import org.slf4j.LoggerFactory
 import org.springframework.context.annotation.Scope
 import org.springframework.stereotype.Component
+import java.time.LocalDate
 
 @Component
 @Scope("prototype")
@@ -71,7 +72,7 @@ class DokumentMetadataCollector(
                 rolle = RolleType.BM,
                 fodselsnummer = bidragsmottaker.ident,
                 navn = if (bidragsmottaker.isKode6) "" else bidragsmottaker.fornavnEtternavn,
-                fodselsdato = bidragsmottaker.foedselsdato,
+                fodselsdato = hentFodselsdato(bidragsmottaker),
                 doedsdato = bidragsmottaker.doedsdato,
                 landkode = bidragsmottakerAdresse?.land
             )
@@ -82,7 +83,7 @@ class DokumentMetadataCollector(
                     rolle = RolleType.BP,
                     fodselsnummer = bidragspliktig.ident,
                     navn = if (bidragspliktig.isKode6) "" else bidragspliktig.fornavnEtternavn,
-                    fodselsdato = bidragspliktig.foedselsdato,
+                    fodselsdato = hentFodselsdato(bidragspliktig),
                     doedsdato = bidragspliktig.doedsdato,
                     landkode = bidragspliktigAdresse?.land
                 )
@@ -94,7 +95,7 @@ class DokumentMetadataCollector(
             dokumentBestilling.roller.add(Barn(
                     fodselsnummer = barnInfo.ident,
                     navn = if (barnInfo.isKode6) hentKode6NavnBarn(barnInfo) else barnInfo.fornavnEtternavn,
-                    fodselsdato = barnInfo.foedselsdato,
+                    fodselsdato = hentFodselsdato(barnInfo),
                     fornavn = if (barnInfo.isKode6) hentKode6NavnBarn(barnInfo) else barnInfo.fornavn
             ))
         }
@@ -187,6 +188,9 @@ class DokumentMetadataCollector(
 
     fun getBestillingData(): DokumentBestilling = dokumentBestilling
 
+    private fun hentFodselsdato(person: HentPersonResponse): LocalDate? {
+        return if (person.isKode6) null else person.foedselsdato
+    }
     private fun hentKode6NavnBarn(person: HentPersonResponse): String {
         val fodtaar = person.foedselsdato?.year
         return when(dokumentBestilling.spraak){
