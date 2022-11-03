@@ -3,7 +3,6 @@ package no.nav.bidrag.dokument.bestilling.controller
 import StubUtils
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.github.tomakehurst.wiremock.client.WireMock
-import com.thomaskasene.wiremock.junit.WireMockStubs
 import no.nav.bidrag.commons.web.EnhetFilter.X_ENHET_HEADER
 import no.nav.bidrag.commons.web.test.HttpHeaderTestRestTemplate
 import no.nav.bidrag.dokument.bestilling.BidragDokumentBestillingLocalTest
