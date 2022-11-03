@@ -17,6 +17,7 @@ import no.nav.bidrag.dokument.bestilling.model.RolleType
 import no.nav.bidrag.dokument.bestilling.model.SakRolle
 import no.nav.bidrag.dokument.bestilling.model.SamhandlerManglerKontaktinformasjon
 import no.nav.bidrag.dokument.bestilling.model.SpraakKoder
+import no.nav.bidrag.dokument.bestilling.service.KodeverkService
 import no.nav.bidrag.dokument.bestilling.service.OrganisasjonService
 import no.nav.bidrag.dokument.bestilling.service.PersonService
 import no.nav.bidrag.dokument.bestilling.service.SakService
@@ -30,6 +31,7 @@ import java.time.LocalDate
 class DokumentMetadataCollector(
     var personService: PersonService,
     var sakService: SakService,
+    var kodeverkService: KodeverkService,
     var organisasjonService: OrganisasjonService
 ) {
     companion object {
@@ -74,7 +76,8 @@ class DokumentMetadataCollector(
                 navn = if (bidragsmottaker.isKode6) "" else bidragsmottaker.fornavnEtternavn,
                 fodselsdato = hentFodselsdato(bidragsmottaker),
                 doedsdato = bidragsmottaker.doedsdato,
-                landkode = bidragsmottakerAdresse?.land
+                landkode = bidragsmottakerAdresse?.land,
+                landkode3 = bidragsmottakerAdresse?.land3
             )
         )
 
@@ -85,8 +88,9 @@ class DokumentMetadataCollector(
                     navn = if (bidragspliktig.isKode6) "" else bidragspliktig.fornavnEtternavn,
                     fodselsdato = hentFodselsdato(bidragspliktig),
                     doedsdato = bidragspliktig.doedsdato,
-                    landkode = bidragspliktigAdresse?.land
-                )
+                    landkode = bidragspliktigAdresse?.land,
+                    landkode3 = bidragspliktigAdresse?.land3
+            )
         )
 
         val barn = sak.roller.filter { it.rolleType == RolleType.BA }
@@ -124,29 +128,34 @@ class DokumentMetadataCollector(
 
     fun addMottaker(): DokumentMetadataCollector {
         if (request.isMottakerSamhandler()){
-            val kontaktInfo = request.mottakerKontaktInformasjon ?: throw SamhandlerManglerKontaktinformasjon("Samhandler med id ${request.mottakerId} mangler kontaktinformasjon")
+            val samhandler = request.samhandlerInformasjon ?: throw SamhandlerManglerKontaktinformasjon("Samhandler med id ${request.mottakerId} mangler kontaktinformasjon")
+            val adresse = samhandler.adresse
             dokumentBestilling.mottaker = Mottaker(
                 fodselsnummer = request.mottakerId,
                 fodselsdato = null,
                 rolle = null,
-                navn = kontaktInfo.navn ?: "Ukjent",
+                navn = samhandler.navn ?: "Ukjent",
+                spraak = samhandler.spraak ?: "NB",
                 adresse = Adresse(
-                    adresselinje1 = kontaktInfo.adresselinje1 ?: "",
-                    adresselinje2 = kontaktInfo.adresselinje2 ?: "",
-                    adresselinje3 = kontaktInfo.adresselinje3 ?: "",
-                    postnummer = kontaktInfo.postnummer,
-                    landkode = kontaktInfo.landkode
+                    adresselinje1 = adresse?.adresselinje1 ?: "",
+                    adresselinje2 = adresse?.adresselinje2 ?: "",
+                    adresselinje3 = adresse?.adresselinje3 ?: "",
+                    postnummer = adresse?.postnummer,
+                    landkode = adresse?.landkode,
+                    landkode3 = adresse?.landkode,
+                    land = adresse?.landkode?.let { kodeverkService.hentLandFullnavnForKode(it) }
                 )
             )
         } else {
-            val person = hentMottaker()
+            val mottaker = hentMottaker()
             val adresse = hentMottakerAdresse()
 
             dokumentBestilling.mottaker = Mottaker(
-                fodselsnummer = person.ident,
-                fodselsdato = person.foedselsdato,
-                navn = person.navn,
-                rolle = hentRolle(person.ident),
+                fodselsnummer = mottaker.ident,
+                fodselsdato = mottaker.foedselsdato,
+                navn = mottaker.navn,
+                rolle = hentRolle(mottaker.ident),
+                spraak = personService.hentSpraak(mottaker.ident),
                 adresse = Adresse(
                     adresselinje1 = adresse.adresselinje1!!,
                     adresselinje2 = adresse.adresselinje2,
@@ -154,7 +163,9 @@ class DokumentMetadataCollector(
                     bruksenhetsnummer = adresse.bruksenhetsnummer,
                     poststed = adresse.poststed,
                     postnummer = adresse.postnummer,
-                    landkode = adresse.land
+                    landkode = adresse.land,
+                    landkode3 = adresse.land3,
+                    land = adresse.land3?.let { kodeverkService.hentLandFullnavnForKode(it) }
                 )
             )
         }

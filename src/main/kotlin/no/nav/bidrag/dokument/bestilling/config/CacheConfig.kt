@@ -14,6 +14,7 @@ import java.util.concurrent.TimeUnit
 @Profile(value = ["!test"]) // Ignore cache on tests
 class CacheConfig {
     companion object {
+        const val LANDKODER_CACHE = "LANDKODER_CACHE"
         const val PERSON_CACHE = "PERSON_CACHE"
         const val PERSON_ADRESSE_CACHE = "PERSON_ADRESSE_CACHE"
         const val SAKSBEHANDLERINFO_CACHE = "SAKSBEHANDLERINFO_CACHE"

@@ -25,4 +25,8 @@ class PersonService(private var bidragPersonConsumer: BidragPersonConsumer) {
             FantIkkePersonException("Fant ikke adresse for person med rolle $rolle")
         }
     }
+
+    fun hentSpraak(personId: String): String {
+        return bidragPersonConsumer.hentSpraak(personId)?.uppercase() ?: "NB"
+    }
 }

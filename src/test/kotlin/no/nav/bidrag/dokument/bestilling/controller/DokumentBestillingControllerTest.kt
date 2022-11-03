@@ -1,30 +1,35 @@
 package no.nav.bidrag.dokument.bestilling.controller
 
 import StubUtils
+import com.fasterxml.jackson.databind.ObjectMapper
 import com.github.tomakehurst.wiremock.client.WireMock
+import com.thomaskasene.wiremock.junit.WireMockStubs
 import no.nav.bidrag.commons.web.EnhetFilter.X_ENHET_HEADER
 import no.nav.bidrag.commons.web.test.HttpHeaderTestRestTemplate
-import no.nav.bidrag.dokument.bestilling.BidragDokumentBestillingLocal
 import no.nav.bidrag.dokument.bestilling.BidragDokumentBestillingLocalTest
 import no.nav.bidrag.dokument.bestilling.JmsTestConfig
+import no.nav.bidrag.dokument.bestilling.consumer.KodeverkConsumer
 import no.nav.bidrag.dokument.bestilling.model.DokumentBestillingRequest
 import no.nav.bidrag.dokument.bestilling.model.DokumentBestillingResponse
 import no.nav.bidrag.dokument.bestilling.model.HentPersonResponse
+import no.nav.bidrag.dokument.bestilling.model.KodeverkResponse
 import no.nav.bidrag.dokument.bestilling.utils.BARN_ID_1
 import no.nav.bidrag.dokument.bestilling.utils.BARN_ID_2
 import no.nav.bidrag.dokument.bestilling.utils.BARN_NAVN_1
 import no.nav.bidrag.dokument.bestilling.utils.BARN_NAVN_2
-import no.nav.bidrag.dokument.bestilling.utils.JmsTestConsumer
 import no.nav.bidrag.dokument.bestilling.utils.BM_PERSON_ID_1
 import no.nav.bidrag.dokument.bestilling.utils.BM_PERSON_NAVN_1
 import no.nav.bidrag.dokument.bestilling.utils.BP_PERSON_ID_1
 import no.nav.bidrag.dokument.bestilling.utils.BP_PERSON_NAVN_1
+import no.nav.bidrag.dokument.bestilling.utils.JmsTestConsumer
 import no.nav.security.token.support.spring.test.EnableMockOAuth2Server
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.mockito.Mockito
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.boot.test.web.server.LocalServerPort
 import org.springframework.cloud.contract.wiremock.AutoConfigureWireMock
 import org.springframework.core.io.ClassPathResource
@@ -47,6 +52,9 @@ class DokumentBestillingControllerTest {
     @LocalServerPort
     private val port = 0
 
+    @MockBean
+    lateinit var kodeverkConsumer: KodeverkConsumer
+
     @Autowired
     lateinit var stubUtils: StubUtils
 
@@ -61,10 +69,14 @@ class DokumentBestillingControllerTest {
     @Autowired
     lateinit var jmsTestConsumer: JmsTestConsumer
 
+
     @BeforeEach
     fun resetMocks(){
         WireMock.reset()
+        val kodeverkResponse = ObjectMapper().findAndRegisterModules().readValue(readFile("api/landkoder.json"), KodeverkResponse::class.java)
+        Mockito.`when`(kodeverkConsumer.hentLandkoder()).thenReturn(kodeverkResponse)
     }
+
     @Test
     fun `skal produsere XML for fritekstsbrev`(){
         stubUtils.stubHentPerson(BP_PERSON_ID_1, HentPersonResponse(BP_PERSON_ID_1, BP_PERSON_NAVN_1, LocalDate.parse("2020-05-06"), null, "213213213"))
@@ -76,6 +88,7 @@ class DokumentBestillingControllerTest {
         stubUtils.stubEnhetKontaktInfo()
         stubUtils.stubHentSaksbehandlerInfo()
         stubUtils.stubHentSak()
+        stubUtils.stubHentPersonSpraak()
 
         stubUtils.stubOpprettJournalpost()
         val headers = HttpHeaders()
@@ -96,7 +109,7 @@ class DokumentBestillingControllerTest {
             val message = this.getMessageAsString()
 
             println(message)
-            assertThat(message).isEqualTo(readFile("simpel_fritekstbrev.xml"))
+            assertThat(message).isEqualTo(readFile("xml/simpel_fritekstbrev.xml"))
 
             stubUtils.Verify().verifyHentEnhetKontaktInfoCalledWith()
         }
@@ -108,8 +121,8 @@ class DokumentBestillingControllerTest {
         return "http://localhost:$port"
     }
 
-    fun readFile(filename: String): String{
-        return String(ClassPathResource("testdata/xml/$filename").inputStream.readAllBytes())
+    fun readFile(filePath: String): String{
+        return String(ClassPathResource("testdata/$filePath").inputStream.readAllBytes())
     }
 
 }

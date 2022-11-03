@@ -26,7 +26,7 @@ data class HentPersonResponse(
     }
 }
 
-data class HentPostadresseRequest(
+data class HentPersonInforRequest(
     var ident: String
 )
 
@@ -37,5 +37,6 @@ data class HentPostadresseResponse(
     var bruksenhetsnummer: String?,
     var postnummer: String?,
     var poststed: String?,
-    var land: String?
+    var land: String?,
+    var land3: String? = null
 )

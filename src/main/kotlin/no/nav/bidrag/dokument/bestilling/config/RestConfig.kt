@@ -21,7 +21,7 @@ import org.springframework.web.client.RestTemplate
 class RestConfig {
     @Bean
     @Scope("prototype")
-    fun baseRestTemplate(@Value("\${NAIS_APP_NAME}") naisAppName: String, metricsRestTemplateCustomizer: MetricsRestTemplateCustomizer ): RestTemplate {
+    fun baseRestTemplate(@Value("\${NAIS_APP_NAME}") naisAppName: String, metricsRestTemplateCustomizer: MetricsRestTemplateCustomizer ): HttpHeaderRestTemplate {
         val restTemplate = HttpHeaderRestTemplate()
         restTemplate.requestFactory = HttpComponentsClientHttpRequestFactory()
         restTemplate.withDefaultHeaders()

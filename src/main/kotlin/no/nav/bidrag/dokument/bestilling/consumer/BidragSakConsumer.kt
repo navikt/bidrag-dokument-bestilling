@@ -1,18 +1,10 @@
 package no.nav.bidrag.dokument.bestilling.consumer
 
 import no.nav.bidrag.commons.security.service.SecurityTokenService
-import no.nav.bidrag.dokument.bestilling.SECURE_LOGGER
-import no.nav.bidrag.dokument.bestilling.config.CacheConfig.Companion.PERSON_ADRESSE_CACHE
-import no.nav.bidrag.dokument.bestilling.config.CacheConfig.Companion.PERSON_CACHE
-import no.nav.bidrag.dokument.bestilling.model.HentPersonResponse
-import no.nav.bidrag.dokument.bestilling.model.HentPostadresseRequest
-import no.nav.bidrag.dokument.bestilling.model.HentPostadresseResponse
 import no.nav.bidrag.dokument.bestilling.model.HentSakFeiletException
 import no.nav.bidrag.dokument.bestilling.model.HentSakResponse
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
-import org.springframework.cache.annotation.Cacheable
-import org.springframework.http.HttpEntity
 import org.springframework.http.HttpMethod
 import org.springframework.http.HttpStatus
 import org.springframework.retry.annotation.Backoff

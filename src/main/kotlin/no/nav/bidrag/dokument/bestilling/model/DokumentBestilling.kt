@@ -56,6 +56,7 @@ data class PartInfo(
     override val fodselsdato: LocalDate? = null,
     val doedsdato: LocalDate? = null,
     val landkode: String? = null,
+    val landkode3: String? = null,
     val datoDod: LocalDate? = null,
     val gebyr: Number? = null,
     val kravFremAv: String? = null
@@ -78,6 +79,7 @@ data class Gjelder(
 data class Mottaker(
     var fodselsnummer: String,
     var navn: String,
+    var spraak: String,
     val adresse: Adresse,
     val rolle: RolleType?,
     val fodselsdato: LocalDate?,
@@ -91,6 +93,7 @@ data class Adresse(
     val postnummer: String? = null,
     val poststed: String? = null,
     val landkode: String? = null,
+    val landkode3: String? = null,
     val land: String? = null
 )
 

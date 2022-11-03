@@ -2,7 +2,7 @@ package no.nav.bidrag.dokument.bestilling.model
 
 data class DokumentBestillingRequest(
     val mottakerId: String,
-    val mottakerKontaktInformasjon: Kontaktinformasjon? = null,
+    val samhandlerInformasjon: SamhandlerInformasjon? = null,
     val saksbehandler: Saksbehandler? = null,
     val gjelderId: String,
     val saksnummer: String,
@@ -33,12 +33,16 @@ data class DokumentBestillingResponse(
     var arkivSystem: String? = null,
 )
 
-data class Kontaktinformasjon(
-    var navn: String? = null,
+data class SamhandlerAdresse(
     var adresselinje1: String? = null,
     var adresselinje2: String? = null,
     var adresselinje3: String? = null,
     var postnummer: String? = null,
     var landkode: String? = null,
-    var spraak: String? = null
+)
+
+data class SamhandlerInformasjon(
+    var navn: String? = null,
+    var spraak: String? = null,
+    var adresse: SamhandlerAdresse? = null
 )

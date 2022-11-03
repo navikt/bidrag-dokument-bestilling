@@ -1,10 +1,9 @@
 package no.nav.bidrag.dokument.bestilling.consumer
 
 import no.nav.bidrag.commons.security.service.SecurityTokenService
-import no.nav.bidrag.dokument.bestilling.SECURE_LOGGER
 import no.nav.bidrag.dokument.bestilling.model.HentPersonFeiletException
 import no.nav.bidrag.dokument.bestilling.model.HentPersonResponse
-import no.nav.bidrag.dokument.bestilling.model.HentPostadresseRequest
+import no.nav.bidrag.dokument.bestilling.model.HentPersonInforRequest
 import no.nav.bidrag.dokument.bestilling.model.HentPostadresseResponse
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
@@ -46,9 +45,17 @@ class BidragPersonConsumer(
     @Retryable(maxAttempts = 3, backoff = Backoff(delay = 500, maxDelay = 1500, multiplier = 2.0))
     fun hentAdresse(id: String): Optional<HentPostadresseResponse> {
         return Optional.ofNullable(restTemplate.exchange(
-            "/adresse/post", HttpMethod.POST, HttpEntity(HentPostadresseRequest(id)),
+            "/adresse/post", HttpMethod.POST, HttpEntity(HentPersonInforRequest(id)),
             HentPostadresseResponse::class.java
         ).body)
+    }
+
+    @Retryable(maxAttempts = 3, backoff = Backoff(delay = 500, maxDelay = 1500, multiplier = 2.0))
+    fun hentSpraak(id: String): String? {
+        return restTemplate.exchange(
+            "/spraak", HttpMethod.POST, HttpEntity(HentPersonInforRequest(id)),
+            String::class.java
+        ).body
     }
 
 }

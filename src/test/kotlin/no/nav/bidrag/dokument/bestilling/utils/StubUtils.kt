@@ -51,6 +51,26 @@ class StubUtils {
         )
     }
 
+    fun stubHentPersonSpraak(){
+        WireMock.stubFor(
+            WireMock.post(WireMock.urlMatching("/person/spraak")).willReturn(
+                aClosedJsonResponse()
+                    .withStatus(HttpStatus.OK.value())
+                    .withBody("nb")
+            )
+        )
+    }
+
+    fun stubHentLandkoder(){
+        WireMock.stubFor(
+            WireMock.get(WireMock.urlMatching("/kodeverk/.*")).willReturn(
+                aClosedJsonResponse()
+                    .withStatus(HttpStatus.OK.value())
+                    .withBodyFile("testdata/api/landkoder.json")
+            )
+        )
+    }
+
     fun stubHentAdresse(postAdresse: HentPostadresseResponse = createPostAdresseResponse()){
         WireMock.stubFor(
             WireMock.post(WireMock.urlMatching("/person/adresse/post")).willReturn(

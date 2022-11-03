@@ -13,6 +13,7 @@ import no.nav.bidrag.dokument.bestilling.model.BrevType
 import no.nav.bidrag.dokument.bestilling.model.DokumentBestilling
 import no.nav.bidrag.dokument.bestilling.model.DokumentBestillingResult
 import no.nav.bidrag.dokument.bestilling.model.EnhetKontaktInfo
+import no.nav.bidrag.dokument.bestilling.model.LANDKODE3_NORGE
 import no.nav.bidrag.dokument.bestilling.model.Mottaker
 import no.nav.bidrag.dokument.bestilling.model.RolleType
 import no.nav.bidrag.dokument.bestilling.model.brevbestilling
@@ -85,7 +86,7 @@ class BrevserverProducer(
                 brevref = dokumentBestilling.dokumentReferanse!!
                 spraak = dokumentSpraak
                 tknr = dokumentBestilling.enhet!!
-                mottaker = mapBrevmottaker(this, dokumentBestilling.mottaker!!, dokumentSpraak)
+                mottaker = mapBrevmottaker(this, dokumentBestilling.mottaker!!)
                 kontaktInfo = mapKontaktInfo(this, dokumentBestilling.kontaktInfo)
                 soknad {
                     saksnr = dokumentBestilling.saksnummer
@@ -99,8 +100,8 @@ class BrevserverProducer(
                     bmfnr = bm?.fodselsnummer
                     bmnavn = bm?.navn
                     bmfodselsdato = bm?.fodselsdato
-                    bmlandkode = if (bm?.landkode.isNullOrEmpty() || bm?.landkode == "NO") null else bm?.landkode
-                    bplandkode = if (bp?.landkode.isNullOrEmpty() || bp?.landkode == "NO") null else bp?.landkode
+                    bmlandkode = hentLandkode(bm?.landkode3)
+                    bplandkode = hentLandkode(bp?.landkode3)
                     bpdatodod = bp?.doedsdato
                     bmdatodod = bm?.doedsdato
                 }
@@ -138,10 +139,10 @@ class BrevserverProducer(
             }
         }
     }
-    fun mapBrevmottaker(brev: Brev, mottaker: Mottaker, brevSpraak: String): BrevMottaker {
+    fun mapBrevmottaker(brev: Brev, mottaker: Mottaker): BrevMottaker {
         return brev.brevmottaker {
             navn = mottaker.navn
-            spraak = brevSpraak
+            spraak = mottaker.spraak
             fodselsnummer = mottaker.fodselsnummer
             rolle = when(mottaker.rolle){
                 RolleType.BM -> "01"
@@ -152,14 +153,18 @@ class BrevserverProducer(
             fodselsdato = mottaker.fodselsdato
 
             val adresse = mottaker.adresse
-            val postnummerSted = "${adresse.postnummer} ${adresse.poststed ?: ""}"
+            val postnummerSted = if (adresse.postnummer.isNullOrEmpty() && adresse.poststed.isNullOrEmpty()) null else "${adresse.postnummer ?: ""} ${adresse.poststed ?: ""}".trim()
             adresselinje1 = adresse.adresselinje1
             adresselinje2 = adresse.adresselinje2
             adresselinje3 = adresse.adresselinje3 ?: postnummerSted
-            adresselinje4 = if (adresselinje3 == postnummerSted) null else postnummerSted
+            adresselinje4 = if (!adresse.landkode.isNullOrEmpty() && adresse.landkode != LANDKODE3_NORGE) adresse.land else null
             boligNr = if (adresse.bruksenhetsnummer == BRUKSHENETSNUMMER_STANDARD) null else adresse.bruksenhetsnummer
-            postnummer = adresse.postnummer
-            landkode = adresse.landkode
+            postnummer = adresse.postnummer ?: ""
+            landkode = hentLandkode(adresse.landkode)
         }
+    }
+
+    private fun hentLandkode(landkode: String?): String? {
+        return if (landkode.isNullOrEmpty() || landkode == LANDKODE3_NORGE) null else landkode
     }
 }

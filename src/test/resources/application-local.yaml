@@ -9,6 +9,7 @@ BIDRAG_ORGANISASJON_SCOPE: dev-fss.bidrag.bidrag-organisasjon-feature
 
 BIDRAG_SAK_URL: https://bidrag-sak-feature.dev-fss-pub.nais.io/bidrag-sak
 BIDRAG_SAK_SCOPE: dev-fss.bidrag.bidrag-sak-feature
+KODEVERK_URL: https://kodeverk.dev.adeo.no
 
 AZURE_APP_TENANT_ID: 966ac572-f5b7-4bbe-aa88-c76419c0f851
 

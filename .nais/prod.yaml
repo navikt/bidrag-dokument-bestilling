@@ -13,6 +13,7 @@ env:
 
   BIDRAG_SAK_URL: https://bidrag-sak.prod-fss-pub.nais.io/bidrag-sak
   BIDRAG_SAK_SCOPE: prod-fss.bidrag.bidrag-sak
+  KODEVERK_URL: https://kodeverk.nais.adeo.no
 
   BREVSERVER_ONLINEBREV_QUEUE: QA.Q2_475.BREVSERVER_ONLINEBREV
   BREVSERVER_KVITTERING_QUEUE: QA.Q2_464.BREV_REPLY_QUE
