@@ -139,7 +139,7 @@ class DokumentMetadataCollector(
                 adresse = Adresse(
                     adresselinje1 = adresse?.adresselinje1 ?: "",
                     adresselinje2 = adresse?.adresselinje2 ?: "",
-                    adresselinje3 = adresse?.adresselinje3 ?: "",
+                    adresselinje3 = "${adresse?.postnummer} ${adresse?.adresselinje3?.substring(0, adresse.adresselinje3?.length?.coerceAtMost(25) ?: 0)}",
                     postnummer = adresse?.postnummer,
                     landkode = adresse?.landkode,
                     landkode3 = adresse?.landkode,
