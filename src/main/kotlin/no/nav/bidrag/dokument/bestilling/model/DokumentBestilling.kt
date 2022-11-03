@@ -11,6 +11,7 @@ data class DokumentBestilling(
     var mottaker: Mottaker? = null,
     var gjelder: Gjelder? = null,
     var kontaktInfo: EnhetKontaktInfo? = null,
+    var saksbehandler: Saksbehandler? = null,
     var dokumentReferanse: String? = null,
     var tittel: String? = null,
     var enhet: String? = null,

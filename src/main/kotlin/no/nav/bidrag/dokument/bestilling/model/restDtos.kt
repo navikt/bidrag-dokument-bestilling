@@ -3,6 +3,7 @@ package no.nav.bidrag.dokument.bestilling.model
 data class DokumentBestillingRequest(
     val mottakerId: String,
     val mottakerKontaktInformasjon: Kontaktinformasjon? = null,
+    val saksbehandler: Saksbehandler? = null,
     val gjelderId: String,
     val saksnummer: String,
     val vedtaksId: String? = null,
