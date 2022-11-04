@@ -15,4 +15,6 @@ object FeilSpraakKoder {
     val TYSK = "TY"
 }
 
+
+
 const val BRUKSHENETSNUMMER_STANDARD = "H0101"

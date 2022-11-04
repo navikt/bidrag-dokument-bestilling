@@ -12,7 +12,6 @@ import org.springframework.cache.annotation.Cacheable
 import org.springframework.http.HttpMethod
 import org.springframework.stereotype.Service
 import org.springframework.web.client.RestTemplate
-import java.util.Optional
 
 @Service
 class BidragOrganisasjonConsumer(
@@ -32,23 +31,23 @@ class BidragOrganisasjonConsumer(
     }
 
     @Cacheable(ENHETINFO_CACHE)
-    fun hentEnhetInfo(enhetId: String): Optional<EnhetInfo> {
-        return Optional.ofNullable(restTemplate.exchange(
+    fun hentEnhetInfo(enhetId: String): EnhetInfo? {
+        return restTemplate.exchange(
             "/enhet/info/$enhetId",
             HttpMethod.GET,
             null,
             EnhetInfo::class.java
-        ).body)
+        ).body
     }
 
     @Cacheable(ENHETKONTAKTINFO_CACHE)
-    fun hentEnhetKontaktinfo(enhetId: String, spraak: String): Optional<EnhetKontaktInfoDto> {
-        return Optional.ofNullable(restTemplate.exchange(
+    fun hentEnhetKontaktinfo(enhetId: String, spraak: String): EnhetKontaktInfoDto? {
+        return restTemplate.exchange(
             "/enhet/kontaktinfo/$enhetId/$spraak",
             HttpMethod.GET,
             null,
             EnhetKontaktInfoDto::class.java
-        ).body)
+        ).body
     }
 
     companion object {

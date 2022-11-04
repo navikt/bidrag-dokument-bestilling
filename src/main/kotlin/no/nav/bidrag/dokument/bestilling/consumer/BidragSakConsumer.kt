@@ -12,7 +12,6 @@ import org.springframework.retry.annotation.Retryable
 import org.springframework.stereotype.Service
 import org.springframework.web.client.HttpStatusCodeException
 import org.springframework.web.client.RestTemplate
-import java.util.Optional
 
 @Service
 class BidragSakConsumer(
@@ -24,15 +23,15 @@ class BidragSakConsumer(
         private val LOGGER = LoggerFactory.getLogger(BidragSakConsumer::class.java)
     }
     @Retryable(maxAttempts = 3, backoff = Backoff(delay = 500, maxDelay = 1500, multiplier = 2.0))
-    fun hentSak(saksnr: String): Optional<HentSakResponse> {
+    fun hentSak(saksnr: String): HentSakResponse? {
         try {
             val hentPersonResponse =
                 restTemplate.exchange("/sak/$saksnr", HttpMethod.GET, null, HentSakResponse::class.java)
             LOGGER.info("Hentet sak med id $saksnr")
-            return Optional.ofNullable(hentPersonResponse.body)
+            return hentPersonResponse.body
         } catch (e: HttpStatusCodeException){
             if (e.statusCode == HttpStatus.NOT_FOUND){
-                return Optional.empty()
+                return null
             }
             throw HentSakFeiletException("Henting av sak $saksnr feilet", e)
         }

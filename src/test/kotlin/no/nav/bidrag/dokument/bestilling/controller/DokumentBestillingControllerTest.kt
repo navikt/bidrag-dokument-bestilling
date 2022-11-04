@@ -23,9 +23,11 @@ import no.nav.bidrag.dokument.bestilling.utils.BP_PERSON_NAVN_1
 import no.nav.bidrag.dokument.bestilling.utils.JmsTestConsumer
 import no.nav.security.token.support.spring.test.EnableMockOAuth2Server
 import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.mockito.Mockito
+import org.mockito.kotlin.whenever
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.mock.mockito.MockBean
@@ -39,6 +41,7 @@ import org.springframework.http.HttpStatus
 import org.springframework.jms.core.JmsTemplate
 import org.springframework.test.context.ActiveProfiles
 import java.time.LocalDate
+import java.time.LocalDateTime
 import javax.jms.Queue
 
 
@@ -68,16 +71,24 @@ class DokumentBestillingControllerTest {
     @Autowired
     lateinit var jmsTestConsumer: JmsTestConsumer
 
+    val localDateMock = Mockito.mockStatic(LocalDate::class.java, Mockito.CALLS_REAL_METHODS)
+
+    @AfterEach
+    fun `remove time mock`(){
+        localDateMock.close()
+    }
 
     @BeforeEach
     fun resetMocks(){
         WireMock.reset()
         val kodeverkResponse = ObjectMapper().findAndRegisterModules().readValue(readFile("api/landkoder.json"), KodeverkResponse::class.java)
-        Mockito.`when`(kodeverkConsumer.hentLandkoder()).thenReturn(kodeverkResponse)
+        whenever(kodeverkConsumer.hentLandkoder()).thenReturn(kodeverkResponse)
     }
 
     @Test
     fun `skal produsere XML for fritekstsbrev`(){
+        val mockTime = LocalDate.parse("2022-09-10")
+        whenever(LocalDate.now()).thenReturn(mockTime)
         stubUtils.stubHentPerson(BP_PERSON_ID_1, HentPersonResponse(BP_PERSON_ID_1, BP_PERSON_NAVN_1, LocalDate.parse("2020-05-06"), null, "213213213"))
         stubUtils.stubHentPerson(BM_PERSON_ID_1, HentPersonResponse(BM_PERSON_ID_1, BM_PERSON_NAVN_1, LocalDate.parse("2020-05-06"), null, "213213213"))
         stubUtils.stubHentPerson(BARN_ID_1, HentPersonResponse(BARN_ID_1, BARN_NAVN_1, LocalDate.parse("2020-05-06"), null, "213213213"))

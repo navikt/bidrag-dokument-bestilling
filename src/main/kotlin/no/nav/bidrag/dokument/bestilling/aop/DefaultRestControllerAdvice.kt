@@ -1,7 +1,9 @@
 package no.nav.bidrag.dokument.bestilling.aop
 
+import no.nav.bidrag.dokument.bestilling.model.FantIkkeEnhetException
 import no.nav.bidrag.dokument.bestilling.model.FantIkkePersonException
 import no.nav.bidrag.dokument.bestilling.model.FantIkkeSakException
+import no.nav.bidrag.dokument.bestilling.model.ManglerGjelderException
 import no.nav.bidrag.dokument.bestilling.model.ProduksjonAvDokumentStottesIkke
 import no.nav.bidrag.dokument.bestilling.model.SamhandlerManglerKontaktinformasjon
 import no.nav.security.token.support.spring.validation.interceptor.JwtTokenUnauthorizedException
@@ -12,6 +14,7 @@ import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.ResponseBody
 import org.springframework.web.bind.annotation.RestControllerAdvice
+import org.springframework.web.client.HttpStatusCodeException
 
 @RestControllerAdvice
 class DefaultRestControllerAdvice {
@@ -20,7 +23,13 @@ class DefaultRestControllerAdvice {
     }
 
     @ResponseBody
-    @ExceptionHandler(value = [FantIkkePersonException::class, FantIkkeSakException::class, SamhandlerManglerKontaktinformasjon::class])
+    @ExceptionHandler(value = [
+        ManglerGjelderException::class,
+        FantIkkeEnhetException::class,
+        FantIkkePersonException::class,
+        FantIkkeSakException::class,
+        SamhandlerManglerKontaktinformasjon::class
+    ])
     fun fantIkkeData(exception: RuntimeException): ResponseEntity<*> {
         LOGGER.warn(exception.message)
         return ResponseEntity
@@ -40,9 +49,19 @@ class DefaultRestControllerAdvice {
     }
 
     @ResponseBody
+    @ExceptionHandler(HttpStatusCodeException::class)
+    fun handleHttpStatusException(exception: HttpStatusCodeException): ResponseEntity<*> {
+        LOGGER.warn("Det skjedde en feil ved kall mot ekstern tjeneste: ${exception.message}", exception)
+        return ResponseEntity
+            .status(HttpStatus.INTERNAL_SERVER_ERROR)
+            .header(HttpHeaders.WARNING, "Det skjedde en feil ved kall mot ekstern tjeneste: ${exception.message}")
+            .build<Any>()
+    }
+
+    @ResponseBody
     @ExceptionHandler(Exception::class)
     fun handleOtherExceptions(exception: Exception): ResponseEntity<*> {
-        LOGGER.warn("Det skjedde en ukjent feil", exception)
+        LOGGER.warn("Det skjedde en ukjent feil: ${exception.message}", exception)
         return ResponseEntity
             .status(HttpStatus.INTERNAL_SERVER_ERROR)
             .header(HttpHeaders.WARNING, "Det skjedde en ukjent feil: ${exception.message}")

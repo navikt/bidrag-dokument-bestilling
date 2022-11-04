@@ -25,6 +25,7 @@ import no.nav.bidrag.dokument.dto.OpprettJournalpostRequest
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.jms.core.JmsTemplate
 import org.springframework.stereotype.Component
+import java.time.LocalDate
 
 @Component(BestillingSystem.BREVSERVER)
 class BrevserverProducer(
@@ -91,6 +92,7 @@ class BrevserverProducer(
                 soknad {
                     saksnr = dokumentBestilling.saksnummer
                     rmISak = dokumentBestilling.rmISak
+                    sendtDato = LocalDate.now()
                     sakstype = "E" // "X" hvis det er en ukjent part i saken, "U" hvis parter levde adskilt, "E" i alle andre tilfeller
                 }
                 parter {
@@ -100,8 +102,8 @@ class BrevserverProducer(
                     bmfnr = bm?.fodselsnummer
                     bmnavn = bm?.navn
                     bmfodselsdato = bm?.fodselsdato
-                    bmlandkode = hentLandkode(bm?.landkode3)
-                    bplandkode = hentLandkode(bp?.landkode3)
+                    bmlandkode = bm?.landkode3
+                    bplandkode = bp?.landkode3
                     bpdatodod = bp?.doedsdato
                     bmdatodod = bm?.doedsdato
                 }
@@ -147,7 +149,7 @@ class BrevserverProducer(
             rolle = when(mottaker.rolle){
                 RolleType.BM -> "01"
                 RolleType.BP -> "02"
-//                RolleType.BA -> "03"
+                RolleType.RM -> "RM"
                 else -> "00"
             }
             fodselsdato = mottaker.fodselsdato
@@ -158,13 +160,9 @@ class BrevserverProducer(
             adresselinje2 = adresse.adresselinje2
             adresselinje3 = adresse.adresselinje3 ?: postnummerSted
             adresselinje4 = if (!adresse.landkode.isNullOrEmpty() && adresse.landkode != LANDKODE3_NORGE) adresse.land else null
-            boligNr = if (adresse.bruksenhetsnummer == BRUKSHENETSNUMMER_STANDARD) null else adresse.bruksenhetsnummer
+            boligNr = adresse.bruksenhetsnummer
             postnummer = adresse.postnummer ?: ""
-            landkode = hentLandkode(adresse.landkode3)
+            landkode = adresse.landkode3
         }
-    }
-
-    private fun hentLandkode(landkode: String?): String? {
-        return if (landkode.isNullOrEmpty() || landkode == LANDKODE3_NORGE) null else landkode
     }
 }

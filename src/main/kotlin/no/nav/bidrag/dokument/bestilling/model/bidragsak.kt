@@ -13,8 +13,8 @@ data class HentSakResponse (
 )
 
 data class SakRolle(
-        var foedselsnummer: String? = null,
-        var rolleType: RolleType? = null
+    val foedselsnummer: Ident? = null,
+    val rolleType: RolleType? = null
 )
 
 enum class RolleType(var beskrivelse: String) {

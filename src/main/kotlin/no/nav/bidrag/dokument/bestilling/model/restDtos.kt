@@ -1,10 +1,10 @@
 package no.nav.bidrag.dokument.bestilling.model
 
 data class DokumentBestillingRequest(
-    val mottakerId: String,
+    val mottakerId: Ident,
     val samhandlerInformasjon: SamhandlerInformasjon? = null,
     val saksbehandler: Saksbehandler? = null,
-    val gjelderId: String,
+    val gjelderId: Ident? = null,
     val saksnummer: String,
     val vedtaksId: String? = null,
     val dokumentReferanse: String? = null,
@@ -12,7 +12,7 @@ data class DokumentBestillingRequest(
     val enhet: String? = null,
     val spraak: String? = null,
 ){
-    fun isMottakerSamhandler() = mottakerId.matches("^[8-9][0-9]{10}$".toRegex())
+    fun isMottakerSamhandler() = mottakerId.isSamhandler
     fun hentRiktigSpraakkode(): String {
         if (spraak.isNullOrEmpty()){
             return SpraakKoder.BOKMAL

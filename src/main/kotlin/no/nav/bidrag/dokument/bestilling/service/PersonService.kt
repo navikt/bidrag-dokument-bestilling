@@ -13,16 +13,16 @@ import org.springframework.web.context.annotation.RequestScope
 class PersonService(private var bidragPersonConsumer: BidragPersonConsumer) {
 
     fun hentPerson(personId: String, rolle: String? = "UKJENT"): HentPersonResponse {
-       return bidragPersonConsumer.hentPerson(personId).orElseThrow {
+       return bidragPersonConsumer.hentPerson(personId) ?: run {
            SECURE_LOGGER.warn("Fant ikke person med fnr $personId og rolle $rolle")
-           FantIkkePersonException("Fant ikke person med rolle $rolle")
+           throw FantIkkePersonException("Fant ikke person med rolle $rolle")
        }
     }
 
     fun hentPersonAdresse(personId: String, rolle: String? = "UKJENT"): HentPostadresseResponse {
-        return bidragPersonConsumer.hentAdresse(personId).orElseThrow {
+        return bidragPersonConsumer.hentAdresse(personId) ?: run {
             SECURE_LOGGER.warn("Fant ikke adresse for person $personId med rolle $rolle")
-            FantIkkePersonException("Fant ikke adresse for person med rolle $rolle")
+            throw FantIkkePersonException("Fant ikke adresse for person med rolle $rolle")
         }
     }
 

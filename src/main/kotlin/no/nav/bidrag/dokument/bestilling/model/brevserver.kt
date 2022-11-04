@@ -135,7 +135,7 @@ class BrevSaksbehandler {
 
 @XmlRootElement(name = "brevMottaker")
 @XmlAccessorType(XmlAccessType.FIELD)
-class BrevMottaker() {
+class BrevMottaker {
     @XmlElement(name = "navn", nillable = true)
     var navn: String? = null
     @XmlElement(name = "adr1", nillable = true)
@@ -158,6 +158,7 @@ class BrevMottaker() {
     @XmlElement(name = "postnr", nillable = true)
     var postnummer: String? = null
     @XmlElement(name = "landKd", nillable = true)
+    @XmlJavaTypeAdapter(LandkodeAdapter::class)
     var landkode: String? = null
     @XmlElement(name = "spraak", nillable = true)
     var spraak: String? = null
@@ -237,6 +238,7 @@ class BrevKontaktinfo {
 @XmlRootElement(name = "parter")
 @XmlAccessorType(XmlAccessType.FIELD)
 class Parter {
+    // Bidragspliktig (BP)
     @XmlElement(name = "bpfnr", nillable = true)
     var bpfnr: String? = null
     @XmlElement(name = "bpNavn", nillable = true)
@@ -248,8 +250,14 @@ class Parter {
     var bpkravfremav: String? = null
     @XmlElement(name = "bpbelopGebyr", nillable = true)
     var bpgebyr: String? = null
+    @XmlElement(name = "bpLandKd", nillable = true)
+    @XmlJavaTypeAdapter(LandkodeAdapter::class)
+    var bplandkode: String? = null
+    @XmlElement(name = "bpDatoDod", nillable = true)
+    @XmlJavaTypeAdapter(BirthDateAdapter::class)
+    var bpdatodod: LocalDate? = null
 
-
+    // Bidragsmottaker (BM)
     @XmlElement(name = "bmfnr", nillable = true)
     var bmfnr: String? = null
     @XmlElement(name = "bmNavn", nillable = true)
@@ -262,15 +270,12 @@ class Parter {
     @XmlElement(name = "bmbelopGebyr", nillable = true)
     var bmgebyr: String? = null
     @XmlElement(name = "bmLandKd", nillable = true)
+    @XmlJavaTypeAdapter(LandkodeAdapter::class)
     var bmlandkode: String? = null
-    @XmlElement(name = "bpLandKd", nillable = true)
-    var bplandkode: String? = null
     @XmlElement(name = "bmDatoDod", nillable = true)
     @XmlJavaTypeAdapter(BirthDateAdapter::class)
     var bmdatodod: LocalDate? = null
-    @XmlElement(name = "bpDatoDod", nillable = true)
-    @XmlJavaTypeAdapter(BirthDateAdapter::class)
-    var bpdatodod: LocalDate? = null
+
 }
 
 @Suppress("unused")
@@ -298,7 +303,7 @@ class Soknad {
     var ugKode: String? = null
     @XmlElement(name = "datoSakReg", nillable = true)
     @XmlJavaTypeAdapter(DateAdapter::class)
-    var datoSakReg: LocalDate? = LocalDate.now()
+    var datoSakReg: LocalDate? = null
     @XmlElement(name = "resKode", nillable = true)
     var resKode: String? = null
     @XmlElement(name = "datoVtak", nillable = true)
@@ -393,6 +398,17 @@ class DateAdapter: XmlAdapter<String, LocalDate?>() {
     @Throws(ParseException::class)
     override fun unmarshal(v: String): LocalDate {
         return LocalDate.parse(v, BREV_SOKNAD_DATETIME_FORMAT)
+    }
+}
+
+class LandkodeAdapter: XmlAdapter<String, String?>() {
+    override fun marshal(landkode: String?): String? {
+        return if (landkode.isNullOrEmpty() || landkode == LANDKODE3_NORGE) null else landkode
+    }
+
+    @Throws(ParseException::class)
+    override fun unmarshal(landkode: String): String {
+        return landkode
     }
 }
 
