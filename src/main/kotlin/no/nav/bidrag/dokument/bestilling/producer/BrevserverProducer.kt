@@ -63,7 +63,8 @@ class BrevserverProducer(
                 journalposttype = when(brevKode.brevtype){
                     BrevType.UTGAAENDE -> JournalpostType.UTGAAENDE
                     BrevType.NOTAT -> JournalpostType.NOTAT
-                }
+                },
+                saksbehandlerIdent = dokumentBestilling.saksbehandler?.ident
             ))
 
             dokumentBestilling.dokumentReferanse = response?.dokumenter?.get(0)?.dokumentreferanse
@@ -92,7 +93,6 @@ class BrevserverProducer(
                 soknad {
                     saksnr = dokumentBestilling.saksnummer
                     rmISak = dokumentBestilling.rmISak
-                    sendtDato = LocalDate.now()
                     sakstype = "E" // "X" hvis det er en ukjent part i saken, "U" hvis parter levde adskilt, "E" i alle andre tilfeller
                 }
                 parter {

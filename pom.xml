@@ -23,7 +23,7 @@
 		<token-support.version>2.0.14</token-support.version>
 		<bidrag-commons-test.version>0.2.2</bidrag-commons-test.version>
 		<ibmmq.version>9.3.0.1</ibmmq.version>
-		<bidrag-dokument-dto.version>1.5.13</bidrag-dokument-dto.version>
+		<bidrag-dokument-dto.version>1.5.14</bidrag-dokument-dto.version>
 	</properties>
 	<dependencies>
 
