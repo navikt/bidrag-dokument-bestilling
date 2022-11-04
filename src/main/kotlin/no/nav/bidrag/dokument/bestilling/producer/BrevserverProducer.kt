@@ -159,7 +159,7 @@ class BrevserverProducer(
             adresselinje1 = adresse.adresselinje1
             adresselinje2 = adresse.adresselinje2
             adresselinje3 = adresse.adresselinje3 ?: postnummerSted
-            adresselinje4 = if (!adresse.landkode.isNullOrEmpty() && adresse.landkode != LANDKODE3_NORGE) adresse.land else null
+            adresselinje4 = if (!adresse.landkode3.isNullOrEmpty() && adresse.landkode3 != LANDKODE3_NORGE) adresse.land else null
             boligNr = adresse.bruksenhetsnummer
             postnummer = adresse.postnummer ?: ""
             landkode = adresse.landkode3
