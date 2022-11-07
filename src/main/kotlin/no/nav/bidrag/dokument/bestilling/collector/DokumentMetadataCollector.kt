@@ -1,8 +1,10 @@
 package no.nav.bidrag.dokument.bestilling.collector
 
+import no.nav.bidrag.dokument.bestilling.config.SaksbehandlerInfoManager
 import no.nav.bidrag.dokument.bestilling.model.Adresse
 import no.nav.bidrag.dokument.bestilling.model.BRUKSHENETSNUMMER_STANDARD
 import no.nav.bidrag.dokument.bestilling.model.Barn
+import no.nav.bidrag.dokument.bestilling.model.BrevKode
 import no.nav.bidrag.dokument.bestilling.model.DokumentBestilling
 import no.nav.bidrag.dokument.bestilling.model.DokumentBestillingRequest
 import no.nav.bidrag.dokument.bestilling.model.EnhetKontaktInfo
@@ -17,6 +19,7 @@ import no.nav.bidrag.dokument.bestilling.model.ManglerGjelderException
 import no.nav.bidrag.dokument.bestilling.model.Mottaker
 import no.nav.bidrag.dokument.bestilling.model.PartInfo
 import no.nav.bidrag.dokument.bestilling.model.RolleType
+import no.nav.bidrag.dokument.bestilling.model.Saksbehandler
 import no.nav.bidrag.dokument.bestilling.model.SamhandlerManglerKontaktinformasjon
 import no.nav.bidrag.dokument.bestilling.model.SpraakKoder
 import no.nav.bidrag.dokument.bestilling.model.isDodfodt
@@ -25,6 +28,7 @@ import no.nav.bidrag.dokument.bestilling.service.OrganisasjonService
 import no.nav.bidrag.dokument.bestilling.service.PersonService
 import no.nav.bidrag.dokument.bestilling.service.SakService
 import org.slf4j.LoggerFactory
+import org.springframework.cache.CacheManager
 import org.springframework.context.annotation.Scope
 import org.springframework.stereotype.Component
 import java.time.LocalDate
@@ -32,11 +36,13 @@ import java.time.LocalDate
 @Component
 @Scope("prototype")
 class DokumentMetadataCollector(
-    var personService: PersonService,
-    var sakService: SakService,
-    var kodeverkService: KodeverkService,
-    var organisasjonService: OrganisasjonService
+    val personService: PersonService,
+    val sakService: SakService,
+    val kodeverkService: KodeverkService,
+    val saksbehandlerInfoManager: SaksbehandlerInfoManager,
+    val organisasjonService: OrganisasjonService
 ) {
+
     companion object {
         private val LOGGER = LoggerFactory.getLogger(DokumentMetadataCollector::class.java)
     }
@@ -53,7 +59,11 @@ class DokumentMetadataCollector(
         dokumentBestilling.tittel = request.tittel
         dokumentBestilling.saksnummer = request.saksnummer
         dokumentBestilling.spraak = request.hentRiktigSpraakkode()
-        dokumentBestilling.saksbehandler = request.saksbehandler
+        dokumentBestilling.saksbehandler = if (request.saksbehandler != null) request.saksbehandler else {
+            val saksbehandlerId = saksbehandlerInfoManager.hentSaksbehandlerBrukerId() ?: ""
+            val saksbehandlerNavn = saksbehandlerInfoManager.hentSaksbehandler()?.navn ?: saksbehandlerInfoManager.hentSaksbehandlerBrukerId()
+            Saksbehandler(saksbehandlerId, saksbehandlerNavn)
+        }
 
         sak = sakService.hentSak(request.saksnummer) ?: throw FantIkkeSakException("Fant ikke sak ${request.saksnummer}")
 
@@ -61,6 +71,14 @@ class DokumentMetadataCollector(
         dokumentBestilling.enhet = enhet
         dokumentBestilling.rmISak = sak.roller.any { it.rolleType == RolleType.RM }
 
+        return this
+    }
+
+    fun addCommonMetadata(): DokumentMetadataCollector{
+        addRoller()
+        addMottaker()
+        addGjelder()
+        addEnhetKontaktInfo()
         return this
     }
 
@@ -175,7 +193,7 @@ class DokumentMetadataCollector(
         return this
     }
 
-    fun addKontaktInfo(): DokumentMetadataCollector {
+    fun addEnhetKontaktInfo(): DokumentMetadataCollector {
         val enhetKontaktInfo = organisasjonService.hentEnhetKontaktInfo(enhet, dokumentBestilling.spraak) ?: throw FantIkkeEnhetException("Fant ikke enhet $enhet for spraak ${dokumentBestilling.spraak}")
 
         dokumentBestilling.kontaktInfo = EnhetKontaktInfo(

@@ -1,8 +1,6 @@
 package no.nav.bidrag.dokument.bestilling.producer
 
-import no.nav.bidrag.dokument.bestilling.config.SaksbehandlerInfoManager
 import no.nav.bidrag.dokument.bestilling.consumer.BidragDokumentConsumer
-import no.nav.bidrag.dokument.bestilling.model.BRUKSHENETSNUMMER_STANDARD
 import no.nav.bidrag.dokument.bestilling.model.BestillingSystem
 import no.nav.bidrag.dokument.bestilling.model.Brev
 import no.nav.bidrag.dokument.bestilling.model.BrevBestilling
@@ -25,12 +23,10 @@ import no.nav.bidrag.dokument.dto.OpprettJournalpostRequest
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.jms.core.JmsTemplate
 import org.springframework.stereotype.Component
-import java.time.LocalDate
 
 @Component(BestillingSystem.BREVSERVER)
 class BrevserverProducer(
     var onlinebrevTemplate: JmsTemplate,
-    var saksbehandlerInfoManager: SaksbehandlerInfoManager,
     var bidragDokumentConsumer: BidragDokumentConsumer,
     @Value("\${BREVSERVER_PASSORD}") val brevPassord: String
 ): DokumentProducer {
@@ -75,7 +71,7 @@ class BrevserverProducer(
 
     private fun mapToBrevserverMessage(dokumentBestilling: DokumentBestilling, brevKode: BrevKode): BrevBestilling {
         val dokumentSpraak = dokumentBestilling.spraak ?: "NB"
-        val saksbehandlerNavn = dokumentBestilling.saksbehandler?.navn ?: saksbehandlerInfoManager.hentSaksbehandler().orElse(null)?.navn ?: saksbehandlerInfoManager.hentSaksbehandlerBrukerId()
+        val saksbehandlerNavn = dokumentBestilling.saksbehandler?.navn
         return brevbestilling {
             val roller = dokumentBestilling.roller
             val bp = roller.bidragspliktig
@@ -83,7 +79,7 @@ class BrevserverProducer(
 
             malpakke = "BI01.${brevKode.name}"
             passord = brevPassord
-            saksbehandler = dokumentBestilling.saksbehandler?.ident ?: saksbehandlerInfoManager.hentSaksbehandlerBrukerId()
+            saksbehandler = dokumentBestilling.saksbehandler?.ident!!
             brev {
                 brevref = dokumentBestilling.dokumentReferanse!!
                 spraak = dokumentSpraak
@@ -162,7 +158,7 @@ class BrevserverProducer(
             adresselinje4 = if (!adresse.landkode3.isNullOrEmpty() && adresse.landkode3 != LANDKODE3_NORGE) adresse.land else null
             boligNr = adresse.bruksenhetsnummer
             postnummer = adresse.postnummer ?: ""
-            landkode = adresse.landkode3
+//            landkode = adresse.landkode3
         }
     }
 }

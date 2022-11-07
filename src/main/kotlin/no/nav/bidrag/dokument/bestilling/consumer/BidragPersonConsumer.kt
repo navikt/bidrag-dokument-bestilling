@@ -1,6 +1,10 @@
 package no.nav.bidrag.dokument.bestilling.consumer
 
 import no.nav.bidrag.commons.security.service.SecurityTokenService
+import no.nav.bidrag.dokument.bestilling.config.CacheConfig.Companion.PERSON_ADRESSE_CACHE
+import no.nav.bidrag.dokument.bestilling.config.CacheConfig.Companion.PERSON_CACHE
+import no.nav.bidrag.dokument.bestilling.config.CacheConfig.Companion.PERSON_SPRAAK_CACHE
+import no.nav.bidrag.dokument.bestilling.config.cache.UserCacheable
 import no.nav.bidrag.dokument.bestilling.model.HentPersonFeiletException
 import no.nav.bidrag.dokument.bestilling.model.HentPersonInforRequest
 import no.nav.bidrag.dokument.bestilling.model.HentPersonResponse
@@ -29,6 +33,7 @@ class BidragPersonConsumer(
     }
 
     @Retryable(maxAttempts = 3, backoff = Backoff(delay = 500, maxDelay = 1500, multiplier = 2.0))
+    @UserCacheable(PERSON_CACHE)
     fun hentPerson(personId: String): HentPersonResponse? {
         try {
             val hentPersonResponse =
@@ -42,6 +47,7 @@ class BidragPersonConsumer(
         }
     }
     @Retryable(maxAttempts = 3, backoff = Backoff(delay = 500, maxDelay = 1500, multiplier = 2.0))
+    @UserCacheable(PERSON_ADRESSE_CACHE)
     fun hentAdresse(id: String): HentPostadresseResponse? {
         return restTemplate.exchange(
             "/adresse/post", HttpMethod.POST, HttpEntity(HentPersonInforRequest(id)),
@@ -50,6 +56,7 @@ class BidragPersonConsumer(
     }
 
     @Retryable(maxAttempts = 3, backoff = Backoff(delay = 500, maxDelay = 1500, multiplier = 2.0))
+    @UserCacheable(PERSON_SPRAAK_CACHE)
     fun hentSpraak(id: String): String? {
         return restTemplate.exchange(
             "/spraak", HttpMethod.POST, HttpEntity(HentPersonInforRequest(id)),

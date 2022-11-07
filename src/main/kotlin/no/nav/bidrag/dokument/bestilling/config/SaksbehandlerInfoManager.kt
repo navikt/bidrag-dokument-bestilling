@@ -1,43 +1,41 @@
-package no.nav.bidrag.dokument.bestilling.config;
+package no.nav.bidrag.dokument.bestilling.config
 
-import java.util.Optional;
-import no.nav.bidrag.commons.security.service.OidcTokenManager;
-import no.nav.bidrag.commons.security.utils.TokenUtils;
-import no.nav.bidrag.dokument.bestilling.consumer.BidragOrganisasjonConsumer;
-import no.nav.bidrag.dokument.bestilling.model.Saksbehandler;
-import org.springframework.stereotype.Service;
+import no.nav.bidrag.commons.security.service.OidcTokenManager
+import no.nav.bidrag.commons.security.utils.TokenUtils
+import no.nav.bidrag.commons.security.utils.TokenUtils.fetchSubject
+import no.nav.bidrag.dokument.bestilling.consumer.BidragOrganisasjonConsumer
+import no.nav.bidrag.dokument.bestilling.model.Saksbehandler
+import org.springframework.stereotype.Service
+import java.util.Optional
 
 @Service
-public class SaksbehandlerInfoManager {
-
-  private final BidragOrganisasjonConsumer bidragOrganisasjonConsumer;
-  private final OidcTokenManager oidcTokenManager;
-
-  public SaksbehandlerInfoManager(BidragOrganisasjonConsumer bidragOrganisasjonConsumer,
-      OidcTokenManager oidcTokenManager) {
-    this.bidragOrganisasjonConsumer = bidragOrganisasjonConsumer;
-    this.oidcTokenManager = oidcTokenManager;
-  }
-
-  public String hentSaksbehandlerBrukerId(){
-    try {
-      return TokenUtils.fetchSubject(oidcTokenManager.fetchTokenAsString());
-    } catch (Exception e){
-      return null;
+class SaksbehandlerInfoManager(
+    private val bidragOrganisasjonConsumer: BidragOrganisasjonConsumer,
+    private val oidcTokenManager: OidcTokenManager
+) {
+    fun hentSaksbehandlerBrukerId(): String? {
+        return try {
+            fetchSubject(oidcTokenManager.fetchTokenAsString())
+        } catch (e: Exception) {
+            null
+        }
     }
-  }
 
-  public Optional<Saksbehandler> hentSaksbehandler(){
-    try {
-      var saksbehandlerIdent = hentSaksbehandlerBrukerId();
-      if (saksbehandlerIdent == null){
-        return Optional.empty();
-      }
-      var saksbehandlerNavn = bidragOrganisasjonConsumer.hentSaksbehandlerInfo(saksbehandlerIdent).getNavn();
-      return Optional.of(new Saksbehandler(saksbehandlerIdent, saksbehandlerNavn));
-    } catch (Exception e){
-      return Optional.empty();
+    fun hentSaksbehandler(): Saksbehandler? {
+        return try {
+            val saksbehandlerIdent = hentSaksbehandlerBrukerId() ?: return null
+            val saksbehandlerNavn = bidragOrganisasjonConsumer.hentSaksbehandlerInfo(saksbehandlerIdent)!!.navn
+            Saksbehandler(saksbehandlerIdent, saksbehandlerNavn)
+        } catch (e: Exception) {
+            null
+        }
     }
-  }
 
+    fun erSystembruker(): Boolean {
+        return try {
+            TokenUtils.isSystemUser(oidcTokenManager.fetchTokenAsString())
+        } catch (e: Exception) {
+            false
+        }
+    }
 }
