@@ -12,6 +12,7 @@ data class HentPersonResponse(
     ){
 
     val isKode6 = diskresjonskode == DISREKSJONSKODE_KODE_6
+    val isDod = doedsdato != null
     val fornavnEtternavn get () = run {
             val navnSplit = navn.split(",")
             val fornavnMellomnavn = if (navnSplit.size == 2) navnSplit[1] else navnSplit[0]

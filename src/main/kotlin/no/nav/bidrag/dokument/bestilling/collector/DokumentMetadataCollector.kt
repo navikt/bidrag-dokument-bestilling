@@ -116,12 +116,15 @@ class DokumentMetadataCollector(
         val barn = sak.roller.filter { it.rolleType == RolleType.BA }
         barn.filter { !it.foedselsnummer.isNullOrEmpty() }.forEach{
             val barnInfo = if (it.foedselsnummer!!.isDodfodt) null else personService.hentPerson(it.foedselsnummer, "Barn")
-            dokumentBestilling.roller.add(Barn(
+            if (barnInfo == null || !barnInfo.isDod) {
+                dokumentBestilling.roller.add(Barn(
                     fodselsnummer = it.foedselsnummer,
                     navn = barnInfo?.let { if (barnInfo.isKode6) hentKode6NavnBarn(barnInfo) else barnInfo.fornavnEtternavn} ?: "",
                     fodselsdato = barnInfo?.let { hentFodselsdato(barnInfo) },
                     fornavn = barnInfo?.let { if (barnInfo.isKode6) hentKode6NavnBarn(barnInfo) else barnInfo.fornavn }
-            ))
+                ))
+            }
+
         }
 
         return this
