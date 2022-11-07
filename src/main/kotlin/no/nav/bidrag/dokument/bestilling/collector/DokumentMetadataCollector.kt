@@ -4,7 +4,6 @@ import no.nav.bidrag.dokument.bestilling.config.SaksbehandlerInfoManager
 import no.nav.bidrag.dokument.bestilling.model.Adresse
 import no.nav.bidrag.dokument.bestilling.model.BRUKSHENETSNUMMER_STANDARD
 import no.nav.bidrag.dokument.bestilling.model.Barn
-import no.nav.bidrag.dokument.bestilling.model.BrevKode
 import no.nav.bidrag.dokument.bestilling.model.DokumentBestilling
 import no.nav.bidrag.dokument.bestilling.model.DokumentBestillingRequest
 import no.nav.bidrag.dokument.bestilling.model.EnhetKontaktInfo
@@ -15,6 +14,7 @@ import no.nav.bidrag.dokument.bestilling.model.HentPersonResponse
 import no.nav.bidrag.dokument.bestilling.model.HentPostadresseResponse
 import no.nav.bidrag.dokument.bestilling.model.HentSakResponse
 import no.nav.bidrag.dokument.bestilling.model.Ident
+import no.nav.bidrag.dokument.bestilling.model.LANDKODE3_NORGE
 import no.nav.bidrag.dokument.bestilling.model.ManglerGjelderException
 import no.nav.bidrag.dokument.bestilling.model.Mottaker
 import no.nav.bidrag.dokument.bestilling.model.PartInfo
@@ -27,8 +27,6 @@ import no.nav.bidrag.dokument.bestilling.service.KodeverkService
 import no.nav.bidrag.dokument.bestilling.service.OrganisasjonService
 import no.nav.bidrag.dokument.bestilling.service.PersonService
 import no.nav.bidrag.dokument.bestilling.service.SakService
-import org.slf4j.LoggerFactory
-import org.springframework.cache.CacheManager
 import org.springframework.context.annotation.Scope
 import org.springframework.stereotype.Component
 import java.time.LocalDate
@@ -42,10 +40,6 @@ class DokumentMetadataCollector(
     val saksbehandlerInfoManager: SaksbehandlerInfoManager,
     val organisasjonService: OrganisasjonService
 ) {
-
-    companion object {
-        private val LOGGER = LoggerFactory.getLogger(DokumentMetadataCollector::class.java)
-    }
 
     lateinit var request: DokumentBestillingRequest
     lateinit var enhet: String
@@ -131,20 +125,9 @@ class DokumentMetadataCollector(
     }
 
     fun addGjelder(): DokumentMetadataCollector {
-        val person = request.gjelder
-        val adresse = request.gjelderAdresse
         dokumentBestilling.gjelder = Gjelder(
-            fodselsnummer = person.ident,
-            navn = person.navn,
-            rolle = hentRolle(person.ident),
-            adresse = Adresse(
-                adresselinje1 = adresse.adresselinje1!!,
-                adresselinje2 = adresse.adresselinje2,
-                adresselinje3 = adresse.adresselinje3,
-                poststed = adresse.poststed,
-                postnummer = adresse.postnummer,
-                landkode = adresse.land
-            )
+            fodselsnummer = request.actualGjelderId,
+            rolle = hentRolle(request.actualGjelderId)
         )
         return this
     }
@@ -172,7 +155,8 @@ class DokumentMetadataCollector(
         } else {
             val mottaker = hentMottaker()
             val adresse = hentMottakerAdresse()
-
+            val postnummerSted = if (adresse.postnummer.isNullOrEmpty() && adresse.poststed.isNullOrEmpty()) null else "${adresse.postnummer ?: ""} ${adresse.poststed ?: ""}".trim()
+            val landNavn = adresse.land3?.let { kodeverkService.hentLandFullnavnForKode(it) }
             dokumentBestilling.mottaker = Mottaker(
                 fodselsnummer = mottaker.ident,
                 fodselsdato = mottaker.foedselsdato,
@@ -182,13 +166,14 @@ class DokumentMetadataCollector(
                 adresse = Adresse(
                     adresselinje1 = adresse.adresselinje1!!,
                     adresselinje2 = adresse.adresselinje2,
-                    adresselinje3 = adresse.adresselinje3,
+                    adresselinje3 = adresse.adresselinje3 ?: postnummerSted,
+                    adresselinje4 = if (!adresse.land3.isNullOrEmpty() && adresse.land3 != LANDKODE3_NORGE) landNavn else null,
                     bruksenhetsnummer = if (adresse.bruksenhetsnummer == BRUKSHENETSNUMMER_STANDARD) null else adresse.bruksenhetsnummer,
                     poststed = adresse.poststed,
                     postnummer = adresse.postnummer,
                     landkode = adresse.land,
                     landkode3 = adresse.land3,
-                    land = adresse.land3?.let { kodeverkService.hentLandFullnavnForKode(it) }
+                    land = landNavn
                 )
             )
         }
@@ -222,10 +207,6 @@ class DokumentMetadataCollector(
 
     private val DokumentBestillingRequest.actualGjelderId get() =
         (if (hentRolle(this.gjelderId) != null) this.gjelderId else hentGjelderFraRoller()) ?: throw ManglerGjelderException("Fant ingen gjelder")
-    private val DokumentBestillingRequest.gjelder get() =
-        if (mottakerId == actualGjelderId) hentMottaker() else personService.hentPerson(actualGjelderId, "Gjelder")
-    private val DokumentBestillingRequest.gjelderAdresse get() =
-        if (mottakerId == actualGjelderId) hentMottakerAdresse() else personService.hentPersonAdresse(actualGjelderId, "Gjelder")
 
     private fun hentFodselsdato(person: HentPersonResponse): LocalDate? {
         return if (person.isKode6) null else person.foedselsdato

@@ -2,7 +2,6 @@ package no.nav.bidrag.dokument.bestilling.collector
 
 import no.nav.bidrag.dokument.bestilling.model.BrevKode
 import no.nav.bidrag.dokument.bestilling.model.DokumentBestillingRequest
-import org.slf4j.LoggerFactory
 import org.springframework.context.ApplicationContext
 import org.springframework.stereotype.Component
 import java.util.EnumMap
@@ -11,9 +10,6 @@ typealias DokumentMetadataCollectorFun = (dokumentBestilling: DokumentBestilling
 
 @Component
 class DokumentMap(val applicationContext: ApplicationContext): MutableMap<BrevKode, DokumentMetadataCollectorFun> by EnumMap(BrevKode::class.java) {
-    companion object {
-        private val LOGGER = LoggerFactory.getLogger(DokumentMap::class.java)
-    }
     private final fun add(pair: Pair<BrevKode, DokumentMetadataCollectorFun>){
         put(pair.first, pair.second)
     }

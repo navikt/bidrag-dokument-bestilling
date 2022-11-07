@@ -70,8 +70,8 @@ data class EnhetKontaktInfo(
 
 data class Gjelder(
     var fodselsnummer: String,
-    var navn: String,
-    val adresse: Adresse,
+    var navn: String? = null,
+    val adresse: Adresse? = null,
     val rolle: RolleType?,
 )
 
@@ -89,6 +89,7 @@ data class Adresse(
     val adresselinje1: String,
     val adresselinje2: String? = null,
     val adresselinje3: String? = null,
+    val adresselinje4: String? = null,
     val bruksenhetsnummer: String? = null,
     val postnummer: String? = null,
     val poststed: String? = null,

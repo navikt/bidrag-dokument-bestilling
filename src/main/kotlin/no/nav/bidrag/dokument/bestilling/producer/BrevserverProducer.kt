@@ -124,7 +124,8 @@ class BrevserverProducer(
             returOgPostadresse {
                 enhet = kontaktInfo.enhetId
                 navn = kontaktInfo.navn
-                adresselinje2 = kontaktInfo.postadresse.adresselinje1
+                adresselinje1 = kontaktInfo.postadresse.adresselinje1
+                adresselinje2 = kontaktInfo.postadresse.adresselinje2
                 postnummer = kontaktInfo.postadresse.postnummer
                 poststed = kontaktInfo.postadresse.poststed
                 land = kontaktInfo.postadresse.land
@@ -151,11 +152,10 @@ class BrevserverProducer(
             fodselsdato = mottaker.fodselsdato
 
             val adresse = mottaker.adresse
-            val postnummerSted = if (adresse.postnummer.isNullOrEmpty() && adresse.poststed.isNullOrEmpty()) null else "${adresse.postnummer ?: ""} ${adresse.poststed ?: ""}".trim()
             adresselinje1 = adresse.adresselinje1
             adresselinje2 = adresse.adresselinje2
-            adresselinje3 = adresse.adresselinje3 ?: postnummerSted
-            adresselinje4 = if (!adresse.landkode3.isNullOrEmpty() && adresse.landkode3 != LANDKODE3_NORGE) adresse.land else null
+            adresselinje3 = adresse.adresselinje3
+            adresselinje4 = adresse.adresselinje4
             boligNr = adresse.bruksenhetsnummer
             postnummer = adresse.postnummer ?: ""
 //            landkode = adresse.landkode3
