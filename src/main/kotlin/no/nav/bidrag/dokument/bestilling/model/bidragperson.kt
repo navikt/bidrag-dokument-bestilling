@@ -1,10 +1,10 @@
 package no.nav.bidrag.dokument.bestilling.model
 
 import java.time.LocalDate
-
 data class HentPersonResponse(
     val ident: String,
     val navn: String,
+    val kortNavn: String?,
     val foedselsdato: LocalDate?,
     val doedsdato: LocalDate?,
     val aktoerId: String,
@@ -27,7 +27,7 @@ data class HentPersonResponse(
     }
 }
 
-data class HentPersonInforRequest(
+data class HentPersonInfoRequest(
     var ident: String
 )
 

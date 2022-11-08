@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service
 import org.springframework.web.context.annotation.RequestScope
 
 @Service
-@RequestScope
 class DokumentBestillingService(var dokumentBestillingManager: DokumentBestillingManager) {
 
     companion object {

@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service
 import org.springframework.web.context.annotation.RequestScope
 
 @Service
-@RequestScope
 class PersonService(private var bidragPersonConsumer: BidragPersonConsumer) {
 
     fun hentPerson(personId: String, rolle: String? = "UKJENT"): HentPersonResponse {

@@ -59,10 +59,8 @@ class JmsTestConsumer {
         }
 
         fun <T> getMessageAsObject(o: Class<T>): T? {
-            val message: ActiveMQBytesMessage = consumer?.receive(1000) as ActiveMQBytesMessage
-            val byteArr = ByteArray(message.bodyLength.toInt())
-            message.readBytes(byteArr)
-            return JAXB.unmarshal(byteArr.inputStream(), o)
+            val message: ActiveMQTextMessage = consumer?.receive(1000) as ActiveMQTextMessage
+            return JAXB.unmarshal(message.text.byteInputStream(), o)
         }
     }
 

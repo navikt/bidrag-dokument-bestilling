@@ -1,6 +1,7 @@
 package no.nav.bidrag.dokument.bestilling
 
 import no.nav.bidrag.commons.web.test.HttpHeaderTestRestTemplate
+import no.nav.bidrag.dokument.bestilling.utils.SAKSBEHANDLER_IDENT
 import no.nav.security.mock.oauth2.MockOAuth2Server
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
@@ -29,7 +30,7 @@ class TestRestTemplateConfiguration {
     }
 
     private fun generateBearerToken(): String {
-        val token = mockOAuth2Server?.issueToken("aad", "aud-localhost", clientId)
+        val token = mockOAuth2Server?.issueToken("aad", SAKSBEHANDLER_IDENT, clientId)
         return "Bearer " + token?.serialize()
     }
 }

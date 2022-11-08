@@ -41,10 +41,10 @@ class DokumentMetadataCollector(
     val organisasjonService: OrganisasjonService
 ) {
 
-    lateinit var request: DokumentBestillingRequest
-    lateinit var enhet: String
-    lateinit var sak: HentSakResponse
-    lateinit var dokumentBestilling: DokumentBestilling
+    private lateinit var request: DokumentBestillingRequest
+    private lateinit var enhet: String
+    private lateinit var sak: HentSakResponse
+    private lateinit var dokumentBestilling: DokumentBestilling
 
     fun init(request: DokumentBestillingRequest): DokumentMetadataCollector {
         this.dokumentBestilling = DokumentBestilling()
@@ -160,7 +160,7 @@ class DokumentMetadataCollector(
             dokumentBestilling.mottaker = Mottaker(
                 fodselsnummer = mottaker.ident,
                 fodselsdato = mottaker.foedselsdato,
-                navn = mottaker.navn,
+                navn = mottaker.kortNavn ?: mottaker.navn,
                 rolle = hentRolle(mottaker.ident),
                 spraak = personService.hentSpraak(mottaker.ident),
                 adresse = Adresse(

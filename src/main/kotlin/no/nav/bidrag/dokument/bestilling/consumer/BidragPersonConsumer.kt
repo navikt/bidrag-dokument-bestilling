@@ -6,7 +6,7 @@ import no.nav.bidrag.dokument.bestilling.config.CacheConfig.Companion.PERSON_CAC
 import no.nav.bidrag.dokument.bestilling.config.CacheConfig.Companion.PERSON_SPRAAK_CACHE
 import no.nav.bidrag.dokument.bestilling.config.cache.UserCacheable
 import no.nav.bidrag.dokument.bestilling.model.HentPersonFeiletException
-import no.nav.bidrag.dokument.bestilling.model.HentPersonInforRequest
+import no.nav.bidrag.dokument.bestilling.model.HentPersonInfoRequest
 import no.nav.bidrag.dokument.bestilling.model.HentPersonResponse
 import no.nav.bidrag.dokument.bestilling.model.HentPostadresseResponse
 import org.slf4j.LoggerFactory
@@ -37,7 +37,7 @@ class BidragPersonConsumer(
     fun hentPerson(personId: String): HentPersonResponse? {
         try {
             val hentPersonResponse =
-                restTemplate.exchange("/informasjon/$personId", HttpMethod.GET, null, HentPersonResponse::class.java)
+                restTemplate.exchange("/informasjon", HttpMethod.POST, HttpEntity(HentPersonInfoRequest(personId)), HentPersonResponse::class.java)
             return hentPersonResponse.body
         } catch (e: HttpStatusCodeException){
             if (e.statusCode == HttpStatus.NOT_FOUND){
@@ -50,7 +50,7 @@ class BidragPersonConsumer(
     @UserCacheable(PERSON_ADRESSE_CACHE)
     fun hentAdresse(id: String): HentPostadresseResponse? {
         return restTemplate.exchange(
-            "/adresse/post", HttpMethod.POST, HttpEntity(HentPersonInforRequest(id)),
+            "/adresse/post", HttpMethod.POST, HttpEntity(HentPersonInfoRequest(id)),
             HentPostadresseResponse::class.java
         ).body
     }
@@ -59,7 +59,7 @@ class BidragPersonConsumer(
     @UserCacheable(PERSON_SPRAAK_CACHE)
     fun hentSpraak(id: String): String? {
         return restTemplate.exchange(
-            "/spraak", HttpMethod.POST, HttpEntity(HentPersonInforRequest(id)),
+            "/spraak", HttpMethod.POST, HttpEntity(HentPersonInfoRequest(id)),
             String::class.java
         ).body
     }

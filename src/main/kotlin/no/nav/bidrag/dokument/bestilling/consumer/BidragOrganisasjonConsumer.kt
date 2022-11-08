@@ -51,7 +51,6 @@ class BidragOrganisasjonConsumer(
     }
 
     companion object {
-        const val ARBEIDSFORDELING_URL = "/arbeidsfordeling/enhetsliste/geografisktilknytning/%s"
         const val SAKSBEHANDLER_INFO = "/saksbehandler/info/%s"
     }
 }
