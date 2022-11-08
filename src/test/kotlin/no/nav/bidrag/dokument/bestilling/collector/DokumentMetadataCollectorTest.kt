@@ -103,7 +103,7 @@ internal class DokumentMetadataCollectorTest {
         bestilling.mottaker?.fodselsdato shouldBe BM1.foedselsdato
         bestilling.mottaker?.adresse?.adresselinje1 shouldBe adresseResponse.adresselinje1
         bestilling.mottaker?.adresse?.adresselinje2 shouldBe adresseResponse.adresselinje2
-        bestilling.mottaker?.adresse?.adresselinje3 shouldBe adresseResponse.adresselinje3
+        bestilling.mottaker?.adresse?.adresselinje3 shouldBe "3030 Drammen"
         bestilling.mottaker?.adresse?.adresselinje4 shouldBe null
         bestilling.mottaker?.adresse?.bruksenhetsnummer shouldBe adresseResponse.bruksenhetsnummer
         bestilling.mottaker?.adresse?.postnummer shouldBe adresseResponse.postnummer
