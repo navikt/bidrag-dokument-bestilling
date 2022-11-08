@@ -1,5 +1,6 @@
 package no.nav.bidrag.dokument.bestilling.utils
 
+import no.nav.bidrag.dokument.bestilling.model.DISREKSJONSKODE_KODE_6
 import no.nav.bidrag.dokument.bestilling.model.EnhetKontaktInfoDto
 import no.nav.bidrag.dokument.bestilling.model.EnhetPostadresseDto
 import no.nav.bidrag.dokument.bestilling.model.HentPersonResponse
@@ -7,27 +8,67 @@ import no.nav.bidrag.dokument.bestilling.model.HentPostadresseResponse
 import no.nav.bidrag.dokument.bestilling.model.HentSakResponse
 import no.nav.bidrag.dokument.bestilling.model.RolleType
 import no.nav.bidrag.dokument.bestilling.model.SakRolle
+import no.nav.bidrag.dokument.bestilling.model.SamhandlerAdresse
+import no.nav.bidrag.dokument.bestilling.model.SamhandlerInformasjon
 import no.nav.bidrag.dokument.dto.OpprettDokumentDto
 import no.nav.bidrag.dokument.dto.OpprettJournalpostResponse
 import java.time.LocalDate
+val DEFAULT_TITLE_DOKUMENT = "Tittel på dokumentet"
+val DEFAULT_SAKSNUMMER = "123312321321"
 
-
-var BM_PERSON_ID_1 = "123123123123"
-var BM_PERSON_NAVN_1 = "Etternavn, BMFornavn Bidragsmottaker"
+val SAMHANDLER_IDENT = "80000123213"
 
 val SAKSBEHANDLER_IDENT = "Z99999"
 val SAKSBEHANDLER_NAVN = "Saksbehandler Saksbehandlersen"
 
-val BP1 = HentPersonResponse("444213123123", "Etternavn, BPFornavn Bidragspliktig", null, LocalDate.parse("2001-05-06"), null, "123335555")
-val BM1 = HentPersonResponse("123123123123", "Etternavn, BMFornavn Bidragsmottaker", null, LocalDate.parse("2000-03-06"), null, "123335555")
-val BARN1 = HentPersonResponse("3323213", "Etternavn, Barn1 Mellomnavn", null, LocalDate.parse("2020-05-06"), null, "123335555")
-val BARN2 = HentPersonResponse("333333323213", "Etternavn, Barn2 Mellomnavn", null, LocalDate.parse("2018-03-20"), null, "123123123")
-val BARN3_DOD = HentPersonResponse("5124124124124", "Etternavn, Barn3 Mellomnavn", null, LocalDate.parse("2018-03-20"), LocalDate.parse("2018-05-20"), "123123123")
+val SAMHANDLER_INFO = SamhandlerInformasjon(
+    navn = "Samhandler samhandlersen",
+    spraak = "NB",
+    adresse = SamhandlerAdresse(
+        adresselinje1 = "Samhandler adresselinje 1",
+        adresselinje2 = "Samhandler adresselinje 2",
+        adresselinje3 = "Samhandler adresselinje 3",
+        postnummer = "3000",
+        landkode = "NOR"
+    )
+)
 
-var SAKSNUMMER1 = "123213123"
+val ANNEN_MOTTAKER = createPersonResponse(
+    "444213123123333",
+    "Etternavn, BPFornavn Annen mottaker",
+    fodselsdato = LocalDate.parse("2001-05-06"),
+)
+val BP1 = createPersonResponse(
+        "444213123123",
+        "Etternavn, BPFornavn Bidragspliktig",
+        fodselsdato = LocalDate.parse("2001-05-06"),
+    )
+val BM1 = createPersonResponse(
+        "123123123123",
+        "Etternavn, BMFornavn Bidragsmottaker",
+            fodselsdato = LocalDate.parse("2000-03-06"),
+    )
+val BARN1 = createPersonResponse(
+        "3323213",
+        "Etternavn, Barn1 Mellomnavn",
+        fodselsdato = LocalDate.parse("2020-05-06"),
+    )
+val BARN2 = createPersonResponse(
+    "333333323213",
+    "Etternavn, Barn2 Mellomnavn",
+    fodselsdato = LocalDate.parse("2018-03-20"),
+)
+
+val BARN3 = createPersonResponse(
+    "412421412421",
+    "Etternavn, Barn3",
+    fodselsdato = LocalDate.parse("2014-03-20"),
+)
+
 fun createSakResponse(): HentSakResponse{
     return HentSakResponse(
-        saksnummer = SAKSNUMMER1,
+        saksnummer = DEFAULT_SAKSNUMMER,
+        eierfogd = "4806",
         roller = listOf(
             SakRolle(
                 foedselsnummer = BM1.ident,
@@ -47,6 +88,19 @@ fun createSakResponse(): HentSakResponse{
             )
         )
     )
+}
+
+fun createPersonResponse(
+    ident: String,
+    navn: String,
+    kortNavn: String? = null,
+    fodselsdato: LocalDate? = null,
+    dodsdato: LocalDate? = null,
+    aktorId: String? = "313213",
+    diskresjonskode: String? = null,
+
+): HentPersonResponse{
+    return HentPersonResponse(ident, navn,kortNavn, fodselsdato, dodsdato, aktorId, diskresjonskode = diskresjonskode)
 }
 fun createPostAdresseResponse(): HentPostadresseResponse{
     return HentPostadresseResponse(

@@ -111,6 +111,10 @@ class DokumentBestillingControllerTest {
         val enhetKontaktInfo = createEnhetKontaktInformasjon()
         val bmAdresse = createPostAdresseResponse()
         val brevKode = BrevKode.BI01S02
+        val tittel = "Tittel på dokument"
+        val saksnummer = "123213"
+        val mottakerId = BM1.ident
+        val gjelderId = BP1.ident
         stubUtils.stubHentPerson(BP1.ident, BP1)
         stubUtils.stubHentPerson(BM1.ident, BM1)
         stubUtils.stubHentPerson(BARN1.ident, BARN1)
@@ -124,10 +128,10 @@ class DokumentBestillingControllerTest {
         headers.set(X_ENHET_HEADER, "4806")
 
         val request = DokumentBestillingRequest(
-            mottakerId = BM1.ident,
-            gjelderId = BP1.ident,
-            saksnummer = "123213",
-            tittel = "Tittel på dokument",
+            mottakerId = mottakerId,
+            gjelderId = gjelderId,
+            saksnummer = saksnummer,
+            tittel = tittel,
             enhet = "4806",
             spraak = "NB"
 
@@ -204,7 +208,7 @@ class DokumentBestillingControllerTest {
                 message.brev?.barnISak?.get(1)?.belForskudd shouldBe ""
                 message.brev?.barnISak?.get(1)?.belBidrag shouldBe ""
 
-                message.brev?.soknad?.saksnr shouldBe "123213"
+                message.brev?.soknad?.saksnr shouldBe saksnummer
                 message.brev?.soknad?.sakstype shouldBe "E"
                 message.brev?.soknad?.rmISak shouldBe false
                 message.brev?.soknad?.sendtDato shouldBe LocalDate.now()
@@ -213,6 +217,24 @@ class DokumentBestillingControllerTest {
 
                 stubUtils.Verify().verifyHentEnhetKontaktInfoCalledWith()
                 stubUtils.Verify().verifyHentPersonCalled(BM1.ident)
+                stubUtils.Verify().verifyHentPersonCalled(BP1.ident)
+                stubUtils.Verify().verifyHentPersonCalled(BARN1.ident)
+                stubUtils.Verify().verifyHentPersonCalled(BARN2.ident)
+                stubUtils.Verify().verifyOpprettJournalpostCalledWith("{" +
+                        "\"tittel\":\"$tittel\"," +
+                        "\"gjelder\":{\"ident\":\"$gjelderId\",\"type\":null}," +
+                        "\"avsenderMottaker\":" +
+                            "{\"navn\":\"${BM1.navn}\",\"ident\":\"$mottakerId\",\"type\":\"UKJENT\"}," +
+                        "\"dokumenter\":[" +
+                            "{\"tittel\":\"$tittel\",\"brevkode\":\"${brevKode.name}\",\"dokumentreferanse\":null,\"dokument\":null}" +
+                        "]," +
+                        "\"tilknyttSaker\":[\"$saksnummer\"]," +
+                        "\"behandlingstema\":null,\"tema\":null," +
+                        "\"journalposttype\":\"UTGAAENDE\"," +
+                        "\"referanseId\":null," +
+                        "\"journalfoerendeEnhet\":\"4806\"," +
+                        "\"saksbehandlerIdent\":\"Z99999\"}"
+                )
             }
         }
 

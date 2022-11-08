@@ -15,36 +15,36 @@ class DokumentMap(val applicationContext: ApplicationContext): MutableMap<BrevKo
     }
     init {
         add(BrevKode.BI01P11 to {
-           withMetadataCollector(it)
+           withMetadataCollector(it, BrevKode.BI01P11)
                .addCommonMetadata()
         })
         add(BrevKode.BI01P18 to {
-            withMetadataCollector(it)
+            withMetadataCollector(it, BrevKode.BI01P18)
                 .addCommonMetadata()
         })
         add(BrevKode.BI01X01 to {
-            withMetadataCollector(it)
+            withMetadataCollector(it, BrevKode.BI01X01)
                 .addCommonMetadata()
         })
         add(BrevKode.BI01X02 to {
-            withMetadataCollector(it)
+            withMetadataCollector(it, BrevKode.BI01X02)
                 .addCommonMetadata()
         })
         add(BrevKode.BI01S10 to {
-            withMetadataCollector(it)
+            withMetadataCollector(it, BrevKode.BI01S10)
                 .addCommonMetadata()
         })
         add(BrevKode.BI01S67 to {
-            withMetadataCollector(it)
+            withMetadataCollector(it, BrevKode.BI01S67)
                 .addCommonMetadata()
         })
         add(BrevKode.BI01S02 to {
-            withMetadataCollector(it)
+            withMetadataCollector(it, BrevKode.BI01S02)
                 .addCommonMetadata()
         })
     }
 
-    private fun withMetadataCollector(dokumentBestilling: DokumentBestillingRequest): DokumentMetadataCollector {
-        return applicationContext.getBean(DokumentMetadataCollector::class.java).init(dokumentBestilling)
+    private fun withMetadataCollector(dokumentBestilling: DokumentBestillingRequest, brevKode: BrevKode): DokumentMetadataCollector {
+        return applicationContext.getBean(DokumentMetadataCollector::class.java).init(dokumentBestilling, brevKode)
     }
 }

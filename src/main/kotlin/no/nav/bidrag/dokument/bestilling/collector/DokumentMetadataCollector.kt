@@ -4,6 +4,7 @@ import no.nav.bidrag.dokument.bestilling.config.SaksbehandlerInfoManager
 import no.nav.bidrag.dokument.bestilling.model.Adresse
 import no.nav.bidrag.dokument.bestilling.model.BRUKSHENETSNUMMER_STANDARD
 import no.nav.bidrag.dokument.bestilling.model.Barn
+import no.nav.bidrag.dokument.bestilling.model.BrevKode
 import no.nav.bidrag.dokument.bestilling.model.DokumentBestilling
 import no.nav.bidrag.dokument.bestilling.model.DokumentBestillingRequest
 import no.nav.bidrag.dokument.bestilling.model.EnhetKontaktInfo
@@ -43,23 +44,22 @@ class DokumentMetadataCollector(
 
     private lateinit var request: DokumentBestillingRequest
     private lateinit var enhet: String
+    private lateinit var brevKode: BrevKode
     private lateinit var sak: HentSakResponse
     private lateinit var dokumentBestilling: DokumentBestilling
 
-    fun init(request: DokumentBestillingRequest): DokumentMetadataCollector {
+    fun init(request: DokumentBestillingRequest, brevKode: BrevKode): DokumentMetadataCollector {
         this.dokumentBestilling = DokumentBestilling()
+        this.brevKode = brevKode
         this.request = request
         dokumentBestilling.dokumentReferanse = request.dokumentReferanse
-        dokumentBestilling.tittel = request.tittel
+        dokumentBestilling.tittel = request.tittel ?: brevKode.beskrivelse
         dokumentBestilling.saksnummer = request.saksnummer
         dokumentBestilling.spraak = request.hentRiktigSpraakkode()
-        dokumentBestilling.saksbehandler = if (request.saksbehandler != null) request.saksbehandler else {
-            val saksbehandlerId = saksbehandlerInfoManager.hentSaksbehandlerBrukerId() ?: ""
-            val saksbehandlerNavn = saksbehandlerInfoManager.hentSaksbehandler()?.navn ?: saksbehandlerInfoManager.hentSaksbehandlerBrukerId()
-            Saksbehandler(saksbehandlerId, saksbehandlerNavn)
-        }
+        dokumentBestilling.saksbehandler = hentSaksbehandler(request)
 
         sak = sakService.hentSak(request.saksnummer) ?: throw FantIkkeSakException("Fant ikke sak ${request.saksnummer}")
+        // TODO: Legg til sak opprettet dato (mangler fra sak respons)
 
         this.enhet = request.enhet ?: sak.eierfogd ?: "9999"
         dokumentBestilling.enhet = enhet
@@ -111,6 +111,7 @@ class DokumentMetadataCollector(
         barn.filter { !it.foedselsnummer.isNullOrEmpty() }.forEach{
             val barnInfo = if (it.foedselsnummer!!.isDodfodt) null else personService.hentPerson(it.foedselsnummer, "Barn")
             if (barnInfo == null || !barnInfo.isDod) {
+                // TODO: Legg til RM fødselsnummer (mangler fra sak respons)
                 dokumentBestilling.roller.add(Barn(
                     fodselsnummer = it.foedselsnummer,
                     navn = barnInfo?.let { if (barnInfo.isKode6) hentKode6NavnBarn(barnInfo) else barnInfo.fornavnEtternavn} ?: "",
@@ -256,5 +257,18 @@ class DokumentMetadataCollector(
     private fun hentGjelderFraRoller(): Ident? {
         return hentIdentForRolle(RolleType.BM) ?: hentIdentForRolle(RolleType.BP) ?: hentIdentForRolle(RolleType.BA)
     }
+
+    private fun hentSaksbehandler(request: DokumentBestillingRequest): Saksbehandler {
+        if (request.saksbehandler != null && !request.saksbehandler.ident.isNullOrEmpty()) {
+            val saksbehandlerNavn = request.saksbehandler.navn ?: saksbehandlerInfoManager.hentSaksbehandler()?.navn ?: saksbehandlerInfoManager.hentSaksbehandlerBrukerId()
+            return Saksbehandler(request.saksbehandler.ident, saksbehandlerNavn)
+        }
+
+        val saksbehandlerId = saksbehandlerInfoManager.hentSaksbehandlerBrukerId() ?: ""
+        val saksbehandlerNavn = saksbehandlerInfoManager.hentSaksbehandler()?.navn ?: saksbehandlerInfoManager.hentSaksbehandlerBrukerId()
+        return Saksbehandler(saksbehandlerId, saksbehandlerNavn)
+    }
+
+    fun erSammeBrevkode(sammelignBrevkode: BrevKode) = brevKode == sammelignBrevkode
 
 }

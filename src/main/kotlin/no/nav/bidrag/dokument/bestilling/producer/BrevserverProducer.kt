@@ -84,7 +84,7 @@ class BrevserverProducer(
                 brevref = dokumentBestilling.dokumentReferanse!!
                 spraak = dokumentSpraak
                 tknr = dokumentBestilling.enhet!!
-                mottaker = mapBrevmottaker(this, dokumentBestilling.mottaker!!)
+                mottaker = dokumentBestilling.mottaker?.let { mapBrevmottaker(this, it) }
                 kontaktInfo = mapKontaktInfo(this, dokumentBestilling.kontaktInfo)
                 soknad {
                     saksnr = dokumentBestilling.saksnummer

@@ -147,6 +147,13 @@ class StubUtils {
             verifyContains(verify, *contains)
         }
 
+        fun verifyOpprettJournalpostCalledWith(vararg contains: String) {
+            val verify = WireMock.postRequestedFor(
+                WireMock.urlMatching("/dokument/journalpost/BIDRAG")
+            )
+            verifyContains(verify, *contains)
+        }
+
         private fun verifyContains(verify: RequestPatternBuilder, vararg contains: String){
             Arrays.stream(contains).forEach { verify.withRequestBody(ContainsPattern(it)) }
             WireMock.verify(verify)
