@@ -22,17 +22,14 @@ class DokumentMap(val applicationContext: ApplicationContext): MutableMap<BrevKo
         add(BrevKode.BI01P18 to {
             withMetadataCollector(it)
                 .addMottakerGjelder()
-                .addEnhetKontaktInfo()
         })
         add(BrevKode.BI01X01 to {
             withMetadataCollector(it)
                 .addMottakerGjelder()
-                .addEnhetKontaktInfo()
         })
         add(BrevKode.BI01X02 to {
             withMetadataCollector(it)
                 .addMottakerGjelder()
-                .addEnhetKontaktInfo()
         })
         add(BrevKode.BI01S10 to {
             withMetadataCollector(it)
