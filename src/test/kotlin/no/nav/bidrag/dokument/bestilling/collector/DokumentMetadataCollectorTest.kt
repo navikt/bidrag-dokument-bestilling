@@ -822,6 +822,7 @@ internal class DokumentMetadataCollectorTest {
         return metadataCollector.init(request)
             .addRoller()
             .addMottakerGjelder()
+            .addEnhetKontaktInfo()
             .getBestillingData()
     }
 }
