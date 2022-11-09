@@ -179,23 +179,6 @@ internal class DokumentMetadataCollectorTest {
     }
 
     @Test
-    fun `should use title from brevkode if title missing in request`(){
-        mockDefaultValues()
-
-        val request = DokumentBestillingRequest(
-            mottakerId = BM1.ident,
-            gjelderId = BM1.ident,
-            saksnummer = DEFAULT_SAKSNUMMER,
-            enhet = "4806",
-            spraak = "NB",
-        )
-        val bestilling = mapToBestillingsdata(request, BrevKode.BI01P18)
-        assertSoftly {
-            bestilling.tittel shouldBe BrevKode.BI01P18.beskrivelse
-        }
-    }
-
-    @Test
     fun `should add saksbehandler from request when available`(){
         mockDefaultValues()
         val saksbehandlerId = "Z123213"
@@ -835,11 +818,10 @@ internal class DokumentMetadataCollectorTest {
         }
     }
 
-    private fun mapToBestillingsdata(request: DokumentBestillingRequest, brevKode: BrevKode = BrevKode.BI01S02): DokumentBestilling {
-        return metadataCollector.init(request, brevKode)
-            .addGjelder()
+    private fun mapToBestillingsdata(request: DokumentBestillingRequest): DokumentBestilling {
+        return metadataCollector.init(request)
             .addRoller()
-            .addEnhetKontaktInfo()
-            .addMottaker().getBestillingData()
+            .addMottakerGjelder()
+            .getBestillingData()
     }
 }

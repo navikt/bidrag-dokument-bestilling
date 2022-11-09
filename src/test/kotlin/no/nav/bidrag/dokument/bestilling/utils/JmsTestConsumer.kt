@@ -62,6 +62,11 @@ class JmsTestConsumer {
             val message: ActiveMQTextMessage = consumer?.receive(1000) as ActiveMQTextMessage
             return JAXB.unmarshal(message.text.byteInputStream(), o)
         }
+
+        fun hasNoMessage(): Boolean {
+            return consumer?.receive(1000) == null
+
+        }
     }
 
 }

@@ -15,36 +15,46 @@ class DokumentMap(val applicationContext: ApplicationContext): MutableMap<BrevKo
     }
     init {
         add(BrevKode.BI01P11 to {
-           withMetadataCollector(it, BrevKode.BI01P11)
-               .addCommonMetadata()
+           withMetadataCollector(it)
+               .addMottakerGjelder()
+               .addEnhetKontaktInfo()
         })
         add(BrevKode.BI01P18 to {
-            withMetadataCollector(it, BrevKode.BI01P18)
-                .addCommonMetadata()
+            withMetadataCollector(it)
+                .addMottakerGjelder()
+                .addEnhetKontaktInfo()
         })
         add(BrevKode.BI01X01 to {
-            withMetadataCollector(it, BrevKode.BI01X01)
-                .addCommonMetadata()
+            withMetadataCollector(it)
+                .addMottakerGjelder()
+                .addEnhetKontaktInfo()
         })
         add(BrevKode.BI01X02 to {
-            withMetadataCollector(it, BrevKode.BI01X02)
-                .addCommonMetadata()
+            withMetadataCollector(it)
+                .addMottakerGjelder()
+                .addEnhetKontaktInfo()
         })
         add(BrevKode.BI01S10 to {
-            withMetadataCollector(it, BrevKode.BI01S10)
-                .addCommonMetadata()
+            withMetadataCollector(it)
+                .addMottakerGjelder()
+                .addEnhetKontaktInfo()
+                .addRoller()
         })
         add(BrevKode.BI01S67 to {
-            withMetadataCollector(it, BrevKode.BI01S67)
-                .addCommonMetadata()
+            withMetadataCollector(it)
+                .addMottakerGjelder()
+                .addEnhetKontaktInfo()
+                .addRoller()
         })
         add(BrevKode.BI01S02 to {
-            withMetadataCollector(it, BrevKode.BI01S02)
-                .addCommonMetadata()
+            withMetadataCollector(it)
+                .addMottakerGjelder()
+                .addEnhetKontaktInfo()
+                .addRoller()
         })
     }
 
-    private fun withMetadataCollector(dokumentBestilling: DokumentBestillingRequest, brevKode: BrevKode): DokumentMetadataCollector {
-        return applicationContext.getBean(DokumentMetadataCollector::class.java).init(dokumentBestilling, brevKode)
+    private fun withMetadataCollector(dokumentBestilling: DokumentBestillingRequest): DokumentMetadataCollector {
+        return applicationContext.getBean(DokumentMetadataCollector::class.java).init(dokumentBestilling)
     }
 }

@@ -92,11 +92,11 @@ class StubUtils {
             )
         )
     }
-    fun stubOpprettJournalpost(response: OpprettJournalpostResponse = createOpprettJournalpostResponse()){
+    fun stubOpprettJournalpost(response: OpprettJournalpostResponse = createOpprettJournalpostResponse(), status: HttpStatus = HttpStatus.OK){
         WireMock.stubFor(
             WireMock.post(WireMock.urlMatching("/dokument/journalpost/BIDRAG")).willReturn(
                 aClosedJsonResponse()
-                    .withStatus(HttpStatus.OK.value())
+                    .withStatus(status.value())
                     .withBody(convertObjectToString(response))
             )
         )

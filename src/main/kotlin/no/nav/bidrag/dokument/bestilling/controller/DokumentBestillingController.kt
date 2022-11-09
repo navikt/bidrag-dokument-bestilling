@@ -52,8 +52,10 @@ class DokumentBestillingController(
         security = [SecurityRequirement(name = "bearer-key")],
     )
     fun hentStottedeBrevkoder(): List<String> {
-        LOGGER.info("Henter støttede brevkoder")
-        return BrevKode.values().filter { it.enabled }.map { it.name }
+        return BrevKode.values().filter { it.enabled }.map { it.name }.let {
+            LOGGER.info("Hentet støttede brevkoder $it")
+            it
+        }
     }
 
     @PostMapping("/bestill/raw")

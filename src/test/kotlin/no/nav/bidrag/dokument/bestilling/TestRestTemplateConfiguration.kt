@@ -16,7 +16,7 @@ import org.springframework.http.HttpHeaders
 @Profile("test")
 class TestRestTemplateConfiguration {
     @Autowired
-    private val mockOAuth2Server: MockOAuth2Server? = null
+    lateinit var mockOAuth2Server: MockOAuth2Server
 
     @Value("\${AZURE_APP_CLIENT_ID}")
     private lateinit var clientId: String
@@ -30,7 +30,7 @@ class TestRestTemplateConfiguration {
     }
 
     private fun generateBearerToken(): String {
-        val token = mockOAuth2Server?.issueToken("aad", SAKSBEHANDLER_IDENT, clientId)
-        return "Bearer " + token?.serialize()
+        val token = mockOAuth2Server.issueToken("aad", SAKSBEHANDLER_IDENT, clientId, claims = mapOf("azp_name" to "bidrag-dokument-bestilling-test"))
+        return "Bearer " + token.serialize()
     }
 }

@@ -4,7 +4,6 @@ import no.nav.bidrag.dokument.bestilling.config.SaksbehandlerInfoManager
 import no.nav.bidrag.dokument.bestilling.model.Adresse
 import no.nav.bidrag.dokument.bestilling.model.BRUKSHENETSNUMMER_STANDARD
 import no.nav.bidrag.dokument.bestilling.model.Barn
-import no.nav.bidrag.dokument.bestilling.model.BrevKode
 import no.nav.bidrag.dokument.bestilling.model.DokumentBestilling
 import no.nav.bidrag.dokument.bestilling.model.DokumentBestillingRequest
 import no.nav.bidrag.dokument.bestilling.model.EnhetKontaktInfo
@@ -44,16 +43,14 @@ class DokumentMetadataCollector(
 
     private lateinit var request: DokumentBestillingRequest
     private lateinit var enhet: String
-    private lateinit var brevKode: BrevKode
     private lateinit var sak: HentSakResponse
     private lateinit var dokumentBestilling: DokumentBestilling
 
-    fun init(request: DokumentBestillingRequest, brevKode: BrevKode): DokumentMetadataCollector {
+    fun init(request: DokumentBestillingRequest): DokumentMetadataCollector {
         this.dokumentBestilling = DokumentBestilling()
-        this.brevKode = brevKode
         this.request = request
         dokumentBestilling.dokumentReferanse = request.dokumentReferanse
-        dokumentBestilling.tittel = request.tittel ?: brevKode.beskrivelse
+        dokumentBestilling.tittel = request.tittel
         dokumentBestilling.saksnummer = request.saksnummer
         dokumentBestilling.spraak = request.hentRiktigSpraakkode()
         dokumentBestilling.saksbehandler = hentSaksbehandler(request)
@@ -68,11 +65,9 @@ class DokumentMetadataCollector(
         return this
     }
 
-    fun addCommonMetadata(): DokumentMetadataCollector{
-        addRoller()
+    fun addMottakerGjelder(): DokumentMetadataCollector{
         addMottaker()
         addGjelder()
-        addEnhetKontaktInfo()
         return this
     }
 
@@ -268,7 +263,4 @@ class DokumentMetadataCollector(
         val saksbehandlerNavn = saksbehandlerInfoManager.hentSaksbehandler()?.navn ?: saksbehandlerInfoManager.hentSaksbehandlerBrukerId()
         return Saksbehandler(saksbehandlerId, saksbehandlerNavn)
     }
-
-    fun erSammeBrevkode(sammelignBrevkode: BrevKode) = brevKode == sammelignBrevkode
-
 }
