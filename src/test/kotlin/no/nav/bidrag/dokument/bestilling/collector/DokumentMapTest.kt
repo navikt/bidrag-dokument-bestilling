@@ -60,4 +60,9 @@ internal class DokumentMapTest {
                 value.invoke(DokumentBestillingRequest("", gjelderId = "123", saksnummer = "", saksbehandler = Saksbehandler("123", "21313"))).erSammeBrevkode(brevkode) shouldBe true }
         }*/
     }
+
+    @Test
+    fun `Notater should add mottaker and gjelder`(){
+
+    }
 }

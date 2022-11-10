@@ -22,7 +22,7 @@ data class DokumentBestilling(
 )
 
 class Roller: MutableList<Rolle> by mutableListOf() {
-    val barn: List<Barn> get() =  filterIsInstance<Barn>()
+    val barn: List<Barn> get() =  filterIsInstance<Barn>().sortedBy { it.fodselsdato }
     val bidragsmottaker get() = filterIsInstance<PartInfo>().find { it.rolle == RolleType.BM }
     val bidragspliktig get() = filterIsInstance<PartInfo>().find { it.rolle == RolleType.BP }
 }

@@ -120,7 +120,7 @@ class DokumentMetadataCollector(
         return this
     }
 
-    fun addGjelder(): DokumentMetadataCollector {
+   private fun addGjelder(): DokumentMetadataCollector {
         dokumentBestilling.gjelder = Gjelder(
             fodselsnummer = request.actualGjelderId,
             rolle = hentRolle(request.actualGjelderId)
@@ -128,7 +128,7 @@ class DokumentMetadataCollector(
         return this
     }
 
-    fun addMottaker(): DokumentMetadataCollector {
+    private fun addMottaker(): DokumentMetadataCollector {
         if (request.isMottakerSamhandler()){
             val samhandler = request.samhandlerInformasjon ?: throw SamhandlerManglerKontaktinformasjon("Samhandler med id ${request.mottakerId} mangler kontaktinformasjon")
             val adresse = samhandler.adresse

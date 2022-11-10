@@ -13,10 +13,6 @@ import org.springframework.stereotype.Component
 
 @Component
 class DokumentBestillingManager(var applicationContext: ApplicationContext, val dokumentMap: DokumentMap) {
-    companion object {
-        private val LOGGER = LoggerFactory.getLogger(DokumentBestillingManager::class.java)
-    }
-
     fun bestill(reqest: DokumentBestillingRequest, brevKode: BrevKode): DokumentBestillingResult {
         val bestillingData = buildDokumentBestilling(reqest, brevKode)
         val dokumentProducer = fetchProducer(brevKode)

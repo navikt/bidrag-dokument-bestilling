@@ -5,6 +5,7 @@ import com.ninjasquad.springmockk.MockkBean
 import com.ninjasquad.springmockk.SpykBean
 import io.kotest.assertions.assertSoftly
 import io.kotest.assertions.throwables.shouldThrow
+import io.kotest.assertions.withClue
 import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
@@ -35,6 +36,7 @@ import no.nav.bidrag.dokument.bestilling.service.SakService
 import no.nav.bidrag.dokument.bestilling.utils.ANNEN_MOTTAKER
 import no.nav.bidrag.dokument.bestilling.utils.BARN1
 import no.nav.bidrag.dokument.bestilling.utils.BARN2
+import no.nav.bidrag.dokument.bestilling.utils.BARN3
 import no.nav.bidrag.dokument.bestilling.utils.BM1
 import no.nav.bidrag.dokument.bestilling.utils.BP1
 import no.nav.bidrag.dokument.bestilling.utils.DEFAULT_SAKSNUMMER
@@ -160,15 +162,15 @@ internal class DokumentMetadataCollectorTest {
             bestilling.roller.bidragspliktig?.landkode3 shouldBe "NOR"
 
             bestilling.roller.barn shouldHaveSize 2
-            bestilling.roller.barn[0].fodselsnummer shouldBe BARN1.ident
-            bestilling.roller.barn[0].fodselsdato shouldBe BARN1.foedselsdato
-            bestilling.roller.barn[0].fornavn shouldBe BARN1.fornavn
-            bestilling.roller.barn[0].navn shouldBe BARN1.fornavnEtternavn
+            bestilling.roller.barn[0].fodselsnummer shouldBe BARN2.ident
+            bestilling.roller.barn[0].fodselsdato shouldBe BARN2.foedselsdato
+            bestilling.roller.barn[0].fornavn shouldBe BARN2.fornavn
+            bestilling.roller.barn[0].navn shouldBe BARN2.fornavnEtternavn
 
-            bestilling.roller.barn[1].fodselsnummer shouldBe BARN2.ident
-            bestilling.roller.barn[1].fodselsdato shouldBe BARN2.foedselsdato
-            bestilling.roller.barn[1].fornavn shouldBe BARN2.fornavn
-            bestilling.roller.barn[1].navn shouldBe BARN2.fornavnEtternavn
+            bestilling.roller.barn[1].fodselsnummer shouldBe BARN1.ident
+            bestilling.roller.barn[1].fodselsdato shouldBe BARN1.foedselsdato
+            bestilling.roller.barn[1].fornavn shouldBe BARN1.fornavn
+            bestilling.roller.barn[1].navn shouldBe BARN1.fornavnEtternavn
 
             bestilling.spraak shouldBe "NB"
             bestilling.saksnummer shouldBe DEFAULT_SAKSNUMMER
@@ -816,6 +818,73 @@ internal class DokumentMetadataCollectorTest {
             bestilling.roller.bidragsmottaker shouldNotBe null
             bestilling.roller.barn shouldHaveSize 1
         }
+    }
+
+    @Test
+    fun `should sort barn by born date`(){
+        mockDefaultValues()
+        val saksnummer = "22222"
+        val barn1 = BARN1.copy(foedselsdato = LocalDate.parse("2020-01-02"))
+        val barn2 = BARN2.copy(foedselsdato = LocalDate.parse("2020-05-15"))
+        val barn3 = BARN3.copy(foedselsdato = LocalDate.parse("2021-07-20"))
+        val barn4 = BARN3.copy(ident = "1231231233333333", foedselsdato = LocalDate.parse("2022-03-15"))
+        val sak = createSakResponse().copy(
+            roller = listOf(
+                SakRolle(
+                    foedselsnummer = BM1.ident,
+                    rolleType = RolleType.BM
+                ),
+                SakRolle(
+                    foedselsnummer = barn1.ident,
+                    rolleType = RolleType.BA
+                ),
+                SakRolle(
+                    foedselsnummer = barn2.ident,
+                    rolleType = RolleType.BA
+                ),
+                SakRolle(
+                    foedselsnummer = barn3.ident,
+                    rolleType = RolleType.BA
+                ),
+                SakRolle(
+                    foedselsnummer = barn4.ident,
+                    rolleType = RolleType.BA
+                )
+            )
+        )
+        every { sakService.hentSak(saksnummer) } returns sak
+        every { personService.hentPerson(barn1.ident, any()) } returns barn1
+        every { personService.hentPerson(barn2.ident, any()) } returns barn2
+        every { personService.hentPerson(barn3.ident, any()) } returns barn3
+        every { personService.hentPerson(barn4.ident, any()) } returns barn4
+
+        val request = DokumentBestillingRequest(
+            mottakerId = BM1.ident,
+            saksnummer = saksnummer,
+            tittel = DEFAULT_TITLE_DOKUMENT,
+            enhet = "4806",
+            spraak = "NB",
+            samhandlerInformasjon = null
+        )
+        val bestilling = mapToBestillingsdata(request)
+        assertSoftly {
+            bestilling.roller.bidragspliktig shouldBe null
+            bestilling.roller.bidragsmottaker shouldNotBe null
+            bestilling.roller.barn shouldHaveSize 4
+            withClue("Første barn må være eldste barn født ${barn1.foedselsdato}") {
+                bestilling.roller.barn[0].fodselsnummer shouldBe barn1.ident
+            }
+            withClue("Andre barn må være nest eldste barn født ${barn2.foedselsdato}") {
+                bestilling.roller.barn[1].fodselsnummer shouldBe barn2.ident
+            }
+            withClue("Tredje barn må være barn født ${barn3.foedselsdato}") {
+                bestilling.roller.barn[2].fodselsnummer shouldBe barn3.ident
+            }
+            withClue("Fjerde barn må være barn født ${barn4.foedselsdato}") {
+                bestilling.roller.barn[3].fodselsnummer shouldBe barn4.ident
+            }
+        }
+
     }
 
     private fun mapToBestillingsdata(request: DokumentBestillingRequest): DokumentBestilling {

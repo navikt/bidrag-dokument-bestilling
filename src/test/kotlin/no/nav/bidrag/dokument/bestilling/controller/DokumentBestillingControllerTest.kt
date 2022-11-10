@@ -1,31 +1,19 @@
 package no.nav.bidrag.dokument.bestilling.controller
 
-import StubUtils
-import com.fasterxml.jackson.databind.ObjectMapper
-import com.github.tomakehurst.wiremock.client.WireMock
-import com.ninjasquad.springmockk.MockkBean
 import io.kotest.assertions.assertSoftly
 import io.kotest.matchers.collections.shouldBeIn
 import io.kotest.matchers.collections.shouldHaveAtLeastSize
 import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.collections.shouldNotBeIn
 import io.kotest.matchers.equality.shouldBeEqualToComparingFields
-import io.kotest.matchers.equality.shouldNotBeEqualToComparingFields
 import io.kotest.matchers.shouldBe
-import io.kotest.matchers.shouldNotBe
 import io.kotest.matchers.string.shouldContain
-import io.mockk.every
 import no.nav.bidrag.commons.web.EnhetFilter.X_ENHET_HEADER
-import no.nav.bidrag.commons.web.test.HttpHeaderTestRestTemplate
-import no.nav.bidrag.dokument.bestilling.BidragDokumentBestillingLocalTest
-import no.nav.bidrag.dokument.bestilling.JmsTestConfig
-import no.nav.bidrag.dokument.bestilling.consumer.KodeverkConsumer
 import no.nav.bidrag.dokument.bestilling.model.BrevBestilling
 import no.nav.bidrag.dokument.bestilling.model.BrevKode
 import no.nav.bidrag.dokument.bestilling.model.BrevKontaktinfo
 import no.nav.bidrag.dokument.bestilling.model.DokumentBestillingRequest
 import no.nav.bidrag.dokument.bestilling.model.DokumentBestillingResponse
-import no.nav.bidrag.dokument.bestilling.model.KodeverkResponse
 import no.nav.bidrag.dokument.bestilling.model.RolleType
 import no.nav.bidrag.dokument.bestilling.model.SakRolle
 import no.nav.bidrag.dokument.bestilling.utils.ANNEN_MOTTAKER
@@ -33,8 +21,6 @@ import no.nav.bidrag.dokument.bestilling.utils.BARN1
 import no.nav.bidrag.dokument.bestilling.utils.BARN2
 import no.nav.bidrag.dokument.bestilling.utils.BM1
 import no.nav.bidrag.dokument.bestilling.utils.BP1
-import no.nav.bidrag.dokument.bestilling.utils.DEFAULT_SAKSNUMMER
-import no.nav.bidrag.dokument.bestilling.utils.JmsTestConsumer
 import no.nav.bidrag.dokument.bestilling.utils.SAKSBEHANDLER_IDENT
 import no.nav.bidrag.dokument.bestilling.utils.SAKSBEHANDLER_NAVN
 import no.nav.bidrag.dokument.bestilling.utils.createEnhetKontaktInformasjon
@@ -42,89 +28,15 @@ import no.nav.bidrag.dokument.bestilling.utils.createOpprettJournalpostResponse
 import no.nav.bidrag.dokument.bestilling.utils.createPostAdresseResponse
 import no.nav.bidrag.dokument.bestilling.utils.createPostAdresseResponseUtenlandsk
 import no.nav.bidrag.dokument.bestilling.utils.createSakResponse
-import no.nav.security.token.support.spring.test.EnableMockOAuth2Server
-import org.assertj.core.api.Assertions.assertThat
-import org.junit.After
-import org.junit.AfterClass
-import org.junit.Before
-import org.junit.BeforeClass
-import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.mockito.Mockito
-import org.mockito.kotlin.whenever
-import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.boot.test.mock.mockito.MockBean
-import org.springframework.boot.test.web.server.LocalServerPort
-import org.springframework.cloud.contract.wiremock.AutoConfigureWireMock
-import org.springframework.core.io.ClassPathResource
 import org.springframework.http.HttpEntity
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpMethod
 import org.springframework.http.HttpStatus
-import org.springframework.jms.core.JmsTemplate
-import org.springframework.test.context.ActiveProfiles
 import java.time.LocalDate
-import javax.jms.Queue
 
 
-@ActiveProfiles("test")
-@SpringBootTest(
-    classes = [BidragDokumentBestillingLocalTest::class, StubUtils::class, JmsTestConfig::class],
-    webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT
-)
-@AutoConfigureWireMock(port = 0)
-@EnableMockOAuth2Server
-class DokumentBestillingControllerTest {
-
-    @LocalServerPort
-    private val port = 0
-
-    @MockkBean
-    lateinit var kodeverkConsumer: KodeverkConsumer
-
-    @Autowired
-    lateinit var stubUtils: StubUtils
-
-    @Autowired
-    lateinit var httpHeaderTestRestTemplate: HttpHeaderTestRestTemplate
-
-    @Autowired
-    lateinit var onlineBrevQueue: Queue
-
-    @Autowired
-    lateinit var onlinebrevTemplate: JmsTemplate
-
-    @Autowired
-    lateinit var jmsTestConsumer: JmsTestConsumer
-
-    @BeforeEach
-    fun initMocks() {
-        stubUtils.stubEnhetInfo()
-        stubUtils.stubEnhetKontaktInfo()
-        stubUtils.stubHentSaksbehandlerInfo()
-        stubUtils.stubHentPersonSpraak()
-        val kodeverkResponse = ObjectMapper().findAndRegisterModules().readValue(readFile("api/landkoder.json"), KodeverkResponse::class.java)
-        every { kodeverkConsumer.hentLandkoder() } returns kodeverkResponse
-    }
-
-    @AfterEach
-    fun resetMocks() {
-        WireMock.reset()
-    }
-
-    fun stubDefaultValues(){
-        stubUtils.stubHentPerson(BP1.ident, BP1)
-        stubUtils.stubHentPerson(BM1.ident, BM1)
-        stubUtils.stubHentPerson(BARN1.ident, BARN1)
-        stubUtils.stubHentPerson(BARN2.ident, BARN2)
-        stubUtils.stubHentPerson(ANNEN_MOTTAKER.ident, ANNEN_MOTTAKER)
-        stubUtils.stubHentSak()
-        stubUtils.stubHentPersonSpraak()
-        stubUtils.stubHentAdresse(postAdresse = createPostAdresseResponse())
-        stubUtils.stubEnhetKontaktInfo(createEnhetKontaktInformasjon())
-    }
+class DokumentBestillingControllerTest: AbstractControllerTest() {
 
     @Test
     fun `skal returnere liste over brevkoder som er støttet`(){
@@ -223,17 +135,17 @@ class DokumentBestillingControllerTest {
                 message.brev?.parter?.bpdatodod shouldBe null
 
                 message.brev?.barnISak?.shouldHaveAtLeastSize(2)
-                message.brev?.barnISak?.get(0)?.fnr shouldBe BARN1.ident
-                message.brev?.barnISak?.get(0)?.navn shouldBe BARN1.fornavnEtternavn
-                message.brev?.barnISak?.get(0)?.fDato shouldBe BARN1.foedselsdato
+                message.brev?.barnISak?.get(0)?.fnr shouldBe BARN2.ident
+                message.brev?.barnISak?.get(0)?.navn shouldBe BARN2.fornavnEtternavn
+                message.brev?.barnISak?.get(0)?.fDato shouldBe BARN2.foedselsdato
                 message.brev?.barnISak?.get(0)?.personIdRm shouldBe ""
                 message.brev?.barnISak?.get(0)?.belopGebyrRm shouldBe ""
                 message.brev?.barnISak?.get(0)?.belForskudd shouldBe ""
                 message.brev?.barnISak?.get(0)?.belBidrag shouldBe ""
 
-                message.brev?.barnISak?.get(1)?.fDato shouldBe BARN2.foedselsdato
-                message.brev?.barnISak?.get(1)?.fnr shouldBe BARN2.ident
-                message.brev?.barnISak?.get(1)?.navn shouldBe BARN2.fornavnEtternavn
+                message.brev?.barnISak?.get(1)?.fDato shouldBe BARN1.foedselsdato
+                message.brev?.barnISak?.get(1)?.fnr shouldBe BARN1.ident
+                message.brev?.barnISak?.get(1)?.navn shouldBe BARN1.fornavnEtternavn
                 message.brev?.barnISak?.get(1)?.personIdRm shouldBe ""
                 message.brev?.barnISak?.get(1)?.belopGebyrRm shouldBe ""
                 message.brev?.barnISak?.get(1)?.belForskudd shouldBe ""
@@ -416,6 +328,31 @@ class DokumentBestillingControllerTest {
     }
 
     @Test
+    fun `should fail when request with invalid brevkode`(){
+        stubDefaultValues()
+
+        val request = DokumentBestillingRequest(
+            mottakerId = BM1.ident,
+            gjelderId = BP1.ident,
+            saksnummer = "123213",
+            enhet = "4806"
+        )
+
+        jmsTestConsumer.withOnlinebrev {
+            val response = httpHeaderTestRestTemplate.exchange(
+                "${rootUri()}/bestill/BI01INVALID",
+                HttpMethod.POST,
+                HttpEntity(request),
+                DokumentBestillingResponse::class.java
+            )
+
+            response.statusCode shouldBe HttpStatus.BAD_REQUEST
+
+            this.hasNoMessage() shouldBe true
+        }
+    }
+
+    @Test
     fun `should produse XML with mottaker role RM`(){
         val brevKode = BrevKode.BI01X01
         val sak = createSakResponse().copy(
@@ -469,24 +406,4 @@ class DokumentBestillingControllerTest {
             }
         }
     }
-    fun verifyBrevbestillingHeaders(bestilling: BrevBestilling, brevKode: BrevKode) {
-        bestilling.passord shouldBe "pass"
-        bestilling.sysid shouldBe "BI12"
-        bestilling.arkiver shouldBe "JA"
-        bestilling.format shouldBe "ENSIDIG"
-        bestilling.skrivertype shouldBe "LOKAL"
-        bestilling.skuff shouldBe ""
-        bestilling.skriver shouldBe ""
-        bestilling.saksbehandler shouldBe SAKSBEHANDLER_IDENT
-        bestilling.malpakke shouldBe "BI01.${brevKode.name}"
-    }
-
-    fun rootUri(): String {
-        return "http://localhost:$port"
-    }
-
-    fun readFile(filePath: String): String {
-        return String(ClassPathResource("testdata/$filePath").inputStream.readAllBytes())
-    }
-
 }
