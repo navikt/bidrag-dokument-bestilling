@@ -3,13 +3,19 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.github.tomakehurst.wiremock.client.ResponseDefinitionBuilder
 import com.github.tomakehurst.wiremock.client.WireMock
 import com.github.tomakehurst.wiremock.client.WireMock.aResponse
+import com.github.tomakehurst.wiremock.matching.AnythingPattern
+import com.github.tomakehurst.wiremock.matching.ContainsPattern
+import com.github.tomakehurst.wiremock.matching.RequestPatternBuilder
 import no.nav.bidrag.dokument.bestilling.model.EnhetInfo
+import no.nav.bidrag.dokument.bestilling.model.EnhetKontaktInfo
+import no.nav.bidrag.dokument.bestilling.model.EnhetKontaktInfoDto
 import no.nav.bidrag.dokument.bestilling.model.HentPersonResponse
 import no.nav.bidrag.dokument.bestilling.model.HentPostadresseResponse
 import no.nav.bidrag.dokument.bestilling.model.HentSakResponse
 import no.nav.bidrag.dokument.bestilling.model.SaksbehandlerInfoResponse
-import no.nav.bidrag.dokument.bestilling.utils.BM_PERSON_ID_1
-import no.nav.bidrag.dokument.bestilling.utils.BM_PERSON_NAVN_1
+import no.nav.bidrag.dokument.bestilling.utils.SAKSBEHANDLER_IDENT
+import no.nav.bidrag.dokument.bestilling.utils.SAKSBEHANDLER_NAVN
+import no.nav.bidrag.dokument.bestilling.utils.createEnhetKontaktInformasjon
 import no.nav.bidrag.dokument.bestilling.utils.createOpprettJournalpostResponse
 import no.nav.bidrag.dokument.bestilling.utils.createPostAdresseResponse
 import no.nav.bidrag.dokument.bestilling.utils.createSakResponse
@@ -19,6 +25,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Component
+import java.util.Arrays
 
 
 @Component
@@ -35,9 +42,9 @@ class StubUtils {
             }
     }
 
-    fun stubHentPerson(fnr: String = ".*", personResponse: HentPersonResponse){
+    fun stubHentPerson(fnr: String? = null, personResponse: HentPersonResponse){
         WireMock.stubFor(
-            WireMock.get(WireMock.urlMatching("/person/informasjon/$fnr")).willReturn(
+            WireMock.post(WireMock.urlMatching("/person/informasjon")).withRequestBody(if(fnr.isNullOrEmpty()) AnythingPattern() else ContainsPattern(fnr)).willReturn(
                 aClosedJsonResponse()
                     .withStatus(HttpStatus.OK.value())
                     .withBody(convertObjectToString(personResponse))
@@ -45,9 +52,30 @@ class StubUtils {
         )
     }
 
-    fun stubHentAdresse(postAdresse: HentPostadresseResponse = createPostAdresseResponse()){
+    fun stubHentPersonSpraak(result: String = "nb"){
         WireMock.stubFor(
-            WireMock.post(WireMock.urlMatching("/person/adresse/post")).willReturn(
+            WireMock.post(WireMock.urlMatching("/person/spraak")).willReturn(
+                aClosedJsonResponse()
+                    .withStatus(HttpStatus.OK.value())
+                    .withBody(result)
+            )
+        )
+    }
+
+    fun stubHentLandkoder(){
+        WireMock.stubFor(
+            WireMock.get(WireMock.urlMatching("/kodeverk/.*")).willReturn(
+                aClosedJsonResponse()
+                    .withStatus(HttpStatus.OK.value())
+                    .withBodyFile("testdata/api/landkoder.json")
+            )
+        )
+    }
+
+    fun stubHentAdresse(ident: String? = null, postAdresse: HentPostadresseResponse = createPostAdresseResponse()){
+        WireMock.stubFor(
+            WireMock.post(WireMock.urlMatching("/person/adresse/post")).withRequestBody(
+                if(ident.isNullOrEmpty()) AnythingPattern() else ContainsPattern(ident)).willReturn(
                 aClosedJsonResponse()
                     .withStatus(HttpStatus.OK.value())
                     .withBody(convertObjectToString(postAdresse))
@@ -64,11 +92,11 @@ class StubUtils {
             )
         )
     }
-    fun stubOpprettJournalpost(response: OpprettJournalpostResponse = createOpprettJournalpostResponse()){
+    fun stubOpprettJournalpost(response: OpprettJournalpostResponse = createOpprettJournalpostResponse(), status: HttpStatus = HttpStatus.OK){
         WireMock.stubFor(
             WireMock.post(WireMock.urlMatching("/dokument/journalpost/BIDRAG")).willReturn(
                 aClosedJsonResponse()
-                    .withStatus(HttpStatus.OK.value())
+                    .withStatus(status.value())
                     .withBody(convertObjectToString(response))
             )
         )
@@ -84,7 +112,17 @@ class StubUtils {
         )
     }
 
-    fun stubHentSaksbehandlerInfo(response: SaksbehandlerInfoResponse = SaksbehandlerInfoResponse(BM_PERSON_ID_1, BM_PERSON_NAVN_1)){
+    fun stubEnhetKontaktInfo(response: EnhetKontaktInfoDto = createEnhetKontaktInformasjon()){
+        WireMock.stubFor(
+            WireMock.get(WireMock.urlMatching("/organisasjon/enhet/kontaktinfo/.*")).willReturn(
+                aClosedJsonResponse()
+                    .withStatus(HttpStatus.OK.value())
+                    .withBody(convertObjectToString(response))
+            )
+        )
+    }
+
+    fun stubHentSaksbehandlerInfo(response: SaksbehandlerInfoResponse = SaksbehandlerInfoResponse(SAKSBEHANDLER_IDENT, SAKSBEHANDLER_NAVN)){
         WireMock.stubFor(
             WireMock.get(WireMock.urlMatching("/organisasjon/saksbehandler/info/.*")).willReturn(
                 aClosedJsonResponse()
@@ -92,6 +130,34 @@ class StubUtils {
                     .withBody(convertObjectToString(response))
             )
         )
+    }
+
+    inner class Verify {
+
+        fun verifyHentPersonCalled(fnr: String?){
+            val verify = WireMock.postRequestedFor(
+                WireMock.urlMatching("/person/informasjon")
+            ).withRequestBody(ContainsPattern(fnr))
+            WireMock.verify(verify)
+        }
+        fun verifyHentEnhetKontaktInfoCalledWith(spraak: String? = "NB", vararg contains: String) {
+            val verify = WireMock.getRequestedFor(
+                WireMock.urlMatching("/organisasjon/enhet/kontaktinfo/.*/$spraak")
+            )
+            verifyContains(verify, *contains)
+        }
+
+        fun verifyOpprettJournalpostCalledWith(vararg contains: String) {
+            val verify = WireMock.postRequestedFor(
+                WireMock.urlMatching("/dokument/journalpost/BIDRAG")
+            )
+            verifyContains(verify, *contains)
+        }
+
+        private fun verifyContains(verify: RequestPatternBuilder, vararg contains: String){
+            Arrays.stream(contains).forEach { verify.withRequestBody(ContainsPattern(it)) }
+            WireMock.verify(verify)
+        }
     }
 
     fun <T> convertObjectToString(o: T): String {

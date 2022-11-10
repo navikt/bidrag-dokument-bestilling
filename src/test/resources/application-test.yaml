@@ -2,6 +2,7 @@ BIDRAG_PERSON_URL: http://localhost:${wiremock.server.port}/person
 BIDRAG_DOKUMENT_URL: http://localhost:${wiremock.server.port}/dokument
 BIDRAG_ORGANISASJON_URL: http://localhost:${wiremock.server.port}/organisasjon
 BIDRAG_SAK_URL: http://localhost:${wiremock.server.port}/sak
+KODEVERK_URL: http://localhost:${wiremock.server.port}/kodeverk
 
 AZURE_OPENID_CONFIG_ISSUER: http://localhost:${mock-oauth2-server.port}/aad
 AZURE_APP_TENANT_ID: 12321321-123213-3213123
@@ -15,6 +16,7 @@ MQ_HOSTNAME: b27apvl220.preprod.local
 MQ_CHANNEL: Q1_BDJOURNALPOST
 
 BREVSERVER_ONLINEBREV_QUEUE: brevserver_queue
+BREVSERVER_KVITTERING_QUEUE: brevserver_queue
 BREVSERVER_PASSORD: pass
 no.nav.security.jwt:
   client:

@@ -1,21 +1,17 @@
 package no.nav.bidrag.dokument.bestilling.consumer
 
 import no.nav.bidrag.commons.security.service.SecurityTokenService
-import no.nav.bidrag.dokument.bestilling.SECURE_LOGGER
-import no.nav.bidrag.dokument.bestilling.config.CacheConfig.Companion.PERSON_ADRESSE_CACHE
-import no.nav.bidrag.dokument.bestilling.config.CacheConfig.Companion.PERSON_CACHE
-import no.nav.bidrag.dokument.bestilling.model.HentPersonResponse
-import no.nav.bidrag.dokument.bestilling.model.HentPostadresseRequest
-import no.nav.bidrag.dokument.bestilling.model.HentPostadresseResponse
+import no.nav.bidrag.dokument.bestilling.model.HentSakFeiletException
 import no.nav.bidrag.dokument.bestilling.model.HentSakResponse
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
-import org.springframework.cache.annotation.Cacheable
-import org.springframework.http.HttpEntity
 import org.springframework.http.HttpMethod
+import org.springframework.http.HttpStatus
+import org.springframework.retry.annotation.Backoff
+import org.springframework.retry.annotation.Retryable
 import org.springframework.stereotype.Service
+import org.springframework.web.client.HttpStatusCodeException
 import org.springframework.web.client.RestTemplate
-import java.util.Optional
 
 @Service
 class BidragSakConsumer(
@@ -26,12 +22,20 @@ class BidragSakConsumer(
     companion object {
         private val LOGGER = LoggerFactory.getLogger(BidragSakConsumer::class.java)
     }
+    @Retryable(maxAttempts = 3, backoff = Backoff(delay = 500, maxDelay = 1500, multiplier = 2.0))
+    fun hentSak(saksnr: String): HentSakResponse? {
+        try {
+            val hentPersonResponse =
+                restTemplate.exchange("/sak/$saksnr", HttpMethod.GET, null, HentSakResponse::class.java)
+            LOGGER.info("Hentet sak med id $saksnr")
+            return hentPersonResponse.body
+        } catch (e: HttpStatusCodeException){
+            if (e.statusCode == HttpStatus.NOT_FOUND){
+                return null
+            }
+            throw HentSakFeiletException("Henting av sak $saksnr feilet", e)
+        }
 
-    fun hentSak(saksnr: String): Optional<HentSakResponse> {
-        LOGGER.info("Henter sak med id $saksnr")
-        val hentPersonResponse =
-            restTemplate.exchange("/sak/$saksnr", HttpMethod.GET, null, HentSakResponse::class.java)
-        return Optional.ofNullable(hentPersonResponse.body)
     }
 
 }

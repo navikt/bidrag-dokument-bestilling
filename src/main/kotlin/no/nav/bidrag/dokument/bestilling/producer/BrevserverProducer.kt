@@ -1,8 +1,8 @@
 package no.nav.bidrag.dokument.bestilling.producer
 
-import no.nav.bidrag.dokument.bestilling.config.SaksbehandlerInfoManager
 import no.nav.bidrag.dokument.bestilling.consumer.BidragDokumentConsumer
 import no.nav.bidrag.dokument.bestilling.model.BestillingSystem
+import no.nav.bidrag.dokument.bestilling.model.Brev
 import no.nav.bidrag.dokument.bestilling.model.BrevBestilling
 import no.nav.bidrag.dokument.bestilling.model.BrevKode
 import no.nav.bidrag.dokument.bestilling.model.BrevKontaktinfo
@@ -11,16 +11,10 @@ import no.nav.bidrag.dokument.bestilling.model.BrevType
 import no.nav.bidrag.dokument.bestilling.model.DokumentBestilling
 import no.nav.bidrag.dokument.bestilling.model.DokumentBestillingResult
 import no.nav.bidrag.dokument.bestilling.model.EnhetKontaktInfo
+import no.nav.bidrag.dokument.bestilling.model.LANDKODE3_NORGE
 import no.nav.bidrag.dokument.bestilling.model.Mottaker
-import no.nav.bidrag.dokument.bestilling.model.Parter
 import no.nav.bidrag.dokument.bestilling.model.RolleType
-import no.nav.bidrag.dokument.bestilling.model.SoknadsPart
-import no.nav.bidrag.dokument.bestilling.model.brev
-import no.nav.bidrag.dokument.bestilling.model.brevKontaktinfo
 import no.nav.bidrag.dokument.bestilling.model.brevbestilling
-import no.nav.bidrag.dokument.bestilling.model.brevmottaker
-import no.nav.bidrag.dokument.bestilling.model.parter
-import no.nav.bidrag.dokument.bestilling.model.soknad
 import no.nav.bidrag.dokument.dto.AktorDto
 import no.nav.bidrag.dokument.dto.AvsenderMottakerDto
 import no.nav.bidrag.dokument.dto.JournalpostType
@@ -29,13 +23,10 @@ import no.nav.bidrag.dokument.dto.OpprettJournalpostRequest
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.jms.core.JmsTemplate
 import org.springframework.stereotype.Component
-import java.time.format.DateTimeFormatter
 
-var BREV_DATETIME_FORMAT = DateTimeFormatter.ofPattern("ddMMyy")
 @Component(BestillingSystem.BREVSERVER)
 class BrevserverProducer(
     var onlinebrevTemplate: JmsTemplate,
-    var saksbehandlerInfoManager: SaksbehandlerInfoManager,
     var bidragDokumentConsumer: BidragDokumentConsumer,
     @Value("\${BREVSERVER_PASSORD}") val brevPassord: String
 ): DokumentProducer {
@@ -68,7 +59,8 @@ class BrevserverProducer(
                 journalposttype = when(brevKode.brevtype){
                     BrevType.UTGAAENDE -> JournalpostType.UTGAAENDE
                     BrevType.NOTAT -> JournalpostType.NOTAT
-                }
+                },
+                saksbehandlerIdent = dokumentBestilling.saksbehandler?.ident
             ))
 
             dokumentBestilling.dokumentReferanse = response?.dokumenter?.get(0)?.dokumentreferanse
@@ -79,51 +71,64 @@ class BrevserverProducer(
 
     private fun mapToBrevserverMessage(dokumentBestilling: DokumentBestilling, brevKode: BrevKode): BrevBestilling {
         val dokumentSpraak = dokumentBestilling.spraak ?: "NB"
+        val saksbehandlerNavn = dokumentBestilling.saksbehandler?.navn
         return brevbestilling {
+            val roller = dokumentBestilling.roller
+            val bp = roller.bidragspliktig
+            val bm = roller.bidragsmottaker
+
             malpakke = "BI01.${brevKode.name}"
             passord = brevPassord
-            saksbehandler = saksbehandlerInfoManager.hentSaksbehandlerBrukerId()
-            brev = brev {
+            saksbehandler = dokumentBestilling.saksbehandler?.ident!!
+            brev {
                 brevref = dokumentBestilling.dokumentReferanse!!
                 spraak = dokumentSpraak
                 tknr = dokumentBestilling.enhet!!
-                mottaker = mapBrevmottaker(dokumentBestilling.mottaker!!, dokumentSpraak)
-                kontaktInfo = mapKontaktInfo(dokumentBestilling.kontaktInfo)
-                soknad = soknad {
+                mottaker = dokumentBestilling.mottaker?.let { mapBrevmottaker(this, it) }
+                kontaktInfo = mapKontaktInfo(this, dokumentBestilling.kontaktInfo)
+                soknad {
                     saksnr = dokumentBestilling.saksnummer
-                    sakstype = "E"
+                    rmISak = dokumentBestilling.rmISak
+                    sakstype = "E" // "X" hvis det er en ukjent part i saken, "U" hvis parter levde adskilt, "E" i alle andre tilfeller
                 }
-                parter = mapPart(dokumentBestilling.parter)
+                parter {
+                    bpfnr = bp?.fodselsnummer
+                    bpnavn = bp?.navn
+                    bpfodselsdato = bp?.fodselsdato
+                    bmfnr = bm?.fodselsnummer
+                    bmnavn = bm?.navn
+                    bmfodselsdato = bm?.fodselsdato
+                    bmlandkode = bm?.landkode3
+                    bplandkode = bp?.landkode3
+                    bpdatodod = bp?.doedsdato
+                    bmdatodod = bm?.doedsdato
+                }
+                brevSaksbehandler {
+                    navn = saksbehandlerNavn
+                }
+                dokumentBestilling.roller.barn.forEach {
+                    barnISak {
+                        fnr = it.fodselsnummer
+                        navn = it.navn
+                        fDato = it.fodselsdato
+                        fornavn = it.fornavn
+                    }
+                }
             }
         }
     }
 
-    fun mapPart(_part: List<SoknadsPart>): Parter? {
-        val part = if (_part.isNotEmpty()) _part[0] else return null
-        val bp = part.bidragsPliktigInfo
-        val bm = part.bidragsMottakerInfo
-
-        return parter {
-            bpfnr = bp?.fnr
-            bpnavn = bp?.navn
-            bpnavn = bp?.fodselsdato?.format(BREV_DATETIME_FORMAT)
-            bmfnr = bm?.fnr
-            bmnavn = bm?.navn
-            bmfodselsdato = bm?.fodselsdato?.format(BREV_DATETIME_FORMAT)
-        }
-    }
-    fun mapKontaktInfo(_kontaktInfo: EnhetKontaktInfo?): BrevKontaktinfo? {
+    fun mapKontaktInfo(brev: Brev, _kontaktInfo: EnhetKontaktInfo?): BrevKontaktinfo? {
         val kontaktInfo = _kontaktInfo ?: return null
-        return brevKontaktinfo {
-            val mappedAdresse = adresse {
+        return brev.brevKontaktinfo {
+            returOgPostadresse {
                 enhet = kontaktInfo.enhetId
-                navn = kontaktInfo.navn.substring(0, kontaktInfo.navn.length.coerceAtMost(30))
-                telefon = if(kontaktInfo.navn.length > 30) kontaktInfo.navn.substring(30, kontaktInfo.navn.length) else null
-                adresselinje1 = kontaktInfo.returAdresse.adresselinje1
-                adresselinje2 = kontaktInfo.returAdresse.adresselinje2
-                postnummer = kontaktInfo.returAdresse.postnummer
-                poststed = kontaktInfo.returAdresse.poststed
-                land = kontaktInfo.returAdresse.landkode
+                navn = kontaktInfo.navn
+                adresselinje1 = kontaktInfo.postadresse.adresselinje1
+                adresselinje2 = kontaktInfo.postadresse.adresselinje2
+                postnummer = kontaktInfo.postadresse.postnummer
+                poststed = kontaktInfo.postadresse.poststed
+                land = kontaktInfo.postadresse.land
             }
             avsender = avsender {
                 navn = kontaktInfo.navn
@@ -131,34 +136,29 @@ class BrevserverProducer(
             tlfAvsender = tlfAvsender {
                 telefonnummer = kontaktInfo.telefonnummer
             }
-            returAdresse = mappedAdresse
-            postadresse = mappedAdresse
         }
     }
-    fun mapBrevmottaker(mottaker: Mottaker, brevSpraak: String): BrevMottaker {
-        return brevmottaker {
+    fun mapBrevmottaker(brev: Brev, mottaker: Mottaker): BrevMottaker {
+        return brev.brevmottaker {
             navn = mottaker.navn
-            spraak = brevSpraak
+            spraak = mottaker.spraak
             fodselsnummer = mottaker.fodselsnummer
             rolle = when(mottaker.rolle){
-                RolleType.BP -> "01"
-                RolleType.BM -> "02"
-                RolleType.BA -> "03"
-                RolleType.RM -> "04"
-                RolleType.FR -> "05"
-                else -> null
+                RolleType.BM -> "01"
+                RolleType.BP -> "02"
+                RolleType.RM -> "RM"
+                else -> "00"
             }
-            fodselsdato = mottaker.fodselsdato.format(BREV_DATETIME_FORMAT)
+            fodselsdato = mottaker.fodselsdato
 
             val adresse = mottaker.adresse
-            val postnummerSted = "${adresse.postnummer} ${adresse.poststed}"
             adresselinje1 = adresse.adresselinje1
             adresselinje2 = adresse.adresselinje2
-            adresselinje3 = adresse.adresselinje3 ?: postnummerSted
-            adresselinje4 = postnummerSted
-            boligNr = adresse.boligNr
-            postnummer = adresse.postnummer
-            landkode = adresse.landkode
+            adresselinje3 = adresse.adresselinje3
+            adresselinje4 = adresse.adresselinje4
+            boligNr = adresse.bruksenhetsnummer
+            postnummer = adresse.postnummer ?: ""
+//            landkode = adresse.landkode3
         }
     }
 }

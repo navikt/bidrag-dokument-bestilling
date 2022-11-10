@@ -9,14 +9,20 @@ env:
   BIDRAG_DOKUMENT_SCOPE: dev-fss.bidrag.bidrag-dokument
 
   BIDRAG_ORGANISASJON_URL: https://bidrag-organisasjon.dev-fss-pub.nais.io/bidrag-organisasjon
-  BIDRAG_ORGANiSASJON_SCOPE: dev-fss.bidrag.bidrag-organisasjon
+  BIDRAG_ORGANISASJON_SCOPE: dev-fss.bidrag.bidrag-organisasjon
 
   BIDRAG_SAK_URL: https://bidrag-sak.dev-fss-pub.nais.io/bidrag-sak
   BIDRAG_SAK_SCOPE: dev-fss.bidrag.bidrag-sak
+  KODEVERK_URL: https://kodeverk.dev-fss-pub.nais.io
 
   BREVSERVER_ONLINEBREV_QUEUE: QA.Q2_475.BREVSERVER_ONLINEBREV
+  BREVSERVER_KVITTERING_QUEUE: QA.Q2_464.BREV_REPLY_QUE
   MQ_QUEUE_MANAGER: MQLS02
   MQ_PORT: 1413
   MQ_HOSTNAME: b27apvl220.preprod.local
-  MQ_CHANNEL: Q2_BDJOURNALPOST
+  MQ_CHANNEL: Q2_BDBESTILLING
   JAVA_OPTS: -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005
+azure_access_inbound:
+  - application: bisys
+    namespace: bidrag
+    cluster: dev-fss
