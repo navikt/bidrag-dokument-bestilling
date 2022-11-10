@@ -8,21 +8,9 @@ env:
   IMAGE: ghcr.io/${{ github.repository }}:${{ github.sha }}
 
 jobs:
-  verify:
-    name: Verify that release commit is present in main branch
-    runs-on: ubuntu-latest
-
-    steps:
-      - run: git clone --depth 1 https://www.github.com/${{ github.repository }}
-      - name: check if commit to build exists in main branch
-        run: |
-          cd $( echo ${{ github.repository }} | sed 's;navikt/;;' )
-          git log | grep -c ${{ github.sha }}
-
   build:
     name: Build release with maven and docker
     runs-on: ubuntu-latest
-    needs: verify
 
     steps:
       - uses: actions/checkout@v3
@@ -65,12 +53,3 @@ jobs:
           CLUSTER: prod-gcp
           RESOURCE: deploy/.nais/nais.yaml
           VARS: deploy/.nais/prod.yaml
-
-  tag:
-    runs-on: ubuntu-latest
-    name: Tag latest deploy to prod
-    needs: deploy
-
-    steps:
-      - uses: actions/checkout@v3
-      - uses: navikt/bidrag-git/tag@v1-tag

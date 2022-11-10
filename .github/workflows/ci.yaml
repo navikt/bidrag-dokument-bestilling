@@ -66,13 +66,3 @@ jobs:
           CLUSTER: dev-gcp
           RESOURCE: deploy/.nais/nais.yaml
           VARS: deploy/.nais/feature.yaml
-
-  bump_dev_version:
-    runs-on: ubuntu-latest
-    name: Bump SNAPSHOT version
-    needs: deploy
-    if: github.ref == 'refs/heads/main'
-
-    steps:
-      - uses: actions/checkout@v3
-      - uses: navikt/bidrag-git/tag-snap@v1-tag-snap
