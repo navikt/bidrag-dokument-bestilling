@@ -1,13 +1,16 @@
 package no.nav.bidrag.dokument.bestilling.model
 
+import io.swagger.v3.oas.annotations.media.Schema
+
+@Schema(description = "Metadata som brukes ved bestilling av ny dokument")
 data class DokumentBestillingRequest(
     val mottakerId: Ident,
-    val samhandlerInformasjon: SamhandlerInformasjon? = null,
-    val saksbehandler: Saksbehandler? = null,
+    @Schema(description = "Informasjon samhandler hvis mottakerid er en samhandlerid. Påkrevd hvis mottaker er en samhandler") val samhandlerInformasjon: SamhandlerInformasjon? = null,
+    @Schema(description = "Informasjon om saksbehandler som skal brukes ved opprettelse av dokument") val saksbehandler: Saksbehandler? = null,
     val gjelderId: Ident? = null,
     val saksnummer: String,
     val vedtaksId: String? = null,
-    val dokumentReferanse: String? = null,
+    @Schema(description = "Dokumentreferanse dokumentet skal bli opprettet med. Det vil ikke bli opprettet ny journalpost hvis dette er satt.") val dokumentReferanse: String? = null,
     val tittel: String? = null,
     val enhet: String? = null,
     val spraak: String? = null,
