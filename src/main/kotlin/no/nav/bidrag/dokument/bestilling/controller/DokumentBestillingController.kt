@@ -37,7 +37,9 @@ class DokumentBestillingController(var dokumentBestillingService: DokumentBestil
     fun bestillBrev(@RequestBody bestillingRequest: DokumentBestillingRequest, @PathVariable brevKode: BrevKode): DokumentBestillingResponse {
         LOGGER.info("Bestiller dokument for brevkode $brevKode og enhet ${bestillingRequest.enhet}")
         SECURE_LOGGER.info("Bestiller dokument for brevkode $brevKode med data $bestillingRequest og enhet ${bestillingRequest.enhet}")
-        return dokumentBestillingService.bestill(bestillingRequest, brevKode)
+        val result = dokumentBestillingService.bestill(bestillingRequest, brevKode)
+        LOGGER.info("Bestilt dokument for brevkode $brevKode og enhet ${bestillingRequest.enhet} med respons $result")
+        return result
     }
 
     @RequestMapping("/brevkoder", method = [RequestMethod.OPTIONS])
