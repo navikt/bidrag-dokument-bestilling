@@ -65,7 +65,7 @@ class DokumentMetadataCollector(
         return this
     }
 
-    fun addMottakerGjelder(): DokumentMetadataCollector{
+    fun addMottakerGjelder(): DokumentMetadataCollector {
         addMottaker()
         addGjelder()
         return this
@@ -92,24 +92,24 @@ class DokumentMetadataCollector(
 
         if (bidragspliktig != null) dokumentBestilling.roller.add(
             PartInfo(
-                    rolle = RolleType.BP,
-                    fodselsnummer = bidragspliktig.ident,
-                    navn = if (bidragspliktig.isKode6) "" else bidragspliktig.fornavnEtternavn,
-                    fodselsdato = hentFodselsdato(bidragspliktig),
-                    doedsdato = bidragspliktig.doedsdato,
-                    landkode = bidragspliktigAdresse?.land,
-                    landkode3 = bidragspliktigAdresse?.land3
+                rolle = RolleType.BP,
+                fodselsnummer = bidragspliktig.ident,
+                navn = if (bidragspliktig.isKode6) "" else bidragspliktig.fornavnEtternavn,
+                fodselsdato = hentFodselsdato(bidragspliktig),
+                doedsdato = bidragspliktig.doedsdato,
+                landkode = bidragspliktigAdresse?.land,
+                landkode3 = bidragspliktigAdresse?.land3
             )
         )
 
         val barn = sak.roller.filter { it.rolleType == RolleType.BA }
-        barn.filter { !it.foedselsnummer.isNullOrEmpty() }.forEach{
+        barn.filter { !it.foedselsnummer.isNullOrEmpty() }.forEach {
             val barnInfo = if (it.foedselsnummer!!.isDodfodt) null else personService.hentPerson(it.foedselsnummer, "Barn")
             if (barnInfo == null || !barnInfo.isDod) {
                 // TODO: Legg til RM fødselsnummer (mangler fra sak respons)
                 dokumentBestilling.roller.add(Barn(
                     fodselsnummer = it.foedselsnummer,
-                    navn = barnInfo?.let { if (barnInfo.isKode6) hentKode6NavnBarn(barnInfo) else barnInfo.fornavnEtternavn} ?: "",
+                    navn = barnInfo?.let { if (barnInfo.isKode6) hentKode6NavnBarn(barnInfo) else barnInfo.fornavnEtternavn } ?: "",
                     fodselsdato = barnInfo?.let { hentFodselsdato(barnInfo) },
                     fornavn = barnInfo?.let { if (barnInfo.isKode6) hentKode6NavnBarn(barnInfo) else barnInfo.fornavn }
                 ))
@@ -120,7 +120,7 @@ class DokumentMetadataCollector(
         return this
     }
 
-   private fun addGjelder(): DokumentMetadataCollector {
+    private fun addGjelder(): DokumentMetadataCollector {
         dokumentBestilling.gjelder = Gjelder(
             fodselsnummer = request.actualGjelderId,
             rolle = hentRolle(request.actualGjelderId)
@@ -129,7 +129,7 @@ class DokumentMetadataCollector(
     }
 
     private fun addMottaker(): DokumentMetadataCollector {
-        if (request.isMottakerSamhandler()){
+        if (request.isMottakerSamhandler()) {
             val samhandler = request.samhandlerInformasjon ?: throw SamhandlerManglerKontaktinformasjon("Samhandler med id ${request.mottakerId} mangler kontaktinformasjon")
             val adresse = samhandler.adresse
             dokumentBestilling.mottaker = Mottaker(
@@ -151,26 +151,30 @@ class DokumentMetadataCollector(
         } else {
             val mottaker = hentMottaker()
             val adresse = hentMottakerAdresse()
-            val postnummerSted = if (adresse.postnummer.isNullOrEmpty() && adresse.poststed.isNullOrEmpty()) null else "${adresse.postnummer ?: ""} ${adresse.poststed ?: ""}".trim()
-            val landNavn = adresse.land3?.let { kodeverkService.hentLandFullnavnForKode(it) }
+
             dokumentBestilling.mottaker = Mottaker(
                 fodselsnummer = mottaker.ident,
                 fodselsdato = mottaker.foedselsdato,
                 navn = mottaker.kortNavn ?: mottaker.navn,
                 rolle = hentRolle(mottaker.ident),
                 spraak = personService.hentSpraak(mottaker.ident),
-                adresse = Adresse(
-                    adresselinje1 = adresse.adresselinje1!!,
-                    adresselinje2 = adresse.adresselinje2,
-                    adresselinje3 = adresse.adresselinje3 ?: postnummerSted,
-                    adresselinje4 = if (!adresse.land3.isNullOrEmpty() && adresse.land3 != LANDKODE3_NORGE) landNavn else null,
-                    bruksenhetsnummer = if (adresse.bruksenhetsnummer == BRUKSHENETSNUMMER_STANDARD) null else adresse.bruksenhetsnummer,
-                    poststed = adresse.poststed,
-                    postnummer = adresse.postnummer,
-                    landkode = adresse.land,
-                    landkode3 = adresse.land3,
-                    land = landNavn
-                )
+                adresse = if (adresse != null) {
+                    val postnummerSted = if (adresse.postnummer.isNullOrEmpty() && adresse.poststed.isNullOrEmpty()) null
+                                        else "${adresse.postnummer ?: ""} ${adresse.poststed ?: ""}".trim()
+                    val landNavn = adresse.land3?.let { kodeverkService.hentLandFullnavnForKode(it) }
+                    Adresse(
+                        adresselinje1 = adresse.adresselinje1!!,
+                        adresselinje2 = adresse.adresselinje2,
+                        adresselinje3 = adresse.adresselinje3 ?: postnummerSted,
+                        adresselinje4 = if (!adresse.land3.isNullOrEmpty() && adresse.land3 != LANDKODE3_NORGE) landNavn else null,
+                        bruksenhetsnummer = if (adresse.bruksenhetsnummer == BRUKSHENETSNUMMER_STANDARD) null else adresse.bruksenhetsnummer,
+                        poststed = adresse.poststed,
+                        postnummer = adresse.postnummer,
+                        landkode = adresse.land,
+                        landkode3 = adresse.land3,
+                        land = landNavn
+                    )
+                } else null
             )
         }
 
@@ -201,20 +205,21 @@ class DokumentMetadataCollector(
 
     fun getBestillingData(): DokumentBestilling = dokumentBestilling
 
-    private val DokumentBestillingRequest.actualGjelderId get() =
-        (if (hentRolle(this.gjelderId) != null) this.gjelderId else hentGjelderFraRoller()) ?: throw ManglerGjelderException("Fant ingen gjelder")
+    private val DokumentBestillingRequest.actualGjelderId get() = (if (hentRolle(this.gjelderId) != null) this.gjelderId else hentGjelderFraRoller()) ?: throw ManglerGjelderException("Fant ingen gjelder")
 
     private fun hentFodselsdato(person: HentPersonResponse): LocalDate? {
         return if (person.isKode6) null else person.foedselsdato
     }
+
     private fun hentKode6NavnBarn(person: HentPersonResponse): String {
         val fodtaar = person.foedselsdato?.year
-        return when(dokumentBestilling.spraak){
-            SpraakKoder.BOKMAL -> if(fodtaar==null) "(BARN)" else "(BARN FØDT I $fodtaar)"
-            SpraakKoder.NYNORSK -> if(fodtaar==null) "(BARN)" else "(BARN FØDD I $fodtaar)"
-            else -> if(fodtaar==null) "(CHILD)" else "(CHILD BORN IN $fodtaar)"
+        return when (dokumentBestilling.spraak) {
+            SpraakKoder.BOKMAL -> if (fodtaar == null) "(BARN)" else "(BARN FØDT I $fodtaar)"
+            SpraakKoder.NYNORSK -> if (fodtaar == null) "(BARN)" else "(BARN FØDD I $fodtaar)"
+            else -> if (fodtaar == null) "(CHILD)" else "(CHILD BORN IN $fodtaar)"
         }
     }
+
     private fun hentRolle(ident: String?): RolleType? {
         return sak.roller.find { it.foedselsnummer == ident }?.rolleType
     }
@@ -222,33 +227,35 @@ class DokumentMetadataCollector(
     private fun hentIdentForRolle(rolle: RolleType): String? {
         return sak.roller.find { it.rolleType == rolle }?.foedselsnummer
     }
+
     private fun hentBidragsmottaker(): HentPersonResponse? {
         val bmFnr = hentIdentForRolle(RolleType.BM)
-        return if(!bmFnr.isNullOrEmpty()) personService.hentPerson(bmFnr, "Bidragsmottaker") else null
+        return if (!bmFnr.isNullOrEmpty()) personService.hentPerson(bmFnr, "Bidragsmottaker") else null
     }
 
     private fun hentBidragspliktig(): HentPersonResponse? {
         val fnr = hentIdentForRolle(RolleType.BP)
-        return if(!fnr.isNullOrEmpty()) personService.hentPerson(fnr, "Bidragspliktig") else null
+        return if (!fnr.isNullOrEmpty()) personService.hentPerson(fnr, "Bidragspliktig") else null
     }
 
     private fun hentBidragspliktigAdresse(): HentPostadresseResponse? {
         val fnr = hentIdentForRolle(RolleType.BP)
-        return if(!fnr.isNullOrEmpty()) personService.hentPersonAdresse(fnr, "Bidragspliktig adresse") else null
+        return if (!fnr.isNullOrEmpty()) personService.hentPersonAdresse(fnr, "Bidragspliktig adresse") else null
     }
 
     private fun hentBidragsmottakerAdresse(): HentPostadresseResponse? {
         val fnr = hentIdentForRolle(RolleType.BM)
-        return if(!fnr.isNullOrEmpty()) personService.hentPersonAdresse(fnr, "Bidragsmottaker adresse") else null
+        return if (!fnr.isNullOrEmpty()) personService.hentPersonAdresse(fnr, "Bidragsmottaker adresse") else null
     }
 
     private fun hentMottaker(): HentPersonResponse {
         return personService.hentPerson(request.mottakerId, "Mottaker")
     }
 
-    private fun hentMottakerAdresse(): HentPostadresseResponse {
+    private fun hentMottakerAdresse(): HentPostadresseResponse? {
         return personService.hentPersonAdresse(request.mottakerId, "Mottaker")
     }
+
     private fun hentGjelderFraRoller(): Ident? {
         return hentIdentForRolle(RolleType.BM) ?: hentIdentForRolle(RolleType.BP) ?: hentIdentForRolle(RolleType.BA)
     }

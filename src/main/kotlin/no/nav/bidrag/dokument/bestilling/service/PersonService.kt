@@ -18,10 +18,10 @@ class PersonService(private var bidragPersonConsumer: BidragPersonConsumer) {
        }
     }
 
-    fun hentPersonAdresse(personId: String, rolle: String? = "UKJENT"): HentPostadresseResponse {
+    fun hentPersonAdresse(personId: String, rolle: String? = "UKJENT"): HentPostadresseResponse? {
         return bidragPersonConsumer.hentAdresse(personId) ?: run {
             SECURE_LOGGER.warn("Fant ikke adresse for person $personId med rolle $rolle")
-            throw FantIkkePersonException("Fant ikke adresse for person med rolle $rolle")
+            null
         }
     }
 

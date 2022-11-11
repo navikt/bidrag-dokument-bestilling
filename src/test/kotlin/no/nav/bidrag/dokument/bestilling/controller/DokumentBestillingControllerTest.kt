@@ -301,6 +301,41 @@ class DokumentBestillingControllerTest: AbstractControllerTest() {
     }
 
     @Test
+    fun `should produse XML without adresse when mottaker has not adresse`(){
+        val brevKode = BrevKode.BI01S02
+        stubDefaultValues()
+        stubUtils.stubHentAdresse(postAdresse = null, status = HttpStatus.NO_CONTENT)
+
+        stubUtils.stubOpprettJournalpost(createOpprettJournalpostResponse(dokumentReferanse = "DOKREF_1"))
+        val request = DokumentBestillingRequest(
+            mottakerId = BM1.ident,
+            gjelderId = BP1.ident,
+            saksnummer = "123213",
+            enhet = "4806"
+        )
+
+        jmsTestConsumer.withOnlinebrev {
+            val response = httpHeaderTestRestTemplate.exchange(
+                "${rootUri()}/bestill/${brevKode.name}",
+                HttpMethod.POST,
+                HttpEntity(request),
+                DokumentBestillingResponse::class.java
+            )
+
+            response.statusCode shouldBe HttpStatus.OK
+
+            val message = this.getMessageAsObject(BrevBestilling::class.java)!!
+            message.brev?.mottaker?.navn shouldBe BM1.navn
+            message.brev?.mottaker?.adresselinje1 shouldBe ""
+            message.brev?.mottaker?.adresselinje2 shouldBe ""
+            message.brev?.mottaker?.adresselinje3 shouldBe ""
+            message.brev?.mottaker?.boligNr shouldBe ""
+            message.brev?.mottaker?.postnummer shouldBe ""
+
+        }
+    }
+
+    @Test
     fun `should not send XML when opprett journalpost fails`(){
         val brevKode = BrevKode.BI01X01
         stubDefaultValues()
