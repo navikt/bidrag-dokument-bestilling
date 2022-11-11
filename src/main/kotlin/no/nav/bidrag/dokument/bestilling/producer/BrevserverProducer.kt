@@ -152,13 +152,15 @@ class BrevserverProducer(
             fodselsdato = mottaker.fodselsdato
 
             val adresse = mottaker.adresse
-            adresselinje1 = adresse.adresselinje1
-            adresselinje2 = adresse.adresselinje2
-            adresselinje3 = adresse.adresselinje3
-            adresselinje4 = adresse.adresselinje4
-            boligNr = adresse.bruksenhetsnummer
-            postnummer = adresse.postnummer ?: ""
+            if (adresse != null){
+                adresselinje1 = adresse.adresselinje1
+                adresselinje2 = adresse.adresselinje2
+                adresselinje3 = adresse.adresselinje3
+                adresselinje4 = adresse.adresselinje4
+                boligNr = adresse.bruksenhetsnummer
+                postnummer = adresse.postnummer ?: ""
 //            landkode = adresse.landkode3
+            }
         }
     }
 }

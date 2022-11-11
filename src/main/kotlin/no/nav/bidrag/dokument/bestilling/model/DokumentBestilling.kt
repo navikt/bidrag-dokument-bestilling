@@ -80,7 +80,7 @@ data class Mottaker(
     var fodselsnummer: String,
     var navn: String,
     var spraak: String,
-    val adresse: Adresse,
+    val adresse: Adresse?,
     val rolle: RolleType?,
     val fodselsdato: LocalDate?,
 )

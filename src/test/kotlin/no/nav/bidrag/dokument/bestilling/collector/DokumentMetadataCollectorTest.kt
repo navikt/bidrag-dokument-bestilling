@@ -1,8 +1,6 @@
 package no.nav.bidrag.dokument.bestilling.collector
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.ninjasquad.springmockk.MockkBean
-import com.ninjasquad.springmockk.SpykBean
 import io.kotest.assertions.assertSoftly
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.assertions.withClue
@@ -13,11 +11,9 @@ import io.mockk.clearAllMocks
 import io.mockk.every
 import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
-import io.mockk.impl.annotations.RelaxedMockK
 import io.mockk.junit5.MockKExtension
 import no.nav.bidrag.dokument.bestilling.config.SaksbehandlerInfoManager
 import no.nav.bidrag.dokument.bestilling.consumer.KodeverkConsumer
-import no.nav.bidrag.dokument.bestilling.model.BrevKode
 import no.nav.bidrag.dokument.bestilling.model.DISREKSJONSKODE_KODE_6
 import no.nav.bidrag.dokument.bestilling.model.DokumentBestilling
 import no.nav.bidrag.dokument.bestilling.model.DokumentBestillingRequest
@@ -26,8 +22,6 @@ import no.nav.bidrag.dokument.bestilling.model.KodeverkResponse
 import no.nav.bidrag.dokument.bestilling.model.RolleType
 import no.nav.bidrag.dokument.bestilling.model.SakRolle
 import no.nav.bidrag.dokument.bestilling.model.Saksbehandler
-import no.nav.bidrag.dokument.bestilling.model.SaksbehandlerInfoResponse
-import no.nav.bidrag.dokument.bestilling.model.SamhandlerInformasjon
 import no.nav.bidrag.dokument.bestilling.model.SamhandlerManglerKontaktinformasjon
 import no.nav.bidrag.dokument.bestilling.service.KodeverkService
 import no.nav.bidrag.dokument.bestilling.service.OrganisasjonService
@@ -177,6 +171,26 @@ internal class DokumentMetadataCollectorTest {
             bestilling.tittel shouldBe DEFAULT_TITLE_DOKUMENT
             bestilling.enhet shouldBe "4806"
             bestilling.rmISak shouldBe false
+        }
+    }
+
+    @Test
+    fun `should map when person missing adresse`(){
+        mockDefaultValues()
+        every { personService.hentPersonAdresse(any(), any()) } returns null
+        val request = DokumentBestillingRequest(
+            mottakerId = BM1.ident,
+            gjelderId = BM1.ident,
+            saksnummer = DEFAULT_SAKSNUMMER,
+            tittel = DEFAULT_TITLE_DOKUMENT,
+            enhet = "4806",
+            spraak = "NB"
+        )
+        val bestilling = mapToBestillingsdata(request)
+        assertSoftly {
+            bestilling.mottaker?.adresse shouldBe null
+            bestilling.roller.bidragspliktig?.landkode3 shouldBe null
+            bestilling.roller.bidragsmottaker?.landkode3 shouldBe null
         }
     }
 

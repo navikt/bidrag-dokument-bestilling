@@ -72,12 +72,12 @@ class StubUtils {
         )
     }
 
-    fun stubHentAdresse(ident: String? = null, postAdresse: HentPostadresseResponse = createPostAdresseResponse()){
+    fun stubHentAdresse(ident: String? = null, postAdresse: HentPostadresseResponse? = createPostAdresseResponse(), status: HttpStatus = HttpStatus.OK){
         WireMock.stubFor(
             WireMock.post(WireMock.urlMatching("/person/adresse/post")).withRequestBody(
                 if(ident.isNullOrEmpty()) AnythingPattern() else ContainsPattern(ident)).willReturn(
                 aClosedJsonResponse()
-                    .withStatus(HttpStatus.OK.value())
+                    .withStatus(status.value())
                     .withBody(convertObjectToString(postAdresse))
             )
         )
