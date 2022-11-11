@@ -130,8 +130,7 @@ class DokumentMetadataCollector(
 
     private fun addMottaker(): DokumentMetadataCollector {
         if (request.isMottakerSamhandler()) {
-            val samhandler = request.samhandlerInformasjon
-                ?: throw SamhandlerManglerKontaktinformasjon("Samhandler med id ${request.mottakerId} mangler kontaktinformasjon")
+            val samhandler = request.samhandlerInformasjon ?: throw SamhandlerManglerKontaktinformasjon("Samhandler med id ${request.mottakerId} mangler kontaktinformasjon")
             val adresse = samhandler.adresse
             dokumentBestilling.mottaker = Mottaker(
                 fodselsnummer = request.mottakerId,
@@ -183,8 +182,7 @@ class DokumentMetadataCollector(
     }
 
     fun addEnhetKontaktInfo(): DokumentMetadataCollector {
-        val enhetKontaktInfo = organisasjonService.hentEnhetKontaktInfo(enhet, dokumentBestilling.spraak)
-            ?: throw FantIkkeEnhetException("Fant ikke enhet $enhet for spraak ${dokumentBestilling.spraak}")
+        val enhetKontaktInfo = organisasjonService.hentEnhetKontaktInfo(enhet, dokumentBestilling.spraak) ?: throw FantIkkeEnhetException("Fant ikke enhet $enhet for spraak ${dokumentBestilling.spraak}")
 
         dokumentBestilling.kontaktInfo = EnhetKontaktInfo(
             navn = enhetKontaktInfo.enhetNavn ?: "",
@@ -207,9 +205,7 @@ class DokumentMetadataCollector(
 
     fun getBestillingData(): DokumentBestilling = dokumentBestilling
 
-    private val DokumentBestillingRequest.actualGjelderId
-        get() =
-            (if (hentRolle(this.gjelderId) != null) this.gjelderId else hentGjelderFraRoller()) ?: throw ManglerGjelderException("Fant ingen gjelder")
+    private val DokumentBestillingRequest.actualGjelderId get() = (if (hentRolle(this.gjelderId) != null) this.gjelderId else hentGjelderFraRoller()) ?: throw ManglerGjelderException("Fant ingen gjelder")
 
     private fun hentFodselsdato(person: HentPersonResponse): LocalDate? {
         return if (person.isKode6) null else person.foedselsdato
@@ -266,8 +262,7 @@ class DokumentMetadataCollector(
 
     private fun hentSaksbehandler(request: DokumentBestillingRequest): Saksbehandler {
         if (request.saksbehandler != null && !request.saksbehandler.ident.isNullOrEmpty()) {
-            val saksbehandlerNavn = request.saksbehandler.navn ?: saksbehandlerInfoManager.hentSaksbehandler()?.navn
-            ?: saksbehandlerInfoManager.hentSaksbehandlerBrukerId()
+            val saksbehandlerNavn = request.saksbehandler.navn ?: saksbehandlerInfoManager.hentSaksbehandler()?.navn ?: saksbehandlerInfoManager.hentSaksbehandlerBrukerId()
             return Saksbehandler(request.saksbehandler.ident, saksbehandlerNavn)
         }
 
