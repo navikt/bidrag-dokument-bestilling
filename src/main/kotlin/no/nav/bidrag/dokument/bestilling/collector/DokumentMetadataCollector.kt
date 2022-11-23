@@ -163,7 +163,7 @@ class DokumentMetadataCollector(
                                         else "${adresse.postnummer ?: ""} ${adresse.poststed ?: ""}".trim()
                     val landNavn = adresse.land3?.let { kodeverkService.hentLandFullnavnForKode(it) }
                     Adresse(
-                        adresselinje1 = adresse.adresselinje1!!,
+                        adresselinje1 = adresse.adresselinje1 ?: "",
                         adresselinje2 = adresse.adresselinje2,
                         adresselinje3 = adresse.adresselinje3 ?: postnummerSted,
                         adresselinje4 = if (!adresse.land3.isNullOrEmpty() && adresse.land3 != LANDKODE3_NORGE) landNavn else null,
