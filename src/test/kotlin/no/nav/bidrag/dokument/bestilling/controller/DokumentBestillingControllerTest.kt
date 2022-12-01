@@ -174,9 +174,9 @@ class DokumentBestillingControllerTest: AbstractControllerTest() {
                         "]," +
                         "\"tilknyttSaker\":[\"$saksnummer\"]," +
                         "\"behandlingstema\":null,\"tema\":null," +
-                        "\"journalposttype\":\"UTGAAENDE\"," +
+                        "\"journalposttype\":\"UTGÅENDE\"," +
                         "\"referanseId\":null," +
-                        "\"journalfoerendeEnhet\":\"4806\"," +
+                        "\"journalførendeEnhet\":\"4806\"," +
                         "\"saksbehandlerIdent\":\"Z99999\"}"
                 )
             }
