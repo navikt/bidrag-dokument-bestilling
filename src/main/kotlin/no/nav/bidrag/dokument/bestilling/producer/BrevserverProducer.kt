@@ -52,6 +52,8 @@ class BrevserverProducer(
                     tittel = tittel,
                     brevkode = brevKode.name
                 )),
+                datoMottatt = null,
+                kanal = null,
                 gjelderIdent = dokumentBestilling.gjelder?.fodselsnummer!!,
                 avsenderMottaker = AvsenderMottakerDto(dokumentBestilling.mottaker?.navn, dokumentBestilling.mottaker?.fodselsnummer!!),
                 journalposttype = when(brevKode.brevtype){
