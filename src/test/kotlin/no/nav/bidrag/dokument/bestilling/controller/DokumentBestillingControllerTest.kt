@@ -167,18 +167,11 @@ class DokumentBestillingControllerTest: AbstractControllerTest() {
                 stubUtils.Verify().verifyOpprettJournalpostCalledWith(
                     "{\"skalFerdigstilles\":false," +
                             "\"tittel\":\"$tittel\"," +
-                            "\"gjelder\":null," +
                             "\"gjelderIdent\":\"$gjelderId\"," +
                             "\"avsenderMottaker\":{\"navn\":\"${BM1.navn}\",\"ident\":\"$mottakerId\",\"type\":\"FNR\"}," +
                             "\"dokumenter\":[{\"tittel\":\"$tittel\",\"brevkode\":\"${brevKode.name}\"}]," +
                             "\"tilknyttSaker\":[\"$saksnummer\"]," +
-                            "\"behandlingstema\":null," +
-                            "\"datoMottatt\":null," +
-                            "\"kanal\":null," +
-                            "\"tema\":null," +
                             "\"journalposttype\":\"UTGÅENDE\"," +
-                            "\"referanseId\":null," +
-                            "\"journalfoerendeEnhet\":null," +
                             "\"journalførendeEnhet\":\"4806\"," +
                             "\"saksbehandlerIdent\":\"Z99999\"}"
                 )
