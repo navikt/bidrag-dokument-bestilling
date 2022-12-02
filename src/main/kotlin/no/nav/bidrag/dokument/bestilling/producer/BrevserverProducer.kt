@@ -11,11 +11,9 @@ import no.nav.bidrag.dokument.bestilling.model.BrevType
 import no.nav.bidrag.dokument.bestilling.model.DokumentBestilling
 import no.nav.bidrag.dokument.bestilling.model.DokumentBestillingResult
 import no.nav.bidrag.dokument.bestilling.model.EnhetKontaktInfo
-import no.nav.bidrag.dokument.bestilling.model.LANDKODE3_NORGE
 import no.nav.bidrag.dokument.bestilling.model.Mottaker
 import no.nav.bidrag.dokument.bestilling.model.RolleType
 import no.nav.bidrag.dokument.bestilling.model.brevbestilling
-import no.nav.bidrag.dokument.dto.AktorDto
 import no.nav.bidrag.dokument.dto.AvsenderMottakerDto
 import no.nav.bidrag.dokument.dto.JournalpostType
 import no.nav.bidrag.dokument.dto.OpprettDokumentDto
@@ -48,16 +46,16 @@ class BrevserverProducer(
             val tittel = dokumentBestilling.tittel ?: brevKode.beskrivelse
             val response = bidragDokumentConsumer.opprettJournalpost(OpprettJournalpostRequest(
                 tittel = tittel,
-                journalfoerendeEnhet = dokumentBestilling.enhet,
+                journalførendeEnhet = dokumentBestilling.enhet,
                 tilknyttSaker = listOf(dokumentBestilling.saksnummer!!),
                 dokumenter = listOf(OpprettDokumentDto(
                     tittel = tittel,
                     brevkode = brevKode.name
                 )),
-                gjelder = AktorDto(dokumentBestilling.gjelder?.fodselsnummer!!),
+                gjelderIdent = dokumentBestilling.gjelder?.fodselsnummer!!,
                 avsenderMottaker = AvsenderMottakerDto(dokumentBestilling.mottaker?.navn, dokumentBestilling.mottaker?.fodselsnummer!!),
                 journalposttype = when(brevKode.brevtype){
-                    BrevType.UTGAAENDE -> JournalpostType.UTGAAENDE
+                    BrevType.UTGÅENDE -> JournalpostType.UTGÅENDE
                     BrevType.NOTAT -> JournalpostType.NOTAT
                 },
                 saksbehandlerIdent = dokumentBestilling.saksbehandler?.ident

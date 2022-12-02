@@ -5,7 +5,7 @@ object BestillingSystem {
 }
 
 enum class BrevType {
-    UTGAAENDE,
+    UTGÅENDE,
     NOTAT
 }
 typealias BestillingSystemType = String
@@ -15,8 +15,8 @@ enum class BrevKode(val beskrivelse: String, var brevtype: BrevType, val bestill
     BI01P18("Saksbehandlingsnotat", BrevType.NOTAT, BestillingSystem.BREVSERVER),
     BI01X01("REFERAT FRA SAMTALE", BrevType.NOTAT, BestillingSystem.BREVSERVER),
     BI01X02("ELEKTRONISK DIALOG", BrevType.NOTAT, BestillingSystem.BREVSERVER),
-    BI01S10("KOPIFORSIDE T", BrevType.UTGAAENDE, BestillingSystem.BREVSERVER),
-    BI01S67("ADRESSEFORESPØRSEL", BrevType.UTGAAENDE, BestillingSystem.BREVSERVER),
-    BI01S02("Fritekstbrev", BrevType.UTGAAENDE, BestillingSystem.BREVSERVER),
-    BI01S09("Varsel opphør bidrag v 18 år", BrevType.UTGAAENDE, BestillingSystem.BREVSERVER, false),
+    BI01S10("KOPIFORSIDE T", BrevType.UTGÅENDE, BestillingSystem.BREVSERVER),
+    BI01S67("ADRESSEFORESPØRSEL", BrevType.UTGÅENDE, BestillingSystem.BREVSERVER),
+    BI01S02("Fritekstbrev", BrevType.UTGÅENDE, BestillingSystem.BREVSERVER),
+    BI01S09("Varsel opphør bidrag v 18 år", BrevType.UTGÅENDE, BestillingSystem.BREVSERVER, false),
 }

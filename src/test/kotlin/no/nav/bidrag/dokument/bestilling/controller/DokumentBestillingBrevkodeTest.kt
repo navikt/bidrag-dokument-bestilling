@@ -2,15 +2,11 @@ package no.nav.bidrag.dokument.bestilling.controller
 
 import com.ninjasquad.springmockk.SpykBean
 import io.kotest.assertions.assertSoftly
-import io.kotest.matchers.collections.shouldHaveAtLeastSize
 import io.kotest.matchers.collections.shouldHaveSize
-import io.kotest.matchers.equality.shouldBeEqualToComparingFields
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
 import io.mockk.verify
-import no.nav.bidrag.dokument.bestilling.model.BrevBestilling
 import no.nav.bidrag.dokument.bestilling.model.BrevKode
-import no.nav.bidrag.dokument.bestilling.model.BrevKontaktinfo
 import no.nav.bidrag.dokument.bestilling.model.BrevType
 import no.nav.bidrag.dokument.bestilling.model.DokumentBestillingRequest
 import no.nav.bidrag.dokument.bestilling.model.DokumentBestillingResponse
@@ -40,7 +36,7 @@ class DokumentBestillingBrevkodeTest: AbstractControllerTest(){
 
     companion object {
         @JvmStatic
-        fun brevkoderUtgaaende() = BrevKode.values().filter { it.brevtype == BrevType.UTGAAENDE }
+        fun brevkoderUtgaaende() = BrevKode.values().filter { it.brevtype == BrevType.UTGÅENDE }
 
         @JvmStatic
         fun brevkoderEnhetKontaktinfo(): List<BrevKode> {

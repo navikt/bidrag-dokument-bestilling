@@ -164,20 +164,16 @@ class DokumentBestillingControllerTest: AbstractControllerTest() {
                 stubUtils.Verify().verifyHentPersonCalled(BARN1.ident)
                 stubUtils.Verify().verifyHentPersonCalled(BARN2.ident)
                 stubUtils.Verify().verifyHentPersonCalled(BARN2.ident)
-                stubUtils.Verify().verifyOpprettJournalpostCalledWith("{" +
-                        "\"tittel\":\"$tittel\"," +
-                        "\"gjelder\":{\"ident\":\"$gjelderId\",\"type\":null}," +
-                        "\"avsenderMottaker\":" +
-                            "{\"navn\":\"${BM1.navn}\",\"ident\":\"$mottakerId\",\"type\":\"UKJENT\"}," +
-                        "\"dokumenter\":[" +
-                            "{\"tittel\":\"$tittel\",\"brevkode\":\"${brevKode.name}\",\"dokumentreferanse\":null,\"dokument\":null}" +
-                        "]," +
-                        "\"tilknyttSaker\":[\"$saksnummer\"]," +
-                        "\"behandlingstema\":null,\"tema\":null," +
-                        "\"journalposttype\":\"UTGAAENDE\"," +
-                        "\"referanseId\":null," +
-                        "\"journalfoerendeEnhet\":\"4806\"," +
-                        "\"saksbehandlerIdent\":\"Z99999\"}"
+                stubUtils.Verify().verifyOpprettJournalpostCalledWith(
+                    "{\"skalFerdigstilles\":false," +
+                            "\"tittel\":\"$tittel\"," +
+                            "\"gjelderIdent\":\"$gjelderId\"," +
+                            "\"avsenderMottaker\":{\"navn\":\"${BM1.navn}\",\"ident\":\"$mottakerId\",\"type\":\"FNR\"}," +
+                            "\"dokumenter\":[{\"tittel\":\"$tittel\",\"brevkode\":\"${brevKode.name}\"}]," +
+                            "\"tilknyttSaker\":[\"$saksnummer\"]," +
+                            "\"journalposttype\":\"UTGÅENDE\"," +
+                            "\"journalførendeEnhet\":\"4806\"," +
+                            "\"saksbehandlerIdent\":\"Z99999\"}"
                 )
             }
         }
