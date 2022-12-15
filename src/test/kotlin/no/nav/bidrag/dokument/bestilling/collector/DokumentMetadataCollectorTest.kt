@@ -140,7 +140,7 @@ internal class DokumentMetadataCollectorTest {
             bestilling.kontaktInfo?.postadresse?.land shouldBe "Norge"
 
             bestilling.saksbehandler?.ident shouldBe SAKSBEHANDLER_IDENT
-            bestilling.saksbehandler?.navn shouldBe SAKSBEHANDLER_NAVN
+            bestilling.saksbehandler?.navn shouldBe "Saksbehandler Mellomnavn Saksbehandlersen"
 
             bestilling.roller shouldHaveSize 4
             bestilling.roller.bidragsmottaker?.fodselsnummer shouldBe BM1.ident
