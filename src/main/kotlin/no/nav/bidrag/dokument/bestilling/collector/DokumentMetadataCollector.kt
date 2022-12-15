@@ -266,8 +266,9 @@ class DokumentMetadataCollector(
             return Saksbehandler(request.saksbehandler.ident, saksbehandlerNavn)
         }
 
-        val saksbehandlerId = saksbehandlerInfoManager.hentSaksbehandlerBrukerId() ?: ""
-        val saksbehandlerNavn = saksbehandlerInfoManager.hentSaksbehandler()?.navn ?: saksbehandlerInfoManager.hentSaksbehandlerBrukerId()
+        val saksbehandler = saksbehandlerInfoManager.hentSaksbehandler()
+        val saksbehandlerId = saksbehandler?.ident ?: ""
+        val saksbehandlerNavn = saksbehandler?.fornavnEtternavn ?: ""
         return Saksbehandler(saksbehandlerId, saksbehandlerNavn)
     }
 }

@@ -2,17 +2,16 @@ package no.nav.bidrag.dokument.bestilling.model
 
 
 data class Saksbehandler(
-    var ident: String? = null,
-    var navn: String? = null
+    val ident: String? = null,
+    val navn: String? = null
 ) {
-    fun hentIdentMedNavn() = "$ident - $navn"
-    fun hentSaksbehandlerInfo(journalforendeEnhet: String) = "$navn ($ident - $journalforendeEnhet)"
-    fun tilEnhet(enhetsnummer: String?): SaksbehandlerMedEnhet {
-        return SaksbehandlerMedEnhet(this, enhetsnummer?:"9999")
-    }
-}
-
-data class SaksbehandlerMedEnhet(val saksbehandler: Saksbehandler, val enhetsnummer: String){
-    fun hentSaksbehandlerInfo() = saksbehandler.hentSaksbehandlerInfo(enhetsnummer)
-
+    val fornavnEtternavn: String get() = run {
+            if (navn.isNullOrEmpty()) {
+                return navn ?: ""
+            }
+            val navnDeler = navn.split(",\\s*".toRegex(), limit = 2).toTypedArray()
+            return if (navnDeler.size > 1) {
+                navnDeler[1] + " " + navnDeler[0]
+            } else navn
+        }
 }
