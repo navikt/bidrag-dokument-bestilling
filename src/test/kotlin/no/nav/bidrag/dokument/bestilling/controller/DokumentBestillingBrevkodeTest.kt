@@ -97,7 +97,7 @@ class DokumentBestillingBrevkodeTest: AbstractControllerTest(){
                     bestilling.gjelder?.rolle shouldBe RolleType.BP
 
                     bestilling.saksbehandler?.ident shouldBe SAKSBEHANDLER_IDENT
-                    bestilling.saksbehandler?.navn shouldBe SAKSBEHANDLER_NAVN
+                    bestilling.saksbehandler?.navn shouldBe "Saksbehandler Mellomnavn Saksbehandlersen"
 
                     bestilling.spraak shouldBe "NB"
                     bestilling.saksnummer shouldBe saksnummer

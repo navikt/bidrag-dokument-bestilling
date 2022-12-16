@@ -24,7 +24,7 @@ class SaksbehandlerInfoManager(
     fun hentSaksbehandler(): Saksbehandler? {
         return try {
             val saksbehandlerIdent = hentSaksbehandlerBrukerId() ?: return null
-            val saksbehandlerNavn = bidragOrganisasjonConsumer.hentSaksbehandlerInfo(saksbehandlerIdent)!!.navn
+            val saksbehandlerNavn = bidragOrganisasjonConsumer.hentSaksbehandlerInfo(saksbehandlerIdent)?.navn
             Saksbehandler(saksbehandlerIdent, saksbehandlerNavn)
         } catch (e: Exception) {
             null

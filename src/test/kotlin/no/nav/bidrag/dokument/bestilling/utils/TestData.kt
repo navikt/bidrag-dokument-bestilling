@@ -19,7 +19,7 @@ val DEFAULT_SAKSNUMMER = "123312321321"
 val SAMHANDLER_IDENT = "80000123213"
 
 val SAKSBEHANDLER_IDENT = "Z99999"
-val SAKSBEHANDLER_NAVN = "Saksbehandler Saksbehandlersen"
+val SAKSBEHANDLER_NAVN = "Saksbehandlersen, Saksbehandler Mellomnavn"
 
 val SAMHANDLER_INFO = SamhandlerInformasjon(
     navn = "Samhandler samhandlersen",

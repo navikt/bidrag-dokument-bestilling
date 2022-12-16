@@ -156,7 +156,7 @@ class DokumentBestillingControllerTest: AbstractControllerTest() {
                 message.brev?.soknad?.rmISak shouldBe false
                 message.brev?.soknad?.sendtDato shouldBe LocalDate.now()
 
-                message.brev?.saksbehandler?.navn shouldBe SAKSBEHANDLER_NAVN
+                message.brev?.saksbehandler?.navn shouldBe "Saksbehandler Mellomnavn Saksbehandlersen"
 
                 stubUtils.Verify().verifyHentEnhetKontaktInfoCalledWith()
                 stubUtils.Verify().verifyHentPersonCalled(BM1.ident)
