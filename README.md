@@ -42,7 +42,7 @@ kubectl config use dev-gcp
 Deretter kjør følgende kommando for å importere secrets. Viktig at filen som opprettes ikke committes til git
 
 ```bash
-kubectl exec --tty deployment/bidrag-dokument-bestilling-feature printenv | grep -E 'AZURE_APP_CLIENT_ID|AZURE_APP_CLIENT_SECRET|AZURE_OPENID_CONFIG_TOKEN_ENDPOINT|AZURE_APP_TENANT_ID|AZURE_APP_WELL_KNOWN_URL|KODEVERK_URL|BIDRAG_PERSON_URL|BIDRAG_DOKUMENT_URL|BIDRAG_ORGANISASJON_URL|BIDRAG_SAK_URL|SCOPE' > src/main/resources/application-lokal-nais-secrets.properties
+kubectl exec --tty deployment/bidrag-dokument-bestilling-feature printenv | grep -E 'AZURE_|_URL|QUEUE|MQ|SCOPE' > src/main/resources/application-lokal-nais-secrets.properties
 ```
 
 Start opp applikasjonen ved å kjøre [BidragDokumentBestillingLokal.kt](src/test/kotlin/no/nav/bidrag/dokument/bestilling/BidragDokumentBestillingLokal.kt).
