@@ -1,13 +1,12 @@
 package no.nav.bidrag.dokument.bestilling.utils
 
-import no.nav.bidrag.dokument.bestilling.model.DISREKSJONSKODE_KODE_6
-import no.nav.bidrag.dokument.bestilling.model.EnhetKontaktInfoDto
-import no.nav.bidrag.dokument.bestilling.model.EnhetPostadresseDto
-import no.nav.bidrag.dokument.bestilling.model.HentPersonResponse
-import no.nav.bidrag.dokument.bestilling.model.HentPostadresseResponse
-import no.nav.bidrag.dokument.bestilling.model.HentSakResponse
-import no.nav.bidrag.dokument.bestilling.model.RolleType
-import no.nav.bidrag.dokument.bestilling.model.SakRolle
+import no.nav.bidrag.dokument.bestilling.konsumer.dto.EnhetKontaktInfoDto
+import no.nav.bidrag.dokument.bestilling.konsumer.dto.EnhetPostadresseDto
+import no.nav.bidrag.dokument.bestilling.konsumer.dto.HentPersonResponse
+import no.nav.bidrag.dokument.bestilling.konsumer.dto.HentPostadresseResponse
+import no.nav.bidrag.dokument.bestilling.konsumer.dto.HentSakResponse
+import no.nav.bidrag.dokument.bestilling.konsumer.dto.RolleType
+import no.nav.bidrag.dokument.bestilling.konsumer.dto.SakRolle
 import no.nav.bidrag.dokument.bestilling.model.SamhandlerAdresse
 import no.nav.bidrag.dokument.bestilling.model.SamhandlerInformasjon
 import no.nav.bidrag.dokument.dto.OpprettDokumentDto
@@ -65,7 +64,7 @@ val BARN3 = createPersonResponse(
     fodselsdato = LocalDate.parse("2014-03-20"),
 )
 
-fun createSakResponse(): HentSakResponse{
+fun createSakResponse(): HentSakResponse {
     return HentSakResponse(
         saksnummer = DEFAULT_SAKSNUMMER,
         eierfogd = "4806",
@@ -99,10 +98,10 @@ fun createPersonResponse(
     aktorId: String? = "313213",
     diskresjonskode: String? = null,
 
-): HentPersonResponse{
+): HentPersonResponse {
     return HentPersonResponse(ident, navn,kortNavn, fodselsdato, dodsdato, aktorId, diskresjonskode = diskresjonskode)
 }
-fun createPostAdresseResponse(): HentPostadresseResponse{
+fun createPostAdresseResponse(): HentPostadresseResponse {
     return HentPostadresseResponse(
         adresselinje1 = "Adresselinje1",
         adresselinje2 = "Adresselinje2",
@@ -115,7 +114,7 @@ fun createPostAdresseResponse(): HentPostadresseResponse{
     )
 }
 
-fun createPostAdresseResponseUtenlandsk(): HentPostadresseResponse{
+fun createPostAdresseResponseUtenlandsk(): HentPostadresseResponse {
     return HentPostadresseResponse(
         adresselinje1 = "Utenlandsk Adresselinje1",
         adresselinje2 = "Utenlandsk Adresselinje2",

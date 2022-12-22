@@ -1,5 +1,6 @@
 package no.nav.bidrag.dokument.bestilling.model
 
+import no.nav.bidrag.dokument.bestilling.konsumer.dto.RolleType
 import java.time.LocalDate
 
 data class DokumentBestillingResult(
