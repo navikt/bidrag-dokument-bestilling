@@ -8,7 +8,7 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import no.nav.bidrag.dokument.bestilling.SECURE_LOGGER
 import no.nav.bidrag.dokument.bestilling.api.dto.DokumentBestillingForespørsel
 import no.nav.bidrag.dokument.bestilling.api.dto.DokumentBestillingResponse
-import no.nav.bidrag.dokument.bestilling.model.BrevKode
+import no.nav.bidrag.dokument.bestilling.bestilling.dto.BrevKode
 import no.nav.bidrag.dokument.bestilling.tjenester.DokumentBestillingTjeneste
 import no.nav.security.token.support.core.api.Protected
 import org.slf4j.LoggerFactory

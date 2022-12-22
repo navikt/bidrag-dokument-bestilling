@@ -10,11 +10,11 @@ import org.springframework.stereotype.Service
 import org.springframework.web.client.RestTemplate
 
 @Service
-class BidragDokumentConsumer(
+class BidragDokumentKonsumer(
     @Value("\${BIDRAG_DOKUMENT_URL}") bidragDokumentUrl: String,
     baseRestTemplate: RestTemplate,
     securityTokenService: SecurityTokenService
-): DefaultConsumer("bidrag-dokument", bidragDokumentUrl, baseRestTemplate, securityTokenService) {
+): DefaultKonsumer("bidrag-dokument", bidragDokumentUrl, baseRestTemplate, securityTokenService) {
 
     fun opprettJournalpost(opprettJournalpostRequest: OpprettJournalpostRequest): OpprettJournalpostResponse? {
         return restTemplate.exchange(

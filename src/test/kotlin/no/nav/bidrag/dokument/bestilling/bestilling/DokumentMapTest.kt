@@ -5,7 +5,7 @@ import io.mockk.impl.annotations.MockK
 import io.mockk.impl.annotations.RelaxedMockK
 import io.mockk.junit5.MockKExtension
 import no.nav.bidrag.dokument.bestilling.konfigurasjon.SaksbehandlerInfoManager
-import no.nav.bidrag.dokument.bestilling.konsumer.KodeverkConsumer
+import no.nav.bidrag.dokument.bestilling.konsumer.KodeverkKonsumer
 import no.nav.bidrag.dokument.bestilling.tjenester.KodeverkTjeneste
 import no.nav.bidrag.dokument.bestilling.tjenester.OrganisasjonTjeneste
 import no.nav.bidrag.dokument.bestilling.tjenester.PersonTjeneste
@@ -24,7 +24,7 @@ internal class DokumentMapTest {
     @RelaxedMockK
     lateinit var sakService: SakTjeneste
     @RelaxedMockK
-    lateinit var kodeverkConsumer: KodeverkConsumer
+    lateinit var kodeverkKonsumer: KodeverkKonsumer
     @RelaxedMockK
     lateinit var saksbehandlerInfoManager: SaksbehandlerInfoManager
     @RelaxedMockK

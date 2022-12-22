@@ -1,5 +1,6 @@
-package no.nav.bidrag.dokument.bestilling.model
+package no.nav.bidrag.dokument.bestilling.bestilling.produksjon.dto
 
+import no.nav.bidrag.dokument.bestilling.model.LANDKODE3_NORGE
 import java.text.ParseException
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter

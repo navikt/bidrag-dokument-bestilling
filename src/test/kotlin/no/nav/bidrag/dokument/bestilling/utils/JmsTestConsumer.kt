@@ -1,6 +1,6 @@
 package no.nav.bidrag.dokument.bestilling.utils
 
-import no.nav.bidrag.dokument.bestilling.model.BrevBestilling
+import no.nav.bidrag.dokument.bestilling.bestilling.produksjon.dto.BrevBestilling
 import org.apache.activemq.command.ActiveMQBytesMessage
 import org.apache.activemq.command.ActiveMQTextMessage
 import org.springframework.beans.factory.annotation.Autowired

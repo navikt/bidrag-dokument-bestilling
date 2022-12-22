@@ -9,9 +9,9 @@ import io.mockk.verify
 import no.nav.bidrag.dokument.bestilling.api.dto.DokumentBestillingForespørsel
 import no.nav.bidrag.dokument.bestilling.api.dto.DokumentBestillingResponse
 import no.nav.bidrag.dokument.bestilling.konsumer.dto.RolleType
-import no.nav.bidrag.dokument.bestilling.model.BrevKode
-import no.nav.bidrag.dokument.bestilling.model.BrevType
-import no.nav.bidrag.dokument.bestilling.produksjon.DokumentProducer
+import no.nav.bidrag.dokument.bestilling.bestilling.dto.BrevKode
+import no.nav.bidrag.dokument.bestilling.bestilling.dto.BrevType
+import no.nav.bidrag.dokument.bestilling.bestilling.produksjon.DokumentProdusent
 import no.nav.bidrag.dokument.bestilling.utils.BARN1
 import no.nav.bidrag.dokument.bestilling.utils.BARN2
 import no.nav.bidrag.dokument.bestilling.utils.BM1
@@ -31,7 +31,7 @@ import org.springframework.http.HttpStatus
 class DokumentBestillingBrevkodeTest: AbstractControllerTest(){
 
     @SpykBean
-    lateinit var dokumentProducer: DokumentProducer
+    lateinit var dokumentProducer: DokumentProdusent
 
     companion object {
         @JvmStatic
@@ -82,7 +82,7 @@ class DokumentBestillingBrevkodeTest: AbstractControllerTest(){
 
         response.statusCode shouldBe HttpStatus.OK
 
-        verify(exactly = 1) { dokumentProducer.produce(
+        verify(exactly = 1) { dokumentProducer.produser(
             withArg {bestilling ->
                 assertSoftly {
                     bestilling.mottaker?.spraak shouldBe "NB"
@@ -145,7 +145,7 @@ class DokumentBestillingBrevkodeTest: AbstractControllerTest(){
 
         response.statusCode shouldBe HttpStatus.OK
 
-        verify(exactly = 1) { dokumentProducer.produce(
+        verify(exactly = 1) { dokumentProducer.produser(
             withArg {bestilling ->
                 assertSoftly {
                     bestilling.roller shouldHaveSize 4
@@ -213,7 +213,7 @@ class DokumentBestillingBrevkodeTest: AbstractControllerTest(){
 
         response.statusCode shouldBe HttpStatus.OK
 
-        verify(exactly = 1) { dokumentProducer.produce(
+        verify(exactly = 1) { dokumentProducer.produser(
             withArg {bestilling ->
                 assertSoftly {
                     bestilling.kontaktInfo?.navn shouldBe enhetKontaktInfo.enhetNavn

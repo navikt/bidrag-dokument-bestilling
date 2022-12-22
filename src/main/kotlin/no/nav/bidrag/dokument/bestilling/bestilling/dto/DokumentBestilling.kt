@@ -1,11 +1,13 @@
-package no.nav.bidrag.dokument.bestilling.model
+package no.nav.bidrag.dokument.bestilling.bestilling.dto
 
 import no.nav.bidrag.dokument.bestilling.konsumer.dto.RolleType
+import no.nav.bidrag.dokument.bestilling.model.Saksbehandler
 import java.time.LocalDate
 
 data class DokumentBestillingResult(
-    var dokumentReferanse: String,
-    var journalpostId: String,
+    val dokumentReferanse: String,
+    val journalpostId: String,
+    val arkivSystem: String
 )
 
 data class DokumentBestilling(

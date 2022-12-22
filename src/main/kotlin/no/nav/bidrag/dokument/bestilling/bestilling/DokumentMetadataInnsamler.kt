@@ -2,22 +2,22 @@ package no.nav.bidrag.dokument.bestilling.bestilling
 
 import no.nav.bidrag.dokument.bestilling.api.dto.DokumentBestillingForespørsel
 import no.nav.bidrag.dokument.bestilling.konfigurasjon.SaksbehandlerInfoManager
-import no.nav.bidrag.dokument.bestilling.model.Adresse
+import no.nav.bidrag.dokument.bestilling.bestilling.dto.Adresse
 import no.nav.bidrag.dokument.bestilling.model.BRUKSHENETSNUMMER_STANDARD
-import no.nav.bidrag.dokument.bestilling.model.Barn
-import no.nav.bidrag.dokument.bestilling.model.DokumentBestilling
-import no.nav.bidrag.dokument.bestilling.model.EnhetKontaktInfo
+import no.nav.bidrag.dokument.bestilling.bestilling.dto.Barn
+import no.nav.bidrag.dokument.bestilling.bestilling.dto.DokumentBestilling
+import no.nav.bidrag.dokument.bestilling.bestilling.dto.EnhetKontaktInfo
 import no.nav.bidrag.dokument.bestilling.model.FantIkkeEnhetException
 import no.nav.bidrag.dokument.bestilling.model.FantIkkeSakException
-import no.nav.bidrag.dokument.bestilling.model.Gjelder
+import no.nav.bidrag.dokument.bestilling.bestilling.dto.Gjelder
 import no.nav.bidrag.dokument.bestilling.konsumer.dto.HentPersonResponse
 import no.nav.bidrag.dokument.bestilling.konsumer.dto.HentPostadresseResponse
 import no.nav.bidrag.dokument.bestilling.konsumer.dto.HentSakResponse
 import no.nav.bidrag.dokument.bestilling.model.Ident
 import no.nav.bidrag.dokument.bestilling.model.LANDKODE3_NORGE
 import no.nav.bidrag.dokument.bestilling.model.ManglerGjelderException
-import no.nav.bidrag.dokument.bestilling.model.Mottaker
-import no.nav.bidrag.dokument.bestilling.model.PartInfo
+import no.nav.bidrag.dokument.bestilling.bestilling.dto.Mottaker
+import no.nav.bidrag.dokument.bestilling.bestilling.dto.PartInfo
 import no.nav.bidrag.dokument.bestilling.konsumer.dto.RolleType
 import no.nav.bidrag.dokument.bestilling.model.Saksbehandler
 import no.nav.bidrag.dokument.bestilling.model.SamhandlerManglerKontaktinformasjon
@@ -249,7 +249,7 @@ class DokumentMetadataInnsamler(
     }
 
     private fun hentMottaker(): HentPersonResponse {
-        return personService.hentPerson(request.mottaker?.ident ?: request.mottakerId, "Mottaker")
+        return personService.hentPerson(request.mottakerId, "Mottaker")
     }
 
     private fun hentMottakerAdresse(): HentPostadresseResponse? {

@@ -10,9 +10,9 @@ import io.mockk.every
 import no.nav.bidrag.commons.web.test.HttpHeaderTestRestTemplate
 import no.nav.bidrag.dokument.bestilling.BidragDokumentBestillingLocalTest
 import no.nav.bidrag.dokument.bestilling.JmsTestKonfig
-import no.nav.bidrag.dokument.bestilling.konsumer.KodeverkConsumer
-import no.nav.bidrag.dokument.bestilling.model.BrevBestilling
-import no.nav.bidrag.dokument.bestilling.model.BrevKode
+import no.nav.bidrag.dokument.bestilling.konsumer.KodeverkKonsumer
+import no.nav.bidrag.dokument.bestilling.bestilling.produksjon.dto.BrevBestilling
+import no.nav.bidrag.dokument.bestilling.bestilling.dto.BrevKode
 import no.nav.bidrag.dokument.bestilling.konsumer.dto.KodeverkResponse
 import no.nav.bidrag.dokument.bestilling.utils.ANNEN_MOTTAKER
 import no.nav.bidrag.dokument.bestilling.utils.BARN1
@@ -46,7 +46,7 @@ abstract class AbstractControllerTest {
     private val port = 0
 
     @MockkBean
-    lateinit var kodeverkConsumer: KodeverkConsumer
+    lateinit var kodeverkKonsumer: KodeverkKonsumer
 
     @Autowired
     lateinit var stubUtils: StubUtils
@@ -70,7 +70,7 @@ abstract class AbstractControllerTest {
         stubUtils.stubHentSaksbehandlerInfo()
         stubUtils.stubHentPersonSpraak()
         val kodeverkResponse = ObjectMapper().findAndRegisterModules().readValue(readFile("api/landkoder.json"), KodeverkResponse::class.java)
-        every { kodeverkConsumer.hentLandkoder() } returns kodeverkResponse
+        every { kodeverkKonsumer.hentLandkoder() } returns kodeverkResponse
     }
 
     @AfterEach

@@ -13,9 +13,9 @@ import no.nav.bidrag.dokument.bestilling.api.dto.DokumentBestillingForespørsel
 import no.nav.bidrag.dokument.bestilling.api.dto.DokumentBestillingResponse
 import no.nav.bidrag.dokument.bestilling.konsumer.dto.RolleType
 import no.nav.bidrag.dokument.bestilling.konsumer.dto.SakRolle
-import no.nav.bidrag.dokument.bestilling.model.BrevBestilling
-import no.nav.bidrag.dokument.bestilling.model.BrevKode
-import no.nav.bidrag.dokument.bestilling.model.BrevKontaktinfo
+import no.nav.bidrag.dokument.bestilling.bestilling.produksjon.dto.BrevBestilling
+import no.nav.bidrag.dokument.bestilling.bestilling.dto.BrevKode
+import no.nav.bidrag.dokument.bestilling.bestilling.produksjon.dto.BrevKontaktinfo
 import no.nav.bidrag.dokument.bestilling.utils.ANNEN_MOTTAKER
 import no.nav.bidrag.dokument.bestilling.utils.BARN1
 import no.nav.bidrag.dokument.bestilling.utils.BARN2

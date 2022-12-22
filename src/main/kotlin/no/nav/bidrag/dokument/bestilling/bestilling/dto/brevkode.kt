@@ -1,4 +1,4 @@
-package no.nav.bidrag.dokument.bestilling.model
+package no.nav.bidrag.dokument.bestilling.bestilling.dto
 
 object BestillingSystem {
     const val BREVSERVER = "BREVSERVER"

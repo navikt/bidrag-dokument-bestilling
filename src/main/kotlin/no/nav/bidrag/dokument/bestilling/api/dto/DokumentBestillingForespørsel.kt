@@ -11,7 +11,6 @@ import no.nav.bidrag.dokument.bestilling.model.Ident
 @Schema(description = "Metadata som brukes ved bestilling av ny dokument")
 data class DokumentBestillingForespørsel(
     val mottakerId: Ident,
-    val mottaker: MottakerTo? = null,
     @Schema(description = "Informasjon samhandler hvis mottakerid er en samhandlerid. Påkrevd hvis mottaker er en samhandler", deprecated = true)
     val samhandlerInformasjon: SamhandlerInformasjon? = null,
     @Schema(description = "Informasjon om saksbehandler som skal brukes ved opprettelse av dokument")
@@ -44,26 +43,15 @@ data class DokumentBestillingForespørsel(
     }
 }
 
-data class MottakerTo(
-    val ident: String? = null,
-    val navn: String? = null,
-    val språk: String? = null,
-    val adresse: MottakerAdresseTo? = null
-)
-
-data class MottakerAdresseTo(
-    val adresselinje1: String? = null,
-    val adresselinje2: String? = null,
-    val adresselinje3: String? = null,
-    val postnummer: String? = null,
-    val landkode: String? = null,
-)
-
 data class DokumentBestillingResponse(
     val dokumentId: String,
     val journalpostId: String,
-    val arkivSystem: String? = null,
+    val arkivSystem: DokumentArkivSystemTo? = null,
 )
+
+enum class DokumentArkivSystemTo {
+    MIDLERTIDLIG_BREVLAGER
+}
 
 data class SamhandlerAdresse(
     val adresselinje1: String? = null,

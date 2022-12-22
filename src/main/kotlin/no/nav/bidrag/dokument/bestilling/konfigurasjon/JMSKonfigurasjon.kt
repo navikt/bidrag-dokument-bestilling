@@ -6,7 +6,7 @@ import com.ibm.msg.client.jms.JmsConstants
 import com.ibm.msg.client.wmq.common.CommonConstants
 import no.nav.bidrag.dokument.bestilling.konfigurasjon.jms.LoggingMarshallingMessageConverter
 import no.nav.bidrag.dokument.bestilling.konfigurasjon.jms.MQProperties
-import no.nav.bidrag.dokument.bestilling.model.BrevBestilling
+import no.nav.bidrag.dokument.bestilling.bestilling.produksjon.dto.BrevBestilling
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.context.properties.ConfigurationPropertiesScan
 import org.springframework.context.annotation.Bean

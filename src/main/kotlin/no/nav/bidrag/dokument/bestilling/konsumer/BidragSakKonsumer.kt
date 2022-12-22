@@ -14,13 +14,13 @@ import org.springframework.web.client.HttpStatusCodeException
 import org.springframework.web.client.RestTemplate
 
 @Service
-class BidragSakConsumer(
+class BidragSakKonsumer(
     @Value("\${BIDRAG_SAK_URL}") bidragSakUrl: String, baseRestTemplate: RestTemplate,
     securityTokenService: SecurityTokenService
-): DefaultConsumer("bidrag-sak", bidragSakUrl, baseRestTemplate, securityTokenService) {
+): DefaultKonsumer("bidrag-sak", bidragSakUrl, baseRestTemplate, securityTokenService) {
 
     companion object {
-        private val LOGGER = LoggerFactory.getLogger(BidragSakConsumer::class.java)
+        private val LOGGER = LoggerFactory.getLogger(BidragSakKonsumer::class.java)
     }
     @Retryable(maxAttempts = 3, backoff = Backoff(delay = 500, maxDelay = 1500, multiplier = 2.0))
     fun hentSak(saksnr: String): HentSakResponse? {

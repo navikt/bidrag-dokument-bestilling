@@ -14,11 +14,11 @@ import org.springframework.stereotype.Service
 import org.springframework.web.client.RestTemplate
 
 @Service
-class BidragOrganisasjonConsumer(
+class BidragOrganisasjonKonsumer(
     @Value("\${BIDRAG_ORGANISASJON_URL}") bidragOrgUrl: String,
     baseRestTemplate: RestTemplate,
     securityTokenService: SecurityTokenService
-): DefaultConsumer("bidrag-organisasjon", bidragOrgUrl, baseRestTemplate, securityTokenService) {
+): DefaultKonsumer("bidrag-organisasjon", bidragOrgUrl, baseRestTemplate, securityTokenService) {
 
     @Cacheable(SAKSBEHANDLERINFO_CACHE)
     fun hentSaksbehandlerInfo(saksbehandlerIdent: String): SaksbehandlerInfoResponse? {

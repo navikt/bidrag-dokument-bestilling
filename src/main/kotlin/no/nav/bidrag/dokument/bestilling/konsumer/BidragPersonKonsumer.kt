@@ -23,13 +23,13 @@ import org.springframework.web.context.annotation.RequestScope
 
 @Service
 @RequestScope
-class BidragPersonConsumer(
+class BidragPersonKonsumer(
     @Value("\${BIDRAG_PERSON_URL}") bidragPersonUrl: String, baseRestTemplate: RestTemplate,
     securityTokenService: SecurityTokenService
-): DefaultConsumer("bidrag-person", bidragPersonUrl, baseRestTemplate, securityTokenService) {
+): DefaultKonsumer("bidrag-person", bidragPersonUrl, baseRestTemplate, securityTokenService) {
 
     companion object {
-        private val LOGGER = LoggerFactory.getLogger(BidragPersonConsumer::class.java)
+        private val LOGGER = LoggerFactory.getLogger(BidragPersonKonsumer::class.java)
     }
 
     @Retryable(maxAttempts = 3, backoff = Backoff(delay = 500, maxDelay = 1500, multiplier = 2.0))

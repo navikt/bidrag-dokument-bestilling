@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service
 import javax.annotation.PostConstruct
 
 @Service
-class KodeverkConsumer(@Value("\${KODEVERK_URL}") kodeverkUrl: String, val cacheManager: CacheManager, private final val baseRestTemplate: HttpHeaderRestTemplate)  {
+class KodeverkKonsumer(@Value("\${KODEVERK_URL}") kodeverkUrl: String, val cacheManager: CacheManager, private final val baseRestTemplate: HttpHeaderRestTemplate)  {
 
     init {
         baseRestTemplate.uriTemplateHandler = RootUriTemplateHandler("$kodeverkUrl/api/v1/kodeverk")
@@ -39,7 +39,7 @@ class KodeverkConsumer(@Value("\${KODEVERK_URL}") kodeverkUrl: String, val cache
 
 
     companion object {
-        private val LOGGER = LoggerFactory.getLogger(KodeverkConsumer::class.java)
+        private val LOGGER = LoggerFactory.getLogger(KodeverkKonsumer::class.java)
         private const val DEFAULT_CACHE = "DEFAULT"
     }
 }

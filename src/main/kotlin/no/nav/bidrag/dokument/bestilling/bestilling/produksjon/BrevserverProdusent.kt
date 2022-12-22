@@ -1,19 +1,19 @@
-package no.nav.bidrag.dokument.bestilling.produksjon
+package no.nav.bidrag.dokument.bestilling.bestilling.produksjon
 
-import no.nav.bidrag.dokument.bestilling.konsumer.BidragDokumentConsumer
-import no.nav.bidrag.dokument.bestilling.model.BestillingSystem
-import no.nav.bidrag.dokument.bestilling.model.Brev
-import no.nav.bidrag.dokument.bestilling.model.BrevBestilling
-import no.nav.bidrag.dokument.bestilling.model.BrevKode
-import no.nav.bidrag.dokument.bestilling.model.BrevKontaktinfo
-import no.nav.bidrag.dokument.bestilling.model.BrevMottaker
-import no.nav.bidrag.dokument.bestilling.model.BrevType
-import no.nav.bidrag.dokument.bestilling.model.DokumentBestilling
-import no.nav.bidrag.dokument.bestilling.model.DokumentBestillingResult
-import no.nav.bidrag.dokument.bestilling.model.EnhetKontaktInfo
-import no.nav.bidrag.dokument.bestilling.model.Mottaker
+import no.nav.bidrag.dokument.bestilling.konsumer.BidragDokumentKonsumer
+import no.nav.bidrag.dokument.bestilling.bestilling.dto.BestillingSystem
+import no.nav.bidrag.dokument.bestilling.bestilling.dto.BrevKode
+import no.nav.bidrag.dokument.bestilling.bestilling.dto.BrevType
+import no.nav.bidrag.dokument.bestilling.bestilling.dto.DokumentBestilling
+import no.nav.bidrag.dokument.bestilling.bestilling.dto.DokumentBestillingResult
+import no.nav.bidrag.dokument.bestilling.bestilling.dto.EnhetKontaktInfo
+import no.nav.bidrag.dokument.bestilling.bestilling.dto.Mottaker
 import no.nav.bidrag.dokument.bestilling.konsumer.dto.RolleType
-import no.nav.bidrag.dokument.bestilling.model.brevbestilling
+import no.nav.bidrag.dokument.bestilling.bestilling.produksjon.dto.Brev
+import no.nav.bidrag.dokument.bestilling.bestilling.produksjon.dto.BrevBestilling
+import no.nav.bidrag.dokument.bestilling.bestilling.produksjon.dto.BrevKontaktinfo
+import no.nav.bidrag.dokument.bestilling.bestilling.produksjon.dto.BrevMottaker
+import no.nav.bidrag.dokument.bestilling.bestilling.produksjon.dto.brevbestilling
 import no.nav.bidrag.dokument.dto.AvsenderMottakerDto
 import no.nav.bidrag.dokument.dto.JournalpostType
 import no.nav.bidrag.dokument.dto.OpprettDokumentDto
@@ -25,26 +25,27 @@ import org.springframework.stereotype.Component
 @Component(BestillingSystem.BREVSERVER)
 class BrevserverProdusent(
     val onlinebrevTemplate: JmsTemplate,
-    val bidragDokumentConsumer: BidragDokumentConsumer,
+    val bidragDokumentKonsumer: BidragDokumentKonsumer,
     @Value("\${BREVSERVER_PASSORD}") val brevPassord: String
-): DokumentProducer {
+): DokumentProdusent {
 
 
-    override fun produce(dokumentBestilling: DokumentBestilling, brevKode: BrevKode): DokumentBestillingResult {
+    override fun produser(dokumentBestilling: DokumentBestilling, brevKode: BrevKode): DokumentBestillingResult {
         val journalpostId = opprettJournalpost(dokumentBestilling, brevKode)
 
         onlinebrevTemplate.convertAndSend(mapToBrevserverMessage(dokumentBestilling, brevKode))
          // TODO: Error handling
         return DokumentBestillingResult(
             dokumentReferanse = dokumentBestilling.dokumentReferanse!!,
-            journalpostId = journalpostId
+            journalpostId = journalpostId,
+            arkivSystem = BestillingSystem.BREVSERVER
         )
     }
 
     fun opprettJournalpost(dokumentBestilling: DokumentBestilling, brevKode: BrevKode): String {
         if (dokumentBestilling.dokumentReferanse.isNullOrEmpty()){
             val tittel = dokumentBestilling.tittel ?: brevKode.beskrivelse
-            val response = bidragDokumentConsumer.opprettJournalpost(OpprettJournalpostRequest(
+            val response = bidragDokumentKonsumer.opprettJournalpost(OpprettJournalpostRequest(
                 tittel = tittel,
                 journalførendeEnhet = dokumentBestilling.enhet,
                 tilknyttSaker = listOf(dokumentBestilling.saksnummer!!),

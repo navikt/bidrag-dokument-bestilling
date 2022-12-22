@@ -14,12 +14,12 @@ import io.mockk.impl.annotations.MockK
 import io.mockk.junit5.MockKExtension
 import no.nav.bidrag.dokument.bestilling.api.dto.DokumentBestillingForespørsel
 import no.nav.bidrag.dokument.bestilling.konfigurasjon.SaksbehandlerInfoManager
-import no.nav.bidrag.dokument.bestilling.konsumer.KodeverkConsumer
+import no.nav.bidrag.dokument.bestilling.konsumer.KodeverkKonsumer
 import no.nav.bidrag.dokument.bestilling.konsumer.dto.KodeverkResponse
 import no.nav.bidrag.dokument.bestilling.konsumer.dto.RolleType
 import no.nav.bidrag.dokument.bestilling.konsumer.dto.SakRolle
 import no.nav.bidrag.dokument.bestilling.model.DISREKSJONSKODE_KODE_6
-import no.nav.bidrag.dokument.bestilling.model.DokumentBestilling
+import no.nav.bidrag.dokument.bestilling.bestilling.dto.DokumentBestilling
 import no.nav.bidrag.dokument.bestilling.model.FantIkkeSakException
 import no.nav.bidrag.dokument.bestilling.model.Saksbehandler
 import no.nav.bidrag.dokument.bestilling.model.SamhandlerManglerKontaktinformasjon
@@ -59,7 +59,7 @@ internal class DokumentMetadataInnsamlerTest {
     @MockK
     lateinit var sakService: SakTjeneste
     @MockK
-    lateinit var kodeverkConsumer: KodeverkConsumer
+    lateinit var kodeverkKonsumer: KodeverkKonsumer
     @MockK
     lateinit var saksbehandlerInfoManager: SaksbehandlerInfoManager
     @MockK
@@ -73,7 +73,7 @@ internal class DokumentMetadataInnsamlerTest {
     @BeforeEach
     fun initMocks(){
         val kodeverkResponse = ObjectMapper().findAndRegisterModules().readValue(readFile("api/landkoder.json"), KodeverkResponse::class.java)
-        every { kodeverkConsumer.hentLandkoder() } returns kodeverkResponse
+        every { kodeverkKonsumer.hentLandkoder() } returns kodeverkResponse
     }
 
     @AfterEach

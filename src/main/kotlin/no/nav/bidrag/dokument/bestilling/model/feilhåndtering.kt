@@ -1,5 +1,7 @@
 package no.nav.bidrag.dokument.bestilling.model
 
+import no.nav.bidrag.dokument.bestilling.bestilling.dto.BrevKode
+
 class ProduksjonAvDokumentStottesIkke(brevKode: BrevKode): RuntimeException("Produksjon av dokument med brevkode=$brevKode støttes ikke")
 
 class FantIkkePersonException(msg: String): RuntimeException(msg)

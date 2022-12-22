@@ -1,7 +1,7 @@
 package no.nav.bidrag.dokument.bestilling.bestilling
 
 import no.nav.bidrag.dokument.bestilling.api.dto.DokumentBestillingForespørsel
-import no.nav.bidrag.dokument.bestilling.model.BrevKode
+import no.nav.bidrag.dokument.bestilling.bestilling.dto.BrevKode
 import org.springframework.context.ApplicationContext
 import org.springframework.stereotype.Component
 import java.util.EnumMap
