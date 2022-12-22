@@ -1,5 +1,7 @@
 package no.nav.bidrag.dokument.bestilling.utils
 
+import no.nav.bidrag.dokument.bestilling.api.dto.SamhandlerAdresse
+import no.nav.bidrag.dokument.bestilling.api.dto.SamhandlerInformasjon
 import no.nav.bidrag.dokument.bestilling.konsumer.dto.EnhetKontaktInfoDto
 import no.nav.bidrag.dokument.bestilling.konsumer.dto.EnhetPostadresseDto
 import no.nav.bidrag.dokument.bestilling.konsumer.dto.HentPersonResponse
@@ -7,11 +9,10 @@ import no.nav.bidrag.dokument.bestilling.konsumer.dto.HentPostadresseResponse
 import no.nav.bidrag.dokument.bestilling.konsumer.dto.HentSakResponse
 import no.nav.bidrag.dokument.bestilling.konsumer.dto.RolleType
 import no.nav.bidrag.dokument.bestilling.konsumer.dto.SakRolle
-import no.nav.bidrag.dokument.bestilling.model.SamhandlerAdresse
-import no.nav.bidrag.dokument.bestilling.model.SamhandlerInformasjon
 import no.nav.bidrag.dokument.dto.OpprettDokumentDto
 import no.nav.bidrag.dokument.dto.OpprettJournalpostResponse
 import java.time.LocalDate
+
 val DEFAULT_TITLE_DOKUMENT = "Tittel på dokumentet"
 val DEFAULT_SAKSNUMMER = "123312321321"
 

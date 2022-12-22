@@ -6,11 +6,11 @@ import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
 import io.mockk.verify
+import no.nav.bidrag.dokument.bestilling.api.dto.DokumentBestillingForespørsel
+import no.nav.bidrag.dokument.bestilling.api.dto.DokumentBestillingResponse
+import no.nav.bidrag.dokument.bestilling.konsumer.dto.RolleType
 import no.nav.bidrag.dokument.bestilling.model.BrevKode
 import no.nav.bidrag.dokument.bestilling.model.BrevType
-import no.nav.bidrag.dokument.bestilling.model.DokumentBestillingForespørsel
-import no.nav.bidrag.dokument.bestilling.model.DokumentBestillingResponse
-import no.nav.bidrag.dokument.bestilling.konsumer.dto.RolleType
 import no.nav.bidrag.dokument.bestilling.produksjon.DokumentProducer
 import no.nav.bidrag.dokument.bestilling.utils.BARN1
 import no.nav.bidrag.dokument.bestilling.utils.BARN2
