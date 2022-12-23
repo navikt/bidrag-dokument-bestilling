@@ -1,20 +1,20 @@
 package no.nav.bidrag.dokument.bestilling.konfigurasjon
 
 import com.github.benmanes.caffeine.cache.Caffeine
-import no.nav.bidrag.dokument.bestilling.konfigurasjon.cache.CacheEvictBeforeWorkingHours
-import no.nav.bidrag.dokument.bestilling.konfigurasjon.cache.UserCacheKey
-import no.nav.bidrag.dokument.bestilling.konfigurasjon.cache.UserCacheKeyGenerator
+import no.nav.bidrag.commons.cache.BrukerCacheKonfig
+import no.nav.bidrag.commons.cache.InvaliderCacheFørStartenAvArbeidsdag
 import org.springframework.cache.CacheManager
 import org.springframework.cache.annotation.EnableCaching
 import org.springframework.cache.caffeine.CaffeineCacheManager
-import org.springframework.cache.interceptor.KeyGenerator
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.context.annotation.Import
 import org.springframework.context.annotation.Profile
 
 @Configuration
 @EnableCaching
 @Profile(value = ["!test"]) // Ignore cache on tests
+@Import(BrukerCacheKonfig::class)
 class CacheKonfig {
     companion object {
         const val LANDKODER_CACHE = "LANDKODER_CACHE"
@@ -29,17 +29,12 @@ class CacheKonfig {
     @Bean
     fun cacheManager(): CacheManager {
         val caffeineCacheManager = CaffeineCacheManager()
-        caffeineCacheManager.registerCustomCache(SAKSBEHANDLERINFO_CACHE, Caffeine.newBuilder().expireAfter(CacheEvictBeforeWorkingHours()).build())
-        caffeineCacheManager.registerCustomCache(ENHETINFO_CACHE, Caffeine.newBuilder().expireAfter(CacheEvictBeforeWorkingHours()).build())
-        caffeineCacheManager.registerCustomCache(ENHETKONTAKTINFO_CACHE, Caffeine.newBuilder().expireAfter(CacheEvictBeforeWorkingHours()).build())
-        caffeineCacheManager.registerCustomCache(PERSON_CACHE, Caffeine.newBuilder().expireAfter(CacheEvictBeforeWorkingHours()).build())
-        caffeineCacheManager.registerCustomCache(PERSON_ADRESSE_CACHE, Caffeine.newBuilder().expireAfter(CacheEvictBeforeWorkingHours()).build())
-        caffeineCacheManager.registerCustomCache(PERSON_SPRAAK_CACHE, Caffeine.newBuilder().expireAfter(CacheEvictBeforeWorkingHours()).build())
+        caffeineCacheManager.registerCustomCache(SAKSBEHANDLERINFO_CACHE, Caffeine.newBuilder().expireAfter(InvaliderCacheFørStartenAvArbeidsdag()).build())
+        caffeineCacheManager.registerCustomCache(ENHETINFO_CACHE, Caffeine.newBuilder().expireAfter(InvaliderCacheFørStartenAvArbeidsdag()).build())
+        caffeineCacheManager.registerCustomCache(ENHETKONTAKTINFO_CACHE, Caffeine.newBuilder().expireAfter(InvaliderCacheFørStartenAvArbeidsdag()).build())
+        caffeineCacheManager.registerCustomCache(PERSON_CACHE, Caffeine.newBuilder().expireAfter(InvaliderCacheFørStartenAvArbeidsdag()).build())
+        caffeineCacheManager.registerCustomCache(PERSON_ADRESSE_CACHE, Caffeine.newBuilder().expireAfter(InvaliderCacheFørStartenAvArbeidsdag()).build())
+        caffeineCacheManager.registerCustomCache(PERSON_SPRAAK_CACHE, Caffeine.newBuilder().expireAfter(InvaliderCacheFørStartenAvArbeidsdag()).build())
         return caffeineCacheManager;
-    }
-
-    @Bean(UserCacheKey.GENERATOR_BEAN)
-    fun userKeyGenerator(saksbehandlerInfoManager: SaksbehandlerInfoManager): KeyGenerator {
-        return UserCacheKeyGenerator(saksbehandlerInfoManager)
     }
 }

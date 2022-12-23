@@ -36,14 +36,14 @@ class BrevserverProdusent(
         onlinebrevTemplate.convertAndSend(mapToBrevserverMessage(dokumentBestilling, brevKode))
          // TODO: Error handling
         return DokumentBestillingResult(
-            dokumentReferanse = dokumentBestilling.dokumentReferanse!!,
+            dokumentReferanse = dokumentBestilling.dokumentreferanse!!,
             journalpostId = journalpostId,
             arkivSystem = BestillingSystem.BREVSERVER
         )
     }
 
     fun opprettJournalpost(dokumentBestilling: DokumentBestilling, brevKode: BrevKode): String {
-        if (dokumentBestilling.dokumentReferanse.isNullOrEmpty()){
+        if (dokumentBestilling.dokumentreferanse.isNullOrEmpty()){
             val tittel = dokumentBestilling.tittel ?: brevKode.beskrivelse
             val response = bidragDokumentKonsumer.opprettJournalpost(OpprettJournalpostRequest(
                 tittel = tittel,
@@ -62,7 +62,7 @@ class BrevserverProdusent(
                 saksbehandlerIdent = dokumentBestilling.saksbehandler?.ident
             ))
 
-            dokumentBestilling.dokumentReferanse = response?.dokumenter?.get(0)?.dokumentreferanse
+            dokumentBestilling.dokumentreferanse = response?.dokumenter?.get(0)?.dokumentreferanse
             return response?.journalpostId!!
         }
         return ""
@@ -80,7 +80,7 @@ class BrevserverProdusent(
             passord = brevPassord
             saksbehandler = dokumentBestilling.saksbehandler?.ident!!
             brev {
-                brevref = dokumentBestilling.dokumentReferanse!!
+                brevref = dokumentBestilling.dokumentreferanse!!
                 spraak = dokumentSpraak
                 tknr = dokumentBestilling.enhet!!
                 mottaker = dokumentBestilling.mottaker?.let { mapBrevmottaker(this, it) }

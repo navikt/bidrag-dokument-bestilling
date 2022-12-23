@@ -34,31 +34,31 @@ import java.time.LocalDate
 @Component
 @Scope("prototype")
 class DokumentMetadataInnsamler(
-    val personService: PersonTjeneste,
-    val sakService: SakTjeneste,
+    val personTjeneste: PersonTjeneste,
+    val sakTjeneste: SakTjeneste,
     val kodeverkTjeneste: KodeverkTjeneste,
     val saksbehandlerInfoManager: SaksbehandlerInfoManager,
-    val organisasjonService: OrganisasjonTjeneste
+    val organisasjonTjeneste: OrganisasjonTjeneste
 ) {
 
-    private lateinit var request: DokumentBestillingForespørsel
+    private lateinit var forespørsel: DokumentBestillingForespørsel
     private lateinit var enhet: String
     private lateinit var sak: HentSakResponse
     private lateinit var dokumentBestilling: DokumentBestilling
 
-    fun init(request: DokumentBestillingForespørsel): DokumentMetadataInnsamler {
+    fun init(forespørsel: DokumentBestillingForespørsel): DokumentMetadataInnsamler {
         this.dokumentBestilling = DokumentBestilling()
-        this.request = request
-        dokumentBestilling.dokumentReferanse = request.dokumentReferanse
-        dokumentBestilling.tittel = request.tittel
-        dokumentBestilling.saksnummer = request.saksnummer
-        dokumentBestilling.spraak = request.hentRiktigSpråkkode()
-        dokumentBestilling.saksbehandler = hentSaksbehandler(request)
+        this.forespørsel = forespørsel
+        dokumentBestilling.dokumentreferanse = forespørsel.dokumentreferanse ?: forespørsel.dokumentReferanse
+        dokumentBestilling.tittel = forespørsel.tittel
+        dokumentBestilling.saksnummer = forespørsel.saksnummer
+        dokumentBestilling.spraak = forespørsel.hentRiktigSpråkkode()
+        dokumentBestilling.saksbehandler = hentSaksbehandler(forespørsel)
 
-        sak = sakService.hentSak(request.saksnummer) ?: throw FantIkkeSakException("Fant ikke sak ${request.saksnummer}")
+        sak = sakTjeneste.hentSak(forespørsel.saksnummer) ?: throw FantIkkeSakException("Fant ikke sak ${forespørsel.saksnummer}")
         // TODO: Legg til sak opprettet dato (mangler fra sak respons)
 
-        this.enhet = request.enhet ?: sak.eierfogd ?: "9999"
+        this.enhet = forespørsel.enhet ?: sak.eierfogd ?: "9999"
         dokumentBestilling.enhet = enhet
         dokumentBestilling.rmISak = sak.roller.any { it.rolleType == RolleType.RM }
 
@@ -104,7 +104,7 @@ class DokumentMetadataInnsamler(
 
         val barn = sak.roller.filter { it.rolleType == RolleType.BA }
         barn.filter { !it.foedselsnummer.isNullOrEmpty() }.forEach {
-            val barnInfo = if (it.foedselsnummer!!.erDødfødt) null else personService.hentPerson(it.foedselsnummer, "Barn")
+            val barnInfo = if (it.foedselsnummer!!.erDødfødt) null else personTjeneste.hentPerson(it.foedselsnummer, "Barn")
             if (barnInfo == null || !barnInfo.isDod) {
                 // TODO: Legg til RM fødselsnummer (mangler fra sak respons)
                 dokumentBestilling.roller.add(Barn(
@@ -122,18 +122,18 @@ class DokumentMetadataInnsamler(
 
     private fun leggTilGjelder(): DokumentMetadataInnsamler {
         dokumentBestilling.gjelder = Gjelder(
-            fodselsnummer = request.actualGjelderId,
-            rolle = hentRolle(request.actualGjelderId)
+            fodselsnummer = forespørsel.actualGjelderId,
+            rolle = hentRolle(forespørsel.actualGjelderId)
         )
         return this
     }
 
     private fun leggTilMottaker(): DokumentMetadataInnsamler {
-        if (request.erMottakerSamhandler()) {
-            val samhandler = request.samhandlerInformasjon ?: throw SamhandlerManglerKontaktinformasjon("Samhandler med id ${request.mottakerId} mangler kontaktinformasjon")
+        if (forespørsel.erMottakerSamhandler()) {
+            val samhandler = forespørsel.samhandlerInformasjon ?: throw SamhandlerManglerKontaktinformasjon("Samhandler med id ${forespørsel.mottakerId} mangler kontaktinformasjon")
             val adresse = samhandler.adresse
             dokumentBestilling.mottaker = Mottaker(
-                fodselsnummer = request.mottakerId,
+                fodselsnummer = forespørsel.mottakerId,
                 fodselsdato = null,
                 rolle = null,
                 navn = samhandler.navn ?: "Ukjent",
@@ -157,7 +157,7 @@ class DokumentMetadataInnsamler(
                 fodselsdato = mottaker.foedselsdato,
                 navn = mottaker.kortNavn ?: mottaker.navn,
                 rolle = hentRolle(mottaker.ident),
-                spraak = personService.hentSpraak(mottaker.ident),
+                spraak = personTjeneste.hentSpraak(mottaker.ident),
                 adresse = if (adresse != null) {
                     val postnummerSted = if (adresse.postnummer.isNullOrEmpty() && adresse.poststed.isNullOrEmpty()) null
                                         else "${adresse.postnummer ?: ""} ${adresse.poststed ?: ""}".trim()
@@ -182,7 +182,7 @@ class DokumentMetadataInnsamler(
     }
 
     fun leggTilEnhetKontaktInfo(): DokumentMetadataInnsamler {
-        val enhetKontaktInfo = organisasjonService.hentEnhetKontaktInfo(enhet, dokumentBestilling.spraak) ?: throw FantIkkeEnhetException("Fant ikke enhet $enhet for spraak ${dokumentBestilling.spraak}")
+        val enhetKontaktInfo = organisasjonTjeneste.hentEnhetKontaktInfo(enhet, dokumentBestilling.spraak) ?: throw FantIkkeEnhetException("Fant ikke enhet $enhet for spraak ${dokumentBestilling.spraak}")
 
         dokumentBestilling.kontaktInfo = EnhetKontaktInfo(
             navn = enhetKontaktInfo.enhetNavn ?: "",
@@ -230,30 +230,30 @@ class DokumentMetadataInnsamler(
 
     private fun hentBidragsmottaker(): HentPersonResponse? {
         val bmFnr = hentIdentForRolle(RolleType.BM)
-        return if (!bmFnr.isNullOrEmpty()) personService.hentPerson(bmFnr, "Bidragsmottaker") else null
+        return if (!bmFnr.isNullOrEmpty()) personTjeneste.hentPerson(bmFnr, "Bidragsmottaker") else null
     }
 
     private fun hentBidragspliktig(): HentPersonResponse? {
         val fnr = hentIdentForRolle(RolleType.BP)
-        return if (!fnr.isNullOrEmpty()) personService.hentPerson(fnr, "Bidragspliktig") else null
+        return if (!fnr.isNullOrEmpty()) personTjeneste.hentPerson(fnr, "Bidragspliktig") else null
     }
 
     private fun hentBidragspliktigAdresse(): HentPostadresseResponse? {
         val fnr = hentIdentForRolle(RolleType.BP)
-        return if (!fnr.isNullOrEmpty()) personService.hentPersonAdresse(fnr, "Bidragspliktig adresse") else null
+        return if (!fnr.isNullOrEmpty()) personTjeneste.hentPersonAdresse(fnr, "Bidragspliktig adresse") else null
     }
 
     private fun hentBidragsmottakerAdresse(): HentPostadresseResponse? {
         val fnr = hentIdentForRolle(RolleType.BM)
-        return if (!fnr.isNullOrEmpty()) personService.hentPersonAdresse(fnr, "Bidragsmottaker adresse") else null
+        return if (!fnr.isNullOrEmpty()) personTjeneste.hentPersonAdresse(fnr, "Bidragsmottaker adresse") else null
     }
 
     private fun hentMottaker(): HentPersonResponse {
-        return personService.hentPerson(request.mottakerId, "Mottaker")
+        return personTjeneste.hentPerson(forespørsel.mottakerId, "Mottaker")
     }
 
     private fun hentMottakerAdresse(): HentPostadresseResponse? {
-        return personService.hentPersonAdresse(request.mottakerId, "Mottaker")
+        return personTjeneste.hentPersonAdresse(forespørsel.mottakerId, "Mottaker")
     }
 
     private fun hentGjelderFraRoller(): Ident? {

@@ -1,15 +1,14 @@
 package no.nav.bidrag.dokument.bestilling.konsumer
 
+import no.nav.bidrag.commons.cache.BrukerCacheable
 import no.nav.bidrag.commons.security.service.SecurityTokenService
 import no.nav.bidrag.dokument.bestilling.konfigurasjon.CacheKonfig.Companion.PERSON_ADRESSE_CACHE
 import no.nav.bidrag.dokument.bestilling.konfigurasjon.CacheKonfig.Companion.PERSON_CACHE
 import no.nav.bidrag.dokument.bestilling.konfigurasjon.CacheKonfig.Companion.PERSON_SPRAAK_CACHE
-import no.nav.bidrag.dokument.bestilling.konfigurasjon.cache.UserCacheable
-import no.nav.bidrag.dokument.bestilling.model.HentPersonFeiletException
 import no.nav.bidrag.dokument.bestilling.konsumer.dto.HentPersonInfoRequest
 import no.nav.bidrag.dokument.bestilling.konsumer.dto.HentPersonResponse
 import no.nav.bidrag.dokument.bestilling.konsumer.dto.HentPostadresseResponse
-import org.slf4j.LoggerFactory
+import no.nav.bidrag.dokument.bestilling.model.HentPersonFeiletException
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.HttpEntity
 import org.springframework.http.HttpMethod
@@ -28,12 +27,8 @@ class BidragPersonKonsumer(
     securityTokenService: SecurityTokenService
 ): DefaultKonsumer("bidrag-person", bidragPersonUrl, baseRestTemplate, securityTokenService) {
 
-    companion object {
-        private val LOGGER = LoggerFactory.getLogger(BidragPersonKonsumer::class.java)
-    }
-
     @Retryable(maxAttempts = 3, backoff = Backoff(delay = 500, maxDelay = 1500, multiplier = 2.0))
-    @UserCacheable(PERSON_CACHE)
+    @BrukerCacheable(PERSON_CACHE)
     fun hentPerson(personId: String): HentPersonResponse? {
         try {
             val hentPersonResponse =
@@ -47,7 +42,7 @@ class BidragPersonKonsumer(
         }
     }
     @Retryable(maxAttempts = 3, backoff = Backoff(delay = 500, maxDelay = 1500, multiplier = 2.0))
-    @UserCacheable(PERSON_ADRESSE_CACHE)
+    @BrukerCacheable(PERSON_ADRESSE_CACHE)
     fun hentAdresse(id: String): HentPostadresseResponse? {
         return restTemplate.exchange(
             "/adresse/post", HttpMethod.POST, HttpEntity(HentPersonInfoRequest(id)),
@@ -56,7 +51,7 @@ class BidragPersonKonsumer(
     }
 
     @Retryable(maxAttempts = 3, backoff = Backoff(delay = 500, maxDelay = 1500, multiplier = 2.0))
-    @UserCacheable(PERSON_SPRAAK_CACHE)
+    @BrukerCacheable(PERSON_SPRAAK_CACHE)
     fun hentSpraak(id: String): String? {
         return restTemplate.exchange(
             "/spraak", HttpMethod.POST, HttpEntity(HentPersonInfoRequest(id)),
