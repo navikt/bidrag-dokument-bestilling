@@ -15,7 +15,7 @@
 	<properties>
 		<java.version>17</java.version>
 		<kotlin.version>1.7.21</kotlin.version>
-		<bidrag-commons.version>0.7.15</bidrag-commons.version>
+		<bidrag-commons.version>0.7.28</bidrag-commons.version>
 		<logback-encoder.version>7.2</logback-encoder.version>
 		<token-support.version>2.1.7</token-support.version>
 		<springframework-cloud.version>3.1.4</springframework-cloud.version>
@@ -24,6 +24,7 @@
 		<bidrag-commons-test.version>0.2.2</bidrag-commons-test.version>
 		<ibmmq.version>9.3.0.1</ibmmq.version>
 		<bidrag-dokument-dto.version>1.5.17</bidrag-dokument-dto.version>
+		<kotlin-logging-jvm.version>3.0.2</kotlin-logging-jvm.version>
 	</properties>
 	<dependencies>
 
@@ -93,6 +94,12 @@
 			<groupId>org.apache.cxf</groupId>
 			<artifactId>cxf-spring-boot-starter-jaxws</artifactId>
 			<version>3.5.3</version>
+		</dependency>
+
+		<dependency>
+			<groupId>io.github.microutils</groupId>
+			<artifactId>kotlin-logging-jvm</artifactId>
+			<version>${kotlin-logging-jvm.version}</version>
 		</dependency>
 
 		<dependency>

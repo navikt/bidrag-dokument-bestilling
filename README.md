@@ -1,14 +1,10 @@
 # bidrag-dokument-bestilling
-Template repo for å opprette ny Spring applikasjon for Bidrag
+Tjeneste for å bestille redigerbar og ikke-redigerbare bidrag dokumenter
 
-[![continuous integration](https://github.com/navikt/bidrag-dokument-bestilling/actions/workflows/ci.yaml/badge.svg)](https://github.com/navikt/bidrag-dialog/actions/workflows/ci.yaml)
-[![release bidrag-dokument-bestilling](https://github.com/navikt/bidrag-dokument-bestilling/actions/workflows/release.yaml/badge.svg)](https://github.com/navikt/bidrag-dialog/actions/workflows/release.yaml)
+[![continuous integration](https://github.com/navikt/bidrag-dokument-bestilling/actions/workflows/ci.yaml/badge.svg)](https://github.com/navikt/bidrag-dokument-bestilling/actions/workflows/ci.yaml)
+[![release bidrag-dokument-bestilling](https://github.com/navikt/bidrag-dokument-bestilling/actions/workflows/release.yaml/badge.svg)](https://github.com/navikt/bidrag-dokument-bestilling/actions/workflows/release.yaml)
 
 ## Beskrivelse
-
-Erstatt alt som har postfix `-template-spring` med din applikasjonsnavn
-
-Legg til Github secret `NAIS_DEPLOY_APIKEY` hvor secret hentes fra [Api key](https://deploy.nais.io/apikeys)
 
 ## Secrets
 Applikasjonen bruker noen hemmeligheter som må settes opp før deploy til NAIS
@@ -18,21 +14,6 @@ kubectl create secret generic bidrag-dokument-bestilling-secrets \
   --from-literal=MQ_USER_PASSWORD=pass \
   --from-literal=BREVSERVER_PASSORD=pass
 ```
-## Kjøre applikasjonen lokalt
-
-Start opp applikasjonen ved å kjøre [BidragTemplateLocal.kt](src/test/kotlin/no/nav/bidrag/template/BidragTemplateLocal.kt).
-Dette starter applikasjonen med profil `local` og henter miljøvariabler for Q1 miljøet fra filen [application-local.yaml](src/test/resources/application-local.yaml).
-
-Her mangler det noen miljøvariabler som ikke bør committes til Git (Miljøvariabler for passord/secret osv).<br/>
-Når du starter applikasjon må derfor følgende miljøvariabl(er) settes:
-```bash
--DAZURE_APP_CLIENT_SECRET=<secret>
--DAZURE_APP_CLIENT_ID=<id>
-```
-Disse kan hentes ved å kjøre kan hentes ved å kjøre 
-```bash
-kubectl exec --tty deployment/bidrag-dialog-feature -- printenv | grep -e AZURE_APP_CLIENT_ID -e AZURE_APP_CLIENT_SECRET
-```
 
 ### Live reload
 Med `spring-boot-devtools` har Spring støtte for live-reload av applikasjon. Dette betyr i praksis at Spring vil automatisk restarte applikasjonen når en fil endres. Du vil derfor slippe å restarte applikasjonen hver gang du gjør endringer. Dette er forklart i [dokumentasjonen](https://docs.spring.io/spring-boot/docs/1.5.16.RELEASE/reference/html/using-boot-devtools.html#using-boot-devtools-restart).
@@ -40,3 +21,30 @@ For at dette skal fungere må det gjøres noe endringer i Intellij instillingene
 
 * Gå til `Preference -> Compiler -> check "Build project automatically"`
 * Gå til `Preference -> Advanced settings -> check "Allow auto-make to start even if developed application is currently running"`
+
+#### Kjøre lokalt mot nais tjenester
+For å kunne kjøre lokalt mot sky må du gjøre følgende
+
+Åpne terminal på root mappen til `bidrag-dokument-bestilling`
+Konfigurer kubectl til å gå mot kluster `dev-gcp`
+```bash
+# Log inn til GPC
+gcp auth login --update-adc
+# Sett cluster til dev-fss
+kubectx dev-gcp
+# Sett namespace til bidrag
+kubens bidrag 
+
+# -- Eller hvis du ikke har kubectx/kubens installert 
+# (da må -n=bidrag legges til etter exec i neste kommando)
+kubectl config use dev-gcp
+```
+Deretter kjør følgende kommando for å importere secrets. Viktig at filen som opprettes ikke committes til git
+
+```bash
+kubectl exec --tty deployment/bidrag-dokument-bestilling-feature printenv | grep -E 'AZURE_|_URL|QUEUE|MQ|SCOPE' > src/main/resources/application-lokal-nais-secrets.properties
+```
+
+Start opp applikasjonen ved å kjøre [BidragDokumentBestillingLokal.kt](src/test/kotlin/no/nav/bidrag/dokument/bestilling/BidragDokumentBestillingLokal.kt).
+
+Deretter kan tokenet brukes til å logge inn på swagger-ui http://localhost:8999/swagger-ui.html

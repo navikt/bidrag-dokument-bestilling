@@ -1,5 +1,6 @@
 package no.nav.bidrag.dokument.bestilling.aop
 
+import mu.KotlinLogging
 import no.nav.bidrag.dokument.bestilling.model.FantIkkeEnhetException
 import no.nav.bidrag.dokument.bestilling.model.FantIkkePersonException
 import no.nav.bidrag.dokument.bestilling.model.FantIkkeSakException
@@ -18,11 +19,10 @@ import org.springframework.web.bind.annotation.RestControllerAdvice
 import org.springframework.web.client.HttpStatusCodeException
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException
 
+private val LOGGER = KotlinLogging.logger {}
+
 @RestControllerAdvice
 class DefaultRestControllerAdvice {
-    companion object {
-        private val LOGGER = LoggerFactory.getLogger(DefaultRestControllerAdvice::class.java)
-    }
 
     @ResponseBody
     @ExceptionHandler(value = [
@@ -53,7 +53,7 @@ class DefaultRestControllerAdvice {
     @ResponseBody
     @ExceptionHandler(HttpStatusCodeException::class)
     fun handleHttpStatusException(exception: HttpStatusCodeException): ResponseEntity<*> {
-        LOGGER.warn("Det skjedde en feil ved kall mot ekstern tjeneste: ${exception.message}", exception)
+        LOGGER.warn(exception){"Det skjedde en feil ved kall mot ekstern tjeneste: ${exception.message}"}
         return ResponseEntity
             .status(HttpStatus.INTERNAL_SERVER_ERROR)
             .header(HttpHeaders.WARNING, "Det skjedde en feil ved kall mot ekstern tjeneste: ${exception.message}")
