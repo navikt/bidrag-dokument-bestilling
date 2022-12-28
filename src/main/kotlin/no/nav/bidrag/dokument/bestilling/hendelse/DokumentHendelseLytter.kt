@@ -2,7 +2,9 @@ package no.nav.bidrag.dokument.bestilling.hendelse
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import mu.KotlinLogging
+import no.nav.bidrag.dokument.bestilling.api.dto.DokumentArkivSystemTo
 import no.nav.bidrag.dokument.bestilling.api.dto.DokumentBestillingForespørsel
+import no.nav.bidrag.dokument.bestilling.api.dto.DokumentBestillingResponse
 import no.nav.bidrag.dokument.bestilling.api.dto.MottakerAdresseTo
 import no.nav.bidrag.dokument.bestilling.api.dto.MottakerTo
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.BrevKode
@@ -14,16 +16,18 @@ import no.nav.bidrag.dokument.bestilling.model.UgyldigBestillingAvDokument
 import no.nav.bidrag.dokument.bestilling.tjenester.DokumentBestillingTjeneste
 import no.nav.bidrag.dokument.dto.DokumentHendelse
 import no.nav.bidrag.dokument.dto.DokumentHendelseType
+import no.nav.bidrag.dokument.dto.DokumentStatusTo
 import org.apache.kafka.clients.consumer.ConsumerRecord
 import org.springframework.kafka.annotation.KafkaListener
 import org.springframework.stereotype.Component
 private val LOGGER = KotlinLogging.logger {}
 
 
-val DokumentHendelse.erForsendelse get() = forsendelseId?.startsWith("BIF") == true
-val DokumentHendelse.erBestilling get() = hendelseType != DokumentHendelseType.BESTILLING
+val DokumentHendelse.erForsendelse get() = forsendelseId != null
+val DokumentHendelse.hentForsendelseIdMedPrefix get() = if (forsendelseId?.startsWith("BIF") == true) forsendelseId else "BIF-$forsendelseId"
+val DokumentHendelse.erBestilling get() = hendelseType == DokumentHendelseType.BESTILLING
 @Component
-class DokumentHendelseLytter(val objectMapper: ObjectMapper, val dokumentKonsumer: BidragDokumentKonsumer, val dokumentBestillingService: DokumentBestillingTjeneste) {
+class DokumentHendelseLytter(val objectMapper: ObjectMapper, val dokumentKonsumer: BidragDokumentKonsumer, val dokumentBestillingService: DokumentBestillingTjeneste, val hendelseProduser: DokumentHendelseProduser) {
 
     @KafkaListener(groupId = "bidrag-dokument-bestilling", topics = ["\${TOPIC_DOKUMENT}"])
     fun prossesserDokumentHendelse(melding: ConsumerRecord<String, String>){
@@ -31,12 +35,12 @@ class DokumentHendelseLytter(val objectMapper: ObjectMapper, val dokumentKonsume
         val erGyldigBestilling = hendelse.erBestilling && hendelse.erForsendelse
         if (!erGyldigBestilling) return
 
-        val forsendelseRespons = dokumentKonsumer.hentJournalpost(hendelse.forsendelseId!!)!!
+        val forsendelseRespons = dokumentKonsumer.hentJournalpost(hendelse.hentForsendelseIdMedPrefix!!)!!
         val forsendelse = forsendelseRespons.journalpost!!
         val dokument = forsendelse.dokumenter.find{it.dokumentreferanse == hendelse.dokumentreferanse} ?: throw ForsendelseFraHendelseManglerDokument("Fant ikke ${hendelse.dokumentreferanse} i forsendelse ${hendelse.forsendelseId} fra hendelse")
         val brevkode = hentBrevkode(dokument.dokumentmalId) ?: throw UgyldigBestillingAvDokument("Bestilling av forsendelse ${hendelse.forsendelseId} med dokumentreferanse ${hendelse.dokumentreferanse} er ugyldig. Dokumentmal ${dokument.dokumentmalId} er ikke støttet")
         val mottaker = forsendelse.avsenderMottaker ?: throw ForsendelseFraHendelseManglerNødvendigDetaljer("Forsendelse ${hendelse.forsendelseId} mangler mottaker informasjon")
-        dokumentBestillingService.bestill(
+        val resultat = dokumentBestillingService.bestill(
             DokumentBestillingForespørsel(
                 mottaker = MottakerTo(
                     ident = mottaker.ident as Ident,
@@ -62,8 +66,23 @@ class DokumentHendelseLytter(val objectMapper: ObjectMapper, val dokumentKonsume
                 språk = forsendelse.språk
             ),
             brevkode
-
         )
+        sendHendelse(hendelse, resultat)
+    }
+
+    private fun sendHendelse(hendelse: DokumentHendelse, respons: DokumentBestillingResponse){
+        try {
+            val nyHendelse = hendelse.copy(
+                hendelseType = DokumentHendelseType.BESTILLING_PROSESSERES,
+                arkivSystem =  when(respons.arkivSystem){
+                    DokumentArkivSystemTo.MIDL_BREVLAGER -> no.nav.bidrag.dokument.dto.DokumentArkivSystemTo.MIDLERTIDLIG_BREVLAGER
+                    else -> null
+                }
+            )
+            hendelseProduser.sendHendelse(nyHendelse)
+        } catch (e: Exception){
+            LOGGER.error(e){  "Det skjedde en feil ved sending av hendelse $hendelse" }
+        }
 
     }
 
