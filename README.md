@@ -42,9 +42,23 @@ kubectl config use dev-gcp
 Deretter kjør følgende kommando for å importere secrets. Viktig at filen som opprettes ikke committes til git
 
 ```bash
-kubectl exec --tty deployment/bidrag-dokument-bestilling-feature printenv | grep -E 'AZURE_|_URL|QUEUE|MQ|SCOPE' > src/main/resources/application-lokal-nais-secrets.properties
+kubectl exec --tty deployment/bidrag-dokument-bestilling-feature printenv | grep -E 'AZURE_|_URL|SCOPE' > src/main/resources/application-lokal-nais-secrets.properties
 ```
 
 Start opp applikasjonen ved å kjøre [BidragDokumentBestillingLokal.kt](src/test/kotlin/no/nav/bidrag/dokument/bestilling/BidragDokumentBestillingLokal.kt).
 
 Deretter kan tokenet brukes til å logge inn på swagger-ui http://localhost:8999/swagger-ui.html
+
+
+### Kafka
+
+Bruk `kcat` til å sende meldinger til kafka topic. Feks
+
+````bash
+kcat -b 0.0.0.0:9092 -t bidrag.dokument -P -K:
+````
+og lim inn eks:
+```bash
+BIF_1000000004:{"dokumentreferanse":"BIF_1000000004","forsendelseId":"BIF-1000000002","sporingId":"bestilling-BIF_1000000004","hendelseType":"BESTILLING"}
+```
+og deretter trykk Ctrl+D. Da vil meldingen bli sendt til topic bidrag-journalpost

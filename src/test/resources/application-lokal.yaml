@@ -27,8 +27,11 @@ MQ_USER_USERNAME: srvbdjournalpost
 #MQ_USER_PASSWORD: srvbdjournalpost
 #AZURE_APP_CLIENT_ID: <app_client_id>
 #AZURE_APP_CLIENT_SECRET: unset
-
+KAFKA_BOOTSTRAP_SERVERS: localhost:9092
+KAFKA_GROUP_ID: bidrag-dokument-forsendelse
+KAFKA_BROKERS: localhost:9092
 TOPIC_DOKUMENT: bidrag.dokument
+KAFKA_MAX_RETRY: 1
 spring:
   kafka:
     bootstrap-servers: ${KAFKA_BROKERS}

@@ -21,7 +21,6 @@ import org.springframework.web.client.RestTemplate
 import org.springframework.web.context.annotation.RequestScope
 
 @Service
-@RequestScope
 class BidragPersonKonsumer(
     @Value("\${BIDRAG_PERSON_URL}") bidragPersonUrl: String, baseRestTemplate: RestTemplate,
     securityTokenService: SecurityTokenService
