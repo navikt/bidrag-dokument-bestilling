@@ -12,6 +12,7 @@ import no.nav.bidrag.dokument.bestilling.konsumer.BidragDokumentKonsumer
 import no.nav.bidrag.dokument.bestilling.model.ForsendelseFraHendelseManglerDokument
 import no.nav.bidrag.dokument.bestilling.model.ForsendelseFraHendelseManglerNødvendigDetaljer
 import no.nav.bidrag.dokument.bestilling.model.Ident
+import no.nav.bidrag.dokument.bestilling.model.Saksbehandler
 import no.nav.bidrag.dokument.bestilling.model.UgyldigBestillingAvDokument
 import no.nav.bidrag.dokument.bestilling.tjenester.DokumentBestillingTjeneste
 import no.nav.bidrag.dokument.dto.DokumentHendelse
@@ -63,7 +64,8 @@ class DokumentHendelseLytter(val objectMapper: ObjectMapper, val dokumentKonsume
                 dokumentreferanse = hendelse.dokumentreferanse,
                 tittel = dokument.tittel,
                 enhet = forsendelse.journalforendeEnhet,
-                språk = forsendelse.språk
+                språk = forsendelse.språk,
+                saksbehandler = Saksbehandler(forsendelse.opprettetAvIdent)
             ),
             brevkode
         )

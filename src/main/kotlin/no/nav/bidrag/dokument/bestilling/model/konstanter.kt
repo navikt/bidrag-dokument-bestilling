@@ -3,6 +3,8 @@ package no.nav.bidrag.dokument.bestilling.model
 const val SYSTEMBRUKER_ID = "SYSTEM"
 const val DISREKSJONSKODE_KODE_6 = "SPSF"
 const val LANDKODE3_NORGE = "NOR"
+const val MDC_KORRELASJONSID = "correlationId"
+
 object SpråkKoder {
     val BOKMAL = "NB"
     val NYNORSK = "NN"
