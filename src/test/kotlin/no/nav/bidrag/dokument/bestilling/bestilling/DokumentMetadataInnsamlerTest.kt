@@ -200,7 +200,7 @@ internal class DokumentMetadataInnsamlerTest {
     fun `should add saksbehandler from request when available`(){
         mockDefaultValues()
         val saksbehandlerId = "Z123213"
-        every { saksbehandlerInfoManager.hentSaksbehandler() } returns Saksbehandler(saksbehandlerId, "Navn saksbehandler")
+        every { saksbehandlerInfoManager.hentSaksbehandler(any()) } returns Saksbehandler(saksbehandlerId, "Navn saksbehandler")
 
         val request = DokumentBestillingForespørsel(
             mottakerId = BM1.ident,
