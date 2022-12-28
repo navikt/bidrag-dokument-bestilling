@@ -23,6 +23,8 @@ spec:
       {{/each}}
   secureLogs:
     enabled: true
+  kafka:
+    pool: {{ kafka.pool }}
   image: {{ image }}
   liveness:
     path: /actuator/health

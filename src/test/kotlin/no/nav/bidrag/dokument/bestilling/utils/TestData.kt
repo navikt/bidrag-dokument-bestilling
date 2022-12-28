@@ -1,5 +1,6 @@
 package no.nav.bidrag.dokument.bestilling.utils
 
+import no.nav.bidrag.dokument.bestilling.api.dto.MottakerAdresseTo
 import no.nav.bidrag.dokument.bestilling.api.dto.SamhandlerAdresse
 import no.nav.bidrag.dokument.bestilling.api.dto.SamhandlerInformasjon
 import no.nav.bidrag.dokument.bestilling.konsumer.dto.EnhetKontaktInfoDto
@@ -31,6 +32,14 @@ val SAMHANDLER_INFO = SamhandlerInformasjon(
         postnummer = "3000",
         landkode = "NOR"
     )
+)
+
+val SAMHANDLER_MOTTAKER_ADRESSE = MottakerAdresseTo(
+    adresselinje1 = "Samhandler adresselinje 1",
+    adresselinje2 = "Samhandler adresselinje 2",
+    adresselinje3 = "Samhandler adresselinje 3",
+    postnummer = "3000",
+    landkode3 = "NOR"
 )
 
 val ANNEN_MOTTAKER = createPersonResponse(

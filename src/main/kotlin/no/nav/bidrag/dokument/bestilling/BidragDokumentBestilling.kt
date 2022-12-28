@@ -10,7 +10,7 @@ import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfi
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 
 const val PROFILE_NAIS = "nais"
-val SECURE_LOGGER: Logger = LoggerFactory.getLogger("secureLogger")
+val SIKKER_LOGG: Logger = LoggerFactory.getLogger("secureLogger")
 
 @SpringBootApplication(exclude = [SecurityAutoConfiguration::class, ManagementWebSecurityAutoConfiguration::class])
 @EnableJwtTokenValidation(ignore = ["org.springframework", "org.springdoc"])

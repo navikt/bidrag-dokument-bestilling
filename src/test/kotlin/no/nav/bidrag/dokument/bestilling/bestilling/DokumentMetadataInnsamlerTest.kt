@@ -13,6 +13,7 @@ import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
 import io.mockk.junit5.MockKExtension
 import no.nav.bidrag.dokument.bestilling.api.dto.DokumentBestillingForespørsel
+import no.nav.bidrag.dokument.bestilling.api.dto.MottakerTo
 import no.nav.bidrag.dokument.bestilling.konfigurasjon.SaksbehandlerInfoManager
 import no.nav.bidrag.dokument.bestilling.konsumer.KodeverkKonsumer
 import no.nav.bidrag.dokument.bestilling.konsumer.dto.KodeverkResponse
@@ -39,6 +40,7 @@ import no.nav.bidrag.dokument.bestilling.utils.SAKSBEHANDLER_IDENT
 import no.nav.bidrag.dokument.bestilling.utils.SAKSBEHANDLER_NAVN
 import no.nav.bidrag.dokument.bestilling.utils.SAMHANDLER_IDENT
 import no.nav.bidrag.dokument.bestilling.utils.SAMHANDLER_INFO
+import no.nav.bidrag.dokument.bestilling.utils.SAMHANDLER_MOTTAKER_ADRESSE
 import no.nav.bidrag.dokument.bestilling.utils.createEnhetKontaktInformasjon
 import no.nav.bidrag.dokument.bestilling.utils.createPostAdresseResponse
 import no.nav.bidrag.dokument.bestilling.utils.createSakResponse
@@ -86,7 +88,7 @@ internal class DokumentMetadataInnsamlerTest {
         every { personService.hentPerson(BP1.ident, any()) } returns BP1
         every { personService.hentPerson(BARN1.ident, any()) } returns BARN1
         every { personService.hentPerson(BARN2.ident, any()) } returns BARN2
-        every { personService.hentSpraak(any()) } returns "NB"
+        every { personService.hentSpråk(any()) } returns "NB"
         every { personService.hentPersonAdresse(any(), any()) } returns createPostAdresseResponse()
 
         every { organisasjonService.hentEnhetKontaktInfo(any(), any()) } returns createEnhetKontaktInformasjon()
@@ -309,6 +311,44 @@ internal class DokumentMetadataInnsamlerTest {
         )
         val bestilling = mapToBestillingsdata(request)
         bestilling.mottaker?.navn shouldBe mottaker.kortNavn
+    }
+
+    @Test
+    fun `should map with mottaker kontaktinformasjon`(){
+        mockDefaultValues()
+
+        val request = DokumentBestillingForespørsel(
+            mottaker = MottakerTo(
+                ident = SAMHANDLER_IDENT,
+                navn = "Samhandler samhandlersen",
+                språk = "NB",
+                adresse = SAMHANDLER_MOTTAKER_ADRESSE
+            ),
+            gjelderId = BM1.ident,
+            saksnummer = DEFAULT_SAKSNUMMER,
+            tittel = DEFAULT_TITLE_DOKUMENT,
+            enhet = "4806",
+            spraak = "NB",
+        )
+        val bestilling = mapToBestillingsdata(request)
+        val adresseResponse = SAMHANDLER_MOTTAKER_ADRESSE
+        assertSoftly {
+            bestilling.mottaker?.spraak shouldBe "NB"
+            bestilling.mottaker?.navn shouldBe SAMHANDLER_INFO.navn
+            bestilling.mottaker?.fodselsnummer shouldBe SAMHANDLER_IDENT
+            bestilling.mottaker?.rolle shouldBe null
+            bestilling.mottaker?.fodselsdato shouldBe null
+            bestilling.mottaker?.adresse?.adresselinje1 shouldBe adresseResponse.adresselinje1
+            bestilling.mottaker?.adresse?.adresselinje2 shouldBe adresseResponse.adresselinje2
+            bestilling.mottaker?.adresse?.adresselinje3 shouldBe "3000 Samhandler adresselinje 3"
+            bestilling.mottaker?.adresse?.adresselinje4 shouldBe null
+            bestilling.mottaker?.adresse?.bruksenhetsnummer shouldBe null
+            bestilling.mottaker?.adresse?.postnummer shouldBe adresseResponse.postnummer
+            bestilling.mottaker?.adresse?.poststed shouldBe null
+            bestilling.mottaker?.adresse?.landkode shouldBe null
+            bestilling.mottaker?.adresse?.landkode3 shouldBe adresseResponse.landkode3
+            bestilling.mottaker?.adresse?.land shouldBe "NORGE"
+        }
     }
 
     @Test

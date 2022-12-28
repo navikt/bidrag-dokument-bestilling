@@ -129,11 +129,11 @@ class DokumentMetadataInnsamler(
     }
 
     private fun leggTilMottaker(): DokumentMetadataInnsamler {
-        if (forespørsel.erMottakerSamhandler()) {
+        if (forespørsel.erMottakerSamhandler() && !forespørsel.harMottakerKontaktinformasjon()) {
             val samhandler = forespørsel.samhandlerInformasjon ?: throw SamhandlerManglerKontaktinformasjon("Samhandler med id ${forespørsel.mottakerId} mangler kontaktinformasjon")
             val adresse = samhandler.adresse
             dokumentBestilling.mottaker = Mottaker(
-                fodselsnummer = forespørsel.mottakerId,
+                fodselsnummer = forespørsel.mottakerIdent,
                 fodselsdato = null,
                 rolle = null,
                 navn = samhandler.navn ?: "Ukjent",
@@ -157,16 +157,18 @@ class DokumentMetadataInnsamler(
                 fodselsdato = mottaker.foedselsdato,
                 navn = mottaker.kortNavn ?: mottaker.navn,
                 rolle = hentRolle(mottaker.ident),
-                spraak = personTjeneste.hentSpraak(mottaker.ident),
+                spraak = forespørsel.mottaker?.språk ?: personTjeneste.hentSpråk(mottaker.ident),
                 adresse = if (adresse != null) {
                     val postnummerSted = if (adresse.postnummer.isNullOrEmpty() && adresse.poststed.isNullOrEmpty()) null
                                         else "${adresse.postnummer ?: ""} ${adresse.poststed ?: ""}".trim()
                     val landNavn = adresse.land3?.let { kodeverkTjeneste.hentLandFullnavnForKode(it) }
+                    val adresselinje3 = if (forespørsel.erMottakerSamhandler()) "${adresse.postnummer} ${adresse.adresselinje3?.substring(0, adresse.adresselinje3.length.coerceAtMost(25)) ?: ""}".trim()
+                    else adresse.adresselinje3 ?: postnummerSted
                     Adresse(
                         adresselinje1 = adresse.adresselinje1 ?: "",
                         adresselinje2 = adresse.adresselinje2,
-                        adresselinje3 = adresse.adresselinje3 ?: postnummerSted,
-                        adresselinje4 = if (!adresse.land3.isNullOrEmpty() && adresse.land3 != LANDKODE3_NORGE) landNavn else null,
+                        adresselinje3 = adresselinje3,
+                        adresselinje4 = if (!adresse.land3.isNullOrEmpty() && adresse.land3 != LANDKODE3_NORGE && !forespørsel.erMottakerSamhandler()) landNavn else null,
                         bruksenhetsnummer = if (adresse.bruksenhetsnummer == BRUKSHENETSNUMMER_STANDARD) null else adresse.bruksenhetsnummer,
                         poststed = adresse.poststed,
                         postnummer = adresse.postnummer,
@@ -249,11 +251,30 @@ class DokumentMetadataInnsamler(
     }
 
     private fun hentMottaker(): HentPersonResponse {
-        return personTjeneste.hentPerson(forespørsel.mottakerId, "Mottaker")
+        return if (forespørsel.erMottakerSamhandler()){
+            val mottaker = forespørsel.mottaker!!
+            HentPersonResponse(
+                navn = mottaker.navn!!,
+                ident = mottaker.ident,
+            )
+        } else personTjeneste.hentPerson(forespørsel.mottakerIdent, "Mottaker")
     }
 
     private fun hentMottakerAdresse(): HentPostadresseResponse? {
-        return personTjeneste.hentPersonAdresse(forespørsel.mottakerId, "Mottaker")
+        if (forespørsel.erMottakerSamhandler() && !forespørsel.harMottakerKontaktinformasjon()) throw SamhandlerManglerKontaktinformasjon("Samhandler med id ${forespørsel.mottakerId} mangler kontaktinformasjon")
+        return if (forespørsel.harMottakerKontaktinformasjon()){
+            val adresse = forespørsel.mottaker!!.adresse!!
+            HentPostadresseResponse(
+                adresselinje1 = adresse.adresselinje1,
+                adresselinje2 = adresse.adresselinje2,
+                adresselinje3 = adresse.adresselinje3,
+                bruksenhetsnummer = adresse.bruksenhetsnummer,
+                poststed = adresse.poststed,
+                postnummer = adresse.postnummer,
+                land = adresse.landkode,
+                land3 = adresse.landkode3
+            )
+        } else personTjeneste.hentPersonAdresse(forespørsel.mottakerIdent, "Mottaker")
     }
 
     private fun hentGjelderFraRoller(): Ident? {

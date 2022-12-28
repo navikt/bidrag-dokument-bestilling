@@ -11,3 +11,7 @@ class HentSakFeiletException(msg: String, throwable: Throwable): RuntimeExceptio
 class HentPersonFeiletException(msg: String, throwable: Throwable): RuntimeException(msg, throwable)
 class SamhandlerManglerKontaktinformasjon(msg: String): RuntimeException(msg)
 class ManglerGjelderException(msg: String): RuntimeException(msg)
+class ForsendelseFraHendelseManglerDokument(msg: String): RuntimeException(msg)
+class ForsendelseFraHendelseManglerNødvendigDetaljer(msg: String): RuntimeException(msg)
+class BestillingManglerMottaker(): RuntimeException("Bestilling mangler mottaker")
+class UgyldigBestillingAvDokument(msg: String): RuntimeException(msg)

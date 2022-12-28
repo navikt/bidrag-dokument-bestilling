@@ -1,6 +1,8 @@
 name: bidrag-dokument-bestilling-feature
 ingresses:
   - https://bidrag-dokument-bestilling-feature.dev.intern.nav.no
+kafka:
+  pool: nav-dev
 env:
   BIDRAG_PERSON_URL: https://bidrag-person-feature.dev-fss-pub.nais.io/bidrag-person
   BIDRAG_PERSON_SCOPE: dev-fss.bidrag.bidrag-person-feature
@@ -22,6 +24,9 @@ env:
   MQ_HOSTNAME: b27apvl220.preprod.local
   MQ_CHANNEL: Q1_BDBESTILLING
   JAVA_OPTS: -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005
+
+  KAFKA_MAX_RETRY: 3
+  TOPIC_DOKUMENT: bidrag.dokument-feature
 azure_access_inbound:
   - application: bisys
     namespace: bidrag

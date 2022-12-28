@@ -27,3 +27,14 @@ MQ_USER_USERNAME: srvbdjournalpost
 #MQ_USER_PASSWORD: srvbdjournalpost
 #AZURE_APP_CLIENT_ID: <app_client_id>
 #AZURE_APP_CLIENT_SECRET: unset
+
+TOPIC_DOKUMENT: bidrag.dokument
+spring:
+  kafka:
+    bootstrap-servers: ${KAFKA_BROKERS}
+    properties:
+      security.protocol: PLAINTEXT
+    consumer:
+      enableAutoCommit: false
+    listener:
+      ackMode: RECORD

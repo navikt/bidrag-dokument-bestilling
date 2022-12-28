@@ -23,12 +23,16 @@
 		<token-support.version>2.0.14</token-support.version>
 		<bidrag-commons-test.version>0.2.2</bidrag-commons-test.version>
 		<ibmmq.version>9.3.0.1</ibmmq.version>
-		<bidrag-dokument-dto.version>1.5.17</bidrag-dokument-dto.version>
-		<kotlin-logging-jvm.version>3.0.2</kotlin-logging-jvm.version>
+		<bidrag-dokument-dto.version>1.6.5</bidrag-dokument-dto.version>
+		<kotlin-logging-jvm.version>3.0.4</kotlin-logging-jvm.version>
 	</properties>
 	<dependencies>
 
 		<!--Spring-->
+		<dependency>
+			<groupId>org.springframework.kafka</groupId>
+			<artifactId>spring-kafka</artifactId>
+		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter</artifactId>

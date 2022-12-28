@@ -17,8 +17,8 @@ class DokumentBestillingTjeneste(val dokumentBestillingManager: DokumentBestilli
         return DokumentBestillingResponse(
             dokumentId = result.dokumentReferanse,
             journalpostId = result.journalpostId,
-            arkivSystem = when(result.arkivSystem){
-                BestillingSystem.BREVSERVER -> DokumentArkivSystemTo.MIDLERTIDLIG_BREVLAGER
+            arkivSystem = when(result.bestillingSystem){
+                BestillingSystem.BREVSERVER -> DokumentArkivSystemTo.MIDL_BREVLAGER
                 else -> null
             }
         )

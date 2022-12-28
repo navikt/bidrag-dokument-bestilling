@@ -6,11 +6,13 @@ import no.nav.bidrag.dokument.bestilling.model.SpråkKoder
 import no.nav.bidrag.dokument.bestilling.model.erSamhandler
 
 import io.swagger.v3.oas.annotations.media.Schema
+import no.nav.bidrag.dokument.bestilling.model.BestillingManglerMottaker
 import no.nav.bidrag.dokument.bestilling.model.Ident
 
 @Schema(description = "Metadata som brukes ved bestilling av ny dokument")
 data class DokumentBestillingForespørsel(
-    val mottakerId: Ident,
+    val mottakerId: Ident? = null,
+    val mottaker: MottakerTo? = null,
     @Schema(description = "Informasjon samhandler hvis mottakerid er en samhandlerid. Påkrevd hvis mottaker er en samhandler", deprecated = true)
     val samhandlerInformasjon: SamhandlerInformasjon? = null,
     @Schema(description = "Informasjon om saksbehandler som skal brukes ved opprettelse av dokument")
@@ -28,8 +30,10 @@ data class DokumentBestillingForespørsel(
     val spraak: String? = null,
     val språk: String? = null,
 ){
+    val mottakerIdent get() = mottaker?.ident ?: mottakerId ?: throw BestillingManglerMottaker()
     fun hentSpråk() = språk ?: spraak
-    fun erMottakerSamhandler() = mottakerId.erSamhandler
+    fun erMottakerSamhandler() = mottaker?.ident?.erSamhandler ?: mottakerIdent.erSamhandler
+    fun harMottakerKontaktinformasjon() = mottaker?.adresse != null
     fun hentRiktigSpråkkode(): String {
         val språk = hentSpråk()
         if (språk.isNullOrEmpty()){
@@ -45,6 +49,24 @@ data class DokumentBestillingForespørsel(
     }
 }
 
+data class MottakerTo(
+    val ident: Ident,
+    val navn: String? = null,
+    val språk: String? = null,
+    val adresse: MottakerAdresseTo? = null
+)
+data class MottakerAdresseTo(
+    val adresselinje1: String,
+    val adresselinje2: String? = null,
+    val adresselinje3: String? = null,
+    val bruksenhetsnummer: String? = null,
+    @Schema(description = "Lankode må være i ISO 3166-1 alpha-2 format") val landkode: String? = null,
+    @Schema(description = "Lankode må være i ISO 3166-1 alpha-3 format") val landkode3: String? = null,
+    val postnummer: String? = null,
+    val poststed: String? = null,
+)
+
+
 data class DokumentBestillingResponse(
     val dokumentId: String,
     val journalpostId: String,
@@ -52,7 +74,7 @@ data class DokumentBestillingResponse(
 )
 
 enum class DokumentArkivSystemTo {
-    MIDLERTIDLIG_BREVLAGER
+    MIDL_BREVLAGER
 }
 
 data class SamhandlerAdresse(

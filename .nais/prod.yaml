@@ -1,6 +1,8 @@
 name: bidrag-dokument-bestilling
 ingresses:
   - https://bidrag-dokument-bestilling.intern.nav.no
+kafka:
+  pool: nav-prod
 env:
   BIDRAG_PERSON_URL: https://bidrag-person.prod-fss-pub.nais.io/bidrag-person
   BIDRAG_PERSON_SCOPE: prod-fss.bidrag.bidrag-person
@@ -21,6 +23,9 @@ env:
   MQ_PORT: 1414
   MQ_HOSTNAME: mpls02.adeo.no
   MQ_CHANNEL: P_BDBESTILLING
+
+  KAFKA_MAX_RETRY: 5
+  TOPIC_DOKUMENT: bidrag.dokument
 azure_access_inbound:
   - application: bisys
     namespace: bidrag

@@ -1,6 +1,7 @@
 package no.nav.bidrag.dokument.bestilling.konsumer
 
 import no.nav.bidrag.commons.security.service.SecurityTokenService
+import no.nav.bidrag.dokument.dto.JournalpostResponse
 import no.nav.bidrag.dokument.dto.OpprettJournalpostRequest
 import no.nav.bidrag.dokument.dto.OpprettJournalpostResponse
 import org.springframework.beans.factory.annotation.Value
@@ -22,6 +23,15 @@ class BidragDokumentKonsumer(
             HttpMethod.POST,
             HttpEntity(opprettJournalpostRequest),
             OpprettJournalpostResponse::class.java
+        ).body
+    }
+
+    fun hentJournalpost(forsendelseId: String): JournalpostResponse? {
+        return restTemplate.exchange(
+            "/journal/$forsendelseId",
+            HttpMethod.GET,
+            null,
+            JournalpostResponse::class.java
         ).body
     }
 }
