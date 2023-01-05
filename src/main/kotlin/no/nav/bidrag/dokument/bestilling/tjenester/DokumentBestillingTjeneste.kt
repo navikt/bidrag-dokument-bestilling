@@ -1,11 +1,11 @@
 package no.nav.bidrag.dokument.bestilling.tjenester
 
-import no.nav.bidrag.dokument.bestilling.api.dto.DokumentArkivSystemTo
 import no.nav.bidrag.dokument.bestilling.api.dto.DokumentBestillingForespørsel
 import no.nav.bidrag.dokument.bestilling.api.dto.DokumentBestillingResponse
 import no.nav.bidrag.dokument.bestilling.bestilling.DokumentBestillingManager
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.BestillingSystem
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.BrevKode
+import no.nav.bidrag.dokument.dto.DokumentArkivSystemDto
 import org.springframework.stereotype.Service
 
 @Service
@@ -18,7 +18,7 @@ class DokumentBestillingTjeneste(val dokumentBestillingManager: DokumentBestilli
             dokumentId = result.dokumentReferanse,
             journalpostId = result.journalpostId,
             arkivSystem = when(result.bestillingSystem){
-                BestillingSystem.BREVSERVER -> DokumentArkivSystemTo.MIDL_BREVLAGER
+                BestillingSystem.BREVSERVER -> DokumentArkivSystemDto.MIDLERTIDLIG_BREVLAGER
                 else -> null
             }
         )

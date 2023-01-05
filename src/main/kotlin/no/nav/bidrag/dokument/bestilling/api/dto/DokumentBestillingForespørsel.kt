@@ -8,6 +8,7 @@ import no.nav.bidrag.dokument.bestilling.model.erSamhandler
 import io.swagger.v3.oas.annotations.media.Schema
 import no.nav.bidrag.dokument.bestilling.model.BestillingManglerMottaker
 import no.nav.bidrag.dokument.bestilling.model.Ident
+import no.nav.bidrag.dokument.dto.DokumentArkivSystemDto
 
 @Schema(description = "Metadata som brukes ved bestilling av ny dokument")
 data class DokumentBestillingForespørsel(
@@ -70,13 +71,8 @@ data class MottakerAdresseTo(
 data class DokumentBestillingResponse(
     val dokumentId: String,
     val journalpostId: String,
-    val arkivSystem: DokumentArkivSystemTo? = null,
+    val arkivSystem: DokumentArkivSystemDto? = null,
 )
-
-enum class DokumentArkivSystemTo {
-    MIDL_BREVLAGER
-}
-
 data class SamhandlerAdresse(
     val adresselinje1: String? = null,
     val adresselinje2: String? = null,

@@ -3,7 +3,6 @@ package no.nav.bidrag.dokument.bestilling.hendelse
 import com.fasterxml.jackson.databind.ObjectMapper
 import mu.KotlinLogging
 import no.nav.bidrag.commons.security.SikkerhetsKontekst.Companion.medApplikasjonKontekst
-import no.nav.bidrag.dokument.bestilling.api.dto.DokumentArkivSystemTo
 import no.nav.bidrag.dokument.bestilling.api.dto.DokumentBestillingForespørsel
 import no.nav.bidrag.dokument.bestilling.api.dto.DokumentBestillingResponse
 import no.nav.bidrag.dokument.bestilling.api.dto.MottakerAdresseTo
@@ -18,7 +17,6 @@ import no.nav.bidrag.dokument.bestilling.model.UgyldigBestillingAvDokument
 import no.nav.bidrag.dokument.bestilling.tjenester.DokumentBestillingTjeneste
 import no.nav.bidrag.dokument.dto.DokumentHendelse
 import no.nav.bidrag.dokument.dto.DokumentHendelseType
-import no.nav.bidrag.dokument.dto.DokumentStatusTo
 import org.apache.kafka.clients.consumer.ConsumerRecord
 import org.springframework.kafka.annotation.KafkaListener
 import org.springframework.stereotype.Component
@@ -78,11 +76,8 @@ class DokumentHendelseLytter(val objectMapper: ObjectMapper, val dokumentKonsume
     private fun sendHendelse(hendelse: DokumentHendelse, respons: DokumentBestillingResponse){
         try {
             val nyHendelse = hendelse.copy(
-                hendelseType = DokumentHendelseType.BESTILLING_PROSESSERES,
-                arkivSystem =  when(respons.arkivSystem){
-                    DokumentArkivSystemTo.MIDL_BREVLAGER -> no.nav.bidrag.dokument.dto.DokumentArkivSystemTo.MIDLERTIDLIG_BREVLAGER
-                    else -> null
-                }
+                hendelseType = DokumentHendelseType.ENDRING,
+                arkivSystem =  respons.arkivSystem
             )
             hendelseProduser.sendHendelse(nyHendelse)
         } catch (e: Exception){
