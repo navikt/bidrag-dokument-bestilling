@@ -5,7 +5,7 @@ import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.responses.ApiResponses
 import io.swagger.v3.oas.annotations.security.SecurityRequirement
-import no.nav.bidrag.dokument.bestilling.SECURE_LOGGER
+import no.nav.bidrag.dokument.bestilling.SIKKER_LOGG
 import no.nav.bidrag.dokument.bestilling.api.dto.DokumentBestillingForespørsel
 import no.nav.bidrag.dokument.bestilling.api.dto.DokumentBestillingResponse
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.BrevKode
@@ -36,7 +36,7 @@ class DokumentBestillingKontroller(val dokumentBestillingService: DokumentBestil
     @ApiResponses(value = [ApiResponse(responseCode = "400", description = "Dokument ble bestilt med ugyldig data")])
     fun bestillBrev(@RequestBody bestillingRequest: DokumentBestillingForespørsel, @PathVariable brevKode: BrevKode): DokumentBestillingResponse {
         LOGGER.info("Bestiller dokument for brevkode $brevKode og enhet ${bestillingRequest.enhet}")
-        SECURE_LOGGER.info("Bestiller dokument for brevkode $brevKode med data $bestillingRequest og enhet ${bestillingRequest.enhet}")
+        SIKKER_LOGG.info("Bestiller dokument for brevkode $brevKode med data $bestillingRequest og enhet ${bestillingRequest.enhet}")
         val result = dokumentBestillingService.bestill(bestillingRequest, brevKode)
         LOGGER.info("Bestilt dokument for brevkode $brevKode og enhet ${bestillingRequest.enhet} med respons $result")
         return result

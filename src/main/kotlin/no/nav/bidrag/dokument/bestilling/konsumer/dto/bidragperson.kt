@@ -5,10 +5,10 @@ import java.time.LocalDate
 data class HentPersonResponse(
     val ident: String,
     val navn: String,
-    val kortNavn: String?,
-    val foedselsdato: LocalDate?,
-    val doedsdato: LocalDate?,
-    val aktoerId: String?,
+    val kortNavn: String? = null,
+    val foedselsdato: LocalDate? = null,
+    val doedsdato: LocalDate? = null,
+    val aktoerId: String? = null,
     val diskresjonskode: String? = null,
     ){
 
@@ -33,12 +33,12 @@ data class HentPersonInfoRequest(
 )
 
 data class HentPostadresseResponse(
-    var adresselinje1: String?,
-    var adresselinje2: String?,
-    var adresselinje3: String?,
-    var bruksenhetsnummer: String?,
-    var postnummer: String?,
-    var poststed: String?,
-    var land: String?,
-    var land3: String? = null
+    val adresselinje1: String?,
+    val adresselinje2: String?,
+    val adresselinje3: String?,
+    val bruksenhetsnummer: String?,
+    val postnummer: String?,
+    val poststed: String?,
+    val land: String?,
+    val land3: String? = null
 )

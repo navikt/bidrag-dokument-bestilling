@@ -38,7 +38,7 @@ class BrevserverProdusent(
         return DokumentBestillingResult(
             dokumentReferanse = dokumentBestilling.dokumentreferanse!!,
             journalpostId = journalpostId,
-            arkivSystem = BestillingSystem.BREVSERVER
+            bestillingSystem = BestillingSystem.BREVSERVER
         )
     }
 

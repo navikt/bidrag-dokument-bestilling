@@ -20,9 +20,9 @@ class SaksbehandlerInfoManager(
         }
     }
 
-    fun hentSaksbehandler(): Saksbehandler? {
+    fun hentSaksbehandler(ident: String? = null): Saksbehandler? {
         return try {
-            val saksbehandlerIdent = hentSaksbehandlerBrukerId() ?: return null
+            val saksbehandlerIdent = ident ?: hentSaksbehandlerBrukerId() ?: return null
             val saksbehandlerNavn = bidragOrganisasjonKonsumer.hentSaksbehandlerInfo(saksbehandlerIdent)?.navn
             Saksbehandler(saksbehandlerIdent, saksbehandlerNavn)
         } catch (e: Exception) {
