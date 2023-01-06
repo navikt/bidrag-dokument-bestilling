@@ -166,7 +166,7 @@ class DokumentBestillingControllerTest: AbstractControllerTest() {
                     "{\"skalFerdigstilles\":false," +
                             "\"tittel\":\"$tittel\"," +
                             "\"gjelderIdent\":\"$gjelderId\"," +
-                            "\"avsenderMottaker\":{\"navn\":\"${BM1.navn}\",\"ident\":\"$mottakerId\",\"type\":\"FNR\"}," +
+                            "\"avsenderMottaker\":{\"navn\":\"${BM1.navn}\",\"ident\":\"$mottakerId\",\"type\":\"FNR\",\"adresse\":null}," +
                             "\"dokumenter\":[{\"tittel\":\"$tittel\",\"brevkode\":\"${brevKode.name}\"}]," +
                             "\"tilknyttSaker\":[\"$saksnummer\"]," +
                             "\"journalposttype\":\"UTGÅENDE\"," +

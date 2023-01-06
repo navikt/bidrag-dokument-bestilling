@@ -1,22 +1,14 @@
 package no.nav.bidrag.dokument.bestilling.konfigurasjon.jms
 
 import com.ibm.mq.constants.CMQC
-import com.ibm.mq.headers.CCSID
 import com.ibm.mq.jms.MQQueue
 import com.ibm.msg.client.jms.JmsConstants
-import com.ibm.msg.client.jms.JmsDestination
-import com.ibm.msg.client.jms.JmsQueue
-import com.ibm.msg.client.wmq.WMQConstants
-import no.nav.bidrag.dokument.bestilling.SECURE_LOGGER
-import org.slf4j.LoggerFactory
+import no.nav.bidrag.dokument.bestilling.SIKKER_LOGG
 import org.springframework.jms.support.converter.MarshallingMessageConverter
 import org.springframework.jms.support.converter.MessageType
 import org.springframework.oxm.Marshaller
 import org.springframework.oxm.jaxb.Jaxb2Marshaller
-import java.io.ByteArrayOutputStream
 import java.io.StringWriter
-import javax.jms.BytesMessage
-import javax.jms.Destination
 import javax.jms.Session
 import javax.jms.TextMessage
 import javax.xml.transform.Result
@@ -38,7 +30,7 @@ class LoggingMarshallingMessageConverter(jaxb2Marshaller: Jaxb2Marshaller, var r
             .replace("xsi:nil=\"true\"", "")
             .replace("xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"", "")
             .replace("\\s{2,}".toRegex(), "")
-        SECURE_LOGGER.info("Sending message $cleanedMessageString")
+        SIKKER_LOGG.info("Sending message $cleanedMessageString")
         val message =  session.createTextMessage(cleanedMessageString)
         message.setIntProperty(JmsConstants.JMS_IBM_CHARACTER_SET, 277)
         message.setIntProperty(JmsConstants.JMS_IBM_MSGTYPE, CMQC.MQMT_DATAGRAM)

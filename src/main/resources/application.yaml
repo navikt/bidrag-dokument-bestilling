@@ -16,7 +16,7 @@ mq:
   username: ${MQ_USER_USERNAME}
   password: ${MQ_USER_PASSWORD}
 ---
-spring.config.activate.on-profile: nais,local
+spring.config.activate.on-profile: nais,lokal
 
 no.nav.security.jwt:
   client:

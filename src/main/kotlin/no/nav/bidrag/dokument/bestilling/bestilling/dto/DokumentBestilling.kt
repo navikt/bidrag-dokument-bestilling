@@ -7,7 +7,7 @@ import java.time.LocalDate
 data class DokumentBestillingResult(
     val dokumentReferanse: String,
     val journalpostId: String,
-    val arkivSystem: String
+    val bestillingSystem: String
 )
 
 data class DokumentBestilling(
