@@ -73,7 +73,7 @@ class DefaultRestControllerAdvice {
     @ResponseBody
     @ExceptionHandler(value = [IllegalArgumentException::class, MethodArgumentTypeMismatchException::class, ConversionFailedException::class])
     fun handleInvalidValueExceptions(exception: Exception): ResponseEntity<*> {
-        LOGGER.warn("Kallet inneholder ugyldig verdi", exception)
+        LOGGER.warn(exception){"Kallet inneholder ugyldig verdi: ${exception.message} "}
         return ResponseEntity
             .status(HttpStatus.BAD_REQUEST)
             .header(HttpHeaders.WARNING, "Kallet inneholder ugyldig verdi: ${exception.message}")
@@ -83,7 +83,7 @@ class DefaultRestControllerAdvice {
     @ResponseBody
     @ExceptionHandler(Exception::class)
     fun handleOtherExceptions(exception: Exception): ResponseEntity<*> {
-        LOGGER.warn("Det skjedde en ukjent feil: ${exception.message}", exception)
+        LOGGER.error(exception){"Det skjedde en ukjent feil: ${exception.message}"}
         return ResponseEntity
             .status(HttpStatus.INTERNAL_SERVER_ERROR)
             .header(HttpHeaders.WARNING, "Det skjedde en ukjent feil: ${exception.message}")
