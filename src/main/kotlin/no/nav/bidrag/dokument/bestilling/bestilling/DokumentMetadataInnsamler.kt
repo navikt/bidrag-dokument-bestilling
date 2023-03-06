@@ -130,7 +130,8 @@ class DokumentMetadataInnsamler(
 
     private fun leggTilMottaker(): DokumentMetadataInnsamler {
         if (forespørsel.erMottakerSamhandler() && !forespørsel.harMottakerKontaktinformasjon()) {
-            val samhandler = forespørsel.samhandlerInformasjon ?: throw SamhandlerManglerKontaktinformasjon("Samhandler med id ${forespørsel.mottakerId} mangler kontaktinformasjon")
+            val samhandler = forespørsel.samhandlerInformasjon
+                ?: throw SamhandlerManglerKontaktinformasjon("Samhandler med id ${forespørsel.mottakerId} mangler kontaktinformasjon")
             val adresse = samhandler.adresse
             dokumentBestilling.mottaker = Mottaker(
                 fodselsnummer = forespørsel.mottakerIdent,
@@ -141,7 +142,12 @@ class DokumentMetadataInnsamler(
                 adresse = Adresse(
                     adresselinje1 = adresse?.adresselinje1 ?: "",
                     adresselinje2 = adresse?.adresselinje2 ?: "",
-                    adresselinje3 = "${adresse?.postnummer} ${adresse?.adresselinje3?.substring(0, adresse.adresselinje3.length.coerceAtMost(25)) ?: ""}".trim(),
+                    adresselinje3 = "${adresse?.postnummer} ${
+                        adresse?.adresselinje3?.substring(
+                            0,
+                            adresse.adresselinje3.length.coerceAtMost(25)
+                        ) ?: ""
+                    }".trim(),
                     postnummer = adresse?.postnummer,
                     landkode = adresse?.landkode,
                     landkode3 = adresse?.landkode,
@@ -155,14 +161,19 @@ class DokumentMetadataInnsamler(
             dokumentBestilling.mottaker = Mottaker(
                 fodselsnummer = mottaker.ident,
                 fodselsdato = mottaker.foedselsdato,
-                navn = mottaker.kortNavn ?: mottaker.navn,
+                navn = mottaker.kortNavn ?: mottaker.navn ?: "",
                 rolle = hentRolle(mottaker.ident),
                 spraak = forespørsel.mottaker?.språk ?: personTjeneste.hentSpråk(mottaker.ident),
                 adresse = if (adresse != null) {
                     val postnummerSted = if (adresse.postnummer.isNullOrEmpty() && adresse.poststed.isNullOrEmpty()) null
-                                        else "${adresse.postnummer ?: ""} ${adresse.poststed ?: ""}".trim()
+                    else "${adresse.postnummer ?: ""} ${adresse.poststed ?: ""}".trim()
                     val landNavn = adresse.land3?.let { kodeverkTjeneste.hentLandFullnavnForKode(it) }
-                    val adresselinje3 = if (forespørsel.erMottakerSamhandler()) "${adresse.postnummer} ${adresse.adresselinje3?.substring(0, adresse.adresselinje3.length.coerceAtMost(25)) ?: ""}".trim()
+                    val adresselinje3 = if (forespørsel.erMottakerSamhandler()) "${adresse.postnummer} ${
+                        adresse.adresselinje3?.substring(
+                            0,
+                            adresse.adresselinje3.length.coerceAtMost(25)
+                        ) ?: ""
+                    }".trim()
                     else adresse.adresselinje3 ?: postnummerSted
                     Adresse(
                         adresselinje1 = adresse.adresselinje1 ?: "",
@@ -184,7 +195,8 @@ class DokumentMetadataInnsamler(
     }
 
     fun leggTilEnhetKontaktInfo(): DokumentMetadataInnsamler {
-        val enhetKontaktInfo = organisasjonTjeneste.hentEnhetKontaktInfo(enhet, dokumentBestilling.spraak) ?: throw FantIkkeEnhetException("Fant ikke enhet $enhet for spraak ${dokumentBestilling.spraak}")
+        val enhetKontaktInfo = organisasjonTjeneste.hentEnhetKontaktInfo(enhet, dokumentBestilling.spraak)
+            ?: throw FantIkkeEnhetException("Fant ikke enhet $enhet for spraak ${dokumentBestilling.spraak}")
 
         dokumentBestilling.kontaktInfo = EnhetKontaktInfo(
             navn = enhetKontaktInfo.enhetNavn ?: "",
@@ -207,7 +219,9 @@ class DokumentMetadataInnsamler(
 
     fun hentBestillingData(): DokumentBestilling = dokumentBestilling
 
-    private val DokumentBestillingForespørsel.actualGjelderId get() = (if (hentRolle(this.gjelderId) != null) this.gjelderId else hentGjelderFraRoller()) ?: throw ManglerGjelderException("Fant ingen gjelder")
+    private val DokumentBestillingForespørsel.actualGjelderId
+        get() = (if (hentRolle(this.gjelderId) != null) this.gjelderId else hentGjelderFraRoller())
+            ?: throw ManglerGjelderException("Fant ingen gjelder")
 
     private fun hentFodselsdato(person: HentPersonResponse): LocalDate? {
         return if (person.isKode6) null else person.foedselsdato
@@ -251,7 +265,7 @@ class DokumentMetadataInnsamler(
     }
 
     private fun hentMottaker(): HentPersonResponse {
-        return if (forespørsel.erMottakerSamhandler()){
+        return if (forespørsel.erMottakerSamhandler()) {
             val mottaker = forespørsel.mottaker!!
             HentPersonResponse(
                 navn = mottaker.navn!!,
@@ -262,7 +276,7 @@ class DokumentMetadataInnsamler(
 
     private fun hentMottakerAdresse(): HentPostadresseResponse? {
         if (forespørsel.erMottakerSamhandler() && !forespørsel.harMottakerKontaktinformasjon()) throw SamhandlerManglerKontaktinformasjon("Samhandler med id ${forespørsel.mottakerId} mangler kontaktinformasjon")
-        return if (forespørsel.harMottakerKontaktinformasjon()){
+        return if (forespørsel.harMottakerKontaktinformasjon()) {
             val adresse = forespørsel.mottaker!!.adresse!!
             HentPostadresseResponse(
                 adresselinje1 = adresse.adresselinje1,
@@ -283,7 +297,8 @@ class DokumentMetadataInnsamler(
 
     private fun hentSaksbehandler(request: DokumentBestillingForespørsel): Saksbehandler {
         if (request.saksbehandler != null && !request.saksbehandler.ident.isNullOrEmpty()) {
-            val saksbehandlerNavn = request.saksbehandler.navn ?: saksbehandlerInfoManager.hentSaksbehandler(request.saksbehandler.ident)?.navn ?: saksbehandlerInfoManager.hentSaksbehandlerBrukerId()
+            val saksbehandlerNavn = request.saksbehandler.navn ?: saksbehandlerInfoManager.hentSaksbehandler(request.saksbehandler.ident)?.navn
+            ?: saksbehandlerInfoManager.hentSaksbehandlerBrukerId()
             return Saksbehandler(request.saksbehandler.ident, saksbehandlerNavn)
         }
 
