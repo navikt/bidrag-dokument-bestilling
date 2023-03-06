@@ -16,16 +16,18 @@ data class HentPersonResponse(
     val isKode6 = diskresjonskode == DISREKSJONSKODE_KODE_6
     val isDod = doedsdato != null
     val fornavnEtternavn
-        get() = run {
-            val navnSplit = navn?.split(",") ?: emptyList()
+        get(): String = run {
+            if (navn.isNullOrEmpty()) return ""
+            val navnSplit = navn.split(",")
             val fornavnMellomnavn = if (navnSplit.size == 2) navnSplit[1] else navnSplit[0]
             val etternavn = if (navnSplit.size == 2) navnSplit[0] else ""
             "$fornavnMellomnavn $etternavn"
         }
 
     val fornavn
-        get() = run {
-            val navnSplit = navn?.split(",") ?: emptyList()
+        get(): String = run {
+            if (navn.isNullOrEmpty()) return ""
+            val navnSplit = navn.split(",")
             val fornavnMellomnavn = if (navnSplit.size == 2) navnSplit[1] else navnSplit[0]
             fornavnMellomnavn.trim().split(" ")[0]
         }
