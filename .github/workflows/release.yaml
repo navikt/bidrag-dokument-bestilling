@@ -3,6 +3,9 @@ on:
   push:
     branches:
       - release
+env:
+  GITHUB_USERNAME: x-access-token
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 jobs:
   build:
