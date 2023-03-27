@@ -48,3 +48,9 @@ kubectl exec --tty deployment/bidrag-dokument-bestilling-feature printenv | grep
 Start opp applikasjonen ved å kjøre [BidragDokumentBestillingLokal.kt](src/test/kotlin/no/nav/bidrag/dokument/bestilling/BidragDokumentBestillingLokal.kt).
 
 Deretter kan tokenet brukes til å logge inn på swagger-ui http://localhost:8999/swagger-ui.html
+
+### Test nais.yaml implementation
+
+```
+docker run -v $(pwd)/.nais:/nais navikt/deployment:v1 ./deploy --dry-run --print-payload --resource /nais/nais.yaml --vars /nais/feature.yaml
+```

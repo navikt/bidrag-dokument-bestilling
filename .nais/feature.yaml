@@ -23,6 +23,12 @@ env:
   MQ_HOSTNAME: b27apvl220.preprod.local
   MQ_CHANNEL: Q1_BDBESTILLING
   JAVA_OPTS: -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005
+outbound-access-hosts:
+   - bidrag-dokument-feature.dev-fss-pub.nais.io
+   - bidrag-person-feature.dev-fss-pub.nais.io
+   - bidrag-sak-feature.dev-fss-pub.nais.io
+   - bidrag-organisasjon-feature.dev-fss-pub.nais.io
+   - kodeverk.dev-fss-pub.nais.io
 azure_access_inbound:
   - application: bisys
     namespace: bidrag
