@@ -1,24 +1,24 @@
 package no.nav.bidrag.dokument.bestilling.bestilling
 
 import no.nav.bidrag.dokument.bestilling.api.dto.DokumentBestillingForespørsel
-import no.nav.bidrag.dokument.bestilling.konfigurasjon.SaksbehandlerInfoManager
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.Adresse
-import no.nav.bidrag.dokument.bestilling.model.BRUKSHENETSNUMMER_STANDARD
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.Barn
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.DokumentBestilling
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.EnhetKontaktInfo
-import no.nav.bidrag.dokument.bestilling.model.FantIkkeEnhetException
-import no.nav.bidrag.dokument.bestilling.model.FantIkkeSakException
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.Gjelder
+import no.nav.bidrag.dokument.bestilling.bestilling.dto.Mottaker
+import no.nav.bidrag.dokument.bestilling.bestilling.dto.PartInfo
+import no.nav.bidrag.dokument.bestilling.konfigurasjon.SaksbehandlerInfoManager
 import no.nav.bidrag.dokument.bestilling.konsumer.dto.HentPersonResponse
 import no.nav.bidrag.dokument.bestilling.konsumer.dto.HentPostadresseResponse
 import no.nav.bidrag.dokument.bestilling.konsumer.dto.HentSakResponse
+import no.nav.bidrag.dokument.bestilling.konsumer.dto.RolleType
+import no.nav.bidrag.dokument.bestilling.model.BRUKSHENETSNUMMER_STANDARD
+import no.nav.bidrag.dokument.bestilling.model.FantIkkeEnhetException
+import no.nav.bidrag.dokument.bestilling.model.FantIkkeSakException
 import no.nav.bidrag.dokument.bestilling.model.Ident
 import no.nav.bidrag.dokument.bestilling.model.LANDKODE3_NORGE
 import no.nav.bidrag.dokument.bestilling.model.ManglerGjelderException
-import no.nav.bidrag.dokument.bestilling.bestilling.dto.Mottaker
-import no.nav.bidrag.dokument.bestilling.bestilling.dto.PartInfo
-import no.nav.bidrag.dokument.bestilling.konsumer.dto.RolleType
 import no.nav.bidrag.dokument.bestilling.model.Saksbehandler
 import no.nav.bidrag.dokument.bestilling.model.SamhandlerManglerKontaktinformasjon
 import no.nav.bidrag.dokument.bestilling.model.SpråkKoder
@@ -78,43 +78,48 @@ class DokumentMetadataInnsamler(
         val bidragspliktigAdresse = hentBidragspliktigAdresse()
         val bidragsmottakerAdresse = hentBidragsmottakerAdresse()
 
-        if (bidragsmottaker != null) dokumentBestilling.roller.add(
-            PartInfo(
-                rolle = RolleType.BM,
-                fodselsnummer = bidragsmottaker.ident,
-                navn = if (bidragsmottaker.isKode6) "" else bidragsmottaker.fornavnEtternavn,
-                fodselsdato = hentFodselsdato(bidragsmottaker),
-                doedsdato = bidragsmottaker.doedsdato,
-                landkode = bidragsmottakerAdresse?.land,
-                landkode3 = bidragsmottakerAdresse?.land3
+        if (bidragsmottaker != null) {
+            dokumentBestilling.roller.add(
+                PartInfo(
+                    rolle = RolleType.BM,
+                    fodselsnummer = bidragsmottaker.ident,
+                    navn = if (bidragsmottaker.isKode6) "" else bidragsmottaker.fornavnEtternavn,
+                    fodselsdato = hentFodselsdato(bidragsmottaker),
+                    doedsdato = bidragsmottaker.doedsdato,
+                    landkode = bidragsmottakerAdresse?.land,
+                    landkode3 = bidragsmottakerAdresse?.land3
+                )
             )
-        )
+        }
 
-        if (bidragspliktig != null) dokumentBestilling.roller.add(
-            PartInfo(
-                rolle = RolleType.BP,
-                fodselsnummer = bidragspliktig.ident,
-                navn = if (bidragspliktig.isKode6) "" else bidragspliktig.fornavnEtternavn,
-                fodselsdato = hentFodselsdato(bidragspliktig),
-                doedsdato = bidragspliktig.doedsdato,
-                landkode = bidragspliktigAdresse?.land,
-                landkode3 = bidragspliktigAdresse?.land3
+        if (bidragspliktig != null) {
+            dokumentBestilling.roller.add(
+                PartInfo(
+                    rolle = RolleType.BP,
+                    fodselsnummer = bidragspliktig.ident,
+                    navn = if (bidragspliktig.isKode6) "" else bidragspliktig.fornavnEtternavn,
+                    fodselsdato = hentFodselsdato(bidragspliktig),
+                    doedsdato = bidragspliktig.doedsdato,
+                    landkode = bidragspliktigAdresse?.land,
+                    landkode3 = bidragspliktigAdresse?.land3
+                )
             )
-        )
+        }
 
         val barn = sak.roller.filter { it.rolleType == RolleType.BA }
         barn.filter { !it.foedselsnummer.isNullOrEmpty() }.forEach {
             val barnInfo = if (it.foedselsnummer!!.erDødfødt) null else personTjeneste.hentPerson(it.foedselsnummer, "Barn")
             if (barnInfo == null || !barnInfo.isDod) {
                 // TODO: Legg til RM fødselsnummer (mangler fra sak respons)
-                dokumentBestilling.roller.add(Barn(
-                    fodselsnummer = it.foedselsnummer,
-                    navn = barnInfo?.let { if (barnInfo.isKode6) hentKode6NavnBarn(barnInfo) else barnInfo.fornavnEtternavn } ?: "",
-                    fodselsdato = barnInfo?.let { hentFodselsdato(barnInfo) },
-                    fornavn = barnInfo?.let { if (barnInfo.isKode6) hentKode6NavnBarn(barnInfo) else barnInfo.fornavn }
-                ))
+                dokumentBestilling.roller.add(
+                    Barn(
+                        fodselsnummer = it.foedselsnummer,
+                        navn = barnInfo?.let { if (barnInfo.isKode6) hentKode6NavnBarn(barnInfo) else barnInfo.fornavnEtternavn } ?: "",
+                        fodselsdato = barnInfo?.let { hentFodselsdato(barnInfo) },
+                        fornavn = barnInfo?.let { if (barnInfo.isKode6) hentKode6NavnBarn(barnInfo) else barnInfo.fornavn }
+                    )
+                )
             }
-
         }
 
         return this
@@ -143,10 +148,10 @@ class DokumentMetadataInnsamler(
                     adresselinje1 = adresse?.adresselinje1 ?: "",
                     adresselinje2 = adresse?.adresselinje2 ?: "",
                     adresselinje3 = "${adresse?.postnummer} ${
-                        adresse?.adresselinje3?.substring(
-                            0,
-                            adresse.adresselinje3.length.coerceAtMost(25)
-                        ) ?: ""
+                    adresse?.adresselinje3?.substring(
+                        0,
+                        adresse.adresselinje3.length.coerceAtMost(25)
+                    ) ?: ""
                     }".trim(),
                     postnummer = adresse?.postnummer,
                     landkode = adresse?.landkode,
@@ -165,16 +170,22 @@ class DokumentMetadataInnsamler(
                 rolle = hentRolle(mottaker.ident),
                 spraak = forespørsel.mottaker?.språk ?: personTjeneste.hentSpråk(mottaker.ident),
                 adresse = if (adresse != null) {
-                    val postnummerSted = if (adresse.postnummer.isNullOrEmpty() && adresse.poststed.isNullOrEmpty()) null
-                    else "${adresse.postnummer ?: ""} ${adresse.poststed ?: ""}".trim()
+                    val postnummerSted = if (adresse.postnummer.isNullOrEmpty() && adresse.poststed.isNullOrEmpty()) {
+                        null
+                    } else {
+                        "${adresse.postnummer ?: ""} ${adresse.poststed ?: ""}".trim()
+                    }
                     val landNavn = adresse.land3?.let { kodeverkTjeneste.hentLandFullnavnForKode(it) }
-                    val adresselinje3 = if (forespørsel.erMottakerSamhandler()) "${adresse.postnummer} ${
+                    val adresselinje3 = if (forespørsel.erMottakerSamhandler()) {
+                        "${adresse.postnummer} ${
                         adresse.adresselinje3?.substring(
                             0,
                             adresse.adresselinje3.length.coerceAtMost(25)
                         ) ?: ""
-                    }".trim()
-                    else adresse.adresselinje3 ?: postnummerSted
+                        }".trim()
+                    } else {
+                        adresse.adresselinje3 ?: postnummerSted
+                    }
                     Adresse(
                         adresselinje1 = adresse.adresselinje1 ?: "",
                         adresselinje2 = adresse.adresselinje2,
@@ -187,7 +198,9 @@ class DokumentMetadataInnsamler(
                         landkode3 = adresse.land3,
                         land = landNavn
                     )
-                } else null
+                } else {
+                    null
+                }
             )
         }
 
@@ -206,7 +219,7 @@ class DokumentMetadataInnsamler(
                 adresselinje2 = enhetKontaktInfo.postadresse?.adresselinje2,
                 poststed = enhetKontaktInfo.postadresse?.poststed,
                 postnummer = enhetKontaktInfo.postadresse?.postnummer,
-                land = enhetKontaktInfo.postadresse?.land,
+                land = enhetKontaktInfo.postadresse?.land
             ),
             enhetId = enhet
         )
@@ -269,9 +282,11 @@ class DokumentMetadataInnsamler(
             val mottaker = forespørsel.mottaker!!
             HentPersonResponse(
                 navn = mottaker.navn!!,
-                ident = mottaker.ident,
+                ident = mottaker.ident
             )
-        } else personTjeneste.hentPerson(forespørsel.mottakerIdent, "Mottaker")
+        } else {
+            personTjeneste.hentPerson(forespørsel.mottakerIdent, "Mottaker")
+        }
     }
 
     private fun hentMottakerAdresse(): HentPostadresseResponse? {
@@ -288,7 +303,9 @@ class DokumentMetadataInnsamler(
                 land = adresse.landkode,
                 land3 = adresse.landkode3
             )
-        } else personTjeneste.hentPersonAdresse(forespørsel.mottakerIdent, "Mottaker")
+        } else {
+            personTjeneste.hentPersonAdresse(forespørsel.mottakerIdent, "Mottaker")
+        }
     }
 
     private fun hentGjelderFraRoller(): Ident? {
@@ -298,7 +315,7 @@ class DokumentMetadataInnsamler(
     private fun hentSaksbehandler(request: DokumentBestillingForespørsel): Saksbehandler {
         if (request.saksbehandler != null && !request.saksbehandler.ident.isNullOrEmpty()) {
             val saksbehandlerNavn = request.saksbehandler.navn ?: saksbehandlerInfoManager.hentSaksbehandler(request.saksbehandler.ident)?.navn
-            ?: saksbehandlerInfoManager.hentSaksbehandlerBrukerId()
+                ?: saksbehandlerInfoManager.hentSaksbehandlerBrukerId()
             return Saksbehandler(request.saksbehandler.ident, saksbehandlerNavn)
         }
 

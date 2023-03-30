@@ -6,6 +6,5 @@ import no.nav.bidrag.dokument.bestilling.bestilling.dto.DokumentBestillingResult
 
 interface DokumentProdusent {
 
-
     fun produser(dokumentBestilling: DokumentBestilling, brevKode: BrevKode): DokumentBestillingResult
 }

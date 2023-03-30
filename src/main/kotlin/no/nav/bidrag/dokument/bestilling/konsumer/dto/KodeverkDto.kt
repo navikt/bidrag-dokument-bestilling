@@ -4,7 +4,7 @@ import java.time.LocalDate
 
 data class KodeverkResponse(
     var betydninger: Map<String, List<KodeverkBetydning>>
-){
+) {
     fun hentFraKode(kode: String?) = betydninger[kode]?.get(0)
 }
 

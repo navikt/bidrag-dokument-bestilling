@@ -14,7 +14,7 @@ class BidragDokumentKonsumer(
     @Value("\${BIDRAG_DOKUMENT_URL}") bidragDokumentUrl: String,
     baseRestTemplate: RestTemplate,
     securityTokenService: SecurityTokenService
-): DefaultKonsumer("bidrag-dokument", bidragDokumentUrl, baseRestTemplate, securityTokenService) {
+) : DefaultKonsumer("bidrag-dokument", bidragDokumentUrl, baseRestTemplate, securityTokenService) {
 
     fun opprettJournalpost(opprettJournalpostRequest: OpprettJournalpostRequest): OpprettJournalpostResponse? {
         return restTemplate.exchange(

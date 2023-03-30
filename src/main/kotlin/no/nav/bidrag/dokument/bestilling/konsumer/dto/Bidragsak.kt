@@ -2,7 +2,7 @@ package no.nav.bidrag.dokument.bestilling.konsumer.dto
 
 import no.nav.bidrag.dokument.bestilling.model.Ident
 
-data class HentSakResponse (
+data class HentSakResponse(
     val eierfogd: String? = null,
     val saksnummer: String? = null,
     val saksstatus: String? = null,
@@ -23,5 +23,5 @@ enum class RolleType(var beskrivelse: String) {
     BP("Bidragspliktig"),
     FR("Feilregistrert"),
     RM("Reell mottaker"),
-    UKJENT("Ukjent"),
+    UKJENT("Ukjent")
 }

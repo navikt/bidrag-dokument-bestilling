@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service
 class SakTjeneste(private val bidragSakKonsumer: BidragSakKonsumer) {
 
     fun hentSak(saksnr: String): HentSakResponse? {
-       return bidragSakKonsumer.hentSak(saksnr)
+        return bidragSakKonsumer.hentSak(saksnr)
     }
-
 }

@@ -1,6 +1,5 @@
 package no.nav.bidrag.dokument.bestilling.bestilling.produksjon
 
-import no.nav.bidrag.dokument.bestilling.konsumer.BidragDokumentKonsumer
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.BestillingSystem
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.BrevKode
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.BrevType
@@ -8,12 +7,13 @@ import no.nav.bidrag.dokument.bestilling.bestilling.dto.DokumentBestilling
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.DokumentBestillingResult
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.EnhetKontaktInfo
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.Mottaker
-import no.nav.bidrag.dokument.bestilling.konsumer.dto.RolleType
 import no.nav.bidrag.dokument.bestilling.bestilling.produksjon.dto.Brev
 import no.nav.bidrag.dokument.bestilling.bestilling.produksjon.dto.BrevBestilling
 import no.nav.bidrag.dokument.bestilling.bestilling.produksjon.dto.BrevKontaktinfo
 import no.nav.bidrag.dokument.bestilling.bestilling.produksjon.dto.BrevMottaker
 import no.nav.bidrag.dokument.bestilling.bestilling.produksjon.dto.brevbestilling
+import no.nav.bidrag.dokument.bestilling.konsumer.BidragDokumentKonsumer
+import no.nav.bidrag.dokument.bestilling.konsumer.dto.RolleType
 import no.nav.bidrag.dokument.dto.AvsenderMottakerDto
 import no.nav.bidrag.dokument.dto.JournalpostType
 import no.nav.bidrag.dokument.dto.OpprettDokumentDto
@@ -27,14 +27,13 @@ class BrevserverProdusent(
     val onlinebrevTemplate: JmsTemplate,
     val bidragDokumentKonsumer: BidragDokumentKonsumer,
     @Value("\${BREVSERVER_PASSORD}") val brevPassord: String
-): DokumentProdusent {
-
+) : DokumentProdusent {
 
     override fun produser(dokumentBestilling: DokumentBestilling, brevKode: BrevKode): DokumentBestillingResult {
         val journalpostId = opprettJournalpost(dokumentBestilling, brevKode)
 
         onlinebrevTemplate.convertAndSend(mapToBrevserverMessage(dokumentBestilling, brevKode))
-         // TODO: Error handling
+        // TODO: Error handling
         return DokumentBestillingResult(
             dokumentReferanse = dokumentBestilling.dokumentreferanse!!,
             journalpostId = journalpostId,
@@ -43,24 +42,28 @@ class BrevserverProdusent(
     }
 
     fun opprettJournalpost(dokumentBestilling: DokumentBestilling, brevKode: BrevKode): String {
-        if (dokumentBestilling.dokumentreferanse.isNullOrEmpty()){
+        if (dokumentBestilling.dokumentreferanse.isNullOrEmpty()) {
             val tittel = dokumentBestilling.tittel ?: brevKode.beskrivelse
-            val response = bidragDokumentKonsumer.opprettJournalpost(OpprettJournalpostRequest(
-                tittel = tittel,
-                journalførendeEnhet = dokumentBestilling.enhet,
-                tilknyttSaker = listOf(dokumentBestilling.saksnummer!!),
-                dokumenter = listOf(OpprettDokumentDto(
+            val response = bidragDokumentKonsumer.opprettJournalpost(
+                OpprettJournalpostRequest(
                     tittel = tittel,
-                    brevkode = brevKode.name
-                )),
-                gjelderIdent = dokumentBestilling.gjelder?.fodselsnummer!!,
-                avsenderMottaker = AvsenderMottakerDto(dokumentBestilling.mottaker?.navn, dokumentBestilling.mottaker?.fodselsnummer!!),
-                journalposttype = when(brevKode.brevtype){
-                    BrevType.UTGÅENDE -> JournalpostType.UTGÅENDE
-                    BrevType.NOTAT -> JournalpostType.NOTAT
-                },
-                saksbehandlerIdent = dokumentBestilling.saksbehandler?.ident
-            ))
+                    journalførendeEnhet = dokumentBestilling.enhet,
+                    tilknyttSaker = listOf(dokumentBestilling.saksnummer!!),
+                    dokumenter = listOf(
+                        OpprettDokumentDto(
+                            tittel = tittel,
+                            brevkode = brevKode.name
+                        )
+                    ),
+                    gjelderIdent = dokumentBestilling.gjelder?.fodselsnummer!!,
+                    avsenderMottaker = AvsenderMottakerDto(dokumentBestilling.mottaker?.navn, dokumentBestilling.mottaker?.fodselsnummer!!),
+                    journalposttype = when (brevKode.brevtype) {
+                        BrevType.UTGÅENDE -> JournalpostType.UTGÅENDE
+                        BrevType.NOTAT -> JournalpostType.NOTAT
+                    },
+                    saksbehandlerIdent = dokumentBestilling.saksbehandler?.ident
+                )
+            )
 
             dokumentBestilling.dokumentreferanse = response?.dokumenter?.get(0)?.dokumentreferanse
             return response?.journalpostId!!
@@ -142,7 +145,7 @@ class BrevserverProdusent(
             navn = mottaker.navn
             spraak = mottaker.spraak
             fodselsnummer = mottaker.fodselsnummer
-            rolle = when(mottaker.rolle){
+            rolle = when (mottaker.rolle) {
                 RolleType.BM -> "01"
                 RolleType.BP -> "02"
                 RolleType.RM -> "RM"
@@ -151,7 +154,7 @@ class BrevserverProdusent(
             fodselsdato = mottaker.fodselsdato
 
             val adresse = mottaker.adresse
-            if (adresse != null){
+            if (adresse != null) {
                 adresselinje1 = adresse.adresselinje1
                 adresselinje2 = adresse.adresselinje2
                 adresselinje3 = adresse.adresselinje3

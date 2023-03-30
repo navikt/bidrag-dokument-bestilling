@@ -14,6 +14,6 @@ class BidragDokumentBestillingLokal
 
 fun main(args: Array<String>) {
     val app = SpringApplication(BidragDokumentBestillingLokal::class.java)
-    app.setAdditionalProfiles("lokal-nais","lokal-nais-secrets", "lokal")
+    app.setAdditionalProfiles("lokal-nais", "lokal-nais-secrets", "lokal")
     app.run(*args)
 }

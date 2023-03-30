@@ -11,7 +11,6 @@ import org.springframework.context.annotation.Profile
 import javax.jms.ConnectionFactory
 import javax.jms.Queue
 
-
 @TestConfiguration
 class JmsTestKonfig {
 

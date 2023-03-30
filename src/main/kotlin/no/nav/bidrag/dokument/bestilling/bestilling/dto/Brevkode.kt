@@ -18,5 +18,5 @@ enum class BrevKode(val beskrivelse: String, var brevtype: BrevType, val bestill
     BI01S10("KOPIFORSIDE T", BrevType.UTGÅENDE, BestillingSystem.BREVSERVER),
     BI01S67("ADRESSEFORESPØRSEL", BrevType.UTGÅENDE, BestillingSystem.BREVSERVER),
     BI01S02("Fritekstbrev", BrevType.UTGÅENDE, BestillingSystem.BREVSERVER),
-    BI01S09("Varsel opphør bidrag v 18 år", BrevType.UTGÅENDE, BestillingSystem.BREVSERVER, false),
+    BI01S09("Varsel opphør bidrag v 18 år", BrevType.UTGÅENDE, BestillingSystem.BREVSERVER, false)
 }

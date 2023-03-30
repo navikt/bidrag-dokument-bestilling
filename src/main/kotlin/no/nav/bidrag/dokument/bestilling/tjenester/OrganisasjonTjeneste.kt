@@ -9,10 +9,10 @@ import org.springframework.stereotype.Service
 class OrganisasjonTjeneste(private val bidragOrganisasjonKonsumer: BidragOrganisasjonKonsumer) {
 
     fun hentEnhetInfo(enhetId: String): EnhetInfo? {
-       return bidragOrganisasjonKonsumer.hentEnhetInfo(enhetId)
+        return bidragOrganisasjonKonsumer.hentEnhetInfo(enhetId)
     }
 
     fun hentEnhetKontaktInfo(enhetId: String, spraak: String?): EnhetKontaktInfoDto? {
-        return bidragOrganisasjonKonsumer.hentEnhetKontaktinfo(enhetId, spraak?:"NB")
+        return bidragOrganisasjonKonsumer.hentEnhetKontaktinfo(enhetId, spraak ?: "NB")
     }
 }

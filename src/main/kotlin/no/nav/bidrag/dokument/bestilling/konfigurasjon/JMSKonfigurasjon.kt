@@ -4,9 +4,9 @@ import com.ibm.mq.constants.CMQC
 import com.ibm.mq.jms.MQQueueConnectionFactory
 import com.ibm.msg.client.jms.JmsConstants
 import com.ibm.msg.client.wmq.common.CommonConstants
+import no.nav.bidrag.dokument.bestilling.bestilling.produksjon.dto.BrevBestilling
 import no.nav.bidrag.dokument.bestilling.konfigurasjon.jms.LoggingMarshallingMessageConverter
 import no.nav.bidrag.dokument.bestilling.konfigurasjon.jms.MQProperties
-import no.nav.bidrag.dokument.bestilling.bestilling.produksjon.dto.BrevBestilling
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.context.properties.ConfigurationPropertiesScan
 import org.springframework.context.annotation.Bean
@@ -29,11 +29,12 @@ class JMSKonfigurasjon(private val mqProperties: MQProperties) {
 
     @Bean
     @Scope("prototype")
-    fun baseJmsTemplate(mqQueueConnectionFactory: ConnectionFactory): JmsTemplate{
+    fun baseJmsTemplate(mqQueueConnectionFactory: ConnectionFactory): JmsTemplate {
         val template = JmsTemplate()
         template.connectionFactory = mqQueueConnectionFactory
         return template
     }
+
     @Bean
     @Throws(JMSException::class)
     fun onlinebrevTemplate(baseJmsTemplate: JmsTemplate, @Value("\${BREVSERVER_ONLINEBREV_QUEUE}") queueName: String, @Value("\${BREVSERVER_KVITTERING_QUEUE}") replyQueueName: String): JmsTemplate {

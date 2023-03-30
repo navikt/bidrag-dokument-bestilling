@@ -45,33 +45,33 @@ val SAMHANDLER_MOTTAKER_ADRESSE = MottakerAdresseTo(
 val ANNEN_MOTTAKER = createPersonResponse(
     "444213123123333",
     "Etternavn, BPFornavn Annen mottaker",
-    fodselsdato = LocalDate.parse("2001-05-06"),
+    fodselsdato = LocalDate.parse("2001-05-06")
 )
 val BP1 = createPersonResponse(
-        "444213123123",
-        "Etternavn, BPFornavn Bidragspliktig",
-        fodselsdato = LocalDate.parse("2001-05-06"),
-    )
+    "444213123123",
+    "Etternavn, BPFornavn Bidragspliktig",
+    fodselsdato = LocalDate.parse("2001-05-06")
+)
 val BM1 = createPersonResponse(
-        "123123123123",
-        "Etternavn, BMFornavn Bidragsmottaker",
-            fodselsdato = LocalDate.parse("2000-03-06"),
-    )
+    "123123123123",
+    "Etternavn, BMFornavn Bidragsmottaker",
+    fodselsdato = LocalDate.parse("2000-03-06")
+)
 val BARN1 = createPersonResponse(
-        "3323213",
-        "Etternavn, Barn1 Mellomnavn",
-        fodselsdato = LocalDate.parse("2020-05-06"),
-    )
+    "3323213",
+    "Etternavn, Barn1 Mellomnavn",
+    fodselsdato = LocalDate.parse("2020-05-06")
+)
 val BARN2 = createPersonResponse(
     "333333323213",
     "Etternavn, Barn2 Mellomnavn",
-    fodselsdato = LocalDate.parse("2018-03-20"),
+    fodselsdato = LocalDate.parse("2018-03-20")
 )
 
 val BARN3 = createPersonResponse(
     "412421412421",
     "Etternavn, Barn3",
-    fodselsdato = LocalDate.parse("2014-03-20"),
+    fodselsdato = LocalDate.parse("2014-03-20")
 )
 
 fun createSakResponse(): HentSakResponse {
@@ -106,10 +106,10 @@ fun createPersonResponse(
     fodselsdato: LocalDate? = null,
     dodsdato: LocalDate? = null,
     aktorId: String? = "313213",
-    diskresjonskode: String? = null,
+    diskresjonskode: String? = null
 
 ): HentPersonResponse {
-    return HentPersonResponse(ident, navn,kortNavn, fodselsdato, dodsdato, aktorId, diskresjonskode = diskresjonskode)
+    return HentPersonResponse(ident, navn, kortNavn, fodselsdato, dodsdato, aktorId, diskresjonskode = diskresjonskode)
 }
 fun createPostAdresseResponse(): HentPostadresseResponse {
     return HentPostadresseResponse(
@@ -150,7 +150,6 @@ fun createOpprettJournalpostResponse(tittel: String = "Tittel på dokument", jou
 }
 
 fun createEnhetKontaktInformasjon(): EnhetKontaktInfoDto {
-
     return EnhetKontaktInfoDto(
         enhetIdent = "4806",
         enhetNavn = "NAV Familie- og pensjonsytelser Drammen",
