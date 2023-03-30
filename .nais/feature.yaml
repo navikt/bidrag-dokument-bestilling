@@ -20,7 +20,7 @@ env:
   BREVSERVER_KVITTERING_QUEUE: QA.Q464.BISYS_REPLY_QUE
   MQ_QUEUE_MANAGER: MQLS02
   MQ_PORT: 1413
-  MQ_HOSTNAME: b27apvl220.preprod.local
+  MQ_HOSTNAME: mqls02.preprod.local
   MQ_CHANNEL: Q1_BDBESTILLING
   JAVA_OPTS: -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005
 outbound-access-hosts:
@@ -29,7 +29,7 @@ outbound-access-hosts:
    - bidrag-sak-feature.dev-fss-pub.nais.io
    - bidrag-organisasjon-feature.dev-fss-pub.nais.io
    - kodeverk.dev-fss-pub.nais.io
-   - b27apvl220.preprod.local
+   - mqls02.preprod.local
 azure_access_inbound:
   - application: bisys
     namespace: bidrag
