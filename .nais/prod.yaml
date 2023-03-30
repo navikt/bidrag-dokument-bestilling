@@ -27,6 +27,7 @@ outbound-access-hosts:
    - bidrag-sak.prod-fss-pub.nais.io
    - bidrag-organisasjon.prod-fss-pub.nais.io
    - kodeverk.prod-fss-pub.nais.io
+   - mpls02.adeo.no
 azure_access_inbound:
   - application: bisys
     namespace: bidrag

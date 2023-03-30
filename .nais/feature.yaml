@@ -29,6 +29,7 @@ outbound-access-hosts:
    - bidrag-sak-feature.dev-fss-pub.nais.io
    - bidrag-organisasjon-feature.dev-fss-pub.nais.io
    - kodeverk.dev-fss-pub.nais.io
+   - b27apvl220.preprod.local
 azure_access_inbound:
   - application: bisys
     namespace: bidrag
