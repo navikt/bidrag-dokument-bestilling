@@ -27,6 +27,11 @@ spec:
       {{#each outbound-access-hosts}}
           - host: {{this}}
       {{/each}}
+          - host: {{env.MQ_HOSTNAME}}
+            ports:
+              - name: MQ
+                port: {{env.MQ_PORT}}
+                protocol: TCP
   secureLogs:
     enabled: true
   image: {{ image }}
