@@ -11,6 +11,4 @@ class JmsListenerErrorHandler : ErrorHandler {
     override fun handleError(t: Throwable) {
         LOGGER.error("Det skjedde en feil ved behandling av JMS melding", t)
     }
-
-
 }

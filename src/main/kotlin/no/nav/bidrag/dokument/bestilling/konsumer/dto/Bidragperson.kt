@@ -10,7 +10,7 @@ data class HentPersonResponse(
     val foedselsdato: LocalDate? = null,
     val doedsdato: LocalDate? = null,
     val aktoerId: String? = null,
-    val diskresjonskode: String? = null,
+    val diskresjonskode: String? = null
 ) {
 
     val isKode6 = diskresjonskode == DISREKSJONSKODE_KODE_6

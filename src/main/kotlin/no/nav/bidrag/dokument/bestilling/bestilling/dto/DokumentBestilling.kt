@@ -24,8 +24,8 @@ data class DokumentBestilling(
     var rmISak: Boolean? = false
 )
 
-class Roller: MutableList<Rolle> by mutableListOf() {
-    val barn: List<Barn> get() =  filterIsInstance<Barn>().sortedBy { it.fodselsdato }
+class Roller : MutableList<Rolle> by mutableListOf() {
+    val barn: List<Barn> get() = filterIsInstance<Barn>().sortedBy { it.fodselsdato }
     val bidragsmottaker get() = filterIsInstance<PartInfo>().find { it.rolle == RolleType.BM }
     val bidragspliktig get() = filterIsInstance<PartInfo>().find { it.rolle == RolleType.BP }
 }
@@ -46,10 +46,10 @@ data class Barn(
     val forskuddsbelop: Number? = null,
     val gebyrRm: Number? = null,
     val fodselsnummerRm: String? = null
-): Rolle
+) : Rolle
 data class SoknadsPart(
     val bidragsPliktigInfo: PartInfo? = null,
-    val bidragsMottakerInfo: PartInfo? = null,
+    val bidragsMottakerInfo: PartInfo? = null
 )
 
 data class PartInfo(
@@ -63,7 +63,7 @@ data class PartInfo(
     val datoDod: LocalDate? = null,
     val gebyr: Number? = null,
     val kravFremAv: String? = null
-): Rolle
+) : Rolle
 data class EnhetKontaktInfo(
     val navn: String,
     val telefonnummer: String,
@@ -75,9 +75,8 @@ data class Gjelder(
     var fodselsnummer: String,
     var navn: String? = null,
     val adresse: Adresse? = null,
-    val rolle: RolleType?,
+    val rolle: RolleType?
 )
-
 
 data class Mottaker(
     var fodselsnummer: String,
@@ -85,7 +84,7 @@ data class Mottaker(
     var spraak: String,
     val adresse: Adresse?,
     val rolle: RolleType?,
-    val fodselsdato: LocalDate?,
+    val fodselsdato: LocalDate?
 )
 
 data class Adresse(
@@ -100,4 +99,3 @@ data class Adresse(
     val landkode3: String? = null,
     val land: String? = null
 )
-

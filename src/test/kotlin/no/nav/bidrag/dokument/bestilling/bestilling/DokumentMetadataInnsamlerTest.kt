@@ -14,13 +14,13 @@ import io.mockk.impl.annotations.MockK
 import io.mockk.junit5.MockKExtension
 import no.nav.bidrag.dokument.bestilling.api.dto.DokumentBestillingForespørsel
 import no.nav.bidrag.dokument.bestilling.api.dto.MottakerTo
+import no.nav.bidrag.dokument.bestilling.bestilling.dto.DokumentBestilling
 import no.nav.bidrag.dokument.bestilling.konfigurasjon.SaksbehandlerInfoManager
 import no.nav.bidrag.dokument.bestilling.konsumer.KodeverkKonsumer
 import no.nav.bidrag.dokument.bestilling.konsumer.dto.KodeverkResponse
 import no.nav.bidrag.dokument.bestilling.konsumer.dto.RolleType
 import no.nav.bidrag.dokument.bestilling.konsumer.dto.SakRolle
 import no.nav.bidrag.dokument.bestilling.model.DISREKSJONSKODE_KODE_6
-import no.nav.bidrag.dokument.bestilling.bestilling.dto.DokumentBestilling
 import no.nav.bidrag.dokument.bestilling.model.FantIkkeSakException
 import no.nav.bidrag.dokument.bestilling.model.Saksbehandler
 import no.nav.bidrag.dokument.bestilling.model.SamhandlerManglerKontaktinformasjon
@@ -52,38 +52,42 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import java.time.LocalDate
 
-
 @ExtendWith(MockKExtension::class)
 internal class DokumentMetadataInnsamlerTest {
 
     @MockK
     lateinit var personService: PersonTjeneste
+
     @MockK
     lateinit var sakService: SakTjeneste
+
     @MockK
     lateinit var kodeverkKonsumer: KodeverkKonsumer
+
     @MockK
     lateinit var saksbehandlerInfoManager: SaksbehandlerInfoManager
+
     @MockK
     lateinit var organisasjonService: OrganisasjonTjeneste
+
     @InjectMockKs
     lateinit var kodeverkTjeneste: KodeverkTjeneste
+
     @InjectMockKs
     lateinit var metadataCollector: DokumentMetadataInnsamler
 
-
     @BeforeEach
-    fun initMocks(){
+    fun initMocks() {
         val kodeverkResponse = ObjectMapper().findAndRegisterModules().readValue(readFile("api/landkoder.json"), KodeverkResponse::class.java)
         every { kodeverkKonsumer.hentLandkoder() } returns kodeverkResponse
     }
 
     @AfterEach
-    fun resetMocks(){
-       clearAllMocks()
+    fun resetMocks() {
+        clearAllMocks()
     }
 
-    fun mockDefaultValues(){
+    fun mockDefaultValues() {
         every { personService.hentPerson(BM1.ident, any()) } returns BM1
         every { personService.hentPerson(BP1.ident, any()) } returns BP1
         every { personService.hentPerson(BARN1.ident, any()) } returns BARN1
@@ -98,7 +102,7 @@ internal class DokumentMetadataInnsamlerTest {
     }
 
     @Test
-    fun `should map to bestilling request`(){
+    fun `should map to bestilling request`() {
         mockDefaultValues()
         val adresseResponse = createPostAdresseResponse()
         val defaultKontaktinfo = createEnhetKontaktInformasjon()
@@ -177,7 +181,7 @@ internal class DokumentMetadataInnsamlerTest {
     }
 
     @Test
-    fun `should map when person missing adresse`(){
+    fun `should map when person missing adresse`() {
         mockDefaultValues()
         every { personService.hentPersonAdresse(any(), any()) } returns null
         val request = DokumentBestillingForespørsel(
@@ -197,7 +201,7 @@ internal class DokumentMetadataInnsamlerTest {
     }
 
     @Test
-    fun `should add saksbehandler from request when available`(){
+    fun `should add saksbehandler from request when available`() {
         mockDefaultValues()
         val saksbehandlerId = "Z123213"
         every { saksbehandlerInfoManager.hentSaksbehandler(any()) } returns Saksbehandler(saksbehandlerId, "Navn saksbehandler")
@@ -219,7 +223,7 @@ internal class DokumentMetadataInnsamlerTest {
     }
 
     @Test
-    fun `should add saksbehandler ident and name from request when available`(){
+    fun `should add saksbehandler ident and name from request when available`() {
         mockDefaultValues()
         val saksbehandlerId = "Z123213"
         val request = DokumentBestillingForespørsel(
@@ -239,7 +243,7 @@ internal class DokumentMetadataInnsamlerTest {
     }
 
     @Test
-    fun `should map mottaker adresse with bruksenhetsnummer standard value`(){
+    fun `should map mottaker adresse with bruksenhetsnummer standard value`() {
         mockDefaultValues()
         val adresseResponse = createPostAdresseResponse()
             .copy(bruksenhetsnummer = "H0101")
@@ -268,7 +272,7 @@ internal class DokumentMetadataInnsamlerTest {
     }
 
     @Test
-    fun `should map mottaker add country name to adresselinje 4 when land not Norway`(){
+    fun `should map mottaker add country name to adresselinje 4 when land not Norway`() {
         mockDefaultValues()
         val adresseResponse = createPostAdresseResponse()
             .copy(bruksenhetsnummer = null, land = "TR", land3 = "TUR")
@@ -297,7 +301,7 @@ internal class DokumentMetadataInnsamlerTest {
     }
 
     @Test
-    fun `should map mottaker with kortnavn when availabe`(){
+    fun `should map mottaker with kortnavn when availabe`() {
         mockDefaultValues()
         val mottaker = BM1.copy(kortNavn = "Etternavn, Kortnavn")
         every { personService.hentPerson(mottaker.ident, any()) } returns mottaker
@@ -314,7 +318,7 @@ internal class DokumentMetadataInnsamlerTest {
     }
 
     @Test
-    fun `should map with mottaker kontaktinformasjon`(){
+    fun `should map with mottaker kontaktinformasjon`() {
         mockDefaultValues()
 
         val request = DokumentBestillingForespørsel(
@@ -328,7 +332,7 @@ internal class DokumentMetadataInnsamlerTest {
             saksnummer = DEFAULT_SAKSNUMMER,
             tittel = DEFAULT_TITLE_DOKUMENT,
             enhet = "4806",
-            spraak = "NB",
+            spraak = "NB"
         )
         val bestilling = mapToBestillingsdata(request)
         val adresseResponse = SAMHANDLER_MOTTAKER_ADRESSE
@@ -352,7 +356,7 @@ internal class DokumentMetadataInnsamlerTest {
     }
 
     @Test
-    fun `should map with samhandler mottaker`(){
+    fun `should map with samhandler mottaker`() {
         mockDefaultValues()
 
         val request = DokumentBestillingForespørsel(
@@ -386,7 +390,7 @@ internal class DokumentMetadataInnsamlerTest {
     }
 
     @Test
-    fun `should map with samhandler mottaker having utenlandsk adresse and long adresselinje3`(){
+    fun `should map with samhandler mottaker having utenlandsk adresse and long adresselinje3`() {
         mockDefaultValues()
 
         val samhandlerInfo = SAMHANDLER_INFO.copy(
@@ -426,7 +430,7 @@ internal class DokumentMetadataInnsamlerTest {
     }
 
     @Test
-    fun `should map with mottakerid not in roller`(){
+    fun `should map with mottakerid not in roller`() {
         mockDefaultValues()
         every { personService.hentPerson(ANNEN_MOTTAKER.ident, any()) } returns ANNEN_MOTTAKER
 
@@ -436,7 +440,7 @@ internal class DokumentMetadataInnsamlerTest {
             saksnummer = DEFAULT_SAKSNUMMER,
             tittel = DEFAULT_TITLE_DOKUMENT,
             enhet = "4806",
-            spraak = "NB",
+            spraak = "NB"
         )
         val bestilling = mapToBestillingsdata(request)
         assertSoftly {
@@ -449,7 +453,7 @@ internal class DokumentMetadataInnsamlerTest {
     }
 
     @Test
-    fun `should pick gjelder from roller when gjelderId is null`(){
+    fun `should pick gjelder from roller when gjelderId is null`() {
         mockDefaultValues()
         every { personService.hentPerson(ANNEN_MOTTAKER.ident, any()) } returns ANNEN_MOTTAKER
 
@@ -459,7 +463,7 @@ internal class DokumentMetadataInnsamlerTest {
             saksnummer = DEFAULT_SAKSNUMMER,
             tittel = DEFAULT_TITLE_DOKUMENT,
             enhet = "4806",
-            spraak = "NB",
+            spraak = "NB"
         )
         val bestilling = mapToBestillingsdata(request)
         assertSoftly {
@@ -469,7 +473,7 @@ internal class DokumentMetadataInnsamlerTest {
     }
 
     @Test
-    fun `should pick gjelder from roller when gjelderId is not in roller`(){
+    fun `should pick gjelder from roller when gjelderId is not in roller`() {
         mockDefaultValues()
         every { personService.hentPerson(ANNEN_MOTTAKER.ident, any()) } returns ANNEN_MOTTAKER
 
@@ -479,7 +483,7 @@ internal class DokumentMetadataInnsamlerTest {
             saksnummer = DEFAULT_SAKSNUMMER,
             tittel = DEFAULT_TITLE_DOKUMENT,
             enhet = "4806",
-            spraak = "NB",
+            spraak = "NB"
         )
         val bestilling = mapToBestillingsdata(request)
         assertSoftly {
@@ -489,7 +493,7 @@ internal class DokumentMetadataInnsamlerTest {
     }
 
     @Test
-    fun `should pick gjelder as BP from roller when gjelderId is not in roller and BM not exists`(){
+    fun `should pick gjelder as BP from roller when gjelderId is not in roller and BM not exists`() {
         mockDefaultValues()
         val saksnummer = "22222"
         val barn1Dod = BARN1.copy(doedsdato = LocalDate.parse("2022-01-01"))
@@ -529,7 +533,7 @@ internal class DokumentMetadataInnsamlerTest {
     }
 
     @Test
-    fun `should use enhet from sak when request is missing enhet`(){
+    fun `should use enhet from sak when request is missing enhet`() {
         mockDefaultValues()
         val sakresponse = createSakResponse().copy(eierfogd = "4888")
         every { sakService.hentSak(any()) } returns sakresponse
@@ -546,7 +550,7 @@ internal class DokumentMetadataInnsamlerTest {
     }
 
     @Test
-    fun `should throw when mottaker is samhandler but is missing samhandlerInformasjon`(){
+    fun `should throw when mottaker is samhandler but is missing samhandlerInformasjon`() {
         mockDefaultValues()
 
         val request = DokumentBestillingForespørsel(
@@ -558,11 +562,11 @@ internal class DokumentMetadataInnsamlerTest {
             spraak = "NB",
             samhandlerInformasjon = null
         )
-       shouldThrow<SamhandlerManglerKontaktinformasjon> {  mapToBestillingsdata(request) }
+        shouldThrow<SamhandlerManglerKontaktinformasjon> { mapToBestillingsdata(request) }
     }
 
     @Test
-    fun `should throw when sak is not found`(){
+    fun `should throw when sak is not found`() {
         mockDefaultValues()
         val saksnummer = "111111"
         every { sakService.hentSak(saksnummer) } returns null
@@ -575,11 +579,11 @@ internal class DokumentMetadataInnsamlerTest {
             spraak = "NB",
             samhandlerInformasjon = null
         )
-        shouldThrow<FantIkkeSakException> {  mapToBestillingsdata(request) }
+        shouldThrow<FantIkkeSakException> { mapToBestillingsdata(request) }
     }
 
     @Test
-    fun `should map with roller having kode6 diskresjon`(){
+    fun `should map with roller having kode6 diskresjon`() {
         mockDefaultValues()
         val barn1Kode6 = BARN1.copy(diskresjonskode = DISREKSJONSKODE_KODE_6)
         val barn2Kode6 = BARN2.copy(diskresjonskode = DISREKSJONSKODE_KODE_6, foedselsdato = null)
@@ -644,7 +648,7 @@ internal class DokumentMetadataInnsamlerTest {
     }
 
     @Test
-    fun `should map with roller having kode6 diskresjon with english language`(){
+    fun `should map with roller having kode6 diskresjon with english language`() {
         mockDefaultValues()
         val barn1Kode6 = BARN1.copy(diskresjonskode = DISREKSJONSKODE_KODE_6)
         val barn2Kode6 = BARN2.copy(diskresjonskode = DISREKSJONSKODE_KODE_6, foedselsdato = null)
@@ -674,7 +678,7 @@ internal class DokumentMetadataInnsamlerTest {
     }
 
     @Test
-    fun `should map with roller having kode6 diskresjon with nynorsk language`(){
+    fun `should map with roller having kode6 diskresjon with nynorsk language`() {
         mockDefaultValues()
         val barn1Kode6 = BARN1.copy(diskresjonskode = DISREKSJONSKODE_KODE_6)
         val barn2Kode6 = BARN2.copy(diskresjonskode = DISREKSJONSKODE_KODE_6, foedselsdato = null)
@@ -706,7 +710,7 @@ internal class DokumentMetadataInnsamlerTest {
     @Nested
     inner class MapRoller {
         @Test
-        fun `should set rmISak when sak has rolle RM`(){
+        fun `should set rmISak when sak has rolle RM`() {
             mockDefaultValues()
             val rmIdent = "13123123"
             val saksnummer = "22222"
@@ -714,9 +718,9 @@ internal class DokumentMetadataInnsamlerTest {
             val roller = originalSakResponse.roller.toMutableList()
             roller.add(
                 SakRolle(
-                foedselsnummer = rmIdent,
-                rolleType = RolleType.RM
-            )
+                    foedselsnummer = rmIdent,
+                    rolleType = RolleType.RM
+                )
             )
             val sak = originalSakResponse.copy(
                 roller = roller
@@ -733,11 +737,10 @@ internal class DokumentMetadataInnsamlerTest {
             )
             val bestilling = mapToBestillingsdata(request)
             bestilling.rmISak shouldBe true
-
         }
 
         @Test
-        fun `should map when bidragsmottaker is missing in sak`(){
+        fun `should map when bidragsmottaker is missing in sak`() {
             mockDefaultValues()
             val saksnummer = "22222"
             val sak = createSakResponse().copy(
@@ -770,11 +773,10 @@ internal class DokumentMetadataInnsamlerTest {
             bestilling.roller.bidragsmottaker shouldBe null
             bestilling.roller.bidragspliktig shouldNotBe null
             bestilling.roller.barn shouldHaveSize 2
-
         }
 
         @Test
-        fun `should map when bidragsplitkig is missing in sak`(){
+        fun `should map when bidragsplitkig is missing in sak`() {
             mockDefaultValues()
             val saksnummer = "22222"
             val sak = createSakResponse().copy(
@@ -810,7 +812,7 @@ internal class DokumentMetadataInnsamlerTest {
         }
 
         @Test
-        fun `should map when barn is missing in sak`(){
+        fun `should map when barn is missing in sak`() {
             mockDefaultValues()
             val saksnummer = "22222"
             val sak = createSakResponse().copy(
@@ -838,7 +840,7 @@ internal class DokumentMetadataInnsamlerTest {
         }
 
         @Test
-        fun `should not add dead barn to roller`(){
+        fun `should not add dead barn to roller`() {
             mockDefaultValues()
             val saksnummer = "22222"
             val barn1Dod = BARN1.copy(doedsdato = LocalDate.parse("2022-01-01"))
@@ -877,7 +879,7 @@ internal class DokumentMetadataInnsamlerTest {
     }
 
     @Test
-    fun `should sort barn by born date`(){
+    fun `should sort barn by born date`() {
         mockDefaultValues()
         val saksnummer = "22222"
         val barn1 = BARN1.copy(foedselsdato = LocalDate.parse("2020-01-02"))
@@ -940,7 +942,6 @@ internal class DokumentMetadataInnsamlerTest {
                 bestilling.roller.barn[3].fodselsnummer shouldBe barn4.ident
             }
         }
-
     }
 
     private fun mapToBestillingsdata(request: DokumentBestillingForespørsel): DokumentBestilling {

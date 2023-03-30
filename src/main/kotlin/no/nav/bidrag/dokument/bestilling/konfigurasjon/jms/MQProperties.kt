@@ -11,5 +11,5 @@ data class MQProperties(
     var username: String = "",
     var password: String = "",
     var channel: String = "",
-    var brevserverQueue: String? = null,
+    var brevserverQueue: String? = null
 )

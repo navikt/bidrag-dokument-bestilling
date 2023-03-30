@@ -1,12 +1,9 @@
 package no.nav.bidrag.dokument.bestilling.utils
 
-import no.nav.bidrag.dokument.bestilling.bestilling.produksjon.dto.BrevBestilling
-import org.apache.activemq.command.ActiveMQBytesMessage
 import org.apache.activemq.command.ActiveMQTextMessage
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Profile
 import org.springframework.jms.core.JmsTemplate
-import org.springframework.oxm.jaxb.Jaxb2Marshaller
 import org.springframework.stereotype.Component
 import javax.jms.Connection
 import javax.jms.MessageConsumer
@@ -23,14 +20,13 @@ class JmsTestConsumer {
     @Autowired
     private lateinit var onlinebrevTemplate: JmsTemplate
 
-    fun withOnlinebrev(func: JmsConnection.()->Unit){
+    fun withOnlinebrev(func: JmsConnection.() -> Unit) {
         val conn = JmsConnection(onlinebrevTemplate, onlineBrevQueue)
         try {
             func.invoke(conn)
         } finally {
             conn.close()
         }
-
     }
 
     class JmsConnection(jmsTemplate: JmsTemplate, queue: Queue) {
@@ -44,7 +40,7 @@ class JmsTestConsumer {
             consumer = session?.createConsumer(queue)
         }
 
-        fun close(){
+        fun close() {
             consumer?.close()
             session?.close()
             connection?.close()
@@ -65,8 +61,6 @@ class JmsTestConsumer {
 
         fun hasNoMessage(): Boolean {
             return consumer?.receive(1000) == null
-
         }
     }
-
 }

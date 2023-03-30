@@ -10,7 +10,6 @@ import no.nav.bidrag.dokument.bestilling.tjenester.KodeverkTjeneste
 import no.nav.bidrag.dokument.bestilling.tjenester.OrganisasjonTjeneste
 import no.nav.bidrag.dokument.bestilling.tjenester.PersonTjeneste
 import no.nav.bidrag.dokument.bestilling.tjenester.SakTjeneste
-import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -21,18 +20,25 @@ import org.springframework.context.ApplicationContext
 internal class DokumentMapTest {
     @RelaxedMockK
     lateinit var personService: PersonTjeneste
+
     @RelaxedMockK
     lateinit var sakService: SakTjeneste
+
     @RelaxedMockK
     lateinit var kodeverkKonsumer: KodeverkKonsumer
+
     @RelaxedMockK
     lateinit var saksbehandlerInfoManager: SaksbehandlerInfoManager
+
     @RelaxedMockK
     lateinit var organisasjonService: OrganisasjonTjeneste
+
     @InjectMockKs
     lateinit var kodeverkTjeneste: KodeverkTjeneste
+
     @InjectMockKs
     lateinit var metadataCollector: DokumentMetadataInnsamler
+
     @MockK
     lateinit var applicationContext: ApplicationContext
 
@@ -51,7 +57,6 @@ internal class DokumentMapTest {
     }
 
     @Test
-    fun `Notater should add mottaker and gjelder`(){
-
+    fun `Notater should add mottaker and gjelder`() {
     }
 }

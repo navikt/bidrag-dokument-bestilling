@@ -12,12 +12,11 @@ import org.springframework.stereotype.Service
 class DokumentBestillingTjeneste(val dokumentBestillingManager: DokumentBestillingManager) {
 
     fun bestill(bestillingRequest: DokumentBestillingForespørsel, brevKode: BrevKode): DokumentBestillingResponse {
-
         val result = dokumentBestillingManager.bestill(bestillingRequest, brevKode)
         return DokumentBestillingResponse(
             dokumentId = result.dokumentReferanse,
             journalpostId = result.journalpostId,
-            arkivSystem = when(result.bestillingSystem){
+            arkivSystem = when (result.bestillingSystem) {
                 BestillingSystem.BREVSERVER -> DokumentArkivSystemDto.MIDLERTIDLIG_BREVLAGER
                 else -> null
             }

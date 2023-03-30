@@ -8,7 +8,6 @@ import no.nav.bidrag.dokument.bestilling.model.ManglerGjelderException
 import no.nav.bidrag.dokument.bestilling.model.ProduksjonAvDokumentStottesIkke
 import no.nav.bidrag.dokument.bestilling.model.SamhandlerManglerKontaktinformasjon
 import no.nav.security.token.support.spring.validation.interceptor.JwtTokenUnauthorizedException
-import org.slf4j.LoggerFactory
 import org.springframework.core.convert.ConversionFailedException
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
@@ -25,13 +24,15 @@ private val LOGGER = KotlinLogging.logger {}
 class DefaultRestControllerAdvice {
 
     @ResponseBody
-    @ExceptionHandler(value = [
-        ManglerGjelderException::class,
-        FantIkkeEnhetException::class,
-        FantIkkePersonException::class,
-        FantIkkeSakException::class,
-        SamhandlerManglerKontaktinformasjon::class
-    ])
+    @ExceptionHandler(
+        value = [
+            ManglerGjelderException::class,
+            FantIkkeEnhetException::class,
+            FantIkkePersonException::class,
+            FantIkkeSakException::class,
+            SamhandlerManglerKontaktinformasjon::class
+        ]
+    )
     fun fantIkkeData(exception: RuntimeException): ResponseEntity<*> {
         LOGGER.warn(exception.message)
         return ResponseEntity
@@ -53,7 +54,7 @@ class DefaultRestControllerAdvice {
     @ResponseBody
     @ExceptionHandler(HttpStatusCodeException::class)
     fun handleHttpStatusException(exception: HttpStatusCodeException): ResponseEntity<*> {
-        LOGGER.warn(exception){"Det skjedde en feil ved kall mot ekstern tjeneste: ${exception.message}"}
+        LOGGER.warn(exception) { "Det skjedde en feil ved kall mot ekstern tjeneste: ${exception.message}" }
         return ResponseEntity
             .status(HttpStatus.INTERNAL_SERVER_ERROR)
             .header(HttpHeaders.WARNING, "Det skjedde en feil ved kall mot ekstern tjeneste: ${exception.message}")
@@ -73,7 +74,7 @@ class DefaultRestControllerAdvice {
     @ResponseBody
     @ExceptionHandler(value = [IllegalArgumentException::class, MethodArgumentTypeMismatchException::class, ConversionFailedException::class])
     fun handleInvalidValueExceptions(exception: Exception): ResponseEntity<*> {
-        LOGGER.warn(exception){"Kallet inneholder ugyldig verdi: ${exception.message} "}
+        LOGGER.warn(exception) { "Kallet inneholder ugyldig verdi: ${exception.message} " }
         return ResponseEntity
             .status(HttpStatus.BAD_REQUEST)
             .header(HttpHeaders.WARNING, "Kallet inneholder ugyldig verdi: ${exception.message}")
@@ -83,11 +84,10 @@ class DefaultRestControllerAdvice {
     @ResponseBody
     @ExceptionHandler(Exception::class)
     fun handleOtherExceptions(exception: Exception): ResponseEntity<*> {
-        LOGGER.error(exception){"Det skjedde en ukjent feil: ${exception.message}"}
+        LOGGER.error(exception) { "Det skjedde en ukjent feil: ${exception.message}" }
         return ResponseEntity
             .status(HttpStatus.INTERNAL_SERVER_ERROR)
             .header(HttpHeaders.WARNING, "Det skjedde en ukjent feil: ${exception.message}")
             .build<Any>()
     }
-
 }

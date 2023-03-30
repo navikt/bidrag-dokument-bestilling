@@ -18,7 +18,7 @@ class BidragOrganisasjonKonsumer(
     @Value("\${BIDRAG_ORGANISASJON_URL}") bidragOrgUrl: String,
     baseRestTemplate: RestTemplate,
     securityTokenService: SecurityTokenService
-): DefaultKonsumer("bidrag-organisasjon", bidragOrgUrl, baseRestTemplate, securityTokenService) {
+) : DefaultKonsumer("bidrag-organisasjon", bidragOrgUrl, baseRestTemplate, securityTokenService) {
 
     @Cacheable(SAKSBEHANDLERINFO_CACHE)
     fun hentSaksbehandlerInfo(saksbehandlerIdent: String): SaksbehandlerInfoResponse? {

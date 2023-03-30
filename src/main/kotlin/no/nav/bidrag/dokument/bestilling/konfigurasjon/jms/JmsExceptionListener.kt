@@ -12,6 +12,4 @@ class JmsExceptionListener : ExceptionListener {
     override fun onException(e: JMSException) {
         LOGGER.error("Det skjedde en feil ved parsing av JMS melding", e)
     }
-
-
 }

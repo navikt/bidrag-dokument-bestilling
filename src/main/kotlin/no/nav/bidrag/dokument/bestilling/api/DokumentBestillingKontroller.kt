@@ -33,7 +33,7 @@ class DokumentBestillingKontroller(val dokumentBestillingService: DokumentBestil
     @PostMapping("/bestill/{brevKode}")
     @Operation(
         description = "Bestiller dokument for oppgitt brevkode/dokumentKode",
-        security = [SecurityRequirement(name = "bearer-key")],
+        security = [SecurityRequirement(name = "bearer-key")]
     )
     @ApiResponses(value = [ApiResponse(responseCode = "400", description = "Dokument ble bestilt med ugyldig data")])
     fun bestillBrev(@RequestBody bestillingRequest: DokumentBestillingForespørsel, @PathVariable brevKode: BrevKode): DokumentBestillingResponse {
@@ -47,7 +47,7 @@ class DokumentBestillingKontroller(val dokumentBestillingService: DokumentBestil
     @RequestMapping("/brevkoder", method = [RequestMethod.OPTIONS])
     @Operation(
         description = "Henter brevkoder som er støttet av applikasjonen",
-        security = [SecurityRequirement(name = "bearer-key")],
+        security = [SecurityRequirement(name = "bearer-key")]
     )
     fun hentStottedeBrevkoder(): List<String> {
         return BrevKode.values().filter { it.enabled }.map { it.name }.let {
@@ -59,11 +59,10 @@ class DokumentBestillingKontroller(val dokumentBestillingService: DokumentBestil
     @GetMapping("/dokumentmal/detaljer")
     @Operation(
         description = "Henter detaljer om alle støttede dokumentmaler",
-        security = [SecurityRequirement(name = "bearer-key")],
+        security = [SecurityRequirement(name = "bearer-key")]
     )
     fun hentDokumentmalDetaljer(): Map<String, DokumentMalDetaljer> {
         return BrevKode.values().filter { it.enabled }
             .associate { it.name to DokumentMalDetaljer(it.beskrivelse, it.brevtype) }
     }
-
 }

@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test
 class SaksbehandlerTest {
 
     @Test
-    fun skalReturnereFornavnEtternavn(){
+    fun skalReturnereFornavnEtternavn() {
         val saksbehandler = Saksbehandler("Z123123", "Etternavn, Fornavn Mellomnavn")
 
         saksbehandler.fornavnEtternavn shouldBe "Fornavn Mellomnavn Etternavn"
@@ -15,7 +15,7 @@ class SaksbehandlerTest {
     }
 
     @Test
-    fun skalReturnereNavnHvisNavnIkkeErKommaSeparert(){
+    fun skalReturnereNavnHvisNavnIkkeErKommaSeparert() {
         val saksbehandler = Saksbehandler("Z123123", "Fornavn Mellomnavn Etternavn")
 
         saksbehandler.fornavnEtternavn shouldBe "Fornavn Mellomnavn Etternavn"
@@ -24,7 +24,7 @@ class SaksbehandlerTest {
     }
 
     @Test
-    fun skalReturnereTomStringHvisNull(){
+    fun skalReturnereTomStringHvisNull() {
         val saksbehandler = Saksbehandler("Z123123", null)
 
         saksbehandler.fornavnEtternavn shouldBe ""

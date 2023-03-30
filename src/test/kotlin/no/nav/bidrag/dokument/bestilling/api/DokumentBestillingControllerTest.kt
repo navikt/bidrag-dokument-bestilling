@@ -11,11 +11,11 @@ import io.kotest.matchers.string.shouldContain
 import no.nav.bidrag.commons.web.EnhetFilter.X_ENHET_HEADER
 import no.nav.bidrag.dokument.bestilling.api.dto.DokumentBestillingForespørsel
 import no.nav.bidrag.dokument.bestilling.api.dto.DokumentBestillingResponse
+import no.nav.bidrag.dokument.bestilling.bestilling.dto.BrevKode
+import no.nav.bidrag.dokument.bestilling.bestilling.produksjon.dto.BrevBestilling
+import no.nav.bidrag.dokument.bestilling.bestilling.produksjon.dto.BrevKontaktinfo
 import no.nav.bidrag.dokument.bestilling.konsumer.dto.RolleType
 import no.nav.bidrag.dokument.bestilling.konsumer.dto.SakRolle
-import no.nav.bidrag.dokument.bestilling.bestilling.produksjon.dto.BrevBestilling
-import no.nav.bidrag.dokument.bestilling.bestilling.dto.BrevKode
-import no.nav.bidrag.dokument.bestilling.bestilling.produksjon.dto.BrevKontaktinfo
 import no.nav.bidrag.dokument.bestilling.utils.ANNEN_MOTTAKER
 import no.nav.bidrag.dokument.bestilling.utils.BARN1
 import no.nav.bidrag.dokument.bestilling.utils.BARN2
@@ -33,11 +33,10 @@ import org.springframework.http.HttpMethod
 import org.springframework.http.HttpStatus
 import java.time.LocalDate
 
-
-class DokumentBestillingControllerTest: AbstractControllerTest() {
+class DokumentBestillingControllerTest : AbstractControllerTest() {
 
     @Test
-    fun `skal returnere liste over brevkoder som er støttet`(){
+    fun `skal returnere liste over brevkoder som er støttet`() {
         val response = httpHeaderTestRestTemplate.exchange(
             "${rootUri()}/brevkoder",
             HttpMethod.OPTIONS,
@@ -47,11 +46,12 @@ class DokumentBestillingControllerTest: AbstractControllerTest() {
 
         response.body?.forEach {
             it shouldBeIn BrevKode.values().map { bk -> bk.name }
-            it shouldNotBeIn BrevKode.values().filter{bk -> !bk.enabled}.map { bk -> bk.name }
+            it shouldNotBeIn BrevKode.values().filter { bk -> !bk.enabled }.map { bk -> bk.name }
         }
 
         response.body?.shouldHaveSize(BrevKode.values().filter { it.enabled }.size)
     }
+
     @Test
     fun `skal produsere XML for fritekstsbrev`() {
         stubDefaultValues()
@@ -164,18 +164,17 @@ class DokumentBestillingControllerTest: AbstractControllerTest() {
                 stubUtils.Verify().verifyHentPersonCalled(BARN2.ident)
                 stubUtils.Verify().verifyOpprettJournalpostCalledWith(
                     "{\"skalFerdigstilles\":false," +
-                            "\"tittel\":\"$tittel\"," +
-                            "\"gjelderIdent\":\"$gjelderId\"," +
-                            "\"avsenderMottaker\":{\"navn\":\"${BM1.navn}\",\"ident\":\"$mottakerId\",\"type\":\"FNR\",\"adresse\":null}," +
-                            "\"dokumenter\":[{\"tittel\":\"$tittel\",\"brevkode\":\"${brevKode.name}\"}]," +
-                            "\"tilknyttSaker\":[\"$saksnummer\"]," +
-                            "\"journalposttype\":\"UTGÅENDE\"," +
-                            "\"journalførendeEnhet\":\"4806\"," +
-                            "\"saksbehandlerIdent\":\"Z99999\"}"
+                        "\"tittel\":\"$tittel\"," +
+                        "\"gjelderIdent\":\"$gjelderId\"," +
+                        "\"avsenderMottaker\":{\"navn\":\"${BM1.navn}\",\"ident\":\"$mottakerId\",\"type\":\"FNR\",\"adresse\":null}," +
+                        "\"dokumenter\":[{\"tittel\":\"$tittel\",\"brevkode\":\"${brevKode.name}\"}]," +
+                        "\"tilknyttSaker\":[\"$saksnummer\"]," +
+                        "\"journalposttype\":\"UTGÅENDE\"," +
+                        "\"journalførendeEnhet\":\"4806\"," +
+                        "\"saksbehandlerIdent\":\"Z99999\"}"
                 )
             }
         }
-
     }
 
     @Test
@@ -212,7 +211,6 @@ class DokumentBestillingControllerTest: AbstractControllerTest() {
 
             val message: BrevBestilling = this.getMessageAsObject(BrevBestilling::class.java)!!
             assertSoftly {
-
                 message.brev?.spraak shouldBe "EN"
                 message.brev?.mottaker?.navn shouldBe BM1.navn
                 message.brev?.mottaker?.adresselinje1 shouldBe bmAdresse.adresselinje1
@@ -229,11 +227,10 @@ class DokumentBestillingControllerTest: AbstractControllerTest() {
                 stubUtils.Verify().verifyHentEnhetKontaktInfoCalledWith("EN")
             }
         }
-
     }
 
     @Test
-    fun `should use title from brevkode if title missing in request`(){
+    fun `should use title from brevkode if title missing in request`() {
         val brevKode = BrevKode.BI01S02
         stubDefaultValues()
 
@@ -264,7 +261,7 @@ class DokumentBestillingControllerTest: AbstractControllerTest() {
     }
 
     @Test
-    fun `should produse XML for brevkode notat`(){
+    fun `should produse XML for brevkode notat`() {
         val brevKode = BrevKode.BI01X01
         stubDefaultValues()
 
@@ -295,7 +292,7 @@ class DokumentBestillingControllerTest: AbstractControllerTest() {
     }
 
     @Test
-    fun `should produse XML without adresse when mottaker has not adresse`(){
+    fun `should produse XML without adresse when mottaker has not adresse`() {
         val brevKode = BrevKode.BI01S02
         stubDefaultValues()
         stubUtils.stubHentAdresse(postAdresse = null, status = HttpStatus.NO_CONTENT)
@@ -325,12 +322,11 @@ class DokumentBestillingControllerTest: AbstractControllerTest() {
             message.brev?.mottaker?.adresselinje3 shouldBe ""
             message.brev?.mottaker?.boligNr shouldBe ""
             message.brev?.mottaker?.postnummer shouldBe ""
-
         }
     }
 
     @Test
-    fun `should not send XML when opprett journalpost fails`(){
+    fun `should not send XML when opprett journalpost fails`() {
         val brevKode = BrevKode.BI01X01
         stubDefaultValues()
 
@@ -357,7 +353,7 @@ class DokumentBestillingControllerTest: AbstractControllerTest() {
     }
 
     @Test
-    fun `should fail when request with invalid brevkode`(){
+    fun `should fail when request with invalid brevkode`() {
         stubDefaultValues()
 
         val request = DokumentBestillingForespørsel(
@@ -382,7 +378,7 @@ class DokumentBestillingControllerTest: AbstractControllerTest() {
     }
 
     @Test
-    fun `should produse XML with mottaker role RM`(){
+    fun `should produse XML with mottaker role RM`() {
         val brevKode = BrevKode.BI01X01
         val sak = createSakResponse().copy(
             roller = listOf(

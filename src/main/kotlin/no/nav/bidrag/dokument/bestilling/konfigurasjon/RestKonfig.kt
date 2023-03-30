@@ -13,14 +13,13 @@ import org.springframework.http.client.HttpComponentsClientHttpRequestFactory
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder
 import org.springframework.retry.annotation.EnableRetry
 
-
 @Configuration
 @EnableSecurityConfiguration
 @EnableRetry
 class RestKonfig {
     @Bean
     @Scope("prototype")
-    fun baseRestTemplate(@Value("\${NAIS_APP_NAME}") naisAppName: String, metricsRestTemplateCustomizer: MetricsRestTemplateCustomizer ): HttpHeaderRestTemplate {
+    fun baseRestTemplate(@Value("\${NAIS_APP_NAME}") naisAppName: String, metricsRestTemplateCustomizer: MetricsRestTemplateCustomizer): HttpHeaderRestTemplate {
         val restTemplate = HttpHeaderRestTemplate()
         restTemplate.requestFactory = HttpComponentsClientHttpRequestFactory()
         restTemplate.withDefaultHeaders()
@@ -34,5 +33,4 @@ class RestKonfig {
     fun jackson2ObjectMapperBuilder(): Jackson2ObjectMapperBuilder {
         return Jackson2ObjectMapperBuilder().serializationInclusion(JsonInclude.Include.NON_NULL)
     }
-
 }

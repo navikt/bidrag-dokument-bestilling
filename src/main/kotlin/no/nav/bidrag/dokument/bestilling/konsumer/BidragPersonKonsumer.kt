@@ -21,9 +21,10 @@ import org.springframework.web.client.RestTemplate
 
 @Service
 class BidragPersonKonsumer(
-    @Value("\${BIDRAG_PERSON_URL}") bidragPersonUrl: String, baseRestTemplate: RestTemplate,
+    @Value("\${BIDRAG_PERSON_URL}") bidragPersonUrl: String,
+    baseRestTemplate: RestTemplate,
     securityTokenService: SecurityTokenService
-): DefaultKonsumer("bidrag-person", bidragPersonUrl, baseRestTemplate, securityTokenService) {
+) : DefaultKonsumer("bidrag-person", bidragPersonUrl, baseRestTemplate, securityTokenService) {
 
     @Retryable(maxAttempts = 3, backoff = Backoff(delay = 500, maxDelay = 1500, multiplier = 2.0))
     @BrukerCacheable(PERSON_CACHE)
@@ -32,18 +33,21 @@ class BidragPersonKonsumer(
             val hentPersonResponse =
                 restTemplate.exchange("/informasjon", HttpMethod.POST, HttpEntity(HentPersonInfoRequest(personId)), HentPersonResponse::class.java)
             return hentPersonResponse.body
-        } catch (e: HttpStatusCodeException){
-            if (e.statusCode == HttpStatus.NOT_FOUND){
+        } catch (e: HttpStatusCodeException) {
+            if (e.statusCode == HttpStatus.NOT_FOUND) {
                 return null
             }
             throw HentPersonFeiletException("Henting av person $personId feilet", e)
         }
     }
+
     @Retryable(maxAttempts = 3, backoff = Backoff(delay = 500, maxDelay = 1500, multiplier = 2.0))
     @BrukerCacheable(PERSON_ADRESSE_CACHE)
     fun hentAdresse(id: String): HentPostadresseResponse? {
         return restTemplate.exchange(
-            "/adresse/post", HttpMethod.POST, HttpEntity(HentPersonInfoRequest(id)),
+            "/adresse/post",
+            HttpMethod.POST,
+            HttpEntity(HentPersonInfoRequest(id)),
             HentPostadresseResponse::class.java
         ).body
     }
@@ -52,9 +56,10 @@ class BidragPersonKonsumer(
     @BrukerCacheable(PERSON_SPRAAK_CACHE)
     fun hentSpraak(id: String): String? {
         return restTemplate.exchange(
-            "/spraak", HttpMethod.POST, HttpEntity(HentPersonInfoRequest(id)),
+            "/spraak",
+            HttpMethod.POST,
+            HttpEntity(HentPersonInfoRequest(id)),
             String::class.java
         ).body
     }
-
 }

@@ -10,9 +10,9 @@ import io.mockk.every
 import no.nav.bidrag.commons.web.test.HttpHeaderTestRestTemplate
 import no.nav.bidrag.dokument.bestilling.BidragDokumentBestillingLocalTest
 import no.nav.bidrag.dokument.bestilling.JmsTestKonfig
-import no.nav.bidrag.dokument.bestilling.konsumer.KodeverkKonsumer
-import no.nav.bidrag.dokument.bestilling.bestilling.produksjon.dto.BrevBestilling
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.BrevKode
+import no.nav.bidrag.dokument.bestilling.bestilling.produksjon.dto.BrevBestilling
+import no.nav.bidrag.dokument.bestilling.konsumer.KodeverkKonsumer
 import no.nav.bidrag.dokument.bestilling.konsumer.dto.KodeverkResponse
 import no.nav.bidrag.dokument.bestilling.utils.ANNEN_MOTTAKER
 import no.nav.bidrag.dokument.bestilling.utils.BARN1
@@ -87,7 +87,7 @@ abstract class AbstractControllerTest {
         return String(ClassPathResource("testdata/$filePath").inputStream.readAllBytes())
     }
 
-    fun stubDefaultValues(){
+    fun stubDefaultValues() {
         stubUtils.stubHentPerson(BP1.ident, BP1)
         stubUtils.stubHentPerson(BM1.ident, BM1)
         stubUtils.stubHentPerson(BARN1.ident, BARN1)

@@ -35,6 +35,6 @@ class CacheKonfig {
         caffeineCacheManager.registerCustomCache(PERSON_CACHE, Caffeine.newBuilder().expireAfter(InvaliderCacheFørStartenAvArbeidsdag()).build())
         caffeineCacheManager.registerCustomCache(PERSON_ADRESSE_CACHE, Caffeine.newBuilder().expireAfter(InvaliderCacheFørStartenAvArbeidsdag()).build())
         caffeineCacheManager.registerCustomCache(PERSON_SPRAAK_CACHE, Caffeine.newBuilder().expireAfter(InvaliderCacheFørStartenAvArbeidsdag()).build())
-        return caffeineCacheManager;
+        return caffeineCacheManager
     }
 }
