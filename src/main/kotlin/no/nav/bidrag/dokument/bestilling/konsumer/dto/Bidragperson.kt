@@ -34,7 +34,8 @@ data class HentPersonResponse(
 }
 
 data class HentPersonInfoRequest(
-    var ident: String
+    var ident: String,
+    val verdi: String = ident
 )
 
 data class HentPostadresseResponse(
