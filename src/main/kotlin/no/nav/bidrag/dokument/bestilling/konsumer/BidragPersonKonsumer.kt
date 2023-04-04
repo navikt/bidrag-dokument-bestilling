@@ -5,10 +5,10 @@ import no.nav.bidrag.commons.security.service.SecurityTokenService
 import no.nav.bidrag.dokument.bestilling.konfigurasjon.CacheKonfig.Companion.PERSON_ADRESSE_CACHE
 import no.nav.bidrag.dokument.bestilling.konfigurasjon.CacheKonfig.Companion.PERSON_CACHE
 import no.nav.bidrag.dokument.bestilling.konfigurasjon.CacheKonfig.Companion.PERSON_SPRAAK_CACHE
-import no.nav.bidrag.dokument.bestilling.konsumer.dto.HentPersonInfoRequest
 import no.nav.bidrag.dokument.bestilling.konsumer.dto.HentPersonResponse
 import no.nav.bidrag.dokument.bestilling.konsumer.dto.HentPostadresseResponse
 import no.nav.bidrag.dokument.bestilling.model.HentPersonFeiletException
+import no.nav.bidrag.domain.ident.PersonIdent
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.HttpEntity
 import org.springframework.http.HttpMethod
@@ -31,7 +31,7 @@ class BidragPersonKonsumer(
     fun hentPerson(personId: String): HentPersonResponse? {
         try {
             val hentPersonResponse =
-                restTemplate.exchange("/informasjon", HttpMethod.POST, HttpEntity(HentPersonInfoRequest(personId)), HentPersonResponse::class.java)
+                restTemplate.exchange("/informasjon", HttpMethod.POST, HttpEntity(PersonIdent(personId)), HentPersonResponse::class.java)
             return hentPersonResponse.body
         } catch (e: HttpStatusCodeException) {
             if (e.statusCode == HttpStatus.NOT_FOUND) {
@@ -47,7 +47,7 @@ class BidragPersonKonsumer(
         return restTemplate.exchange(
             "/adresse/post",
             HttpMethod.POST,
-            HttpEntity(HentPersonInfoRequest(id)),
+            HttpEntity(PersonIdent(id)),
             HentPostadresseResponse::class.java
         ).body
     }
@@ -58,7 +58,7 @@ class BidragPersonKonsumer(
         return restTemplate.exchange(
             "/spraak",
             HttpMethod.POST,
-            HttpEntity(HentPersonInfoRequest(id)),
+            HttpEntity(PersonIdent(id)),
             String::class.java
         ).body
     }

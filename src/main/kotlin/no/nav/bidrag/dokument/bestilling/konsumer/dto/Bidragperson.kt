@@ -33,11 +33,6 @@ data class HentPersonResponse(
         }
 }
 
-data class HentPersonInfoRequest(
-    var ident: String,
-    val verdi: String = ident
-)
-
 data class HentPostadresseResponse(
     val adresselinje1: String?,
     val adresselinje2: String?,
