@@ -550,19 +550,60 @@ internal class DokumentMetadataInnsamlerTest {
     }
 
     @Test
-    fun `should throw when mottaker is samhandler but is missing samhandlerInformasjon`() {
+    fun `should not throw when mottaker is samhandler but is missing samhandlerInformasjon`() {
         mockDefaultValues()
 
         val request = DokumentBestillingForespørsel(
-            mottakerId = SAMHANDLER_IDENT,
             gjelderId = BM1.ident,
             saksnummer = DEFAULT_SAKSNUMMER,
             tittel = DEFAULT_TITLE_DOKUMENT,
             enhet = "4806",
             spraak = "NB",
-            samhandlerInformasjon = null
+            samhandlerInformasjon = null,
+            mottaker = MottakerTo(
+                ident = SAMHANDLER_IDENT,
+                navn = SAKSBEHANDLER_NAVN,
+                adresse = SAMHANDLER_MOTTAKER_ADRESSE
+            )
         )
-        shouldThrow<SamhandlerManglerKontaktinformasjon> { mapToBestillingsdata(request) }
+        val bestilling = mapToBestillingsdata(request)
+        assertSoftly {
+            bestilling.mottaker?.spraak shouldBe "NB"
+            bestilling.mottaker?.navn shouldBe SAKSBEHANDLER_NAVN
+            bestilling.mottaker?.fodselsnummer shouldBe SAMHANDLER_IDENT
+            bestilling.mottaker?.rolle shouldBe null
+            bestilling.mottaker?.adresse!!.adresselinje1 shouldBe SAMHANDLER_MOTTAKER_ADRESSE.adresselinje1
+            bestilling.mottaker?.adresse!!.adresselinje2 shouldBe SAMHANDLER_MOTTAKER_ADRESSE.adresselinje2
+            bestilling.mottaker?.adresse?.adresselinje3 shouldBe "3000 Samhandler adresselinje 3"
+            bestilling.mottaker?.adresse!!.postnummer shouldBe SAMHANDLER_MOTTAKER_ADRESSE.postnummer
+            bestilling.mottaker?.adresse!!.land shouldBe "NORGE"
+        }
+    }
+
+    @Test
+    fun `should not throw when mottaker is samhandler but is missing adresse`() {
+        mockDefaultValues()
+
+        val request = DokumentBestillingForespørsel(
+            gjelderId = BM1.ident,
+            saksnummer = DEFAULT_SAKSNUMMER,
+            tittel = DEFAULT_TITLE_DOKUMENT,
+            enhet = "4806",
+            spraak = "NB",
+            samhandlerInformasjon = null,
+            mottaker = MottakerTo(
+                ident = SAMHANDLER_IDENT,
+                navn = SAKSBEHANDLER_NAVN,
+            )
+        )
+        val bestilling = mapToBestillingsdata(request)
+        assertSoftly {
+            bestilling.mottaker?.spraak shouldBe "NB"
+            bestilling.mottaker?.navn shouldBe SAKSBEHANDLER_NAVN
+            bestilling.mottaker?.fodselsnummer shouldBe SAMHANDLER_IDENT
+            bestilling.mottaker?.rolle shouldBe null
+            bestilling.mottaker?.adresse shouldBe null
+        }
     }
 
     @Test
