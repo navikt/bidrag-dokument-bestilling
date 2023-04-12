@@ -290,7 +290,7 @@ class DokumentMetadataInnsamler(
     }
 
     private fun hentMottakerAdresse(): HentPostadresseResponse? {
-        if (forespørsel.erMottakerSamhandler() && !forespørsel.harMottakerKontaktinformasjon()) throw SamhandlerManglerKontaktinformasjon("Samhandler med id ${forespørsel.mottakerId} mangler kontaktinformasjon")
+//        if (forespørsel.erMottakerSamhandler() && !forespørsel.harMottakerKontaktinformasjon()) throw SamhandlerManglerKontaktinformasjon("Samhandler med id ${forespørsel.mottakerId} mangler kontaktinformasjon")
         return if (forespørsel.harMottakerKontaktinformasjon()) {
             val adresse = forespørsel.mottaker!!.adresse!!
             HentPostadresseResponse(
@@ -303,9 +303,9 @@ class DokumentMetadataInnsamler(
                 land = adresse.landkode,
                 land3 = adresse.landkode3
             )
-        } else {
+        } else if (!forespørsel.erMottakerSamhandler()){
             personTjeneste.hentPersonAdresse(forespørsel.mottakerIdent, "Mottaker")
-        }
+        } else null
     }
 
     private fun hentGjelderFraRoller(): Ident? {
