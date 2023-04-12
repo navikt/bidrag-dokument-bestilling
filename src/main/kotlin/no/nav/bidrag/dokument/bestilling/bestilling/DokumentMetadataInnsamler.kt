@@ -134,9 +134,8 @@ class DokumentMetadataInnsamler(
     }
 
     private fun leggTilMottaker(): DokumentMetadataInnsamler {
-        if (forespørsel.erMottakerSamhandler() && !forespørsel.harMottakerKontaktinformasjon()) {
-            val samhandler = forespørsel.samhandlerInformasjon
-                ?: throw SamhandlerManglerKontaktinformasjon("Samhandler med id ${forespørsel.mottakerId} mangler kontaktinformasjon")
+        if (forespørsel.erMottakerSamhandler() && !forespørsel.harMottakerKontaktinformasjon() && forespørsel.samhandlerInformasjon != null) {
+            val samhandler = forespørsel.samhandlerInformasjon!!
             val adresse = samhandler.adresse
             dokumentBestilling.mottaker = Mottaker(
                 fodselsnummer = forespørsel.mottakerIdent,
@@ -290,7 +289,6 @@ class DokumentMetadataInnsamler(
     }
 
     private fun hentMottakerAdresse(): HentPostadresseResponse? {
-//        if (forespørsel.erMottakerSamhandler() && !forespørsel.harMottakerKontaktinformasjon()) throw SamhandlerManglerKontaktinformasjon("Samhandler med id ${forespørsel.mottakerId} mangler kontaktinformasjon")
         return if (forespørsel.harMottakerKontaktinformasjon()) {
             val adresse = forespørsel.mottaker!!.adresse!!
             HentPostadresseResponse(

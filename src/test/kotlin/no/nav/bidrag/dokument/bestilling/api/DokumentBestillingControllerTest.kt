@@ -11,6 +11,7 @@ import io.kotest.matchers.string.shouldContain
 import no.nav.bidrag.commons.web.EnhetFilter.X_ENHET_HEADER
 import no.nav.bidrag.dokument.bestilling.api.dto.DokumentBestillingForespørsel
 import no.nav.bidrag.dokument.bestilling.api.dto.DokumentBestillingResponse
+import no.nav.bidrag.dokument.bestilling.api.dto.MottakerTo
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.BrevKode
 import no.nav.bidrag.dokument.bestilling.bestilling.produksjon.dto.BrevBestilling
 import no.nav.bidrag.dokument.bestilling.bestilling.produksjon.dto.BrevKontaktinfo
@@ -21,6 +22,8 @@ import no.nav.bidrag.dokument.bestilling.utils.BARN1
 import no.nav.bidrag.dokument.bestilling.utils.BARN2
 import no.nav.bidrag.dokument.bestilling.utils.BM1
 import no.nav.bidrag.dokument.bestilling.utils.BP1
+import no.nav.bidrag.dokument.bestilling.utils.SAKSBEHANDLER_NAVN
+import no.nav.bidrag.dokument.bestilling.utils.SAMHANDLER_IDENT
 import no.nav.bidrag.dokument.bestilling.utils.createEnhetKontaktInformasjon
 import no.nav.bidrag.dokument.bestilling.utils.createOpprettJournalpostResponse
 import no.nav.bidrag.dokument.bestilling.utils.createPostAdresseResponse
@@ -292,6 +295,43 @@ class DokumentBestillingControllerTest : AbstractControllerTest() {
     }
 
     @Test
+    fun `should produse XML without adresse when samhandler mottaker has not adresse`() {
+        val brevKode = BrevKode.BI01S02
+        stubDefaultValues()
+        stubUtils.stubHentAdresse(postAdresse = null, status = HttpStatus.NO_CONTENT)
+
+        stubUtils.stubOpprettJournalpost(createOpprettJournalpostResponse(dokumentReferanse = "DOKREF_1"))
+        val request = DokumentBestillingForespørsel(
+            gjelderId = BP1.ident,
+            saksnummer = "123213",
+            enhet = "4806",
+            mottaker = MottakerTo(
+                ident = SAMHANDLER_IDENT,
+                navn = SAKSBEHANDLER_NAVN
+            )
+        )
+
+        jmsTestConsumer.withOnlinebrev {
+            val response = httpHeaderTestRestTemplate.exchange(
+                "${rootUri()}/bestill/${brevKode.name}",
+                HttpMethod.POST,
+                HttpEntity(request),
+                DokumentBestillingResponse::class.java
+            )
+
+            response.statusCode shouldBe HttpStatus.OK
+
+            val message = this.getMessageAsObject(BrevBestilling::class.java)!!
+            message.brev?.mottaker?.navn shouldBe SAKSBEHANDLER_NAVN
+            message.brev?.mottaker?.adresselinje1 shouldBe ""
+            message.brev?.mottaker?.adresselinje2 shouldBe ""
+            message.brev?.mottaker?.adresselinje3 shouldBe ""
+            message.brev?.mottaker?.boligNr shouldBe ""
+            message.brev?.mottaker?.postnummer shouldBe ""
+        }
+    }
+
+    @Test
     fun `should produse XML without adresse when mottaker has not adresse`() {
         val brevKode = BrevKode.BI01S02
         stubDefaultValues()
@@ -299,10 +339,12 @@ class DokumentBestillingControllerTest : AbstractControllerTest() {
 
         stubUtils.stubOpprettJournalpost(createOpprettJournalpostResponse(dokumentReferanse = "DOKREF_1"))
         val request = DokumentBestillingForespørsel(
-            mottakerId = BM1.ident,
             gjelderId = BP1.ident,
             saksnummer = "123213",
-            enhet = "4806"
+            enhet = "4806",
+            mottaker = MottakerTo(
+                ident = BM1.ident
+            )
         )
 
         jmsTestConsumer.withOnlinebrev {
