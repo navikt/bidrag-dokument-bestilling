@@ -193,7 +193,7 @@ class DokumentMetadataInnsamler(
                         adresselinje1 = adresse.adresselinje1?.verdi ?: "",
                         adresselinje2 = adresse.adresselinje2?.verdi,
                         adresselinje3 = adresselinje3,
-                        adresselinje4 = if (!adresse.land3.verdi.isNullOrEmpty() && adresse.land3.verdi != LANDKODE3_NORGE && !forespørsel.erMottakerSamhandler()) landNavn else null,
+                        adresselinje4 = if (!adresse.land3.verdi.isEmpty() && adresse.land3.verdi != LANDKODE3_NORGE && !forespørsel.erMottakerSamhandler()) landNavn else null,
                         bruksenhetsnummer = if (adresse.bruksenhetsnummer?.verdi == BRUKSHENETSNUMMER_STANDARD) null else adresse.bruksenhetsnummer?.verdi,
                         poststed = adresse.poststed?.verdi,
                         postnummer = adresse.postnummer?.verdi,
