@@ -23,7 +23,6 @@ import no.nav.bidrag.dokument.bestilling.konsumer.dto.SakRolle
 import no.nav.bidrag.dokument.bestilling.konsumer.dto.fornavnEtternavn
 import no.nav.bidrag.dokument.bestilling.model.FantIkkeSakException
 import no.nav.bidrag.dokument.bestilling.model.Saksbehandler
-import no.nav.bidrag.dokument.bestilling.model.SamhandlerManglerKontaktinformasjon
 import no.nav.bidrag.dokument.bestilling.tjenester.KodeverkTjeneste
 import no.nav.bidrag.dokument.bestilling.tjenester.OrganisasjonTjeneste
 import no.nav.bidrag.dokument.bestilling.tjenester.PersonTjeneste
@@ -125,19 +124,19 @@ internal class DokumentMetadataInnsamlerTest {
         val bestilling = mapToBestillingsdata(request)
         assertSoftly {
             bestilling.mottaker?.spraak shouldBe "NB"
-            bestilling.mottaker?.navn shouldBe BM1.navn
+            bestilling.mottaker?.navn shouldBe BM1.navn?.verdi
             bestilling.mottaker?.fodselsnummer shouldBe BM1.ident.verdi
             bestilling.mottaker?.rolle shouldBe RolleType.BM
-            bestilling.mottaker?.fodselsdato shouldBe BM1.fødselsdato
-            bestilling.mottaker?.adresse?.adresselinje1 shouldBe adresseResponse.adresselinje1
-            bestilling.mottaker?.adresse?.adresselinje2 shouldBe adresseResponse.adresselinje2
+            bestilling.mottaker?.fodselsdato shouldBe BM1.fødselsdato?.verdi
+            bestilling.mottaker?.adresse?.adresselinje1 shouldBe adresseResponse.adresselinje1?.verdi
+            bestilling.mottaker?.adresse?.adresselinje2 shouldBe adresseResponse.adresselinje2?.verdi
             bestilling.mottaker?.adresse?.adresselinje3 shouldBe "3030 Drammen"
             bestilling.mottaker?.adresse?.adresselinje4 shouldBe null
-            bestilling.mottaker?.adresse?.bruksenhetsnummer shouldBe adresseResponse.bruksenhetsnummer
-            bestilling.mottaker?.adresse?.postnummer shouldBe adresseResponse.postnummer
-            bestilling.mottaker?.adresse?.poststed shouldBe adresseResponse.poststed
-            bestilling.mottaker?.adresse?.landkode shouldBe adresseResponse.land
-            bestilling.mottaker?.adresse?.landkode3 shouldBe adresseResponse.land3
+            bestilling.mottaker?.adresse?.bruksenhetsnummer shouldBe adresseResponse.bruksenhetsnummer?.verdi
+            bestilling.mottaker?.adresse?.postnummer shouldBe adresseResponse.postnummer?.verdi
+            bestilling.mottaker?.adresse?.poststed shouldBe adresseResponse.poststed?.verdi
+            bestilling.mottaker?.adresse?.landkode shouldBe adresseResponse.land.verdi
+            bestilling.mottaker?.adresse?.landkode3 shouldBe adresseResponse.land3.verdi
             bestilling.mottaker?.adresse?.land shouldBe "NORGE"
 
             bestilling.gjelder?.fodselsnummer shouldBe BM1.ident.verdi
@@ -158,24 +157,24 @@ internal class DokumentMetadataInnsamlerTest {
             bestilling.roller shouldHaveSize 4
             bestilling.roller.bidragsmottaker?.fodselsnummer shouldBe BM1.ident.verdi
             bestilling.roller.bidragsmottaker?.navn shouldBe BM1.fornavnEtternavn()
-            bestilling.roller.bidragsmottaker?.fodselsdato shouldBe BM1.fødselsdato
+            bestilling.roller.bidragsmottaker?.fodselsdato shouldBe BM1.fødselsdato?.verdi
             bestilling.roller.bidragsmottaker?.landkode shouldBe "NO"
             bestilling.roller.bidragsmottaker?.landkode3 shouldBe "NOR"
 
             bestilling.roller.bidragspliktig?.fodselsnummer shouldBe BP1.ident.verdi
             bestilling.roller.bidragspliktig?.navn shouldBe BP1.fornavnEtternavn()
-            bestilling.roller.bidragspliktig?.fodselsdato shouldBe BP1.fødselsdato
+            bestilling.roller.bidragspliktig?.fodselsdato shouldBe BP1.fødselsdato?.verdi
             bestilling.roller.bidragspliktig?.landkode shouldBe "NO"
             bestilling.roller.bidragspliktig?.landkode3 shouldBe "NOR"
 
             bestilling.roller.barn shouldHaveSize 2
             bestilling.roller.barn[0].fodselsnummer shouldBe BARN2.ident.verdi
-            bestilling.roller.barn[0].fodselsdato shouldBe BARN2.fødselsdato
+            bestilling.roller.barn[0].fodselsdato shouldBe BARN2.fødselsdato?.verdi
             bestilling.roller.barn[0].fornavn shouldBe BARN2.fornavn
             bestilling.roller.barn[0].navn shouldBe BARN2.fornavnEtternavn()
 
             bestilling.roller.barn[1].fodselsnummer shouldBe BARN1.ident.verdi
-            bestilling.roller.barn[1].fodselsdato shouldBe BARN1.fødselsdato
+            bestilling.roller.barn[1].fodselsdato shouldBe BARN1.fødselsdato?.verdi
             bestilling.roller.barn[1].fornavn shouldBe BARN1.fornavn
             bestilling.roller.barn[1].navn shouldBe BARN1.fornavnEtternavn()
 
@@ -265,15 +264,15 @@ internal class DokumentMetadataInnsamlerTest {
         )
         val bestilling = mapToBestillingsdata(request)
         assertSoftly {
-            bestilling.mottaker?.adresse?.adresselinje1 shouldBe adresseResponse.adresselinje1
-            bestilling.mottaker?.adresse?.adresselinje2 shouldBe adresseResponse.adresselinje2
+            bestilling.mottaker?.adresse?.adresselinje1 shouldBe adresseResponse.adresselinje1?.verdi
+            bestilling.mottaker?.adresse?.adresselinje2 shouldBe adresseResponse.adresselinje2?.verdi
             bestilling.mottaker?.adresse?.adresselinje3 shouldBe "3030 Drammen"
             bestilling.mottaker?.adresse?.adresselinje4 shouldBe null
             bestilling.mottaker?.adresse?.bruksenhetsnummer shouldBe null
-            bestilling.mottaker?.adresse?.postnummer shouldBe adresseResponse.postnummer
-            bestilling.mottaker?.adresse?.poststed shouldBe adresseResponse.poststed
-            bestilling.mottaker?.adresse?.landkode shouldBe adresseResponse.land
-            bestilling.mottaker?.adresse?.landkode3 shouldBe adresseResponse.land3
+            bestilling.mottaker?.adresse?.postnummer shouldBe adresseResponse.postnummer?.verdi
+            bestilling.mottaker?.adresse?.poststed shouldBe adresseResponse.poststed?.verdi
+            bestilling.mottaker?.adresse?.landkode shouldBe adresseResponse.land.verdi
+            bestilling.mottaker?.adresse?.landkode3 shouldBe adresseResponse.land3.verdi
             bestilling.mottaker?.adresse?.land shouldBe "NORGE"
         }
     }
@@ -294,15 +293,15 @@ internal class DokumentMetadataInnsamlerTest {
         )
         val bestilling = mapToBestillingsdata(request)
         assertSoftly {
-            bestilling.mottaker?.adresse?.adresselinje1 shouldBe adresseResponse.adresselinje1
-            bestilling.mottaker?.adresse?.adresselinje2 shouldBe adresseResponse.adresselinje2
+            bestilling.mottaker?.adresse?.adresselinje1 shouldBe adresseResponse.adresselinje1?.verdi
+            bestilling.mottaker?.adresse?.adresselinje2 shouldBe adresseResponse.adresselinje2?.verdi
             bestilling.mottaker?.adresse?.adresselinje3 shouldBe "3030 Drammen"
             bestilling.mottaker?.adresse?.adresselinje4 shouldBe "TYRKIA"
             bestilling.mottaker?.adresse?.bruksenhetsnummer shouldBe null
-            bestilling.mottaker?.adresse?.postnummer shouldBe adresseResponse.postnummer
-            bestilling.mottaker?.adresse?.poststed shouldBe adresseResponse.poststed
-            bestilling.mottaker?.adresse?.landkode shouldBe adresseResponse.land
-            bestilling.mottaker?.adresse?.landkode3 shouldBe adresseResponse.land3
+            bestilling.mottaker?.adresse?.postnummer shouldBe adresseResponse.postnummer?.verdi
+            bestilling.mottaker?.adresse?.poststed shouldBe adresseResponse.poststed?.verdi
+            bestilling.mottaker?.adresse?.landkode shouldBe adresseResponse.land.verdi
+            bestilling.mottaker?.adresse?.landkode3 shouldBe adresseResponse.land3.verdi
             bestilling.mottaker?.adresse?.land shouldBe "TYRKIA"
         }
     }
@@ -321,7 +320,7 @@ internal class DokumentMetadataInnsamlerTest {
             spraak = "NB"
         )
         val bestilling = mapToBestillingsdata(request)
-        bestilling.mottaker?.navn shouldBe mottaker.kortnavn
+        bestilling.mottaker?.navn shouldBe mottaker.kortnavn?.verdi
     }
 
     @Test
@@ -356,7 +355,7 @@ internal class DokumentMetadataInnsamlerTest {
             bestilling.mottaker?.adresse?.bruksenhetsnummer shouldBe null
             bestilling.mottaker?.adresse?.postnummer shouldBe adresseResponse.postnummer
             bestilling.mottaker?.adresse?.poststed shouldBe null
-            bestilling.mottaker?.adresse?.landkode shouldBe null
+            bestilling.mottaker?.adresse?.landkode shouldBe "NO"
             bestilling.mottaker?.adresse?.landkode3 shouldBe adresseResponse.landkode3
             bestilling.mottaker?.adresse?.land shouldBe "NORGE"
         }
@@ -452,10 +451,10 @@ internal class DokumentMetadataInnsamlerTest {
         val bestilling = mapToBestillingsdata(request)
         assertSoftly {
             bestilling.mottaker?.spraak shouldBe "NB"
-            bestilling.mottaker?.navn shouldBe ANNEN_MOTTAKER.navn
+            bestilling.mottaker?.navn shouldBe ANNEN_MOTTAKER.navn?.verdi
             bestilling.mottaker?.fodselsnummer shouldBe ANNEN_MOTTAKER.ident.verdi
             bestilling.mottaker?.rolle shouldBe null
-            bestilling.mottaker?.fodselsdato shouldBe ANNEN_MOTTAKER.fødselsdato
+            bestilling.mottaker?.fodselsdato shouldBe ANNEN_MOTTAKER.fødselsdato?.verdi
         }
     }
 
@@ -592,7 +591,7 @@ internal class DokumentMetadataInnsamlerTest {
         mockDefaultValues()
 
         val request = DokumentBestillingForespørsel(
-            gjelderId = BM1.ident,
+            gjelderId = BM1.ident.verdi,
             saksnummer = DEFAULT_SAKSNUMMER,
             tittel = DEFAULT_TITLE_DOKUMENT,
             enhet = "4806",
@@ -600,7 +599,7 @@ internal class DokumentMetadataInnsamlerTest {
             samhandlerInformasjon = null,
             mottaker = MottakerTo(
                 ident = SAMHANDLER_IDENT,
-                navn = SAKSBEHANDLER_NAVN,
+                navn = SAKSBEHANDLER_NAVN
             )
         )
         val bestilling = mapToBestillingsdata(request)
@@ -654,19 +653,19 @@ internal class DokumentMetadataInnsamlerTest {
         val adresseResponse = createPostAdresseResponse()
         assertSoftly {
             bestilling.mottaker?.spraak shouldBe "NB"
-            bestilling.mottaker?.navn shouldBe bmKode6.navn
+            bestilling.mottaker?.navn shouldBe bmKode6.navn?.verdi
             bestilling.mottaker?.fodselsnummer shouldBe bmKode6.ident.verdi
             bestilling.mottaker?.rolle shouldBe RolleType.BM
-            bestilling.mottaker?.fodselsdato shouldBe BM1.fødselsdato
-            bestilling.mottaker?.adresse?.adresselinje1 shouldBe adresseResponse.adresselinje1
-            bestilling.mottaker?.adresse?.adresselinje2 shouldBe adresseResponse.adresselinje2
+            bestilling.mottaker?.fodselsdato shouldBe BM1.fødselsdato?.verdi
+            bestilling.mottaker?.adresse?.adresselinje1 shouldBe adresseResponse.adresselinje1?.verdi
+            bestilling.mottaker?.adresse?.adresselinje2 shouldBe adresseResponse.adresselinje2?.verdi
             bestilling.mottaker?.adresse?.adresselinje3 shouldBe "3030 Drammen"
             bestilling.mottaker?.adresse?.adresselinje4 shouldBe null
-            bestilling.mottaker?.adresse?.bruksenhetsnummer shouldBe adresseResponse.bruksenhetsnummer
-            bestilling.mottaker?.adresse?.postnummer shouldBe adresseResponse.postnummer
-            bestilling.mottaker?.adresse?.poststed shouldBe adresseResponse.poststed
-            bestilling.mottaker?.adresse?.landkode shouldBe adresseResponse.land
-            bestilling.mottaker?.adresse?.landkode3 shouldBe adresseResponse.land3
+            bestilling.mottaker?.adresse?.bruksenhetsnummer shouldBe adresseResponse.bruksenhetsnummer?.verdi
+            bestilling.mottaker?.adresse?.postnummer shouldBe adresseResponse.postnummer?.verdi
+            bestilling.mottaker?.adresse?.poststed shouldBe adresseResponse.poststed?.verdi
+            bestilling.mottaker?.adresse?.landkode shouldBe adresseResponse.land.verdi
+            bestilling.mottaker?.adresse?.landkode3 shouldBe adresseResponse.land3.verdi
             bestilling.mottaker?.adresse?.land shouldBe "NORGE"
 
             bestilling.roller shouldHaveSize 4

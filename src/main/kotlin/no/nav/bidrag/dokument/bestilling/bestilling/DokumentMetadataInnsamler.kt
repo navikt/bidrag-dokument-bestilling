@@ -21,7 +21,6 @@ import no.nav.bidrag.dokument.bestilling.model.Ident
 import no.nav.bidrag.dokument.bestilling.model.LANDKODE3_NORGE
 import no.nav.bidrag.dokument.bestilling.model.ManglerGjelderException
 import no.nav.bidrag.dokument.bestilling.model.Saksbehandler
-import no.nav.bidrag.dokument.bestilling.model.SamhandlerManglerKontaktinformasjon
 import no.nav.bidrag.dokument.bestilling.model.SpråkKoder
 import no.nav.bidrag.dokument.bestilling.model.erDødfødt
 import no.nav.bidrag.dokument.bestilling.tjenester.KodeverkTjeneste
@@ -306,9 +305,11 @@ class DokumentMetadataInnsamler(
                 land3 = Landkode3(adresse.landkode3),
                 adressetype = Adressetype.BOSTEDSADRESSE
             )
-        } else if (!forespørsel.erMottakerSamhandler()){
+        } else if (!forespørsel.erMottakerSamhandler()) {
             personTjeneste.hentPersonAdresse(forespørsel.mottakerIdent, "Mottaker")
-        } else null
+        } else {
+            null
+        }
     }
 
     private fun hentGjelderFraRoller(): Ident? {
@@ -318,7 +319,7 @@ class DokumentMetadataInnsamler(
     private fun hentSaksbehandler(request: DokumentBestillingForespørsel): Saksbehandler {
         if (request.saksbehandler != null && !request.saksbehandler.ident.isNullOrEmpty()) {
             val saksbehandlerNavn = request.saksbehandler.navn ?: saksbehandlerInfoManager.hentSaksbehandler(request.saksbehandler.ident)?.navn
-            ?: saksbehandlerInfoManager.hentSaksbehandlerBrukerId()
+                ?: saksbehandlerInfoManager.hentSaksbehandlerBrukerId()
             return Saksbehandler(request.saksbehandler.ident, saksbehandlerNavn)
         }
 
