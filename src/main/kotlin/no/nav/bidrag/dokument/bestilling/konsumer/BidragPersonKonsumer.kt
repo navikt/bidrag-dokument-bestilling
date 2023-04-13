@@ -5,10 +5,10 @@ import no.nav.bidrag.commons.security.service.SecurityTokenService
 import no.nav.bidrag.dokument.bestilling.konfigurasjon.CacheKonfig.Companion.PERSON_ADRESSE_CACHE
 import no.nav.bidrag.dokument.bestilling.konfigurasjon.CacheKonfig.Companion.PERSON_CACHE
 import no.nav.bidrag.dokument.bestilling.konfigurasjon.CacheKonfig.Companion.PERSON_SPRAAK_CACHE
-import no.nav.bidrag.dokument.bestilling.konsumer.dto.HentPersonResponse
-import no.nav.bidrag.dokument.bestilling.konsumer.dto.HentPostadresseResponse
 import no.nav.bidrag.dokument.bestilling.model.HentPersonFeiletException
 import no.nav.bidrag.domain.ident.PersonIdent
+import no.nav.bidrag.transport.person.PersonAdresseDto
+import no.nav.bidrag.transport.person.PersonDto
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.HttpEntity
 import org.springframework.http.HttpMethod
@@ -28,10 +28,10 @@ class BidragPersonKonsumer(
 
     @Retryable(maxAttempts = 3, backoff = Backoff(delay = 500, maxDelay = 1500, multiplier = 2.0))
     @BrukerCacheable(PERSON_CACHE)
-    fun hentPerson(personId: String): HentPersonResponse? {
+    fun hentPerson(personId: String): PersonDto? {
         try {
             val hentPersonResponse =
-                restTemplate.exchange("/informasjon", HttpMethod.POST, HttpEntity(PersonIdent(personId)), HentPersonResponse::class.java)
+                restTemplate.exchange("/informasjon", HttpMethod.POST, HttpEntity(PersonIdent(personId)), PersonDto::class.java)
             return hentPersonResponse.body
         } catch (e: HttpStatusCodeException) {
             if (e.statusCode == HttpStatus.NOT_FOUND) {
@@ -43,12 +43,12 @@ class BidragPersonKonsumer(
 
     @Retryable(maxAttempts = 3, backoff = Backoff(delay = 500, maxDelay = 1500, multiplier = 2.0))
     @BrukerCacheable(PERSON_ADRESSE_CACHE)
-    fun hentAdresse(id: String): HentPostadresseResponse? {
+    fun hentAdresse(id: String): PersonAdresseDto? {
         return restTemplate.exchange(
             "/adresse/post",
             HttpMethod.POST,
             HttpEntity(PersonIdent(id)),
-            HentPostadresseResponse::class.java
+            PersonAdresseDto::class.java
         ).body
     }
 

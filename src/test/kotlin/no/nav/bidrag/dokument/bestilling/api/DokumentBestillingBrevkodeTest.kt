@@ -12,6 +12,7 @@ import no.nav.bidrag.dokument.bestilling.bestilling.dto.BrevKode
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.BrevType
 import no.nav.bidrag.dokument.bestilling.bestilling.produksjon.DokumentProdusent
 import no.nav.bidrag.dokument.bestilling.konsumer.dto.RolleType
+import no.nav.bidrag.dokument.bestilling.konsumer.dto.fornavnEtternavn
 import no.nav.bidrag.dokument.bestilling.utils.BARN1
 import no.nav.bidrag.dokument.bestilling.utils.BARN2
 import no.nav.bidrag.dokument.bestilling.utils.BM1
@@ -63,8 +64,8 @@ class DokumentBestillingBrevkodeTest : AbstractControllerTest() {
         stubUtils.stubOpprettJournalpost(createOpprettJournalpostResponse(dokumentReferanse = "DOKREF_1"))
 
         val request = DokumentBestillingForespørsel(
-            mottakerId = mottakerId,
-            gjelderId = gjelderId,
+            mottakerId = mottakerId.verdi,
+            gjelderId = gjelderId.verdi,
             saksnummer = saksnummer,
             tittel = tittel,
             enhet = "4806",
@@ -89,7 +90,7 @@ class DokumentBestillingBrevkodeTest : AbstractControllerTest() {
                         bestilling.mottaker?.navn shouldBe BM1.navn
                         bestilling.mottaker?.fodselsnummer shouldBe BM1.ident
                         bestilling.mottaker?.rolle shouldBe RolleType.BM
-                        bestilling.mottaker?.fodselsdato shouldBe BM1.foedselsdato
+                        bestilling.mottaker?.fodselsdato shouldBe BM1.fødselsdato
                         bestilling.mottaker?.adresse shouldNotBe null
 
                         bestilling.gjelder?.fodselsnummer shouldBe gjelderId
@@ -129,8 +130,8 @@ class DokumentBestillingBrevkodeTest : AbstractControllerTest() {
         stubUtils.stubOpprettJournalpost(createOpprettJournalpostResponse(dokumentReferanse = "DOKREF_1"))
 
         val request = DokumentBestillingForespørsel(
-            mottakerId = mottakerId,
-            gjelderId = gjelderId,
+            mottakerId = mottakerId.verdi,
+            gjelderId = gjelderId.verdi,
             saksnummer = saksnummer,
             tittel = tittel,
             enhet = "4806",
@@ -153,27 +154,27 @@ class DokumentBestillingBrevkodeTest : AbstractControllerTest() {
                     assertSoftly {
                         bestilling.roller shouldHaveSize 4
                         bestilling.roller.bidragsmottaker?.fodselsnummer shouldBe BM1.ident
-                        bestilling.roller.bidragsmottaker?.navn shouldBe BM1.fornavnEtternavn
-                        bestilling.roller.bidragsmottaker?.fodselsdato shouldBe BM1.foedselsdato
+                        bestilling.roller.bidragsmottaker?.navn shouldBe BM1.fornavnEtternavn()
+                        bestilling.roller.bidragsmottaker?.fodselsdato shouldBe BM1.fødselsdato
                         bestilling.roller.bidragsmottaker?.landkode shouldBe "NO"
                         bestilling.roller.bidragsmottaker?.landkode3 shouldBe "NOR"
 
                         bestilling.roller.bidragspliktig?.fodselsnummer shouldBe BP1.ident
-                        bestilling.roller.bidragspliktig?.navn shouldBe BP1.fornavnEtternavn
-                        bestilling.roller.bidragspliktig?.fodselsdato shouldBe BP1.foedselsdato
+                        bestilling.roller.bidragspliktig?.navn shouldBe BP1.fornavnEtternavn()
+                        bestilling.roller.bidragspliktig?.fodselsdato shouldBe BP1.fødselsdato
                         bestilling.roller.bidragspliktig?.landkode shouldBe "NO"
                         bestilling.roller.bidragspliktig?.landkode3 shouldBe "NOR"
 
                         bestilling.roller.barn shouldHaveSize 2
                         bestilling.roller.barn[0].fodselsnummer shouldBe BARN2.ident
-                        bestilling.roller.barn[0].fodselsdato shouldBe BARN2.foedselsdato
+                        bestilling.roller.barn[0].fodselsdato shouldBe BARN2.fødselsdato
                         bestilling.roller.barn[0].fornavn shouldBe BARN2.fornavn
-                        bestilling.roller.barn[0].navn shouldBe BARN2.fornavnEtternavn
+                        bestilling.roller.barn[0].navn shouldBe BARN2.fornavnEtternavn()
 
                         bestilling.roller.barn[1].fodselsnummer shouldBe BARN1.ident
-                        bestilling.roller.barn[1].fodselsdato shouldBe BARN1.foedselsdato
+                        bestilling.roller.barn[1].fodselsdato shouldBe BARN1.fødselsdato
                         bestilling.roller.barn[1].fornavn shouldBe BARN1.fornavn
-                        bestilling.roller.barn[1].navn shouldBe BARN1.fornavnEtternavn
+                        bestilling.roller.barn[1].navn shouldBe BARN1.fornavnEtternavn()
                     }
                 },
                 brevKode
@@ -201,8 +202,8 @@ class DokumentBestillingBrevkodeTest : AbstractControllerTest() {
         stubUtils.stubOpprettJournalpost(createOpprettJournalpostResponse(dokumentReferanse = "DOKREF_1"))
 
         val request = DokumentBestillingForespørsel(
-            mottakerId = mottakerId,
-            gjelderId = gjelderId,
+            mottakerId = mottakerId.verdi,
+            gjelderId = gjelderId.verdi,
             saksnummer = saksnummer,
             tittel = tittel,
             enhet = "4806",
