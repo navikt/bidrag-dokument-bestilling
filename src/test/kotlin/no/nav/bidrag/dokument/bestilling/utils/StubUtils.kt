@@ -6,10 +6,7 @@ import com.github.tomakehurst.wiremock.client.WireMock.aResponse
 import com.github.tomakehurst.wiremock.matching.AnythingPattern
 import com.github.tomakehurst.wiremock.matching.ContainsPattern
 import com.github.tomakehurst.wiremock.matching.RequestPatternBuilder
-import no.nav.bidrag.dokument.bestilling.konsumer.dto.EnhetInfo
-import no.nav.bidrag.dokument.bestilling.konsumer.dto.EnhetKontaktInfoDto
 import no.nav.bidrag.dokument.bestilling.konsumer.dto.HentSakResponse
-import no.nav.bidrag.dokument.bestilling.konsumer.dto.SaksbehandlerInfoResponse
 import no.nav.bidrag.dokument.bestilling.utils.SAKSBEHANDLER_IDENT
 import no.nav.bidrag.dokument.bestilling.utils.SAKSBEHANDLER_NAVN
 import no.nav.bidrag.dokument.bestilling.utils.createEnhetKontaktInformasjon
@@ -17,6 +14,10 @@ import no.nav.bidrag.dokument.bestilling.utils.createOpprettJournalpostResponse
 import no.nav.bidrag.dokument.bestilling.utils.createPostAdresseResponse
 import no.nav.bidrag.dokument.bestilling.utils.createSakResponse
 import no.nav.bidrag.dokument.dto.OpprettJournalpostResponse
+import no.nav.bidrag.domain.ident.SaksbehandlerId
+import no.nav.bidrag.domain.string.Navn
+import no.nav.bidrag.organisasjon.dto.SaksbehandlerDto
+import no.nav.bidrag.transport.organisasjon.EnhetKontaktinfoDto
 import no.nav.bidrag.transport.person.PersonAdresseDto
 import no.nav.bidrag.transport.person.PersonDto
 import org.junit.Assert
@@ -42,11 +43,12 @@ class StubUtils {
 
     fun stubHentPerson(fnr: String? = null, personResponse: PersonDto) {
         WireMock.stubFor(
-            WireMock.post(WireMock.urlMatching("/person/informasjon")).withRequestBody(if (fnr.isNullOrEmpty()) AnythingPattern() else ContainsPattern(fnr)).willReturn(
-                aClosedJsonResponse()
-                    .withStatus(HttpStatus.OK.value())
-                    .withBody(convertObjectToString(personResponse))
-            )
+            WireMock.post(WireMock.urlMatching("/person/informasjon"))
+                .withRequestBody(if (fnr.isNullOrEmpty()) AnythingPattern() else ContainsPattern(fnr)).willReturn(
+                    aClosedJsonResponse()
+                        .withStatus(HttpStatus.OK.value())
+                        .withBody(convertObjectToString(personResponse))
+                )
         )
     }
 
@@ -91,6 +93,7 @@ class StubUtils {
             )
         )
     }
+
     fun stubOpprettJournalpost(response: OpprettJournalpostResponse = createOpprettJournalpostResponse(), status: HttpStatus = HttpStatus.OK) {
         WireMock.stubFor(
             WireMock.post(WireMock.urlMatching("/dokument/journalpost/BIDRAG")).willReturn(
@@ -101,17 +104,7 @@ class StubUtils {
         )
     }
 
-    fun stubEnhetInfo(response: EnhetInfo = EnhetInfo("4806", "Nav Drammen")) {
-        WireMock.stubFor(
-            WireMock.get(WireMock.urlMatching("/organisasjon/enhet/info/.*")).willReturn(
-                aClosedJsonResponse()
-                    .withStatus(HttpStatus.OK.value())
-                    .withBody(convertObjectToString(response))
-            )
-        )
-    }
-
-    fun stubEnhetKontaktInfo(response: EnhetKontaktInfoDto = createEnhetKontaktInformasjon()) {
+    fun stubEnhetKontaktInfo(response: EnhetKontaktinfoDto = createEnhetKontaktInformasjon()) {
         WireMock.stubFor(
             WireMock.get(WireMock.urlMatching("/organisasjon/enhet/kontaktinfo/.*")).willReturn(
                 aClosedJsonResponse()
@@ -121,7 +114,7 @@ class StubUtils {
         )
     }
 
-    fun stubHentSaksbehandlerInfo(response: SaksbehandlerInfoResponse = SaksbehandlerInfoResponse(SAKSBEHANDLER_IDENT, SAKSBEHANDLER_NAVN)) {
+    fun stubHentSaksbehandlerInfo(response: SaksbehandlerDto = SaksbehandlerDto(SaksbehandlerId(SAKSBEHANDLER_IDENT), Navn(SAKSBEHANDLER_NAVN))) {
         WireMock.stubFor(
             WireMock.get(WireMock.urlMatching("/organisasjon/saksbehandler/info/.*")).willReturn(
                 aClosedJsonResponse()
@@ -139,6 +132,7 @@ class StubUtils {
             ).withRequestBody(ContainsPattern(fnr))
             WireMock.verify(verify)
         }
+
         fun verifyHentEnhetKontaktInfoCalledWith(spraak: String? = "NB", vararg contains: String) {
             val verify = WireMock.getRequestedFor(
                 WireMock.urlMatching("/organisasjon/enhet/kontaktinfo/.*/$spraak")

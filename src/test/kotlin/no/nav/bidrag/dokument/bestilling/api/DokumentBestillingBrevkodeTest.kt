@@ -223,13 +223,13 @@ class DokumentBestillingBrevkodeTest : AbstractControllerTest() {
             dokumentProducer.produser(
                 withArg { bestilling ->
                     assertSoftly {
-                        bestilling.kontaktInfo?.navn shouldBe enhetKontaktInfo.enhetNavn
-                        bestilling.kontaktInfo?.telefonnummer shouldBe enhetKontaktInfo.telefonnummer
-                        bestilling.kontaktInfo?.enhetId shouldBe enhetKontaktInfo.enhetIdent
-                        bestilling.kontaktInfo?.postadresse?.adresselinje1 shouldBe enhetKontaktInfo.postadresse?.adresselinje1
-                        bestilling.kontaktInfo?.postadresse?.adresselinje2 shouldBe enhetKontaktInfo.postadresse?.adresselinje2
-                        bestilling.kontaktInfo?.postadresse?.postnummer shouldBe enhetKontaktInfo.postadresse?.postnummer
-                        bestilling.kontaktInfo?.postadresse?.poststed shouldBe enhetKontaktInfo.postadresse?.poststed
+                        bestilling.kontaktInfo?.navn shouldBe enhetKontaktInfo.navn?.verdi
+                        bestilling.kontaktInfo?.telefonnummer shouldBe enhetKontaktInfo.telefonnummer?.verdi
+                        bestilling.kontaktInfo?.enhetId shouldBe enhetKontaktInfo.nummer.verdi
+                        bestilling.kontaktInfo?.postadresse?.adresselinje1 shouldBe enhetKontaktInfo.postadresse?.adresselinje1?.verdi
+                        bestilling.kontaktInfo?.postadresse?.adresselinje2 shouldBe enhetKontaktInfo.postadresse?.adresselinje2?.verdi
+                        bestilling.kontaktInfo?.postadresse?.postnummer shouldBe enhetKontaktInfo.postadresse?.postnummer?.verdi
+                        bestilling.kontaktInfo?.postadresse?.poststed shouldBe enhetKontaktInfo.postadresse?.poststed?.verdi
                         bestilling.kontaktInfo?.postadresse?.land shouldBe "Norge"
                     }
                 },

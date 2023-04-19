@@ -142,13 +142,13 @@ internal class DokumentMetadataInnsamlerTest {
             bestilling.gjelder?.fodselsnummer shouldBe BM1.ident.verdi
             bestilling.gjelder?.rolle shouldBe RolleType.BM
 
-            bestilling.kontaktInfo?.navn shouldBe defaultKontaktinfo.enhetNavn
-            bestilling.kontaktInfo?.telefonnummer shouldBe defaultKontaktinfo.telefonnummer
-            bestilling.kontaktInfo?.enhetId shouldBe defaultKontaktinfo.enhetIdent
-            bestilling.kontaktInfo?.postadresse?.adresselinje1 shouldBe defaultKontaktinfo.postadresse?.adresselinje1
-            bestilling.kontaktInfo?.postadresse?.adresselinje2 shouldBe defaultKontaktinfo.postadresse?.adresselinje2
-            bestilling.kontaktInfo?.postadresse?.postnummer shouldBe defaultKontaktinfo.postadresse?.postnummer
-            bestilling.kontaktInfo?.postadresse?.poststed shouldBe defaultKontaktinfo.postadresse?.poststed
+            bestilling.kontaktInfo?.navn shouldBe defaultKontaktinfo.navn?.verdi
+            bestilling.kontaktInfo?.telefonnummer shouldBe defaultKontaktinfo.telefonnummer?.verdi
+            bestilling.kontaktInfo?.enhetId shouldBe defaultKontaktinfo.nummer.verdi
+            bestilling.kontaktInfo?.postadresse?.adresselinje1 shouldBe defaultKontaktinfo.postadresse?.adresselinje1?.verdi
+            bestilling.kontaktInfo?.postadresse?.adresselinje2 shouldBe defaultKontaktinfo.postadresse?.adresselinje2?.verdi
+            bestilling.kontaktInfo?.postadresse?.postnummer shouldBe defaultKontaktinfo.postadresse?.postnummer?.verdi
+            bestilling.kontaktInfo?.postadresse?.poststed shouldBe defaultKontaktinfo.postadresse?.poststed?.verdi
             bestilling.kontaktInfo?.postadresse?.land shouldBe "Norge"
 
             bestilling.saksbehandler?.ident shouldBe SAKSBEHANDLER_IDENT

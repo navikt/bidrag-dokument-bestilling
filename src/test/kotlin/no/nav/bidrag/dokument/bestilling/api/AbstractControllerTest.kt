@@ -65,7 +65,6 @@ abstract class AbstractControllerTest {
 
     @BeforeEach
     fun initMocks() {
-        stubUtils.stubEnhetInfo()
         stubUtils.stubEnhetKontaktInfo()
         stubUtils.stubHentSaksbehandlerInfo()
         stubUtils.stubHentPersonSpraak()

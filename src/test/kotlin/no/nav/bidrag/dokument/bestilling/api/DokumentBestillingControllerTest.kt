@@ -95,19 +95,19 @@ class DokumentBestillingControllerTest : AbstractControllerTest() {
             val message: BrevBestilling = this.getMessageAsObject(BrevBestilling::class.java)!!
             assertSoftly {
                 verifyBrevbestillingHeaders(message, brevKode)
-                message.brev?.tknr shouldBe enhetKontaktInfo.enhetIdent
+                message.brev?.tknr shouldBe enhetKontaktInfo.nummer.verdi
                 message.brev?.spraak shouldBe "NB"
                 message.brev?.brevref shouldBe "DOKREF_1"
 
-                message.brev?.kontaktInfo?.avsender?.navn shouldBe enhetKontaktInfo.enhetNavn
+                message.brev?.kontaktInfo?.avsender?.navn shouldBe enhetKontaktInfo.navn?.verdi
                 message.brev?.kontaktInfo?.tlfAvsender?.telefonnummer shouldBe "55553333"
                 message.brev?.kontaktInfo?.returAdresse?.enhet shouldBe "4806"
-                message.brev?.kontaktInfo?.returAdresse?.navn shouldBe enhetKontaktInfo.enhetNavn
-                message.brev?.kontaktInfo?.returAdresse?.adresselinje1 shouldBe enhetKontaktInfo.postadresse?.adresselinje1
-                message.brev?.kontaktInfo?.returAdresse?.adresselinje2 shouldBe enhetKontaktInfo.postadresse?.adresselinje2
-                message.brev?.kontaktInfo?.returAdresse?.postnummer shouldBe enhetKontaktInfo.postadresse?.postnummer
-                message.brev?.kontaktInfo?.returAdresse?.poststed shouldBe enhetKontaktInfo.postadresse?.poststed
-                message.brev?.kontaktInfo?.returAdresse?.land shouldBe enhetKontaktInfo.postadresse?.land
+                message.brev?.kontaktInfo?.returAdresse?.navn shouldBe enhetKontaktInfo.navn?.verdi
+                message.brev?.kontaktInfo?.returAdresse?.adresselinje1 shouldBe enhetKontaktInfo.postadresse?.adresselinje1?.verdi
+                message.brev?.kontaktInfo?.returAdresse?.adresselinje2 shouldBe enhetKontaktInfo.postadresse?.adresselinje2?.verdi
+                message.brev?.kontaktInfo?.returAdresse?.postnummer shouldBe enhetKontaktInfo.postadresse?.postnummer?.verdi
+                message.brev?.kontaktInfo?.returAdresse?.poststed shouldBe enhetKontaktInfo.postadresse?.poststed?.verdi
+                message.brev?.kontaktInfo?.returAdresse?.land shouldBe enhetKontaktInfo.postadresse?.land?.verdi
                 message.brev?.kontaktInfo?.returAdresse?.shouldBeEqualToComparingFields(message.brev?.kontaktInfo?.postadresse as BrevKontaktinfo.Adresse)
 
                 message.brev?.mottaker?.navn shouldBe BM1.navn?.verdi

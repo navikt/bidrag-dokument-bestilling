@@ -3,8 +3,6 @@ package no.nav.bidrag.dokument.bestilling.utils
 import no.nav.bidrag.dokument.bestilling.api.dto.MottakerAdresseTo
 import no.nav.bidrag.dokument.bestilling.api.dto.SamhandlerAdresse
 import no.nav.bidrag.dokument.bestilling.api.dto.SamhandlerInformasjon
-import no.nav.bidrag.dokument.bestilling.konsumer.dto.EnhetKontaktInfoDto
-import no.nav.bidrag.dokument.bestilling.konsumer.dto.EnhetPostadresseDto
 import no.nav.bidrag.dokument.bestilling.konsumer.dto.HentSakResponse
 import no.nav.bidrag.dokument.bestilling.konsumer.dto.RolleType
 import no.nav.bidrag.dokument.bestilling.konsumer.dto.SakRolle
@@ -18,14 +16,20 @@ import no.nav.bidrag.domain.string.Adresselinje1
 import no.nav.bidrag.domain.string.Adresselinje2
 import no.nav.bidrag.domain.string.Adresselinje3
 import no.nav.bidrag.domain.string.Bruksenhetsnummer
+import no.nav.bidrag.domain.string.Enhetsnavn
+import no.nav.bidrag.domain.string.Enhetsnummer
 import no.nav.bidrag.domain.string.FulltNavn
 import no.nav.bidrag.domain.string.Kortnavn
 import no.nav.bidrag.domain.string.Landkode2
 import no.nav.bidrag.domain.string.Landkode3
+import no.nav.bidrag.domain.string.Landnavn
 import no.nav.bidrag.domain.string.Postnummer
 import no.nav.bidrag.domain.string.Poststed
+import no.nav.bidrag.domain.string.Telefonnummer
 import no.nav.bidrag.domain.tid.Dødsdato
 import no.nav.bidrag.domain.tid.Fødselsdato
+import no.nav.bidrag.transport.organisasjon.EnhetKontaktinfoDto
+import no.nav.bidrag.transport.organisasjon.EnhetspostadresseDto
 import no.nav.bidrag.transport.person.PersonAdresseDto
 import no.nav.bidrag.transport.person.PersonDto
 import java.time.LocalDate
@@ -177,17 +181,17 @@ fun createOpprettJournalpostResponse(
     )
 }
 
-fun createEnhetKontaktInformasjon(): EnhetKontaktInfoDto {
-    return EnhetKontaktInfoDto(
-        enhetIdent = "4806",
-        enhetNavn = "NAV Familie- og pensjonsytelser Drammen",
-        telefonnummer = "55553333",
-        postadresse = EnhetPostadresseDto(
-            adresselinje1 = "Postboks 1583",
-            adresselinje2 = "Linje2",
-            postnummer = "3040",
-            poststed = "Drammen",
-            land = "Norge"
+fun createEnhetKontaktInformasjon(): EnhetKontaktinfoDto {
+    return EnhetKontaktinfoDto(
+        nummer = Enhetsnummer("4806"),
+        navn = Enhetsnavn("NAV Familie- og pensjonsytelser Drammen"),
+        telefonnummer = Telefonnummer("55553333"),
+        postadresse = EnhetspostadresseDto(
+            adresselinje1 = Adresselinje1("Postboks 1583"),
+            adresselinje2 = Adresselinje2("Linje2"),
+            postnummer = Postnummer("3040"),
+            poststed = Poststed("Drammen"),
+            land = Landnavn("Norge")
         )
     )
 }

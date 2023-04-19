@@ -214,14 +214,14 @@ class DokumentMetadataInnsamler(
             ?: throw FantIkkeEnhetException("Fant ikke enhet $enhet for spraak ${dokumentBestilling.spraak}")
 
         dokumentBestilling.kontaktInfo = EnhetKontaktInfo(
-            navn = enhetKontaktInfo.enhetNavn ?: "",
-            telefonnummer = enhetKontaktInfo.telefonnummer ?: "",
+            navn = enhetKontaktInfo.navn?.verdi ?: "",
+            telefonnummer = enhetKontaktInfo.telefonnummer?.verdi ?: "",
             postadresse = Adresse(
-                adresselinje1 = enhetKontaktInfo.postadresse?.adresselinje1 ?: "",
-                adresselinje2 = enhetKontaktInfo.postadresse?.adresselinje2,
-                poststed = enhetKontaktInfo.postadresse?.poststed,
-                postnummer = enhetKontaktInfo.postadresse?.postnummer,
-                land = enhetKontaktInfo.postadresse?.land
+                adresselinje1 = enhetKontaktInfo.postadresse?.adresselinje1?.verdi ?: "",
+                adresselinje2 = enhetKontaktInfo.postadresse?.adresselinje2?.verdi,
+                poststed = enhetKontaktInfo.postadresse?.poststed?.verdi,
+                postnummer = enhetKontaktInfo.postadresse?.postnummer?.verdi,
+                land = enhetKontaktInfo.postadresse?.land?.verdi
             ),
             enhetId = enhet
         )

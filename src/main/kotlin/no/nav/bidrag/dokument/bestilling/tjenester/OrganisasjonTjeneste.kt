@@ -1,18 +1,13 @@
 package no.nav.bidrag.dokument.bestilling.tjenester
 
 import no.nav.bidrag.dokument.bestilling.konsumer.BidragOrganisasjonKonsumer
-import no.nav.bidrag.dokument.bestilling.konsumer.dto.EnhetInfo
-import no.nav.bidrag.dokument.bestilling.konsumer.dto.EnhetKontaktInfoDto
+import no.nav.bidrag.transport.organisasjon.EnhetKontaktinfoDto
 import org.springframework.stereotype.Service
 
 @Service
 class OrganisasjonTjeneste(private val bidragOrganisasjonKonsumer: BidragOrganisasjonKonsumer) {
 
-    fun hentEnhetInfo(enhetId: String): EnhetInfo? {
-        return bidragOrganisasjonKonsumer.hentEnhetInfo(enhetId)
-    }
-
-    fun hentEnhetKontaktInfo(enhetId: String, spraak: String?): EnhetKontaktInfoDto? {
+    fun hentEnhetKontaktInfo(enhetId: String, spraak: String?): EnhetKontaktinfoDto? {
         return bidragOrganisasjonKonsumer.hentEnhetKontaktinfo(enhetId, spraak ?: "NB")
     }
 }
