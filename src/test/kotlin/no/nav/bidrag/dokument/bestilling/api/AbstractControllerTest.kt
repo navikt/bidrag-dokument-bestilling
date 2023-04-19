@@ -88,11 +88,11 @@ abstract class AbstractControllerTest {
     }
 
     fun stubDefaultValues() {
-        stubUtils.stubHentPerson(BP1.ident, BP1)
-        stubUtils.stubHentPerson(BM1.ident, BM1)
-        stubUtils.stubHentPerson(BARN1.ident, BARN1)
-        stubUtils.stubHentPerson(BARN2.ident, BARN2)
-        stubUtils.stubHentPerson(ANNEN_MOTTAKER.ident, ANNEN_MOTTAKER)
+        stubUtils.stubHentPerson(BP1.ident.verdi, BP1)
+        stubUtils.stubHentPerson(BM1.ident.verdi, BM1)
+        stubUtils.stubHentPerson(BARN1.ident.verdi, BARN1)
+        stubUtils.stubHentPerson(BARN2.ident.verdi, BARN2)
+        stubUtils.stubHentPerson(ANNEN_MOTTAKER.ident.verdi, ANNEN_MOTTAKER)
         stubUtils.stubHentSak()
         stubUtils.stubHentPersonSpraak()
         stubUtils.stubHentAdresse(postAdresse = createPostAdresseResponse())

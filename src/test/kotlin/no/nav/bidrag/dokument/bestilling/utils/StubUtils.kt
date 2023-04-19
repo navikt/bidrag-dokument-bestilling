@@ -8,8 +8,6 @@ import com.github.tomakehurst.wiremock.matching.ContainsPattern
 import com.github.tomakehurst.wiremock.matching.RequestPatternBuilder
 import no.nav.bidrag.dokument.bestilling.konsumer.dto.EnhetInfo
 import no.nav.bidrag.dokument.bestilling.konsumer.dto.EnhetKontaktInfoDto
-import no.nav.bidrag.dokument.bestilling.konsumer.dto.HentPersonResponse
-import no.nav.bidrag.dokument.bestilling.konsumer.dto.HentPostadresseResponse
 import no.nav.bidrag.dokument.bestilling.konsumer.dto.HentSakResponse
 import no.nav.bidrag.dokument.bestilling.konsumer.dto.SaksbehandlerInfoResponse
 import no.nav.bidrag.dokument.bestilling.utils.SAKSBEHANDLER_IDENT
@@ -19,6 +17,8 @@ import no.nav.bidrag.dokument.bestilling.utils.createOpprettJournalpostResponse
 import no.nav.bidrag.dokument.bestilling.utils.createPostAdresseResponse
 import no.nav.bidrag.dokument.bestilling.utils.createSakResponse
 import no.nav.bidrag.dokument.dto.OpprettJournalpostResponse
+import no.nav.bidrag.transport.person.PersonAdresseDto
+import no.nav.bidrag.transport.person.PersonDto
 import org.junit.Assert
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpHeaders
@@ -40,7 +40,7 @@ class StubUtils {
         }
     }
 
-    fun stubHentPerson(fnr: String? = null, personResponse: HentPersonResponse) {
+    fun stubHentPerson(fnr: String? = null, personResponse: PersonDto) {
         WireMock.stubFor(
             WireMock.post(WireMock.urlMatching("/person/informasjon")).withRequestBody(if (fnr.isNullOrEmpty()) AnythingPattern() else ContainsPattern(fnr)).willReturn(
                 aClosedJsonResponse()
@@ -70,7 +70,7 @@ class StubUtils {
         )
     }
 
-    fun stubHentAdresse(ident: String? = null, postAdresse: HentPostadresseResponse? = createPostAdresseResponse(), status: HttpStatus = HttpStatus.OK) {
+    fun stubHentAdresse(ident: String? = null, postAdresse: PersonAdresseDto? = createPostAdresseResponse(), status: HttpStatus = HttpStatus.OK) {
         WireMock.stubFor(
             WireMock.post(WireMock.urlMatching("/person/adresse/post")).withRequestBody(
                 if (ident.isNullOrEmpty()) AnythingPattern() else ContainsPattern(ident)

@@ -17,6 +17,7 @@ import no.nav.bidrag.dokument.bestilling.bestilling.produksjon.dto.BrevBestillin
 import no.nav.bidrag.dokument.bestilling.bestilling.produksjon.dto.BrevKontaktinfo
 import no.nav.bidrag.dokument.bestilling.konsumer.dto.RolleType
 import no.nav.bidrag.dokument.bestilling.konsumer.dto.SakRolle
+import no.nav.bidrag.dokument.bestilling.konsumer.dto.fornavnEtternavn
 import no.nav.bidrag.dokument.bestilling.utils.ANNEN_MOTTAKER
 import no.nav.bidrag.dokument.bestilling.utils.BARN1
 import no.nav.bidrag.dokument.bestilling.utils.BARN2
@@ -72,8 +73,8 @@ class DokumentBestillingControllerTest : AbstractControllerTest() {
         stubUtils.stubOpprettJournalpost(createOpprettJournalpostResponse(dokumentReferanse = "DOKREF_1"))
 
         val request = DokumentBestillingForespørsel(
-            mottakerId = mottakerId,
-            gjelderId = gjelderId,
+            mottakerId = mottakerId.verdi,
+            gjelderId = gjelderId.verdi,
             saksnummer = saksnummer,
             tittel = tittel,
             enhet = "4806",
@@ -109,23 +110,23 @@ class DokumentBestillingControllerTest : AbstractControllerTest() {
                 message.brev?.kontaktInfo?.returAdresse?.land shouldBe enhetKontaktInfo.postadresse?.land
                 message.brev?.kontaktInfo?.returAdresse?.shouldBeEqualToComparingFields(message.brev?.kontaktInfo?.postadresse as BrevKontaktinfo.Adresse)
 
-                message.brev?.mottaker?.navn shouldBe BM1.navn
-                message.brev?.mottaker?.adresselinje1 shouldBe bmAdresse.adresselinje1
-                message.brev?.mottaker?.adresselinje2 shouldBe bmAdresse.adresselinje2
+                message.brev?.mottaker?.navn shouldBe BM1.navn?.verdi
+                message.brev?.mottaker?.adresselinje1 shouldBe bmAdresse.adresselinje1?.verdi
+                message.brev?.mottaker?.adresselinje2 shouldBe bmAdresse.adresselinje2?.verdi
                 message.brev?.mottaker?.adresselinje3 shouldBe "3030 Drammen"
-                message.brev?.mottaker?.boligNr shouldBe bmAdresse.bruksenhetsnummer
-                message.brev?.mottaker?.postnummer shouldBe bmAdresse.postnummer
+                message.brev?.mottaker?.boligNr shouldBe bmAdresse.bruksenhetsnummer?.verdi
+                message.brev?.mottaker?.postnummer shouldBe bmAdresse.postnummer?.verdi
                 message.brev?.mottaker?.spraak shouldBe "NB"
                 message.brev?.mottaker?.rolle shouldBe "01"
-                message.brev?.mottaker?.fodselsnummer shouldBe BM1.ident
-                message.brev?.mottaker?.fodselsdato shouldBe BM1.foedselsdato
+                message.brev?.mottaker?.fodselsnummer shouldBe BM1.ident.verdi
+                message.brev?.mottaker?.fodselsdato shouldBe BM1.fødselsdato?.verdi
 
-                message.brev?.parter?.bmfnr shouldBe BM1.ident
-                message.brev?.parter?.bmnavn shouldBe BM1.fornavnEtternavn
-                message.brev?.parter?.bpfnr shouldBe BP1.ident
-                message.brev?.parter?.bpnavn shouldBe BP1.fornavnEtternavn
-                message.brev?.parter?.bmfodselsdato shouldBe BM1.foedselsdato
-                message.brev?.parter?.bpfodselsdato shouldBe BP1.foedselsdato
+                message.brev?.parter?.bmfnr shouldBe BM1.ident.verdi
+                message.brev?.parter?.bmnavn shouldBe BM1.fornavnEtternavn()
+                message.brev?.parter?.bpfnr shouldBe BP1.ident.verdi
+                message.brev?.parter?.bpnavn shouldBe BP1.fornavnEtternavn()
+                message.brev?.parter?.bmfodselsdato shouldBe BM1.fødselsdato?.verdi
+                message.brev?.parter?.bpfodselsdato shouldBe BP1.fødselsdato?.verdi
                 message.brev?.parter?.bmkravkfremav shouldBe ""
                 message.brev?.parter?.bmgebyr shouldBe ""
                 message.brev?.parter?.bmlandkode shouldBe ""
@@ -136,17 +137,17 @@ class DokumentBestillingControllerTest : AbstractControllerTest() {
                 message.brev?.parter?.bpdatodod shouldBe null
 
                 message.brev?.barnISak?.shouldHaveAtLeastSize(2)
-                message.brev?.barnISak?.get(0)?.fnr shouldBe BARN2.ident
-                message.brev?.barnISak?.get(0)?.navn shouldBe BARN2.fornavnEtternavn
-                message.brev?.barnISak?.get(0)?.fDato shouldBe BARN2.foedselsdato
+                message.brev?.barnISak?.get(0)?.fnr shouldBe BARN2.ident.verdi
+                message.brev?.barnISak?.get(0)?.navn shouldBe BARN2.fornavnEtternavn()
+                message.brev?.barnISak?.get(0)?.fDato shouldBe BARN2.fødselsdato?.verdi
                 message.brev?.barnISak?.get(0)?.personIdRm shouldBe ""
                 message.brev?.barnISak?.get(0)?.belopGebyrRm shouldBe ""
                 message.brev?.barnISak?.get(0)?.belForskudd shouldBe ""
                 message.brev?.barnISak?.get(0)?.belBidrag shouldBe ""
 
-                message.brev?.barnISak?.get(1)?.fDato shouldBe BARN1.foedselsdato
-                message.brev?.barnISak?.get(1)?.fnr shouldBe BARN1.ident
-                message.brev?.barnISak?.get(1)?.navn shouldBe BARN1.fornavnEtternavn
+                message.brev?.barnISak?.get(1)?.fDato shouldBe BARN1.fødselsdato?.verdi
+                message.brev?.barnISak?.get(1)?.fnr shouldBe BARN1.ident.verdi
+                message.brev?.barnISak?.get(1)?.navn shouldBe BARN1.fornavnEtternavn()
                 message.brev?.barnISak?.get(1)?.personIdRm shouldBe ""
                 message.brev?.barnISak?.get(1)?.belopGebyrRm shouldBe ""
                 message.brev?.barnISak?.get(1)?.belForskudd shouldBe ""
@@ -160,16 +161,16 @@ class DokumentBestillingControllerTest : AbstractControllerTest() {
                 message.brev?.saksbehandler?.navn shouldBe "Saksbehandler Mellomnavn Saksbehandlersen"
 
                 stubUtils.Verify().verifyHentEnhetKontaktInfoCalledWith()
-                stubUtils.Verify().verifyHentPersonCalled(BM1.ident)
-                stubUtils.Verify().verifyHentPersonCalled(BP1.ident)
-                stubUtils.Verify().verifyHentPersonCalled(BARN1.ident)
-                stubUtils.Verify().verifyHentPersonCalled(BARN2.ident)
-                stubUtils.Verify().verifyHentPersonCalled(BARN2.ident)
+                stubUtils.Verify().verifyHentPersonCalled(BM1.ident.verdi)
+                stubUtils.Verify().verifyHentPersonCalled(BP1.ident.verdi)
+                stubUtils.Verify().verifyHentPersonCalled(BARN1.ident.verdi)
+                stubUtils.Verify().verifyHentPersonCalled(BARN2.ident.verdi)
+                stubUtils.Verify().verifyHentPersonCalled(BARN2.ident.verdi)
                 stubUtils.Verify().verifyOpprettJournalpostCalledWith(
                     "{\"skalFerdigstilles\":false," +
                         "\"tittel\":\"$tittel\"," +
-                        "\"gjelderIdent\":\"$gjelderId\"," +
-                        "\"avsenderMottaker\":{\"navn\":\"${BM1.navn}\",\"ident\":\"$mottakerId\",\"type\":\"FNR\",\"adresse\":null}," +
+                        "\"gjelderIdent\":\"${gjelderId.verdi}\"," +
+                        "\"avsenderMottaker\":{\"navn\":\"${BM1.navn}\",\"ident\":\"${mottakerId.verdi}\",\"type\":\"FNR\",\"adresse\":null}," +
                         "\"dokumenter\":[{\"tittel\":\"$tittel\",\"brevkode\":\"${brevKode.name}\"}]," +
                         "\"tilknyttSaker\":[\"$saksnummer\"]," +
                         "\"journalposttype\":\"UTGÅENDE\"," +
@@ -193,8 +194,8 @@ class DokumentBestillingControllerTest : AbstractControllerTest() {
         stubUtils.stubOpprettJournalpost(createOpprettJournalpostResponse(dokumentReferanse = "DOKREF_1"))
 
         val request = DokumentBestillingForespørsel(
-            mottakerId = BM1.ident,
-            gjelderId = BP1.ident,
+            mottakerId = BM1.ident.verdi,
+            gjelderId = BP1.ident.verdi,
             saksnummer = "123213",
             tittel = "Tittel på dokument",
             enhet = "4806",
@@ -215,17 +216,17 @@ class DokumentBestillingControllerTest : AbstractControllerTest() {
             val message: BrevBestilling = this.getMessageAsObject(BrevBestilling::class.java)!!
             assertSoftly {
                 message.brev?.spraak shouldBe "EN"
-                message.brev?.mottaker?.navn shouldBe BM1.navn
-                message.brev?.mottaker?.adresselinje1 shouldBe bmAdresse.adresselinje1
-                message.brev?.mottaker?.adresselinje2 shouldBe bmAdresse.adresselinje2
-                message.brev?.mottaker?.adresselinje3 shouldBe bmAdresse.adresselinje3
+                message.brev?.mottaker?.navn shouldBe BM1.navn?.verdi
+                message.brev?.mottaker?.adresselinje1 shouldBe bmAdresse.adresselinje1?.verdi
+                message.brev?.mottaker?.adresselinje2 shouldBe bmAdresse.adresselinje2?.verdi
+                message.brev?.mottaker?.adresselinje3 shouldBe bmAdresse.adresselinje3?.verdi
                 message.brev?.mottaker?.adresselinje4 shouldBe "USA"
                 message.brev?.mottaker?.boligNr shouldBe ""
                 message.brev?.mottaker?.postnummer shouldBe ""
                 message.brev?.mottaker?.spraak shouldBe "EN"
                 message.brev?.mottaker?.rolle shouldBe "01"
-                message.brev?.mottaker?.fodselsnummer shouldBe BM1.ident
-                message.brev?.mottaker?.fodselsdato shouldBe BM1.foedselsdato
+                message.brev?.mottaker?.fodselsnummer shouldBe BM1.ident.verdi
+                message.brev?.mottaker?.fodselsdato shouldBe BM1.fødselsdato?.verdi
 
                 stubUtils.Verify().verifyHentEnhetKontaktInfoCalledWith("EN")
             }
@@ -242,8 +243,8 @@ class DokumentBestillingControllerTest : AbstractControllerTest() {
         headers.set(X_ENHET_HEADER, "4806")
 
         val request = DokumentBestillingForespørsel(
-            mottakerId = BM1.ident,
-            gjelderId = BP1.ident,
+            mottakerId = BM1.ident.verdi,
+            gjelderId = BP1.ident.verdi,
             saksnummer = "123213",
             enhet = "4806"
         )
@@ -270,8 +271,8 @@ class DokumentBestillingControllerTest : AbstractControllerTest() {
 
         stubUtils.stubOpprettJournalpost(createOpprettJournalpostResponse(dokumentReferanse = "DOKREF_1"))
         val request = DokumentBestillingForespørsel(
-            mottakerId = BM1.ident,
-            gjelderId = BP1.ident,
+            mottakerId = BM1.ident.verdi,
+            gjelderId = BP1.ident.verdi,
             saksnummer = "123213",
             enhet = "4806"
         )
@@ -302,7 +303,7 @@ class DokumentBestillingControllerTest : AbstractControllerTest() {
 
         stubUtils.stubOpprettJournalpost(createOpprettJournalpostResponse(dokumentReferanse = "DOKREF_1"))
         val request = DokumentBestillingForespørsel(
-            gjelderId = BP1.ident,
+            gjelderId = BP1.ident.verdi,
             saksnummer = "123213",
             enhet = "4806",
             mottaker = MottakerTo(
@@ -339,11 +340,11 @@ class DokumentBestillingControllerTest : AbstractControllerTest() {
 
         stubUtils.stubOpprettJournalpost(createOpprettJournalpostResponse(dokumentReferanse = "DOKREF_1"))
         val request = DokumentBestillingForespørsel(
-            gjelderId = BP1.ident,
+            gjelderId = BP1.ident.verdi,
             saksnummer = "123213",
             enhet = "4806",
             mottaker = MottakerTo(
-                ident = BM1.ident
+                ident = BM1.ident.verdi
             )
         )
 
@@ -358,7 +359,7 @@ class DokumentBestillingControllerTest : AbstractControllerTest() {
             response.statusCode shouldBe HttpStatus.OK
 
             val message = this.getMessageAsObject(BrevBestilling::class.java)!!
-            message.brev?.mottaker?.navn shouldBe BM1.navn
+            message.brev?.mottaker?.navn shouldBe BM1.navn?.verdi
             message.brev?.mottaker?.adresselinje1 shouldBe ""
             message.brev?.mottaker?.adresselinje2 shouldBe ""
             message.brev?.mottaker?.adresselinje3 shouldBe ""
@@ -374,8 +375,8 @@ class DokumentBestillingControllerTest : AbstractControllerTest() {
 
         stubUtils.stubOpprettJournalpost(status = HttpStatus.BAD_REQUEST)
         val request = DokumentBestillingForespørsel(
-            mottakerId = BM1.ident,
-            gjelderId = BP1.ident,
+            mottakerId = BM1.ident.verdi,
+            gjelderId = BP1.ident.verdi,
             saksnummer = "123213",
             enhet = "4806"
         )
@@ -399,8 +400,8 @@ class DokumentBestillingControllerTest : AbstractControllerTest() {
         stubDefaultValues()
 
         val request = DokumentBestillingForespørsel(
-            mottakerId = BM1.ident,
-            gjelderId = BP1.ident,
+            mottakerId = BM1.ident.verdi,
+            gjelderId = BP1.ident.verdi,
             saksnummer = "123213",
             enhet = "4806"
         )
@@ -425,23 +426,23 @@ class DokumentBestillingControllerTest : AbstractControllerTest() {
         val sak = createSakResponse().copy(
             roller = listOf(
                 SakRolle(
-                    foedselsnummer = BM1.ident,
+                    foedselsnummer = BM1.ident.verdi,
                     rolleType = RolleType.BM
                 ),
                 SakRolle(
-                    foedselsnummer = BP1.ident,
+                    foedselsnummer = BP1.ident.verdi,
                     rolleType = RolleType.BP
                 ),
                 SakRolle(
-                    foedselsnummer = BARN1.ident,
+                    foedselsnummer = BARN1.ident.verdi,
                     rolleType = RolleType.BA
                 ),
                 SakRolle(
-                    foedselsnummer = BARN2.ident,
+                    foedselsnummer = BARN2.ident.verdi,
                     rolleType = RolleType.BA
                 ),
                 SakRolle(
-                    foedselsnummer = ANNEN_MOTTAKER.ident,
+                    foedselsnummer = ANNEN_MOTTAKER.ident.verdi,
                     rolleType = RolleType.RM
                 )
             )
@@ -451,8 +452,8 @@ class DokumentBestillingControllerTest : AbstractControllerTest() {
         stubUtils.stubOpprettJournalpost(createOpprettJournalpostResponse(dokumentReferanse = "DOKREF_1"))
 
         val request = DokumentBestillingForespørsel(
-            mottakerId = ANNEN_MOTTAKER.ident,
-            gjelderId = BP1.ident,
+            mottakerId = ANNEN_MOTTAKER.ident.verdi,
+            gjelderId = BP1.ident.verdi,
             saksnummer = "123213",
             enhet = "4806"
         )

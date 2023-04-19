@@ -5,13 +5,29 @@ import no.nav.bidrag.dokument.bestilling.api.dto.SamhandlerAdresse
 import no.nav.bidrag.dokument.bestilling.api.dto.SamhandlerInformasjon
 import no.nav.bidrag.dokument.bestilling.konsumer.dto.EnhetKontaktInfoDto
 import no.nav.bidrag.dokument.bestilling.konsumer.dto.EnhetPostadresseDto
-import no.nav.bidrag.dokument.bestilling.konsumer.dto.HentPersonResponse
-import no.nav.bidrag.dokument.bestilling.konsumer.dto.HentPostadresseResponse
 import no.nav.bidrag.dokument.bestilling.konsumer.dto.HentSakResponse
 import no.nav.bidrag.dokument.bestilling.konsumer.dto.RolleType
 import no.nav.bidrag.dokument.bestilling.konsumer.dto.SakRolle
 import no.nav.bidrag.dokument.dto.OpprettDokumentDto
 import no.nav.bidrag.dokument.dto.OpprettJournalpostResponse
+import no.nav.bidrag.domain.enums.Adressetype
+import no.nav.bidrag.domain.enums.Diskresjonskode
+import no.nav.bidrag.domain.ident.AktørId
+import no.nav.bidrag.domain.ident.PersonIdent
+import no.nav.bidrag.domain.string.Adresselinje1
+import no.nav.bidrag.domain.string.Adresselinje2
+import no.nav.bidrag.domain.string.Adresselinje3
+import no.nav.bidrag.domain.string.Bruksenhetsnummer
+import no.nav.bidrag.domain.string.FulltNavn
+import no.nav.bidrag.domain.string.Kortnavn
+import no.nav.bidrag.domain.string.Landkode2
+import no.nav.bidrag.domain.string.Landkode3
+import no.nav.bidrag.domain.string.Postnummer
+import no.nav.bidrag.domain.string.Poststed
+import no.nav.bidrag.domain.tid.Dødsdato
+import no.nav.bidrag.domain.tid.Fødselsdato
+import no.nav.bidrag.transport.person.PersonAdresseDto
+import no.nav.bidrag.transport.person.PersonDto
 import java.time.LocalDate
 
 val DEFAULT_TITLE_DOKUMENT = "Tittel på dokumentet"
@@ -39,6 +55,7 @@ val SAMHANDLER_MOTTAKER_ADRESSE = MottakerAdresseTo(
     adresselinje2 = "Samhandler adresselinje 2",
     adresselinje3 = "Samhandler adresselinje 3",
     postnummer = "3000",
+    landkode = "NO",
     landkode3 = "NOR"
 )
 
@@ -80,19 +97,19 @@ fun createSakResponse(): HentSakResponse {
         eierfogd = "4806",
         roller = listOf(
             SakRolle(
-                foedselsnummer = BM1.ident,
+                foedselsnummer = BM1.ident.verdi,
                 rolleType = RolleType.BM
             ),
             SakRolle(
-                foedselsnummer = BP1.ident,
+                foedselsnummer = BP1.ident.verdi,
                 rolleType = RolleType.BP
             ),
             SakRolle(
-                foedselsnummer = BARN1.ident,
+                foedselsnummer = BARN1.ident.verdi,
                 rolleType = RolleType.BA
             ),
             SakRolle(
-                foedselsnummer = BARN2.ident,
+                foedselsnummer = BARN2.ident.verdi,
                 rolleType = RolleType.BA
             )
         )
@@ -106,38 +123,49 @@ fun createPersonResponse(
     fodselsdato: LocalDate? = null,
     dodsdato: LocalDate? = null,
     aktorId: String? = "313213",
-    diskresjonskode: String? = null
+    diskresjonskode: Diskresjonskode? = null
 
-): HentPersonResponse {
-    return HentPersonResponse(ident, navn, kortNavn, fodselsdato, dodsdato, aktorId, diskresjonskode = diskresjonskode)
-}
-fun createPostAdresseResponse(): HentPostadresseResponse {
-    return HentPostadresseResponse(
-        adresselinje1 = "Adresselinje1",
-        adresselinje2 = "Adresselinje2",
-        adresselinje3 = null,
-        postnummer = "3030",
-        poststed = "Drammen",
-        land = "NO",
-        land3 = "NOR",
-        bruksenhetsnummer = "H0201"
+): PersonDto {
+    return PersonDto(
+        ident = PersonIdent(ident),
+        navn = FulltNavn(navn),
+        kortnavn = kortNavn?.let { Kortnavn(it) },
+        fødselsdato = fodselsdato?.let { Fødselsdato(it) },
+        dødsdato = dodsdato?.let { Dødsdato(it) },
+        aktørId = aktorId?.let { AktørId(it) },
+        diskresjonskode = diskresjonskode
     )
 }
 
-fun createPostAdresseResponseUtenlandsk(): HentPostadresseResponse {
-    return HentPostadresseResponse(
-        adresselinje1 = "Utenlandsk Adresselinje1",
-        adresselinje2 = "Utenlandsk Adresselinje2",
-        adresselinje3 = "United states of America",
-        postnummer = null,
-        poststed = null,
-        land = "US",
-        land3 = "USA",
-        bruksenhetsnummer = null
+fun createPostAdresseResponse(): PersonAdresseDto {
+    return PersonAdresseDto(
+        adresselinje1 = Adresselinje1("Adresselinje1"),
+        adresselinje2 = Adresselinje2("Adresselinje2"),
+        postnummer = Postnummer("3030"),
+        poststed = Poststed("Drammen"),
+        land = Landkode2("NO"),
+        land3 = Landkode3("NOR"),
+        bruksenhetsnummer = Bruksenhetsnummer("H0201"),
+        adressetype = Adressetype.BOSTEDSADRESSE
     )
 }
 
-fun createOpprettJournalpostResponse(tittel: String = "Tittel på dokument", journalpostId: String = "123123", dokumentReferanse: String = "dokref1"): OpprettJournalpostResponse {
+fun createPostAdresseResponseUtenlandsk(): PersonAdresseDto {
+    return PersonAdresseDto(
+        adresselinje1 = Adresselinje1("Utenlandsk Adresselinje1"),
+        adresselinje2 = Adresselinje2("Utenlandsk Adresselinje2"),
+        adresselinje3 = Adresselinje3("United states of America"),
+        land = Landkode2("US"),
+        land3 = Landkode3("USA"),
+        adressetype = Adressetype.BOSTEDSADRESSE
+    )
+}
+
+fun createOpprettJournalpostResponse(
+    tittel: String = "Tittel på dokument",
+    journalpostId: String = "123123",
+    dokumentReferanse: String = "dokref1"
+): OpprettJournalpostResponse {
     return OpprettJournalpostResponse(
         dokumenter = listOf(
             OpprettDokumentDto(
