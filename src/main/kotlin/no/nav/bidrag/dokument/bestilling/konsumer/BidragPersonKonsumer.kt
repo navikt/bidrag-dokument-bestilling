@@ -32,9 +32,12 @@ class BidragPersonKonsumer(
     fun hentPerson(personId: String): PersonDto? {
         try {
             val hentPersonResponse =
-                restTemplate.exchange("/informasjon", HttpMethod.POST, HttpEntity(
-                    HentPersonInfoRequest(personId)
-                ), PersonDto::class.java)
+                restTemplate.exchange(
+                    "/informasjon",
+                    HttpMethod.POST,
+                    HttpEntity(HentPersonInfoRequest(personId)),
+                    PersonDto::class.java
+                )
             return hentPersonResponse.body
         } catch (e: HttpStatusCodeException) {
             if (e.statusCode == HttpStatus.NOT_FOUND) {
