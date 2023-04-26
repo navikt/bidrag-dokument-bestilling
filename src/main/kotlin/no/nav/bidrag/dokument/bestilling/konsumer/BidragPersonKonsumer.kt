@@ -5,7 +5,6 @@ import no.nav.bidrag.commons.security.service.SecurityTokenService
 import no.nav.bidrag.dokument.bestilling.konfigurasjon.CacheKonfig.Companion.PERSON_ADRESSE_CACHE
 import no.nav.bidrag.dokument.bestilling.konfigurasjon.CacheKonfig.Companion.PERSON_CACHE
 import no.nav.bidrag.dokument.bestilling.konfigurasjon.CacheKonfig.Companion.PERSON_SPRAAK_CACHE
-import no.nav.bidrag.dokument.bestilling.konsumer.dto.HentPersonInfoRequest
 import no.nav.bidrag.dokument.bestilling.model.HentPersonFeiletException
 import no.nav.bidrag.domain.ident.PersonIdent
 import no.nav.bidrag.transport.person.PersonAdresseDto
@@ -32,12 +31,7 @@ class BidragPersonKonsumer(
     fun hentPerson(personId: String): PersonDto? {
         try {
             val hentPersonResponse =
-                restTemplate.exchange(
-                    "/informasjon",
-                    HttpMethod.POST,
-                    HttpEntity(HentPersonInfoRequest(personId)),
-                    PersonDto::class.java
-                )
+                restTemplate.exchange("/informasjon", HttpMethod.POST, HttpEntity(PersonIdent(personId)), PersonDto::class.java)
             return hentPersonResponse.body
         } catch (e: HttpStatusCodeException) {
             if (e.statusCode == HttpStatus.NOT_FOUND) {
