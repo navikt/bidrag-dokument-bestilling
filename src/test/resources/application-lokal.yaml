@@ -13,7 +13,7 @@ KODEVERK_URL: https://kodeverk.dev.adeo.no
 
 AZURE_APP_TENANT_ID: 966ac572-f5b7-4bbe-aa88-c76419c0f851
 
-server.port: 8999
+server.port: 8998
 NAIS_APP_NAME: bidrag-dokument-bestilling
 
 MQ_QUEUE_MANAGER: MQLS02
