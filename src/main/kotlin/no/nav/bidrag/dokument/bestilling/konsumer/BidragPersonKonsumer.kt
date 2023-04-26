@@ -9,6 +9,7 @@ import no.nav.bidrag.dokument.bestilling.model.HentPersonFeiletException
 import no.nav.bidrag.domain.ident.PersonIdent
 import no.nav.bidrag.transport.person.PersonAdresseDto
 import no.nav.bidrag.transport.person.PersonDto
+import no.nav.bidrag.transport.person.PersonRequest
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.HttpEntity
 import org.springframework.http.HttpMethod
@@ -31,7 +32,7 @@ class BidragPersonKonsumer(
     fun hentPerson(personId: String): PersonDto? {
         try {
             val hentPersonResponse =
-                restTemplate.exchange("/informasjon", HttpMethod.POST, HttpEntity(PersonIdent(personId)), PersonDto::class.java)
+                restTemplate.exchange("/informasjon", HttpMethod.POST, HttpEntity(PersonRequest(PersonIdent(personId))), PersonDto::class.java)
             return hentPersonResponse.body
         } catch (e: HttpStatusCodeException) {
             if (e.statusCode == HttpStatus.NOT_FOUND) {
@@ -47,7 +48,7 @@ class BidragPersonKonsumer(
         return restTemplate.exchange(
             "/adresse/post",
             HttpMethod.POST,
-            HttpEntity(PersonIdent(id)),
+            HttpEntity(PersonRequest(PersonIdent(id))),
             PersonAdresseDto::class.java
         ).body
     }
@@ -58,7 +59,7 @@ class BidragPersonKonsumer(
         return restTemplate.exchange(
             "/spraak",
             HttpMethod.POST,
-            HttpEntity(PersonIdent(id)),
+            HttpEntity(PersonRequest(PersonIdent(id))),
             String::class.java
         ).body
     }
