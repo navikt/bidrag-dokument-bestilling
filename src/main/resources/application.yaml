@@ -7,7 +7,7 @@ management:
 springdoc:
   packages-to-scan: no.nav.bidrag.dokument.bestilling.controller
 spring.main.banner-mode: off
-
+spring.application.name: ${NAIS_APP_NAME:bidrag-dokument-bestilling}
 mq:
   hostname: ${MQ_HOSTNAME}
   port: ${MQ_PORT}

@@ -15,7 +15,7 @@
   <properties>
     <java.version>17</java.version>
     <kotlin.version>1.8.21</kotlin.version>
-    <bidrag-commons.version>0.7.31</bidrag-commons.version>
+    <bidrag-commons.version>0.7.43</bidrag-commons.version>
     <bidrag-transport.version>20230420100825_db5a095</bidrag-transport.version>
     <logback-encoder.version>7.3</logback-encoder.version>
     <token-support.version>2.1.7</token-support.version>
