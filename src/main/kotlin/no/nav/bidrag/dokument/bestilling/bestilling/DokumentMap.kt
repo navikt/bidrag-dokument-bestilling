@@ -6,7 +6,7 @@ import org.springframework.context.ApplicationContext
 import org.springframework.stereotype.Component
 import java.util.EnumMap
 
-typealias DokumentMetadataCollectorFun = (dokumentBestilling: DokumentBestillingForespørsel) -> DokumentMetadataInnsamler
+typealias DokumentMetadataCollectorFun = (dokumentBestilling: DokumentBestillingForespørsel) -> DokumentMetadataCollector
 
 @Component
 class DokumentMap(val applicationContext: ApplicationContext) : MutableMap<BrevKode, DokumentMetadataCollectorFun> by EnumMap(BrevKode::class.java) {
@@ -65,7 +65,7 @@ class DokumentMap(val applicationContext: ApplicationContext) : MutableMap<BrevK
         )
     }
 
-    private fun medMetadataInnsamler(dokumentBestilling: DokumentBestillingForespørsel): DokumentMetadataInnsamler {
-        return applicationContext.getBean(DokumentMetadataInnsamler::class.java).init(dokumentBestilling)
+    private fun medMetadataInnsamler(dokumentBestilling: DokumentBestillingForespørsel): DokumentMetadataCollector {
+        return applicationContext.getBean(DokumentMetadataCollector::class.java).init(dokumentBestilling)
     }
 }

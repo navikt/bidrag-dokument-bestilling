@@ -5,7 +5,7 @@
   <parent>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
-    <version>2.7.4</version>
+    <version>2.7.11</version>
     <relativePath/> <!-- lookup parent from repository -->
   </parent>
   <groupId>no.nav</groupId>
@@ -14,10 +14,10 @@
   <name>bidrag-dokument-bestilling</name>
   <properties>
     <java.version>17</java.version>
-    <kotlin.version>1.7.21</kotlin.version>
+    <kotlin.version>1.8.21</kotlin.version>
     <bidrag-commons.version>0.7.31</bidrag-commons.version>
     <bidrag-transport.version>20230420100825_db5a095</bidrag-transport.version>
-    <logback-encoder.version>7.2</logback-encoder.version>
+    <logback-encoder.version>7.3</logback-encoder.version>
     <token-support.version>2.1.7</token-support.version>
     <springframework-cloud.version>3.1.4</springframework-cloud.version>
     <springdoc.version>1.6.11</springdoc.version>
@@ -223,13 +223,13 @@
     <dependency>
       <groupId>org.mockito</groupId>
       <artifactId>mockito-inline</artifactId>
-      <version>4.8.0</version>
+      <version>5.2.0</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.mockito.kotlin</groupId>
       <artifactId>mockito-kotlin</artifactId>
-      <version>4.0.0</version>
+      <version>4.1.0</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -257,13 +257,13 @@
     <dependency>
       <groupId>io.kotest</groupId>
       <artifactId>kotest-assertions-core-jvm</artifactId>
-      <version>5.5.3</version>
+      <version>5.5.5</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>com.ninja-squad</groupId>
       <artifactId>springmockk</artifactId>
-      <version>3.1.1</version>
+      <version>4.0.2</version>
       <scope>test</scope>
     </dependency>
     <dependency>

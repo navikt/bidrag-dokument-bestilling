@@ -12,7 +12,7 @@ import no.nav.bidrag.dokument.bestilling.bestilling.produksjon.dto.BrevBestillin
 import no.nav.bidrag.dokument.bestilling.bestilling.produksjon.dto.BrevKontaktinfo
 import no.nav.bidrag.dokument.bestilling.bestilling.produksjon.dto.BrevMottaker
 import no.nav.bidrag.dokument.bestilling.bestilling.produksjon.dto.brevbestilling
-import no.nav.bidrag.dokument.bestilling.konsumer.BidragDokumentKonsumer
+import no.nav.bidrag.dokument.bestilling.konsumer.BidragDokumentConsumer
 import no.nav.bidrag.dokument.bestilling.konsumer.dto.RolleType
 import no.nav.bidrag.dokument.dto.AvsenderMottakerDto
 import no.nav.bidrag.dokument.dto.JournalpostType
@@ -23,11 +23,11 @@ import org.springframework.jms.core.JmsTemplate
 import org.springframework.stereotype.Component
 
 @Component(BestillingSystem.BREVSERVER)
-class BrevserverProdusent(
+class BrevserverProducer(
     val onlinebrevTemplate: JmsTemplate,
-    val bidragDokumentKonsumer: BidragDokumentKonsumer,
+    val bidragDokumentConsumer: BidragDokumentConsumer,
     @Value("\${BREVSERVER_PASSORD}") val brevPassord: String
-) : DokumentProdusent {
+) : DokumentProducer {
 
     override fun produser(dokumentBestilling: DokumentBestilling, brevKode: BrevKode): DokumentBestillingResult {
         val journalpostId = opprettJournalpost(dokumentBestilling, brevKode)
@@ -44,7 +44,7 @@ class BrevserverProdusent(
     fun opprettJournalpost(dokumentBestilling: DokumentBestilling, brevKode: BrevKode): String {
         if (dokumentBestilling.dokumentreferanse.isNullOrEmpty()) {
             val tittel = dokumentBestilling.tittel ?: brevKode.beskrivelse
-            val response = bidragDokumentKonsumer.opprettJournalpost(
+            val response = bidragDokumentConsumer.opprettJournalpost(
                 OpprettJournalpostRequest(
                     tittel = tittel,
                     journalførendeEnhet = dokumentBestilling.enhet,

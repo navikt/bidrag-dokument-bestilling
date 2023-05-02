@@ -10,7 +10,7 @@ import no.nav.bidrag.dokument.bestilling.api.dto.DokumentBestillingForespørsel
 import no.nav.bidrag.dokument.bestilling.api.dto.DokumentBestillingResponse
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.BrevKode
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.BrevType
-import no.nav.bidrag.dokument.bestilling.bestilling.produksjon.DokumentProdusent
+import no.nav.bidrag.dokument.bestilling.bestilling.produksjon.DokumentProducer
 import no.nav.bidrag.dokument.bestilling.konsumer.dto.RolleType
 import no.nav.bidrag.dokument.bestilling.konsumer.dto.fornavnEtternavn
 import no.nav.bidrag.dokument.bestilling.utils.BARN1
@@ -31,7 +31,7 @@ import org.springframework.http.HttpStatus
 class DokumentBestillingBrevkodeTest : AbstractControllerTest() {
 
     @SpykBean
-    lateinit var dokumentProducer: DokumentProdusent
+    lateinit var dokumentProducer: DokumentProducer
 
     companion object {
         @JvmStatic

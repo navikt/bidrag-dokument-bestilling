@@ -15,7 +15,7 @@ import org.springframework.context.annotation.Profile
 @EnableCaching
 @Profile(value = ["!test"]) // Ignore cache on tests
 @Import(BrukerCacheKonfig::class)
-class CacheKonfig {
+class CacheConfig {
     companion object {
         const val LANDKODER_CACHE = "LANDKODER_CACHE"
         const val PERSON_CACHE = "PERSON_CACHE"

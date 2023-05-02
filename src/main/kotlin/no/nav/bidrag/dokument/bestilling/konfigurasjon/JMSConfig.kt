@@ -25,7 +25,7 @@ import javax.xml.bind.Marshaller
 @Configuration
 @EnableJms
 @ConfigurationPropertiesScan
-class JMSKonfigurasjon(private val mqProperties: MQProperties) {
+class JMSConfig(private val mqProperties: MQProperties) {
 
     @Bean
     @Scope("prototype")

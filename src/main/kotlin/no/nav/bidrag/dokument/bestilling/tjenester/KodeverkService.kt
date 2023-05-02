@@ -1,13 +1,13 @@
 package no.nav.bidrag.dokument.bestilling.tjenester
 
-import no.nav.bidrag.dokument.bestilling.konsumer.KodeverkKonsumer
+import no.nav.bidrag.dokument.bestilling.konsumer.KodeverkConsumer
 import org.springframework.stereotype.Service
 
 @Service
-class KodeverkTjeneste(val kodeverkKonsumer: KodeverkKonsumer) {
+class KodeverkService(val kodeverkConsumer: KodeverkConsumer) {
 
     fun hentLandFullnavnForKode(landkode: String): String? {
-        val landkoder = kodeverkKonsumer.hentLandkoder()
+        val landkoder = kodeverkConsumer.hentLandkoder()
         return landkoder?.hentFraKode(landkode)?.hentNorskNavn()
     }
 }

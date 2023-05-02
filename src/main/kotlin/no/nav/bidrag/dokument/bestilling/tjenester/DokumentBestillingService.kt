@@ -9,7 +9,7 @@ import no.nav.bidrag.dokument.dto.DokumentArkivSystemDto
 import org.springframework.stereotype.Service
 
 @Service
-class DokumentBestillingTjeneste(val dokumentBestillingManager: DokumentBestillingManager) {
+class DokumentBestillingService(val dokumentBestillingManager: DokumentBestillingManager) {
 
     fun bestill(bestillingRequest: DokumentBestillingForespørsel, brevKode: BrevKode): DokumentBestillingResponse {
         val result = dokumentBestillingManager.bestill(bestillingRequest, brevKode)
