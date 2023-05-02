@@ -1,6 +1,5 @@
 name: bidrag-dokument-bestilling-feature
 ingresses:
-  - https://bidrag-dokument-bestilling-feature.dev.intern.nav.no
   - https://bidrag-dokument-bestilling-feature.intern.dev.nav.no
 env:
   BIDRAG_PERSON_URL: https://bidrag-person-feature.dev-fss-pub.nais.io/bidrag-person
