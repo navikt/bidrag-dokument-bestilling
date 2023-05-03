@@ -3,11 +3,11 @@ package no.nav.bidrag.dokument.bestilling.utils
 import no.nav.bidrag.dokument.bestilling.api.dto.MottakerAdresseTo
 import no.nav.bidrag.dokument.bestilling.api.dto.SamhandlerAdresse
 import no.nav.bidrag.dokument.bestilling.api.dto.SamhandlerInformasjon
-import no.nav.bidrag.dokument.bestilling.konsumer.dto.EnhetKontaktInfoDto
-import no.nav.bidrag.dokument.bestilling.konsumer.dto.EnhetPostadresseDto
-import no.nav.bidrag.dokument.bestilling.konsumer.dto.HentSakResponse
-import no.nav.bidrag.dokument.bestilling.konsumer.dto.RolleType
-import no.nav.bidrag.dokument.bestilling.konsumer.dto.SakRolle
+import no.nav.bidrag.dokument.bestilling.consumer.dto.EnhetKontaktInfoDto
+import no.nav.bidrag.dokument.bestilling.consumer.dto.EnhetPostadresseDto
+import no.nav.bidrag.dokument.bestilling.consumer.dto.HentSakResponse
+import no.nav.bidrag.dokument.bestilling.consumer.dto.RolleType
+import no.nav.bidrag.dokument.bestilling.consumer.dto.SakRolle
 import no.nav.bidrag.dokument.dto.OpprettDokumentDto
 import no.nav.bidrag.dokument.dto.OpprettJournalpostResponse
 import no.nav.bidrag.domain.enums.Adressetype

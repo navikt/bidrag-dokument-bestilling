@@ -6,10 +6,10 @@ import com.github.tomakehurst.wiremock.client.WireMock.aResponse
 import com.github.tomakehurst.wiremock.matching.AnythingPattern
 import com.github.tomakehurst.wiremock.matching.ContainsPattern
 import com.github.tomakehurst.wiremock.matching.RequestPatternBuilder
-import no.nav.bidrag.dokument.bestilling.konsumer.dto.EnhetInfo
-import no.nav.bidrag.dokument.bestilling.konsumer.dto.EnhetKontaktInfoDto
-import no.nav.bidrag.dokument.bestilling.konsumer.dto.HentSakResponse
-import no.nav.bidrag.dokument.bestilling.konsumer.dto.SaksbehandlerInfoResponse
+import no.nav.bidrag.dokument.bestilling.consumer.dto.EnhetInfo
+import no.nav.bidrag.dokument.bestilling.consumer.dto.EnhetKontaktInfoDto
+import no.nav.bidrag.dokument.bestilling.consumer.dto.HentSakResponse
+import no.nav.bidrag.dokument.bestilling.consumer.dto.SaksbehandlerInfoResponse
 import no.nav.bidrag.dokument.bestilling.utils.SAKSBEHANDLER_IDENT
 import no.nav.bidrag.dokument.bestilling.utils.SAKSBEHANDLER_NAVN
 import no.nav.bidrag.dokument.bestilling.utils.createEnhetKontaktInformasjon

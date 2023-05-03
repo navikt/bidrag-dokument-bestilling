@@ -1,22 +1,17 @@
-package no.nav.bidrag.dokument.bestilling.konsumer
+package no.nav.bidrag.dokument.bestilling.consumer
 
-import no.nav.bidrag.commons.security.service.SecurityTokenService
 import no.nav.bidrag.commons.web.client.AbstractRestClient
-import no.nav.bidrag.dokument.bestilling.konsumer.dto.HentSakResponse
+import no.nav.bidrag.dokument.bestilling.consumer.dto.HentSakResponse
 import no.nav.bidrag.dokument.bestilling.model.HentSakFeiletException
-import no.nav.bidrag.domain.ident.PersonIdent
-import no.nav.bidrag.transport.person.PersonRequest
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.beans.factory.annotation.Value
-import org.springframework.http.HttpMethod
 import org.springframework.http.HttpStatus
 import org.springframework.retry.annotation.Backoff
 import org.springframework.retry.annotation.Retryable
 import org.springframework.stereotype.Service
 import org.springframework.web.client.HttpStatusCodeException
 import org.springframework.web.client.RestOperations
-import org.springframework.web.client.RestTemplate
 import org.springframework.web.util.UriComponentsBuilder
 import java.net.URI
 

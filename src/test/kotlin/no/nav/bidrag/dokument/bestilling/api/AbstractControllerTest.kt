@@ -12,8 +12,8 @@ import no.nav.bidrag.dokument.bestilling.BidragDokumentBestillingLocalTest
 import no.nav.bidrag.dokument.bestilling.JmsTestConfig
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.BrevKode
 import no.nav.bidrag.dokument.bestilling.bestilling.produksjon.dto.BrevBestilling
-import no.nav.bidrag.dokument.bestilling.konsumer.KodeverkConsumer
-import no.nav.bidrag.dokument.bestilling.konsumer.dto.KodeverkResponse
+import no.nav.bidrag.dokument.bestilling.consumer.KodeverkConsumer
+import no.nav.bidrag.dokument.bestilling.consumer.dto.KodeverkResponse
 import no.nav.bidrag.dokument.bestilling.utils.ANNEN_MOTTAKER
 import no.nav.bidrag.dokument.bestilling.utils.BARN1
 import no.nav.bidrag.dokument.bestilling.utils.BARN2

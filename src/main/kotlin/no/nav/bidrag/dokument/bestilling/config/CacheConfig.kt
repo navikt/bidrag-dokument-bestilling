@@ -1,4 +1,4 @@
-package no.nav.bidrag.dokument.bestilling.konfigurasjon
+package no.nav.bidrag.dokument.bestilling.config
 
 import com.github.benmanes.caffeine.cache.Caffeine
 import no.nav.bidrag.commons.cache.BrukerCacheKonfig

@@ -1,20 +1,17 @@
-package no.nav.bidrag.dokument.bestilling.konsumer
+package no.nav.bidrag.dokument.bestilling.consumer
 
-import no.nav.bidrag.commons.security.service.SecurityTokenService
 import no.nav.bidrag.commons.web.client.AbstractRestClient
-import no.nav.bidrag.dokument.bestilling.konfigurasjon.CacheConfig.Companion.ENHETINFO_CACHE
-import no.nav.bidrag.dokument.bestilling.konfigurasjon.CacheConfig.Companion.ENHETKONTAKTINFO_CACHE
-import no.nav.bidrag.dokument.bestilling.konfigurasjon.CacheConfig.Companion.SAKSBEHANDLERINFO_CACHE
-import no.nav.bidrag.dokument.bestilling.konsumer.dto.EnhetInfo
-import no.nav.bidrag.dokument.bestilling.konsumer.dto.EnhetKontaktInfoDto
-import no.nav.bidrag.dokument.bestilling.konsumer.dto.SaksbehandlerInfoResponse
+import no.nav.bidrag.dokument.bestilling.config.CacheConfig.Companion.ENHETINFO_CACHE
+import no.nav.bidrag.dokument.bestilling.config.CacheConfig.Companion.ENHETKONTAKTINFO_CACHE
+import no.nav.bidrag.dokument.bestilling.config.CacheConfig.Companion.SAKSBEHANDLERINFO_CACHE
+import no.nav.bidrag.dokument.bestilling.consumer.dto.EnhetInfo
+import no.nav.bidrag.dokument.bestilling.consumer.dto.EnhetKontaktInfoDto
+import no.nav.bidrag.dokument.bestilling.consumer.dto.SaksbehandlerInfoResponse
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.cache.annotation.Cacheable
-import org.springframework.http.HttpMethod
 import org.springframework.stereotype.Service
 import org.springframework.web.client.RestOperations
-import org.springframework.web.client.RestTemplate
 import org.springframework.web.util.UriComponentsBuilder
 import java.net.URI
 

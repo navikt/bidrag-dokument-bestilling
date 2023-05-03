@@ -11,8 +11,8 @@ import no.nav.bidrag.dokument.bestilling.api.dto.DokumentBestillingResponse
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.BrevKode
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.BrevType
 import no.nav.bidrag.dokument.bestilling.bestilling.produksjon.DokumentProducer
-import no.nav.bidrag.dokument.bestilling.konsumer.dto.RolleType
-import no.nav.bidrag.dokument.bestilling.konsumer.dto.fornavnEtternavn
+import no.nav.bidrag.dokument.bestilling.consumer.dto.RolleType
+import no.nav.bidrag.dokument.bestilling.consumer.dto.fornavnEtternavn
 import no.nav.bidrag.dokument.bestilling.utils.BARN1
 import no.nav.bidrag.dokument.bestilling.utils.BARN2
 import no.nav.bidrag.dokument.bestilling.utils.BM1

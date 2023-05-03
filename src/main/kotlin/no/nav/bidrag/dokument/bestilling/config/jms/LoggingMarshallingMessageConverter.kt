@@ -1,4 +1,4 @@
-package no.nav.bidrag.dokument.bestilling.konfigurasjon.jms
+package no.nav.bidrag.dokument.bestilling.config.jms
 
 import com.ibm.mq.constants.CMQC
 import com.ibm.mq.jms.MQQueue
