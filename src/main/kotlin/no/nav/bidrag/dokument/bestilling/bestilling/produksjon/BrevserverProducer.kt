@@ -12,8 +12,8 @@ import no.nav.bidrag.dokument.bestilling.bestilling.produksjon.dto.BrevBestillin
 import no.nav.bidrag.dokument.bestilling.bestilling.produksjon.dto.BrevKontaktinfo
 import no.nav.bidrag.dokument.bestilling.bestilling.produksjon.dto.BrevMottaker
 import no.nav.bidrag.dokument.bestilling.bestilling.produksjon.dto.brevbestilling
-import no.nav.bidrag.dokument.bestilling.konsumer.BidragDokumentConsumer
-import no.nav.bidrag.dokument.bestilling.konsumer.dto.RolleType
+import no.nav.bidrag.dokument.bestilling.consumer.BidragDokumentConsumer
+import no.nav.bidrag.dokument.bestilling.consumer.dto.RolleType
 import no.nav.bidrag.dokument.dto.AvsenderMottakerDto
 import no.nav.bidrag.dokument.dto.JournalpostType
 import no.nav.bidrag.dokument.dto.OpprettDokumentDto

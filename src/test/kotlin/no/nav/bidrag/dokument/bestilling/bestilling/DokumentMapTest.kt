@@ -4,8 +4,8 @@ import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
 import io.mockk.impl.annotations.RelaxedMockK
 import io.mockk.junit5.MockKExtension
-import no.nav.bidrag.dokument.bestilling.konfigurasjon.SaksbehandlerInfoManager
-import no.nav.bidrag.dokument.bestilling.konsumer.KodeverkConsumer
+import no.nav.bidrag.dokument.bestilling.config.SaksbehandlerInfoManager
+import no.nav.bidrag.dokument.bestilling.consumer.KodeverkConsumer
 import no.nav.bidrag.dokument.bestilling.tjenester.KodeverkService
 import no.nav.bidrag.dokument.bestilling.tjenester.OrganisasjonService
 import no.nav.bidrag.dokument.bestilling.tjenester.PersonService

@@ -1,16 +1,12 @@
-package no.nav.bidrag.dokument.bestilling.konsumer
+package no.nav.bidrag.dokument.bestilling.consumer
 
-import no.nav.bidrag.commons.security.service.SecurityTokenService
 import no.nav.bidrag.commons.web.client.AbstractRestClient
 import no.nav.bidrag.dokument.dto.OpprettJournalpostRequest
 import no.nav.bidrag.dokument.dto.OpprettJournalpostResponse
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.beans.factory.annotation.Value
-import org.springframework.http.HttpEntity
-import org.springframework.http.HttpMethod
 import org.springframework.stereotype.Service
 import org.springframework.web.client.RestOperations
-import org.springframework.web.client.RestTemplate
 import org.springframework.web.util.UriComponentsBuilder
 import java.net.URI
 

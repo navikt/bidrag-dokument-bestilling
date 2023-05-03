@@ -1,7 +1,7 @@
 package no.nav.bidrag.dokument.bestilling.tjenester
 
-import no.nav.bidrag.dokument.bestilling.konsumer.BidragSakConsumer
-import no.nav.bidrag.dokument.bestilling.konsumer.dto.HentSakResponse
+import no.nav.bidrag.dokument.bestilling.consumer.BidragSakConsumer
+import no.nav.bidrag.dokument.bestilling.consumer.dto.HentSakResponse
 import org.springframework.stereotype.Service
 
 @Service

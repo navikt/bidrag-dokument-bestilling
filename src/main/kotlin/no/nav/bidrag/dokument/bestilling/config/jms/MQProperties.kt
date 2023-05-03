@@ -1,4 +1,4 @@
-package no.nav.bidrag.dokument.bestilling.konfigurasjon.jms
+package no.nav.bidrag.dokument.bestilling.config.jms
 
 import org.springframework.boot.context.properties.ConfigurationProperties
 

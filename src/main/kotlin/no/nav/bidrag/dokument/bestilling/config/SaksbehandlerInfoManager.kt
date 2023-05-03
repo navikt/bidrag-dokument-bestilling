@@ -1,7 +1,7 @@
-package no.nav.bidrag.dokument.bestilling.konfigurasjon
+package no.nav.bidrag.dokument.bestilling.config
 
 import no.nav.bidrag.commons.security.utils.TokenUtils
-import no.nav.bidrag.dokument.bestilling.konsumer.BidragOrganisasjonConsumer
+import no.nav.bidrag.dokument.bestilling.consumer.BidragOrganisasjonConsumer
 import no.nav.bidrag.dokument.bestilling.model.Saksbehandler
 import org.springframework.stereotype.Service
 

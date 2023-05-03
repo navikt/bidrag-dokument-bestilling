@@ -1,6 +1,6 @@
 package no.nav.bidrag.dokument.bestilling.bestilling.dto
 
-import no.nav.bidrag.dokument.bestilling.konsumer.dto.RolleType
+import no.nav.bidrag.dokument.bestilling.consumer.dto.RolleType
 import no.nav.bidrag.dokument.bestilling.model.Saksbehandler
 import java.time.LocalDate
 
@@ -72,16 +72,16 @@ data class EnhetKontaktInfo(
 )
 
 data class Gjelder(
-    var fodselsnummer: String,
-    var navn: String? = null,
+    val fodselsnummer: String,
+    val navn: String? = null,
     val adresse: Adresse? = null,
     val rolle: RolleType?
 )
 
 data class Mottaker(
-    var fodselsnummer: String,
-    var navn: String,
-    var spraak: String,
+    val fodselsnummer: String,
+    val navn: String,
+    val spraak: String,
     val adresse: Adresse?,
     val rolle: RolleType?,
     val fodselsdato: LocalDate?

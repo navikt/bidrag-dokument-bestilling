@@ -1,7 +1,7 @@
 package no.nav.bidrag.dokument.bestilling.tjenester
 
 import no.nav.bidrag.dokument.bestilling.SIKKER_LOGG
-import no.nav.bidrag.dokument.bestilling.konsumer.BidragPersonConsumer
+import no.nav.bidrag.dokument.bestilling.consumer.BidragPersonConsumer
 import no.nav.bidrag.dokument.bestilling.model.FantIkkePersonException
 import no.nav.bidrag.transport.person.PersonAdresseDto
 import no.nav.bidrag.transport.person.PersonDto

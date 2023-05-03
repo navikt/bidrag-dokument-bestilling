@@ -1,9 +1,9 @@
-package no.nav.bidrag.dokument.bestilling.konsumer
+package no.nav.bidrag.dokument.bestilling.consumer
 
 import no.nav.bidrag.commons.CorrelationId
 import no.nav.bidrag.commons.web.HttpHeaderRestTemplate
-import no.nav.bidrag.dokument.bestilling.konfigurasjon.CacheConfig.Companion.LANDKODER_CACHE
-import no.nav.bidrag.dokument.bestilling.konsumer.dto.KodeverkResponse
+import no.nav.bidrag.dokument.bestilling.config.CacheConfig.Companion.LANDKODER_CACHE
+import no.nav.bidrag.dokument.bestilling.consumer.dto.KodeverkResponse
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.web.client.RootUriTemplateHandler

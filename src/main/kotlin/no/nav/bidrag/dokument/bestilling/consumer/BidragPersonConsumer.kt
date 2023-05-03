@@ -1,11 +1,10 @@
-package no.nav.bidrag.dokument.bestilling.konsumer
+package no.nav.bidrag.dokument.bestilling.consumer
 
 import no.nav.bidrag.commons.cache.BrukerCacheable
-import no.nav.bidrag.commons.security.service.SecurityTokenService
 import no.nav.bidrag.commons.web.client.AbstractRestClient
-import no.nav.bidrag.dokument.bestilling.konfigurasjon.CacheConfig.Companion.PERSON_ADRESSE_CACHE
-import no.nav.bidrag.dokument.bestilling.konfigurasjon.CacheConfig.Companion.PERSON_CACHE
-import no.nav.bidrag.dokument.bestilling.konfigurasjon.CacheConfig.Companion.PERSON_SPRAAK_CACHE
+import no.nav.bidrag.dokument.bestilling.config.CacheConfig.Companion.PERSON_ADRESSE_CACHE
+import no.nav.bidrag.dokument.bestilling.config.CacheConfig.Companion.PERSON_CACHE
+import no.nav.bidrag.dokument.bestilling.config.CacheConfig.Companion.PERSON_SPRAAK_CACHE
 import no.nav.bidrag.dokument.bestilling.model.HentPersonFeiletException
 import no.nav.bidrag.domain.ident.PersonIdent
 import no.nav.bidrag.transport.person.PersonAdresseDto
@@ -13,15 +12,12 @@ import no.nav.bidrag.transport.person.PersonDto
 import no.nav.bidrag.transport.person.PersonRequest
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.beans.factory.annotation.Value
-import org.springframework.http.HttpEntity
-import org.springframework.http.HttpMethod
 import org.springframework.http.HttpStatus
 import org.springframework.retry.annotation.Backoff
 import org.springframework.retry.annotation.Retryable
 import org.springframework.stereotype.Service
 import org.springframework.web.client.HttpStatusCodeException
 import org.springframework.web.client.RestOperations
-import org.springframework.web.client.RestTemplate
 import org.springframework.web.util.UriComponentsBuilder
 import java.net.URI
 
