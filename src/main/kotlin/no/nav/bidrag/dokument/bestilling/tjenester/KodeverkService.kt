@@ -1,6 +1,6 @@
 package no.nav.bidrag.dokument.bestilling.tjenester
 
-import no.nav.bidrag.dokument.bestilling.konsumer.KodeverkConsumer
+import no.nav.bidrag.dokument.bestilling.consumer.KodeverkConsumer
 import org.springframework.stereotype.Service
 
 @Service
