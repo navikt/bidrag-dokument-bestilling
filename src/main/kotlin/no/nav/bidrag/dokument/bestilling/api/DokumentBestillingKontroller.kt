@@ -10,7 +10,7 @@ import no.nav.bidrag.dokument.bestilling.api.dto.DokumentBestillingForespørsel
 import no.nav.bidrag.dokument.bestilling.api.dto.DokumentBestillingResponse
 import no.nav.bidrag.dokument.bestilling.api.dto.DokumentMalDetaljer
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.BrevKode
-import no.nav.bidrag.dokument.bestilling.tjenester.DokumentBestillingTjeneste
+import no.nav.bidrag.dokument.bestilling.tjenester.DokumentBestillingService
 import no.nav.security.token.support.core.api.Protected
 import org.slf4j.LoggerFactory
 import org.springframework.web.bind.annotation.GetMapping
@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 @Protected
 @Timed
-class DokumentBestillingKontroller(val dokumentBestillingService: DokumentBestillingTjeneste) {
+class DokumentBestillingKontroller(val dokumentBestillingService: DokumentBestillingService) {
 
     companion object {
         private val LOGGER = LoggerFactory.getLogger(DokumentBestillingKontroller::class.java)

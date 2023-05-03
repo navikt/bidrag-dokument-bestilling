@@ -5,11 +5,11 @@ import io.mockk.impl.annotations.MockK
 import io.mockk.impl.annotations.RelaxedMockK
 import io.mockk.junit5.MockKExtension
 import no.nav.bidrag.dokument.bestilling.konfigurasjon.SaksbehandlerInfoManager
-import no.nav.bidrag.dokument.bestilling.konsumer.KodeverkKonsumer
-import no.nav.bidrag.dokument.bestilling.tjenester.KodeverkTjeneste
-import no.nav.bidrag.dokument.bestilling.tjenester.OrganisasjonTjeneste
-import no.nav.bidrag.dokument.bestilling.tjenester.PersonTjeneste
-import no.nav.bidrag.dokument.bestilling.tjenester.SakTjeneste
+import no.nav.bidrag.dokument.bestilling.konsumer.KodeverkConsumer
+import no.nav.bidrag.dokument.bestilling.tjenester.KodeverkService
+import no.nav.bidrag.dokument.bestilling.tjenester.OrganisasjonService
+import no.nav.bidrag.dokument.bestilling.tjenester.PersonService
+import no.nav.bidrag.dokument.bestilling.tjenester.SakService
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -19,25 +19,25 @@ import org.springframework.context.ApplicationContext
 
 internal class DokumentMapTest {
     @RelaxedMockK
-    lateinit var personService: PersonTjeneste
+    lateinit var personService: PersonService
 
     @RelaxedMockK
-    lateinit var sakService: SakTjeneste
+    lateinit var sakService: SakService
 
     @RelaxedMockK
-    lateinit var kodeverkKonsumer: KodeverkKonsumer
+    lateinit var kodeverkConsumer: KodeverkConsumer
 
     @RelaxedMockK
     lateinit var saksbehandlerInfoManager: SaksbehandlerInfoManager
 
     @RelaxedMockK
-    lateinit var organisasjonService: OrganisasjonTjeneste
+    lateinit var organisasjonService: OrganisasjonService
 
     @InjectMockKs
-    lateinit var kodeverkTjeneste: KodeverkTjeneste
+    lateinit var kodeverkService: KodeverkService
 
     @InjectMockKs
-    lateinit var metadataCollector: DokumentMetadataInnsamler
+    lateinit var metadataCollector: DokumentMetadataCollector
 
     @MockK
     lateinit var applicationContext: ApplicationContext

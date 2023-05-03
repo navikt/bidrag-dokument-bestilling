@@ -7,7 +7,7 @@ management:
 springdoc:
   packages-to-scan: no.nav.bidrag.dokument.bestilling.controller
 spring.main.banner-mode: off
-
+spring.application.name: ${NAIS_APP_NAME:bidrag-dokument-bestilling}
 mq:
   hostname: ${MQ_HOSTNAME}
   port: ${MQ_PORT}
@@ -22,6 +22,7 @@ no.nav.security.jwt:
   client:
     registration:
       bidrag-person:
+        resource-url: ${BIDRAG_PERSON_URL}
         token-endpoint-url: https://login.microsoftonline.com/${AZURE_APP_TENANT_ID}/oauth2/v2.0/token
         grant-type: urn:ietf:params:oauth:grant-type:jwt-bearer
         scope: api://${BIDRAG_PERSON_SCOPE}/.default
@@ -30,6 +31,7 @@ no.nav.security.jwt:
           client-secret: ${AZURE_APP_CLIENT_SECRET}
           client-auth-method: client_secret_post
       bidrag-dokument:
+        resource-url: ${BIDRAG_DOKUMENT_URL}
         token-endpoint-url: https://login.microsoftonline.com/${AZURE_APP_TENANT_ID}/oauth2/v2.0/token
         grant-type: urn:ietf:params:oauth:grant-type:jwt-bearer
         scope: api://${BIDRAG_DOKUMENT_SCOPE}/.default
@@ -38,6 +40,7 @@ no.nav.security.jwt:
           client-secret: ${AZURE_APP_CLIENT_SECRET}
           client-auth-method: client_secret_post
       bidrag-organisasjon:
+        resource-url: ${BIDRAG_ORGANISASJON_URL}
         token-endpoint-url: https://login.microsoftonline.com/${AZURE_APP_TENANT_ID}/oauth2/v2.0/token
         grant-type: urn:ietf:params:oauth:grant-type:jwt-bearer
         scope: api://${BIDRAG_ORGANISASJON_SCOPE}/.default
@@ -46,6 +49,7 @@ no.nav.security.jwt:
           client-secret: ${AZURE_APP_CLIENT_SECRET}
           client-auth-method: client_secret_post
       bidrag-sak:
+        resource-url: ${BIDRAG_SAK_URL}
         token-endpoint-url: https://login.microsoftonline.com/${AZURE_APP_TENANT_ID}/oauth2/v2.0/token
         grant-type: urn:ietf:params:oauth:grant-type:jwt-bearer
         scope: api://${BIDRAG_SAK_SCOPE}/.default

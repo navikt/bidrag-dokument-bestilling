@@ -17,7 +17,7 @@ import org.springframework.web.filter.CorsFilter
 @OpenAPIDefinition(info = Info(title = "bidrag-dokument-bestilling", version = "v1"), security = [SecurityRequirement(name = "bearer-key")])
 @SecurityScheme(bearerFormat = "JWT", name = "bearer-key", scheme = "bearer", type = SecuritySchemeType.HTTP)
 @Configuration
-class DefaultKonfigurasjon {
+class DefaultConfig {
     @Bean
     fun corsFilter(): CorsFilter = DefaultCorsFilter()
 

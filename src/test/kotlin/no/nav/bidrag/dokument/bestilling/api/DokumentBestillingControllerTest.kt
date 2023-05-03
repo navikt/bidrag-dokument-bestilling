@@ -8,7 +8,7 @@ import io.kotest.matchers.collections.shouldNotBeIn
 import io.kotest.matchers.equality.shouldBeEqualToComparingFields
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldContain
-import no.nav.bidrag.commons.web.EnhetFilter.X_ENHET_HEADER
+import no.nav.bidrag.commons.web.EnhetFilter.Companion.X_ENHET_HEADER
 import no.nav.bidrag.dokument.bestilling.api.dto.DokumentBestillingForespørsel
 import no.nav.bidrag.dokument.bestilling.api.dto.DokumentBestillingResponse
 import no.nav.bidrag.dokument.bestilling.api.dto.MottakerTo

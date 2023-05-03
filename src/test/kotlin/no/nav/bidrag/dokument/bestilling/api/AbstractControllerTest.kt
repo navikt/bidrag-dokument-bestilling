@@ -9,10 +9,10 @@ import io.mockk.clearAllMocks
 import io.mockk.every
 import no.nav.bidrag.commons.web.test.HttpHeaderTestRestTemplate
 import no.nav.bidrag.dokument.bestilling.BidragDokumentBestillingLocalTest
-import no.nav.bidrag.dokument.bestilling.JmsTestKonfig
+import no.nav.bidrag.dokument.bestilling.JmsTestConfig
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.BrevKode
 import no.nav.bidrag.dokument.bestilling.bestilling.produksjon.dto.BrevBestilling
-import no.nav.bidrag.dokument.bestilling.konsumer.KodeverkKonsumer
+import no.nav.bidrag.dokument.bestilling.konsumer.KodeverkConsumer
 import no.nav.bidrag.dokument.bestilling.konsumer.dto.KodeverkResponse
 import no.nav.bidrag.dokument.bestilling.utils.ANNEN_MOTTAKER
 import no.nav.bidrag.dokument.bestilling.utils.BARN1
@@ -36,7 +36,7 @@ import org.springframework.test.context.ActiveProfiles
 import javax.jms.Queue
 @ActiveProfiles("test")
 @SpringBootTest(
-    classes = [BidragDokumentBestillingLocalTest::class, StubUtils::class, JmsTestKonfig::class],
+    classes = [BidragDokumentBestillingLocalTest::class, StubUtils::class, JmsTestConfig::class],
     webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT
 )
 @AutoConfigureWireMock(port = 0)
@@ -46,7 +46,7 @@ abstract class AbstractControllerTest {
     private val port = 0
 
     @MockkBean
-    lateinit var kodeverkKonsumer: KodeverkKonsumer
+    lateinit var kodeverkConsumer: KodeverkConsumer
 
     @Autowired
     lateinit var stubUtils: StubUtils
@@ -70,7 +70,7 @@ abstract class AbstractControllerTest {
         stubUtils.stubHentSaksbehandlerInfo()
         stubUtils.stubHentPersonSpraak()
         val kodeverkResponse = ObjectMapper().findAndRegisterModules().readValue(readFile("api/landkoder.json"), KodeverkResponse::class.java)
-        every { kodeverkKonsumer.hentLandkoder() } returns kodeverkResponse
+        every { kodeverkConsumer.hentLandkoder() } returns kodeverkResponse
     }
 
     @AfterEach

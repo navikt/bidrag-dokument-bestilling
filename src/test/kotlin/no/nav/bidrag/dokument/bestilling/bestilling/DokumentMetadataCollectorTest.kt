@@ -16,17 +16,17 @@ import no.nav.bidrag.dokument.bestilling.api.dto.DokumentBestillingForespørsel
 import no.nav.bidrag.dokument.bestilling.api.dto.MottakerTo
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.DokumentBestilling
 import no.nav.bidrag.dokument.bestilling.konfigurasjon.SaksbehandlerInfoManager
-import no.nav.bidrag.dokument.bestilling.konsumer.KodeverkKonsumer
+import no.nav.bidrag.dokument.bestilling.konsumer.KodeverkConsumer
 import no.nav.bidrag.dokument.bestilling.konsumer.dto.KodeverkResponse
 import no.nav.bidrag.dokument.bestilling.konsumer.dto.RolleType
 import no.nav.bidrag.dokument.bestilling.konsumer.dto.SakRolle
 import no.nav.bidrag.dokument.bestilling.konsumer.dto.fornavnEtternavn
 import no.nav.bidrag.dokument.bestilling.model.FantIkkeSakException
 import no.nav.bidrag.dokument.bestilling.model.Saksbehandler
-import no.nav.bidrag.dokument.bestilling.tjenester.KodeverkTjeneste
-import no.nav.bidrag.dokument.bestilling.tjenester.OrganisasjonTjeneste
-import no.nav.bidrag.dokument.bestilling.tjenester.PersonTjeneste
-import no.nav.bidrag.dokument.bestilling.tjenester.SakTjeneste
+import no.nav.bidrag.dokument.bestilling.tjenester.KodeverkService
+import no.nav.bidrag.dokument.bestilling.tjenester.OrganisasjonService
+import no.nav.bidrag.dokument.bestilling.tjenester.PersonService
+import no.nav.bidrag.dokument.bestilling.tjenester.SakService
 import no.nav.bidrag.dokument.bestilling.utils.ANNEN_MOTTAKER
 import no.nav.bidrag.dokument.bestilling.utils.BARN1
 import no.nav.bidrag.dokument.bestilling.utils.BARN2
@@ -59,33 +59,33 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 
 @ExtendWith(MockKExtension::class)
-internal class DokumentMetadataInnsamlerTest {
+internal class DokumentMetadataCollectorTest {
 
     @MockK
-    lateinit var personService: PersonTjeneste
+    lateinit var personService: PersonService
 
     @MockK
-    lateinit var sakService: SakTjeneste
+    lateinit var sakService: SakService
 
     @MockK
-    lateinit var kodeverkKonsumer: KodeverkKonsumer
+    lateinit var kodeverkConsumer: KodeverkConsumer
 
     @MockK
     lateinit var saksbehandlerInfoManager: SaksbehandlerInfoManager
 
     @MockK
-    lateinit var organisasjonService: OrganisasjonTjeneste
+    lateinit var organisasjonService: OrganisasjonService
 
     @InjectMockKs
-    lateinit var kodeverkTjeneste: KodeverkTjeneste
+    lateinit var kodeverkService: KodeverkService
 
     @InjectMockKs
-    lateinit var metadataCollector: DokumentMetadataInnsamler
+    lateinit var metadataCollector: DokumentMetadataCollector
 
     @BeforeEach
     fun initMocks() {
         val kodeverkResponse = ObjectMapper().findAndRegisterModules().readValue(readFile("api/landkoder.json"), KodeverkResponse::class.java)
-        every { kodeverkKonsumer.hentLandkoder() } returns kodeverkResponse
+        every { kodeverkConsumer.hentLandkoder() } returns kodeverkResponse
     }
 
     @AfterEach

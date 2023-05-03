@@ -1,20 +1,17 @@
 package no.nav.bidrag.dokument.bestilling.konfigurasjon
 
-import no.nav.bidrag.commons.security.service.OidcTokenManager
 import no.nav.bidrag.commons.security.utils.TokenUtils
-import no.nav.bidrag.commons.security.utils.TokenUtils.fetchSubject
-import no.nav.bidrag.dokument.bestilling.konsumer.BidragOrganisasjonKonsumer
+import no.nav.bidrag.dokument.bestilling.konsumer.BidragOrganisasjonConsumer
 import no.nav.bidrag.dokument.bestilling.model.Saksbehandler
 import org.springframework.stereotype.Service
 
 @Service
 class SaksbehandlerInfoManager(
-    private val bidragOrganisasjonKonsumer: BidragOrganisasjonKonsumer,
-    private val oidcTokenManager: OidcTokenManager
+    private val bidragOrganisasjonConsumer: BidragOrganisasjonConsumer,
 ) {
     fun hentSaksbehandlerBrukerId(): String? {
         return try {
-            fetchSubject(oidcTokenManager.fetchTokenAsString())
+            TokenUtils.hentSaksbehandlerIdent()
         } catch (e: Exception) {
             null
         }
@@ -23,7 +20,7 @@ class SaksbehandlerInfoManager(
     fun hentSaksbehandler(ident: String? = null): Saksbehandler? {
         return try {
             val saksbehandlerIdent = ident ?: hentSaksbehandlerBrukerId() ?: return null
-            val saksbehandlerNavn = bidragOrganisasjonKonsumer.hentSaksbehandlerInfo(saksbehandlerIdent)?.navn
+            val saksbehandlerNavn = bidragOrganisasjonConsumer.hentSaksbehandlerInfo(saksbehandlerIdent)?.navn
             Saksbehandler(saksbehandlerIdent, saksbehandlerNavn)
         } catch (e: Exception) {
             null
@@ -32,7 +29,7 @@ class SaksbehandlerInfoManager(
 
     fun erSystembruker(): Boolean {
         return try {
-            TokenUtils.isSystemUser(oidcTokenManager.fetchTokenAsString())
+            TokenUtils.erApplikasjonsbruker()
         } catch (e: Exception) {
             false
         }

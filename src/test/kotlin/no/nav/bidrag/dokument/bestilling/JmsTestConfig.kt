@@ -12,7 +12,7 @@ import javax.jms.ConnectionFactory
 import javax.jms.Queue
 
 @TestConfiguration
-class JmsTestKonfig {
+class JmsTestConfig {
 
     @Bean
     @Profile("!nais")
