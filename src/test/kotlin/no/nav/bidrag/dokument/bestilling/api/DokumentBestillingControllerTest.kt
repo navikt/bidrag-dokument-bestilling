@@ -389,7 +389,7 @@ class DokumentBestillingControllerTest : AbstractControllerTest() {
                 DokumentBestillingResponse::class.java
             )
 
-            response.statusCode shouldBe HttpStatus.INTERNAL_SERVER_ERROR
+            response.statusCode shouldBe HttpStatus.BAD_REQUEST
 
             this.hasNoMessage() shouldBe true
         }
