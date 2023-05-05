@@ -8,7 +8,6 @@ import com.github.tomakehurst.wiremock.matching.ContainsPattern
 import com.github.tomakehurst.wiremock.matching.RequestPatternBuilder
 import no.nav.bidrag.dokument.bestilling.consumer.dto.EnhetInfo
 import no.nav.bidrag.dokument.bestilling.consumer.dto.EnhetKontaktInfoDto
-import no.nav.bidrag.dokument.bestilling.consumer.dto.HentSakResponse
 import no.nav.bidrag.dokument.bestilling.consumer.dto.SaksbehandlerInfoResponse
 import no.nav.bidrag.dokument.bestilling.utils.SAKSBEHANDLER_IDENT
 import no.nav.bidrag.dokument.bestilling.utils.SAKSBEHANDLER_NAVN
@@ -19,6 +18,7 @@ import no.nav.bidrag.dokument.bestilling.utils.createSakResponse
 import no.nav.bidrag.dokument.dto.OpprettJournalpostResponse
 import no.nav.bidrag.transport.person.PersonAdresseDto
 import no.nav.bidrag.transport.person.PersonDto
+import no.nav.bidrag.transport.sak.BidragssakDto
 import org.junit.Assert
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpHeaders
@@ -82,7 +82,7 @@ class StubUtils {
         )
     }
 
-    fun stubHentSak(sak: HentSakResponse = createSakResponse()) {
+    fun stubHentSak(sak: BidragssakDto = createSakResponse()) {
         WireMock.stubFor(
             WireMock.get(WireMock.urlMatching("/sak/.*")).willReturn(
                 aClosedJsonResponse()

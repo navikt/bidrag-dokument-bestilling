@@ -5,29 +5,34 @@ import no.nav.bidrag.dokument.bestilling.api.dto.SamhandlerAdresse
 import no.nav.bidrag.dokument.bestilling.api.dto.SamhandlerInformasjon
 import no.nav.bidrag.dokument.bestilling.consumer.dto.EnhetKontaktInfoDto
 import no.nav.bidrag.dokument.bestilling.consumer.dto.EnhetPostadresseDto
-import no.nav.bidrag.dokument.bestilling.consumer.dto.HentSakResponse
-import no.nav.bidrag.dokument.bestilling.consumer.dto.RolleType
-import no.nav.bidrag.dokument.bestilling.consumer.dto.SakRolle
 import no.nav.bidrag.dokument.dto.OpprettDokumentDto
 import no.nav.bidrag.dokument.dto.OpprettJournalpostResponse
 import no.nav.bidrag.domain.enums.Adressetype
+import no.nav.bidrag.domain.enums.Bidragssakstatus
 import no.nav.bidrag.domain.enums.Diskresjonskode
+import no.nav.bidrag.domain.enums.Rolletype
+import no.nav.bidrag.domain.enums.Sakskategori
 import no.nav.bidrag.domain.ident.AktørId
 import no.nav.bidrag.domain.ident.PersonIdent
 import no.nav.bidrag.domain.string.Adresselinje1
 import no.nav.bidrag.domain.string.Adresselinje2
 import no.nav.bidrag.domain.string.Adresselinje3
 import no.nav.bidrag.domain.string.Bruksenhetsnummer
+import no.nav.bidrag.domain.string.Enhetsnummer
 import no.nav.bidrag.domain.string.FulltNavn
 import no.nav.bidrag.domain.string.Kortnavn
 import no.nav.bidrag.domain.string.Landkode2
 import no.nav.bidrag.domain.string.Landkode3
 import no.nav.bidrag.domain.string.Postnummer
 import no.nav.bidrag.domain.string.Poststed
+import no.nav.bidrag.domain.string.Saksnummer
 import no.nav.bidrag.domain.tid.Dødsdato
 import no.nav.bidrag.domain.tid.Fødselsdato
+import no.nav.bidrag.domain.tid.OpprettetDato
 import no.nav.bidrag.transport.person.PersonAdresseDto
 import no.nav.bidrag.transport.person.PersonDto
+import no.nav.bidrag.transport.sak.BidragssakDto
+import no.nav.bidrag.transport.sak.RolleDto
 import java.time.LocalDate
 
 val DEFAULT_TITLE_DOKUMENT = "Tittel på dokumentet"
@@ -91,28 +96,31 @@ val BARN3 = createPersonResponse(
     fodselsdato = LocalDate.parse("2014-03-20")
 )
 
-fun createSakResponse(): HentSakResponse {
-    return HentSakResponse(
-        saksnummer = DEFAULT_SAKSNUMMER,
-        eierfogd = "4806",
+fun createSakResponse(): BidragssakDto {
+    return BidragssakDto(
+        saksnummer = Saksnummer(DEFAULT_SAKSNUMMER),
+        eierfogd = Enhetsnummer("4806"),
         roller = listOf(
-            SakRolle(
-                foedselsnummer = BM1.ident.verdi,
-                rolleType = RolleType.BM
+            RolleDto(
+                fødselsnummer = BM1.ident,
+                type = Rolletype.BM
             ),
-            SakRolle(
-                foedselsnummer = BP1.ident.verdi,
-                rolleType = RolleType.BP
+            RolleDto(
+                fødselsnummer = BP1.ident,
+                type = Rolletype.BP
             ),
-            SakRolle(
-                foedselsnummer = BARN1.ident.verdi,
-                rolleType = RolleType.BA
+            RolleDto(
+                fødselsnummer = BARN1.ident,
+                type = Rolletype.BA
             ),
-            SakRolle(
-                foedselsnummer = BARN2.ident.verdi,
-                rolleType = RolleType.BA
+            RolleDto(
+                fødselsnummer = BARN2.ident,
+                type = Rolletype.BA
             )
-        )
+        ),
+        saksstatus = Bidragssakstatus.IN,
+        kategori = Sakskategori.N,
+        opprettetDato = OpprettetDato(LocalDate.now())
     )
 }
 

@@ -1,0 +1,67 @@
+package no.nav.bidrag.dokument.bestilling.model
+
+enum class SoknadType(val kode: String) {
+    ENDRING("EN"),
+    EGET_TILTAK("ET"),
+    SOKNAD("FA"),
+    INNKREVINGSGRUNNL("IG"),
+    INDEKSREG("IR"),
+    KLAGE_BEGR_SATS("KB"),
+    KLAGE("KL"),
+    FOLGER_KLAGE("KM"),
+    KONVERTERING("KV"),
+    OMGJORING_BEGR_SATS("OB"),
+    OPPJUST_FORSK("OF"),
+    OPPHOR("OH"),
+    OMGJORING("OM"),
+    PRIVAT_AVTALE("PA"),
+    BEGR_REVURD("RB"),
+    REVURDERING("RF"),
+    KR("KR");
+}
+
+enum class SoknadFra(val kode: String) {
+    BM_I_ANNEN_SAK("AS"),
+    BARN_18("BB"),
+    BIDRAGSENHET("ET"), // TK
+    FYLKESNEMDA("FN"),
+    NAV_INTERNASJONALT("IN"),
+    KOMMUNE("KU"),
+    KONVERTERING("KV"),
+    BIDRAGSMOTTAKER("MO"),
+    NORSKE_MYNDIGH("NM"),
+    BIDRAGSPLIKTIG("PL"),
+    UTENLANDSKE_MYNDIGH("UM"),
+    VERGE("VE"),
+    TRYGDEETATEN_INNKREVING("TI"),
+    KLAGE_ENHET("FK"); // FTK
+}
+
+enum class BehandlingType(val kode: String) {
+    AVSKRIVNING("AV"),
+    EKTEFELLEBIDRAG("EB"),
+    BIDRAG_18_AR("18"),
+    BIDRAG("BI"),
+    BIDRAG_TILLEGGSBIDRAG("BT"),
+    DIREKTE_OPPGJOR("DO"),
+    ETTERGIVELSE("EG"),
+    ERSTATNING("ER"),
+    FARSKAP("FA"),
+    FORSKUDD("FO"),
+    GEBYR("GB"),
+    INNKREVING("IK"),
+    MOTREGNING("MR"),
+    REFUSJON_BIDRAG("RB"),
+    SAKSOMKOSTNINGER("SO"),
+    SARTILSKUDD("ST"),
+    BIDRAG_18_AR_TILLEGGSBBI("T1"),
+    TILLEGGSBIDRAG("TB"),
+    TILBAKEKR_ETTERGIVELSE("TE"),
+    TILBAKEKREVING("TK"),
+    OPPFOSTRINGSBIDRAG("OB"),
+    MORSKAP("MO"),
+    KUNNSKAP_BIOLOGISK_FAR("FB"),
+    BARNEBORTFORING("BF"),
+    KV("KV"),
+    REISEKOSTNADER("RK");
+}
