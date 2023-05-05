@@ -944,7 +944,7 @@ internal class DokumentMetadataCollectorTest {
     @Test
     fun `should sort barn by born date`() {
         mockDefaultValues()
-        val saksnummer = "22222"
+        val saksnummer = "222222"
         val barn1 = BARN1.copy(fødselsdato = Fødselsdato.of(2020, 1, 2))
         val barn2 = BARN2.copy(fødselsdato = Fødselsdato.of(2020, 5, 15))
         val barn3 = BARN3.copy(fødselsdato = Fødselsdato.of(2021, 7, 20))
