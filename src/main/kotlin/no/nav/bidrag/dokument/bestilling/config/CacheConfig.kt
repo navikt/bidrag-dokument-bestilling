@@ -18,7 +18,9 @@ import org.springframework.context.annotation.Profile
 class CacheConfig {
     companion object {
         const val LANDKODER_CACHE = "LANDKODER_CACHE"
+        const val SJABLONGER_CACHE = "SJABLONGER_CACHE"
         const val PERSON_CACHE = "PERSON_CACHE"
+        const val VEDTAK_CACHE = "VEDTAK_CACHE"
         const val PERSON_ADRESSE_CACHE = "PERSON_ADRESSE_CACHE"
         const val PERSON_SPRAAK_CACHE = "PERSON_SPRAAK_CACHE"
         const val SAKSBEHANDLERINFO_CACHE = "SAKSBEHANDLERINFO_CACHE"
@@ -33,6 +35,7 @@ class CacheConfig {
         caffeineCacheManager.registerCustomCache(ENHETINFO_CACHE, Caffeine.newBuilder().expireAfter(InvaliderCacheFørStartenAvArbeidsdag()).build())
         caffeineCacheManager.registerCustomCache(ENHETKONTAKTINFO_CACHE, Caffeine.newBuilder().expireAfter(InvaliderCacheFørStartenAvArbeidsdag()).build())
         caffeineCacheManager.registerCustomCache(PERSON_CACHE, Caffeine.newBuilder().expireAfter(InvaliderCacheFørStartenAvArbeidsdag()).build())
+        caffeineCacheManager.registerCustomCache(VEDTAK_CACHE, Caffeine.newBuilder().expireAfter(InvaliderCacheFørStartenAvArbeidsdag()).build())
         caffeineCacheManager.registerCustomCache(PERSON_ADRESSE_CACHE, Caffeine.newBuilder().expireAfter(InvaliderCacheFørStartenAvArbeidsdag()).build())
         caffeineCacheManager.registerCustomCache(PERSON_SPRAAK_CACHE, Caffeine.newBuilder().expireAfter(InvaliderCacheFørStartenAvArbeidsdag()).build())
         return caffeineCacheManager

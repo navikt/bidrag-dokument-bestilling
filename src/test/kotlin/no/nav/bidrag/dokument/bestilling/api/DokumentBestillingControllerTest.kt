@@ -15,8 +15,6 @@ import no.nav.bidrag.dokument.bestilling.api.dto.MottakerTo
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.BrevKode
 import no.nav.bidrag.dokument.bestilling.bestilling.produksjon.dto.BrevBestilling
 import no.nav.bidrag.dokument.bestilling.bestilling.produksjon.dto.BrevKontaktinfo
-import no.nav.bidrag.dokument.bestilling.consumer.dto.RolleType
-import no.nav.bidrag.dokument.bestilling.consumer.dto.SakRolle
 import no.nav.bidrag.dokument.bestilling.consumer.dto.fornavnEtternavn
 import no.nav.bidrag.dokument.bestilling.utils.ANNEN_MOTTAKER
 import no.nav.bidrag.dokument.bestilling.utils.BARN1
@@ -30,6 +28,8 @@ import no.nav.bidrag.dokument.bestilling.utils.createOpprettJournalpostResponse
 import no.nav.bidrag.dokument.bestilling.utils.createPostAdresseResponse
 import no.nav.bidrag.dokument.bestilling.utils.createPostAdresseResponseUtenlandsk
 import no.nav.bidrag.dokument.bestilling.utils.createSakResponse
+import no.nav.bidrag.domain.enums.Rolletype
+import no.nav.bidrag.transport.sak.RolleDto
 import org.junit.jupiter.api.Test
 import org.springframework.http.HttpEntity
 import org.springframework.http.HttpHeaders
@@ -142,21 +142,21 @@ class DokumentBestillingControllerTest : AbstractControllerTest() {
                 message.brev?.barnISak?.get(0)?.fDato shouldBe BARN2.fødselsdato?.verdi
                 message.brev?.barnISak?.get(0)?.personIdRm shouldBe ""
                 message.brev?.barnISak?.get(0)?.belopGebyrRm shouldBe ""
-                message.brev?.barnISak?.get(0)?.belForskudd shouldBe ""
-                message.brev?.barnISak?.get(0)?.belBidrag shouldBe ""
+                message.brev?.barnISak?.get(0)?.belForskudd shouldBe null
+                message.brev?.barnISak?.get(0)?.belBidrag shouldBe null
 
                 message.brev?.barnISak?.get(1)?.fDato shouldBe BARN1.fødselsdato?.verdi
                 message.brev?.barnISak?.get(1)?.fnr shouldBe BARN1.ident.verdi
                 message.brev?.barnISak?.get(1)?.navn shouldBe BARN1.fornavnEtternavn()
                 message.brev?.barnISak?.get(1)?.personIdRm shouldBe ""
                 message.brev?.barnISak?.get(1)?.belopGebyrRm shouldBe ""
-                message.brev?.barnISak?.get(1)?.belForskudd shouldBe ""
-                message.brev?.barnISak?.get(1)?.belBidrag shouldBe ""
+                message.brev?.barnISak?.get(1)?.belForskudd shouldBe null
+                message.brev?.barnISak?.get(1)?.belBidrag shouldBe null
 
-                message.brev?.soknad?.saksnr shouldBe saksnummer
-                message.brev?.soknad?.sakstype shouldBe "E"
-                message.brev?.soknad?.rmISak shouldBe false
-                message.brev?.soknad?.sendtDato shouldBe LocalDate.now()
+                message.brev?.soknadBost?.saksnr shouldBe saksnummer
+                message.brev?.soknadBost?.sakstype shouldBe "E"
+                message.brev?.soknadBost?.rmISak shouldBe false
+                message.brev?.soknadBost?.sendtDato shouldBe LocalDate.now()
 
                 message.brev?.saksbehandler?.navn shouldBe "Saksbehandler Mellomnavn Saksbehandlersen"
 
@@ -425,25 +425,25 @@ class DokumentBestillingControllerTest : AbstractControllerTest() {
         val brevKode = BrevKode.BI01X01
         val sak = createSakResponse().copy(
             roller = listOf(
-                SakRolle(
-                    foedselsnummer = BM1.ident.verdi,
-                    rolleType = RolleType.BM
+                RolleDto(
+                    fødselsnummer = BM1.ident,
+                    type = Rolletype.BM
                 ),
-                SakRolle(
-                    foedselsnummer = BP1.ident.verdi,
-                    rolleType = RolleType.BP
+                RolleDto(
+                    fødselsnummer = BP1.ident,
+                    type = Rolletype.BP
                 ),
-                SakRolle(
-                    foedselsnummer = BARN1.ident.verdi,
-                    rolleType = RolleType.BA
+                RolleDto(
+                    fødselsnummer = BARN1.ident,
+                    type = Rolletype.BA
                 ),
-                SakRolle(
-                    foedselsnummer = BARN2.ident.verdi,
-                    rolleType = RolleType.BA
+                RolleDto(
+                    fødselsnummer = BARN2.ident,
+                    type = Rolletype.BA
                 ),
-                SakRolle(
-                    foedselsnummer = ANNEN_MOTTAKER.ident.verdi,
-                    rolleType = RolleType.RM
+                RolleDto(
+                    fødselsnummer = ANNEN_MOTTAKER.ident,
+                    type = Rolletype.RM
                 )
             )
         )

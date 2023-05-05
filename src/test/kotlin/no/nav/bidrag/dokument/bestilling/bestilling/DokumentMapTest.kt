@@ -10,6 +10,8 @@ import no.nav.bidrag.dokument.bestilling.tjenester.KodeverkService
 import no.nav.bidrag.dokument.bestilling.tjenester.OrganisasjonService
 import no.nav.bidrag.dokument.bestilling.tjenester.PersonService
 import no.nav.bidrag.dokument.bestilling.tjenester.SakService
+import no.nav.bidrag.dokument.bestilling.tjenester.SjablongService
+import no.nav.bidrag.dokument.bestilling.tjenester.VedtakService
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -23,7 +25,10 @@ internal class DokumentMapTest {
 
     @RelaxedMockK
     lateinit var sakService: SakService
-
+    @RelaxedMockK
+    lateinit var sjablonService: SjablongService
+    @RelaxedMockK
+    lateinit var vedtakService: VedtakService
     @RelaxedMockK
     lateinit var kodeverkConsumer: KodeverkConsumer
 

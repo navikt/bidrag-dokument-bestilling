@@ -11,7 +11,6 @@ import no.nav.bidrag.dokument.bestilling.api.dto.DokumentBestillingResponse
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.BrevKode
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.BrevType
 import no.nav.bidrag.dokument.bestilling.bestilling.produksjon.DokumentProducer
-import no.nav.bidrag.dokument.bestilling.consumer.dto.RolleType
 import no.nav.bidrag.dokument.bestilling.consumer.dto.fornavnEtternavn
 import no.nav.bidrag.dokument.bestilling.utils.BARN1
 import no.nav.bidrag.dokument.bestilling.utils.BARN2
@@ -21,6 +20,7 @@ import no.nav.bidrag.dokument.bestilling.utils.SAKSBEHANDLER_IDENT
 import no.nav.bidrag.dokument.bestilling.utils.createEnhetKontaktInformasjon
 import no.nav.bidrag.dokument.bestilling.utils.createOpprettJournalpostResponse
 import no.nav.bidrag.dokument.bestilling.utils.createPostAdresseResponse
+import no.nav.bidrag.domain.enums.Rolletype
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.EnumSource
 import org.junit.jupiter.params.provider.MethodSource
@@ -89,12 +89,12 @@ class DokumentBestillingBrevkodeTest : AbstractControllerTest() {
                         bestilling.mottaker?.spraak shouldBe "NB"
                         bestilling.mottaker?.navn shouldBe BM1.navn?.verdi
                         bestilling.mottaker?.fodselsnummer shouldBe BM1.ident.verdi
-                        bestilling.mottaker?.rolle shouldBe RolleType.BM
+                        bestilling.mottaker?.rolle shouldBe Rolletype.BM
                         bestilling.mottaker?.fodselsdato shouldBe BM1.fødselsdato?.verdi
                         bestilling.mottaker?.adresse shouldNotBe null
 
                         bestilling.gjelder?.fodselsnummer shouldBe gjelderId
-                        bestilling.gjelder?.rolle shouldBe RolleType.BP
+                        bestilling.gjelder?.rolle shouldBe Rolletype.BP
 
                         bestilling.saksbehandler?.ident shouldBe SAKSBEHANDLER_IDENT
                         bestilling.saksbehandler?.navn shouldBe "Saksbehandler Mellomnavn Saksbehandlersen"

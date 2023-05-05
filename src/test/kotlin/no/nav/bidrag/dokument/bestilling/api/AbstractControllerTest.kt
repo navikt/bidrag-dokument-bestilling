@@ -13,7 +13,9 @@ import no.nav.bidrag.dokument.bestilling.JmsTestConfig
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.BrevKode
 import no.nav.bidrag.dokument.bestilling.bestilling.produksjon.dto.BrevBestilling
 import no.nav.bidrag.dokument.bestilling.consumer.KodeverkConsumer
+import no.nav.bidrag.dokument.bestilling.consumer.SjablonConsumer
 import no.nav.bidrag.dokument.bestilling.consumer.dto.KodeverkResponse
+import no.nav.bidrag.dokument.bestilling.consumer.dto.SjablongerDto
 import no.nav.bidrag.dokument.bestilling.utils.ANNEN_MOTTAKER
 import no.nav.bidrag.dokument.bestilling.utils.BARN1
 import no.nav.bidrag.dokument.bestilling.utils.BARN2
@@ -44,6 +46,8 @@ import javax.jms.Queue
 abstract class AbstractControllerTest {
     @LocalServerPort
     private val port = 0
+    @MockkBean
+    lateinit var sjablonConsumer: SjablonConsumer
 
     @MockkBean
     lateinit var kodeverkConsumer: KodeverkConsumer
@@ -71,6 +75,7 @@ abstract class AbstractControllerTest {
         stubUtils.stubHentPersonSpraak()
         val kodeverkResponse = ObjectMapper().findAndRegisterModules().readValue(readFile("api/landkoder.json"), KodeverkResponse::class.java)
         every { kodeverkConsumer.hentLandkoder() } returns kodeverkResponse
+        every { sjablonConsumer.hentSjablonger() } returns emptyList()
     }
 
     @AfterEach
