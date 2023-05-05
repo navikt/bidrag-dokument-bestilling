@@ -40,6 +40,7 @@ class DefaultRestControllerAdvice {
             .header(HttpHeaders.WARNING, exception.message)
             .build<Any>()
     }
+
     @ResponseBody
     @ExceptionHandler(value = [IllegalArgumentException::class, MethodArgumentTypeMismatchException::class, ConversionFailedException::class, HttpMessageNotReadableException::class])
     fun handleInvalidValueExceptions(exception: Exception): ResponseEntity<*> {
@@ -65,6 +66,7 @@ class DefaultRestControllerAdvice {
             )
             .build<Any>()
     }
+
     @ResponseBody
     @ExceptionHandler(ProduksjonAvDokumentStottesIkke::class)
     fun ustottetBrev(exception: ProduksjonAvDokumentStottesIkke): ResponseEntity<*> {

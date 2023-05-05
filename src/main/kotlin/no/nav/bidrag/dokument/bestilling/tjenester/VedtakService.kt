@@ -40,24 +40,25 @@ class VedtakService(private val bidragVedtakConsumer: BidragVedtakConsumer, priv
             søknadType = vedtakDto.stonadsendringListe.firstOrNull()?.type,
             søknadFra = SoknadFra.BIDRAGSMOTTAKER,
             grunnlagForskuddPerioder = hentGrunnlagForskudd(vedtakDto),
-            sivilstandPerioder = vedtakDto.hentSivilstand().map { SivilstandPeriode(
-                fomDato = it.datoFom,
-                tomDato = it.datoTil,
-                sivilstandKode = it.sivilstandKode
-            ) },
+            sivilstandPerioder = vedtakDto.hentSivilstand().map {
+                SivilstandPeriode(
+                    fomDato = it.datoFom,
+                    tomDato = it.datoTil,
+                    sivilstandKode = it.sivilstandKode
+                )
+            },
             vedtakBarn = vedtakBarnInfo.filter { it.medIBeregning == true }.map { mapVedtakBarn(it, vedtakDto) }
         )
     }
 
-    fun hentGrunnlagForskudd(vedtak: VedtakDto): List<GrunnlagForskuddPeriode>{
+    fun hentGrunnlagForskudd(vedtak: VedtakDto): List<GrunnlagForskuddPeriode> {
         val periode = vedtak.vedtakTidspunkt
-        val erForskudd = vedtak.stonadsendringListe.any{it.type == StonadType.FORSKUDD}
+        val erForskudd = vedtak.stonadsendringListe.any { it.type == StonadType.FORSKUDD }
         if (!erForskudd) return emptyList()
         return sjablongService.hentSjablonGrunnlagForskudd(periode.toLocalDate())
     }
 
     fun mapVedtakBarn(barnInfo: BarnInfo, vedtak: VedtakDto): VedtakBarn {
-
         return VedtakBarn(
             fodselsnummer = barnInfo.fnr,
             navn = barnInfo.navn,
@@ -66,10 +67,11 @@ class VedtakService(private val bidragVedtakConsumer: BidragVedtakConsumer, priv
         )
     }
     fun hentVedtakListe(barnFodselsnummer: String, vedtakDto: VedtakDto): List<VedtakBarnDetaljer> {
-        return vedtakDto.stonadsendringListe.filter { it.kravhaverId == barnFodselsnummer }.map { vedtak -> {}
+        return vedtakDto.stonadsendringListe.filter { it.kravhaverId == barnFodselsnummer }.map { vedtak ->
+            {}
             VedtakBarnDetaljer(
                 type = vedtak.type,
-                vedtakPerioder =  vedtak.periodeListe.map { periode ->
+                vedtakPerioder = vedtak.periodeListe.map { periode ->
                     VedtakPeriode(
                         fomDato = periode.fomDato,
                         tomDato = periode.tilDato,
@@ -81,7 +83,7 @@ class VedtakService(private val bidragVedtakConsumer: BidragVedtakConsumer, priv
                                 tomDato = it.datoTil,
                                 beløpType = it.inntektType,
                                 beløpÅr = it.gjelderAar.toInt(),
-                                rolle =  it.rolle,
+                                rolle = it.rolle,
                                 inntektsgrense = 0, // INNTEKTSINTERVALL_FORSKUDD,
                                 beløp = it.belop
                             )
@@ -89,8 +91,6 @@ class VedtakService(private val bidragVedtakConsumer: BidragVedtakConsumer, priv
                     )
                 }
             )
-
-
         }
     }
 }

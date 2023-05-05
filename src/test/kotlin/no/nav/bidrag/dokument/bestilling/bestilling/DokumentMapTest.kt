@@ -25,10 +25,13 @@ internal class DokumentMapTest {
 
     @RelaxedMockK
     lateinit var sakService: SakService
+
     @RelaxedMockK
     lateinit var sjablonService: SjablongService
+
     @RelaxedMockK
     lateinit var vedtakService: VedtakService
+
     @RelaxedMockK
     lateinit var kodeverkConsumer: KodeverkConsumer
 

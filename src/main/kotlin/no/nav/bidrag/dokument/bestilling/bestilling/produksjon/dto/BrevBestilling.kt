@@ -3,7 +3,6 @@ package no.nav.bidrag.dokument.bestilling.bestilling.produksjon.dto
 import no.nav.bidrag.dokument.bestilling.model.LANDKODE3_NORGE
 import java.math.BigDecimal
 import java.math.RoundingMode
-import java.text.DecimalFormat
 import java.text.ParseException
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -361,35 +360,41 @@ class Parter {
 @XmlAccessorType(XmlAccessType.FIELD)
 class Soknad {
 
-
     @XmlElement(name = "soknDato", nillable = true)
     @XmlJavaTypeAdapter(DateAdapter::class)
     var soknDato: LocalDate? = null
+
     @XmlElement(name = "type", nillable = true)
     var type: String? = null
+
     @XmlElement(name = "vedtDato", nillable = true)
     @XmlJavaTypeAdapter(DateAdapter::class)
     var vedtattDato: LocalDate? = null
+
     @XmlElement(name = "virknDato", nillable = true)
     @XmlJavaTypeAdapter(DateAdapter::class)
     var virkningDato: LocalDate? = null
+
     @XmlElement(name = "aarsakKd", nillable = true)
     var aarsakKd: String? = null
+
     @XmlElement(name = "undergrp", nillable = true)
     var undergrp: String? = null
+
     @XmlElement(name = "saksnr", nillable = true)
     var saksnr: String? = null
+
     @XmlElement(name = "svarfrDato", nillable = true)
     @XmlJavaTypeAdapter(DateAdapter::class)
     var svarfrDato: LocalDate? = null
+
     @XmlElement(name = "sendtDato", nillable = true)
     @XmlJavaTypeAdapter(DateAdapter::class)
     var sendtDato: LocalDate? = null
+
     @XmlElement(name = "saksTypeOmr", nillable = true)
     var saksTypeOmr: String? = null
-
 }
-
 
 @Suppress("unused")
 @XmlRootElement(name = "soknBost")

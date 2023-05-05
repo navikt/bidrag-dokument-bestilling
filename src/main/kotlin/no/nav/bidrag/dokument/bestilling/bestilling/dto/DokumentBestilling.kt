@@ -126,7 +126,7 @@ data class Soknad(
     val type: SoknadType,
     val årsak: String,
     val undergruppe: String,
-    val sakstypeOmr: String? = null //TODO: What is this?,
+    val sakstypeOmr: String? = null // TODO: What is this?,
 )
 data class VedtakPeriode(
     val fomDato: LocalDate,
@@ -166,7 +166,7 @@ data class VedtakDetaljer(
     val vedtakBarn: List<VedtakBarn> = emptyList(),
     var sivilstandPerioder: List<SivilstandPeriode> = emptyList(),
     var grunnlagForskuddPerioder: List<GrunnlagForskuddPeriode> = emptyList()
-){
+) {
     fun hentForskuddBarn(fodselsnummer: String): BigDecimal? = vedtakBarn
         .find { it.fodselsnummer == fodselsnummer }
         ?.vedtakDetaljer
@@ -179,7 +179,7 @@ data class VedtakBarn(
     val fodselsnummer: String,
     val navn: String?,
     val harSammeAdresse: Boolean,
-    val vedtakDetaljer: List<VedtakBarnDetaljer> = emptyList(),
+    val vedtakDetaljer: List<VedtakBarnDetaljer> = emptyList()
 )
 
 data class VedtakBarnDetaljer(

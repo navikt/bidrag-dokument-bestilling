@@ -2,7 +2,6 @@ package no.nav.bidrag.dokument.bestilling.bestilling
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import io.kotest.assertions.assertSoftly
-import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.assertions.throwables.shouldThrowWithMessage
 import io.kotest.assertions.withClue
 import io.kotest.matchers.collections.shouldHaveSize
@@ -21,7 +20,6 @@ import no.nav.bidrag.dokument.bestilling.config.SaksbehandlerInfoManager
 import no.nav.bidrag.dokument.bestilling.consumer.KodeverkConsumer
 import no.nav.bidrag.dokument.bestilling.consumer.dto.KodeverkResponse
 import no.nav.bidrag.dokument.bestilling.consumer.dto.fornavnEtternavn
-import no.nav.bidrag.dokument.bestilling.model.FantIkkeSakException
 import no.nav.bidrag.dokument.bestilling.model.Saksbehandler
 import no.nav.bidrag.dokument.bestilling.tjenester.KodeverkService
 import no.nav.bidrag.dokument.bestilling.tjenester.OrganisasjonService
@@ -99,7 +97,9 @@ internal class DokumentMetadataCollectorTest {
     fun initMocks() {
         val kodeverkResponse = ObjectMapper().findAndRegisterModules().readValue(readFile("api/landkoder.json"), KodeverkResponse::class.java)
         every { kodeverkConsumer.hentLandkoder() } returns kodeverkResponse
-        every { sjablongService.hentSjablonDetaljer() } returns SjablonDetaljer(multiplikatorInntekstgrenseForskudd = BigDecimal(0), fastsettelseGebyr = BigDecimal(0),
+        every { sjablongService.hentSjablonDetaljer() } returns SjablonDetaljer(
+            multiplikatorInntekstgrenseForskudd = BigDecimal(0),
+            fastsettelseGebyr = BigDecimal(0),
             forskuddInnteksintervall = BigDecimal(0)
         )
     }
@@ -944,7 +944,7 @@ internal class DokumentMetadataCollectorTest {
     @Test
     fun `should sort barn by born date`() {
         mockDefaultValues()
-        val saksnummer = "222222"
+        val saksnummer = "22222"
         val barn1 = BARN1.copy(fødselsdato = Fødselsdato.of(2020, 1, 2))
         val barn2 = BARN2.copy(fødselsdato = Fødselsdato.of(2020, 5, 15))
         val barn3 = BARN3.copy(fødselsdato = Fødselsdato.of(2021, 7, 20))
