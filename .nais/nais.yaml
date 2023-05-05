@@ -32,6 +32,10 @@ spec:
               - name: MQ
                 port: {{env.MQ_PORT}}
                 protocol: TCP
+      rules:
+      {{#each outbound-access-apps}}
+          - application: {{this}}
+      {{/each}}
   secureLogs:
     enabled: true
   image: {{ image }}
