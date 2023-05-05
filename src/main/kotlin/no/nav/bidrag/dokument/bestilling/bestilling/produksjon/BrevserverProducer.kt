@@ -119,7 +119,7 @@ class BrevserverProducer(
                     vedtakInfo?.let {
                         soknGrKode = it.søknadType?.let { type -> BehandlingType.valueOf(type.name).kode }
                         soknFraKode = it.søknadFra?.kode
-                        soknType =  it.vedtakType.let { type -> SoknadType.valueOf(type.name).kode }
+                        soknType = it.vedtakType.let { type -> SoknadType.valueOf(type.name).kode }
                     }
                     forskUtBet = vedtakInfo != null
                     resKode = if (antallVedtakBarn > 1) "FB" else null
@@ -167,7 +167,7 @@ class BrevserverProducer(
                             forskuddSivilstandPeriode {
                                 fomDato = sivilstand.fomDato
                                 tomDato = sivilstand.tomDato ?: defaultToDate
-                                kode = when(sivilstand.sivilstandKode){
+                                kode = when (sivilstand.sivilstandKode) {
                                     SivilstandKode.ENSLIG -> "UGIF"
                                     SivilstandKode.GIFT -> "GIFT"
                                     SivilstandKode.SAMBOER -> "SAMB"
@@ -177,14 +177,14 @@ class BrevserverProducer(
                             }
                         }
                         vedtakBarn.vedtakDetaljer.forEach { detaljer ->
-                            detaljer.vedtakPerioder.forEach {vedtakPeriode ->
+                            detaljer.vedtakPerioder.forEach { vedtakPeriode ->
                                 forskuddVedtakPeriode {
                                     fomDato = vedtakPeriode.fomDato
                                     tomDato = vedtakPeriode.tomDato ?: defaultToDate
                                     fnr = vedtakBarn.fodselsnummer
                                     resultatKode = vedtakPeriode.resultatKode
                                     beløp = vedtakPeriode.beløp
-                                    prosent = "100" //TODO: Hvordan skal dette beregnes?
+                                    prosent = "100" // TODO: Hvordan skal dette beregnes?
                                     maksInntekt = vedtakPeriode.beløp * dokumentBestilling.sjablonDetaljer.multiplikatorInntekstgrenseForskudd
                                 }
                                 vedtakInfo.grunnlagForskuddPerioder.forEach {
@@ -192,7 +192,7 @@ class BrevserverProducer(
                                         fomDato = it.fomDato
                                         tomDato = it.tomDato ?: defaultToDate
                                         antallBarn = it.antallBarn
-                                        forsorgerKode = when(it.forsorgerType){
+                                        forsorgerKode = when (it.forsorgerType) {
                                             ForsorgerType.ENSLIG -> "EN"
                                             ForsorgerType.GIFT_SAMBOER -> "GS"
                                         }
@@ -214,7 +214,6 @@ class BrevserverProducer(
                                         inntektGrense = dokumentBestilling.sjablonDetaljer.forskuddInnteksintervall
                                     }
                                 }
-
                             }
                         }
                     }
@@ -233,7 +232,7 @@ class BrevserverProducer(
                                 fnr = vedtakBarn.fodselsnummer
                                 resultatKode = it.resultatKode
                                 beløp = it.beløp
-                                prosent = "100" //TODO: Hvordan skal dette beregnes?
+                                prosent = "100" // TODO: Hvordan skal dette beregnes?
                                 maksInntekt = it.beløp * dokumentBestilling.sjablonDetaljer.multiplikatorInntekstgrenseForskudd
                             }
                         }

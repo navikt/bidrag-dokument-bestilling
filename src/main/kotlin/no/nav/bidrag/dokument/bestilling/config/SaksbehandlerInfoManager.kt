@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service
 
 @Service
 class SaksbehandlerInfoManager(
-    private val bidragOrganisasjonConsumer: BidragOrganisasjonConsumer,
+    private val bidragOrganisasjonConsumer: BidragOrganisasjonConsumer
 ) {
     fun hentSaksbehandlerBrukerId(): String? {
         return try {

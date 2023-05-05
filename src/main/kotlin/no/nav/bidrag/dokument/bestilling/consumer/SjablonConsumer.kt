@@ -15,7 +15,7 @@ import org.springframework.web.client.RestTemplate
 import javax.annotation.PostConstruct
 
 private val log = KotlinLogging.logger {}
-inline fun <reified T: Any> typeRef(): ParameterizedTypeReference<T> = object: ParameterizedTypeReference<T>(){}
+inline fun <reified T : Any> typeRef(): ParameterizedTypeReference<T> = object : ParameterizedTypeReference<T>() {}
 
 @Service
 class SjablonConsumer(@Value("\${SJABLON_URL}") url: String, val cacheManager: CacheManager) {

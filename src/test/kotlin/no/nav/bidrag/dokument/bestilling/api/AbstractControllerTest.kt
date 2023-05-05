@@ -15,7 +15,6 @@ import no.nav.bidrag.dokument.bestilling.bestilling.produksjon.dto.BrevBestillin
 import no.nav.bidrag.dokument.bestilling.consumer.KodeverkConsumer
 import no.nav.bidrag.dokument.bestilling.consumer.SjablonConsumer
 import no.nav.bidrag.dokument.bestilling.consumer.dto.KodeverkResponse
-import no.nav.bidrag.dokument.bestilling.consumer.dto.SjablongerDto
 import no.nav.bidrag.dokument.bestilling.utils.ANNEN_MOTTAKER
 import no.nav.bidrag.dokument.bestilling.utils.BARN1
 import no.nav.bidrag.dokument.bestilling.utils.BARN2
@@ -46,6 +45,7 @@ import javax.jms.Queue
 abstract class AbstractControllerTest {
     @LocalServerPort
     private val port = 0
+
     @MockkBean
     lateinit var sjablonConsumer: SjablonConsumer
 

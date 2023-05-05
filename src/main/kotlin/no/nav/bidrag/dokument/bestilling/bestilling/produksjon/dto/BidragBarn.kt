@@ -14,14 +14,19 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter
 class BidragBarn {
     @XmlElement(name = "barn", nillable = true)
     var barn: Barn? = null
+
     @XmlElement(name = "perForskBarn", nillable = true)
     var forskuddBarn: ForskuddBarn? = null
+
     @XmlElement(name = "perInntekt", nillable = true)
     var inntektPerioder: MutableList<InntektPeriode> = mutableListOf()
+
     @XmlElement(name = "perForskSiv", nillable = true)
     var forskuddSivilstandPerioder: MutableList<ForskuddSivilstandPeriode> = mutableListOf()
+
     @XmlElement(name = "perForskVtak", nillable = true)
     var forskuddVedtakPerioder: MutableList<ForskuddVedtakPeriode> = mutableListOf()
+
     @XmlElement(name = "perInGrForsk", nillable = true)
     var inntektGrunnlagForskuddPerioder: MutableList<InntektGrunnlagForskuddPeriode> = mutableListOf()
     fun barn(init: Barn.() -> Unit): Barn {
@@ -64,6 +69,7 @@ class BidragBarn {
         return initValue
     }
 }
+
 @Suppress("unused")
 @XmlRootElement(name = "perForskBarn")
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -131,8 +137,6 @@ class ForskuddVedtakPeriode {
 
     @XmlElement(name = "fnr", nillable = true)
     var fnr: String? = null
-
-
 }
 
 @Suppress("unused")
@@ -169,12 +173,7 @@ class InntektGrunnlagForskuddPeriode {
     @XmlElement(name = "belop75til", nillable = true)
     @XmlJavaTypeAdapter(BelopAdapter::class)
     var belop75til: BigDecimal? = null
-
-
-
-
 }
-
 
 @Suppress("unused")
 @XmlRootElement(name = "perInntekt")
@@ -215,11 +214,14 @@ class InntektPeriode {
 class Barn {
     @XmlElement(name = "navn", nillable = true)
     var navn: String? = null
+
     @XmlElement(name = "fnr", nillable = true)
     var fnr: String? = null
+
     @XmlElement(name = "fDato", nillable = true)
     @XmlJavaTypeAdapter(BirthDateAdapter::class)
     var fDato: LocalDate? = null
+
     @XmlElement(name = "saksnr", nillable = true)
     var saksnr: String? = null
 }

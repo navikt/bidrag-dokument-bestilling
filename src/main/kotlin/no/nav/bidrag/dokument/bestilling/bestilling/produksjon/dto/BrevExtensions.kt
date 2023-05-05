@@ -1,7 +1,6 @@
 package no.nav.bidrag.dokument.bestilling.bestilling.produksjon.dto
 
 import no.nav.bidrag.behandling.felles.enums.Rolle
-import no.nav.bidrag.dokument.bestilling.bestilling.dto.GrunnlagInntektType
 import no.nav.bidrag.domain.enums.Rolletype
 
 fun Rolletype.toKode() = when (this) {
@@ -11,7 +10,7 @@ fun Rolletype.toKode() = when (this) {
     else -> "00"
 }
 
-//TODO: Dekode rollekodene til riktige verdier!!
+// TODO: Dekode rollekodene til riktige verdier!!
 fun Rolle.toKode() = when (this) {
     Rolle.BIDRAGSMOTTAKER -> "02"
     Rolle.BIDRAGSPLIKTIG -> "01"

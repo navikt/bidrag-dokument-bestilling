@@ -1,6 +1,5 @@
 package no.nav.bidrag.dokument.bestilling.bestilling
 
-import no.nav.bidrag.behandling.felles.dto.vedtak.VedtakDto
 import no.nav.bidrag.dokument.bestilling.api.dto.DokumentBestillingForespørsel
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.Adresse
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.Barn
