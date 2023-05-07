@@ -6,6 +6,7 @@ import no.nav.bidrag.behandling.felles.dto.vedtak.VedtakDto
 import no.nav.bidrag.behandling.felles.enums.GrunnlagType
 import no.nav.bidrag.behandling.felles.grunnlag.BarnInfo
 import no.nav.bidrag.behandling.felles.grunnlag.Sivilstand
+import no.nav.bidrag.behandling.felles.grunnlag.SoknadInfo
 import no.nav.bidrag.behandling.felles.grunnlag.SoknadsbarnInfo
 import no.nav.bidrag.behandling.felles.grunnlag.VedtakInfo
 import no.nav.bidrag.behandling.felles.grunnlag.delberegning.SluttberegningBBM
@@ -37,4 +38,5 @@ fun <T> VedtakDto.hentGrunnagDetaljer(grunnlagType: GrunnlagType, clazz: Class<T
     .map { objectMapper.readValue(it.innhold.toString(), clazz) }
 fun VedtakDto.hentBarnInfo(): List<BarnInfo> = hentGrunnagDetaljer(GrunnlagType.BARN_INFO, BarnInfo::class.java)
 fun VedtakDto.hentVedtakInfo(): VedtakInfo? = grunnlagListe.find { it.type == GrunnlagType.VEDTAK_INFO }?.let { objectMapper.readValue(it.innhold.toString(), VedtakInfo::class.java) }
+fun VedtakDto.hentSoknadInfo(): SoknadInfo? = grunnlagListe.find { it.type == GrunnlagType.SOKNAD_INFO }?.let { objectMapper.readValue(it.innhold.toString(), SoknadInfo::class.java) }
 fun VedtakDto.hentSivilstand(): List<Sivilstand> = hentGrunnagDetaljer(GrunnlagType.SIVILSTAND, Sivilstand::class.java)

@@ -1,6 +1,5 @@
 package no.nav.bidrag.dokument.bestilling.bestilling.produksjon
 
-import no.nav.bidrag.behandling.felles.enums.SivilstandKode
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.BestillingSystem
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.BrevKode
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.BrevType
@@ -15,11 +14,12 @@ import no.nav.bidrag.dokument.bestilling.bestilling.produksjon.dto.Brev
 import no.nav.bidrag.dokument.bestilling.bestilling.produksjon.dto.BrevBestilling
 import no.nav.bidrag.dokument.bestilling.bestilling.produksjon.dto.BrevKontaktinfo
 import no.nav.bidrag.dokument.bestilling.bestilling.produksjon.dto.BrevMottaker
+import no.nav.bidrag.dokument.bestilling.bestilling.produksjon.dto.behandlingType
 import no.nav.bidrag.dokument.bestilling.bestilling.produksjon.dto.brevbestilling
+import no.nav.bidrag.dokument.bestilling.bestilling.produksjon.dto.soknadType
 import no.nav.bidrag.dokument.bestilling.bestilling.produksjon.dto.toKode
 import no.nav.bidrag.dokument.bestilling.consumer.BidragDokumentConsumer
 import no.nav.bidrag.dokument.bestilling.model.BehandlingType
-import no.nav.bidrag.dokument.bestilling.model.SoknadType
 import no.nav.bidrag.dokument.dto.AvsenderMottakerDto
 import no.nav.bidrag.dokument.dto.JournalpostType
 import no.nav.bidrag.dokument.dto.OpprettDokumentDto
@@ -33,6 +33,7 @@ import java.time.LocalDate
 class BrevserverProducer(
     val onlinebrevTemplate: JmsTemplate,
     val bidragDokumentConsumer: BidragDokumentConsumer,
+    val hgUgKodeService: HgUgKodeService,
     @Value("\${BREVSERVER_PASSORD}") val brevPassord: String
 ) : DokumentProducer {
 
@@ -97,7 +98,7 @@ class BrevserverProducer(
             val roller = dokumentBestilling.roller
             val bp = roller.bidragspliktig
             val bm = roller.bidragsmottaker
-
+            val hgUgDto = vedtakInfo?.let { hgUgKodeService.findHgUg(it.soknadType, it.søknadFra, it.behandlingType) }
             malpakke = "BI01.${brevKode.name}"
             passord = brevPassord
             saksbehandler = dokumentBestilling.saksbehandler?.ident!!
@@ -111,18 +112,25 @@ class BrevserverProducer(
                     saksnr = dokumentBestilling.saksnummer
                     rmISak = dokumentBestilling.rmISak
                     datoSakReg = dokumentBestilling.datoSakOpprettet
-                    hgKode = "FO"
-                    ugKode = "E"
-                    sakstype =
-                        "E" // "X" hvis det er en ukjent part i saken, "U" hvis parter levde adskilt, "E" i alle andre tilfeller
+                    hgKode = hgUgDto?.hg
+                    ugKode = hgUgDto?.ug
+                    sakstype = if (dokumentBestilling.sakDetaljer.harUkjentPart) {
+                        "X"
+                    } else if (dokumentBestilling.sakDetaljer.levdeAdskilt) {
+                        "U"
+                    } else {
+                        "E"
+                    }
                     gebyrsats = dokumentBestilling.sjablonDetaljer.fastsettelseGebyr
                     vedtakInfo?.let {
-                        soknGrKode = it.søknadType?.let { type -> BehandlingType.valueOf(type.name).kode }
+                        soknGrKode = it.behandlingType?.kode
                         soknFraKode = it.søknadFra?.kode
-                        soknType = it.vedtakType.let { type -> SoknadType.valueOf(type.name).kode }
+                        soknType = it.soknadType?.kode
+                        virkningsDato = it.virkningDato
+                        mottatDato = it.soknadDato
                     }
                     forskUtBet = vedtakInfo != null
-                    resKode = if (antallVedtakBarn > 1) "FB" else null
+                    resKode = if (antallVedtakBarn > 1) "FB" else null // TODO: Er dette riktig?
                 }
                 parter {
                     bpfnr = bp?.fodselsnummer
@@ -142,7 +150,7 @@ class BrevserverProducer(
                 vedtakInfo?.let {
                     soknad {
                         aarsakKd = it.virkningÅrsakKode
-                        undergrp = "E"
+                        undergrp = hgUgDto?.ug
                         type = it.søknadType?.let { BehandlingType.valueOf(it.name).kode }
 
                         vedtattDato = it.vedtattDato
@@ -161,18 +169,14 @@ class BrevserverProducer(
                         }
                         forskuddBarn {
                             fomDato = vedtakInfo.virkningDato
+                            tomDato = defaultToDate
                             antallBarn = vedtakInfo.vedtakBarn.size
                         }
                         vedtakInfo.sivilstandPerioder.forEach { sivilstand ->
                             forskuddSivilstandPeriode {
                                 fomDato = sivilstand.fomDato
                                 tomDato = sivilstand.tomDato ?: defaultToDate
-                                kode = when (sivilstand.sivilstandKode) {
-                                    SivilstandKode.ENSLIG -> "UGIF"
-                                    SivilstandKode.GIFT -> "GIFT"
-                                    SivilstandKode.SAMBOER -> "SAMB"
-                                    else -> "UGIF"
-                                }
+                                kode = sivilstand.sivilstandKode.toKode()
                                 beskrivelse = sivilstand.sivilstandKode.name.replace("_", " ").lowercase().replaceFirstChar { it.uppercase() }
                             }
                         }
@@ -190,7 +194,7 @@ class BrevserverProducer(
                                 vedtakInfo.grunnlagForskuddPerioder.forEach {
                                     inntektGrunnlagForskuddPeriode {
                                         fomDato = it.fomDato
-                                        tomDato = it.tomDato ?: defaultToDate
+                                        tomDato = it.tomDato
                                         antallBarn = it.antallBarn
                                         forsorgerKode = when (it.forsorgerType) {
                                             ForsorgerType.ENSLIG -> "EN"

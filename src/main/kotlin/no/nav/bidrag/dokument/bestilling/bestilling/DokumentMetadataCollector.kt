@@ -8,6 +8,7 @@ import no.nav.bidrag.dokument.bestilling.bestilling.dto.EnhetKontaktInfo
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.Gjelder
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.Mottaker
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.PartInfo
+import no.nav.bidrag.dokument.bestilling.bestilling.dto.SakDetaljer
 import no.nav.bidrag.dokument.bestilling.config.SaksbehandlerInfoManager
 import no.nav.bidrag.dokument.bestilling.consumer.dto.fornavnEtternavn
 import no.nav.bidrag.dokument.bestilling.consumer.dto.isDod
@@ -75,7 +76,11 @@ class DokumentMetadataCollector(
             enhet = enhet,
             datoSakOpprettet = sak.opprettetDato.verdi,
             rmISak = sak.roller.any { it.type == Rolletype.RM },
-            sjablonDetaljer = sjablongService.hentSjablonDetaljer()
+            sjablonDetaljer = sjablongService.hentSjablonDetaljer(),
+            sakDetaljer = SakDetaljer(
+                harUkjentPart = hentIdentForRolle(Rolletype.BM) == null || hentIdentForRolle(Rolletype.BP) == null, // TODO: Trenger mer info fra bidrag-sak (ukjent part og levd adskilt)
+                levdeAdskilt = false
+            )
         )
         this.forespørsel = forespørsel
 

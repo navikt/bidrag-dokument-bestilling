@@ -16,6 +16,7 @@ import no.nav.bidrag.dokument.bestilling.model.fantIkkeVedtak
 import no.nav.bidrag.dokument.bestilling.model.hentBarnInfo
 import no.nav.bidrag.dokument.bestilling.model.hentInntekter
 import no.nav.bidrag.dokument.bestilling.model.hentSivilstand
+import no.nav.bidrag.dokument.bestilling.model.hentSoknadInfo
 import no.nav.bidrag.dokument.bestilling.model.hentVedtakInfo
 import org.springframework.stereotype.Service
 import java.math.BigDecimal
@@ -30,10 +31,13 @@ class VedtakService(private val bidragVedtakConsumer: BidragVedtakConsumer, priv
     fun hentVedtakDetaljer(vedtakId: String): VedtakDetaljer {
         val vedtakDto = hentVedtak(vedtakId)
         val vedtakInfo = vedtakDto.hentVedtakInfo()
+        val soknadInfo = vedtakDto.hentSoknadInfo()
         val vedtakBarnInfo = vedtakDto.hentBarnInfo()
         return VedtakDetaljer(
             virkningÅrsakKode = vedtakInfo?.kodeVirkningAarsak,
             virkningDato = vedtakInfo?.virkningDato,
+            soknadDato = soknadInfo?.soknadDato,
+            soktFraDato = soknadInfo?.soktFraDato,
             vedtattDato = vedtakInfo?.vedtakDato,
             kilde = vedtakDto.kilde,
             vedtakType = vedtakDto.type,
@@ -52,10 +56,10 @@ class VedtakService(private val bidragVedtakConsumer: BidragVedtakConsumer, priv
     }
 
     fun hentGrunnlagForskudd(vedtak: VedtakDto): List<GrunnlagForskuddPeriode> {
-        val periode = vedtak.vedtakTidspunkt
+        val vedtakInfo = vedtak.hentVedtakInfo()
         val erForskudd = vedtak.stonadsendringListe.any { it.type == StonadType.FORSKUDD }
-        if (!erForskudd) return emptyList()
-        return sjablongService.hentSjablonGrunnlagForskudd(periode.toLocalDate())
+        if (!erForskudd || vedtakInfo == null) return emptyList()
+        return sjablongService.hentSjablonGrunnlagForskudd(vedtakInfo.virkningDato)
     }
 
     fun mapVedtakBarn(barnInfo: BarnInfo, vedtak: VedtakDto): VedtakBarn {
