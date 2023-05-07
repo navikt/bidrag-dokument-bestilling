@@ -34,7 +34,8 @@ data class DokumentBestilling(
     val roller: Roller = Roller(),
     val rmISak: Boolean? = false,
     var vedtakDetaljer: VedtakDetaljer? = null,
-    var sjablonDetaljer: SjablonDetaljer
+    var sjablonDetaljer: SjablonDetaljer,
+    var sakDetaljer: SakDetaljer
 )
 
 class Roller : MutableList<Rolle> by mutableListOf() {
@@ -158,6 +159,8 @@ data class GrunnlagForskuddPeriode(
 data class VedtakDetaljer(
     val virkningÅrsakKode: String?,
     val virkningDato: LocalDate?,
+    val soknadDato: LocalDate?,
+    val soktFraDato: LocalDate?,
     val vedtattDato: LocalDate?,
     val vedtakType: VedtakType,
     val søknadType: StonadType?,
@@ -201,4 +204,9 @@ data class SjablonDetaljer(
     val multiplikatorInntekstgrenseForskudd: BigDecimal,
     val fastsettelseGebyr: BigDecimal,
     val forskuddInnteksintervall: BigDecimal
+)
+
+data class SakDetaljer(
+    val harUkjentPart: Boolean,
+    val levdeAdskilt: Boolean
 )

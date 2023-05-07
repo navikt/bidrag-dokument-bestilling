@@ -15,11 +15,11 @@ class BidragBarn {
     @XmlElement(name = "barn", nillable = true)
     var barn: Barn? = null
 
-    @XmlElement(name = "perForskBarn", nillable = true)
-    var forskuddBarn: ForskuddBarn? = null
-
     @XmlElement(name = "perInntekt", nillable = true)
     var inntektPerioder: MutableList<InntektPeriode> = mutableListOf()
+
+    @XmlElement(name = "perForskBarn", nillable = true)
+    var forskuddBarn: ForskuddBarn? = null
 
     @XmlElement(name = "perForskSiv", nillable = true)
     var forskuddSivilstandPerioder: MutableList<ForskuddSivilstandPeriode> = mutableListOf()

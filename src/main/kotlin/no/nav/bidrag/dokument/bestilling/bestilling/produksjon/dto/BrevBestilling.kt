@@ -82,26 +82,26 @@ class Brev {
     @XmlElement(name = "barniSak")
     var barnISak: MutableList<BarnISak> = mutableListOf()
 
+    @XmlElement(name = "soknad")
+    var soknad: Soknad? = null
+
     @XmlElement(name = "bidrVtak")
     var vedtak: MutableList<BidragVedtak> = mutableListOf()
-
-    @XmlElement(name = "perForskVtak")
-    var forskuddVedtakPeriode: MutableList<ForskuddVedtakPeriode> = mutableListOf()
-
-    @XmlElement(name = "bidrBarn")
-    var bidragBarn: MutableList<BidragBarn> = mutableListOf()
 
     @XmlElement(name = "soknBost")
     var soknadBost: SoknadBost? = null
 
-    @XmlElement(name = "soknad")
-    var soknad: Soknad? = null
+    @XmlElement(name = "perForskVtak")
+    var forskuddVedtakPeriode: MutableList<ForskuddVedtakPeriode> = mutableListOf()
 
     @XmlElement(name = "Kontaktinfo")
     var kontaktInfo: BrevKontaktinfo? = null
 
     @XmlElement(name = "Saksbehandl")
     var saksbehandler: BrevSaksbehandler? = null
+
+    @XmlElement(name = "bidrBarn")
+    var bidragBarn: MutableList<BidragBarn> = mutableListOf()
 
     fun brevKontaktinfo(init: BrevKontaktinfo.() -> Unit): BrevKontaktinfo {
         val brevKontaktinfo = BrevKontaktinfo()
@@ -457,11 +457,13 @@ class SoknadBost {
     var innkrSamtid: Boolean? = false
 
     @XmlElement(name = "mottDato", nillable = true)
-    @XmlJavaTypeAdapter(BirthDateAdapter::class)
+    @XmlJavaTypeAdapter(DateAdapter::class)
     var mottatDato: LocalDate? = null
 
     @XmlElement(name = "virknDato", nillable = true)
-    var virkningsDato: String? = null // TODO: Date format?
+    @XmlJavaTypeAdapter(DateAdapter::class)
+    var virkningsDato: LocalDate? = null
+
     @XmlElement(name = "myndighet", nillable = true)
     var myndighet: String? = null
 
