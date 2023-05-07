@@ -188,7 +188,7 @@ class BrevserverProducer(
                                     fnr = vedtakBarn.fodselsnummer
                                     resultatKode = vedtakPeriode.resultatKode
                                     beløp = vedtakPeriode.beløp
-                                    prosent = "100" // TODO: Hvordan skal dette beregnes?
+                                    prosent = vedtakPeriode.resultatKode.padStart(3, '0')
                                     maksInntekt = vedtakPeriode.beløp * dokumentBestilling.sjablonDetaljer.multiplikatorInntekstgrenseForskudd
                                 }
                                 vedtakInfo.grunnlagForskuddPerioder.forEach {
@@ -236,7 +236,7 @@ class BrevserverProducer(
                                 fnr = vedtakBarn.fodselsnummer
                                 resultatKode = it.resultatKode
                                 beløp = it.beløp
-                                prosent = "100" // TODO: Hvordan skal dette beregnes?
+                                prosent = it.resultatKode.padStart(3, '0')
                                 maksInntekt = it.beløp * dokumentBestilling.sjablonDetaljer.multiplikatorInntekstgrenseForskudd
                             }
                         }
