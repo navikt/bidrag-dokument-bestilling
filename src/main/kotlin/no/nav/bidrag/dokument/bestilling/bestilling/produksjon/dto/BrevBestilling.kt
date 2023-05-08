@@ -558,6 +558,7 @@ class DateAdapter : XmlAdapter<String, LocalDate?>() {
 
 class PeriodDateAdapter : XmlAdapter<String, LocalDate?>() {
     fun getLastDayOfPreviousMonth(date: LocalDate): LocalDate {
+        if (date.year == 9999) return date
         val cDate = GregorianCalendar.from(date.atStartOfDay(ZoneId.systemDefault()))
         // Subtract one month from the current date
         cDate.add(Calendar.MONTH, -1)

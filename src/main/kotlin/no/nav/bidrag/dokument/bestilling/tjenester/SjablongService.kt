@@ -19,7 +19,7 @@ class SjablongService(val sjablonConsumer: SjablonConsumer) {
         return SjablonDetaljer(
             multiplikatorInntekstgrenseForskudd = sjablonger.hentSisteSjablong(SjablongType.MULTIPLIKATOR_MAKS_INNTGRENSE_FORSKUDD_MOTTAKER)?.verdi ?: BigDecimal(0),
             fastsettelseGebyr = sjablonger.hentSisteSjablong(SjablongType.BELØP_FASTSETTELSESGEBYR)?.verdi ?: BigDecimal(0),
-            forskuddInnteksintervall = sjablonger.hentSisteSjablong(SjablongType.INNTEKTSINTERVALL_FORSKUDD)?.verdi ?: BigDecimal(0)
+            forskuddInntektIntervall = sjablonger.hentSisteSjablong(SjablongType.INNTEKTSINTERVALL_FORSKUDD)?.verdi ?: BigDecimal(0)
         )
     }
     fun hentSjablonGrunnlagForskudd(periodeFra: LocalDate): List<GrunnlagForskuddPeriode> {
