@@ -7,6 +7,8 @@ import no.nav.bidrag.dokument.bestilling.consumer.dto.EnhetKontaktInfoDto
 import no.nav.bidrag.dokument.bestilling.consumer.dto.EnhetPostadresseDto
 import no.nav.bidrag.dokument.dto.OpprettDokumentDto
 import no.nav.bidrag.dokument.dto.OpprettJournalpostResponse
+import no.nav.bidrag.domain.bool.LevdeAdskilt
+import no.nav.bidrag.domain.bool.UkjentPart
 import no.nav.bidrag.domain.enums.Adressetype
 import no.nav.bidrag.domain.enums.Bidragssakstatus
 import no.nav.bidrag.domain.enums.Diskresjonskode
@@ -120,7 +122,9 @@ fun createSakResponse(): BidragssakDto {
         ),
         saksstatus = Bidragssakstatus.IN,
         kategori = Sakskategori.N,
-        opprettetDato = OpprettetDato(LocalDate.now())
+        opprettetDato = OpprettetDato(LocalDate.now()),
+        levdeAdskilt = LevdeAdskilt(false),
+        ukjentPart = UkjentPart(false)
     )
 }
 

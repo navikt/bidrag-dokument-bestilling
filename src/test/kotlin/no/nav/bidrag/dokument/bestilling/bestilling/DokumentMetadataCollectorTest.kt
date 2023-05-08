@@ -100,7 +100,8 @@ internal class DokumentMetadataCollectorTest {
         every { sjablongService.hentSjablonDetaljer() } returns SjablonDetaljer(
             multiplikatorInntekstgrenseForskudd = BigDecimal(0),
             fastsettelseGebyr = BigDecimal(0),
-            forskuddInntektIntervall = BigDecimal(0)
+            forskuddInntektIntervall = BigDecimal(0),
+            forskuddSats = BigDecimal(0)
         )
     }
 
