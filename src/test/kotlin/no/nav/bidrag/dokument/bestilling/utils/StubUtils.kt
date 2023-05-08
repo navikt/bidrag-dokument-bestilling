@@ -60,7 +60,7 @@ class StubUtils {
         )
     }
 
-    fun stubHentLandkoder() {
+    fun stubHentVedtak() {
         WireMock.stubFor(
             WireMock.get(WireMock.urlMatching("/kodeverk/.*")).willReturn(
                 aClosedJsonResponse()
