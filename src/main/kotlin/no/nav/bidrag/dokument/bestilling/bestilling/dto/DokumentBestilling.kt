@@ -208,7 +208,8 @@ enum class ForsorgerType {
 data class SjablonDetaljer(
     val multiplikatorInntekstgrenseForskudd: BigDecimal,
     val fastsettelseGebyr: BigDecimal,
-    val forskuddInntektIntervall: BigDecimal
+    val forskuddInntektIntervall: BigDecimal,
+    val forskuddSats: BigDecimal,
 )
 
 data class SakDetaljer(

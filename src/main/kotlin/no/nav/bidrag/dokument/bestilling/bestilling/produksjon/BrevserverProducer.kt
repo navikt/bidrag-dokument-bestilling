@@ -207,7 +207,7 @@ class BrevserverProducer(
                                     resultatKode = vedtakPeriode.resultatKode
                                     beløp = vedtakPeriode.beløp
                                     prosent = vedtakPeriode.resultatKode.padStart(3, '0')
-                                    maksInntekt = vedtakPeriode.beløp * dokumentBestilling.sjablonDetaljer.multiplikatorInntekstgrenseForskudd
+                                    maksInntekt = dokumentBestilling.sjablonDetaljer.forskuddSats * dokumentBestilling.sjablonDetaljer.multiplikatorInntekstgrenseForskudd
                                 }
 
                                 vedtakPeriode.inntektPerioder.forEach {
