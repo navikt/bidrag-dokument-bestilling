@@ -19,9 +19,10 @@ import no.nav.bidrag.dokument.bestilling.model.hentBarnInfo
 import no.nav.bidrag.dokument.bestilling.model.hentBeregningsgrunnlag
 import no.nav.bidrag.dokument.bestilling.model.hentBostatus
 import no.nav.bidrag.dokument.bestilling.model.hentInntekter
-import no.nav.bidrag.dokument.bestilling.model.hentPersonInfo
 import no.nav.bidrag.dokument.bestilling.model.hentSivilstand
+import no.nav.bidrag.dokument.bestilling.model.hentSluttberegninger
 import no.nav.bidrag.dokument.bestilling.model.hentSoknadInfo
+import no.nav.bidrag.dokument.bestilling.model.hentSoknadsBarnInfo
 import no.nav.bidrag.dokument.bestilling.model.hentVedtakInfo
 import org.springframework.stereotype.Service
 import java.math.BigDecimal
@@ -83,19 +84,21 @@ class VedtakService(private val bidragVedtakConsumer: BidragVedtakConsumer, priv
             VedtakBarnDetaljer(
                 type = vedtak.type,
                 vedtakPerioder = vedtak.periodeListe.map { periode ->
-                    val inntekter = vedtakDto.hentInntekter(periode.grunnlagReferanseListe, periode.resultatkode).map {
-                        val personInfo = vedtakDto.hentPersonInfo(it.rolle)
-                        InntektPeriode(
-                            fomDato = it.datoFom,
-                            tomDato = it.datoTil,
-                            beløpType = GrunnlagInntektType(it.inntektType),
-                            beløpÅr = it.gjelderAar.toInt(),
-                            rolle = it.rolle,
-                            fodselsnummer = personInfo?.fnr,
-                            inntektsgrense = 0, // INNTEKTSINTERVALL_FORSKUDD,
-                            beløp = it.belop
-                        )
+                    val inntekter = vedtakDto.hentSluttberegninger(periode.grunnlagReferanseListe, periode.resultatkode).flatMap { sluttBeregning ->
+                        val soknadBarnInfo = sluttBeregning.hentSoknadsBarnInfo(vedtakDto)
+                        sluttBeregning.hentInntekter(vedtakDto).map {
+                            InntektPeriode(
+                                fomDato = it.datoFom,
+                                tomDato = sluttBeregning.datoTil,
+                                beløpType = GrunnlagInntektType(it.inntektType),
+                                beløpÅr = it.gjelderAar.toInt(),
+                                rolle = it.rolle,
+                                fodselsnummer = soknadBarnInfo.fnr,
+                                beløp = it.belop
+                            )
+                        }
                     }
+
                     VedtakPeriode(
                         fomDato = periode.fomDato,
                         tomDato = if (periode.resultatkode == "AHI") inntekter[0].tomDato else periode.tilDato, //TODO: Er dette riktig??

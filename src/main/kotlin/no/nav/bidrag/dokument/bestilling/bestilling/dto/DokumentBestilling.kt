@@ -149,7 +149,6 @@ data class InntektPeriode(
     val fodselsnummer: String?,
     val beløp: BigDecimal,
     val rolle: GrunnlagRolleType,
-    val inntektsgrense: Int
 )
 
 data class GrunnlagForskuddPeriode(
@@ -218,6 +217,7 @@ data class SjablonDetaljer(
     val fastsettelseGebyr: BigDecimal,
     val forskuddInntektIntervall: BigDecimal,
     val forskuddSats: BigDecimal,
+    val multiplikatorInnteksinslagBarn: BigDecimal,
 )
 
 data class SakDetaljer(
