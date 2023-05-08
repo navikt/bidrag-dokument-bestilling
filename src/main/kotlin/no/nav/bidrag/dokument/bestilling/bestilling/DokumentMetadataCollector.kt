@@ -79,8 +79,8 @@ class DokumentMetadataCollector(
             rmISak = sak.roller.any { it.type == Rolletype.RM },
             sjablonDetaljer = sjablongService.hentSjablonDetaljer(),
             sakDetaljer = SakDetaljer(
-                harUkjentPart = hentIdentForRolle(Rolletype.BM) == null || hentIdentForRolle(Rolletype.BP) == null, // TODO: Trenger mer info fra bidrag-sak (ukjent part og levd adskilt)
-                levdeAdskilt = false
+                harUkjentPart = sak.ukjentPart.verdi,
+                levdeAdskilt = sak.levdeAdskilt.verdi
             )
         )
         this.forespørsel = forespørsel
