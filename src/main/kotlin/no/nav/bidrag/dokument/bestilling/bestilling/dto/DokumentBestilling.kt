@@ -196,7 +196,8 @@ data class VedtakBarnDetaljer(
 data class SivilstandPeriode(
     val fomDato: LocalDate,
     val tomDato: LocalDate? = null,
-    val sivilstandKode: SivilstandKode
+    val sivilstandKode: SivilstandKode,
+    val sivilstandBeskrivelse: String
 )
 
 enum class ForsorgerType {
@@ -207,7 +208,7 @@ enum class ForsorgerType {
 data class SjablonDetaljer(
     val multiplikatorInntekstgrenseForskudd: BigDecimal,
     val fastsettelseGebyr: BigDecimal,
-    val forskuddInnteksintervall: BigDecimal
+    val forskuddInntektIntervall: BigDecimal
 )
 
 data class SakDetaljer(

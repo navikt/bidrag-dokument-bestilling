@@ -30,9 +30,9 @@ fun SivilstandKode.toKode() = when (this) {
     SivilstandKode.SAMBOER -> "SAMB"
     SivilstandKode.SEPARERT_PARTNER -> "SEPA"
     SivilstandKode.SEPARERT -> "SEPR"
-    SivilstandKode.SKILT -> "SKIL"
+    SivilstandKode.SKILT, SivilstandKode.ENSLIG -> "SKIL"
     SivilstandKode.SKILT_PARTNER -> "SKPA"
-    SivilstandKode.UGIFT, SivilstandKode.ENSLIG -> "UGIF"
+    SivilstandKode.UGIFT-> "UGIF"
     else -> "NULL"
 }
 

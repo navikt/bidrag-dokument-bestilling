@@ -19,8 +19,8 @@ import java.math.BigDecimal
 
 val objectMapper = ObjectMapper().findAndRegisterModules()
 var reader = ObjectMapper().readerFor(object : TypeReference<List<String>>() {})
-fun VedtakDto.hentInntekter(referanser: List<String>): List<Inntekt> {
-    val sluttBeregninger = hentGrunnagDetaljer(GrunnlagType.SLUTTBEREGNING_BBM, SluttberegningBBM::class.java, referanser)
+fun VedtakDto.hentInntekter(referanser: List<String>, resultatKode: String): List<Inntekt> {
+    val sluttBeregninger = hentGrunnagDetaljer(GrunnlagType.SLUTTBEREGNING_BBM, SluttberegningBBM::class.java, referanser).filter { it.resultatKode == resultatKode }
 
     val referanserGrunnlag: List<String> = sluttBeregninger.flatMap { it.grunnlagReferanseListe }
     return hentGrunnagDetaljer(GrunnlagType.INNTEKT, Inntekt::class.java, referanserGrunnlag)

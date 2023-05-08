@@ -156,6 +156,8 @@ class BrevserverProducer(
 
                         vedtattDato = it.vedtattDato
                         virkningDato = it.virkningDato
+                        soknDato = it.soknadDato
+                        sendtDato = it.vedtattDato // TODO: Er dette riktig?
                         saksnr = dokumentBestilling.saksnummer
                     }
                 }
@@ -193,7 +195,7 @@ class BrevserverProducer(
                                 fomDato = sivilstand.fomDato
                                 tomDato = sivilstand.tomDato ?: defaultToDate
                                 kode = sivilstand.sivilstandKode.toKode()
-                                beskrivelse = sivilstand.sivilstandKode.name.replace("_", " ").lowercase().replaceFirstChar { it.uppercase() }
+                                beskrivelse = sivilstand.sivilstandBeskrivelse
                             }
                         }
                         vedtakBarn.vedtakDetaljer.forEach { detaljer ->
@@ -216,7 +218,8 @@ class BrevserverProducer(
                                         belopÅrsinntekt = it.beløp
                                         beskrivelse = it.beløpType.beskrivelse
                                         rolle = it.rolle.toKode()
-                                        inntektGrense = dokumentBestilling.sjablonDetaljer.forskuddInnteksintervall
+                                        fnr = it.fodselsnummer
+                                        inntektGrense = dokumentBestilling.sjablonDetaljer.forskuddInntektIntervall
                                     }
                                 }
                             }

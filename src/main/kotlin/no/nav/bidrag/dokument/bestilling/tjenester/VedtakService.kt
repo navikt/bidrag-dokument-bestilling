@@ -51,7 +51,8 @@ class VedtakService(private val bidragVedtakConsumer: BidragVedtakConsumer, priv
                 SivilstandPeriode(
                     fomDato = it.datoFom,
                     tomDato = it.datoTil,
-                    sivilstandKode = it.sivilstandKode
+                    sivilstandKode = it.sivilstandKode,
+                    sivilstandBeskrivelse = it.beskrivelse
                 )
             },
             vedtakBarn = vedtakBarnInfo.filter { it.medIBeregning == true }.map { mapVedtakBarn(it, vedtakDto) }
@@ -78,7 +79,7 @@ class VedtakService(private val bidragVedtakConsumer: BidragVedtakConsumer, priv
             VedtakBarnDetaljer(
                 type = vedtak.type,
                 vedtakPerioder = vedtak.periodeListe.map { periode ->
-                    val inntekter = vedtakDto.hentInntekter(periode.grunnlagReferanseListe).map {
+                    val inntekter = vedtakDto.hentInntekter(periode.grunnlagReferanseListe, periode.resultatkode).map {
                         val personInfo = vedtakDto.hentPersonInfo(it.rolle)
                         InntektPeriode(
                             fomDato = it.datoFom,
@@ -93,7 +94,7 @@ class VedtakService(private val bidragVedtakConsumer: BidragVedtakConsumer, priv
                     }
                     VedtakPeriode(
                         fomDato = periode.fomDato,
-                        tomDato = periode.tilDato,
+                        tomDato = if (periode.resultatkode == "AHI") inntekter[0].tomDato else periode.tilDato, //TODO: Er dette riktig??
                         beløp = periode.belop ?: BigDecimal(0),
                         resultatKode = periode.resultatkode,
                         inntektPerioder = inntekter + inntekter.hentBeregningsgrunnlag()
