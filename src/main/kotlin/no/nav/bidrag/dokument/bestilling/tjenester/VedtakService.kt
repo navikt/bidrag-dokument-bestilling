@@ -3,6 +3,7 @@ package no.nav.bidrag.dokument.bestilling.tjenester
 import no.nav.bidrag.behandling.felles.dto.vedtak.VedtakDto
 import no.nav.bidrag.behandling.felles.enums.StonadType
 import no.nav.bidrag.behandling.felles.grunnlag.BarnInfo
+import no.nav.bidrag.dokument.bestilling.bestilling.dto.BostatusPeriode
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.GrunnlagForskuddPeriode
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.GrunnlagInntektType
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.InntektPeriode
@@ -16,6 +17,7 @@ import no.nav.bidrag.dokument.bestilling.model.SoknadFra
 import no.nav.bidrag.dokument.bestilling.model.fantIkkeVedtak
 import no.nav.bidrag.dokument.bestilling.model.hentBarnInfo
 import no.nav.bidrag.dokument.bestilling.model.hentBeregningsgrunnlag
+import no.nav.bidrag.dokument.bestilling.model.hentBostatus
 import no.nav.bidrag.dokument.bestilling.model.hentInntekter
 import no.nav.bidrag.dokument.bestilling.model.hentPersonInfo
 import no.nav.bidrag.dokument.bestilling.model.hentSivilstand
@@ -55,7 +57,7 @@ class VedtakService(private val bidragVedtakConsumer: BidragVedtakConsumer, priv
                     sivilstandBeskrivelse = it.beskrivelse
                 )
             },
-            vedtakBarn = vedtakBarnInfo.filter { it.medIBeregning == true }.map { mapVedtakBarn(it, vedtakDto) }
+            vedtakBarn = vedtakBarnInfo.filter { it.medIBeregning == true }.distinctBy { it.fnr }.map { mapVedtakBarn(it, vedtakDto) }
         )
     }
 
@@ -67,10 +69,12 @@ class VedtakService(private val bidragVedtakConsumer: BidragVedtakConsumer, priv
     }
 
     fun mapVedtakBarn(barnInfo: BarnInfo, vedtak: VedtakDto): VedtakBarn {
+        val bostatus = vedtak.hentBostatus(barnInfo.fnr)
         return VedtakBarn(
             fodselsnummer = barnInfo.fnr,
             navn = barnInfo.navn,
             harSammeAdresse = barnInfo.harSammeAdresse ?: false,
+            bostatusPerioder = bostatus.map { BostatusPeriode(it.datoFom, it.datoTil, it.bostatusKode) },
             vedtakDetaljer = hentVedtakListe(barnInfo.fnr, vedtak)
         )
     }

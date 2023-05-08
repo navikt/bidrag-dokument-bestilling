@@ -6,6 +6,7 @@ import no.nav.bidrag.behandling.felles.dto.vedtak.VedtakDto
 import no.nav.bidrag.behandling.felles.enums.GrunnlagType
 import no.nav.bidrag.behandling.felles.enums.Rolle
 import no.nav.bidrag.behandling.felles.grunnlag.BarnInfo
+import no.nav.bidrag.behandling.felles.grunnlag.Bostatus
 import no.nav.bidrag.behandling.felles.grunnlag.PersonInfo
 import no.nav.bidrag.behandling.felles.grunnlag.Sivilstand
 import no.nav.bidrag.behandling.felles.grunnlag.SoknadInfo
@@ -42,6 +43,7 @@ fun <T> VedtakDto.hentGrunnagDetaljer(grunnlagType: GrunnlagType, clazz: Class<T
     .filter { referanser.isEmpty() || referanser.contains(it.referanse) }
     .map { objectMapper.readValue(it.innhold.toString(), clazz) }
 fun VedtakDto.hentBarnInfo(): List<BarnInfo> = hentGrunnagDetaljer(GrunnlagType.BARN_INFO, BarnInfo::class.java)
+fun VedtakDto.hentBostatus(fodselsnummer: String): List<Bostatus> = hentGrunnagDetaljer(GrunnlagType.SOKNADSBARN_INFO, SoknadsbarnInfo::class.java).find { it.fnr == fodselsnummer }?.let { sb -> hentGrunnagDetaljer(GrunnlagType.BOSTATUS, Bostatus::class.java).filter { it.soknadsbarnId == sb.soknadsbarnId  }} ?: emptyList()
 fun VedtakDto.hentPersonInfo(rolle: Rolle): PersonInfo? = hentGrunnagDetaljer(GrunnlagType.PERSON_INFO, PersonInfo::class.java).find { it.rolle == rolle }
 fun VedtakDto.hentVedtakInfo(): VedtakInfo? = grunnlagListe.find { it.type == GrunnlagType.VEDTAK_INFO }?.let { objectMapper.readValue(it.innhold.toString(), VedtakInfo::class.java) }
 fun VedtakDto.hentSoknadInfo(): SoknadInfo? = grunnlagListe.find { it.type == GrunnlagType.SOKNAD_INFO }?.let { objectMapper.readValue(it.innhold.toString(), SoknadInfo::class.java) }

@@ -1,5 +1,6 @@
 package no.nav.bidrag.dokument.bestilling.bestilling.dto
 
+import no.nav.bidrag.behandling.felles.enums.BostatusKode
 import no.nav.bidrag.behandling.felles.enums.InntektType
 import no.nav.bidrag.behandling.felles.enums.SivilstandKode
 import no.nav.bidrag.behandling.felles.enums.StonadType
@@ -186,7 +187,14 @@ data class VedtakBarn(
     val fodselsnummer: String,
     val navn: String?,
     val harSammeAdresse: Boolean,
+    val bostatusPerioder: List<BostatusPeriode>,
     val vedtakDetaljer: List<VedtakBarnDetaljer> = emptyList()
+)
+
+data class BostatusPeriode(
+    val fomDato: LocalDate,
+    val tomDato: LocalDate? = null,
+    val bostatusKode: BostatusKode
 )
 
 data class VedtakBarnDetaljer(
