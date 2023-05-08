@@ -3,6 +3,7 @@ package no.nav.bidrag.dokument.bestilling.tjenester
 import no.nav.bidrag.behandling.felles.dto.vedtak.VedtakDto
 import no.nav.bidrag.behandling.felles.enums.StonadType
 import no.nav.bidrag.behandling.felles.grunnlag.BarnInfo
+import no.nav.bidrag.dokument.bestilling.bestilling.dto.BarnIHustandPeriode
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.BostatusPeriode
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.GrunnlagForskuddPeriode
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.GrunnlagInntektType
@@ -15,6 +16,7 @@ import no.nav.bidrag.dokument.bestilling.bestilling.dto.VedtakPeriode
 import no.nav.bidrag.dokument.bestilling.consumer.BidragVedtakConsumer
 import no.nav.bidrag.dokument.bestilling.model.SoknadFra
 import no.nav.bidrag.dokument.bestilling.model.fantIkkeVedtak
+import no.nav.bidrag.dokument.bestilling.model.hentBarnIHustand
 import no.nav.bidrag.dokument.bestilling.model.hentBarnInfo
 import no.nav.bidrag.dokument.bestilling.model.hentBeregningsgrunnlag
 import no.nav.bidrag.dokument.bestilling.model.hentBostatus
@@ -58,7 +60,8 @@ class VedtakService(private val bidragVedtakConsumer: BidragVedtakConsumer, priv
                     sivilstandBeskrivelse = it.beskrivelse
                 )
             },
-            vedtakBarn = vedtakBarnInfo.filter { it.medIBeregning == true }.distinctBy { it.fnr }.map { mapVedtakBarn(it, vedtakDto) }
+            vedtakBarn = vedtakBarnInfo.filter { it.medIBeregning == true }.distinctBy { it.fnr }.map { mapVedtakBarn(it, vedtakDto) },
+            barnIHustandPerioder = vedtakDto.hentBarnIHustand().map { BarnIHustandPeriode(it.datoFom, it.datoTil, it.antall.toInt()) }
         )
     }
 

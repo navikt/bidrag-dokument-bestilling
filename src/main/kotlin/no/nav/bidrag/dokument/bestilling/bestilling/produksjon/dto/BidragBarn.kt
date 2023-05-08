@@ -19,7 +19,7 @@ class BidragBarn {
     var inntektPerioder: MutableList<InntektPeriode> = mutableListOf()
 
     @XmlElement(name = "perForskBarn", nillable = true)
-    var forskuddBarn: ForskuddBarn? = null
+    var forskuddBarnPerioder: MutableList<ForskuddBarnPeriode> = mutableListOf()
 
     @XmlElement(name = "perForskSiv", nillable = true)
     var forskuddSivilstandPerioder: MutableList<ForskuddSivilstandPeriode> = mutableListOf()
@@ -36,10 +36,10 @@ class BidragBarn {
         return initValue
     }
 
-    fun forskuddBarn(init: ForskuddBarn.() -> Unit): ForskuddBarn {
-        val initValue = ForskuddBarn()
+    fun forskuddBarnPeriode(init: ForskuddBarnPeriode.() -> Unit): ForskuddBarnPeriode {
+        val initValue = ForskuddBarnPeriode()
         initValue.init()
-        forskuddBarn = initValue
+        forskuddBarnPerioder.add(initValue)
         return initValue
     }
 
@@ -73,7 +73,7 @@ class BidragBarn {
 @Suppress("unused")
 @XmlRootElement(name = "perForskBarn")
 @XmlAccessorType(XmlAccessType.FIELD)
-class ForskuddBarn {
+class ForskuddBarnPeriode {
     @XmlElement(name = "antBarn", nillable = true)
     @XmlJavaTypeAdapter(NumberAdapter::class)
     var antallBarn: Int? = 0
