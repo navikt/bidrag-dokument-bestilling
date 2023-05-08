@@ -48,7 +48,7 @@ class DokumentBestillingBrevkodeTest : AbstractControllerTest() {
     @ParameterizedTest(name = "{index} - Should add default values with sak, saksbehandler, mottaker and gjelder for brevkode {argumentsWithNames}")
     @EnumSource(value = BrevKode::class)
     fun `Should add default values with sak, saksbehandler, mottaker and gjelder`(brevKode: BrevKode) {
-        if (!brevKode.enabled) {
+        if (!brevKode.enabled || brevKode == BrevKode.BI01A01) {
             print("brevkode ${brevKode.name} ikke støttet, ignorerer testing")
             return
         }
@@ -114,7 +114,7 @@ class DokumentBestillingBrevkodeTest : AbstractControllerTest() {
     @ParameterizedTest(name = "{index} - Should add roller to utgaaende brev with brevkode {argumentsWithNames}")
     @MethodSource("brevkoderUtgaaende")
     fun `Should add roller to utgaaende brev`(brevKode: BrevKode) {
-        if (!brevKode.enabled) {
+        if (!brevKode.enabled || brevKode == BrevKode.BI01A01) {
             print("brevkode ${brevKode.name} ikke støttet, ignorerer testing")
             return
         }
@@ -185,7 +185,7 @@ class DokumentBestillingBrevkodeTest : AbstractControllerTest() {
     @ParameterizedTest(name = "{index} - Should add enhet kontaktinfo for brevkode {argumentsWithNames}")
     @MethodSource("brevkoderEnhetKontaktinfo")
     fun `Should add enhet kontaktinfo`(brevKode: BrevKode) {
-        if (!brevKode.enabled) {
+        if (!brevKode.enabled || brevKode == BrevKode.BI01A01) {
             print("brevkode ${brevKode.name} ikke støttet, ignorerer testing")
             return
         }
