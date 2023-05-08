@@ -171,6 +171,7 @@ data class VedtakDetaljer(
     val søknadFra: SoknadFra? = null,
     val kilde: VedtakKilde,
     val vedtakBarn: List<VedtakBarn> = emptyList(),
+    val barnIHustandPerioder: List<BarnIHustandPeriode> = emptyList(),
     var sivilstandPerioder: List<SivilstandPeriode> = emptyList(),
     var grunnlagForskuddPerioder: List<GrunnlagForskuddPeriode> = emptyList()
 ) {
@@ -181,7 +182,11 @@ data class VedtakDetaljer(
         ?.vedtakPerioder?.find { it.tomDato == null }
         ?.beløp
 }
-
+data class BarnIHustandPeriode(
+    val fomDato: LocalDate,
+    val tomDato: LocalDate? = null,
+    val antall: Int
+)
 data class VedtakBarn(
     val fodselsnummer: String,
     val navn: String?,

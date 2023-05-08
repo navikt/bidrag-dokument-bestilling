@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import no.nav.bidrag.behandling.felles.dto.vedtak.VedtakDto
 import no.nav.bidrag.behandling.felles.enums.GrunnlagType
 import no.nav.bidrag.behandling.felles.enums.Rolle
+import no.nav.bidrag.behandling.felles.grunnlag.BarnIHusstand
 import no.nav.bidrag.behandling.felles.grunnlag.BarnInfo
 import no.nav.bidrag.behandling.felles.grunnlag.Bostatus
 import no.nav.bidrag.behandling.felles.grunnlag.PersonInfo
@@ -14,6 +15,7 @@ import no.nav.bidrag.behandling.felles.grunnlag.SoknadsbarnInfo
 import no.nav.bidrag.behandling.felles.grunnlag.VedtakInfo
 import no.nav.bidrag.behandling.felles.grunnlag.delberegning.SluttberegningBBM
 import no.nav.bidrag.behandling.felles.grunnlag.inntekt.Inntekt
+import no.nav.bidrag.dokument.bestilling.bestilling.dto.BarnIHustandPeriode
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.GrunnlagInntektType
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.InntektPeriode
 import java.math.BigDecimal
@@ -59,6 +61,7 @@ fun VedtakDto.hentPersonInfo(rolle: Rolle): PersonInfo? = hentGrunnagDetaljer(Gr
 fun VedtakDto.hentVedtakInfo(): VedtakInfo? = grunnlagListe.find { it.type == GrunnlagType.VEDTAK_INFO }?.let { objectMapper.readValue(it.innhold.toString(), VedtakInfo::class.java) }
 fun VedtakDto.hentSoknadInfo(): SoknadInfo? = grunnlagListe.find { it.type == GrunnlagType.SOKNAD_INFO }?.let { objectMapper.readValue(it.innhold.toString(), SoknadInfo::class.java) }
 fun VedtakDto.hentSivilstand(): List<Sivilstand> = hentGrunnagDetaljer(GrunnlagType.SIVILSTAND, Sivilstand::class.java)
+fun VedtakDto.hentBarnIHustand(): List<BarnIHusstand> = hentGrunnagDetaljer(GrunnlagType.BARN_I_HUSSTAND, BarnIHusstand::class.java)
 
 fun List<InntektPeriode>.hentBeregningsgrunnlag(): MutableList<InntektPeriode> {
     val beregningsGrunnlagListe = mutableListOf<InntektPeriode>()

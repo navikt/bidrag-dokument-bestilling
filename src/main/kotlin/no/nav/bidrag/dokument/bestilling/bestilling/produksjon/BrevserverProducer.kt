@@ -170,10 +170,13 @@ class BrevserverProducer(
                             fnr = vedtakBarn.fodselsnummer
                             saksnr = dokumentBestilling.saksnummer
                         }
-                        forskuddBarn {
-                            fomDato = vedtakInfo.virkningDato
-                            tomDato = defaultToDate
-                            antallBarn = vedtakInfo.vedtakBarn.size
+
+                        vedtakInfo.barnIHustandPerioder.forEach {
+                            forskuddBarnPeriode {
+                                fomDato = it.fomDato
+                                tomDato = it.tomDato ?: defaultToDate
+                                antallBarn = it.antall
+                            }
                         }
                         vedtakInfo.grunnlagForskuddPerioder.forEach {
                             inntektGrunnlagForskuddPeriode {
