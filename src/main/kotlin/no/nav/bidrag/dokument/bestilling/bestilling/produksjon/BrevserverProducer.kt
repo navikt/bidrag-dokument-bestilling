@@ -28,6 +28,7 @@ import org.springframework.beans.factory.annotation.Value
 import org.springframework.jms.core.JmsTemplate
 import org.springframework.stereotype.Component
 import java.time.LocalDate
+import java.util.*
 
 @Component(BestillingSystem.BREVSERVER)
 class BrevserverProducer(
@@ -172,6 +173,21 @@ class BrevserverProducer(
                             tomDato = defaultToDate
                             antallBarn = vedtakInfo.vedtakBarn.size
                         }
+                        vedtakInfo.grunnlagForskuddPerioder.forEach {
+                            inntektGrunnlagForskuddPeriode {
+                                fomDato = it.fomDato
+                                tomDato = it.tomDato
+                                antallBarn = it.antallBarn
+                                forsorgerKode = when (it.forsorgerType) {
+                                    ForsorgerType.ENSLIG -> "EN"
+                                    ForsorgerType.GIFT_SAMBOER -> "GS"
+                                }
+                                belop50fra = it.beløp50Prosent.fraVerdi()
+                                belop50til = it.beløp50Prosent.tilVerdi()
+                                belop75fra = it.beløp75Prosent.fraVerdi()
+                                belop75til = it.beløp75Prosent.tilVerdi()
+                            }
+                        }
                         vedtakInfo.sivilstandPerioder.forEach { sivilstand ->
                             forskuddSivilstandPeriode {
                                 fomDato = sivilstand.fomDato
@@ -190,21 +206,6 @@ class BrevserverProducer(
                                     beløp = vedtakPeriode.beløp
                                     prosent = vedtakPeriode.resultatKode.padStart(3, '0')
                                     maksInntekt = vedtakPeriode.beløp * dokumentBestilling.sjablonDetaljer.multiplikatorInntekstgrenseForskudd
-                                }
-                                vedtakInfo.grunnlagForskuddPerioder.forEach {
-                                    inntektGrunnlagForskuddPeriode {
-                                        fomDato = it.fomDato
-                                        tomDato = it.tomDato
-                                        antallBarn = it.antallBarn
-                                        forsorgerKode = when (it.forsorgerType) {
-                                            ForsorgerType.ENSLIG -> "EN"
-                                            ForsorgerType.GIFT_SAMBOER -> "GS"
-                                        }
-                                        belop50fra = it.beløp50Prosent.fraVerdi()
-                                        belop50til = it.beløp50Prosent.tilVerdi()
-                                        belop75fra = it.beløp75Prosent.fraVerdi()
-                                        belop75til = it.beløp75Prosent.tilVerdi()
-                                    }
                                 }
 
                                 vedtakPeriode.inntektPerioder.forEach {
@@ -254,7 +255,6 @@ class BrevserverProducer(
             }
         }
     }
-
     fun mapKontaktInfo(brev: Brev, _kontaktInfo: EnhetKontaktInfo?): BrevKontaktinfo? {
         val kontaktInfo = _kontaktInfo ?: return null
         return brev.brevKontaktinfo {

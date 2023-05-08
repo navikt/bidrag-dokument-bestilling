@@ -13,7 +13,10 @@ import java.math.BigDecimal
 import java.time.LocalDate
 
 typealias GrunnlagRolleType = no.nav.bidrag.behandling.felles.enums.Rolle
-typealias GrunnlagInntektType = InntektType
+data class GrunnlagInntektType(val inntektType: InntektType? = null, val periodeBeregningsGrunnlag: Boolean? = false) {
+    val beskrivelse get() = inntektType?.beskrivelse ?: if (periodeBeregningsGrunnlag == true) "Personens beregningsgrunnlag i perioden" else ""
+    val belopstype get() = inntektType?.belopstype ?: if (periodeBeregningsGrunnlag == true) "XINN" else ""
+}
 data class DokumentBestillingResult(
     val dokumentReferanse: String,
     val journalpostId: String,
@@ -142,6 +145,7 @@ data class InntektPeriode(
     val tomDato: LocalDate? = null,
     val beløpType: GrunnlagInntektType,
     val beløpÅr: Int,
+    val fodselsnummer: String?,
     val beløp: BigDecimal,
     val rolle: GrunnlagRolleType,
     val inntektsgrense: Int

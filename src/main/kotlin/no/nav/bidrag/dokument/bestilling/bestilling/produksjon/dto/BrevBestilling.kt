@@ -5,7 +5,9 @@ import java.math.BigDecimal
 import java.math.RoundingMode
 import java.text.ParseException
 import java.time.LocalDate
+import java.time.ZoneId
 import java.time.format.DateTimeFormatter
+import java.util.*
 import javax.xml.bind.annotation.XmlAccessType
 import javax.xml.bind.annotation.XmlAccessorType
 import javax.xml.bind.annotation.XmlAttribute
@@ -543,6 +545,7 @@ class BirthDateAdapter : XmlAdapter<String, LocalDate?>() {
 }
 
 class DateAdapter : XmlAdapter<String, LocalDate?>() {
+
     override fun marshal(date: LocalDate?): String? {
         return date?.format(BREV_SOKNAD_DATETIME_FORMAT)
     }
@@ -554,8 +557,16 @@ class DateAdapter : XmlAdapter<String, LocalDate?>() {
 }
 
 class PeriodDateAdapter : XmlAdapter<String, LocalDate?>() {
+    fun getLastDayOfPreviousMonth(date: LocalDate): LocalDate {
+        val cDate = GregorianCalendar.from(date.atStartOfDay(ZoneId.systemDefault()))
+        // Subtract one month from the current date
+        cDate.add(Calendar.MONTH, -1)
+        // Set the day of the month to the last day of the month
+        cDate.set(Calendar.DAY_OF_MONTH, cDate.getActualMaximum(Calendar.DAY_OF_MONTH))
+        return LocalDate.from(cDate.toZonedDateTime())
+    }
     override fun marshal(date: LocalDate?): String? {
-        val fromDate = date ?: LocalDate.parse("9999-12-31")
+        val fromDate = date?.let { getLastDayOfPreviousMonth(it) } ?: LocalDate.parse("9999-12-31")
         return fromDate.format(BREV_SOKNAD_DATETIME_FORMAT)
     }
 
