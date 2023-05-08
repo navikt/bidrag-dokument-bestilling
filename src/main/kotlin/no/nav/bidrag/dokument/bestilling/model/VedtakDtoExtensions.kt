@@ -26,6 +26,17 @@ fun VedtakDto.hentInntekter(referanser: List<String>, resultatKode: String): Lis
     val referanserGrunnlag: List<String> = sluttBeregninger.flatMap { it.grunnlagReferanseListe }
     return hentGrunnagDetaljer(GrunnlagType.INNTEKT, Inntekt::class.java, referanserGrunnlag)
 }
+fun SluttberegningBBM.hentSoknadsBarnInfo(vedtakDto: VedtakDto): SoknadsbarnInfo {
+    val referanserGrunnlag: List<String> = grunnlagReferanseListe
+    return vedtakDto.hentGrunnagDetaljer(GrunnlagType.SOKNADSBARN_INFO, SoknadsbarnInfo::class.java, referanserGrunnlag).first()
+}
+fun SluttberegningBBM.hentInntekter(vedtakDto: VedtakDto): List<Inntekt> {
+    val referanserGrunnlag: List<String> = grunnlagReferanseListe
+    return vedtakDto.hentGrunnagDetaljer(GrunnlagType.INNTEKT, Inntekt::class.java, referanserGrunnlag)
+}
+fun VedtakDto.hentSluttberegninger(referanser: List<String>, resultatKode: String): List<SluttberegningBBM> {
+    return hentGrunnagDetaljer(GrunnlagType.SLUTTBEREGNING_BBM, SluttberegningBBM::class.java, referanser).filter { it.resultatKode == resultatKode }
+}
 
 fun VedtakDto.hentSluttberegning(referanser: List<String>): List<SluttberegningBBM> {
     return hentGrunnagDetaljer(GrunnlagType.SLUTTBEREGNING_BBM, SluttberegningBBM::class.java, referanser)

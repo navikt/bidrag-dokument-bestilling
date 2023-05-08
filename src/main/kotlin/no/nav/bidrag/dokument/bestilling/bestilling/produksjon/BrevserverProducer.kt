@@ -219,7 +219,7 @@ class BrevserverProducer(
                                         beskrivelse = it.beløpType.beskrivelse
                                         rolle = it.rolle.toKode()
                                         fnr = it.fodselsnummer
-                                        inntektGrense = dokumentBestilling.sjablonDetaljer.forskuddInntektIntervall
+                                        inntektGrense = dokumentBestilling.sjablonDetaljer.multiplikatorInnteksinslagBarn * vedtakPeriode.beløp
                                     }
                                 }
                             }

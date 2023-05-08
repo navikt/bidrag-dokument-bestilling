@@ -101,7 +101,8 @@ internal class DokumentMetadataCollectorTest {
             multiplikatorInntekstgrenseForskudd = BigDecimal(0),
             fastsettelseGebyr = BigDecimal(0),
             forskuddInntektIntervall = BigDecimal(0),
-            forskuddSats = BigDecimal(0)
+            forskuddSats = BigDecimal(0),
+            multiplikatorInnteksinslagBarn = BigDecimal(0)
         )
     }
 
