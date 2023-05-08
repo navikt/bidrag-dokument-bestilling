@@ -22,6 +22,7 @@ import no.nav.bidrag.dokument.bestilling.model.Saksbehandler
 import no.nav.bidrag.dokument.bestilling.model.SpråkKoder
 import no.nav.bidrag.dokument.bestilling.model.erDødfødt
 import no.nav.bidrag.dokument.bestilling.model.fantIkkeSak
+import no.nav.bidrag.dokument.bestilling.model.manglerVedtakId
 import no.nav.bidrag.dokument.bestilling.tjenester.KodeverkService
 import no.nav.bidrag.dokument.bestilling.tjenester.OrganisasjonService
 import no.nav.bidrag.dokument.bestilling.tjenester.PersonService
@@ -84,8 +85,6 @@ class DokumentMetadataCollector(
         )
         this.forespørsel = forespørsel
 
-        // TODO: Legg til sak opprettet dato (mangler fra sak respons)
-
         return this
     }
 
@@ -97,7 +96,7 @@ class DokumentMetadataCollector(
 
     fun leggTilVedtakData(): DokumentMetadataCollector {
         val vedtakId = forespørsel.vedtakId
-        if (vedtakId.isNullOrEmpty()) return this
+        if (vedtakId.isNullOrEmpty()) manglerVedtakId()
         dokumentBestilling.vedtakDetaljer = vedtakService.hentVedtakDetaljer(vedtakId)
         return this
     }

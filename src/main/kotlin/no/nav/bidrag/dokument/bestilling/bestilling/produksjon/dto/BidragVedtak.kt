@@ -37,6 +37,6 @@ class BidragVedtak {
     var fomDato: LocalDate? = null
 
     @XmlElement(name = "tomDato", nillable = true)
-    @XmlJavaTypeAdapter(DateAdapter::class)
+    @XmlJavaTypeAdapter(PeriodDateAdapter::class)
     var tomDato: LocalDate? = null
 }

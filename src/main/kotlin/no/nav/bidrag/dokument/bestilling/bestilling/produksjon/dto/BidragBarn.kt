@@ -83,7 +83,7 @@ class ForskuddBarn {
     var fomDato: LocalDate? = null
 
     @XmlElement(name = "tomDato", nillable = true)
-    @XmlJavaTypeAdapter(DateAdapter::class)
+    @XmlJavaTypeAdapter(PeriodDateAdapter::class)
     var tomDato: LocalDate? = null
 }
 
@@ -102,7 +102,7 @@ class ForskuddSivilstandPeriode {
     var fomDato: LocalDate? = null
 
     @XmlElement(name = "tomDato", nillable = true)
-    @XmlJavaTypeAdapter(DateAdapter::class)
+    @XmlJavaTypeAdapter(PeriodDateAdapter::class)
     var tomDato: LocalDate? = null
 }
 
@@ -115,7 +115,7 @@ class ForskuddVedtakPeriode {
     var fomDato: LocalDate? = null
 
     @XmlElement(name = "tomDato", nillable = true)
-    @XmlJavaTypeAdapter(DateAdapter::class)
+    @XmlJavaTypeAdapter(PeriodDateAdapter::class)
     var tomDato: LocalDate? = null
 
     @XmlElement(name = "maksInnt", nillable = true)
@@ -148,7 +148,7 @@ class InntektGrunnlagForskuddPeriode {
     var fomDato: LocalDate? = null
 
     @XmlElement(name = "tomDato", nillable = true)
-    @XmlJavaTypeAdapter(DateAdapter::class)
+    @XmlJavaTypeAdapter(PeriodDateAdapter::class)
     var tomDato: LocalDate? = null
 
     @XmlElement(name = "forsorgKd", nillable = true)
@@ -187,7 +187,7 @@ class InntektPeriode {
     var fomDato: LocalDate? = null
 
     @XmlElement(name = "tomDato", nillable = true)
-    @XmlJavaTypeAdapter(DateAdapter::class)
+    @XmlJavaTypeAdapter(PeriodDateAdapter::class)
     var tomDato: LocalDate? = null
 
     @XmlElement(name = "belopTyp", nillable = true)

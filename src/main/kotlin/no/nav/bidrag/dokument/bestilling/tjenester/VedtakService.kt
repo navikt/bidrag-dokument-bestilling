@@ -4,6 +4,7 @@ import no.nav.bidrag.behandling.felles.dto.vedtak.VedtakDto
 import no.nav.bidrag.behandling.felles.enums.StonadType
 import no.nav.bidrag.behandling.felles.grunnlag.BarnInfo
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.GrunnlagForskuddPeriode
+import no.nav.bidrag.dokument.bestilling.bestilling.dto.GrunnlagInntektType
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.InntektPeriode
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.SivilstandPeriode
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.VedtakBarn
@@ -14,7 +15,9 @@ import no.nav.bidrag.dokument.bestilling.consumer.BidragVedtakConsumer
 import no.nav.bidrag.dokument.bestilling.model.SoknadFra
 import no.nav.bidrag.dokument.bestilling.model.fantIkkeVedtak
 import no.nav.bidrag.dokument.bestilling.model.hentBarnInfo
+import no.nav.bidrag.dokument.bestilling.model.hentBeregningsgrunnlag
 import no.nav.bidrag.dokument.bestilling.model.hentInntekter
+import no.nav.bidrag.dokument.bestilling.model.hentPersonInfo
 import no.nav.bidrag.dokument.bestilling.model.hentSivilstand
 import no.nav.bidrag.dokument.bestilling.model.hentSoknadInfo
 import no.nav.bidrag.dokument.bestilling.model.hentVedtakInfo
@@ -72,26 +75,28 @@ class VedtakService(private val bidragVedtakConsumer: BidragVedtakConsumer, priv
     }
     fun hentVedtakListe(barnFodselsnummer: String, vedtakDto: VedtakDto): List<VedtakBarnDetaljer> {
         return vedtakDto.stonadsendringListe.filter { it.kravhaverId == barnFodselsnummer }.map { vedtak ->
-            {}
             VedtakBarnDetaljer(
                 type = vedtak.type,
                 vedtakPerioder = vedtak.periodeListe.map { periode ->
+                    val inntekter = vedtakDto.hentInntekter(periode.grunnlagReferanseListe).map {
+                        val personInfo = vedtakDto.hentPersonInfo(it.rolle)
+                        InntektPeriode(
+                            fomDato = it.datoFom,
+                            tomDato = it.datoTil,
+                            beløpType = GrunnlagInntektType(it.inntektType),
+                            beløpÅr = it.gjelderAar.toInt(),
+                            rolle = it.rolle,
+                            fodselsnummer = personInfo?.fnr,
+                            inntektsgrense = 0, // INNTEKTSINTERVALL_FORSKUDD,
+                            beløp = it.belop
+                        )
+                    }
                     VedtakPeriode(
                         fomDato = periode.fomDato,
                         tomDato = periode.tilDato,
                         beløp = periode.belop ?: BigDecimal(0),
                         resultatKode = periode.resultatkode,
-                        inntektPerioder = vedtakDto.hentInntekter(periode.grunnlagReferanseListe).map {
-                            InntektPeriode(
-                                fomDato = it.datoFom,
-                                tomDato = it.datoTil,
-                                beløpType = it.inntektType,
-                                beløpÅr = it.gjelderAar.toInt(),
-                                rolle = it.rolle,
-                                inntektsgrense = 0, // INNTEKTSINTERVALL_FORSKUDD,
-                                beløp = it.belop
-                            )
-                        }
+                        inntektPerioder = inntekter + inntekter.hentBeregningsgrunnlag()
                     )
                 }
             )
