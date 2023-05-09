@@ -1,5 +1,6 @@
 package no.nav.bidrag.dokument.bestilling.consumer.dto
 
+import no.nav.bidrag.dokument.bestilling.bestilling.dto.PeriodeFraTom
 import java.math.BigDecimal
 import java.time.LocalDate
 
@@ -15,8 +16,29 @@ fun SjablongerDto.hentSisteSjablong(type: SjablongType): SjablonData? {
     return find { it.typeSjablon == type.kode && it.datoTom.isAfter(LocalDate.now()) }
 }
 
-fun SjablongerDto.hentSjablongForDato(type: SjablongType, tomDato: LocalDate): SjablonData? {
-    return sortedByDescending { it.datoTom }.find { it.typeSjablon == type.kode && it.datoTom.isBefore(tomDato) }
+fun SjablongerDto.hentSjablongForTomDato(type: SjablongType, tomDato: LocalDate?): SjablonData? {
+    if (tomDato == null) return hentSisteSjablong(type)
+    return sortedBy { it.datoTom }.find { it.typeSjablon == type.kode && (it.datoTom.isAfter(tomDato) || it.datoTom == tomDato) }
+}
+
+fun SjablongerDto.hentNestePeriodeForSjabloner(typer: List<SjablongType>, fraDato: LocalDate): PeriodeFraTom? {
+    val typerKode = typer.map { it.kode }
+    return sortedBy { it.datoTom }.find { typerKode.contains(it.typeSjablon) && it.datoTom >= fraDato }?.let {
+        val fraDatoPeriode = if (it.datoFom < fraDato) fraDato else it.datoFom
+        PeriodeFraTom(fraDatoPeriode, it.datoTom)
+    }
+}
+
+fun SjablongerDto.hentPerioderForSjabloner(typer: List<SjablongType>, fraDato: LocalDate, tomDato: LocalDate?): List<PeriodeFraTom> {
+    val perioder = mutableListOf<PeriodeFraTom>()
+    val periodeTomDato = tomDato ?: LocalDate.parse("9999-12-31")
+    var periode = hentNestePeriodeForSjabloner(typer, fraDato) ?: return perioder
+    perioder.add(periode)
+    while (periodeTomDato >= periode.tomDato) {
+        periode = hentNestePeriodeForSjabloner(typer, periode.tomDato!!.plusDays(1)) ?: return perioder
+        perioder.add(periode)
+    }
+    return perioder
 }
 
 enum class SjablongType(val kode: String) {

@@ -1,5 +1,6 @@
 package no.nav.bidrag.dokument.bestilling.tjenester
 
+import no.nav.bidrag.behandling.felles.dto.vedtak.StonadsendringDto
 import no.nav.bidrag.behandling.felles.dto.vedtak.VedtakDto
 import no.nav.bidrag.behandling.felles.enums.StonadType
 import no.nav.bidrag.behandling.felles.grunnlag.BarnInfo
@@ -8,12 +9,14 @@ import no.nav.bidrag.dokument.bestilling.bestilling.dto.BostatusPeriode
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.GrunnlagForskuddPeriode
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.GrunnlagInntektType
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.InntektPeriode
+import no.nav.bidrag.dokument.bestilling.bestilling.dto.PeriodeFraTom
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.SivilstandPeriode
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.VedtakBarn
-import no.nav.bidrag.dokument.bestilling.bestilling.dto.VedtakBarnDetaljer
+import no.nav.bidrag.dokument.bestilling.bestilling.dto.VedtakBarnStonad
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.VedtakDetaljer
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.VedtakPeriode
 import no.nav.bidrag.dokument.bestilling.consumer.BidragVedtakConsumer
+import no.nav.bidrag.dokument.bestilling.model.MAX_DATE
 import no.nav.bidrag.dokument.bestilling.model.SoknadFra
 import no.nav.bidrag.dokument.bestilling.model.fantIkkeVedtak
 import no.nav.bidrag.dokument.bestilling.model.hentBarnIHustand
@@ -51,7 +54,6 @@ class VedtakService(private val bidragVedtakConsumer: BidragVedtakConsumer, priv
             vedtakType = vedtakDto.type,
             søknadType = vedtakDto.stonadsendringListe.firstOrNull()?.type,
             søknadFra = SoknadFra.BIDRAGSMOTTAKER,
-            grunnlagForskuddPerioder = hentGrunnlagForskudd(vedtakDto),
             sivilstandPerioder = vedtakDto.hentSivilstand().map {
                 SivilstandPeriode(
                     fomDato = it.datoFom,
@@ -65,11 +67,13 @@ class VedtakService(private val bidragVedtakConsumer: BidragVedtakConsumer, priv
         )
     }
 
-    fun hentGrunnlagForskudd(vedtak: VedtakDto): List<GrunnlagForskuddPeriode> {
-        val vedtakInfo = vedtak.hentVedtakInfo()
-        val erForskudd = vedtak.stonadsendringListe.any { it.type == StonadType.FORSKUDD }
-        if (!erForskudd || vedtakInfo == null) return emptyList()
-        return sjablongService.hentSjablonGrunnlagForskudd(vedtakInfo.virkningDato)
+    fun hentGrunnlagForskudd(stonadsendringListe: List<StonadsendringDto>): List<GrunnlagForskuddPeriode> {
+        val erForskudd = stonadsendringListe.any { it.type == StonadType.FORSKUDD }
+        if (!erForskudd) return emptyList()
+        val perioder = stonadsendringListe.flatMap { it.periodeListe.map { periode -> PeriodeFraTom(periode.fomDato, periode.tilDato ?: MAX_DATE) } }
+        val fraDato = perioder.sortedBy { it.fraDato }.first().fraDato
+        val tomDato = perioder.sortedByDescending { it.tomDato }.first().tomDato
+        return sjablongService.hentSjablonGrunnlagForskudd(fraDato, tomDato)
     }
 
     fun mapVedtakBarn(barnInfo: BarnInfo, vedtak: VedtakDto): VedtakBarn {
@@ -82,34 +86,37 @@ class VedtakService(private val bidragVedtakConsumer: BidragVedtakConsumer, priv
             vedtakDetaljer = hentVedtakListe(barnInfo.fnr, vedtak)
         )
     }
-    fun hentVedtakListe(barnFodselsnummer: String, vedtakDto: VedtakDto): List<VedtakBarnDetaljer> {
-        return vedtakDto.stonadsendringListe.filter { it.kravhaverId == barnFodselsnummer }.map { vedtak ->
-            VedtakBarnDetaljer(
-                type = vedtak.type,
-                vedtakPerioder = vedtak.periodeListe.map { periode ->
-                    val inntekter = vedtakDto.hentSluttberegninger(periode.grunnlagReferanseListe, periode.resultatkode).flatMap { sluttBeregning ->
-                        val soknadBarnInfo = sluttBeregning.hentSoknadsBarnInfo(vedtakDto)
-                        sluttBeregning.hentInntekter(vedtakDto).map {
-                            InntektPeriode(
-                                fomDato = it.datoFom,
-                                tomDato = sluttBeregning.datoTil,
-                                beløpType = GrunnlagInntektType(it.inntektType),
-                                beløpÅr = it.gjelderAar.toInt(),
-                                rolle = it.rolle,
-                                fodselsnummer = soknadBarnInfo.fnr,
-                                beløp = it.belop
-                            )
-                        }
+    fun hentVedtakListe(barnFodselsnummer: String, vedtakDto: VedtakDto): List<VedtakBarnStonad> {
+        val stonadListeBarn = vedtakDto.stonadsendringListe.filter { it.kravhaverId == barnFodselsnummer }
+        return stonadListeBarn.map { vedtak ->
+            val vedtakPerioder = vedtak.periodeListe.map { periode ->
+                val inntekter = vedtakDto.hentSluttberegninger(periode.grunnlagReferanseListe, periode.resultatkode).flatMap { sluttBeregning ->
+                    val soknadBarnInfo = sluttBeregning.hentSoknadsBarnInfo(vedtakDto)
+                    sluttBeregning.hentInntekter(vedtakDto).map {
+                        InntektPeriode(
+                            fomDato = it.datoFom,
+                            tomDato = sluttBeregning.datoTil,
+                            beløpType = GrunnlagInntektType(it.inntektType),
+                            beløpÅr = it.gjelderAar.toInt(),
+                            rolle = it.rolle,
+                            fodselsnummer = soknadBarnInfo.fnr,
+                            beløp = it.belop
+                        )
                     }
-
-                    VedtakPeriode(
-                        fomDato = periode.fomDato,
-                        tomDato = if (periode.resultatkode == "AHI") inntekter[0].tomDato else periode.tilDato, //TODO: Er dette riktig??
-                        beløp = periode.belop ?: BigDecimal(0),
-                        resultatKode = periode.resultatkode,
-                        inntektPerioder = inntekter + inntekter.hentBeregningsgrunnlag()
-                    )
                 }
+
+                VedtakPeriode(
+                    fomDato = periode.fomDato,
+                    tomDato = if (periode.resultatkode == "AHI") inntekter[0].tomDato else periode.tilDato, // TODO: Er dette riktig??
+                    beløp = periode.belop ?: BigDecimal(0),
+                    resultatKode = periode.resultatkode,
+                    inntektPerioder = inntekter + inntekter.hentBeregningsgrunnlag()
+                )
+            }
+            VedtakBarnStonad(
+                type = vedtak.type,
+                grunnlagForskuddPerioder = hentGrunnlagForskudd(stonadListeBarn),
+                vedtakPerioder = vedtakPerioder
             )
         }
     }

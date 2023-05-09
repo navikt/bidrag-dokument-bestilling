@@ -32,7 +32,7 @@ fun SivilstandKode.toKode() = when (this) {
     SivilstandKode.SEPARERT -> "SEPR"
     SivilstandKode.SKILT, SivilstandKode.ENSLIG -> "SKIL"
     SivilstandKode.SKILT_PARTNER -> "SKPA"
-    SivilstandKode.UGIFT-> "UGIF"
+    SivilstandKode.UGIFT -> "UGIF"
     else -> "NULL"
 }
 
