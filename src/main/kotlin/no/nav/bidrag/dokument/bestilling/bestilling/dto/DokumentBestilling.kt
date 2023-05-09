@@ -118,6 +118,7 @@ data class Adresse(
     val land: String? = null
 )
 
+data class PeriodeFraTom(val fraDato: LocalDate, val tomDato: LocalDate? = null)
 typealias BeløpFraTil = Pair<BigDecimal, BigDecimal>
 fun BeløpFraTil.fraVerdi() = this.first
 fun BeløpFraTil.tilVerdi() = this.second
@@ -148,12 +149,12 @@ data class InntektPeriode(
     val beløpÅr: Int,
     val fodselsnummer: String?,
     val beløp: BigDecimal,
-    val rolle: GrunnlagRolleType,
+    val rolle: GrunnlagRolleType
 )
 
 data class GrunnlagForskuddPeriode(
     val fomDato: LocalDate,
-    val tomDato: LocalDate,
+    val tomDato: LocalDate? = null,
     val forsorgerType: ForsorgerType,
     val antallBarn: Int,
     val beløp50Prosent: BeløpFraTil,
@@ -172,8 +173,7 @@ data class VedtakDetaljer(
     val kilde: VedtakKilde,
     val vedtakBarn: List<VedtakBarn> = emptyList(),
     val barnIHustandPerioder: List<BarnIHustandPeriode> = emptyList(),
-    var sivilstandPerioder: List<SivilstandPeriode> = emptyList(),
-    var grunnlagForskuddPerioder: List<GrunnlagForskuddPeriode> = emptyList()
+    var sivilstandPerioder: List<SivilstandPeriode> = emptyList()
 ) {
     fun hentForskuddBarn(fodselsnummer: String): BigDecimal? = vedtakBarn
         .find { it.fodselsnummer == fodselsnummer }
@@ -192,7 +192,7 @@ data class VedtakBarn(
     val navn: String?,
     val harSammeAdresse: Boolean,
     val bostatusPerioder: List<BostatusPeriode>,
-    val vedtakDetaljer: List<VedtakBarnDetaljer> = emptyList()
+    val vedtakDetaljer: List<VedtakBarnStonad> = emptyList()
 )
 
 data class BostatusPeriode(
@@ -201,9 +201,10 @@ data class BostatusPeriode(
     val bostatusKode: BostatusKode
 )
 
-data class VedtakBarnDetaljer(
+data class VedtakBarnStonad(
     val type: StonadType,
-    val vedtakPerioder: List<VedtakPeriode> = emptyList()
+    val vedtakPerioder: List<VedtakPeriode> = emptyList(),
+    val grunnlagForskuddPerioder: List<GrunnlagForskuddPeriode> = emptyList()
 )
 data class SivilstandPeriode(
     val fomDato: LocalDate,
@@ -222,7 +223,7 @@ data class SjablonDetaljer(
     val fastsettelseGebyr: BigDecimal,
     val forskuddInntektIntervall: BigDecimal,
     val forskuddSats: BigDecimal,
-    val multiplikatorInnteksinslagBarn: BigDecimal,
+    val multiplikatorInnteksinslagBarn: BigDecimal
 )
 
 data class SakDetaljer(

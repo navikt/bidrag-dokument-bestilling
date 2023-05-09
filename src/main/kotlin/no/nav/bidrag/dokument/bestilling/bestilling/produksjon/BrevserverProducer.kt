@@ -20,6 +20,7 @@ import no.nav.bidrag.dokument.bestilling.bestilling.produksjon.dto.soknadType
 import no.nav.bidrag.dokument.bestilling.bestilling.produksjon.dto.toKode
 import no.nav.bidrag.dokument.bestilling.consumer.BidragDokumentConsumer
 import no.nav.bidrag.dokument.bestilling.model.BehandlingType
+import no.nav.bidrag.dokument.bestilling.model.MAX_DATE
 import no.nav.bidrag.dokument.dto.AvsenderMottakerDto
 import no.nav.bidrag.dokument.dto.JournalpostType
 import no.nav.bidrag.dokument.dto.OpprettDokumentDto
@@ -27,7 +28,6 @@ import no.nav.bidrag.dokument.dto.OpprettJournalpostRequest
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.jms.core.JmsTemplate
 import org.springframework.stereotype.Component
-import java.time.LocalDate
 import java.util.*
 
 @Component(BestillingSystem.BREVSERVER)
@@ -92,7 +92,6 @@ class BrevserverProducer(
     ): BrevBestilling {
         val dokumentSpraak = dokumentBestilling.spraak ?: "NB"
         val saksbehandlerNavn = dokumentBestilling.saksbehandler?.navn
-        val defaultToDate = LocalDate.parse("9999-12-31")
         val vedtakInfo = dokumentBestilling.vedtakDetaljer
         val antallVedtakBarn = vedtakInfo?.vedtakBarn?.size ?: 0
         return brevbestilling {
@@ -174,38 +173,39 @@ class BrevserverProducer(
                         vedtakInfo.barnIHustandPerioder.forEach {
                             forskuddBarnPeriode {
                                 fomDato = it.fomDato
-                                tomDato = it.tomDato ?: defaultToDate
+                                tomDato = it.tomDato ?: MAX_DATE
                                 antallBarn = it.antall
                             }
                         }
-                        vedtakInfo.grunnlagForskuddPerioder.forEach {
-                            inntektGrunnlagForskuddPeriode {
-                                fomDato = it.fomDato
-                                tomDato = it.tomDato
-                                antallBarn = it.antallBarn
-                                forsorgerKode = when (it.forsorgerType) {
-                                    ForsorgerType.ENSLIG -> "EN"
-                                    ForsorgerType.GIFT_SAMBOER -> "GS"
-                                }
-                                belop50fra = it.beløp50Prosent.fraVerdi()
-                                belop50til = it.beløp50Prosent.tilVerdi()
-                                belop75fra = it.beløp75Prosent.fraVerdi()
-                                belop75til = it.beløp75Prosent.tilVerdi()
-                            }
-                        }
+
                         vedtakInfo.sivilstandPerioder.forEach { sivilstand ->
                             forskuddSivilstandPeriode {
                                 fomDato = sivilstand.fomDato
-                                tomDato = sivilstand.tomDato ?: defaultToDate
+                                tomDato = sivilstand.tomDato ?: MAX_DATE
                                 kode = sivilstand.sivilstandKode.toKode()
                                 beskrivelse = sivilstand.sivilstandBeskrivelse
                             }
                         }
                         vedtakBarn.vedtakDetaljer.forEach { detaljer ->
+                            detaljer.grunnlagForskuddPerioder.forEach {
+                                inntektGrunnlagForskuddPeriode {
+                                    fomDato = it.fomDato
+                                    tomDato = it.tomDato ?: MAX_DATE
+                                    antallBarn = it.antallBarn
+                                    forsorgerKode = when (it.forsorgerType) {
+                                        ForsorgerType.ENSLIG -> "EN"
+                                        ForsorgerType.GIFT_SAMBOER -> "GS"
+                                    }
+                                    belop50fra = it.beløp50Prosent.fraVerdi()
+                                    belop50til = it.beløp50Prosent.tilVerdi()
+                                    belop75fra = it.beløp75Prosent.fraVerdi()
+                                    belop75til = it.beløp75Prosent.tilVerdi()
+                                }
+                            }
                             detaljer.vedtakPerioder.forEach { vedtakPeriode ->
                                 forskuddVedtakPeriode {
                                     fomDato = vedtakPeriode.fomDato
-                                    tomDato = vedtakPeriode.tomDato ?: defaultToDate
+                                    tomDato = vedtakPeriode.tomDato ?: MAX_DATE
                                     fnr = vedtakBarn.fodselsnummer
                                     resultatKode = vedtakPeriode.resultatKode
                                     beløp = vedtakPeriode.beløp
@@ -216,7 +216,7 @@ class BrevserverProducer(
                                 vedtakPeriode.inntektPerioder.forEach {
                                     inntektPeriode {
                                         fomDato = it.fomDato
-                                        tomDato = it.tomDato ?: defaultToDate
+                                        tomDato = it.tomDato ?: MAX_DATE
                                         belopType = it.beløpType.belopstype
                                         belopÅrsinntekt = it.beløp
                                         beskrivelse = it.beløpType.beskrivelse
@@ -232,14 +232,14 @@ class BrevserverProducer(
                         detaljer.vedtakPerioder.forEach {
                             vedtak {
                                 fomDato = it.fomDato
-                                tomDato = it.tomDato ?: defaultToDate
+                                tomDato = it.tomDato ?: MAX_DATE
                                 fnr = vedtakBarn.fodselsnummer
                                 belopBidrag = it.beløp
                                 resultatKode = it.resultatKode
                             }
                             forskuddVedtak {
                                 fomDato = it.fomDato
-                                tomDato = it.tomDato ?: defaultToDate
+                                tomDato = it.tomDato ?: MAX_DATE
                                 fnr = vedtakBarn.fodselsnummer
                                 resultatKode = it.resultatKode
                                 beløp = it.beløp

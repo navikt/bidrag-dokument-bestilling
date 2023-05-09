@@ -148,7 +148,7 @@ class InntektGrunnlagForskuddPeriode {
     var fomDato: LocalDate? = null
 
     @XmlElement(name = "tomDato", nillable = true)
-    @XmlJavaTypeAdapter(PeriodDateAdapter::class)
+    @XmlJavaTypeAdapter(DateAdapter::class)
     var tomDato: LocalDate? = null
 
     @XmlElement(name = "forsorgKd", nillable = true)
