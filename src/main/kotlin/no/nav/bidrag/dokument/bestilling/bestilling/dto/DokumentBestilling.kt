@@ -145,6 +145,7 @@ data class VedtakPeriode(
 data class InntektPeriode(
     val fomDato: LocalDate,
     val tomDato: LocalDate? = null,
+    val sluttBeregningTomDato: LocalDate? = null,
     val beløpType: GrunnlagInntektType,
     val beløpÅr: Int,
     val fodselsnummer: String?,
@@ -168,7 +169,7 @@ data class VedtakDetaljer(
     val soktFraDato: LocalDate?,
     val vedtattDato: LocalDate?,
     val vedtakType: VedtakType,
-    val søknadType: StonadType?,
+    val stønadType: StonadType?,
     val søknadFra: SoknadFra? = null,
     val kilde: VedtakKilde,
     val vedtakBarn: List<VedtakBarn> = emptyList(),
