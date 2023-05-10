@@ -52,7 +52,7 @@ class VedtakService(private val bidragVedtakConsumer: BidragVedtakConsumer, priv
             vedtattDato = vedtakInfo?.vedtakDato,
             kilde = vedtakDto.kilde,
             vedtakType = vedtakDto.type,
-            søknadType = vedtakDto.stonadsendringListe.firstOrNull()?.type,
+            stønadType = vedtakDto.stonadsendringListe.firstOrNull()?.type,
             søknadFra = SoknadFra.BIDRAGSMOTTAKER,
             sivilstandPerioder = vedtakDto.hentSivilstand().map {
                 SivilstandPeriode(
@@ -95,7 +95,8 @@ class VedtakService(private val bidragVedtakConsumer: BidragVedtakConsumer, priv
                     sluttBeregning.hentInntekter(vedtakDto).map {
                         InntektPeriode(
                             fomDato = it.datoFom,
-                            tomDato = sluttBeregning.datoTil,
+                            tomDato = it.datoTil,
+                            sluttBeregningTomDato = sluttBeregning.datoTil,
                             beløpType = GrunnlagInntektType(it.inntektType),
                             beløpÅr = it.gjelderAar.toInt(),
                             rolle = it.rolle,

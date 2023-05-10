@@ -151,7 +151,7 @@ class BrevserverProducer(
                     soknad {
                         aarsakKd = it.virkningÅrsakKode
                         undergrp = hgUgDto?.ug
-                        type = it.søknadType?.let { BehandlingType.valueOf(it.name).kode }
+                        type = it.stønadType?.let { BehandlingType.valueOf(it.name).kode }
 
                         vedtattDato = it.vedtattDato
                         virkningDato = it.virkningDato
