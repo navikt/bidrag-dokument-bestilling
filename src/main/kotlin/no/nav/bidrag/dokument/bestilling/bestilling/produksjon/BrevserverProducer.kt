@@ -215,8 +215,8 @@ class BrevserverProducer(
 
                                 vedtakPeriode.inntektPerioder.forEach {
                                     inntektPeriode {
-                                        fomDato = it.fomDato
-                                        tomDato = it.tomDato ?: MAX_DATE
+                                        fomDato = it.periodeFomDato
+                                        tomDato = it.periodeTomDato ?: MAX_DATE
                                         belopType = it.beløpType.belopstype
                                         belopÅrsinntekt = it.beløp
                                         beskrivelse = it.beløpType.beskrivelse

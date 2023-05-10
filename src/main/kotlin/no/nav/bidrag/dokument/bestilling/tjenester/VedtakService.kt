@@ -92,11 +92,12 @@ class VedtakService(private val bidragVedtakConsumer: BidragVedtakConsumer, priv
             val vedtakPerioder = vedtak.periodeListe.map { periode ->
                 val inntekter = vedtakDto.hentSluttberegninger(periode.grunnlagReferanseListe, periode.resultatkode).flatMap { sluttBeregning ->
                     val soknadBarnInfo = sluttBeregning.hentSoknadsBarnInfo(vedtakDto)
-                    sluttBeregning.hentInntekter(vedtakDto).map {
+                    sluttBeregning.hentInntekter(vedtakDto).filter { it.valgt }.map {
                         InntektPeriode(
                             fomDato = it.datoFom,
                             tomDato = it.datoTil,
-                            sluttBeregningTomDato = sluttBeregning.datoTil,
+                            periodeFomDato = periode.fomDato,
+                            periodeTomDato = periode.tilDato,
                             beløpType = GrunnlagInntektType(it.inntektType),
                             beløpÅr = it.gjelderAar.toInt(),
                             rolle = it.rolle,

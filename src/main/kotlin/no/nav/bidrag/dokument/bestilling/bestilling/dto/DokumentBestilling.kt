@@ -145,7 +145,8 @@ data class VedtakPeriode(
 data class InntektPeriode(
     val fomDato: LocalDate,
     val tomDato: LocalDate? = null,
-    val sluttBeregningTomDato: LocalDate? = null,
+    val periodeFomDato: LocalDate,
+    val periodeTomDato: LocalDate? = null,
     val beløpType: GrunnlagInntektType,
     val beløpÅr: Int,
     val fodselsnummer: String?,
