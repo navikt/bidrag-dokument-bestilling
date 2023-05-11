@@ -1,6 +1,7 @@
 package no.nav.bidrag.dokument.bestilling.bestilling.dto
 
 import no.nav.bidrag.behandling.felles.enums.BostatusKode
+import no.nav.bidrag.behandling.felles.enums.EngangsbelopType
 import no.nav.bidrag.behandling.felles.enums.InntektType
 import no.nav.bidrag.behandling.felles.enums.SivilstandKode
 import no.nav.bidrag.behandling.felles.enums.StonadType
@@ -8,7 +9,6 @@ import no.nav.bidrag.behandling.felles.enums.VedtakKilde
 import no.nav.bidrag.behandling.felles.enums.VedtakType
 import no.nav.bidrag.dokument.bestilling.model.Saksbehandler
 import no.nav.bidrag.dokument.bestilling.model.SoknadFra
-import no.nav.bidrag.dokument.bestilling.model.SoknadType
 import no.nav.bidrag.domain.enums.Rolletype
 import java.math.BigDecimal
 import java.time.LocalDate
@@ -130,18 +130,6 @@ data class PeriodeFraTom(val fraDato: LocalDate, val tomDato: LocalDate? = null)
 typealias BeløpFraTil = Pair<BigDecimal, BigDecimal>
 fun BeløpFraTil.fraVerdi() = this.first
 fun BeløpFraTil.tilVerdi() = this.second
-
-data class Soknad(
-    val soknadDato: LocalDate,
-    val sendtDato: LocalDate,
-    val svarFraDato: LocalDate? = null,
-    val vedtattDato: LocalDate? = null,
-    val virkningDato: LocalDate? = null,
-    val type: SoknadType,
-    val årsak: String,
-    val undergruppe: String,
-    val sakstypeOmr: String? = null // TODO: What is this?,
-)
 data class VedtakPeriode(
     val fomDato: LocalDate,
     val tomDato: LocalDate? = null,
@@ -188,11 +176,13 @@ data class VedtakDetaljer(
     val vedtattDato: LocalDate?,
     val vedtakType: VedtakType,
     val stønadType: StonadType?,
+    val engangsbelopType: EngangsbelopType?,
     val søknadFra: SoknadFra? = null,
     val kilde: VedtakKilde,
     val vedtakBarn: List<VedtakBarn> = emptyList(),
     val barnIHustandPerioder: List<BarnIHustandPeriode> = emptyList(),
-    var sivilstandPerioder: List<SivilstandPeriode> = emptyList()
+    val sivilstandPerioder: List<SivilstandPeriode> = emptyList(),
+    val inntektPerioder: List<InntektPeriode> = emptyList()
 ) {
     fun hentForskuddBarn(fodselsnummer: String): BigDecimal? = vedtakBarn
         .find { it.fodselsnummer == fodselsnummer }

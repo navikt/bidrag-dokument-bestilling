@@ -4,6 +4,7 @@ import no.nav.bidrag.behandling.felles.dto.vedtak.StonadsendringDto
 import no.nav.bidrag.behandling.felles.dto.vedtak.VedtakDto
 import no.nav.bidrag.behandling.felles.enums.StonadType
 import no.nav.bidrag.behandling.felles.grunnlag.SoknadsbarnInfo
+import no.nav.bidrag.behandling.felles.grunnlag.inntekt.Inntekt
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.BarnIHustandPeriode
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.BostatusPeriode
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.GrunnlagForskuddPeriode
@@ -53,6 +54,7 @@ class VedtakService(private val bidragVedtakConsumer: BidragVedtakConsumer, priv
             vedtattDato = vedtakInfo?.vedtakDato,
             kilde = vedtakDto.kilde,
             vedtakType = vedtakDto.type,
+            engangsbelopType = vedtakDto.engangsbelopListe.firstOrNull()?.type,
             stønadType = vedtakDto.stonadsendringListe.firstOrNull()?.type,
             søknadFra = SoknadFra.BIDRAGSMOTTAKER,
             sivilstandPerioder = vedtakDto.hentSivilstand().map {
@@ -77,6 +79,21 @@ class VedtakService(private val bidragVedtakConsumer: BidragVedtakConsumer, priv
         return sjablongService.hentSjablonGrunnlagForskudd(fraDato, tomDato)
     }
 
+    fun mapInntekt(inntekt: Inntekt, vedtak: VedtakDto): InntektPeriode {
+        val person = vedtak.hentPersonInfo(inntekt.rolle)
+        return InntektPeriode(
+            fomDato = inntekt.datoFom,
+            tomDato = inntekt.datoTil,
+            periodeFomDato = inntekt.datoFom,
+            periodeTomDato = inntekt.datoTil,
+            beløpType = GrunnlagInntektType(inntekt.inntektType),
+            beløpÅr = inntekt.gjelderAar.toInt(),
+            rolle = inntekt.rolle,
+            fodselsnummer = person?.fnr,
+            beløp = inntekt.belop,
+            beløpPeriode = BigDecimal(0)
+        )
+    }
     fun mapVedtakBarn(soknadBarn: SoknadsbarnInfo, vedtak: VedtakDto): VedtakBarn {
         val bostatus = vedtak.hentBostatus(soknadBarn.fnr)
         val barnInfo = vedtak.hentBarnInfoForFnr(soknadBarn.fnr)

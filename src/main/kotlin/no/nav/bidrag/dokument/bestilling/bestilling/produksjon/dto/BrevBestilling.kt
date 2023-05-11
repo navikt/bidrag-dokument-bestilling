@@ -451,7 +451,7 @@ class SoknadBost {
     var sendtDato: LocalDate? = LocalDate.now()
 
     @XmlElement(name = "gebyrsats", nillable = true)
-    @XmlJavaTypeAdapter(BelopDecimalAdapter::class)
+    @XmlJavaTypeAdapter(BelopDecimalSatsAdapter::class)
     var gebyrsats: BigDecimal? = null
 
     @XmlElement(name = "innkrSamtid")
@@ -580,6 +580,17 @@ class PeriodDateAdapter : XmlAdapter<String, LocalDate?>() {
 class BelopAdapter : XmlAdapter<String, BigDecimal?>() {
     override fun marshal(value: BigDecimal?): String? {
         return value?.toBigInteger()?.toString()?.padStart(11, '0')
+    }
+
+    @Throws(ParseException::class)
+    override fun unmarshal(value: String?): BigDecimal? {
+        return value?.toBigDecimal()
+    }
+}
+
+class BelopDecimalSatsAdapter : XmlAdapter<String, BigDecimal?>() {
+    override fun marshal(value: BigDecimal?): String? {
+        return value?.setScale(1, RoundingMode.FLOOR).toString()?.padStart(7, '0')
     }
 
     @Throws(ParseException::class)

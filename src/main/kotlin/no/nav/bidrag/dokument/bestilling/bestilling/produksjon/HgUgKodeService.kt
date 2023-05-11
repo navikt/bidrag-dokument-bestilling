@@ -36,9 +36,8 @@ class HgUgKodeService {
         soknadFra: SoknadFra?,
         behandlingType: BehandlingType?
     ): HgUgDto? {
-        val soknTypeConverted = if (soknadType == SoknadType.FASTSETTELSE) SoknadType.SOKNAD else soknadType
         val behandlingTypeConverted = if (behandlingType == BehandlingType.BIDRAG18AAR) BehandlingType.BIDRAG_18_AR else behandlingType
-        return hgUgList.find { it.behandlingType == behandlingTypeConverted && it.soknadType == soknTypeConverted && it.soknadFra == soknadFra }
+        return hgUgList.find { it.behandlingType == behandlingTypeConverted && it.soknadType == soknadType && it.soknadFra == soknadFra }
     }
 
     private fun fetchHgUgKodeListFromFile(): List<HgUgDtoFromJson> {

@@ -36,5 +36,5 @@ fun SivilstandKode.toKode() = when (this) {
     else -> "NULL"
 }
 
-val VedtakDetaljer.behandlingType get(): BehandlingType? = stønadType?.let { type -> BehandlingType.valueOf(type.name) }
-val VedtakDetaljer.soknadType get(): SoknadType? = vedtakType.let { type -> SoknadType.valueOf(type.name) }
+val VedtakDetaljer.behandlingType get(): BehandlingType? = stønadType?.let { type -> BehandlingType.from(type, engangsbelopType) }
+val VedtakDetaljer.soknadType get(): SoknadType? = vedtakType.let { type -> SoknadType.fromVedtakType(type) }
