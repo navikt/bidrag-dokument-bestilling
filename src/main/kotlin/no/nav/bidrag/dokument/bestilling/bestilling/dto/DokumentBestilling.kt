@@ -17,6 +17,11 @@ typealias GrunnlagRolleType = no.nav.bidrag.behandling.felles.enums.Rolle
 data class GrunnlagInntektType(val inntektType: InntektType? = null, val periodeBeregningsGrunnlag: Boolean? = false) {
     val beskrivelse get() = inntektType?.beskrivelse ?: if (periodeBeregningsGrunnlag == true) "Personens beregningsgrunnlag i perioden" else ""
     val belopstype get() = inntektType?.belopstype ?: if (periodeBeregningsGrunnlag == true) "XINN" else ""
+
+    override fun equals(other: Any?): Boolean {
+        return if (other is GrunnlagInntektType) inntektType == other.inntektType && periodeBeregningsGrunnlag == other.periodeBeregningsGrunnlag
+        else super.equals(other)
+    }
 }
 data class DokumentBestillingResult(
     val dokumentReferanse: String,
@@ -151,8 +156,17 @@ data class InntektPeriode(
     val beløpÅr: Int,
     val fodselsnummer: String?,
     val beløp: BigDecimal,
+    val beløpPeriode: BigDecimal,
     val rolle: GrunnlagRolleType
-)
+){
+    override fun equals(other: Any?): Boolean {
+        return if (other is InntektPeriode){
+            beløpType == other.beløpType && fomDato == other.fomDato && tomDato == other.tomDato && beløp == other.beløp
+        } else super.equals(other)
+    }
+
+
+}
 
 data class GrunnlagForskuddPeriode(
     val fomDato: LocalDate,

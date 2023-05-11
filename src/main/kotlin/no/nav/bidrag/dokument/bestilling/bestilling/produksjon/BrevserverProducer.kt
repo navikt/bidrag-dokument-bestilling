@@ -202,6 +202,7 @@ class BrevserverProducer(
                                     belop75til = it.beløp75Prosent.tilVerdi()
                                 }
                             }
+
                             detaljer.vedtakPerioder.forEach { vedtakPeriode ->
                                 forskuddVedtakPeriode {
                                     fomDato = vedtakPeriode.fomDato
@@ -222,7 +223,7 @@ class BrevserverProducer(
                                         beskrivelse = it.beløpType.beskrivelse
                                         rolle = it.rolle.toKode()
                                         fnr = it.fodselsnummer
-                                        inntektGrense = dokumentBestilling.sjablonDetaljer.multiplikatorInnteksinslagBarn * vedtakPeriode.beløp
+                                        inntektGrense = dokumentBestilling.sjablonDetaljer.multiplikatorInnteksinslagBarn * it.beløpPeriode
                                     }
                                 }
                             }

@@ -35,6 +35,10 @@ fun SluttberegningBBM.hentInntekter(vedtakDto: VedtakDto): List<Inntekt> {
     val referanserGrunnlag: List<String> = grunnlagReferanseListe
     return vedtakDto.hentGrunnagDetaljer(GrunnlagType.INNTEKT, Inntekt::class.java, referanserGrunnlag)
 }
+
+fun hentInntekter(vedtakDto: VedtakDto, refListe: List<String>): List<Inntekt> {
+    return vedtakDto.hentGrunnagDetaljer(GrunnlagType.INNTEKT, Inntekt::class.java, refListe)
+}
 fun VedtakDto.hentSluttberegninger(referanser: List<String>, resultatKode: String): List<SluttberegningBBM> {
     return hentGrunnagDetaljer(GrunnlagType.SLUTTBEREGNING_BBM, SluttberegningBBM::class.java, referanser).filter { it.resultatKode == resultatKode }
 }
