@@ -66,6 +66,7 @@ fun VedtakDto.hentPersonInfo(rolle: Rolle): PersonInfo? = hentGrunnagDetaljer(Gr
 fun VedtakDto.hentVedtakInfo(): VedtakInfo? = grunnlagListe.find { it.type == GrunnlagType.VEDTAK_INFO }?.let { objectMapper.readValue(it.innhold.toString(), VedtakInfo::class.java) }
 fun VedtakDto.hentSoknadInfo(): SoknadInfo? = grunnlagListe.find { it.type == GrunnlagType.SOKNAD_INFO }?.let { objectMapper.readValue(it.innhold.toString(), SoknadInfo::class.java) }
 fun VedtakDto.hentSivilstand(): List<Sivilstand> = hentGrunnagDetaljer(GrunnlagType.SIVILSTAND, Sivilstand::class.java)
+fun VedtakDto.hentInntekter(): List<Inntekt> = hentGrunnagDetaljer(GrunnlagType.INNTEKT, Inntekt::class.java)
 fun VedtakDto.hentBarnIHustand(): List<BarnIHusstand> = hentGrunnagDetaljer(GrunnlagType.BARN_I_HUSSTAND, BarnIHusstand::class.java)
 
 fun List<InntektPeriode>.hentBeregningsgrunnlag(): MutableList<InntektPeriode> {

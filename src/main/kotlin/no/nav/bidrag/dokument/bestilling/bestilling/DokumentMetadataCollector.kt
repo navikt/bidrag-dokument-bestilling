@@ -140,7 +140,6 @@ class DokumentMetadataCollector(
         barn.filter { it.fødselsnummer != null }.forEach {
             val barnInfo = if (it.fødselsnummer!!.verdi.erDødfødt) null else personService.hentPerson(it.fødselsnummer!!.verdi, "Barn")
             if (barnInfo == null || !barnInfo.isDod()) {
-                // TODO: Legg til RM fødselsnummer (mangler fra sak respons)
                 dokumentBestilling.roller.add(
                     Barn(
                         fodselsnummer = it.fødselsnummer!!.verdi,

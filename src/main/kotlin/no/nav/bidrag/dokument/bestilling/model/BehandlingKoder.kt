@@ -1,11 +1,14 @@
 package no.nav.bidrag.dokument.bestilling.model
 
+import no.nav.bidrag.behandling.felles.enums.EngangsbelopType
+import no.nav.bidrag.behandling.felles.enums.StonadType
+import no.nav.bidrag.behandling.felles.enums.VedtakType
+
 enum class SoknadType(val kode: String) {
     ENDRING("EN"),
     ENDRING_MOTTAKER("EN"),
     EGET_TILTAK("ET"),
     SOKNAD("FA"),
-    FASTSETTELSE("FA"),
     INNKREVINGSGRUNNL("IG"),
     INNKREVING("IK"),
     INDEKSREGULERING("IR"),
@@ -24,6 +27,20 @@ enum class SoknadType(val kode: String) {
     companion object {
         fun fromKode(kode: String): SoknadType? {
             return SoknadType.values().find { it.kode == kode }
+        }
+
+        fun fromVedtakType(vedtakType: VedtakType): SoknadType {
+            return when (vedtakType) {
+                VedtakType.INDEKSREGULERING -> INDEKSREGULERING
+                VedtakType.FASTSETTELSE -> SOKNAD
+                VedtakType.ENDRING, VedtakType.ENDRING_MOTTAKER -> ENDRING
+                VedtakType.INNKREVING -> INNKREVINGSGRUNNL // Kan være INNKREVINGSGRUNNL, PRIVAT_AVTALE
+                VedtakType.KLAGE -> KLAGE // Kan være KLAGE_BEGR_SATS, KLAGE, FOLGER_KLAGE
+                VedtakType.REVURDERING -> REVURDERING // Kan være REVURDERING, BEGR_REVURD, EGET_TILTAK
+                VedtakType.ALDERSOPPHØR, VedtakType.OPPHØR -> OPPHØR
+                VedtakType.ALDERSJUSTERING -> OPPJUST_FORSK // Kan være EGET_TILTAK, OPPJUST_FORSK
+                else -> ENDRING
+            }
         }
     }
 }
@@ -83,6 +100,25 @@ enum class BehandlingType(val kode: String) {
     companion object {
         fun fromKode(kode: String): BehandlingType? {
             return BehandlingType.values().find { it.kode == kode }
+        }
+
+        fun from(stonadType: StonadType, engangsbelopType: EngangsbelopType?): BehandlingType? {
+            return when (stonadType) {
+                StonadType.FORSKUDD -> FORSKUDD
+                StonadType.BIDRAG -> BIDRAG // Inneholder BIDRAG, BIDRAG_TILLEGGSBIDRAG, TILLEGGSBIDRAG
+                StonadType.BIDRAG18AAR -> BIDRAG_18_AR // Inneholder BIDRAG_18_AR_TILLEGGSBBI, BIDRAG_18_AR
+                StonadType.EKTEFELLEBIDRAG -> EKTEFELLEBIDRAG
+                StonadType.MOTREGNING -> MOTREGNING
+                StonadType.OPPFOSTRINGSBIDRAG -> OPPFOSTRINGSBIDRAG
+                else -> when (engangsbelopType) {
+                    EngangsbelopType.SAERTILSKUDD -> SARTILSKUDD
+                    EngangsbelopType.GEBYR_SKYLDNER, EngangsbelopType.GEBYR_MOTTAKER -> GEBYR
+                    EngangsbelopType.ETTERGIVELSE -> ETTERGIVELSE
+                    EngangsbelopType.TILBAKEKREVING -> TILBAKEKREVING
+                    EngangsbelopType.ETTERGIVELSE_TILBAKEKREVING -> TILBAKEKR_ETTERGIVELSE
+                    else -> null
+                }
+            }
         }
     }
 }
