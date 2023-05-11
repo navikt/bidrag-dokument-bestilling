@@ -81,6 +81,31 @@ class DokumentMap(val applicationContext: ApplicationContext) : MutableMap<BrevK
                     .leggTilRoller()
             }
         )
+        add(
+            BrevKode.BI01A04 to {
+                medMetadataInnsamler(it)
+                    .leggTilMottakerGjelder()
+                    .leggTilEnhetKontaktInfo()
+                    .leggTilVedtakData()
+                    .leggTilRoller()
+            }
+        )
+        add(
+            BrevKode.BI01S08 to {
+                medMetadataInnsamler(it)
+                    .leggTilMottakerGjelder()
+                    .leggTilEnhetKontaktInfo()
+                    .leggTilRoller()
+            }
+        )
+        add(
+            BrevKode.BI01S30 to {
+                medMetadataInnsamler(it)
+                    .leggTilMottakerGjelder()
+                    .leggTilEnhetKontaktInfo()
+                    .leggTilRoller()
+            }
+        )
     }
 
     private fun medMetadataInnsamler(dokumentBestilling: DokumentBestillingForespørsel): DokumentMetadataCollector {
