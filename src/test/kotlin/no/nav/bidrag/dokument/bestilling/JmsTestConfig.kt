@@ -1,5 +1,7 @@
 package no.nav.bidrag.dokument.bestilling
 
+import jakarta.jms.ConnectionFactory
+import jakarta.jms.Queue
 import org.apache.activemq.ActiveMQConnectionFactory
 import org.apache.activemq.command.ActiveMQQueue
 import org.springframework.beans.factory.annotation.Value
@@ -8,8 +10,6 @@ import org.springframework.cache.CacheManager
 import org.springframework.cache.support.NoOpCacheManager
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Profile
-import javax.jms.ConnectionFactory
-import javax.jms.Queue
 
 @TestConfiguration
 class JmsTestConfig {
