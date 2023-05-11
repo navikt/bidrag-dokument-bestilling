@@ -33,7 +33,7 @@ class DokumentBestillingBrevkodeTest : AbstractControllerTest() {
     @SpykBean
     lateinit var dokumentProducer: DokumentProducer
 
-    private val ignoreBrevkoder = listOf(BrevKode.BI01A50, BrevKode.BI01A01)
+    private val ignoreBrevkoder = listOf(BrevKode.BI01A50, BrevKode.BI01A01, BrevKode.BI01A04)
     companion object {
         @JvmStatic
         fun brevkoderUtgaaende() = BrevKode.values().filter { it.brevtype == BrevType.UTGÅENDE }

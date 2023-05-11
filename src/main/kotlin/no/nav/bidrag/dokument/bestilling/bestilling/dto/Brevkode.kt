@@ -76,7 +76,7 @@ enum class BrevKode(val beskrivelse: String, var brevtype: BrevType, val bestill
     BI01S42("Endring ektefellebidrag orientering til søkeren", BrevType.UTGÅENDE, BestillingSystem.BREVSERVER, false, false),
     BI01A50("Klage - vedtak forskudd", BrevType.UTGÅENDE, BestillingSystem.BREVSERVER, false, true),
     BI01A01("Vedtak forskudd", BrevType.UTGÅENDE, BestillingSystem.BREVSERVER, false, true),
-    BI01A04("Revurdering forskudd settes ned", BrevType.UTGÅENDE, BestillingSystem.BREVSERVER, false, false),
+    BI01A04("Revurdering forskudd settes ned", BrevType.UTGÅENDE, BestillingSystem.BREVSERVER, false, true),
     BI01S08("Varsel revurd forskudd", BrevType.UTGÅENDE, BestillingSystem.BREVSERVER, false, false),
     BI01S27("Varsel opph tilbake i tid §2 ikke opphold i Riket", BrevType.UTGÅENDE, BestillingSystem.BREVSERVER, false, false),
     BI01S28("Varsel opph tilbake i tid §2 partene bor sammen", BrevType.UTGÅENDE, BestillingSystem.BREVSERVER, false, false),
