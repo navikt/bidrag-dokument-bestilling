@@ -19,8 +19,11 @@ data class GrunnlagInntektType(val inntektType: InntektType? = null, val periode
     val belopstype get() = inntektType?.belopstype ?: if (periodeBeregningsGrunnlag == true) "XINN" else ""
 
     override fun equals(other: Any?): Boolean {
-        return if (other is GrunnlagInntektType) inntektType == other.inntektType && periodeBeregningsGrunnlag == other.periodeBeregningsGrunnlag
-        else super.equals(other)
+        return if (other is GrunnlagInntektType) {
+            inntektType == other.inntektType && periodeBeregningsGrunnlag == other.periodeBeregningsGrunnlag
+        } else {
+            super.equals(other)
+        }
     }
 }
 data class DokumentBestillingResult(
@@ -158,14 +161,14 @@ data class InntektPeriode(
     val beløp: BigDecimal,
     val beløpPeriode: BigDecimal,
     val rolle: GrunnlagRolleType
-){
+) {
     override fun equals(other: Any?): Boolean {
-        return if (other is InntektPeriode){
+        return if (other is InntektPeriode) {
             beløpType == other.beløpType && fomDato == other.fomDato && tomDato == other.tomDato && beløp == other.beløp
-        } else super.equals(other)
+        } else {
+            super.equals(other)
+        }
     }
-
-
 }
 
 data class GrunnlagForskuddPeriode(

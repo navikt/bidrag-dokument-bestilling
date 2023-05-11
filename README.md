@@ -43,6 +43,7 @@ Deretter kjør følgende kommando for å importere secrets. Viktig at filen som 
 
 ```bash
 kubectl exec --tty deployment/bidrag-dokument-bestilling-feature printenv | grep -E 'AZURE_|_URL|SCOPE' | grep -v -e 'BIDRAG_VEDTAK_URL' > src/test/resources/application-lokal-nais-secrets.properties
+kubectl exec --tty deployment/bidrag-dokument-bestilling printenv | grep -E 'AZURE_|_URL|SCOPE' | grep -v -e 'BIDRAG_VEDTAK_URL' > src/test/resources/application-lokal-nais-secrets.properties
 ```
 
 Start opp applikasjonen ved å kjøre [BidragDokumentBestillingLokal.kt](src/test/kotlin/no/nav/bidrag/dokument/bestilling/BidragDokumentBestillingLokal.kt).

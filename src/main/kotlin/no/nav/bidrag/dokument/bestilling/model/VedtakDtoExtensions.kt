@@ -59,6 +59,8 @@ fun <T> VedtakDto.hentGrunnagDetaljer(grunnlagType: GrunnlagType, clazz: Class<T
     .filter { referanser.isEmpty() || referanser.contains(it.referanse) }
     .map { objectMapper.readValue(it.innhold.toString(), clazz) }
 fun VedtakDto.hentBarnInfo(): List<BarnInfo> = hentGrunnagDetaljer(GrunnlagType.BARN_INFO, BarnInfo::class.java)
+fun VedtakDto.hentBarnInfoForFnr(fnr: String): BarnInfo? = hentGrunnagDetaljer(GrunnlagType.BARN_INFO, BarnInfo::class.java).find { it.fnr == fnr }
+fun VedtakDto.hentSøknadBarnInfo(): List<SoknadsbarnInfo> = hentGrunnagDetaljer(GrunnlagType.SOKNADSBARN_INFO, SoknadsbarnInfo::class.java)
 fun VedtakDto.hentBostatus(fodselsnummer: String): List<Bostatus> = hentGrunnagDetaljer(GrunnlagType.SOKNADSBARN_INFO, SoknadsbarnInfo::class.java).find { it.fnr == fodselsnummer }?.let { sb -> hentGrunnagDetaljer(GrunnlagType.BOSTATUS, Bostatus::class.java).filter { it.soknadsbarnId == sb.soknadsbarnId } } ?: emptyList()
 fun VedtakDto.hentPersonInfo(rolle: Rolle): PersonInfo? = hentGrunnagDetaljer(GrunnlagType.PERSON_INFO, PersonInfo::class.java).find { it.rolle == rolle }
 fun VedtakDto.hentVedtakInfo(): VedtakInfo? = grunnlagListe.find { it.type == GrunnlagType.VEDTAK_INFO }?.let { objectMapper.readValue(it.innhold.toString(), VedtakInfo::class.java) }
