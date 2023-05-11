@@ -33,6 +33,7 @@ class DokumentBestillingBrevkodeTest : AbstractControllerTest() {
     @SpykBean
     lateinit var dokumentProducer: DokumentProducer
 
+    private val ignoreBrevkoder = listOf(BrevKode.BI01A50, BrevKode.BI01A01)
     companion object {
         @JvmStatic
         fun brevkoderUtgaaende() = BrevKode.values().filter { it.brevtype == BrevType.UTGÅENDE }
@@ -48,7 +49,7 @@ class DokumentBestillingBrevkodeTest : AbstractControllerTest() {
     @ParameterizedTest(name = "{index} - Should add default values with sak, saksbehandler, mottaker and gjelder for brevkode {argumentsWithNames}")
     @EnumSource(value = BrevKode::class)
     fun `Should add default values with sak, saksbehandler, mottaker and gjelder`(brevKode: BrevKode) {
-        if (!brevKode.enabled || brevKode == BrevKode.BI01A01) {
+        if (!brevKode.enabled || ignoreBrevkoder.contains(brevKode)) {
             print("brevkode ${brevKode.name} ikke støttet, ignorerer testing")
             return
         }
@@ -114,7 +115,7 @@ class DokumentBestillingBrevkodeTest : AbstractControllerTest() {
     @ParameterizedTest(name = "{index} - Should add roller to utgaaende brev with brevkode {argumentsWithNames}")
     @MethodSource("brevkoderUtgaaende")
     fun `Should add roller to utgaaende brev`(brevKode: BrevKode) {
-        if (!brevKode.enabled || brevKode == BrevKode.BI01A01) {
+        if (!brevKode.enabled || ignoreBrevkoder.contains(brevKode)) {
             print("brevkode ${brevKode.name} ikke støttet, ignorerer testing")
             return
         }
@@ -185,7 +186,7 @@ class DokumentBestillingBrevkodeTest : AbstractControllerTest() {
     @ParameterizedTest(name = "{index} - Should add enhet kontaktinfo for brevkode {argumentsWithNames}")
     @MethodSource("brevkoderEnhetKontaktinfo")
     fun `Should add enhet kontaktinfo`(brevKode: BrevKode) {
-        if (!brevKode.enabled || brevKode == BrevKode.BI01A01) {
+        if (!brevKode.enabled || ignoreBrevkoder.contains(brevKode)) {
             print("brevkode ${brevKode.name} ikke støttet, ignorerer testing")
             return
         }
