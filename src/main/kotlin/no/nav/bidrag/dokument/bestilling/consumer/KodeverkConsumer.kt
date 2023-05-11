@@ -1,5 +1,6 @@
 package no.nav.bidrag.dokument.bestilling.consumer
 
+import jakarta.annotation.PostConstruct
 import no.nav.bidrag.commons.CorrelationId
 import no.nav.bidrag.commons.web.HttpHeaderRestTemplate
 import no.nav.bidrag.dokument.bestilling.config.CacheConfig.Companion.LANDKODER_CACHE
@@ -11,7 +12,6 @@ import org.springframework.cache.CacheManager
 import org.springframework.http.HttpMethod
 import org.springframework.stereotype.Service
 import org.springframework.web.client.RestTemplate
-import javax.annotation.PostConstruct
 
 @Service
 class KodeverkConsumer(@Value("\${KODEVERK_URL}") kodeverkUrl: String, val cacheManager: CacheManager) {

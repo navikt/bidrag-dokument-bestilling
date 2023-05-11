@@ -20,7 +20,7 @@
     <logback-encoder.version>7.3</logback-encoder.version>
     <token-support.version>3.0.12</token-support.version>
     <springframework-cloud.version>4.0.2</springframework-cloud.version>
-    <springdoc.version>1.7.0</springdoc.version>
+    <springdoc.version>2.1.0</springdoc.version>
     <token-support.version>3.0.12</token-support.version>
     <bidrag-commons-test.version>1.20230504132526_a72fa41</bidrag-commons-test.version>
     <ibmmq.version>9.3.2.1</ibmmq.version>
@@ -146,17 +146,7 @@
     <!--SpringDoc-->
     <dependency>
       <groupId>org.springdoc</groupId>
-      <artifactId>springdoc-openapi-kotlin</artifactId>
-      <version>${springdoc.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.springdoc</groupId>
-      <artifactId>springdoc-openapi-ui</artifactId>
-      <version>${springdoc.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.springdoc</groupId>
-      <artifactId>springdoc-openapi-data-rest</artifactId>
+      <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
       <version>${springdoc.version}</version>
     </dependency>
 
@@ -194,8 +184,8 @@
       <artifactId>kotlin-reflect</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.apache.httpcomponents</groupId>
-      <artifactId>httpclient</artifactId>
+      <groupId>org.apache.httpcomponents.client5</groupId>
+      <artifactId>httpclient5</artifactId>
     </dependency>
     <dependency>
       <groupId>com.github.ben-manes.caffeine</groupId>
