@@ -179,8 +179,6 @@ class InntektGrunnlagForskuddPeriode {
 @XmlRootElement(name = "perInntekt")
 @XmlAccessorType(XmlAccessType.FIELD)
 class InntektPeriode {
-    @XmlElement(name = "fnr", nillable = true)
-    var fnr: String? = null
 
     @XmlElement(name = "fomDato", nillable = true)
     @XmlJavaTypeAdapter(DateAdapter::class)
@@ -196,6 +194,9 @@ class InntektPeriode {
     @XmlElement(name = "belopAar", nillable = true)
     @XmlJavaTypeAdapter(BelopAdapter::class)
     var belopÅrsinntekt: BigDecimal? = null
+
+    @XmlElement(name = "fnr", nillable = true)
+    var fnr: String? = null
 
     @XmlElement(name = "bidrRolle", nillable = true)
     var rolle: String? = null

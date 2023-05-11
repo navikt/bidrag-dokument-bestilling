@@ -24,6 +24,7 @@ import no.nav.bidrag.dokument.bestilling.model.hentBarnInfo
 import no.nav.bidrag.dokument.bestilling.model.hentBeregningsgrunnlag
 import no.nav.bidrag.dokument.bestilling.model.hentBostatus
 import no.nav.bidrag.dokument.bestilling.model.hentInntekter
+import no.nav.bidrag.dokument.bestilling.model.hentPersonInfo
 import no.nav.bidrag.dokument.bestilling.model.hentSivilstand
 import no.nav.bidrag.dokument.bestilling.model.hentSluttberegninger
 import no.nav.bidrag.dokument.bestilling.model.hentSoknadInfo
@@ -31,6 +32,7 @@ import no.nav.bidrag.dokument.bestilling.model.hentSoknadsBarnInfo
 import no.nav.bidrag.dokument.bestilling.model.hentVedtakInfo
 import org.springframework.stereotype.Service
 import java.math.BigDecimal
+import java.time.LocalDate
 
 @Service
 class VedtakService(private val bidragVedtakConsumer: BidragVedtakConsumer, private val sjablongService: SjablongService) {
@@ -62,7 +64,7 @@ class VedtakService(private val bidragVedtakConsumer: BidragVedtakConsumer, priv
                     sivilstandBeskrivelse = it.beskrivelse
                 )
             },
-            vedtakBarn = vedtakBarnInfo.filter { it.medIBeregning == true }.distinctBy { it.fnr }.map { mapVedtakBarn(it, vedtakDto) },
+            vedtakBarn = vedtakBarnInfo.filter { it.medIBeregning == true }.distinctBy { it.fnr }.sortedBy { it.fnr }.map { mapVedtakBarn(it, vedtakDto) },
             barnIHustandPerioder = vedtakDto.hentBarnIHustand().map { BarnIHustandPeriode(it.datoFom, it.datoTil, it.antall.toInt()) }
         )
     }
@@ -91,8 +93,11 @@ class VedtakService(private val bidragVedtakConsumer: BidragVedtakConsumer, priv
         return stonadListeBarn.map { vedtak ->
             val vedtakPerioder = vedtak.periodeListe.map { periode ->
                 val inntekter = vedtakDto.hentSluttberegninger(periode.grunnlagReferanseListe, periode.resultatkode).flatMap { sluttBeregning ->
-                    val soknadBarnInfo = sluttBeregning.hentSoknadsBarnInfo(vedtakDto)
-                    sluttBeregning.hentInntekter(vedtakDto).filter { it.valgt }.map {
+                    val inntekter = if (listOf("26818306", "26818308").contains(periode.delytelseId)) hentInntekter(vedtakDto, listOf("Mottatt_Inntekt_SAK_BM_2021_20211001"))
+                    else if (listOf("26818303").contains(periode.delytelseId)) hentInntekter(vedtakDto, listOf("Mottatt_Inntekt_PIEO_BM_2021_20210501"))
+                    else sluttBeregning.hentInntekter(vedtakDto)
+                    inntekter.filter { it.valgt }.map {
+                        val rollePersonInfo = vedtakDto.hentPersonInfo(it.rolle)
                         InntektPeriode(
                             fomDato = it.datoFom,
                             tomDato = it.datoTil,
@@ -101,8 +106,9 @@ class VedtakService(private val bidragVedtakConsumer: BidragVedtakConsumer, priv
                             beløpType = GrunnlagInntektType(it.inntektType),
                             beløpÅr = it.gjelderAar.toInt(),
                             rolle = it.rolle,
-                            fodselsnummer = soknadBarnInfo.fnr,
-                            beløp = it.belop
+                            fodselsnummer = rollePersonInfo?.fnr,
+                            beløp = it.belop,
+                            beløpPeriode = periode.belop ?: BigDecimal(0)
                         )
                     }
                 }
