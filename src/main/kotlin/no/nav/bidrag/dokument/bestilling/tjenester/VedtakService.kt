@@ -3,7 +3,7 @@ package no.nav.bidrag.dokument.bestilling.tjenester
 import no.nav.bidrag.behandling.felles.dto.vedtak.StonadsendringDto
 import no.nav.bidrag.behandling.felles.dto.vedtak.VedtakDto
 import no.nav.bidrag.behandling.felles.enums.StonadType
-import no.nav.bidrag.behandling.felles.grunnlag.BarnInfo
+import no.nav.bidrag.behandling.felles.grunnlag.SoknadsbarnInfo
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.BarnIHustandPeriode
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.BostatusPeriode
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.GrunnlagForskuddPeriode
@@ -20,7 +20,7 @@ import no.nav.bidrag.dokument.bestilling.model.MAX_DATE
 import no.nav.bidrag.dokument.bestilling.model.SoknadFra
 import no.nav.bidrag.dokument.bestilling.model.fantIkkeVedtak
 import no.nav.bidrag.dokument.bestilling.model.hentBarnIHustand
-import no.nav.bidrag.dokument.bestilling.model.hentBarnInfo
+import no.nav.bidrag.dokument.bestilling.model.hentBarnInfoForFnr
 import no.nav.bidrag.dokument.bestilling.model.hentBeregningsgrunnlag
 import no.nav.bidrag.dokument.bestilling.model.hentBostatus
 import no.nav.bidrag.dokument.bestilling.model.hentInntekter
@@ -28,14 +28,13 @@ import no.nav.bidrag.dokument.bestilling.model.hentPersonInfo
 import no.nav.bidrag.dokument.bestilling.model.hentSivilstand
 import no.nav.bidrag.dokument.bestilling.model.hentSluttberegninger
 import no.nav.bidrag.dokument.bestilling.model.hentSoknadInfo
-import no.nav.bidrag.dokument.bestilling.model.hentSoknadsBarnInfo
+import no.nav.bidrag.dokument.bestilling.model.hentSøknadBarnInfo
 import no.nav.bidrag.dokument.bestilling.model.hentVedtakInfo
 import org.springframework.stereotype.Service
 import java.math.BigDecimal
-import java.time.LocalDate
 
 @Service
-class VedtakService(private val bidragVedtakConsumer: BidragVedtakConsumer, private val sjablongService: SjablongService) {
+class VedtakService(private val bidragVedtakConsumer: BidragVedtakConsumer, private val sjablongService: SjablongService, private val personService: PersonService) {
 
     fun hentVedtak(vedtakId: String): VedtakDto {
         return bidragVedtakConsumer.hentVedtak(vedtakId) ?: fantIkkeVedtak(vedtakId)
@@ -45,7 +44,7 @@ class VedtakService(private val bidragVedtakConsumer: BidragVedtakConsumer, priv
         val vedtakDto = hentVedtak(vedtakId)
         val vedtakInfo = vedtakDto.hentVedtakInfo()
         val soknadInfo = vedtakDto.hentSoknadInfo()
-        val vedtakBarnInfo = vedtakDto.hentBarnInfo()
+        val vedtakBarnInfo = vedtakDto.hentSøknadBarnInfo()
         return VedtakDetaljer(
             virkningÅrsakKode = vedtakInfo?.kodeVirkningAarsak,
             virkningDato = vedtakInfo?.virkningDato,
@@ -64,7 +63,7 @@ class VedtakService(private val bidragVedtakConsumer: BidragVedtakConsumer, priv
                     sivilstandBeskrivelse = it.beskrivelse
                 )
             },
-            vedtakBarn = vedtakBarnInfo.filter { it.medIBeregning == true }.distinctBy { it.fnr }.sortedBy { it.fnr }.map { mapVedtakBarn(it, vedtakDto) },
+            vedtakBarn = vedtakBarnInfo.distinctBy { it.fnr }.sortedBy { it.fnr }.map { mapVedtakBarn(it, vedtakDto) },
             barnIHustandPerioder = vedtakDto.hentBarnIHustand().map { BarnIHustandPeriode(it.datoFom, it.datoTil, it.antall.toInt()) }
         )
     }
@@ -78,14 +77,16 @@ class VedtakService(private val bidragVedtakConsumer: BidragVedtakConsumer, priv
         return sjablongService.hentSjablonGrunnlagForskudd(fraDato, tomDato)
     }
 
-    fun mapVedtakBarn(barnInfo: BarnInfo, vedtak: VedtakDto): VedtakBarn {
-        val bostatus = vedtak.hentBostatus(barnInfo.fnr)
+    fun mapVedtakBarn(soknadBarn: SoknadsbarnInfo, vedtak: VedtakDto): VedtakBarn {
+        val bostatus = vedtak.hentBostatus(soknadBarn.fnr)
+        val barnInfo = vedtak.hentBarnInfoForFnr(soknadBarn.fnr)
+        val personInfo = personService.hentPerson(soknadBarn.fnr)
         return VedtakBarn(
-            fodselsnummer = barnInfo.fnr,
-            navn = barnInfo.navn,
-            harSammeAdresse = barnInfo.harSammeAdresse ?: false,
+            fodselsnummer = soknadBarn.fnr,
+            navn = personInfo.kortnavn?.verdi,
+            harSammeAdresse = barnInfo?.harSammeAdresse ?: true,
             bostatusPerioder = bostatus.map { BostatusPeriode(it.datoFom, it.datoTil, it.bostatusKode) },
-            vedtakDetaljer = hentVedtakListe(barnInfo.fnr, vedtak)
+            vedtakDetaljer = hentVedtakListe(soknadBarn.fnr, vedtak)
         )
     }
     fun hentVedtakListe(barnFodselsnummer: String, vedtakDto: VedtakDto): List<VedtakBarnStonad> {
@@ -93,9 +94,13 @@ class VedtakService(private val bidragVedtakConsumer: BidragVedtakConsumer, priv
         return stonadListeBarn.map { vedtak ->
             val vedtakPerioder = vedtak.periodeListe.map { periode ->
                 val inntekter = vedtakDto.hentSluttberegninger(periode.grunnlagReferanseListe, periode.resultatkode).flatMap { sluttBeregning ->
-                    val inntekter = if (listOf("26818306", "26818308").contains(periode.delytelseId)) hentInntekter(vedtakDto, listOf("Mottatt_Inntekt_SAK_BM_2021_20211001"))
-                    else if (listOf("26818303").contains(periode.delytelseId)) hentInntekter(vedtakDto, listOf("Mottatt_Inntekt_PIEO_BM_2021_20210501"))
-                    else sluttBeregning.hentInntekter(vedtakDto)
+                    val inntekter = if (listOf("26818306", "26818308").contains(periode.delytelseId)) {
+                        hentInntekter(vedtakDto, listOf("Mottatt_Inntekt_SAK_BM_2021_20211001"))
+                    } else if (listOf("26818303").contains(periode.delytelseId)) {
+                        hentInntekter(vedtakDto, listOf("Mottatt_Inntekt_PIEO_BM_2021_20210501"))
+                    } else {
+                        sluttBeregning.hentInntekter(vedtakDto)
+                    }
                     inntekter.filter { it.valgt }.map {
                         val rollePersonInfo = vedtakDto.hentPersonInfo(it.rolle)
                         InntektPeriode(
