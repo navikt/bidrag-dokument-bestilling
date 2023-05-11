@@ -2,6 +2,7 @@ package no.nav.bidrag.dokument.bestilling.tjenester
 
 import no.nav.bidrag.behandling.felles.dto.vedtak.StonadsendringDto
 import no.nav.bidrag.behandling.felles.dto.vedtak.VedtakDto
+import no.nav.bidrag.behandling.felles.enums.Innkreving
 import no.nav.bidrag.behandling.felles.enums.StonadType
 import no.nav.bidrag.behandling.felles.grunnlag.SoknadsbarnInfo
 import no.nav.bidrag.behandling.felles.grunnlag.inntekt.Inntekt
@@ -20,6 +21,7 @@ import no.nav.bidrag.dokument.bestilling.consumer.BidragVedtakConsumer
 import no.nav.bidrag.dokument.bestilling.model.MAX_DATE
 import no.nav.bidrag.dokument.bestilling.model.SoknadFra
 import no.nav.bidrag.dokument.bestilling.model.fantIkkeVedtak
+import no.nav.bidrag.dokument.bestilling.model.getLastDayOfPreviousMonth
 import no.nav.bidrag.dokument.bestilling.model.hentBarnIHustand
 import no.nav.bidrag.dokument.bestilling.model.hentBarnInfoForFnr
 import no.nav.bidrag.dokument.bestilling.model.hentBeregningsgrunnlag
@@ -91,7 +93,7 @@ class VedtakService(private val bidragVedtakConsumer: BidragVedtakConsumer, priv
             rolle = inntekt.rolle,
             fodselsnummer = person?.fnr,
             beløp = inntekt.belop,
-            beløpPeriode = BigDecimal(0)
+            inntektGrense = sjablongService.hentInntektGrenseForPeriode(getLastDayOfPreviousMonth(inntekt.datoTil))
         )
     }
     fun mapVedtakBarn(soknadBarn: SoknadsbarnInfo, vedtak: VedtakDto): VedtakBarn {
@@ -130,7 +132,7 @@ class VedtakService(private val bidragVedtakConsumer: BidragVedtakConsumer, priv
                             rolle = it.rolle,
                             fodselsnummer = rollePersonInfo?.fnr,
                             beløp = it.belop,
-                            beløpPeriode = periode.belop ?: BigDecimal(0)
+                            inntektGrense = sjablongService.hentInntektGrenseForPeriode(getLastDayOfPreviousMonth(periode.tilDato))
                         )
                     }
                 }
@@ -145,6 +147,7 @@ class VedtakService(private val bidragVedtakConsumer: BidragVedtakConsumer, priv
             }
             VedtakBarnStonad(
                 type = vedtak.type,
+                innkreving = vedtak.innkreving == Innkreving.JA,
                 grunnlagForskuddPerioder = hentGrunnlagForskudd(stonadListeBarn),
                 vedtakPerioder = vedtakPerioder
             )

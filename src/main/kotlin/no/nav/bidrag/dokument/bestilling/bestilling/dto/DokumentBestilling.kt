@@ -147,7 +147,7 @@ data class InntektPeriode(
     val beløpÅr: Int,
     val fodselsnummer: String?,
     val beløp: BigDecimal,
-    val beløpPeriode: BigDecimal,
+    val inntektGrense: BigDecimal,
     val rolle: GrunnlagRolleType
 ) {
     override fun equals(other: Any?): Boolean {
@@ -212,6 +212,7 @@ data class BostatusPeriode(
 
 data class VedtakBarnStonad(
     val type: StonadType,
+    val innkreving: Boolean,
     val vedtakPerioder: List<VedtakPeriode> = emptyList(),
     val grunnlagForskuddPerioder: List<GrunnlagForskuddPeriode> = emptyList()
 )

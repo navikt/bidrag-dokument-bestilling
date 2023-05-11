@@ -27,6 +27,14 @@ class SjablongService(val sjablonConsumer: SjablonConsumer) {
             multiplikatorInnteksinslagBarn = sjablonger.hentSisteSjablong(SjablongType.MULTIPLIKATOR_INNTEKTSINNSLAG_BIDRAGSBARN)?.verdi ?: BigDecimal(0)
         )
     }
+
+    fun hentInntektGrenseForPeriode(periodeTomDato: LocalDate?): BigDecimal {
+        val sjablonger = sjablonConsumer.hentSjablonger()!!
+        val forskuddSats = sjablonger.hentSjablongForTomDato(SjablongType.FORSKUDDSSATS, periodeTomDato)!!
+        val multiplikatorInnteksinslagBarn = sjablonger.hentSjablongForTomDato(SjablongType.MULTIPLIKATOR_INNTEKTSINNSLAG_BIDRAGSBARN, periodeTomDato)!!
+        return forskuddSats.verdi * multiplikatorInnteksinslagBarn.verdi
+
+    }
     fun hentSjablonGrunnlagForskudd(fraDato: LocalDate, tomDato: LocalDate? = null): List<GrunnlagForskuddPeriode> {
         val sjablonger = sjablonConsumer.hentSjablonger() ?: return emptyList()
 
