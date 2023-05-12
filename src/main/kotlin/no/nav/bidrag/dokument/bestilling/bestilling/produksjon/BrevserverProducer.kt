@@ -1,7 +1,7 @@
 package no.nav.bidrag.dokument.bestilling.bestilling.produksjon
 
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.BestillingSystem
-import no.nav.bidrag.dokument.bestilling.bestilling.dto.BrevKode
+import no.nav.bidrag.dokument.bestilling.bestilling.dto.DokumentMal
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.BrevType
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.DokumentBestilling
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.DokumentBestillingResult
@@ -40,11 +40,11 @@ class BrevserverProducer(
 
     override fun produser(
         dokumentBestilling: DokumentBestilling,
-        brevKode: BrevKode
+        dokumentMal: DokumentMal
     ): DokumentBestillingResult {
-        val journalpostId = opprettJournalpost(dokumentBestilling, brevKode)
+        val journalpostId = opprettJournalpost(dokumentBestilling, dokumentMal)
 
-        onlinebrevTemplate.convertAndSend(mapToBrevserverMessage(dokumentBestilling, brevKode))
+        onlinebrevTemplate.convertAndSend(mapToBrevserverMessage(dokumentBestilling, dokumentMal))
         // TODO: Error handling
         return DokumentBestillingResult(
             dokumentReferanse = dokumentBestilling.dokumentreferanse!!,
@@ -53,9 +53,9 @@ class BrevserverProducer(
         )
     }
 
-    fun opprettJournalpost(dokumentBestilling: DokumentBestilling, brevKode: BrevKode): String {
+    fun opprettJournalpost(dokumentBestilling: DokumentBestilling, dokumentMal: DokumentMal): String {
         if (dokumentBestilling.dokumentreferanse.isNullOrEmpty()) {
-            val tittel = dokumentBestilling.tittel ?: brevKode.beskrivelse
+            val tittel = dokumentBestilling.tittel ?: dokumentMal.beskrivelse
             val response = bidragDokumentConsumer.opprettJournalpost(
                 OpprettJournalpostRequest(
                     tittel = tittel,
@@ -64,7 +64,7 @@ class BrevserverProducer(
                     dokumenter = listOf(
                         OpprettDokumentDto(
                             tittel = tittel,
-                            brevkode = brevKode.name
+                            brevkode = dokumentMal.name
                         )
                     ),
                     gjelderIdent = dokumentBestilling.gjelder?.fodselsnummer!!,
@@ -72,7 +72,7 @@ class BrevserverProducer(
                         dokumentBestilling.mottaker?.navn,
                         dokumentBestilling.mottaker?.fodselsnummer!!
                     ),
-                    journalposttype = when (brevKode.brevtype) {
+                    journalposttype = when (dokumentMal.brevtype) {
                         BrevType.UTGÅENDE -> JournalpostType.UTGÅENDE
                         BrevType.NOTAT -> JournalpostType.NOTAT
                     },
@@ -88,7 +88,7 @@ class BrevserverProducer(
 
     private fun mapToBrevserverMessage(
         dokumentBestilling: DokumentBestilling,
-        brevKode: BrevKode
+        dokumentMal: DokumentMal
     ): BrevBestilling {
         val dokumentSpraak = dokumentBestilling.spraak ?: "NB"
         val saksbehandlerNavn = dokumentBestilling.saksbehandler?.navn
@@ -99,7 +99,7 @@ class BrevserverProducer(
             val bp = roller.bidragspliktig
             val bm = roller.bidragsmottaker
             val hgUgDto = vedtakInfo?.let { hgUgKodeService.findHgUg(it.soknadType, it.søknadFra, it.behandlingType) }
-            malpakke = "BI01.${brevKode.name}"
+            malpakke = "BI01.${dokumentMal.name}"
             passord = brevPassord
             saksbehandler = dokumentBestilling.saksbehandler?.ident!!
             brev {
@@ -186,8 +186,8 @@ class BrevserverProducer(
                                 beskrivelse = sivilstand.sivilstandBeskrivelse
                             }
                         }
-                        vedtakBarn.vedtakDetaljer.forEach { detaljer ->
-                            detaljer.grunnlagForskuddPerioder.forEach {
+                        vedtakBarn.stonader.forEach { detaljer ->
+                            detaljer.forskuddInntektgrensePerioder.forEach {
                                 inntektGrunnlagForskuddPeriode {
                                     fomDato = it.fomDato
                                     tomDato = it.tomDato ?: MAX_DATE
@@ -229,7 +229,7 @@ class BrevserverProducer(
                             }
                         }
                     }
-                    vedtakBarn.vedtakDetaljer.forEach { detaljer ->
+                    vedtakBarn.stonader.forEach { detaljer ->
                         detaljer.vedtakPerioder.forEach {
                             vedtak {
                                 fomDato = it.fomDato

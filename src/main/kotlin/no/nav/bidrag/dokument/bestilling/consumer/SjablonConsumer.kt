@@ -5,17 +5,16 @@ import no.nav.bidrag.commons.CorrelationId
 import no.nav.bidrag.commons.web.HttpHeaderRestTemplate
 import no.nav.bidrag.dokument.bestilling.config.CacheConfig.Companion.SJABLONGER_CACHE
 import no.nav.bidrag.dokument.bestilling.consumer.dto.SjablongerDto
+import no.nav.bidrag.dokument.bestilling.model.parameterizedTypeReference
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.web.client.RootUriTemplateHandler
 import org.springframework.cache.CacheManager
-import org.springframework.core.ParameterizedTypeReference
 import org.springframework.http.HttpMethod
 import org.springframework.stereotype.Service
 import org.springframework.web.client.RestTemplate
 import javax.annotation.PostConstruct
 
 private val log = KotlinLogging.logger {}
-inline fun <reified T : Any> typeRef(): ParameterizedTypeReference<T> = object : ParameterizedTypeReference<T>() {}
 
 @Service
 class SjablonConsumer(@Value("\${SJABLON_URL}") url: String, val cacheManager: CacheManager) {
@@ -36,7 +35,7 @@ class SjablonConsumer(@Value("\${SJABLON_URL}") url: String, val cacheManager: C
 
     private fun loadAllSjablonValues() {
         log.info("Henter alle sjablonger fra bidrag-sjablon")
-        val response = restTemplate.exchange("/sjablontall/all", HttpMethod.GET, null, typeRef<SjablongerDto>())
+        val response = restTemplate.exchange("/sjablontall/all", HttpMethod.GET, null, parameterizedTypeReference<SjablongerDto>())
         cacheManager.getCache(SJABLONGER_CACHE)?.put(DEFAULT_CACHE, response.body)
     }
 

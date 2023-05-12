@@ -9,6 +9,7 @@ import no.nav.bidrag.behandling.felles.grunnlag.BarnIHusstand
 import no.nav.bidrag.behandling.felles.grunnlag.BarnInfo
 import no.nav.bidrag.behandling.felles.grunnlag.Bostatus
 import no.nav.bidrag.behandling.felles.grunnlag.PersonInfo
+import no.nav.bidrag.behandling.felles.grunnlag.SaksbehandlerInfo
 import no.nav.bidrag.behandling.felles.grunnlag.Sivilstand
 import no.nav.bidrag.behandling.felles.grunnlag.SoknadInfo
 import no.nav.bidrag.behandling.felles.grunnlag.SoknadsbarnInfo
@@ -64,6 +65,7 @@ fun VedtakDto.hentSøknadBarnInfo(): List<SoknadsbarnInfo> = hentGrunnagDetaljer
 fun VedtakDto.hentBostatus(fodselsnummer: String): List<Bostatus> = hentGrunnagDetaljer(GrunnlagType.SOKNADSBARN_INFO, SoknadsbarnInfo::class.java).find { it.fnr == fodselsnummer }?.let { sb -> hentGrunnagDetaljer(GrunnlagType.BOSTATUS, Bostatus::class.java).filter { it.soknadsbarnId == sb.soknadsbarnId } } ?: emptyList()
 fun VedtakDto.hentPersonInfo(rolle: Rolle): PersonInfo? = hentGrunnagDetaljer(GrunnlagType.PERSON_INFO, PersonInfo::class.java).find { it.rolle == rolle }
 fun VedtakDto.hentVedtakInfo(): VedtakInfo? = grunnlagListe.find { it.type == GrunnlagType.VEDTAK_INFO }?.let { objectMapper.readValue(it.innhold.toString(), VedtakInfo::class.java) }
+fun VedtakDto.hentSaksbehandler(): SaksbehandlerInfo = hentGrunnagDetaljer(GrunnlagType.SAKSBEHANDLER_INFO, SaksbehandlerInfo::class.java).first()
 fun VedtakDto.hentSoknadInfo(): SoknadInfo? = grunnlagListe.find { it.type == GrunnlagType.SOKNAD_INFO }?.let { objectMapper.readValue(it.innhold.toString(), SoknadInfo::class.java) }
 fun VedtakDto.hentSivilstand(): List<Sivilstand> = hentGrunnagDetaljer(GrunnlagType.SIVILSTAND, Sivilstand::class.java)
 fun VedtakDto.hentInntekter(): List<Inntekt> = hentGrunnagDetaljer(GrunnlagType.INNTEKT, Inntekt::class.java)

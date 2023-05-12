@@ -15,12 +15,16 @@ import io.mockk.junit5.MockKExtension
 import no.nav.bidrag.dokument.bestilling.api.dto.DokumentBestillingForespørsel
 import no.nav.bidrag.dokument.bestilling.api.dto.MottakerTo
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.DokumentBestilling
-import no.nav.bidrag.dokument.bestilling.bestilling.dto.SjablonDetaljer
+import no.nav.bidrag.dokument.bestilling.bestilling.dto.DokumentMal
 import no.nav.bidrag.dokument.bestilling.config.SaksbehandlerInfoManager
+import no.nav.bidrag.dokument.bestilling.consumer.BidragVedtakConsumer
 import no.nav.bidrag.dokument.bestilling.consumer.KodeverkConsumer
+import no.nav.bidrag.dokument.bestilling.consumer.SjablonConsumer
 import no.nav.bidrag.dokument.bestilling.consumer.dto.KodeverkResponse
+import no.nav.bidrag.dokument.bestilling.consumer.dto.SjablongerDto
 import no.nav.bidrag.dokument.bestilling.consumer.dto.fornavnEtternavn
 import no.nav.bidrag.dokument.bestilling.model.Saksbehandler
+import no.nav.bidrag.dokument.bestilling.model.typeRef
 import no.nav.bidrag.dokument.bestilling.tjenester.KodeverkService
 import no.nav.bidrag.dokument.bestilling.tjenester.OrganisasjonService
 import no.nav.bidrag.dokument.bestilling.tjenester.PersonService
@@ -61,7 +65,6 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.web.client.HttpStatusCodeException
-import java.math.BigDecimal
 
 @ExtendWith(MockKExtension::class)
 internal class DokumentMetadataCollectorTest {
@@ -76,10 +79,10 @@ internal class DokumentMetadataCollectorTest {
     lateinit var kodeverkConsumer: KodeverkConsumer
 
     @MockK
-    lateinit var vedtakService: VedtakService
+    lateinit var vedtakConsumer: BidragVedtakConsumer
 
     @MockK
-    lateinit var sjablongService: SjablongService
+    lateinit var sjablonConsumer: SjablonConsumer
 
     @MockK
     lateinit var saksbehandlerInfoManager: SaksbehandlerInfoManager
@@ -91,20 +94,24 @@ internal class DokumentMetadataCollectorTest {
     lateinit var kodeverkService: KodeverkService
 
     @InjectMockKs
+    lateinit var sjablongService: SjablongService
+
+    @InjectMockKs
+    lateinit var vedtakService: VedtakService
+
     lateinit var metadataCollector: DokumentMetadataCollector
 
     @BeforeEach
     fun initMocks() {
         val kodeverkResponse = ObjectMapper().findAndRegisterModules().readValue(readFile("api/landkoder.json"), KodeverkResponse::class.java)
+        val sjablonResponse = ObjectMapper().findAndRegisterModules().readValue(readFile("api/sjablon_all.json"), typeRef<SjablongerDto>())
         every { kodeverkConsumer.hentLandkoder() } returns kodeverkResponse
-        every { sjablongService.hentSjablonDetaljer() } returns SjablonDetaljer(
-            multiplikatorInntekstgrenseForskudd = BigDecimal(0),
-            fastsettelseGebyr = BigDecimal(0),
-            forskuddInntektIntervall = BigDecimal(0),
-            forskuddSats = BigDecimal(0),
-            multiplikatorInnteksinslagBarn = BigDecimal(0)
-        )
+        every { sjablonConsumer.hentSjablonger() } returns sjablonResponse
+        metadataCollector = withMetadataCollector()
+
     }
+
+    private fun withMetadataCollector() = DokumentMetadataCollector(personService, sakService, kodeverkService, vedtakService, sjablongService, saksbehandlerInfoManager, organisasjonService)
 
     @AfterEach
     fun resetMocks() {
@@ -1009,11 +1016,7 @@ internal class DokumentMetadataCollectorTest {
         }
     }
 
-    private fun mapToBestillingsdata(request: DokumentBestillingForespørsel): DokumentBestilling {
-        return metadataCollector.init(request)
-            .leggTilRoller()
-            .leggTilMottakerGjelder()
-            .leggTilEnhetKontaktInfo()
-            .hentBestillingData()
+    private fun mapToBestillingsdata(request: DokumentBestillingForespørsel, dokumentMal: DokumentMal = DokumentMal.BI01S02): DokumentBestilling {
+        return metadataCollector.collect(request, dokumentMal)
     }
 }

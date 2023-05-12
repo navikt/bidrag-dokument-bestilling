@@ -7,6 +7,7 @@ import no.nav.bidrag.behandling.felles.enums.SivilstandKode
 import no.nav.bidrag.behandling.felles.enums.StonadType
 import no.nav.bidrag.behandling.felles.enums.VedtakKilde
 import no.nav.bidrag.behandling.felles.enums.VedtakType
+import no.nav.bidrag.behandling.felles.grunnlag.SaksbehandlerInfo
 import no.nav.bidrag.dokument.bestilling.model.Saksbehandler
 import no.nav.bidrag.dokument.bestilling.model.SoknadFra
 import no.nav.bidrag.domain.enums.Rolletype
@@ -45,9 +46,9 @@ data class DokumentBestilling(
     val spraak: String? = null,
     val roller: Roller = Roller(),
     val rmISak: Boolean? = false,
-    var vedtakDetaljer: VedtakDetaljer? = null,
-    var sjablonDetaljer: SjablonDetaljer,
-    var sakDetaljer: SakDetaljer
+    val vedtakDetaljer: VedtakDetaljer? = null,
+    val sjablonDetaljer: SjablonDetaljer,
+    val sakDetaljer: SakDetaljer
 )
 
 class Roller : MutableList<Rolle> by mutableListOf() {
@@ -159,7 +160,7 @@ data class InntektPeriode(
     }
 }
 
-data class GrunnlagForskuddPeriode(
+data class ForskuddInntektgrensePeriode(
     val fomDato: LocalDate,
     val tomDato: LocalDate? = null,
     val forsorgerType: ForsorgerType,
@@ -174,6 +175,7 @@ data class VedtakDetaljer(
     val soknadDato: LocalDate?,
     val soktFraDato: LocalDate?,
     val vedtattDato: LocalDate?,
+    val saksbehandlerInfo: SaksbehandlerInfo,
     val vedtakType: VedtakType,
     val stønadType: StonadType?,
     val engangsbelopType: EngangsbelopType?,
@@ -186,7 +188,7 @@ data class VedtakDetaljer(
 ) {
     fun hentForskuddBarn(fodselsnummer: String): BigDecimal? = vedtakBarn
         .find { it.fodselsnummer == fodselsnummer }
-        ?.vedtakDetaljer
+        ?.stonader
         ?.find { it.type == StonadType.FORSKUDD }
         ?.vedtakPerioder?.find { it.tomDato == null }
         ?.beløp
@@ -201,7 +203,7 @@ data class VedtakBarn(
     val navn: String?,
     val harSammeAdresse: Boolean,
     val bostatusPerioder: List<BostatusPeriode>,
-    val vedtakDetaljer: List<VedtakBarnStonad> = emptyList()
+    val stonader: List<VedtakBarnStonad> = emptyList()
 )
 
 data class BostatusPeriode(
@@ -214,7 +216,7 @@ data class VedtakBarnStonad(
     val type: StonadType,
     val innkreving: Boolean,
     val vedtakPerioder: List<VedtakPeriode> = emptyList(),
-    val grunnlagForskuddPerioder: List<GrunnlagForskuddPeriode> = emptyList()
+    val forskuddInntektgrensePerioder: List<ForskuddInntektgrensePeriode> = emptyList()
 )
 data class SivilstandPeriode(
     val fomDato: LocalDate,

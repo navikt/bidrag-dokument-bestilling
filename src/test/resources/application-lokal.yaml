@@ -1,14 +1,14 @@
-BIDRAG_PERSON_URL: https://bidrag-person-feature.dev-fss-pub.nais.io/bidrag-person
-BIDRAG_PERSON_SCOPE: dev-fss.bidrag.bidrag-person-feature
-
-BIDRAG_DOKUMENT_URL: https://bidrag-dokument-feature.dev-fss-pub.nais.io/bidrag-dokument
-BIDRAG_DOKUMENT_SCOPE: dev-fss.bidrag.bidrag-dokument-feature
-
-BIDRAG_ORGANISASJON_URL: https://bidrag-organisasjon-feature.dev-fss-pub.nais.io/bidrag-organisasjon
-BIDRAG_ORGANISASJON_SCOPE: dev-fss.bidrag.bidrag-organisasjon-feature
-
-BIDRAG_SAK_URL: https://bidrag-sak-feature.dev-fss-pub.nais.io/bidrag-sak
-BIDRAG_SAK_SCOPE: dev-fss.bidrag.bidrag-sak-feature
+#BIDRAG_PERSON_URL: https://bidrag-person-feature.dev-fss-pub.nais.io/bidrag-person
+#BIDRAG_PERSON_SCOPE: dev-fss.bidrag.bidrag-person-feature
+#
+#BIDRAG_DOKUMENT_URL: https://bidrag-dokument-feature.dev-fss-pub.nais.io/bidrag-dokument
+#BIDRAG_DOKUMENT_SCOPE: dev-fss.bidrag.bidrag-dokument-feature
+#
+#BIDRAG_ORGANISASJON_URL: https://bidrag-organisasjon-feature.dev-fss-pub.nais.io/bidrag-organisasjon
+#BIDRAG_ORGANISASJON_SCOPE: dev-fss.bidrag.bidrag-organisasjon-feature
+#
+#BIDRAG_SAK_URL: https://bidrag-sak-feature.dev-fss-pub.nais.io/bidrag-sak
+#BIDRAG_SAK_SCOPE: dev-fss.bidrag.bidrag-sak-feature
 KODEVERK_URL: https://kodeverk.dev.adeo.no
 SJABLON_URL: https://bidrag-sjablon.dev-fss-pub.nais.io/bidrag-sjablon
 BIDRAG_VEDTAK_URL: https://bidrag-vedtak.intern.dev.nav.no

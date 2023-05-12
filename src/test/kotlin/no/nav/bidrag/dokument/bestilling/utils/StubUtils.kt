@@ -82,6 +82,16 @@ class StubUtils {
         )
     }
 
+    fun stubHentVedtak(vedtakFileName: String) {
+        WireMock.stubFor(
+            WireMock.get(WireMock.urlMatching("/vedtak/.*")).willReturn(
+                aClosedJsonResponse()
+                    .withStatus(HttpStatus.OK.value())
+                    .withBodyFile("vedtak/$vedtakFileName")
+            )
+        )
+    }
+
     fun stubHentSak(sak: BidragssakDto = createSakResponse()) {
         WireMock.stubFor(
             WireMock.get(WireMock.urlMatching("/sak/.*")).willReturn(

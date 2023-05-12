@@ -10,16 +10,34 @@ enum class BrevType {
 }
 typealias BestillingSystemType = String
 
-enum class BrevKode(val beskrivelse: String, var brevtype: BrevType, val bestillingSystem: BestillingSystemType, val batchbrev: Boolean = false, val enabled: Boolean = true) {
-    BI01P11("NOTAT P11 T", BrevType.NOTAT, BestillingSystem.BREVSERVER),
-    BI01P18("Saksbehandlingsnotat", BrevType.NOTAT, BestillingSystem.BREVSERVER),
-    BI01X01("REFERAT FRA SAMTALE", BrevType.NOTAT, BestillingSystem.BREVSERVER),
-    BI01X02("ELEKTRONISK DIALOG", BrevType.NOTAT, BestillingSystem.BREVSERVER),
+data class DokumentDataGrunnlag(
+    val vedtak: Boolean = false,
+    val behandling: Boolean = false,
+    val roller: Boolean = true,
+    val enhetKontaktInfo: Boolean = true
+)
+enum class DokumentMal(val beskrivelse: String, var brevtype: BrevType, val bestillingSystem: BestillingSystemType, val batchbrev: Boolean = false, val enabled: Boolean = true, val kreverDataGrunnlag: DokumentDataGrunnlag = DokumentDataGrunnlag()) {
+    // Standardbrev
+    BI01P11("NOTAT P11 T", BrevType.NOTAT, BestillingSystem.BREVSERVER, kreverDataGrunnlag = DokumentDataGrunnlag(roller = false)),
+    BI01P18("Saksbehandlingsnotat", BrevType.NOTAT, BestillingSystem.BREVSERVER, kreverDataGrunnlag = DokumentDataGrunnlag(roller = false, enhetKontaktInfo = false)),
+    BI01X01("REFERAT FRA SAMTALE", BrevType.NOTAT, BestillingSystem.BREVSERVER, kreverDataGrunnlag = DokumentDataGrunnlag(roller = false, enhetKontaktInfo = false)),
+    BI01X02("ELEKTRONISK DIALOG", BrevType.NOTAT, BestillingSystem.BREVSERVER, kreverDataGrunnlag = DokumentDataGrunnlag(roller = false, enhetKontaktInfo = false)),
     BI01S10("KOPIFORSIDE T", BrevType.UTGÅENDE, BestillingSystem.BREVSERVER),
     BI01S67("ADRESSEFORESPØRSEL", BrevType.UTGÅENDE, BestillingSystem.BREVSERVER),
     BI01S02("Fritekstbrev", BrevType.UTGÅENDE, BestillingSystem.BREVSERVER),
-    BI01S09("Varsel opphør bidrag v 18 år", BrevType.UTGÅENDE, BestillingSystem.BREVSERVER, false, false),
 
+    // Brev relatert til forskudd
+    BI01A50("Klage - vedtak forskudd", BrevType.UTGÅENDE, BestillingSystem.BREVSERVER, false, true, DokumentDataGrunnlag(vedtak = true)),
+    BI01A01("Vedtak forskudd", BrevType.UTGÅENDE, BestillingSystem.BREVSERVER, false, true, DokumentDataGrunnlag(vedtak = true)),
+    BI01A04("Revurdering forskudd settes ned", BrevType.UTGÅENDE, BestillingSystem.BREVSERVER, false, true, DokumentDataGrunnlag(vedtak = true)),
+    BI01S08("Varsel revurd forskudd", BrevType.UTGÅENDE, BestillingSystem.BREVSERVER, false, true),
+    BI01S27("Varsel opph tilbake i tid §2 ikke opphold i Riket", BrevType.UTGÅENDE, BestillingSystem.BREVSERVER, false, true),
+    BI01S28("Varsel opph tilbake i tid §2 partene bor sammen", BrevType.UTGÅENDE, BestillingSystem.BREVSERVER, false, true),
+    BI01S29("Varsel opph tilbake i tid §3 direkte betalinger", BrevType.UTGÅENDE, BestillingSystem.BREVSERVER, false, true),
+    BI01S30("Varsel opph tilbake i tid §6 ikke omsorg", BrevType.UTGÅENDE, BestillingSystem.BREVSERVER, false, true),
+
+    // Brev ikke støttet av bestilling
+    BI01S09("Varsel opphør bidrag v 18 år", BrevType.UTGÅENDE, BestillingSystem.BREVSERVER, false, false),
     BI01G01("Vedtak innkrev. barnebidrag og gjeld", BrevType.UTGÅENDE, BestillingSystem.BREVSERVER, false, false),
     BI01G02("Vedtak innkreving opphør", BrevType.UTGÅENDE, BestillingSystem.BREVSERVER, false, false),
     BI01S19("Innkreving varsel til motparten", BrevType.UTGÅENDE, BestillingSystem.BREVSERVER, false, false),
@@ -74,14 +92,6 @@ enum class BrevKode(val beskrivelse: String, var brevtype: BrevType, val bestill
     BI01S39("Bortfall ektefellebidrag nytt ekteskap orientering", BrevType.UTGÅENDE, BestillingSystem.BREVSERVER, false, false),
     BI01S41("Vedtak - bortfall nytt ekteskap", BrevType.UTGÅENDE, BestillingSystem.BREVSERVER, false, false),
     BI01S42("Endring ektefellebidrag orientering til søkeren", BrevType.UTGÅENDE, BestillingSystem.BREVSERVER, false, false),
-    BI01A50("Klage - vedtak forskudd", BrevType.UTGÅENDE, BestillingSystem.BREVSERVER, false, true),
-    BI01A01("Vedtak forskudd", BrevType.UTGÅENDE, BestillingSystem.BREVSERVER, false, true),
-    BI01A04("Revurdering forskudd settes ned", BrevType.UTGÅENDE, BestillingSystem.BREVSERVER, false, true),
-    BI01S08("Varsel revurd forskudd", BrevType.UTGÅENDE, BestillingSystem.BREVSERVER, false, true),
-    BI01S27("Varsel opph tilbake i tid §2 ikke opphold i Riket", BrevType.UTGÅENDE, BestillingSystem.BREVSERVER, false, false),
-    BI01S28("Varsel opph tilbake i tid §2 partene bor sammen", BrevType.UTGÅENDE, BestillingSystem.BREVSERVER, false, false),
-    BI01S29("Varsel opph tilbake i tid §3 direkte betalinger", BrevType.UTGÅENDE, BestillingSystem.BREVSERVER, false, false),
-    BI01S30("Varsel opph tilbake i tid §6 ikke omsorg", BrevType.UTGÅENDE, BestillingSystem.BREVSERVER, false, true),
     BI01S45("Varsel revurd forskudd tilbake i tid", BrevType.UTGÅENDE, BestillingSystem.BREVSERVER, false, false),
     BI01H01("Farskap innkalling mor", BrevType.UTGÅENDE, BestillingSystem.BREVSERVER, false, false),
     BI01H03("Melding om blodprøver i farskapsak", BrevType.UTGÅENDE, BestillingSystem.BREVSERVER, false, false),

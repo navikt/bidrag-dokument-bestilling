@@ -35,8 +35,10 @@ import no.nav.bidrag.transport.person.PersonAdresseDto
 import no.nav.bidrag.transport.person.PersonDto
 import no.nav.bidrag.transport.sak.BidragssakDto
 import no.nav.bidrag.transport.sak.RolleDto
+import java.math.BigDecimal
 import java.time.LocalDate
 
+val FORSKUDD_INNTEKTGRENSE_2022_2023 = BigDecimal(52800)
 val DEFAULT_TITLE_DOKUMENT = "Tittel på dokumentet"
 val DEFAULT_SAKSNUMMER = "123312321321"
 

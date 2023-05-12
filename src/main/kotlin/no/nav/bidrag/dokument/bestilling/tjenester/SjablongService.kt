@@ -2,7 +2,7 @@ package no.nav.bidrag.dokument.bestilling.tjenester
 
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.BeløpFraTil
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.ForsorgerType
-import no.nav.bidrag.dokument.bestilling.bestilling.dto.GrunnlagForskuddPeriode
+import no.nav.bidrag.dokument.bestilling.bestilling.dto.ForskuddInntektgrensePeriode
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.PeriodeFraTom
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.SjablonDetaljer
 import no.nav.bidrag.dokument.bestilling.consumer.SjablonConsumer
@@ -35,7 +35,7 @@ class SjablongService(val sjablonConsumer: SjablonConsumer) {
         return forskuddSats.verdi * multiplikatorInnteksinslagBarn.verdi
 
     }
-    fun hentSjablonGrunnlagForskudd(fraDato: LocalDate, tomDato: LocalDate? = null): List<GrunnlagForskuddPeriode> {
+    fun hentSjablonGrunnlagForskudd(fraDato: LocalDate, tomDato: LocalDate? = null): List<ForskuddInntektgrensePeriode> {
         val sjablonger = sjablonConsumer.hentSjablonger() ?: return emptyList()
 
         val sjablongTyper = listOf(
@@ -51,7 +51,7 @@ class SjablongService(val sjablonConsumer: SjablonConsumer) {
         }
     }
 
-    fun hentSjablonGrunnlagForskuddSjablongForPeriode(periodeFraTom: PeriodeFraTom): List<GrunnlagForskuddPeriode> {
+    fun hentSjablonGrunnlagForskuddSjablongForPeriode(periodeFraTom: PeriodeFraTom): List<ForskuddInntektgrensePeriode> {
         val sjablonger = sjablonConsumer.hentSjablonger()!!
         val periodeFra = periodeFraTom.fraDato
         val periodTomDato = periodeFraTom.tomDato
@@ -63,55 +63,55 @@ class SjablongService(val sjablonConsumer: SjablonConsumer) {
         val forskuddSats = sjablonger.hentSjablongForTomDato(SjablongType.FORSKUDDSSATS, periodTomDato)!!
 
         val forskuddMaksVerdi = forskuddSats.verdi * multiplikatorForskudd.verdi
-        val forskuddEnslig1Barn = GrunnlagForskuddPeriode(
+        val forskuddEnslig1Barn = ForskuddInntektgrensePeriode(
             fomDato = periodeFra,
             tomDato = periodTomDato,
             antallBarn = 1,
             forsorgerType = ForsorgerType.ENSLIG,
-            beløp50Prosent = BeløpFraTil(grenseFullForskudd.verdi + BigDecimal(1), forskudd75ProsentEnslig.verdi),
-            beløp75Prosent = BeløpFraTil(forskudd75ProsentEnslig.verdi + BigDecimal(1), forskuddMaksVerdi)
+            beløp75Prosent = BeløpFraTil(grenseFullForskudd.verdi + BigDecimal(1), forskudd75ProsentEnslig.verdi),
+            beløp50Prosent = BeløpFraTil(forskudd75ProsentEnslig.verdi + BigDecimal(1), forskuddMaksVerdi)
         )
-        val forskuddGift1Barn = GrunnlagForskuddPeriode(
+        val forskuddGift1Barn = ForskuddInntektgrensePeriode(
             fomDato = periodeFra,
             tomDato = periodTomDato,
             antallBarn = 1,
             forsorgerType = ForsorgerType.GIFT_SAMBOER,
-            beløp50Prosent = BeløpFraTil(grenseFullForskudd.verdi + BigDecimal(1), forskudd75ProsentGift.verdi),
-            beløp75Prosent = BeløpFraTil(forskudd75ProsentEnslig.verdi + BigDecimal(1), forskuddMaksVerdi)
+            beløp75Prosent = BeløpFraTil(grenseFullForskudd.verdi + BigDecimal(1), forskudd75ProsentGift.verdi),
+            beløp50Prosent = BeløpFraTil(forskudd75ProsentEnslig.verdi + BigDecimal(1), forskuddMaksVerdi)
         )
         return listOf(
             forskuddEnslig1Barn,
             forskuddEnslig1Barn.copy(
                 antallBarn = 2,
-                beløp50Prosent = BeløpFraTil(grenseFullForskudd.verdi + BigDecimal(1), forskudd75ProsentEnslig.verdi + inntekstIntervallForskudd.verdi),
-                beløp75Prosent = BeløpFraTil(forskudd75ProsentEnslig.verdi + inntekstIntervallForskudd.verdi + BigDecimal(1), forskuddMaksVerdi)
+                beløp75Prosent = BeløpFraTil(grenseFullForskudd.verdi + BigDecimal(1), forskudd75ProsentEnslig.verdi + inntekstIntervallForskudd.verdi),
+                beløp50Prosent = BeløpFraTil(forskudd75ProsentEnslig.verdi + inntekstIntervallForskudd.verdi + BigDecimal(1), forskuddMaksVerdi)
             ),
             forskuddEnslig1Barn.copy(
                 antallBarn = 3,
-                beløp50Prosent = BeløpFraTil(grenseFullForskudd.verdi + BigDecimal(1), forskuddMaksVerdi),
-                beløp75Prosent = BeløpFraTil(forskuddMaksVerdi, forskuddMaksVerdi)
+                beløp75Prosent = BeløpFraTil(grenseFullForskudd.verdi + BigDecimal(1), forskuddMaksVerdi),
+                beløp50Prosent = BeløpFraTil(forskuddMaksVerdi, forskuddMaksVerdi)
             ),
             forskuddEnslig1Barn.copy(
                 antallBarn = 4,
-                beløp50Prosent = BeløpFraTil(grenseFullForskudd.verdi + BigDecimal(1), forskuddMaksVerdi),
-                beløp75Prosent = BeløpFraTil(forskuddMaksVerdi, forskuddMaksVerdi)
+                beløp75Prosent = BeløpFraTil(grenseFullForskudd.verdi + BigDecimal(1), forskuddMaksVerdi),
+                beløp50Prosent = BeløpFraTil(forskuddMaksVerdi, forskuddMaksVerdi)
             ),
 
             forskuddGift1Barn,
             forskuddGift1Barn.copy(
                 antallBarn = 2,
-                beløp50Prosent = BeløpFraTil(grenseFullForskudd.verdi + BigDecimal(1), forskudd75ProsentGift.verdi + inntekstIntervallForskudd.verdi),
-                beløp75Prosent = BeløpFraTil(forskudd75ProsentEnslig.verdi + inntekstIntervallForskudd.verdi + BigDecimal(1), forskuddMaksVerdi)
+                beløp75Prosent = BeløpFraTil(grenseFullForskudd.verdi + BigDecimal(1), forskudd75ProsentGift.verdi + inntekstIntervallForskudd.verdi),
+                beløp50Prosent = BeløpFraTil(forskudd75ProsentEnslig.verdi + inntekstIntervallForskudd.verdi + BigDecimal(1), forskuddMaksVerdi)
             ),
             forskuddGift1Barn.copy(
                 antallBarn = 3,
-                beløp50Prosent = BeløpFraTil(grenseFullForskudd.verdi + BigDecimal(1), forskudd75ProsentGift.verdi + inntekstIntervallForskudd.verdi * BigDecimal(2)),
-                beløp75Prosent = BeløpFraTil(forskuddMaksVerdi, forskuddMaksVerdi)
+                beløp75Prosent = BeløpFraTil(grenseFullForskudd.verdi + BigDecimal(1), forskudd75ProsentGift.verdi + inntekstIntervallForskudd.verdi * BigDecimal(2)),
+                beløp50Prosent = BeløpFraTil(forskuddMaksVerdi, forskuddMaksVerdi)
             ),
             forskuddGift1Barn.copy(
                 antallBarn = 4,
-                beløp50Prosent = BeløpFraTil(grenseFullForskudd.verdi + BigDecimal(1), forskuddMaksVerdi),
-                beløp75Prosent = BeløpFraTil(forskuddMaksVerdi, forskuddMaksVerdi)
+                beløp75Prosent = BeløpFraTil(grenseFullForskudd.verdi + BigDecimal(1), forskuddMaksVerdi),
+                beløp50Prosent = BeløpFraTil(forskuddMaksVerdi, forskuddMaksVerdi)
             )
         )
     }

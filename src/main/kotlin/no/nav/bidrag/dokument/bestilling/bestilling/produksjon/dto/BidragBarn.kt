@@ -29,6 +29,15 @@ class BidragBarn {
 
     @XmlElement(name = "perInGrForsk", nillable = true)
     var inntektGrunnlagForskuddPerioder: MutableList<InntektGrunnlagForskuddPeriode> = mutableListOf()
+
+    @XmlElement(name = "perAndelU", nillable = true)
+    var andelUnderholdPerioder: MutableList<AndelUnderholdPeriode> = mutableListOf()
+
+    @XmlElement(name = "perUkost", nillable = true)
+    var underholdkostnadPerioder: MutableList<UnderholdkostnadPeriode> = mutableListOf()
+
+    @XmlElement(name = "perBidrEvne", nillable = true)
+    var bidragEvnePerioder: MutableList<BidragEvnePeriode> = mutableListOf()
     fun barn(init: Barn.() -> Unit): Barn {
         val initValue = Barn()
         initValue.init()
@@ -66,6 +75,27 @@ class BidragBarn {
         val initValue = InntektGrunnlagForskuddPeriode()
         initValue.init()
         inntektGrunnlagForskuddPerioder.add(initValue)
+        return initValue
+    }
+
+    fun andelUnderholdPeriode(init: AndelUnderholdPeriode.() -> Unit): AndelUnderholdPeriode {
+        val initValue = AndelUnderholdPeriode()
+        initValue.init()
+        andelUnderholdPerioder.add(initValue)
+        return initValue
+    }
+
+    fun underholdKostnadPeriode(init: UnderholdkostnadPeriode.() -> Unit): UnderholdkostnadPeriode {
+        val initValue = UnderholdkostnadPeriode()
+        initValue.init()
+        underholdkostnadPerioder.add(initValue)
+        return initValue
+    }
+
+    fun bidragEvnePeriode(init: BidragEvnePeriode.() -> Unit): BidragEvnePeriode {
+        val initValue = BidragEvnePeriode()
+        initValue.init()
+        bidragEvnePerioder.add(initValue)
         return initValue
     }
 }
@@ -158,14 +188,6 @@ class InntektGrunnlagForskuddPeriode {
     @XmlJavaTypeAdapter(NumberAdapter::class)
     var antallBarn: Int? = 0
 
-    @XmlElement(name = "belop50fra", nillable = true)
-    @XmlJavaTypeAdapter(BelopAdapter::class)
-    var belop50fra: BigDecimal? = null
-
-    @XmlElement(name = "belop50til", nillable = true)
-    @XmlJavaTypeAdapter(BelopAdapter::class)
-    var belop50til: BigDecimal? = null
-
     @XmlElement(name = "belop75fra", nillable = true)
     @XmlJavaTypeAdapter(BelopAdapter::class)
     var belop75fra: BigDecimal? = null
@@ -173,6 +195,14 @@ class InntektGrunnlagForskuddPeriode {
     @XmlElement(name = "belop75til", nillable = true)
     @XmlJavaTypeAdapter(BelopAdapter::class)
     var belop75til: BigDecimal? = null
+
+    @XmlElement(name = "belop50fra", nillable = true)
+    @XmlJavaTypeAdapter(BelopAdapter::class)
+    var belop50fra: BigDecimal? = null
+
+    @XmlElement(name = "belop50til", nillable = true)
+    @XmlJavaTypeAdapter(BelopAdapter::class)
+    var belop50til: BigDecimal? = null
 }
 
 @Suppress("unused")
@@ -225,4 +255,234 @@ class Barn {
 
     @XmlElement(name = "saksnr", nillable = true)
     var saksnr: String? = null
+}
+
+@Suppress("unused")
+@XmlRootElement(name = "perAndelU")
+@XmlAccessorType(XmlAccessType.FIELD)
+class AndelUnderholdPeriode {
+    @XmlElement(name = "fomDato", nillable = true)
+    @XmlJavaTypeAdapter(DateAdapter::class)
+    var fomDato: LocalDate? = null
+
+    @XmlElement(name = "tomDato", nillable = true)
+    @XmlJavaTypeAdapter(PeriodDateAdapter::class)
+    var tomDato: LocalDate? = null
+
+    @XmlElement(name = "belopInntBp", nillable = true)
+    @XmlJavaTypeAdapter(BelopAdapter::class)
+    var belopInntektBp: BigDecimal? = null
+
+    @XmlElement(name = "belopInntBm", nillable = true)
+    @XmlJavaTypeAdapter(BelopAdapter::class)
+    var belopInntektBm: BigDecimal? = null
+
+    @XmlElement(name = "belopInntBb", nillable = true)
+    @XmlJavaTypeAdapter(BelopAdapter::class)
+    var belopInntektBarn: BigDecimal? = null
+
+    @XmlElement(name = "belopInntSum", nillable = true)
+    @XmlJavaTypeAdapter(BelopAdapter::class)
+    var belopInntektSum: BigDecimal? = null
+
+    @XmlElement(name = "fordNokkel", nillable = true)
+    var fordNokkel: Int? = null
+
+    @XmlElement(name = "andelTeller", nillable = true)
+    var andelTeller: Int? = null
+
+    @XmlElement(name = "andelNevner", nillable = true)
+    var andelNevner: Int? = null
+
+    @XmlElement(name = "belopUkost", nillable = true)
+    @XmlJavaTypeAdapter(BelopAdapter::class)
+    var belopUnderholdKostnad: BigDecimal? = null
+
+    @XmlElement(name = "belopBp", nillable = true)
+    @XmlJavaTypeAdapter(BelopAdapter::class)
+    var belopBp: BigDecimal? = null
+}
+
+@Suppress("unused")
+@XmlRootElement(name = "perUkost")
+@XmlAccessorType(XmlAccessType.FIELD)
+class UnderholdkostnadPeriode {
+    @XmlElement(name = "fomDato", nillable = true)
+    @XmlJavaTypeAdapter(DateAdapter::class)
+    var fomDato: LocalDate? = null
+
+    @XmlElement(name = "tomDato", nillable = true)
+    @XmlJavaTypeAdapter(PeriodDateAdapter::class)
+    var tomDato: LocalDate? = null
+
+    @XmlElement(name = "tilsyntypKd", nillable = true)
+    var tilsyntypKd: String? = null
+
+    @XmlElement(name = "skolealderTp", nillable = true)
+    var skolealderTp: String? = null
+
+    @XmlElement(name = "stonadTypKd", nillable = true)
+    var stonadTypKd: String? = null
+
+    @XmlElement(name = "manuellJN", nillable = true)
+    @XmlJavaTypeAdapter(BooleanAdapter::class)
+    var manuellJN: Boolean? = null
+
+    @XmlElement(name = "belopFbrKost", nillable = true)
+    @XmlJavaTypeAdapter(BelopAdapter::class)
+    var belopFbrKost: BigDecimal? = null
+
+    @XmlElement(name = "belopBoutg", nillable = true)
+    @XmlJavaTypeAdapter(BelopAdapter::class)
+    var belopBoutg: BigDecimal? = null
+
+    @XmlElement(name = "belGkjBTils", nillable = true)
+    @XmlJavaTypeAdapter(BelopAdapter::class)
+    var belGkjBTils: BigDecimal? = null
+
+    @XmlElement(name = "belFaktBTils", nillable = true)
+    @XmlJavaTypeAdapter(BelopAdapter::class)
+    var belFaktBTils: BigDecimal? = null
+
+    @XmlElement(name = "belopBTrygd", nillable = true)
+    @XmlJavaTypeAdapter(BelopAdapter::class)
+    var belopBTrygd: BigDecimal? = null
+
+    @XmlElement(name = "belopSmaBTil", nillable = true)
+    @XmlJavaTypeAdapter(BelopAdapter::class)
+    var belopSmaBTil: BigDecimal? = null
+
+    @XmlElement(name = "belBerSumU", nillable = true)
+    @XmlJavaTypeAdapter(BelopAdapter::class)
+    var belBerSumU: BigDecimal? = null
+
+    @XmlElement(name = "belJustSumU", nillable = true)
+    @XmlJavaTypeAdapter(BelopAdapter::class)
+    var belJustSumU: BigDecimal? = null
+
+    @XmlElement(name = "fnr", nillable = true)
+    var fodselsnummer: String? = null
+
+    @XmlElement(name = "bidrRolle", nillable = true)
+    var rolle: String? = null
+
+    @XmlElement(name = "belopForplei", nillable = true)
+    @XmlJavaTypeAdapter(BelopAdapter::class)
+    var belopForplei: BigDecimal? = null
+}
+
+@Suppress("unused")
+@XmlRootElement(name = "perBidrEvne")
+@XmlAccessorType(XmlAccessType.FIELD)
+class BidragEvnePeriode {
+    @XmlElement(name = "fomDato", nillable = true)
+    @XmlJavaTypeAdapter(DateAdapter::class)
+    var fomDato: LocalDate? = null
+
+    @XmlElement(name = "tomDato", nillable = true)
+    @XmlJavaTypeAdapter(PeriodDateAdapter::class)
+    var tomDato: LocalDate? = null
+
+    @XmlElement(name = "skattekl", nillable = true)
+    var skatteklasse: String? = null
+
+    @XmlElement(name = "bostatus", nillable = true)
+    var bostatus: String? = null
+
+    @XmlElement(name = "antBarn", nillable = true)
+    var antallBarn: Int? = null
+
+    @XmlElement(name = "antBarnDelt", nillable = true)
+    var antallBarnDelt: Int? = null
+
+    @XmlElement(name = "flBarnSakJN", nillable = true)
+    @XmlJavaTypeAdapter(BooleanAdapter::class)
+    var flBarnSakJN: Boolean? = null
+
+    @XmlElement(name = "fullBiEvneJN", nillable = true)
+    @XmlJavaTypeAdapter(BooleanAdapter::class)
+    var fullBiEvneJN: Boolean? = null
+
+    @XmlElement(name = "biEvneBeskr", nillable = true)
+    var biEvneBeskr: String? = null
+
+    @XmlElement(name = "belInntGrlag", nillable = true)
+    @XmlJavaTypeAdapter(BelopAdapter::class)
+    var belInntGrlag: BigDecimal? = null
+
+    @XmlElement(name = "belTrygdeAvg", nillable = true)
+    @XmlJavaTypeAdapter(BelopAdapter::class)
+    var belTrygdeAvg: BigDecimal? = null
+
+    @XmlElement(name = "belSkatt", nillable = true)
+    @XmlJavaTypeAdapter(BelopAdapter::class)
+    var belSkatt: BigDecimal? = null
+
+    @XmlElement(name = "belMinFradrg", nillable = true)
+    @XmlJavaTypeAdapter(BelopAdapter::class)
+    var belMinFradrg: BigDecimal? = null
+
+    @XmlElement(name = "belPerFradrg", nillable = true)
+    @XmlJavaTypeAdapter(BelopAdapter::class)
+    var belPerFradrg: BigDecimal? = null
+
+    @XmlElement(name = "belBoutgift", nillable = true)
+    @XmlJavaTypeAdapter(BelopAdapter::class)
+    var belBoutgift: BigDecimal? = null
+
+    @XmlElement(name = "belEgetUhold", nillable = true)
+    @XmlJavaTypeAdapter(BelopAdapter::class)
+    var belEgetUhold: BigDecimal? = null
+
+    @XmlElement(name = "belUholdBhus", nillable = true)
+    @XmlJavaTypeAdapter(BelopAdapter::class)
+    var belUholdBhus: BigDecimal? = null
+
+    @XmlElement(name = "belAarEvne", nillable = true)
+    @XmlJavaTypeAdapter(BelopAdapter::class)
+    var belAarEvne: BigDecimal? = null
+
+    @XmlElement(name = "belMndEvne", nillable = true)
+    @XmlJavaTypeAdapter(BelopAdapter::class)
+    var belMndEvne: BigDecimal? = null
+
+    @XmlElement(name = "belSumBidrag", nillable = true)
+    @XmlJavaTypeAdapter(BelopAdapter::class)
+    var belSumBidrag: BigDecimal? = null
+
+    @XmlElement(name = "belBerBidrag", nillable = true)
+    @XmlJavaTypeAdapter(BelopAdapter::class)
+    var belBerBidrag: BigDecimal? = null
+
+    @XmlElement(name = "belJustBidr", nillable = true)
+    @XmlJavaTypeAdapter(BelopAdapter::class)
+    var belJustBidr: BigDecimal? = null
+}
+
+@XmlRootElement(name = "perSamvaer")
+@XmlAccessorType(XmlAccessType.FIELD)
+class SamvarPeriode {
+    @XmlElement(name = "fomDato", nillable = true)
+    @XmlJavaTypeAdapter(DateAdapter::class)
+    var fomDato: LocalDate? = null
+
+    @XmlElement(name = "tomDato", nillable = true)
+    @XmlJavaTypeAdapter(PeriodDateAdapter::class)
+    var tomDato: LocalDate? = null
+
+    @XmlElement(name = "samvKode", nillable = true)
+    var samvarKode: String? = null
+
+    @XmlElement(name = "aldersgrp", nillable = true)
+    var aldersGruppe: String? = null
+
+    @XmlElement(name = "belSamvFradr", nillable = true)
+    @XmlJavaTypeAdapter(BelopAdapter::class)
+    var belSamvFradr: BigDecimal? = null
+
+    @XmlElement(name = "samvBeskr", nillable = true)
+    var samvBeskr: String? = null
+
+    @XmlElement(name = "fnr", nillable = true)
+    var fodselsnummer: String? = null
 }
