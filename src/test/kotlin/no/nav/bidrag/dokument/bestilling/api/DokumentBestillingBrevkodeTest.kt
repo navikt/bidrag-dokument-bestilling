@@ -8,7 +8,7 @@ import io.kotest.matchers.shouldNotBe
 import io.mockk.verify
 import no.nav.bidrag.dokument.bestilling.api.dto.DokumentBestillingForespørsel
 import no.nav.bidrag.dokument.bestilling.api.dto.DokumentBestillingResponse
-import no.nav.bidrag.dokument.bestilling.bestilling.dto.BrevKode
+import no.nav.bidrag.dokument.bestilling.bestilling.dto.DokumentMal
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.BrevType
 import no.nav.bidrag.dokument.bestilling.bestilling.produksjon.DokumentProducer
 import no.nav.bidrag.dokument.bestilling.consumer.dto.fornavnEtternavn
@@ -33,24 +33,23 @@ class DokumentBestillingBrevkodeTest : AbstractControllerTest() {
     @SpykBean
     lateinit var dokumentProducer: DokumentProducer
 
-    private val ignoreBrevkoder = listOf(BrevKode.BI01A50, BrevKode.BI01A01, BrevKode.BI01A04)
+    private val ignoreBrevkoders = listOf(DokumentMal.BI01A50, DokumentMal.BI01A01, DokumentMal.BI01A04)
     companion object {
         @JvmStatic
-        fun brevkoderUtgaaende() = BrevKode.values().filter { it.brevtype == BrevType.UTGÅENDE }
+        fun brevkoderUtgaaende() = DokumentMal.values().filter { it.brevtype == BrevType.UTGÅENDE }
 
         @JvmStatic
-        fun brevkoderEnhetKontaktinfo(): List<BrevKode> {
-            val brevkoder = brevkoderUtgaaende().toMutableList()
-            brevkoder.add(BrevKode.BI01P11)
-            return brevkoder
-        }
+        fun brevkoderEnhetKontaktinfo() = brevkoderUtgaaende().filter { it.kreverDataGrunnlag.enhetKontaktInfo }
+
+        @JvmStatic
+        fun brevkoderVedtak() = brevkoderUtgaaende().filter { it.kreverDataGrunnlag.vedtak }
     }
 
     @ParameterizedTest(name = "{index} - Should add default values with sak, saksbehandler, mottaker and gjelder for brevkode {argumentsWithNames}")
-    @EnumSource(value = BrevKode::class)
-    fun `Should add default values with sak, saksbehandler, mottaker and gjelder`(brevKode: BrevKode) {
-        if (!brevKode.enabled || ignoreBrevkoder.contains(brevKode)) {
-            print("brevkode ${brevKode.name} ikke støttet, ignorerer testing")
+    @EnumSource(value = DokumentMal::class)
+    fun `Should add default values with sak, saksbehandler, mottaker and gjelder`(dokumentMal: DokumentMal) {
+        if (!dokumentMal.enabled || ignoreBrevkoders.contains(dokumentMal)) {
+            print("brevkode ${dokumentMal.name} ikke støttet, ignorerer testing")
             return
         }
         stubDefaultValues()
@@ -75,7 +74,7 @@ class DokumentBestillingBrevkodeTest : AbstractControllerTest() {
         )
 
         val response = httpHeaderTestRestTemplate.exchange(
-            "${rootUri()}/bestill/${brevKode.name}",
+            "${rootUri()}/bestill/${dokumentMal.name}",
             HttpMethod.POST,
             HttpEntity(request),
             DokumentBestillingResponse::class.java
@@ -107,16 +106,16 @@ class DokumentBestillingBrevkodeTest : AbstractControllerTest() {
                         bestilling.rmISak shouldBe false
                     }
                 },
-                brevKode
+                dokumentMal
             )
         }
     }
 
     @ParameterizedTest(name = "{index} - Should add roller to utgaaende brev with brevkode {argumentsWithNames}")
     @MethodSource("brevkoderUtgaaende")
-    fun `Should add roller to utgaaende brev`(brevKode: BrevKode) {
-        if (!brevKode.enabled || ignoreBrevkoder.contains(brevKode)) {
-            print("brevkode ${brevKode.name} ikke støttet, ignorerer testing")
+    fun `Should add roller to utgaaende brev`(dokumentMal: DokumentMal) {
+        if (!dokumentMal.enabled || ignoreBrevkoders.contains(dokumentMal)) {
+            print("brevkode ${dokumentMal.name} ikke støttet, ignorerer testing")
             return
         }
         stubDefaultValues()
@@ -141,7 +140,7 @@ class DokumentBestillingBrevkodeTest : AbstractControllerTest() {
         )
 
         val response = httpHeaderTestRestTemplate.exchange(
-            "${rootUri()}/bestill/${brevKode.name}",
+            "${rootUri()}/bestill/${dokumentMal.name}",
             HttpMethod.POST,
             HttpEntity(request),
             DokumentBestillingResponse::class.java
@@ -178,16 +177,16 @@ class DokumentBestillingBrevkodeTest : AbstractControllerTest() {
                         bestilling.roller.barn[1].navn shouldBe BARN1.fornavnEtternavn()
                     }
                 },
-                brevKode
+                dokumentMal
             )
         }
     }
 
     @ParameterizedTest(name = "{index} - Should add enhet kontaktinfo for brevkode {argumentsWithNames}")
     @MethodSource("brevkoderEnhetKontaktinfo")
-    fun `Should add enhet kontaktinfo`(brevKode: BrevKode) {
-        if (!brevKode.enabled || ignoreBrevkoder.contains(brevKode)) {
-            print("brevkode ${brevKode.name} ikke støttet, ignorerer testing")
+    fun `Should add enhet kontaktinfo`(dokumentMal: DokumentMal) {
+        if (!dokumentMal.enabled || ignoreBrevkoders.contains(dokumentMal)) {
+            print("brevkode ${dokumentMal.name} ikke støttet, ignorerer testing")
             return
         }
         stubDefaultValues()
@@ -212,7 +211,7 @@ class DokumentBestillingBrevkodeTest : AbstractControllerTest() {
 
         )
         val response = httpHeaderTestRestTemplate.exchange(
-            "${rootUri()}/bestill/${brevKode.name}",
+            "${rootUri()}/bestill/${dokumentMal.name}",
             HttpMethod.POST,
             HttpEntity(request),
             DokumentBestillingResponse::class.java
@@ -234,7 +233,7 @@ class DokumentBestillingBrevkodeTest : AbstractControllerTest() {
                         bestilling.kontaktInfo?.postadresse?.land shouldBe "Norge"
                     }
                 },
-                brevKode
+                dokumentMal
             )
         }
     }

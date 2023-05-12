@@ -1,10 +1,10 @@
 package no.nav.bidrag.dokument.bestilling.model
 
-import no.nav.bidrag.dokument.bestilling.bestilling.dto.BrevKode
+import no.nav.bidrag.dokument.bestilling.bestilling.dto.DokumentMal
 import org.springframework.http.HttpStatus
 import org.springframework.web.client.HttpClientErrorException
 
-class ProduksjonAvDokumentStottesIkke(brevKode: BrevKode) : RuntimeException("Produksjon av dokument med brevkode=$brevKode støttes ikke")
+class ProduksjonAvDokumentStottesIkke(dokumentMal: DokumentMal) : RuntimeException("Produksjon av dokument med brevkode=$dokumentMal støttes ikke")
 
 class FantIkkePersonException(msg: String) : RuntimeException(msg)
 class FantIkkeEnhetException(msg: String) : RuntimeException(msg)

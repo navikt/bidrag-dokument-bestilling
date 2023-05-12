@@ -12,6 +12,14 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter
 @XmlRootElement(name = "bidrVtak")
 @XmlAccessorType(XmlAccessType.FIELD)
 class BidragVedtak {
+    @XmlElement(name = "fomDato", nillable = true)
+    @XmlJavaTypeAdapter(DateAdapter::class)
+    var fomDato: LocalDate? = null
+
+    @XmlElement(name = "tomDato", nillable = true)
+    @XmlJavaTypeAdapter(PeriodDateAdapter::class)
+    var tomDato: LocalDate? = null
+
     @XmlElement(name = "fnr", nillable = true)
     var fnr: String? = null
 
@@ -23,7 +31,7 @@ class BidragVedtak {
     var belopTillegg: String? = null
 
     @XmlElement(name = "innkr", nillable = true)
-    var innkr: String? = null
+    var erInnkreving: String? = null
 
     @XmlElement(name = "soktTlgBidJN", nillable = true)
     @XmlJavaTypeAdapter(BooleanAdapter::class)
@@ -31,12 +39,4 @@ class BidragVedtak {
 
     @XmlElement(name = "resKd", nillable = true)
     var resultatKode: String? = null
-
-    @XmlElement(name = "fomDato", nillable = true)
-    @XmlJavaTypeAdapter(DateAdapter::class)
-    var fomDato: LocalDate? = null
-
-    @XmlElement(name = "tomDato", nillable = true)
-    @XmlJavaTypeAdapter(PeriodDateAdapter::class)
-    var tomDato: LocalDate? = null
 }

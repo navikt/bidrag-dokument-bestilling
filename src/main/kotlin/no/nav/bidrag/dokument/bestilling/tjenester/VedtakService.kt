@@ -8,7 +8,7 @@ import no.nav.bidrag.behandling.felles.grunnlag.SoknadsbarnInfo
 import no.nav.bidrag.behandling.felles.grunnlag.inntekt.Inntekt
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.BarnIHustandPeriode
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.BostatusPeriode
-import no.nav.bidrag.dokument.bestilling.bestilling.dto.GrunnlagForskuddPeriode
+import no.nav.bidrag.dokument.bestilling.bestilling.dto.ForskuddInntektgrensePeriode
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.GrunnlagInntektType
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.InntektPeriode
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.PeriodeFraTom
@@ -28,6 +28,7 @@ import no.nav.bidrag.dokument.bestilling.model.hentBeregningsgrunnlag
 import no.nav.bidrag.dokument.bestilling.model.hentBostatus
 import no.nav.bidrag.dokument.bestilling.model.hentInntekter
 import no.nav.bidrag.dokument.bestilling.model.hentPersonInfo
+import no.nav.bidrag.dokument.bestilling.model.hentSaksbehandler
 import no.nav.bidrag.dokument.bestilling.model.hentSivilstand
 import no.nav.bidrag.dokument.bestilling.model.hentSluttberegninger
 import no.nav.bidrag.dokument.bestilling.model.hentSoknadInfo
@@ -56,6 +57,7 @@ class VedtakService(private val bidragVedtakConsumer: BidragVedtakConsumer, priv
             vedtattDato = vedtakInfo?.vedtakDato,
             kilde = vedtakDto.kilde,
             vedtakType = vedtakDto.type,
+            saksbehandlerInfo = vedtakDto.hentSaksbehandler(),
             engangsbelopType = vedtakDto.engangsbelopListe.firstOrNull()?.type,
             stønadType = vedtakDto.stonadsendringListe.firstOrNull()?.type,
             søknadFra = SoknadFra.BIDRAGSMOTTAKER,
@@ -72,7 +74,7 @@ class VedtakService(private val bidragVedtakConsumer: BidragVedtakConsumer, priv
         )
     }
 
-    fun hentGrunnlagForskudd(stonadsendringListe: List<StonadsendringDto>): List<GrunnlagForskuddPeriode> {
+    fun hentGrunnlagForskudd(stonadsendringListe: List<StonadsendringDto>): List<ForskuddInntektgrensePeriode> {
         val erForskudd = stonadsendringListe.any { it.type == StonadType.FORSKUDD }
         if (!erForskudd) return emptyList()
         val perioder = stonadsendringListe.flatMap { it.periodeListe.map { periode -> PeriodeFraTom(periode.fomDato, periode.tilDato ?: MAX_DATE) } }
@@ -81,21 +83,6 @@ class VedtakService(private val bidragVedtakConsumer: BidragVedtakConsumer, priv
         return sjablongService.hentSjablonGrunnlagForskudd(fraDato, tomDato)
     }
 
-    fun mapInntekt(inntekt: Inntekt, vedtak: VedtakDto): InntektPeriode {
-        val person = vedtak.hentPersonInfo(inntekt.rolle)
-        return InntektPeriode(
-            fomDato = inntekt.datoFom,
-            tomDato = inntekt.datoTil,
-            periodeFomDato = inntekt.datoFom,
-            periodeTomDato = inntekt.datoTil,
-            beløpType = GrunnlagInntektType(inntekt.inntektType),
-            beløpÅr = inntekt.gjelderAar.toInt(),
-            rolle = inntekt.rolle,
-            fodselsnummer = person?.fnr,
-            beløp = inntekt.belop,
-            inntektGrense = sjablongService.hentInntektGrenseForPeriode(getLastDayOfPreviousMonth(inntekt.datoTil))
-        )
-    }
     fun mapVedtakBarn(soknadBarn: SoknadsbarnInfo, vedtak: VedtakDto): VedtakBarn {
         val bostatus = vedtak.hentBostatus(soknadBarn.fnr)
         val barnInfo = vedtak.hentBarnInfoForFnr(soknadBarn.fnr)
@@ -105,22 +92,15 @@ class VedtakService(private val bidragVedtakConsumer: BidragVedtakConsumer, priv
             navn = personInfo.kortnavn?.verdi,
             harSammeAdresse = barnInfo?.harSammeAdresse ?: true,
             bostatusPerioder = bostatus.map { BostatusPeriode(it.datoFom, it.datoTil, it.bostatusKode) },
-            vedtakDetaljer = hentVedtakListe(soknadBarn.fnr, vedtak)
+            stonader = hentStonader(soknadBarn.fnr, vedtak)
         )
     }
-    fun hentVedtakListe(barnFodselsnummer: String, vedtakDto: VedtakDto): List<VedtakBarnStonad> {
+    fun hentStonader(barnFodselsnummer: String, vedtakDto: VedtakDto): List<VedtakBarnStonad> {
         val stonadListeBarn = vedtakDto.stonadsendringListe.filter { it.kravhaverId == barnFodselsnummer }
         return stonadListeBarn.map { vedtak ->
             val vedtakPerioder = vedtak.periodeListe.map { periode ->
                 val inntekter = vedtakDto.hentSluttberegninger(periode.grunnlagReferanseListe, periode.resultatkode).flatMap { sluttBeregning ->
-                    val inntekter = if (listOf("26818306", "26818308").contains(periode.delytelseId)) {
-                        hentInntekter(vedtakDto, listOf("Mottatt_Inntekt_SAK_BM_2021_20211001"))
-                    } else if (listOf("26818303").contains(periode.delytelseId)) {
-                        hentInntekter(vedtakDto, listOf("Mottatt_Inntekt_PIEO_BM_2021_20210501"))
-                    } else {
-                        sluttBeregning.hentInntekter(vedtakDto)
-                    }
-                    inntekter.filter { it.valgt }.map {
+                    sluttBeregning.hentInntekter(vedtakDto).filter { it.valgt }.map {
                         val rollePersonInfo = vedtakDto.hentPersonInfo(it.rolle)
                         InntektPeriode(
                             fomDato = it.datoFom,
@@ -148,7 +128,7 @@ class VedtakService(private val bidragVedtakConsumer: BidragVedtakConsumer, priv
             VedtakBarnStonad(
                 type = vedtak.type,
                 innkreving = vedtak.innkreving == Innkreving.JA,
-                grunnlagForskuddPerioder = hentGrunnlagForskudd(stonadListeBarn),
+                forskuddInntektgrensePerioder = hentGrunnlagForskudd(stonadListeBarn),
                 vedtakPerioder = vedtakPerioder
             )
         }
