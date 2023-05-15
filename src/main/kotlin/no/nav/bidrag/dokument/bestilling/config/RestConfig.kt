@@ -9,6 +9,7 @@ import org.springframework.context.annotation.Import
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder
 import org.springframework.retry.annotation.EnableRetry
 
+
 @Configuration
 @EnableSecurityConfiguration
 @EnableRetry
@@ -17,6 +18,6 @@ class RestConfig {
 
     @Bean
     fun jackson2ObjectMapperBuilder(): Jackson2ObjectMapperBuilder {
-        return Jackson2ObjectMapperBuilder().serializationInclusion(JsonInclude.Include.NON_NULL)
+        return Jackson2ObjectMapperBuilder().serializationInclusion(JsonInclude.Include.NON_NULL).failOnUnknownProperties(false)
     }
 }

@@ -1,6 +1,7 @@
 package no.nav.bidrag.dokument.bestilling.model
 
 import com.fasterxml.jackson.core.type.TypeReference
+import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.ObjectMapper
 import no.nav.bidrag.behandling.felles.dto.vedtak.VedtakDto
 import no.nav.bidrag.behandling.felles.enums.GrunnlagType
@@ -20,7 +21,7 @@ import no.nav.bidrag.dokument.bestilling.bestilling.dto.GrunnlagInntektType
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.InntektPeriode
 import java.math.BigDecimal
 
-val objectMapper = ObjectMapper().findAndRegisterModules()
+val objectMapper = ObjectMapper().findAndRegisterModules().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
 var reader = ObjectMapper().readerFor(object : TypeReference<List<String>>() {})
 fun VedtakDto.hentInntekter(referanser: List<String>, resultatKode: String): List<Inntekt> {
     val sluttBeregninger = hentGrunnagDetaljer(GrunnlagType.SLUTTBEREGNING_BBM, SluttberegningBBM::class.java, referanser).filter { it.resultatKode == resultatKode }

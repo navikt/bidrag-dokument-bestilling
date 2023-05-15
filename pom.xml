@@ -22,11 +22,11 @@
     <springframework-cloud.version>4.0.2</springframework-cloud.version>
     <springdoc.version>2.1.0</springdoc.version>
     <token-support.version>3.0.12</token-support.version>
-    <bidrag-commons-test.version>1.20230504132526_a72fa41</bidrag-commons-test.version>
+    <bidrag-commons-test.version>1.20230511093912_dc35d81</bidrag-commons-test.version>
     <ibmmq.version>9.3.2.1</ibmmq.version>
     <bidrag-dokument-dto.version>1.6.33</bidrag-dokument-dto.version>
     <kotlin-logging-jvm.version>3.0.5</kotlin-logging-jvm.version>
-    <bidrag-behandling-felles-dto.version>0.0.87</bidrag-behandling-felles-dto.version>
+    <bidrag-behandling-felles-dto.version>0.0.88</bidrag-behandling-felles-dto.version>
   </properties>
 
   <repositories>
@@ -58,11 +58,6 @@
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter</artifactId>
     </dependency>
-    <dependency>
-      <groupId>org.apache.activemq</groupId>
-      <artifactId>activemq-client-jakarta</artifactId>
-      <version>5.18.1</version>
-    </dependency>
     <!--TODO Denne avhengighteten er nødvendig for at testene i DokumentBestillingControllerTest og DokumentBestillingBrevkodeTest skal fungere-->
     <!--    <dependency>-->
     <!--      <groupId>org.apache.activemq</groupId>-->
@@ -70,6 +65,23 @@
     <!--      <version>5.19.0</version>-->
     <!--    <scope>test</scope>-->
     <!--    </dependency>-->
+
+    <dependency>
+      <groupId>org.apache.activemq</groupId>
+      <artifactId>activemq-broker</artifactId>
+      <version>5.18.1</version>
+      <exclusions>
+        <exclusion>
+          <groupId>org.apache.activemq</groupId>
+          <artifactId>activemq-client</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.activemq</groupId>
+      <artifactId>activemq-client-jakarta</artifactId>
+      <version>5.18.1</version>
+    </dependency>
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-actuator</artifactId>

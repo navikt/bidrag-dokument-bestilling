@@ -15,13 +15,6 @@ import java.time.LocalDate
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.util.*
-import javax.xml.bind.annotation.XmlAccessType
-import javax.xml.bind.annotation.XmlAccessorType
-import javax.xml.bind.annotation.XmlAttribute
-import javax.xml.bind.annotation.XmlElement
-import javax.xml.bind.annotation.XmlRootElement
-import javax.xml.bind.annotation.adapters.XmlAdapter
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter
 
 var BREV_DATETIME_FORMAT = DateTimeFormatter.ofPattern("ddMMyy")
 var BREV_SOKNAD_DATETIME_FORMAT = DateTimeFormatter.ofPattern("yyyyMMdd")
