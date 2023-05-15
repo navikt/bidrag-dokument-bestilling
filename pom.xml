@@ -5,7 +5,7 @@
   <parent>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
-    <version>2.7.11</version>
+    <version>3.0.6</version>
     <relativePath/> <!-- lookup parent from repository -->
   </parent>
   <groupId>no.nav</groupId>
@@ -15,35 +15,36 @@
   <properties>
     <java.version>17</java.version>
     <kotlin.version>1.8.21</kotlin.version>
-    <bidrag-commons.version>0.7.43</bidrag-commons.version>
-    <bidrag-transport.version>20230420100825_db5a095</bidrag-transport.version>
+    <bidrag-commons.version>20230510130746_8b93e85</bidrag-commons.version>
+    <bidrag-transport.version>20230508100903_0aa6729</bidrag-transport.version>
     <logback-encoder.version>7.3</logback-encoder.version>
-    <token-support.version>2.1.7</token-support.version>
-    <springframework-cloud.version>3.1.4</springframework-cloud.version>
-    <springdoc.version>1.6.11</springdoc.version>
-    <token-support.version>2.0.14</token-support.version>
-    <bidrag-commons-test.version>0.2.2</bidrag-commons-test.version>
-    <ibmmq.version>9.3.0.1</ibmmq.version>
-    <bidrag-dokument-dto.version>1.6.11</bidrag-dokument-dto.version>
-    <kotlin-logging-jvm.version>3.0.4</kotlin-logging-jvm.version>
+    <token-support.version>3.0.12</token-support.version>
+    <springframework-cloud.version>4.0.2</springframework-cloud.version>
+    <springdoc.version>2.1.0</springdoc.version>
+    <token-support.version>3.0.12</token-support.version>
+    <bidrag-commons-test.version>1.20230504132526_a72fa41</bidrag-commons-test.version>
+    <ibmmq.version>9.3.2.1</ibmmq.version>
+    <bidrag-dokument-dto.version>1.6.33</bidrag-dokument-dto.version>
+    <kotlin-logging-jvm.version>3.0.5</kotlin-logging-jvm.version>
   </properties>
 
   <repositories>
     <repository>
-      <id>github-commons</id>
+      <id>github</id>
       <url>https://maven.pkg.github.com/navikt/bidrag-commons</url>
     </repository>
-    <repository>
-      <id>github</id>
-      <name>GitHub felles Apache Maven Packages for navikt</name>
-      <url>https://maven.pkg.github.com/navikt/maven-release/</url>
-    </repository>
-    <repository>
-      <id>confluent</id>
-      <name>Confluent kafka</name>
-      <url>https://packages.confluent.io/maven/</url>
-    </repository>
   </repositories>
+
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>org.yaml</groupId>
+        <artifactId>snakeyaml</artifactId>
+        <version>2.0</version>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+
 
   <dependencies>
 
@@ -53,9 +54,17 @@
       <artifactId>spring-boot-starter</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-activemq</artifactId>
+      <groupId>org.apache.activemq</groupId>
+      <artifactId>activemq-client-jakarta</artifactId>
+      <version>5.18.1</version>
     </dependency>
+    <!--TODO Denne avhengighteten er nødvendig for at testene i DokumentBestillingControllerTest og DokumentBestillingBrevkodeTest skal fungere-->
+    <!--    <dependency>-->
+    <!--      <groupId>org.apache.activemq</groupId>-->
+    <!--      <artifactId>activemq-broker-jakarta</artifactId>-->
+    <!--      <version>5.19.0</version>-->
+    <!--    <scope>test</scope>-->
+    <!--    </dependency>-->
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-actuator</artifactId>
@@ -67,7 +76,7 @@
     <dependency>
       <groupId>org.springframework.retry</groupId>
       <artifactId>spring-retry</artifactId>
-      <version>1.3.3</version>
+      <version>2.0.1</version>
     </dependency>
     <dependency>
       <groupId>org.springframework.boot</groupId>
@@ -112,7 +121,7 @@
     <dependency>
       <groupId>org.apache.cxf</groupId>
       <artifactId>cxf-spring-boot-starter-jaxws</artifactId>
-      <version>3.5.3</version>
+      <version>4.0.1</version>
     </dependency>
 
     <dependency>
@@ -124,36 +133,20 @@
     <dependency>
       <groupId>org.jetbrains.kotlinx</groupId>
       <artifactId>kotlinx-coroutines-android</artifactId>
-      <version>1.6.4</version>
+      <version>1.7.0</version>
     </dependency>
     <!-- IBM MQ -->
     <dependency>
       <groupId>com.ibm.mq</groupId>
-      <artifactId>com.ibm.mq.allclient</artifactId>
-      <version>${ibmmq.version}</version>
-      <exclusions>
-        <exclusion>
-          <groupId>org.bouncycastle</groupId>
-          <artifactId>bcprov-jdk15on</artifactId>
-        </exclusion>
-      </exclusions>
+      <artifactId>mq-jms-spring-boot-starter</artifactId>
+      <version>3.0.6</version>
     </dependency>
 
 
     <!--SpringDoc-->
     <dependency>
       <groupId>org.springdoc</groupId>
-      <artifactId>springdoc-openapi-kotlin</artifactId>
-      <version>${springdoc.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.springdoc</groupId>
-      <artifactId>springdoc-openapi-ui</artifactId>
-      <version>${springdoc.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.springdoc</groupId>
-      <artifactId>springdoc-openapi-data-rest</artifactId>
+      <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
       <version>${springdoc.version}</version>
     </dependency>
 
@@ -191,8 +184,8 @@
       <artifactId>kotlin-reflect</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.apache.httpcomponents</groupId>
-      <artifactId>httpclient</artifactId>
+      <groupId>org.apache.httpcomponents.client5</groupId>
+      <artifactId>httpclient5</artifactId>
     </dependency>
     <dependency>
       <groupId>com.github.ben-manes.caffeine</groupId>
@@ -257,7 +250,7 @@
     <dependency>
       <groupId>io.kotest</groupId>
       <artifactId>kotest-assertions-core-jvm</artifactId>
-      <version>5.5.5</version>
+      <version>5.6.2</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -271,6 +264,16 @@
       <artifactId>spring-cloud-starter-contract-stub-runner</artifactId>
       <version>${springframework-cloud.version}</version>
       <scope>test</scope>
+      <exclusions>
+        <exclusion>
+          <groupId>com.google.guava</groupId>
+          <artifactId>guava</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>commons-collections</groupId>
+          <artifactId>commons-collections</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
     <dependency>
       <groupId>no.nav.security</groupId>
@@ -319,6 +322,7 @@
           <args>
             <arg>-Xjsr305=strict</arg>
           </args>
+          <jvmTarget>17</jvmTarget>
           <compilerPlugins>
             <plugin>spring</plugin>
             <plugin>jpa</plugin>
@@ -342,54 +346,54 @@
           </dependency>
         </dependencies>
       </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-antrun-plugin</artifactId>
-                <version>3.1.0</version>
-                <executions>
-                    <execution>
-                        <id>ktlint</id>
-                        <phase>verify</phase>
-                        <configuration>
-                            <target name="ktlint">
-                                <java taskname="ktlint" dir="${basedir}" fork="true" failonerror="true"
-                                      classpathref="maven.plugin.classpath" classname="com.pinterest.ktlint.Main">
-                                    <arg value="src/**/*.kt"/>
-                                </java>
-                            </target>
-                        </configuration>
-                        <goals>
-                            <goal>run</goal>
-                        </goals>
-                    </execution>
-                    <execution>
-                        <id>ktlint-format</id>
-                        <phase>validate</phase>
-                        <configuration>
-                            <target name="ktlint">
-                                <java taskname="ktlint" dir="${basedir}" fork="true" failonerror="true"
-                                      classpathref="maven.plugin.classpath" classname="com.pinterest.ktlint.Main">
-                                    <jvmarg value="--add-opens"/>
-                                    <jvmarg value="java.base/java.lang=ALL-UNNAMED"/>
-                                    <arg value="-F"/>
-                                    <arg value="src/**/*.kt"/>
-                                </java>
-                            </target>
-                        </configuration>
-                        <goals>
-                            <goal>run</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <dependencies>
-                    <dependency>
-                        <groupId>com.pinterest</groupId>
-                        <artifactId>ktlint</artifactId>
-                        <version>0.47.1</version>
-                    </dependency>
-                    <!-- additional 3rd party ruleset(s) can be specified here -->
-                </dependencies>
-            </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-antrun-plugin</artifactId>
+        <version>3.1.0</version>
+        <executions>
+          <execution>
+            <id>ktlint</id>
+            <phase>verify</phase>
+            <configuration>
+              <target name="ktlint">
+                <java taskname="ktlint" dir="${basedir}" fork="true" failonerror="true"
+                  classpathref="maven.plugin.classpath" classname="com.pinterest.ktlint.Main">
+                  <arg value="src/**/*.kt"/>
+                </java>
+              </target>
+            </configuration>
+            <goals>
+              <goal>run</goal>
+            </goals>
+          </execution>
+          <execution>
+            <id>ktlint-format</id>
+            <phase>validate</phase>
+            <configuration>
+              <target name="ktlint">
+                <java taskname="ktlint" dir="${basedir}" fork="true" failonerror="true"
+                  classpathref="maven.plugin.classpath" classname="com.pinterest.ktlint.Main">
+                  <jvmarg value="--add-opens"/>
+                  <jvmarg value="java.base/java.lang=ALL-UNNAMED"/>
+                  <arg value="-F"/>
+                  <arg value="src/**/*.kt"/>
+                </java>
+              </target>
+            </configuration>
+            <goals>
+              <goal>run</goal>
+            </goals>
+          </execution>
+        </executions>
+        <dependencies>
+          <dependency>
+            <groupId>com.pinterest</groupId>
+            <artifactId>ktlint</artifactId>
+            <version>0.47.1</version>
+          </dependency>
+          <!-- additional 3rd party ruleset(s) can be specified here -->
+        </dependencies>
+      </plugin>
     </plugins>
   </build>
 </project>

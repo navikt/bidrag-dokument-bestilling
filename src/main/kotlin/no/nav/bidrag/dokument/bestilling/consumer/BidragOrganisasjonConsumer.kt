@@ -19,9 +19,10 @@ import java.net.URI
 class BidragOrganisasjonConsumer(
     @Value("\${BIDRAG_ORGANISASJON_URL}") val url: URI,
     @Qualifier("azure") private val restTemplate: RestOperations
-) : AbstractRestClient(restTemplate, "bidrag-organisasjon"){
+) : AbstractRestClient(restTemplate, "bidrag-organisasjon") {
     private fun createUri(path: String?) = UriComponentsBuilder.fromUri(url)
         .path(path ?: "").build().toUri()
+
     @Cacheable(SAKSBEHANDLERINFO_CACHE)
     fun hentSaksbehandlerInfo(saksbehandlerIdent: String): SaksbehandlerInfoResponse? {
         return getForEntity(createUri("/saksbehandler/info/$saksbehandlerIdent"))

@@ -1,15 +1,15 @@
 package no.nav.bidrag.dokument.bestilling.utils
 
+import jakarta.jms.Connection
+import jakarta.jms.MessageConsumer
+import jakarta.jms.Queue
+import jakarta.jms.Session
+import jakarta.xml.bind.JAXB
 import org.apache.activemq.command.ActiveMQTextMessage
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Profile
 import org.springframework.jms.core.JmsTemplate
 import org.springframework.stereotype.Component
-import javax.jms.Connection
-import javax.jms.MessageConsumer
-import javax.jms.Queue
-import javax.jms.Session
-import javax.xml.bind.JAXB
 
 @Component
 @Profile("!nais")
