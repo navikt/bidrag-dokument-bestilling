@@ -21,7 +21,6 @@ import no.nav.bidrag.dokument.bestilling.utils.SAKSBEHANDLER_IDENT
 import no.nav.bidrag.dokument.bestilling.utils.createEnhetKontaktInformasjon
 import no.nav.bidrag.dokument.bestilling.utils.createOpprettJournalpostResponse
 import no.nav.bidrag.dokument.bestilling.utils.createPostAdresseResponse
-import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.EnumSource
 import org.junit.jupiter.params.provider.MethodSource
@@ -29,7 +28,6 @@ import org.springframework.http.HttpEntity
 import org.springframework.http.HttpMethod
 import org.springframework.http.HttpStatus
 
-@Disabled // i påvente av activemq-broker-jakarta 5.19.0
 class DokumentBestillingBrevkodeTest : AbstractControllerTest() {
 
     @SpykBean
@@ -75,9 +73,11 @@ class DokumentBestillingBrevkodeTest : AbstractControllerTest() {
 
         )
 
-        val response = httpHeaderTestRestTemplate.postForEntity<DokumentBestillingResponse>(
+        val response = httpHeaderTestRestTemplate.exchange(
             "${rootUri()}/bestill/${brevKode.name}",
-            HttpEntity(request)
+            HttpMethod.POST,
+            HttpEntity(request),
+            DokumentBestillingResponse::class.java
         )
 
         response.statusCode shouldBe HttpStatus.OK
@@ -210,9 +210,11 @@ class DokumentBestillingBrevkodeTest : AbstractControllerTest() {
             spraak = "NB"
 
         )
-        val response = httpHeaderTestRestTemplate.postForEntity<DokumentBestillingResponse>(
+        val response = httpHeaderTestRestTemplate.exchange(
             "${rootUri()}/bestill/${brevKode.name}",
-            HttpEntity(request)
+            HttpMethod.POST,
+            HttpEntity(request),
+            DokumentBestillingResponse::class.java
         )
 
         response.statusCode shouldBe HttpStatus.OK

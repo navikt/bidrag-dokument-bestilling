@@ -118,4 +118,5 @@ enum class BrevKode(val beskrivelse: String, var brevtype: BrevType, val bestill
     BI01S15("18år orientering til BP", BrevType.UTGÅENDE, BestillingSystem.BREVSERVER, false, false),
     BI01S16("18år orientering til BM", BrevType.UTGÅENDE, BestillingSystem.BREVSERVER, false, false),
     BI01B11("Vedtak tilleggsbidrag over 18 år", BrevType.UTGÅENDE, BestillingSystem.BREVSERVER, false, false)
+
 }

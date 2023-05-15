@@ -1,16 +1,17 @@
 package no.nav.bidrag.dokument.bestilling.config.jms
 
 import com.ibm.mq.constants.CMQC
-import com.ibm.mq.jakarta.jms.MQQueue
-import com.ibm.msg.client.jakarta.jms.JmsConstants
-import jakarta.jms.Session
-import jakarta.jms.TextMessage
+import com.ibm.mq.jms.MQQueue
+import com.ibm.msg.client.jms.JmsConstants
 import no.nav.bidrag.dokument.bestilling.SIKKER_LOGG
 import org.springframework.jms.support.converter.MarshallingMessageConverter
 import org.springframework.jms.support.converter.MessageType
 import org.springframework.oxm.Marshaller
 import org.springframework.oxm.jaxb.Jaxb2Marshaller
 import java.io.StringWriter
+import javax.jms.Session
+import javax.jms.TextMessage
+import javax.xml.transform.Result
 import javax.xml.transform.stream.StreamResult
 
 class LoggingMarshallingMessageConverter(jaxb2Marshaller: Jaxb2Marshaller, var replyQueue: String) : MarshallingMessageConverter(jaxb2Marshaller) {
@@ -22,7 +23,7 @@ class LoggingMarshallingMessageConverter(jaxb2Marshaller: Jaxb2Marshaller, var r
     override fun marshalToTextMessage(o: Any, session: Session, marshaller: Marshaller): TextMessage {
         val rq = MQQueue(replyQueue)
         val writer = StringWriter(1024)
-        val result = StreamResult(writer)
+        val result: Result = StreamResult(writer)
         marshaller.marshal(o, result)
         val messageString = writer.toString()
         val cleanedMessageString = messageString

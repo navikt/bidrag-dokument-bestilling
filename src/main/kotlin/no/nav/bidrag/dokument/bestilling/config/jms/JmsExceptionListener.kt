@@ -1,8 +1,8 @@
 package no.nav.bidrag.dokument.bestilling.config.jms
 
-import jakarta.jms.ExceptionListener
-import jakarta.jms.JMSException
 import org.slf4j.LoggerFactory
+import javax.jms.ExceptionListener
+import javax.jms.JMSException
 
 class JmsExceptionListener : ExceptionListener {
     companion object {
