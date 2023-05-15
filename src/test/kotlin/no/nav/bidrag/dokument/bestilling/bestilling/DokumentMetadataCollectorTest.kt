@@ -108,7 +108,6 @@ internal class DokumentMetadataCollectorTest {
         every { kodeverkConsumer.hentLandkoder() } returns kodeverkResponse
         every { sjablonConsumer.hentSjablonger() } returns sjablonResponse
         metadataCollector = withMetadataCollector()
-
     }
 
     private fun withMetadataCollector() = DokumentMetadataCollector(personService, sakService, kodeverkService, vedtakService, sjablongService, saksbehandlerInfoManager, organisasjonService)

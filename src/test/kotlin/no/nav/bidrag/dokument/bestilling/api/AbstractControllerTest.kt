@@ -1,7 +1,6 @@
 package no.nav.bidrag.dokument.bestilling.api
 
 import StubUtils
-import com.fasterxml.jackson.core.type.TypeReference
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.github.tomakehurst.wiremock.client.WireMock
 import com.ninjasquad.springmockk.MockkBean

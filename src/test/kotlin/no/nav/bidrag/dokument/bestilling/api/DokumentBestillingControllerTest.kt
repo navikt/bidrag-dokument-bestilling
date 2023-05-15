@@ -172,14 +172,14 @@ class DokumentBestillingControllerTest : AbstractControllerTest() {
                 stubUtils.Verify().verifyHentPersonCalled(BARN2.ident.verdi)
                 stubUtils.Verify().verifyOpprettJournalpostCalledWith(
                     "{\"skalFerdigstilles\":false," +
-                            "\"tittel\":\"$tittel\"," +
-                            "\"gjelderIdent\":\"${gjelderId.verdi}\"," +
-                            "\"avsenderMottaker\":{\"navn\":\"${BM1.navn}\",\"ident\":\"${mottakerId.verdi}\",\"type\":\"FNR\",\"adresse\":null}," +
-                            "\"dokumenter\":[{\"tittel\":\"$tittel\",\"brevkode\":\"${dokumentMal.name}\"}]," +
-                            "\"tilknyttSaker\":[\"$saksnummer\"]," +
-                            "\"journalposttype\":\"UTGÅENDE\"," +
-                            "\"journalførendeEnhet\":\"4806\"," +
-                            "\"saksbehandlerIdent\":\"Z99999\"}"
+                        "\"tittel\":\"$tittel\"," +
+                        "\"gjelderIdent\":\"${gjelderId.verdi}\"," +
+                        "\"avsenderMottaker\":{\"navn\":\"${BM1.navn}\",\"ident\":\"${mottakerId.verdi}\",\"type\":\"FNR\",\"adresse\":null}," +
+                        "\"dokumenter\":[{\"tittel\":\"$tittel\",\"brevkode\":\"${dokumentMal.name}\"}]," +
+                        "\"tilknyttSaker\":[\"$saksnummer\"]," +
+                        "\"journalposttype\":\"UTGÅENDE\"," +
+                        "\"journalførendeEnhet\":\"4806\"," +
+                        "\"saksbehandlerIdent\":\"Z99999\"}"
                 )
             }
         }
