@@ -1,5 +1,12 @@
 package no.nav.bidrag.dokument.bestilling.bestilling.produksjon.dto
 
+import jakarta.xml.bind.annotation.XmlAccessType
+import jakarta.xml.bind.annotation.XmlAccessorType
+import jakarta.xml.bind.annotation.XmlAttribute
+import jakarta.xml.bind.annotation.XmlElement
+import jakarta.xml.bind.annotation.XmlRootElement
+import jakarta.xml.bind.annotation.adapters.XmlAdapter
+import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter
 import no.nav.bidrag.dokument.bestilling.model.LANDKODE3_NORGE
 import java.math.BigDecimal
 import java.math.RoundingMode
