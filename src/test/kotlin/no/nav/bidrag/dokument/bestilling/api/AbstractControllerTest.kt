@@ -92,7 +92,7 @@ abstract class AbstractControllerTest {
     }
 
     fun readFile(filePath: String): String {
-        return String(ClassPathResource("testdata/$filePath").inputStream.readAllBytes())
+        return String(ClassPathResource("__files/$filePath").inputStream.readAllBytes())
     }
 
     fun stubDefaultValues() {
