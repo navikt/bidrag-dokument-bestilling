@@ -44,6 +44,7 @@ val SAMHANDLER_IDENT = "80000123213"
 
 val SAKSBEHANDLER_IDENT = "Z99999"
 val SAKSBEHANDLER_NAVN = "Saksbehandlersen, Saksbehandler Mellomnavn"
+val SAK_OPPRETTET_DATO = LocalDate.parse("2023-02-02")
 
 val SAMHANDLER_INFO = SamhandlerInformasjon(
     navn = "Samhandler samhandlersen",
@@ -77,23 +78,23 @@ val BP1 = createPersonResponse(
     fodselsdato = LocalDate.parse("2001-05-06")
 )
 val BM1 = createPersonResponse(
-    "123123123123",
+    "26417806511",
     "Etternavn, BMFornavn Bidragsmottaker",
     fodselsdato = LocalDate.parse("2000-03-06")
 )
 val BARN1 = createPersonResponse(
-    "3323213",
+    "12461690252",
     "Etternavn, Barn1 Mellomnavn",
     fodselsdato = LocalDate.parse("2020-05-06")
 )
 val BARN2 = createPersonResponse(
-    "333333323213",
+    "02461662466",
     "Etternavn, Barn2 Mellomnavn",
     fodselsdato = LocalDate.parse("2018-03-20")
 )
 
 val BARN3 = createPersonResponse(
-    "412421412421",
+    "27461456400",
     "Etternavn, Barn3",
     fodselsdato = LocalDate.parse("2014-03-20")
 )
@@ -122,7 +123,7 @@ fun createSakResponse(): BidragssakDto {
         ),
         saksstatus = Bidragssakstatus.IN,
         kategori = Sakskategori.N,
-        opprettetDato = OpprettetDato(LocalDate.now()),
+        opprettetDato = OpprettetDato(SAK_OPPRETTET_DATO),
         levdeAdskilt = LevdeAdskilt(false),
         ukjentPart = UkjentPart(false)
     )

@@ -1,7 +1,7 @@
 {
   "kilde": "MANUELT",
   "type": "ENDRING",
-  "opprettetAv": "Z994775",
+  "opprettetAv": "Z99999",
   "opprettetAvNavn": null,
   "vedtakTidspunkt": "2023-04-26T11:17:39.000943",
   "enhetId": "4806",
@@ -55,7 +55,7 @@
       "innhold": {
         "datoFom": "2023-04-01",
         "datoTil": null,
-        "fnr": "25451755601",
+        "fnr": "12461690252",
         "navn": "Spettete Komfyr",
         "medIBeregning": true,
         "andelForsorget": 1,
@@ -68,7 +68,7 @@
       "innhold": {
         "datoFom": "2023-04-01",
         "datoTil": null,
-        "fnr": "16451299577",
+        "fnr": "02461662466",
         "navn": "Pessimistisk Konsekvens",
         "medIBeregning": true,
         "andelForsorget": 1,
@@ -115,7 +115,7 @@
       "referanse": "Mottatt_PersonInfo_BM",
       "type": "PERSON_INFO",
       "innhold": {
-        "fnr": "30437516053",
+        "fnr": "26417806511",
         "navn": "Tydelig Bakgrunnslitteratur",
         "rolle": "BIDRAGSMOTTAKER"
       }

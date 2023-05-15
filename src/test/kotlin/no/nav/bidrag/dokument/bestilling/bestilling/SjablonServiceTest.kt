@@ -40,7 +40,19 @@ class SjablonServiceTest {
     }
 
     @Test
-    fun `skal hente innteksgrenser forskudd for periode 2023`() {
+    fun `skal hente inntekgrense forskudd for periode`() {
+        sjablongService.hentInntektGrenseForPeriode(LocalDate.parse("2023-06-30")) shouldBe BigDecimal(52800)
+        sjablongService.hentInntektGrenseForPeriode(LocalDate.parse("2022-06-30")) shouldBe BigDecimal(51300)
+    }
+
+    @Test
+    fun `skal hente maks innteksgrense forskudd for periode`() {
+        sjablongService.hentMaksInntektForPeriode(LocalDate.parse("2023-06-30")) shouldBe BigDecimal(563200)
+        sjablongService.hentMaksInntektForPeriode(LocalDate.parse("2022-06-30")) shouldBe BigDecimal(547200)
+    }
+
+    @Test
+    fun `skal hente forskudd innteksgrenser for periode 2022 - 2023`() {
         val fraDato = LocalDate.parse("2023-01-02")
         val inntektgrenser =
             sjablongService.hentForskuddInntektgrensePerioder(fraDato)
@@ -103,18 +115,33 @@ class SjablonServiceTest {
     }
 
     @Test
-    fun `skal hente innteksgrenser forskudd for periode 2021-2023`() {
+    fun `skal hente forskudd innteksgrenser for periode 2021-2023`() {
         val fraDato = LocalDate.parse("2021-01-02")
         val inntektgrenser =
             sjablongService.hentForskuddInntektgrensePerioder(fraDato)
         assertSoftly {
             inntektgrenser shouldHaveSize 8 * 3
             inntektgrenser.filter { it.tomDato == MAX_DATE } shouldHaveSize 8
+            val inntekgrenser2021 = inntektgrenser.hentForPeriodeHvorDatoErInkludert(LocalDate.parse("2021-01-02"))
+            inntekgrenser2021 shouldHaveSize 8
+            inntekgrenser2021[0].fomDato shouldBe fraDato
+            inntekgrenser2021[0].tomDato!! shouldBe LocalDate.parse("2021-06-30")
+
+            val inntekgrenser2022 = inntektgrenser.hentForPeriodeHvorDatoErInkludert(LocalDate.parse("2021-07-01"))
+            inntekgrenser2022 shouldHaveSize 8
+            inntekgrenser2022[0].fomDato shouldBe LocalDate.parse("2021-07-01")
+            inntekgrenser2022[0].tomDato!! shouldBe LocalDate.parse("2022-06-30")
+
+            val inntekgrenser2023 = inntektgrenser.hentForPeriodeHvorDatoErInkludert(LocalDate.parse("2022-07-01"))
+            inntekgrenser2023 shouldHaveSize 8
+            inntekgrenser2023[0].fomDato shouldBe LocalDate.parse("2022-07-01")
+            inntekgrenser2023[0].tomDato!! shouldBe MAX_DATE
+
             val ensligGrenser = inntektgrenser.filter { it.forsorgerType == ForsorgerType.ENSLIG }
             ensligGrenser shouldHaveSize 4 * 3
 
             // Valider beregning av inntektgrenser for 2022 basert på reele sjablonverdier
-            val ensligPeriode2022 = ensligGrenser.hentForPeriode(LocalDate.parse("2022-04-01"))
+            val ensligPeriode2022 = ensligGrenser.hentForPeriodeHvorDatoErInkludert(LocalDate.parse("2022-04-01"))
             ensligPeriode2022.hentForAntallBarn(1)!!
                 .validerBelop75Prosent(BeløpFraTil(BigDecimal(305001), BigDecimal(476600)))
             ensligPeriode2022.hentForAntallBarn(2)!!
@@ -137,7 +164,7 @@ class SjablonServiceTest {
                 inntektgrenser.filter { it.forsorgerType == ForsorgerType.GIFT_SAMBOER }
             giftSamboerGrenser shouldHaveSize 4 * 3
             val giftSamboerPeriode2022 =
-                giftSamboerGrenser.hentForPeriode(LocalDate.parse("2022-04-01"))
+                giftSamboerGrenser.hentForPeriodeHvorDatoErInkludert(LocalDate.parse("2022-04-01"))
 
             giftSamboerPeriode2022.hentForAntallBarn(1)!!
                 .validerBelop75Prosent(BeløpFraTil(BigDecimal(305001), BigDecimal(366900)))
@@ -159,7 +186,7 @@ class SjablonServiceTest {
         }
     }
 
-    fun List<ForskuddInntektgrensePeriode>.hentForPeriode(dato: LocalDate) =
+    fun List<ForskuddInntektgrensePeriode>.hentForPeriodeHvorDatoErInkludert(dato: LocalDate) =
         this.filter { it.tomDato != null && it.tomDato!! >= dato && it.fomDato <= dato }
 
     fun List<ForskuddInntektgrensePeriode>.hentForAntallBarn(antallBarn: Int) =

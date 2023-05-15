@@ -3,6 +3,7 @@ package no.nav.bidrag.dokument.bestilling.tjenester
 import no.nav.bidrag.behandling.felles.dto.vedtak.StonadsendringDto
 import no.nav.bidrag.behandling.felles.dto.vedtak.VedtakDto
 import no.nav.bidrag.behandling.felles.enums.Innkreving
+import no.nav.bidrag.behandling.felles.enums.InntektType
 import no.nav.bidrag.behandling.felles.enums.StonadType
 import no.nav.bidrag.behandling.felles.grunnlag.SoknadsbarnInfo
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.BarnIHustandPeriode
@@ -99,20 +100,22 @@ class VedtakService(private val bidragVedtakConsumer: BidragVedtakConsumer, priv
         return stonadListeBarn.map { vedtak ->
             val vedtakPerioder = vedtak.periodeListe.map { periode ->
                 val inntekter = vedtakDto.hentSluttberegninger(periode.grunnlagReferanseListe, periode.resultatkode).flatMap { sluttBeregning ->
-                    sluttBeregning.hentInntekter(vedtakDto).filter { it.valgt }.map {
-                        val rollePersonInfo = vedtakDto.hentPersonInfo(it.rolle)
-                        InntektPeriode(
-                            fomDato = it.datoFom,
-                            tomDato = it.datoTil,
-                            periodeFomDato = periode.fomDato,
-                            periodeTomDato = periode.tilDato,
-                            beløpType = GrunnlagInntektType(it.inntektType),
-                            beløpÅr = it.gjelderAar.toInt(),
-                            rolle = it.rolle,
-                            fodselsnummer = rollePersonInfo?.fnr,
-                            beløp = it.belop
-                        )
-                    }
+                    sluttBeregning.hentInntekter(vedtakDto).filter { it.valgt }
+                        .filter { it.inntektType == InntektType.KAPITALINNTEKT_EGNE_OPPLYSNINGER && it.belop > BigDecimal(0) || it.inntektType != InntektType.KAPITALINNTEKT_EGNE_OPPLYSNINGER }
+                        .map {
+                            val rollePersonInfo = vedtakDto.hentPersonInfo(it.rolle)
+                            InntektPeriode(
+                                fomDato = it.datoFom,
+                                tomDato = it.datoTil,
+                                periodeFomDato = periode.fomDato,
+                                periodeTomDato = periode.tilDato,
+                                beløpType = GrunnlagInntektType(it.inntektType),
+                                beløpÅr = it.gjelderAar.toInt(),
+                                rolle = it.rolle,
+                                fodselsnummer = rollePersonInfo?.fnr,
+                                beløp = it.belop
+                            )
+                        }
                 }
 
                 VedtakPeriode(
