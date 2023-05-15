@@ -18,6 +18,7 @@ import no.nav.bidrag.behandling.felles.enums.SivilstandKode
 import no.nav.bidrag.behandling.felles.enums.StonadType
 import no.nav.bidrag.behandling.felles.enums.VedtakKilde
 import no.nav.bidrag.behandling.felles.enums.VedtakType
+import no.nav.bidrag.dokument.bestilling.bestilling.dto.VedtakDetaljer
 import no.nav.bidrag.dokument.bestilling.consumer.BidragVedtakConsumer
 import no.nav.bidrag.dokument.bestilling.consumer.SjablonConsumer
 import no.nav.bidrag.dokument.bestilling.consumer.dto.SjablongerDto
@@ -30,9 +31,11 @@ import no.nav.bidrag.dokument.bestilling.utils.BARN2
 import no.nav.bidrag.dokument.bestilling.utils.BM1
 import no.nav.bidrag.dokument.bestilling.utils.BP1
 import no.nav.bidrag.dokument.bestilling.utils.FORSKUDD_INNTEKTGRENSE_2022_2023
+import no.nav.bidrag.dokument.bestilling.utils.FORSKUDD_MAKS_INNTEKT_FORSKUDD_MOTTAKER_2022_2023
+import no.nav.bidrag.dokument.bestilling.utils.SAKSBEHANDLER_IDENT
+import no.nav.bidrag.dokument.bestilling.utils.SAKSBEHANDLER_NAVN
 import no.nav.bidrag.dokument.bestilling.utils.createPostAdresseResponse
 import no.nav.bidrag.dokument.bestilling.utils.readFile
-import no.nav.bidrag.dokument.bestilling.utils.readFile2
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -74,9 +77,10 @@ class VedtakServiceTest {
     }
 
     @Test
-    fun `skal mappe vedtakdetaljer`(){
+    fun `skal mappe vedtakdetaljer`() {
         mockDefaultValues()
-        val vedtakResponse = ObjectMapper().findAndRegisterModules().readValue(readFile2("vedtak/vedtak_forskudd_enkel_108.json"), VedtakDto::class.java)
+        val virkningDato = LocalDate.parse("2023-04-01")
+        val vedtakResponse = ObjectMapper().findAndRegisterModules().readValue(readFile("vedtak/vedtak_forskudd_enkel_108.json"), VedtakDto::class.java)
         every { vedtakConsumer.hentVedtak(any()) } returns vedtakResponse
 
         val vedtakDetaljer = vedtakService.hentVedtakDetaljer("108")
@@ -88,22 +92,22 @@ class VedtakServiceTest {
             vedtakDetaljer.vedtakType shouldBe VedtakType.ENDRING
             vedtakDetaljer.stønadType shouldBe StonadType.FORSKUDD
             vedtakDetaljer.virkningÅrsakKode shouldBe "M"
-            vedtakDetaljer.virkningDato!! shouldHaveSameDayAs LocalDate.parse("2023-04-01")
+            vedtakDetaljer.virkningDato!! shouldHaveSameDayAs virkningDato
             vedtakDetaljer.soknadDato!! shouldHaveSameDayAs LocalDate.parse("2023-04-10")
             vedtakDetaljer.soktFraDato!! shouldHaveSameDayAs LocalDate.parse("2023-04-01")
             vedtakDetaljer.vedtattDato!! shouldHaveSameDayAs LocalDate.parse("2023-04-26")
-            vedtakDetaljer.saksbehandlerInfo.id shouldBe "Z994775"
-            vedtakDetaljer.saksbehandlerInfo.navn shouldBe "F_Z994775 E_Z994775"
+            vedtakDetaljer.saksbehandlerInfo.id shouldBe SAKSBEHANDLER_IDENT
+            vedtakDetaljer.saksbehandlerInfo.navn shouldBe SAKSBEHANDLER_NAVN
 
             vedtakDetaljer.sivilstandPerioder shouldHaveSize 1
-            val sivilstandPeriode = vedtakDetaljer.sivilstandPerioder[0]
+            val sivilstandPeriode = vedtakDetaljer.hentSivilstandPeriodeForDato(virkningDato)!!
             sivilstandPeriode.fomDato shouldHaveSameDayAs LocalDate.parse("2023-04-01")
             sivilstandPeriode.tomDato shouldBe null
             sivilstandPeriode.sivilstandKode shouldBe SivilstandKode.ENSLIG
             sivilstandPeriode.sivilstandBeskrivelse shouldBe "Ugift"
 
             vedtakDetaljer.barnIHustandPerioder shouldHaveSize 1
-            val barnIHustandPeriode = vedtakDetaljer.barnIHustandPerioder[0]
+            val barnIHustandPeriode = vedtakDetaljer.hentBarnIHustandPeriodeForDato(virkningDato)!!
             barnIHustandPeriode.fomDato shouldHaveSameDayAs LocalDate.parse("2023-04-01")
             barnIHustandPeriode.tomDato shouldBe null
             barnIHustandPeriode.antall shouldBe 2
@@ -122,32 +126,31 @@ class VedtakServiceTest {
             barnVedtakPeriode.tomDato shouldBe null
             barnVedtakPeriode.beløp shouldBe BigDecimal(1760)
             barnVedtakPeriode.resultatKode shouldBe "100"
+            barnVedtakPeriode.inntektGrense shouldBe FORSKUDD_INNTEKTGRENSE_2022_2023
+            barnVedtakPeriode.maksInntekt shouldBe FORSKUDD_MAKS_INNTEKT_FORSKUDD_MOTTAKER_2022_2023
 
-            val barn1InntektPeriode1 = barnVedtakPeriode.inntektPerioder[0]
-            val barn1InntektBeregningsgrunnlag = barnVedtakPeriode.inntektPerioder[1]
+            val barn1InntektPeriode1 = barnVedtakPeriode.inntekter[0]
+            val barn1InntektBeregningsgrunnlag = barnVedtakPeriode.inntekter[1]
 
             barn1InntektPeriode1.beløpType.inntektType shouldBe InntektType.INNTEKTSOPPLYSNINGER_ARBEIDSGIVER
             barn1InntektBeregningsgrunnlag.beløpType.periodeBeregningsGrunnlag shouldBe true
 
             barn1InntektPeriode1.fomDato shouldHaveSameDayAs LocalDate.parse("2023-04-01")
             barn1InntektPeriode1.tomDato shouldBe null
-            barn1InntektBeregningsgrunnlag.fomDato shouldHaveSameDayAs LocalDate.parse("2023-04-01")
-            barn1InntektBeregningsgrunnlag.tomDato shouldBe null
 
-            barn1InntektPeriode1.periodeFomDato shouldHaveSameDayAs  barnVedtakPeriode.fomDato
+            barn1InntektPeriode1.periodeFomDato shouldHaveSameDayAs barnVedtakPeriode.fomDato
             barn1InntektPeriode1.periodeTomDato shouldBe barnVedtakPeriode.tomDato
-            barn1InntektBeregningsgrunnlag.periodeFomDato shouldHaveSameDayAs  barnVedtakPeriode.fomDato
+            barn1InntektBeregningsgrunnlag.periodeFomDato shouldHaveSameDayAs barnVedtakPeriode.fomDato
             barn1InntektBeregningsgrunnlag.periodeTomDato shouldBe barnVedtakPeriode.tomDato
 
             barn1InntektPeriode1.beløp shouldBe BigDecimal(150000)
             barn1InntektBeregningsgrunnlag.beløp shouldBe BigDecimal(150000)
 
-            barn1InntektPeriode1.inntektGrense shouldBe FORSKUDD_INNTEKTGRENSE_2022_2023
-            barn1InntektBeregningsgrunnlag.inntektGrense shouldBe FORSKUDD_INNTEKTGRENSE_2022_2023
-
             barn1InntektPeriode1.rolle shouldBe Rolle.BIDRAGSMOTTAKER
             barn1InntektBeregningsgrunnlag.rolle shouldBe Rolle.BIDRAGSMOTTAKER
-
         }
     }
+
+    fun VedtakDetaljer.hentSivilstandPeriodeForDato(dato: LocalDate) = this.sivilstandPerioder.find { it.fomDato >= dato && (it.tomDato == null || it.tomDato!! <= dato) }
+    fun VedtakDetaljer.hentBarnIHustandPeriodeForDato(dato: LocalDate) = this.barnIHustandPerioder.find { it.fomDato >= dato && (it.tomDato == null || it.tomDato!! <= dato) }
 }

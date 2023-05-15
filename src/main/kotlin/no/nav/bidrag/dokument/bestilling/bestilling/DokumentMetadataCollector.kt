@@ -63,14 +63,12 @@ class DokumentMetadataCollector(
     val organisasjonService: OrganisasjonService
 ) {
 
-    private lateinit var forespørsel: DokumentBestillingForespørsel
     private lateinit var enhet: String
     private lateinit var sak: BidragssakDto
     fun collect(forespørsel: DokumentBestillingForespørsel, dokumentMal: DokumentMal): DokumentBestilling {
         val kreverDataGrunnlag = dokumentMal.kreverDataGrunnlag
         this.sak = sakService.hentSak(forespørsel.saksnummer) ?: fantIkkeSak(forespørsel.saksnummer)
-        this.enhet = forespørsel.enhet ?: sak.eierfogd.verdi ?: "9999"
-        this.forespørsel = forespørsel
+        this.enhet = forespørsel.enhet ?: sak.eierfogd?.verdi ?: "9999"
         return DokumentBestilling(
             dokumentreferanse = forespørsel.dokumentreferanse ?: forespørsel.dokumentReferanse,
             tittel = forespørsel.tittel,
@@ -85,10 +83,10 @@ class DokumentMetadataCollector(
                 harUkjentPart = sak.ukjentPart.verdi,
                 levdeAdskilt = sak.levdeAdskilt.verdi
             ),
-            mottaker = hentMottakerData(),
-            gjelder = hentGjelderData(),
-            kontaktInfo = kreverDataGrunnlag.takeIf { it.enhetKontaktInfo }?.let { hentEnhetKontakInfo() },
-            roller = kreverDataGrunnlag.takeIf { it.roller }?.let { hentRolleData() } ?: Roller(),
+            mottaker = hentMottakerData(forespørsel),
+            gjelder = hentGjelderData(forespørsel),
+            kontaktInfo = kreverDataGrunnlag.takeIf { it.enhetKontaktInfo }?.let { hentEnhetKontakInfo(forespørsel) },
+            roller = kreverDataGrunnlag.takeIf { it.roller }?.let { hentRolleData(forespørsel) } ?: Roller(),
             vedtakDetaljer = kreverDataGrunnlag.takeIf { it.vedtak }?.let { hentVedtakData(forespørsel.vedtakId) }
         )
     }
@@ -98,7 +96,7 @@ class DokumentMetadataCollector(
         return vedtakService.hentVedtakDetaljer(vedtakId)
     }
 
-    private fun hentRolleData(): Roller {
+    private fun hentRolleData(forespørsel: DokumentBestillingForespørsel): Roller {
         val roller = Roller()
         val bidragspliktig = hentBidragspliktig()
         val bidragsmottaker = hentBidragsmottaker()
@@ -141,9 +139,9 @@ class DokumentMetadataCollector(
                 roller.add(
                     Barn(
                         fodselsnummer = it.fødselsnummer!!.verdi,
-                        navn = barnInfo?.let { if (barnInfo.isKode6()) hentKode6NavnBarn(barnInfo) else barnInfo.fornavnEtternavn() } ?: "",
+                        navn = barnInfo?.let { if (barnInfo.isKode6()) hentKode6NavnBarn(barnInfo, forespørsel) else barnInfo.fornavnEtternavn() } ?: "",
                         fodselsdato = barnInfo?.let { hentFodselsdato(barnInfo) },
-                        fornavn = barnInfo?.let { if (barnInfo.isKode6()) hentKode6NavnBarn(barnInfo) else barnInfo.fornavn?.verdi },
+                        fornavn = barnInfo?.let { if (barnInfo.isKode6()) hentKode6NavnBarn(barnInfo, forespørsel) else barnInfo.fornavn?.verdi },
                         fodselsnummerRm = it.rmFødselsnummer()?.verdi
                     )
                 )
@@ -153,14 +151,14 @@ class DokumentMetadataCollector(
         return roller
     }
 
-    private fun hentGjelderData(): Gjelder {
+    private fun hentGjelderData(forespørsel: DokumentBestillingForespørsel): Gjelder {
         return Gjelder(
             fodselsnummer = forespørsel.actualGjelderId,
             rolle = hentRolle(forespørsel.actualGjelderId)
         )
     }
 
-    private fun hentMottakerData(): Mottaker {
+    private fun hentMottakerData(forespørsel: DokumentBestillingForespørsel): Mottaker {
         if (forespørsel.erMottakerSamhandler() && !forespørsel.harMottakerKontaktinformasjon() && forespørsel.samhandlerInformasjon != null) {
             val samhandler = forespørsel.samhandlerInformasjon!!
             val adresse = samhandler.adresse
@@ -181,8 +179,8 @@ class DokumentMetadataCollector(
                 )
             )
         } else {
-            val mottaker = hentMottaker()
-            val adresse = hentMottakerAdresse()
+            val mottaker = hentMottaker(forespørsel)
+            val adresse = hentMottakerAdresse(forespørsel)
 
             return Mottaker(
                 fodselsnummer = mottaker.ident.verdi,
@@ -219,10 +217,9 @@ class DokumentMetadataCollector(
                 }
             )
         }
-
     }
 
-    fun hentEnhetKontakInfo(): EnhetKontaktInfo {
+    fun hentEnhetKontakInfo(forespørsel: DokumentBestillingForespørsel): EnhetKontaktInfo {
         val enhetKontaktInfo = organisasjonService.hentEnhetKontaktInfo(enhet, forespørsel.hentRiktigSpråkkode())
             ?: throw FantIkkeEnhetException("Fant ikke enhet $enhet for spraak ${forespørsel.hentRiktigSpråkkode()}")
 
@@ -247,7 +244,7 @@ class DokumentMetadataCollector(
         return if (person.isKode6()) null else person.fødselsdato?.verdi
     }
 
-    private fun hentKode6NavnBarn(person: PersonDto): String {
+    private fun hentKode6NavnBarn(person: PersonDto, forespørsel: DokumentBestillingForespørsel): String {
         val fodtaar = person.fødselsdato?.verdi?.year
         return when (forespørsel.hentRiktigSpråkkode()) {
             SpråkKoder.BOKMAL -> if (fodtaar == null) "(BARN)" else "(BARN FØDT I $fodtaar)"
@@ -284,7 +281,7 @@ class DokumentMetadataCollector(
         return if (!fnr.isNullOrEmpty()) personService.hentPersonAdresse(fnr, "Bidragsmottaker adresse") else null
     }
 
-    private fun hentMottaker(): PersonDto {
+    private fun hentMottaker(forespørsel: DokumentBestillingForespørsel): PersonDto {
         return if (forespørsel.erMottakerSamhandler()) {
             val mottaker = forespørsel.mottaker!!
             PersonDto(
@@ -296,7 +293,7 @@ class DokumentMetadataCollector(
         }
     }
 
-    private fun hentMottakerAdresse(): PersonAdresseDto? {
+    private fun hentMottakerAdresse(forespørsel: DokumentBestillingForespørsel): PersonAdresseDto? {
         return if (forespørsel.harMottakerKontaktinformasjon()) {
             val adresse = forespørsel.mottaker!!.adresse!!
             PersonAdresseDto(

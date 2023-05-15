@@ -1,9 +1,9 @@
 package no.nav.bidrag.dokument.bestilling.bestilling
 
 import no.nav.bidrag.dokument.bestilling.api.dto.DokumentBestillingForespørsel
-import no.nav.bidrag.dokument.bestilling.bestilling.dto.DokumentMal
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.DokumentBestilling
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.DokumentBestillingResult
+import no.nav.bidrag.dokument.bestilling.bestilling.dto.DokumentMal
 import no.nav.bidrag.dokument.bestilling.bestilling.produksjon.DokumentProducer
 import org.springframework.context.ApplicationContext
 import org.springframework.stereotype.Component

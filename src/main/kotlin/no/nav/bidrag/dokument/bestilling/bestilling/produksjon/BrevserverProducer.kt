@@ -1,10 +1,10 @@
 package no.nav.bidrag.dokument.bestilling.bestilling.produksjon
 
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.BestillingSystem
-import no.nav.bidrag.dokument.bestilling.bestilling.dto.DokumentMal
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.BrevType
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.DokumentBestilling
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.DokumentBestillingResult
+import no.nav.bidrag.dokument.bestilling.bestilling.dto.DokumentMal
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.EnhetKontaktInfo
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.ForsorgerType
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.Mottaker
@@ -211,10 +211,10 @@ class BrevserverProducer(
                                     resultatKode = vedtakPeriode.resultatKode
                                     beløp = vedtakPeriode.beløp
                                     prosent = vedtakPeriode.resultatKode.padStart(3, '0')
-                                    maksInntekt = dokumentBestilling.sjablonDetaljer.forskuddSats * dokumentBestilling.sjablonDetaljer.multiplikatorInntekstgrenseForskudd
+                                    maksInntekt = vedtakPeriode.maksInntekt
                                 }
 
-                                vedtakPeriode.inntektPerioder.forEach {
+                                vedtakPeriode.inntekter.forEach {
                                     inntektPeriode {
                                         fomDato = it.periodeFomDato
                                         tomDato = it.periodeTomDato ?: MAX_DATE
@@ -223,7 +223,7 @@ class BrevserverProducer(
                                         beskrivelse = it.beløpType.beskrivelse
                                         rolle = it.rolle.toKode()
                                         fnr = it.fodselsnummer
-                                        inntektGrense = it.inntektGrense
+                                        inntektGrense = vedtakPeriode.inntektGrense
                                     }
                                 }
                             }
@@ -245,7 +245,7 @@ class BrevserverProducer(
                                 resultatKode = it.resultatKode
                                 beløp = it.beløp
                                 prosent = it.resultatKode.padStart(3, '0')
-                                maksInntekt = it.beløp * dokumentBestilling.sjablonDetaljer.multiplikatorInntekstgrenseForskudd
+                                maksInntekt = it.maksInntekt
                             }
                         }
                     }

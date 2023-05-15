@@ -81,6 +81,7 @@ fun List<InntektPeriode>.hentBeregningsgrunnlag(): MutableList<InntektPeriode> {
 
 fun List<InntektPeriode>.hentTotalInntektPeriodeForRolle(rolle: Rolle): InntektPeriode? = totalBelopForRolle(Rolle.BIDRAGSMOTTAKER)?.let { totalBelop ->
     find { it.rolle == rolle }?.copy(
+        fomDato = MAX_DATE,
         beløp = totalBelop,
         beløpType = GrunnlagInntektType(periodeBeregningsGrunnlag = true)
     )

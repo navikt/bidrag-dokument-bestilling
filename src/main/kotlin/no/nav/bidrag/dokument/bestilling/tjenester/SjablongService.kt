@@ -1,8 +1,8 @@
 package no.nav.bidrag.dokument.bestilling.tjenester
 
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.BeløpFraTil
-import no.nav.bidrag.dokument.bestilling.bestilling.dto.ForsorgerType
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.ForskuddInntektgrensePeriode
+import no.nav.bidrag.dokument.bestilling.bestilling.dto.ForsorgerType
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.PeriodeFraTom
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.SjablonDetaljer
 import no.nav.bidrag.dokument.bestilling.consumer.SjablonConsumer
@@ -33,9 +33,16 @@ class SjablongService(val sjablonConsumer: SjablonConsumer) {
         val forskuddSats = sjablonger.hentSjablongForTomDato(SjablongType.FORSKUDDSSATS, periodeTomDato)!!
         val multiplikatorInnteksinslagBarn = sjablonger.hentSjablongForTomDato(SjablongType.MULTIPLIKATOR_INNTEKTSINNSLAG_BIDRAGSBARN, periodeTomDato)!!
         return forskuddSats.verdi * multiplikatorInnteksinslagBarn.verdi
-
     }
-    fun hentSjablonGrunnlagForskudd(fraDato: LocalDate, tomDato: LocalDate? = null): List<ForskuddInntektgrensePeriode> {
+
+    fun hentMaksInntektForPeriode(periodeTomDato: LocalDate?): BigDecimal {
+        val sjablonger = sjablonConsumer.hentSjablonger()!!
+        val forskuddSats = sjablonger.hentSjablongForTomDato(SjablongType.FORSKUDDSSATS, periodeTomDato)!!
+        val multiplikatorMaksInntektMottaker = sjablonger.hentSjablongForTomDato(SjablongType.MULTIPLIKATOR_MAKS_INNTGRENSE_FORSKUDD_MOTTAKER, periodeTomDato)!!
+        return forskuddSats.verdi * multiplikatorMaksInntektMottaker.verdi
+    }
+
+    fun hentForskuddInntektgrensePerioder(fraDato: LocalDate, tomDato: LocalDate? = null): List<ForskuddInntektgrensePeriode> {
         val sjablonger = sjablonConsumer.hentSjablonger() ?: return emptyList()
 
         val sjablongTyper = listOf(
@@ -77,7 +84,7 @@ class SjablongService(val sjablonConsumer: SjablonConsumer) {
             antallBarn = 1,
             forsorgerType = ForsorgerType.GIFT_SAMBOER,
             beløp75Prosent = BeløpFraTil(grenseFullForskudd.verdi + BigDecimal(1), forskudd75ProsentGift.verdi),
-            beløp50Prosent = BeløpFraTil(forskudd75ProsentEnslig.verdi + BigDecimal(1), forskuddMaksVerdi)
+            beløp50Prosent = BeløpFraTil(forskudd75ProsentGift.verdi + BigDecimal(1), forskuddMaksVerdi)
         )
         return listOf(
             forskuddEnslig1Barn,
@@ -101,12 +108,12 @@ class SjablongService(val sjablonConsumer: SjablonConsumer) {
             forskuddGift1Barn.copy(
                 antallBarn = 2,
                 beløp75Prosent = BeløpFraTil(grenseFullForskudd.verdi + BigDecimal(1), forskudd75ProsentGift.verdi + inntekstIntervallForskudd.verdi),
-                beløp50Prosent = BeløpFraTil(forskudd75ProsentEnslig.verdi + inntekstIntervallForskudd.verdi + BigDecimal(1), forskuddMaksVerdi)
+                beløp50Prosent = BeløpFraTil(forskudd75ProsentGift.verdi + inntekstIntervallForskudd.verdi + BigDecimal(1), forskuddMaksVerdi)
             ),
             forskuddGift1Barn.copy(
                 antallBarn = 3,
                 beløp75Prosent = BeløpFraTil(grenseFullForskudd.verdi + BigDecimal(1), forskudd75ProsentGift.verdi + inntekstIntervallForskudd.verdi * BigDecimal(2)),
-                beløp50Prosent = BeløpFraTil(forskuddMaksVerdi, forskuddMaksVerdi)
+                beløp50Prosent = BeløpFraTil(forskudd75ProsentGift.verdi + inntekstIntervallForskudd.verdi * BigDecimal(2) + BigDecimal(1), forskuddMaksVerdi)
             ),
             forskuddGift1Barn.copy(
                 antallBarn = 4,

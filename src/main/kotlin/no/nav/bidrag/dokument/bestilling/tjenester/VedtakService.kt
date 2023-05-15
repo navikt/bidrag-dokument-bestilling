@@ -5,7 +5,6 @@ import no.nav.bidrag.behandling.felles.dto.vedtak.VedtakDto
 import no.nav.bidrag.behandling.felles.enums.Innkreving
 import no.nav.bidrag.behandling.felles.enums.StonadType
 import no.nav.bidrag.behandling.felles.grunnlag.SoknadsbarnInfo
-import no.nav.bidrag.behandling.felles.grunnlag.inntekt.Inntekt
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.BarnIHustandPeriode
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.BostatusPeriode
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.ForskuddInntektgrensePeriode
@@ -80,7 +79,7 @@ class VedtakService(private val bidragVedtakConsumer: BidragVedtakConsumer, priv
         val perioder = stonadsendringListe.flatMap { it.periodeListe.map { periode -> PeriodeFraTom(periode.fomDato, periode.tilDato ?: MAX_DATE) } }
         val fraDato = perioder.sortedBy { it.fraDato }.first().fraDato
         val tomDato = perioder.sortedByDescending { it.tomDato }.first().tomDato
-        return sjablongService.hentSjablonGrunnlagForskudd(fraDato, tomDato)
+        return sjablongService.hentForskuddInntektgrensePerioder(fraDato, tomDato)
     }
 
     fun mapVedtakBarn(soknadBarn: SoknadsbarnInfo, vedtak: VedtakDto): VedtakBarn {
@@ -111,8 +110,7 @@ class VedtakService(private val bidragVedtakConsumer: BidragVedtakConsumer, priv
                             beløpÅr = it.gjelderAar.toInt(),
                             rolle = it.rolle,
                             fodselsnummer = rollePersonInfo?.fnr,
-                            beløp = it.belop,
-                            inntektGrense = sjablongService.hentInntektGrenseForPeriode(getLastDayOfPreviousMonth(periode.tilDato))
+                            beløp = it.belop
                         )
                     }
                 }
@@ -122,7 +120,9 @@ class VedtakService(private val bidragVedtakConsumer: BidragVedtakConsumer, priv
                     tomDato = if (periode.resultatkode == "AHI") inntekter[0].tomDato else periode.tilDato, // TODO: Er dette riktig??
                     beløp = periode.belop ?: BigDecimal(0),
                     resultatKode = periode.resultatkode,
-                    inntektPerioder = inntekter + inntekter.hentBeregningsgrunnlag()
+                    inntekter = inntekter + inntekter.hentBeregningsgrunnlag(),
+                    inntektGrense = sjablongService.hentInntektGrenseForPeriode(getLastDayOfPreviousMonth(periode.tilDato)),
+                    maksInntekt = sjablongService.hentMaksInntektForPeriode(getLastDayOfPreviousMonth(periode.tilDato))
                 )
             }
             VedtakBarnStonad(

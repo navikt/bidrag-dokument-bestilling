@@ -137,7 +137,9 @@ data class VedtakPeriode(
     val beløp: BigDecimal,
     val innkreving: String? = null,
     val resultatKode: String,
-    val inntektPerioder: List<InntektPeriode> = emptyList()
+    val inntektGrense: BigDecimal,
+    val maksInntekt: BigDecimal,
+    val inntekter: List<InntektPeriode> = emptyList()
 )
 data class InntektPeriode(
     val fomDato: LocalDate,
@@ -148,17 +150,8 @@ data class InntektPeriode(
     val beløpÅr: Int,
     val fodselsnummer: String?,
     val beløp: BigDecimal,
-    val inntektGrense: BigDecimal,
     val rolle: GrunnlagRolleType
-) {
-    override fun equals(other: Any?): Boolean {
-        return if (other is InntektPeriode) {
-            beløpType == other.beløpType && fomDato == other.fomDato && tomDato == other.tomDato && beløp == other.beløp
-        } else {
-            super.equals(other)
-        }
-    }
-}
+)
 
 data class ForskuddInntektgrensePeriode(
     val fomDato: LocalDate,
