@@ -66,3 +66,19 @@ jobs:
           RESOURCE: deploy/.nais/nais.yaml
           VARS: deploy/.nais/feature.yaml
           IMAGE: ${{ needs.build.outputs.image }}
+  deploy_unleash:
+    runs-on: ubuntu-latest
+    name: Deploy unleash
+    needs: build
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          path: deploy
+      - name: Deploy unleash to dev-gcp
+        uses: nais/deploy/actions/deploy@v1
+        env:
+          APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
+          CLUSTER: dev-gcp
+          RESOURCE: deploy/.nais/unleash.yaml
+          VARS: deploy/.nais/main.yaml

@@ -87,7 +87,7 @@ class DokumentBestillingBrevkodeTest : AbstractControllerTest() {
                 withArg { bestilling ->
                     assertSoftly {
                         bestilling.mottaker?.spraak shouldBe "NB"
-                        bestilling.mottaker?.navn shouldBe BM1.navn?.verdi
+                        bestilling.mottaker?.navn shouldBe BM1.kortnavn?.verdi
                         bestilling.mottaker?.fodselsnummer shouldBe BM1.ident.verdi
                         bestilling.mottaker?.rolle shouldBe Rolletype.BM
                         bestilling.mottaker?.fodselsdato shouldBe BM1.fødselsdato?.verdi

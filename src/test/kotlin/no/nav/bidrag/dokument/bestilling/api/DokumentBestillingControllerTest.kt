@@ -160,38 +160,8 @@ class DokumentBestillingControllerTest : AbstractControllerTest() {
             val message: BrevBestilling = this.getMessageAsObject(BrevBestilling::class.java)!!
             assertSoftly {
                 verifyBrevbestillingHeaders(message, dokumentMal)
-                message.brev?.tknr shouldBe enhetKontaktInfo.enhetIdent
-                message.brev?.spraak shouldBe "NB"
-                message.brev?.brevref shouldBe "BIF12321321321"
+                message.validateKontaktInformasjon(enhetKontaktInfo, BM1, BP1, bmAdresse)
 
-                message.brev?.kontaktInfo?.avsender?.navn shouldBe enhetKontaktInfo.enhetNavn
-                message.brev?.kontaktInfo?.tlfAvsender?.telefonnummer shouldBe "55553333"
-                message.brev?.kontaktInfo?.returAdresse?.enhet shouldBe "4806"
-                message.brev?.kontaktInfo?.returAdresse?.navn shouldBe enhetKontaktInfo.enhetNavn
-                message.brev?.kontaktInfo?.returAdresse?.adresselinje1 shouldBe enhetKontaktInfo.postadresse?.adresselinje1
-                message.brev?.kontaktInfo?.returAdresse?.adresselinje2 shouldBe enhetKontaktInfo.postadresse?.adresselinje2
-                message.brev?.kontaktInfo?.returAdresse?.postnummer shouldBe enhetKontaktInfo.postadresse?.postnummer
-                message.brev?.kontaktInfo?.returAdresse?.poststed shouldBe enhetKontaktInfo.postadresse?.poststed
-                message.brev?.kontaktInfo?.returAdresse?.land shouldBe enhetKontaktInfo.postadresse?.land
-                message.brev?.kontaktInfo?.returAdresse?.shouldBeEqualToComparingFields(message.brev?.kontaktInfo?.postadresse as BrevKontaktinfo.Adresse)
-
-                message.brev?.mottaker?.navn shouldBe BM1.navn?.verdi
-                message.brev?.mottaker?.adresselinje1 shouldBe bmAdresse.adresselinje1?.verdi
-                message.brev?.mottaker?.adresselinje2 shouldBe bmAdresse.adresselinje2?.verdi
-                message.brev?.mottaker?.adresselinje3 shouldBe "3030 Drammen"
-                message.brev?.mottaker?.boligNr shouldBe bmAdresse.bruksenhetsnummer?.verdi
-                message.brev?.mottaker?.postnummer shouldBe bmAdresse.postnummer?.verdi
-                message.brev?.mottaker?.spraak shouldBe "NB"
-                message.brev?.mottaker?.rolle shouldBe "01"
-                message.brev?.mottaker?.fodselsnummer shouldBe BM1.ident.verdi
-                message.brev?.mottaker?.fodselsdato shouldBe BM1.fødselsdato?.verdi
-
-                message.brev?.parter?.bmfnr shouldBe BM1.ident.verdi
-                message.brev?.parter?.bmnavn shouldBe BM1.fornavnEtternavn()
-                message.brev?.parter?.bpfnr shouldBe BP1.ident.verdi
-                message.brev?.parter?.bpnavn shouldBe BP1.fornavnEtternavn()
-                message.brev?.parter?.bmfodselsdato shouldBe BM1.fødselsdato?.verdi
-                message.brev?.parter?.bpfodselsdato shouldBe BP1.fødselsdato?.verdi
                 message.brev?.parter?.bmkravkfremav shouldBe ""
                 message.brev?.parter?.bmgebyr shouldBe ""
                 message.brev?.parter?.bmlandkode shouldBe ""
@@ -326,9 +296,13 @@ class DokumentBestillingControllerTest : AbstractControllerTest() {
                 val inntekterPeriode2 = barn1.hentInntektPerioder(periode2)
                 inntekterPeriode2 shouldHaveSize 3
                 inntekterPeriode2[0].inntektGrense shouldBe FORSKUDD_INNTEKTGRENSE_2020_2021
+                inntekterPeriode2[0].fnr shouldBe BM1.ident.verdi
+                inntekterPeriode2[0].rolle shouldBe "02"
                 inntekterPeriode2[0].belopType shouldBe "ESBT"
+                inntekterPeriode2[0].beskrivelse shouldBe "Ekstra smÃ¥barnstillegg"
                 inntekterPeriode2[0].belopÅrsinntekt shouldBe BigDecimal(5000)
                 inntekterPeriode2[1].belopType shouldBe "PIEO"
+                inntekterPeriode2[1].beskrivelse shouldBe "Personinntekt egne opplysninger"
                 inntekterPeriode2[1].belopÅrsinntekt shouldBe BigDecimal(360000)
                 inntekterPeriode2[2].belopType shouldBe "XINN"
                 inntekterPeriode2[2].belopÅrsinntekt shouldBe BigDecimal(365000)
@@ -448,38 +422,8 @@ class DokumentBestillingControllerTest : AbstractControllerTest() {
             val message: BrevBestilling = this.getMessageAsObject(BrevBestilling::class.java)!!
             assertSoftly {
                 verifyBrevbestillingHeaders(message, dokumentMal)
-                message.brev?.tknr shouldBe enhetKontaktInfo.enhetIdent
-                message.brev?.spraak shouldBe "NB"
-                message.brev?.brevref shouldBe "DOKREF_1"
+                message.validateKontaktInformasjon(enhetKontaktInfo, BM1, BP1, bmAdresse, "DOKREF_1")
 
-                message.brev?.kontaktInfo?.avsender?.navn shouldBe enhetKontaktInfo.enhetNavn
-                message.brev?.kontaktInfo?.tlfAvsender?.telefonnummer shouldBe "55553333"
-                message.brev?.kontaktInfo?.returAdresse?.enhet shouldBe "4806"
-                message.brev?.kontaktInfo?.returAdresse?.navn shouldBe enhetKontaktInfo.enhetNavn
-                message.brev?.kontaktInfo?.returAdresse?.adresselinje1 shouldBe enhetKontaktInfo.postadresse?.adresselinje1
-                message.brev?.kontaktInfo?.returAdresse?.adresselinje2 shouldBe enhetKontaktInfo.postadresse?.adresselinje2
-                message.brev?.kontaktInfo?.returAdresse?.postnummer shouldBe enhetKontaktInfo.postadresse?.postnummer
-                message.brev?.kontaktInfo?.returAdresse?.poststed shouldBe enhetKontaktInfo.postadresse?.poststed
-                message.brev?.kontaktInfo?.returAdresse?.land shouldBe enhetKontaktInfo.postadresse?.land
-                message.brev?.kontaktInfo?.returAdresse?.shouldBeEqualToComparingFields(message.brev?.kontaktInfo?.postadresse as BrevKontaktinfo.Adresse)
-
-                message.brev?.mottaker?.navn shouldBe BM1.navn?.verdi
-                message.brev?.mottaker?.adresselinje1 shouldBe bmAdresse.adresselinje1?.verdi
-                message.brev?.mottaker?.adresselinje2 shouldBe bmAdresse.adresselinje2?.verdi
-                message.brev?.mottaker?.adresselinje3 shouldBe "3030 Drammen"
-                message.brev?.mottaker?.boligNr shouldBe bmAdresse.bruksenhetsnummer?.verdi
-                message.brev?.mottaker?.postnummer shouldBe bmAdresse.postnummer?.verdi
-                message.brev?.mottaker?.spraak shouldBe "NB"
-                message.brev?.mottaker?.rolle shouldBe "01"
-                message.brev?.mottaker?.fodselsnummer shouldBe BM1.ident.verdi
-                message.brev?.mottaker?.fodselsdato shouldBe BM1.fødselsdato?.verdi
-
-                message.brev?.parter?.bmfnr shouldBe BM1.ident.verdi
-                message.brev?.parter?.bmnavn shouldBe BM1.fornavnEtternavn()
-                message.brev?.parter?.bpfnr shouldBe BP1.ident.verdi
-                message.brev?.parter?.bpnavn shouldBe BP1.fornavnEtternavn()
-                message.brev?.parter?.bmfodselsdato shouldBe BM1.fødselsdato?.verdi
-                message.brev?.parter?.bpfodselsdato shouldBe BP1.fødselsdato?.verdi
                 message.brev?.parter?.bmkravkfremav shouldBe ""
                 message.brev?.parter?.bmgebyr shouldBe ""
                 message.brev?.parter?.bmlandkode shouldBe ""
@@ -499,7 +443,7 @@ class DokumentBestillingControllerTest : AbstractControllerTest() {
                 message.brev?.barnISak?.get(0)?.belBidrag shouldBe null
 
                 message.brev?.barnISak?.get(1)?.fDato shouldBe BARN1.fødselsdato?.verdi
-                message.brev?.barnISak?.get(1)?.fnr shouldBe BARN1.ident.verdi
+                message.brev?.barnISak?.get(1)?.fnr shouldBe BARN1.ident!!.verdi
                 message.brev?.barnISak?.get(1)?.navn shouldBe BARN1.fornavnEtternavn()
                 message.brev?.barnISak?.get(1)?.personIdRm shouldBe ""
                 message.brev?.barnISak?.get(1)?.belopGebyrRm shouldBe ""
@@ -523,7 +467,7 @@ class DokumentBestillingControllerTest : AbstractControllerTest() {
                     "{\"skalFerdigstilles\":false," +
                         "\"tittel\":\"$tittel\"," +
                         "\"gjelderIdent\":\"${gjelderId.verdi}\"," +
-                        "\"avsenderMottaker\":{\"navn\":\"${BM1.navn}\",\"ident\":\"${mottakerId.verdi}\",\"type\":\"FNR\",\"adresse\":null}," +
+                        "\"avsenderMottaker\":{\"navn\":\"${BM1.kortnavn!!.verdi}\",\"ident\":\"${mottakerId.verdi}\",\"type\":\"FNR\",\"adresse\":null}," +
                         "\"dokumenter\":[{\"tittel\":\"$tittel\",\"brevkode\":\"${dokumentMal.name}\"}]," +
                         "\"tilknyttSaker\":[\"$saksnummer\"]," +
                         "\"journalposttype\":\"UTGÅENDE\"," +
@@ -569,7 +513,7 @@ class DokumentBestillingControllerTest : AbstractControllerTest() {
             val message: BrevBestilling = this.getMessageAsObject(BrevBestilling::class.java)!!
             assertSoftly {
                 message.brev?.spraak shouldBe "EN"
-                message.brev?.mottaker?.navn shouldBe BM1.navn?.verdi
+                message.brev?.mottaker?.navn shouldBe BM1.kortnavn?.verdi
                 message.brev?.mottaker?.adresselinje1 shouldBe bmAdresse.adresselinje1?.verdi
                 message.brev?.mottaker?.adresselinje2 shouldBe bmAdresse.adresselinje2?.verdi
                 message.brev?.mottaker?.adresselinje3 shouldBe bmAdresse.adresselinje3?.verdi
@@ -712,7 +656,7 @@ class DokumentBestillingControllerTest : AbstractControllerTest() {
             response.statusCode shouldBe HttpStatus.OK
 
             val message = this.getMessageAsObject(BrevBestilling::class.java)!!
-            message.brev?.mottaker?.navn shouldBe BM1.navn?.verdi
+            message.brev?.mottaker?.navn shouldBe BM1.kortnavn?.verdi
             message.brev?.mottaker?.adresselinje1 shouldBe ""
             message.brev?.mottaker?.adresselinje2 shouldBe ""
             message.brev?.mottaker?.adresselinje3 shouldBe ""

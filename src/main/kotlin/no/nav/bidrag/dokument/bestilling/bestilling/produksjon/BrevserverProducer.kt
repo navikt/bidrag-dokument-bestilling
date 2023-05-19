@@ -21,6 +21,7 @@ import no.nav.bidrag.dokument.bestilling.bestilling.produksjon.dto.toKode
 import no.nav.bidrag.dokument.bestilling.consumer.BidragDokumentConsumer
 import no.nav.bidrag.dokument.bestilling.model.BehandlingType
 import no.nav.bidrag.dokument.bestilling.model.MAX_DATE
+import no.nav.bidrag.dokument.bestilling.model.ResultatKoder
 import no.nav.bidrag.dokument.dto.AvsenderMottakerDto
 import no.nav.bidrag.dokument.dto.JournalpostType
 import no.nav.bidrag.dokument.dto.OpprettDokumentDto
@@ -93,7 +94,6 @@ class BrevserverProducer(
         val dokumentSpraak = dokumentBestilling.spraak ?: "NB"
         val saksbehandlerNavn = dokumentBestilling.saksbehandler?.navn
         val vedtakInfo = dokumentBestilling.vedtakDetaljer
-        val antallVedtakBarn = vedtakInfo?.vedtakBarn?.size ?: 0
         return brevbestilling {
             val roller = dokumentBestilling.roller
             val bp = roller.bidragspliktig
@@ -130,7 +130,17 @@ class BrevserverProducer(
                         mottatDato = it.soknadDato
                     }
                     forskUtBet = vedtakInfo != null
-                    resKode = if (antallVedtakBarn > 1) "FB" else null // TODO: Er dette riktig?
+                    // Kode fra beslutningårsak i Bisys.
+                    val vedtakPerioder = vedtakInfo?.vedtakBarn?.flatMap { it.stonader }?.flatMap { it.vedtakPerioder } ?: emptyList()
+                    val antallVedtakPerioder = vedtakPerioder.size
+                    resKode = if (antallVedtakPerioder > 1) ResultatKoder.FLERE_BESLUTNING_LINJER
+                    else if (antallVedtakPerioder == 1) {
+                        val resultatKode = vedtakPerioder[0].resultatKode
+                        val erInnkrevingPrivatAvtale = resultatKode == ResultatKoder.PRIVAT_AVTALE && DokumentMal.BI01G01 == dokumentMal
+                        val erInnkreving = listOf(ResultatKoder.INNVILGET_VEDTAK, ResultatKoder.UTENLANDSK_AVGJØRELSE).contains(resultatKode)
+                        if (erInnkreving || erInnkrevingPrivatAvtale) ResultatKoder.VEDTAK_VANLIG_INNKREVING else resultatKode
+                    }
+                    else null
                 }
                 parter {
                     bpfnr = bp?.fodselsnummer

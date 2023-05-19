@@ -36,6 +36,7 @@ outbound-access-hosts:
    - bidrag-organisasjon-feature.dev-fss-pub.nais.io
    - bidrag-sjablon.dev-fss-pub.nais.io
    - kodeverk.dev-fss-pub.nais.io
+   - bidrag-unleash-api.nav.cloud.nais.io
 azure_access_inbound:
   - application: bisys
     namespace: bidrag
@@ -43,3 +44,6 @@ azure_access_inbound:
   - application: bidrag-dokument-forsendelse-feature
     namespace: bidrag
     cluster: dev-gcp
+unleash:
+  env: development
+  secret_name: bidrag-dokument-bestilling-unleash-api-token

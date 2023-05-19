@@ -36,7 +36,7 @@ fun SjablongerDto.hentPerioderForSjabloner(typer: List<SjablongType>, fraDato: L
     val periodeTomDato = tomDato ?: LocalDate.parse("9999-12-31")
     var periode = hentNestePeriodeForSjabloner(typer, fraDato) ?: return perioder
     perioder.add(periode)
-    while (periodeTomDato >= periode.tomDato) {
+    while (periodeTomDato > periode.tomDato) {
         periode = hentNestePeriodeForSjabloner(typer, periode.tomDato!!.plusDays(1)) ?: return perioder
         perioder.add(periode)
     }

@@ -2,6 +2,7 @@ package no.nav.bidrag.dokument.bestilling.model
 
 import com.fasterxml.jackson.core.type.TypeReference
 import org.springframework.core.ParameterizedTypeReference
+import java.math.BigDecimal
 import java.time.LocalDate
 import java.time.ZoneId
 import java.util.*

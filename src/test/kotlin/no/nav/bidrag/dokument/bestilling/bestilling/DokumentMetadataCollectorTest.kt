@@ -148,7 +148,7 @@ internal class DokumentMetadataCollectorTest {
         val bestilling = mapToBestillingsdata(request)
         assertSoftly {
             bestilling.mottaker?.spraak shouldBe "NB"
-            bestilling.mottaker?.navn shouldBe BM1.navn?.verdi
+            bestilling.mottaker?.navn shouldBe BM1.kortnavn?.verdi
             bestilling.mottaker?.fodselsnummer shouldBe BM1.ident.verdi
             bestilling.mottaker?.rolle shouldBe Rolletype.BM
             bestilling.mottaker?.fodselsdato shouldBe BM1.fødselsdato?.verdi
@@ -677,7 +677,7 @@ internal class DokumentMetadataCollectorTest {
         val adresseResponse = createPostAdresseResponse()
         assertSoftly {
             bestilling.mottaker?.spraak shouldBe "NB"
-            bestilling.mottaker?.navn shouldBe bmKode6.navn?.verdi
+            bestilling.mottaker?.navn shouldBe bmKode6.kortnavn?.verdi
             bestilling.mottaker?.fodselsnummer shouldBe bmKode6.ident.verdi
             bestilling.mottaker?.rolle shouldBe Rolletype.BM
             bestilling.mottaker?.fodselsdato shouldBe BM1.fødselsdato?.verdi

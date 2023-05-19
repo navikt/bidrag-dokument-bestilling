@@ -61,6 +61,7 @@ spec:
       memory: 1024Mi
   envFrom:
     - secret: bidrag-dokument-bestilling-secrets
+    - secret: {{unleash.secret_name}}
   ingresses:
   {{#each ingresses as |url|}}
     - {{url}}

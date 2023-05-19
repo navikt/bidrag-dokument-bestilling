@@ -115,22 +115,86 @@ class SjablonServiceTest {
     }
 
     @Test
+    fun `skal hente forskudd innteksgrenser for periode 2020 - 2021`() {
+        val fraDato = LocalDate.parse("2020-07-01")
+        val tomDato = LocalDate.parse("2021-06-30")
+        val inntektgrenser =
+            sjablongService.hentForskuddInntektgrensePerioder(fraDato, tomDato)
+        assertSoftly {
+            inntektgrenser shouldHaveSize 8
+            inntektgrenser.filter { it.fomDato == fraDato } shouldHaveSize 8
+            inntektgrenser.filter { it.tomDato == tomDato } shouldHaveSize 8
+            val ensligGrenser = inntektgrenser.filter { it.forsorgerType == ForsorgerType.ENSLIG }
+            ensligGrenser shouldHaveSize 4
+            ensligGrenser[0].antallBarn shouldBe 1
+            ensligGrenser[1].antallBarn shouldBe 2
+            ensligGrenser[2].antallBarn shouldBe 3
+            ensligGrenser[3].antallBarn shouldBe 4
+
+            // Valider beregning av inntektgrenser for 2023 basert på reele sjablonverdier
+            ensligGrenser.hentForAntallBarn(1)!!
+                .validerBelop75Prosent(BeløpFraTil(BigDecimal(297501), BigDecimal(468500)))
+            ensligGrenser.hentForAntallBarn(2)!!
+                .validerBelop75Prosent(BeløpFraTil(BigDecimal(297501), BigDecimal(534400)))
+            ensligGrenser.hentForAntallBarn(3)!!
+                .validerBelop75Prosent(BeløpFraTil(BigDecimal(297501), BigDecimal(534400)))
+            ensligGrenser.hentForAntallBarn(4)!!
+                .validerBelop75Prosent(BeløpFraTil(BigDecimal(297501), BigDecimal(534400)))
+
+            ensligGrenser.hentForAntallBarn(1)!!
+                .validerBelop50Prosent(BeløpFraTil(BigDecimal(468501), BigDecimal(534400)))
+            ensligGrenser.hentForAntallBarn(2)!!
+                .validerBelop50Prosent(BeløpFraTil(BigDecimal(534400), BigDecimal(534400)))
+            ensligGrenser.hentForAntallBarn(3)!!
+                .validerBelop50Prosent(BeløpFraTil(BigDecimal(534400), BigDecimal(534400)))
+            ensligGrenser.hentForAntallBarn(3)!!
+                .validerBelop50Prosent(BeløpFraTil(BigDecimal(534400), BigDecimal(534400)))
+
+            val giftSamboerGrenser =
+                inntektgrenser.filter { it.forsorgerType == ForsorgerType.GIFT_SAMBOER }
+            giftSamboerGrenser shouldHaveSize 4
+            giftSamboerGrenser[0].antallBarn shouldBe 1
+            giftSamboerGrenser[1].antallBarn shouldBe 2
+            giftSamboerGrenser[2].antallBarn shouldBe 3
+            giftSamboerGrenser[3].antallBarn shouldBe 4
+
+            giftSamboerGrenser.hentForAntallBarn(1)!!
+                .validerBelop75Prosent(BeløpFraTil(BigDecimal(297501), BigDecimal(360800)))
+            giftSamboerGrenser.hentForAntallBarn(2)!!
+                .validerBelop75Prosent(BeløpFraTil(BigDecimal(297501), BigDecimal(429900)))
+            giftSamboerGrenser.hentForAntallBarn(3)!!
+                .validerBelop75Prosent(BeløpFraTil(BigDecimal(297501), BigDecimal(499000)))
+            giftSamboerGrenser.hentForAntallBarn(4)!!
+                .validerBelop75Prosent(BeløpFraTil(BigDecimal(297501), BigDecimal(534400)))
+
+            giftSamboerGrenser.hentForAntallBarn(1)!!
+                .validerBelop50Prosent(BeløpFraTil(BigDecimal(360801), BigDecimal(534400)))
+            giftSamboerGrenser.hentForAntallBarn(2)!!
+                .validerBelop50Prosent(BeløpFraTil(BigDecimal(429901), BigDecimal(534400)))
+            giftSamboerGrenser.hentForAntallBarn(3)!!
+                .validerBelop50Prosent(BeløpFraTil(BigDecimal(499001), BigDecimal(534400)))
+            giftSamboerGrenser.hentForAntallBarn(4)!!
+                .validerBelop50Prosent(BeløpFraTil(BigDecimal(534400), BigDecimal(534400)))
+        }
+    }
+
+    @Test
     fun `skal hente forskudd innteksgrenser for periode 2021-2023`() {
-        val fraDato = LocalDate.parse("2021-01-02")
+        val fraDato = LocalDate.parse("2020-07-01")
         val inntektgrenser =
             sjablongService.hentForskuddInntektgrensePerioder(fraDato)
         assertSoftly {
             inntektgrenser shouldHaveSize 8 * 3
             inntektgrenser.filter { it.tomDato == MAX_DATE } shouldHaveSize 8
-            val inntekgrenser2021 = inntektgrenser.hentForPeriodeHvorDatoErInkludert(LocalDate.parse("2021-01-02"))
-            inntekgrenser2021 shouldHaveSize 8
-            inntekgrenser2021[0].fomDato shouldBe fraDato
-            inntekgrenser2021[0].tomDato!! shouldBe LocalDate.parse("2021-06-30")
+            val inntekgrenser2020_2021 = inntektgrenser.hentForPeriodeHvorDatoErInkludert(LocalDate.parse("2021-01-02"))
+            inntekgrenser2020_2021 shouldHaveSize 8
+            inntekgrenser2020_2021[0].fomDato shouldBe fraDato
+            inntekgrenser2020_2021[0].tomDato!! shouldBe LocalDate.parse("2021-06-30")
 
-            val inntekgrenser2022 = inntektgrenser.hentForPeriodeHvorDatoErInkludert(LocalDate.parse("2021-07-01"))
-            inntekgrenser2022 shouldHaveSize 8
-            inntekgrenser2022[0].fomDato shouldBe LocalDate.parse("2021-07-01")
-            inntekgrenser2022[0].tomDato!! shouldBe LocalDate.parse("2022-06-30")
+            val inntekgrenser2021_2022 = inntektgrenser.hentForPeriodeHvorDatoErInkludert(LocalDate.parse("2021-07-01"))
+            inntekgrenser2021_2022 shouldHaveSize 8
+            inntekgrenser2021_2022[0].fomDato shouldBe LocalDate.parse("2021-07-01")
+            inntekgrenser2021_2022[0].tomDato!! shouldBe LocalDate.parse("2022-06-30")
 
             val inntekgrenser2023 = inntektgrenser.hentForPeriodeHvorDatoErInkludert(LocalDate.parse("2022-07-01"))
             inntekgrenser2023 shouldHaveSize 8
