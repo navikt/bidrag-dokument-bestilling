@@ -76,32 +76,32 @@ val ANNEN_MOTTAKER = createPersonResponse(
 val BP1 = createPersonResponse(
     "444213123123",
     "Etternavn, BPFornavn Bidragspliktig",
-    kortNavn =  "BPFornavn Etternavn",
+    kortNavn = "BPFornavn Etternavn",
     fodselsdato = LocalDate.parse("2001-05-06")
 )
 val BM1 = createPersonResponse(
     "26417806511",
     "Etternavn, BMFornavn Bidragsmottaker",
-    kortNavn =  "BMFornavn Etternavn",
+    kortNavn = "BMFornavn Etternavn",
     fodselsdato = LocalDate.parse("2000-03-06")
 )
 val BARN1 = createPersonResponse(
     "12461690252",
     "Etternavn, Barn1 Mellomnavn",
-    kortNavn =  "Barn1 Etternavn",
+    kortNavn = "Barn1 Etternavn",
     fodselsdato = LocalDate.parse("2020-05-06")
 )
 val BARN2 = createPersonResponse(
     "02461662466",
     "Etternavn, Barn2 Mellomnavn",
-    kortNavn =  "Barn2 Etternavn",
+    kortNavn = "Barn2 Etternavn",
     fodselsdato = LocalDate.parse("2018-03-20")
 )
 
 val BARN3 = createPersonResponse(
     "27461456400",
     "Etternavn, Barn3",
-    kortNavn =  "Barn3 Etternavn",
+    kortNavn = "Barn3 Etternavn",
     fodselsdato = LocalDate.parse("2014-03-20")
 )
 

@@ -133,14 +133,16 @@ class BrevserverProducer(
                     // Kode fra beslutningårsak i Bisys.
                     val vedtakPerioder = vedtakInfo?.vedtakBarn?.flatMap { it.stonader }?.flatMap { it.vedtakPerioder } ?: emptyList()
                     val antallVedtakPerioder = vedtakPerioder.size
-                    resKode = if (antallVedtakPerioder > 1) ResultatKoder.FLERE_BESLUTNING_LINJER
-                    else if (antallVedtakPerioder == 1) {
+                    resKode = if (antallVedtakPerioder > 1) {
+                        ResultatKoder.FLERE_BESLUTNING_LINJER
+                    } else if (antallVedtakPerioder == 1) {
                         val resultatKode = vedtakPerioder[0].resultatKode
                         val erInnkrevingPrivatAvtale = resultatKode == ResultatKoder.PRIVAT_AVTALE && DokumentMal.BI01G01 == dokumentMal
                         val erInnkreving = listOf(ResultatKoder.INNVILGET_VEDTAK, ResultatKoder.UTENLANDSK_AVGJØRELSE).contains(resultatKode)
                         if (erInnkreving || erInnkrevingPrivatAvtale) ResultatKoder.VEDTAK_VANLIG_INNKREVING else resultatKode
+                    } else {
+                        null
                     }
-                    else null
                 }
                 parter {
                     bpfnr = bp?.fodselsnummer

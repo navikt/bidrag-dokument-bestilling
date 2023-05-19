@@ -244,10 +244,23 @@
         "datoTil": "2020-07-01",
         "rolle": "BIDRAGSMOTTAKER",
         "inntektType": "KAPITALINNTEKT_EGNE_OPPLYSNINGER",
-        "belop": -5000,
+        "belop": 5000,
         "gjelderAar": "2020",
         "valgt": true,
-        "inntekter": []
+        "inntekter": [],
+        "grunnlagReferanseListe": [
+          "Sjablon_InnslagKapitalInntektBeløp_20200101"
+        ]
+      }
+    },
+    {
+      "referanse": "Sjablon_InnslagKapitalInntektBeløp_20200101",
+      "type": "SJABLON",
+      "innhold": {
+        "datoFom": "2020-01-01",
+        "datoTil": "2020-07-01",
+        "sjablonNavn": "InnslagKapitalInntektBeløp",
+        "sjablonVerdi": "10000"
       }
     },
     {
@@ -258,10 +271,23 @@
         "datoTil": "2021-07-01",
         "rolle": "BIDRAGSMOTTAKER",
         "inntektType": "KAPITALINNTEKT_EGNE_OPPLYSNINGER",
-        "belop": -5000,
+        "belop": 5000,
         "gjelderAar": "2020",
         "valgt": true,
-        "inntekter": []
+        "inntekter": [],
+        "grunnlagReferanseListe": [
+          "Sjablon_InnslagKapitalInntektBeløp_20200701"
+        ]
+      }
+    },
+    {
+      "referanse": "Sjablon_InnslagKapitalInntektBeløp_20200701",
+      "type": "SJABLON",
+      "innhold": {
+        "datoFom": "2020-01-01",
+        "datoTil": "2021-07-01",
+        "sjablonNavn": "InnslagKapitalInntektBeløp",
+        "sjablonVerdi": "10000"
       }
     },
     {
@@ -272,10 +298,50 @@
         "datoTil": "2022-07-01",
         "rolle": "BIDRAGSMOTTAKER",
         "inntektType": "KAPITALINNTEKT_EGNE_OPPLYSNINGER",
-        "belop": -5000,
+        "belop": 5000,
         "gjelderAar": "2021",
         "valgt": true,
-        "inntekter": []
+        "inntekter": [],
+        "grunnlagReferanseListe": [
+          "Sjablon_InnslagKapitalInntektBeløp_20210701"
+        ]
+      }
+    },
+    {
+      "referanse": "Sjablon_InnslagKapitalInntektBeløp_20210701",
+      "type": "SJABLON",
+      "innhold": {
+        "datoFom": "2021-07-01",
+        "datoTil": "2022-07-01",
+        "sjablonNavn": "InnslagKapitalInntektBeløp",
+        "sjablonVerdi": "10000"
+      }
+    },
+    {
+      "referanse": "Mottatt_Inntekt_KIEO_BM_2022_20221101",
+      "type": "INNTEKT",
+      "innhold": {
+        "datoFom": "2022-11-01",
+        "datoTil": "2023-01-01",
+        "rolle": "BIDRAGSMOTTAKER",
+        "inntektType": "KAPITALINNTEKT_EGNE_OPPLYSNINGER",
+        "belop": 21000,
+        "gjelderAar": "2022",
+        "valgt": true,
+        "inntekter": [],
+        "grunnlagReferanseListe": [
+          "Sjablon_InnslagKapitalInntektBeløp_20221101"
+        ]
+      }
+    },
+    {
+      "referanse": "Sjablon_InnslagKapitalInntektBeløp_20221101",
+      "type": "SJABLON",
+      "innhold": {
+        "datoFom": "2022-11-01",
+        "datoTil": "2023-01-01",
+        "sjablonNavn": "InnslagKapitalInntektBeløp",
+        "sjablonVerdi": "10000"
       }
     },
     {
@@ -286,10 +352,23 @@
         "datoTil": null,
         "rolle": "BIDRAGSMOTTAKER",
         "inntektType": "KAPITALINNTEKT_EGNE_OPPLYSNINGER",
-        "belop": 19000,
+        "belop": 29000,
         "gjelderAar": "2022",
         "valgt": true,
-        "inntekter": []
+        "inntekter": [],
+        "grunnlagReferanseListe": [
+          "Sjablon_InnslagKapitalInntektBeløp_20220701"
+        ]
+      }
+    },
+    {
+      "referanse": "Sjablon_InnslagKapitalInntektBeløp_20220701",
+      "type": "SJABLON",
+      "innhold": {
+        "datoFom": "2022-07-01",
+        "datoTil": null,
+        "sjablonNavn": "InnslagKapitalInntektBeløp",
+        "sjablonVerdi": "10000"
       }
     },
     {

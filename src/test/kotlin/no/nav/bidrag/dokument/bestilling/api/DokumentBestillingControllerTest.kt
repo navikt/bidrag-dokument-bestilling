@@ -314,17 +314,18 @@ class DokumentBestillingControllerTest : AbstractControllerTest() {
                 inntekterPeriode4[0].belopType shouldBe "ESBT"
                 inntekterPeriode4[0].beskrivelse shouldBe "Ekstra smÃ¥barnstillegg"
                 inntekterPeriode4[0].belopÅrsinntekt shouldBe BigDecimal(2000)
-                inntekterPeriode4[1].belopType shouldBe "KIEO"
-                inntekterPeriode4[1].beskrivelse shouldBe "Kapitalinntekt egne opplysninger"
-                inntekterPeriode4[1].belopÅrsinntekt shouldBe BigDecimal(19000)
-                inntekterPeriode4[2].belopType shouldBe "PIEO"
-                inntekterPeriode4[2].beskrivelse shouldBe "Personinntekt egne opplysninger"
-                inntekterPeriode4[2].belopÅrsinntekt shouldBe BigDecimal(410000)
-                inntekterPeriode4[3].belopType shouldBe "UBAT"
-                inntekterPeriode4[3].beskrivelse shouldBe "Utvidet barnetrygd"
-                inntekterPeriode4[3].belopÅrsinntekt shouldBe BigDecimal(1000)
+                inntekterPeriode4[1].belopType shouldBe "PIEO"
+                inntekterPeriode4[1].beskrivelse shouldBe "Personinntekt egne opplysninger"
+                inntekterPeriode4[1].belopÅrsinntekt shouldBe BigDecimal(410000)
+                inntekterPeriode4[2].belopType shouldBe "UBAT"
+                inntekterPeriode4[2].beskrivelse shouldBe "Utvidet barnetrygd"
+                inntekterPeriode4[2].belopÅrsinntekt shouldBe BigDecimal(1000)
+                inntekterPeriode4[3].belopType shouldBe "XKAP"
+                inntekterPeriode4[3].beskrivelse shouldBe "Netto positive kapitalinntekter"
+                inntekterPeriode4[3].belopÅrsinntekt shouldBe BigDecimal(19000)
                 inntekterPeriode4[4].belopType shouldBe "XINN"
                 inntekterPeriode4[4].belopÅrsinntekt shouldBe BigDecimal(432000)
+                inntekterPeriode4[4].beskrivelse shouldBe "Personens beregningsgrunnlag i perioden"
 
                 barn1.forskuddSivilstandPerioder shouldHaveSize 3
                 val sivilstandPeriode1 = barn1.forskuddSivilstandPerioder[0]

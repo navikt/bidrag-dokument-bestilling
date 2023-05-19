@@ -151,8 +151,6 @@ class DokumentMetadataCollector(
             }
         }
 
-
-
         return roller
     }
 

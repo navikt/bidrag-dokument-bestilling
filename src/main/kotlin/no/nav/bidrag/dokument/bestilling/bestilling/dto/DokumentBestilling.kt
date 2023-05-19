@@ -15,9 +15,15 @@ import java.math.BigDecimal
 import java.time.LocalDate
 
 typealias GrunnlagRolleType = no.nav.bidrag.behandling.felles.enums.Rolle
-data class GrunnlagInntektType(val inntektType: InntektType? = null, val periodeBeregningsGrunnlag: Boolean? = false) {
-    val beskrivelse get() = inntektType?.beskrivelse ?: if (periodeBeregningsGrunnlag == true) "Personens beregningsgrunnlag i perioden" else ""
-    val belopstype get() = inntektType?.belopstype ?: if (periodeBeregningsGrunnlag == true) "XINN" else ""
+data class GrunnlagInntektType(val inntektType: InntektType? = null, val periodeBeregningsGrunnlag: Boolean? = false, val nettoKapitalInntekt: Boolean? = false) {
+    val beskrivelse get() = inntektType?.beskrivelse ?: if (periodeBeregningsGrunnlag == true) {
+        "Personens beregningsgrunnlag i perioden"
+    } else if (nettoKapitalInntekt == true) {
+        "Netto positive kapitalinntekter"
+    } else {
+        ""
+    }
+    val belopstype get() = inntektType?.belopstype ?: if (periodeBeregningsGrunnlag == true) "XINN" else if (nettoKapitalInntekt == true) "XKAP" else ""
 
     override fun equals(other: Any?): Boolean {
         return if (other is GrunnlagInntektType) {

@@ -27,6 +27,7 @@
     <bidrag-dokument-dto.version>1.6.11</bidrag-dokument-dto.version>
     <kotlin-logging-jvm.version>3.0.4</kotlin-logging-jvm.version>
     <bidrag-behandling-felles-dto.version>0.0.87</bidrag-behandling-felles-dto.version>
+    <bidrag-behandling-felles.version>0.0.84</bidrag-behandling-felles.version>
   </properties>
 
   <repositories>
@@ -51,6 +52,17 @@
       <groupId>no.nav.bidrag</groupId>
       <artifactId>bidrag-behandling-felles-dto</artifactId>
       <version>${bidrag-behandling-felles-dto.version}</version>
+      <exclusions>
+        <exclusion>
+          <groupId>no.nav.bidrag</groupId>
+          <artifactId>bidrag-behandling-felles</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>no.nav.bidrag</groupId>
+      <artifactId>bidrag-behandling-felles</artifactId>
+      <version>${bidrag-behandling-felles.version}</version>
     </dependency>
     <!--Spring-->
     <dependency>

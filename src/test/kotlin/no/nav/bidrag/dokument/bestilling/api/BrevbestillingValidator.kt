@@ -8,15 +8,13 @@ import no.nav.bidrag.dokument.bestilling.bestilling.produksjon.dto.BrevBestillin
 import no.nav.bidrag.dokument.bestilling.bestilling.produksjon.dto.BrevKontaktinfo
 import no.nav.bidrag.dokument.bestilling.consumer.dto.EnhetKontaktInfoDto
 import no.nav.bidrag.dokument.bestilling.consumer.dto.fornavnEtternavn
-import no.nav.bidrag.dokument.bestilling.utils.BM1
-import no.nav.bidrag.dokument.bestilling.utils.BP1
 import no.nav.bidrag.dokument.bestilling.utils.BREVREF
 import no.nav.bidrag.dokument.bestilling.utils.FORSKUDD_INNTEKTGRENSE_2020_2021
 import no.nav.bidrag.transport.person.PersonAdresseDto
 import no.nav.bidrag.transport.person.PersonDto
 import java.math.BigDecimal
 
-fun BrevBestilling.validateKontaktInformasjon(enhetKontaktInfo: EnhetKontaktInfoDto, bm: PersonDto, bp: PersonDto, adresse: PersonAdresseDto, brevRef: String = BREVREF){
+fun BrevBestilling.validateKontaktInformasjon(enhetKontaktInfo: EnhetKontaktInfoDto, bm: PersonDto, bp: PersonDto, adresse: PersonAdresseDto, brevRef: String = BREVREF) {
     brev?.tknr shouldBe enhetKontaktInfo.enhetIdent
     brev?.spraak shouldBe "NB"
     brev?.brevref shouldBe brevRef
@@ -51,14 +49,12 @@ fun BrevBestilling.validateKontaktInformasjon(enhetKontaktInfo: EnhetKontaktInfo
     brev?.parter?.bpfodselsdato shouldBe bp.fødselsdato?.verdi
 }
 
-
-fun BidragBarn.validerInntekt(periode: PeriodeFraTom, index: Int, inntekt: Int, type: String, beskrivelse: String?){
-    val inntekterPeriode =hentInntektPerioder(periode)
+fun BidragBarn.validerInntekt(periode: PeriodeFraTom, index: Int, inntekt: Int, type: String, beskrivelse: String?) {
+    val inntekterPeriode = hentInntektPerioder(periode)
     inntekterPeriode[index].inntektGrense shouldBe FORSKUDD_INNTEKTGRENSE_2020_2021
     inntekterPeriode[index].belopType shouldBe type
     inntekterPeriode[index].beskrivelse shouldBe beskrivelse
     inntekterPeriode[index].belopÅrsinntekt shouldBe BigDecimal(inntekt)
     inntekterPeriode[index].fomDato shouldBe periode.fraDato
     inntekterPeriode[index].tomDato shouldBe periode.tomDato
-
 }

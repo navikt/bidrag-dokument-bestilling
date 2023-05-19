@@ -256,18 +256,19 @@ class VedtakServiceTest {
             vedtakPeriode1Inntekter[2].beløpType.periodeBeregningsGrunnlag shouldBe true
             vedtakPeriode1Inntekter[2].beløp shouldBe (vedtakPeriode1Inntekter[0].beløp + vedtakPeriode1Inntekter[1].beløp)
 
-            vedtakPeriode1Inntekter.find { it.beløpType.inntektType == InntektType.KAPITALINNTEKT_EGNE_OPPLYSNINGER } shouldBe null
-            vedtakPeriode2.inntekter.find { it.beløpType.inntektType == InntektType.KAPITALINNTEKT_EGNE_OPPLYSNINGER } shouldBe null
-            vedtakPeriode3.inntekter.find { it.beløpType.inntektType == InntektType.KAPITALINNTEKT_EGNE_OPPLYSNINGER } shouldBe null
+            vedtakPeriode1Inntekter.find { it.beløpType.inntektType == InntektType.KAPITALINNTEKT_EGNE_OPPLYSNINGER || it.beløpType.nettoKapitalInntekt == true } shouldBe null
+            vedtakPeriode2.inntekter.find { it.beløpType.inntektType == InntektType.KAPITALINNTEKT_EGNE_OPPLYSNINGER || it.beløpType.nettoKapitalInntekt == true } shouldBe null
+            vedtakPeriode3.inntekter.find { it.beløpType.inntektType == InntektType.KAPITALINNTEKT_EGNE_OPPLYSNINGER || it.beløpType.nettoKapitalInntekt == true } shouldBe null
 
             val vedtakPeriode4Inntekter = vedtakPeriode4.inntekter
             vedtakPeriode4Inntekter shouldHaveSize 5
 
             vedtakPeriode4Inntekter[0].beløpType.inntektType shouldBe InntektType.EKSTRA_SMAABARNSTILLEGG
-            vedtakPeriode4Inntekter[1].beløpType.inntektType shouldBe InntektType.KAPITALINNTEKT_EGNE_OPPLYSNINGER
-            vedtakPeriode4Inntekter[1].beløp shouldBe BigDecimal(19000)
-            vedtakPeriode4Inntekter[2].beløpType.inntektType shouldBe InntektType.PERSONINNTEKT_EGNE_OPPLYSNINGER
-            vedtakPeriode4Inntekter[3].beløpType.inntektType shouldBe InntektType.UTVIDET_BARNETRYGD
+            vedtakPeriode4Inntekter[1].beløpType.inntektType shouldBe InntektType.PERSONINNTEKT_EGNE_OPPLYSNINGER
+            vedtakPeriode4Inntekter[2].beløpType.inntektType shouldBe InntektType.UTVIDET_BARNETRYGD
+            vedtakPeriode4Inntekter[3].beløpType.inntektType shouldBe null
+            vedtakPeriode4Inntekter[3].beløpType.nettoKapitalInntekt shouldBe true
+            vedtakPeriode4Inntekter[3].beløp shouldBe BigDecimal(19000)
 
             vedtakPeriode4Inntekter[4].beløpType.inntektType shouldBe null
             vedtakPeriode4Inntekter[4].beløpType.periodeBeregningsGrunnlag shouldBe true

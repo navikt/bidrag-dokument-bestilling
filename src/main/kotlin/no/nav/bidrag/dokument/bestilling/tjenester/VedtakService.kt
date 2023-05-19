@@ -27,6 +27,8 @@ import no.nav.bidrag.dokument.bestilling.model.hentBarnInfoForFnr
 import no.nav.bidrag.dokument.bestilling.model.hentBeregningsgrunnlag
 import no.nav.bidrag.dokument.bestilling.model.hentBostatus
 import no.nav.bidrag.dokument.bestilling.model.hentInntekter
+import no.nav.bidrag.dokument.bestilling.model.hentKapitalInntekter
+import no.nav.bidrag.dokument.bestilling.model.hentNettoKapitalinntekter
 import no.nav.bidrag.dokument.bestilling.model.hentPersonInfo
 import no.nav.bidrag.dokument.bestilling.model.hentSaksbehandler
 import no.nav.bidrag.dokument.bestilling.model.hentSivilstand
@@ -104,9 +106,14 @@ class VedtakService(private val bidragVedtakConsumer: BidragVedtakConsumer, priv
         val stonadListeBarn = vedtakDto.stonadsendringListe.filter { it.kravhaverId == barnFodselsnummer }
         return stonadListeBarn.map { vedtak ->
             val vedtakPerioder = vedtak.periodeListe.map { periode ->
+                val nettoKapitalInntekt = vedtakDto.hentSluttberegninger(periode.grunnlagReferanseListe, periode.resultatkode).flatMap { sluttBeregning ->
+                    sluttBeregning.hentKapitalInntekter(vedtakDto)
+                        .filter { it.valgt }
+                        .hentNettoKapitalinntekter(periode, vedtakDto)
+                }
                 val inntekter = vedtakDto.hentSluttberegninger(periode.grunnlagReferanseListe, periode.resultatkode).flatMap { sluttBeregning ->
                     sluttBeregning.hentInntekter(vedtakDto).filter { it.valgt }
-                        .filter { it.inntektType == InntektType.KAPITALINNTEKT_EGNE_OPPLYSNINGER && it.belop > BigDecimal(0) || it.inntektType != InntektType.KAPITALINNTEKT_EGNE_OPPLYSNINGER }
+                        .filter { it.inntektType != InntektType.KAPITALINNTEKT_EGNE_OPPLYSNINGER }
                         .map {
                             val rollePersonInfo = vedtakDto.hentPersonInfo(it.rolle)
                             InntektPeriode(
@@ -120,7 +127,7 @@ class VedtakService(private val bidragVedtakConsumer: BidragVedtakConsumer, priv
                                 fodselsnummer = rollePersonInfo?.fnr,
                                 beløp = it.belop
                             )
-                        }
+                        } + nettoKapitalInntekt
                 }
 
                 VedtakPeriode(
