@@ -29,7 +29,7 @@ fun BrevBestilling.validateKontaktInformasjon(enhetKontaktInfo: EnhetKontaktInfo
     brev?.kontaktInfo?.returAdresse?.adresselinje2 shouldBe enhetKontaktInfo.postadresse?.adresselinje2
     brev?.kontaktInfo?.returAdresse?.postnummer shouldBe enhetKontaktInfo.postadresse?.postnummer
     brev?.kontaktInfo?.returAdresse?.poststed shouldBe enhetKontaktInfo.postadresse?.poststed
-    brev?.kontaktInfo?.returAdresse?.land shouldBe enhetKontaktInfo.postadresse?.land
+    brev?.kontaktInfo?.returAdresse?.land shouldBe ""
     brev?.kontaktInfo?.returAdresse?.shouldBeEqualToComparingFields(brev?.kontaktInfo?.postadresse as BrevKontaktinfo.Adresse)
 
     brev?.mottaker?.navn shouldBe bm.kortnavn?.verdi
@@ -39,7 +39,7 @@ fun BrevBestilling.validateKontaktInformasjon(enhetKontaktInfo: EnhetKontaktInfo
     brev?.mottaker?.boligNr shouldBe adresse.bruksenhetsnummer?.verdi
     brev?.mottaker?.postnummer shouldBe adresse.postnummer?.verdi
     brev?.mottaker?.spraak shouldBe "NB"
-    brev?.mottaker?.rolle shouldBe "01"
+    brev?.mottaker?.rolle shouldBe "02"
     brev?.mottaker?.fodselsnummer shouldBe bm.ident.verdi
     brev?.mottaker?.fodselsdato shouldBe bm.fødselsdato?.verdi
 

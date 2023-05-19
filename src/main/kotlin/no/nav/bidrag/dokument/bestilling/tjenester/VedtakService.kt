@@ -43,6 +43,11 @@ class VedtakService(private val bidragVedtakConsumer: BidragVedtakConsumer, priv
     fun hentVedtak(vedtakId: String): VedtakDto {
         return bidragVedtakConsumer.hentVedtak(vedtakId) ?: fantIkkeVedtak(vedtakId)
     }
+    fun hentVedtakSoknadsbarnFodselsnummer(vedtakId: String): List<String> {
+        val vedtakDto = hentVedtak(vedtakId)
+        val vedtakBarnInfo = vedtakDto.hentSøknadBarnInfo()
+        return vedtakBarnInfo.map { it.fnr }
+    }
 
     fun hentVedtakDetaljer(vedtakId: String): VedtakDetaljer {
         val vedtakDto = hentVedtak(vedtakId)
@@ -78,7 +83,7 @@ class VedtakService(private val bidragVedtakConsumer: BidragVedtakConsumer, priv
         val erForskudd = stonadsendringListe.any { it.type == StonadType.FORSKUDD }
         if (!erForskudd) return emptyList()
         val perioder = stonadsendringListe.flatMap { it.periodeListe.map { periode -> PeriodeFraTom(periode.fomDato, periode.tilDato ?: MAX_DATE) } }
-        val fraDato = perioder.sortedBy { it.fraDato }.first().fraDato
+        val fraDato = perioder.minByOrNull { it.fraDato }!!.fraDato
         val tomDato = perioder.sortedByDescending { it.tomDato }.first().tomDato
         return sjablongService.hentForskuddInntektgrensePerioder(fraDato, tomDato)
     }

@@ -8,8 +8,8 @@ import no.nav.bidrag.dokument.bestilling.model.SoknadType
 import no.nav.bidrag.domain.enums.Rolletype
 
 fun Rolletype.toKode() = when (this) {
-    Rolletype.BM -> "01"
-    Rolletype.BP -> "02"
+    Rolletype.BM -> "02"
+    Rolletype.BP -> "01"
     Rolletype.RM -> "RM"
     else -> "00"
 }
@@ -22,7 +22,7 @@ fun Rolle.toKode() = when (this) {
     else -> "00"
 }
 fun SivilstandKode.toKode() = when (this) {
-    SivilstandKode.ENKE_ELLER_ENKEMANN -> "ENKE"
+    SivilstandKode.ENKE_ELLER_ENKEMANN, SivilstandKode.ENSLIG -> "ENKE"
     SivilstandKode.GIFT -> "GIFT"
     SivilstandKode.GJENLEVENDE_PARTNER -> "GJPA"
 //                                    SivilstandKode.GIFT_LEVER_ADSKILT -> "GLAD"
@@ -30,7 +30,7 @@ fun SivilstandKode.toKode() = when (this) {
     SivilstandKode.SAMBOER -> "SAMB"
     SivilstandKode.SEPARERT_PARTNER -> "SEPA"
     SivilstandKode.SEPARERT -> "SEPR"
-    SivilstandKode.SKILT, SivilstandKode.ENSLIG -> "SKIL"
+    SivilstandKode.SKILT -> "SKIL"
     SivilstandKode.SKILT_PARTNER -> "SKPA"
     SivilstandKode.UGIFT -> "UGIF"
     else -> "NULL"

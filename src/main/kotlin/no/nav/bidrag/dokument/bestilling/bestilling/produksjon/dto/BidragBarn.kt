@@ -104,9 +104,6 @@ class BidragBarn {
 @XmlRootElement(name = "perForskBarn")
 @XmlAccessorType(XmlAccessType.FIELD)
 class ForskuddBarnPeriode {
-    @XmlElement(name = "antBarn", nillable = true)
-    @XmlJavaTypeAdapter(NumberAdapter::class)
-    var antallBarn: Int? = 0
 
     @XmlElement(name = "fomDato", nillable = true)
     @XmlJavaTypeAdapter(DateAdapter::class)
@@ -115,17 +112,16 @@ class ForskuddBarnPeriode {
     @XmlElement(name = "tomDato", nillable = true)
     @XmlJavaTypeAdapter(PeriodDateAdapter::class)
     var tomDato: LocalDate? = null
+
+    @XmlElement(name = "antBarn", nillable = true)
+    @XmlJavaTypeAdapter(NumberAdapter::class)
+    var antallBarn: Int? = 0
 }
 
 @Suppress("unused")
 @XmlRootElement(name = "perForskSiv")
 @XmlAccessorType(XmlAccessType.FIELD)
 class ForskuddSivilstandPeriode {
-    @XmlElement(name = "forsorgKd", nillable = true)
-    var kode: String? = null
-
-    @XmlElement(name = "forsorgBesk", nillable = true)
-    var beskrivelse: String? = null
 
     @XmlElement(name = "fomDato", nillable = true)
     @XmlJavaTypeAdapter(DateAdapter::class)
@@ -134,6 +130,12 @@ class ForskuddSivilstandPeriode {
     @XmlElement(name = "tomDato", nillable = true)
     @XmlJavaTypeAdapter(PeriodDateAdapter::class)
     var tomDato: LocalDate? = null
+
+    @XmlElement(name = "forsorgKd", nillable = true)
+    var kode: String? = null
+
+    @XmlElement(name = "forsorgBesk", nillable = true)
+    var beskrivelse: String? = null
 }
 
 @Suppress("unused")

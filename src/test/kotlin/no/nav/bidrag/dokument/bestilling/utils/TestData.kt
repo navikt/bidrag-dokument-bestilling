@@ -196,7 +196,7 @@ fun createOpprettJournalpostResponse(
     )
 }
 
-fun createEnhetKontaktInformasjon(): EnhetKontaktInfoDto {
+fun createEnhetKontaktInformasjon(land: String = "Norge"): EnhetKontaktInfoDto {
     return EnhetKontaktInfoDto(
         enhetIdent = "4806",
         enhetNavn = "NAV Familie- og pensjonsytelser Drammen",
@@ -206,7 +206,7 @@ fun createEnhetKontaktInformasjon(): EnhetKontaktInfoDto {
             adresselinje2 = "Linje2",
             postnummer = "3040",
             poststed = "Drammen",
-            land = "Norge"
+            land = land
         )
     )
 }

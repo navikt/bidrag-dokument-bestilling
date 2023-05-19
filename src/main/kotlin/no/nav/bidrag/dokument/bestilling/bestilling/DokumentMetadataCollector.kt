@@ -132,8 +132,11 @@ class DokumentMetadataCollector(
             )
         }
 
+        val soknadsbarn = mutableListOf<String>()
+        forespørsel.vedtakId?.let { soknadsbarn.addAll(vedtakService.hentVedtakSoknadsbarnFodselsnummer(it)) }
+
         val barn = sak.roller.filter { it.type == Rolletype.BA }
-        barn.filter { it.fødselsnummer != null }.forEach {
+        barn.filter { it.fødselsnummer != null && (soknadsbarn.isEmpty() || soknadsbarn.contains(it.fødselsnummer?.verdi)) }.forEach {
             val barnInfo = if (it.fødselsnummer!!.verdi.erDødfødt) null else personService.hentPerson(it.fødselsnummer!!.verdi, "Barn")
             if (barnInfo == null || !barnInfo.isDod()) {
                 roller.add(
@@ -147,6 +150,8 @@ class DokumentMetadataCollector(
                 )
             }
         }
+
+
 
         return roller
     }
@@ -223,6 +228,8 @@ class DokumentMetadataCollector(
         val enhetKontaktInfo = organisasjonService.hentEnhetKontaktInfo(enhet, forespørsel.hentRiktigSpråkkode())
             ?: throw FantIkkeEnhetException("Fant ikke enhet $enhet for spraak ${forespørsel.hentRiktigSpråkkode()}")
 
+        val land = enhetKontaktInfo.postadresse?.land
+        val erNorge = listOf("Norway", "Norge").any { it.equals(land, ignoreCase = true) }
         return EnhetKontaktInfo(
             navn = enhetKontaktInfo.enhetNavn ?: "",
             telefonnummer = enhetKontaktInfo.telefonnummer ?: "",
@@ -231,7 +238,7 @@ class DokumentMetadataCollector(
                 adresselinje2 = enhetKontaktInfo.postadresse?.adresselinje2,
                 poststed = enhetKontaktInfo.postadresse?.poststed,
                 postnummer = enhetKontaktInfo.postadresse?.postnummer,
-                land = enhetKontaktInfo.postadresse?.land
+                land = if (!erNorge) land else null
             ),
             enhetId = enhet
         )

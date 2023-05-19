@@ -230,7 +230,7 @@ class DokumentBestillingBrevkodeTest : AbstractControllerTest() {
                         bestilling.kontaktInfo?.postadresse?.adresselinje2 shouldBe enhetKontaktInfo.postadresse?.adresselinje2
                         bestilling.kontaktInfo?.postadresse?.postnummer shouldBe enhetKontaktInfo.postadresse?.postnummer
                         bestilling.kontaktInfo?.postadresse?.poststed shouldBe enhetKontaktInfo.postadresse?.poststed
-                        bestilling.kontaktInfo?.postadresse?.land shouldBe "Norge"
+                        bestilling.kontaktInfo?.postadresse?.land shouldBe null
                     }
                 },
                 dokumentMal

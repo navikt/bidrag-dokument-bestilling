@@ -173,7 +173,7 @@ internal class DokumentMetadataCollectorTest {
             bestilling.kontaktInfo?.postadresse?.adresselinje2 shouldBe defaultKontaktinfo.postadresse?.adresselinje2
             bestilling.kontaktInfo?.postadresse?.postnummer shouldBe defaultKontaktinfo.postadresse?.postnummer
             bestilling.kontaktInfo?.postadresse?.poststed shouldBe defaultKontaktinfo.postadresse?.poststed
-            bestilling.kontaktInfo?.postadresse?.land shouldBe "Norge"
+            bestilling.kontaktInfo?.postadresse?.land shouldBe null
 
             bestilling.saksbehandler?.ident shouldBe SAKSBEHANDLER_IDENT
             bestilling.saksbehandler?.navn shouldBe "Saksbehandler Mellomnavn Saksbehandlersen"

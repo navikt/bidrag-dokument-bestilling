@@ -6,7 +6,6 @@ import io.kotest.matchers.collections.shouldHaveAtLeastSize
 import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.collections.shouldNotBeIn
 import io.kotest.matchers.comparables.shouldBeEqualComparingTo
-import io.kotest.matchers.equality.shouldBeEqualToComparingFields
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldContain
 import no.nav.bidrag.commons.web.EnhetFilter.Companion.X_ENHET_HEADER
@@ -17,7 +16,6 @@ import no.nav.bidrag.dokument.bestilling.bestilling.dto.DokumentMal
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.PeriodeFraTom
 import no.nav.bidrag.dokument.bestilling.bestilling.produksjon.dto.BidragBarn
 import no.nav.bidrag.dokument.bestilling.bestilling.produksjon.dto.BrevBestilling
-import no.nav.bidrag.dokument.bestilling.bestilling.produksjon.dto.BrevKontaktinfo
 import no.nav.bidrag.dokument.bestilling.consumer.dto.fornavnEtternavn
 import no.nav.bidrag.dokument.bestilling.model.MAX_DATE
 import no.nav.bidrag.dokument.bestilling.utils.ANNEN_MOTTAKER
@@ -171,25 +169,16 @@ class DokumentBestillingControllerTest : AbstractControllerTest() {
                 message.brev?.parter?.bmdatodod shouldBe null
                 message.brev?.parter?.bpdatodod shouldBe null
 
-                message.brev?.barnISak?.shouldHaveAtLeastSize(2)
+                message.brev?.barnISak?.shouldHaveAtLeastSize(1)
 
                 val barnISak1 = message.brev?.barnISak?.get(0)!!
-                barnISak1.fnr shouldBe BARN2.ident.verdi
-                barnISak1.navn shouldBe BARN2.fornavnEtternavn()
-                barnISak1.fDato shouldBe BARN2.fødselsdato?.verdi
+                barnISak1.fDato shouldBe BARN1.fødselsdato?.verdi
+                barnISak1.fnr shouldBe BARN1.ident.verdi
+                barnISak1.navn shouldBe BARN1.fornavnEtternavn()
                 barnISak1.personIdRm shouldBe ""
                 barnISak1.belopGebyrRm shouldBe ""
-                barnISak1.belForskudd shouldBe null
+                barnISak1.belForskudd shouldBe BigDecimal(1320).setScale(2)
                 barnISak1.belBidrag shouldBe null
-
-                val barnISak2 = message.brev?.barnISak?.get(1)!!
-                barnISak2.fDato shouldBe BARN1.fødselsdato?.verdi
-                barnISak2.fnr shouldBe BARN1.ident.verdi
-                barnISak2.navn shouldBe BARN1.fornavnEtternavn()
-                barnISak2.personIdRm shouldBe ""
-                barnISak2.belopGebyrRm shouldBe ""
-                barnISak2.belForskudd shouldBe BigDecimal(1320).setScale(2)
-                barnISak2.belBidrag shouldBe null
 
                 message.brev?.soknadBost?.saksnr shouldBe saksnummer
                 message.brev?.soknadBost?.sakstype shouldBe "E"
@@ -347,13 +336,13 @@ class DokumentBestillingControllerTest : AbstractControllerTest() {
                 val sivilstandPeriode2 = barn1.forskuddSivilstandPerioder[1]
                 sivilstandPeriode2.fomDato shouldBe periode2.fraDato
                 sivilstandPeriode2.tomDato shouldBe periode3.tomDato
-                sivilstandPeriode2.kode shouldBe "SKIL"
+                sivilstandPeriode2.kode shouldBe "ENKE"
                 sivilstandPeriode2.beskrivelse shouldBe "Skilt"
 
                 val sivilstandPeriode3 = barn1.forskuddSivilstandPerioder[2]
                 sivilstandPeriode3.fomDato shouldBe periode4.fraDato
                 sivilstandPeriode3.tomDato shouldBe MAX_DATE
-                sivilstandPeriode3.kode shouldBe "SKIL"
+                sivilstandPeriode3.kode shouldBe "ENKE"
                 sivilstandPeriode3.beskrivelse shouldBe "Enke"
 
                 // Skal være samme som message.brev.forskuddVedtakPeriode[0]
@@ -377,8 +366,6 @@ class DokumentBestillingControllerTest : AbstractControllerTest() {
                 stubUtils.Verify().verifyHentPersonCalled(BM1.ident.verdi)
                 stubUtils.Verify().verifyHentPersonCalled(BP1.ident.verdi)
                 stubUtils.Verify().verifyHentPersonCalled(BARN1.ident.verdi)
-                stubUtils.Verify().verifyHentPersonCalled(BARN2.ident.verdi)
-                stubUtils.Verify().verifyHentPersonCalled(BARN2.ident.verdi)
             }
         }
     }
@@ -481,7 +468,7 @@ class DokumentBestillingControllerTest : AbstractControllerTest() {
     @Test
     fun `skal produsere XML for fritekstsbrev for utenlandsk adresse and engelsk språk`() {
         stubDefaultValues()
-        val enhetKontaktInfo = createEnhetKontaktInformasjon()
+        val enhetKontaktInfo = createEnhetKontaktInformasjon(land = "USA")
         val bmAdresse = createPostAdresseResponseUtenlandsk()
         val dokumentMal = DokumentMal.BI01S02
         stubUtils.stubHentPersonSpraak("en")
@@ -521,9 +508,11 @@ class DokumentBestillingControllerTest : AbstractControllerTest() {
                 message.brev?.mottaker?.boligNr shouldBe ""
                 message.brev?.mottaker?.postnummer shouldBe ""
                 message.brev?.mottaker?.spraak shouldBe "EN"
-                message.brev?.mottaker?.rolle shouldBe "01"
+                message.brev?.mottaker?.rolle shouldBe "02"
                 message.brev?.mottaker?.fodselsnummer shouldBe BM1.ident.verdi
                 message.brev?.mottaker?.fodselsdato shouldBe BM1.fødselsdato?.verdi
+
+                message.brev?.kontaktInfo?.returAdresse?.land shouldBe "USA"
 
                 stubUtils.Verify().verifyHentEnhetKontaktInfoCalledWith("EN")
             }
