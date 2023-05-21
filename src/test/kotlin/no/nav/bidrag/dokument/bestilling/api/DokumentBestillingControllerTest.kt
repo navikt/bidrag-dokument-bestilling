@@ -372,6 +372,133 @@ class DokumentBestillingControllerTest : AbstractControllerTest() {
     }
 
     @Test
+    fun `skal produsere XML for forskudd vedtakbrev med flere perioder og barn`() {
+        stubDefaultValues()
+        stubUtils.stubHentPerson("16451299577", ANNEN_MOTTAKER)
+        stubUtils.stubHentPerson("25451755601", ANNEN_MOTTAKER)
+        stubUtils.stubHentPerson(BARN1.ident.verdi, BARN1)
+        stubUtils.stubHentPerson(BARN2.ident.verdi, BARN2)
+        stubUtils.stubHentVedtak("vedtak_forskudd_flere_perioder_og_barn_192.json")
+        val enhetKontaktInfo = createEnhetKontaktInformasjon()
+        val bmAdresse = createPostAdresseResponse()
+        val dokumentMal = DokumentMal.BI01A01
+        val tittel = "Tittel på dokument"
+        val saksnummer = "123213"
+        val mottakerId = BM1.ident
+        val gjelderId = BP1.ident
+
+        stubUtils.stubHentAdresse(postAdresse = bmAdresse)
+        stubUtils.stubEnhetKontaktInfo(enhetKontaktInfo)
+
+        val request = DokumentBestillingForespørsel(
+            mottakerId = mottakerId.verdi,
+            gjelderId = gjelderId.verdi,
+            saksnummer = saksnummer,
+            tittel = tittel,
+            vedtakId = "12312",
+            enhet = "4806",
+            spraak = "NB",
+            dokumentreferanse = "BIF12321321321"
+
+        )
+
+        jmsTestConsumer.withOnlinebrev {
+            val response = httpHeaderTestRestTemplate.exchange(
+                "${rootUri()}/bestill/${dokumentMal.name}",
+                HttpMethod.POST,
+                HttpEntity(request),
+                DokumentBestillingResponse::class.java
+            )
+
+            response.statusCode shouldBe HttpStatus.OK
+
+            val message: BrevBestilling = this.getMessageAsObject(BrevBestilling::class.java)!!
+            assertSoftly {
+                verifyBrevbestillingHeaders(message, dokumentMal)
+                message.validateKontaktInformasjon(enhetKontaktInfo, BM1, BP1, bmAdresse)
+
+                message.brev?.parter?.bmkravkfremav shouldBe ""
+                message.brev?.parter?.bmgebyr shouldBe ""
+                message.brev?.parter?.bmlandkode shouldBe ""
+                message.brev?.parter?.bpkravfremav shouldBe ""
+                message.brev?.parter?.bpgebyr shouldBe ""
+                message.brev?.parter?.bplandkode shouldBe ""
+                message.brev?.parter?.bmdatodod shouldBe null
+                message.brev?.parter?.bpdatodod shouldBe null
+
+                message.brev?.barnISak?.shouldHaveAtLeastSize(2)
+
+                val barnISak1 = message.brev?.barnISak?.get(0)!!
+                barnISak1.fDato shouldBe BARN2.fødselsdato?.verdi
+                barnISak1.fnr shouldBe BARN2.ident.verdi
+                barnISak1.navn shouldBe BARN2.fornavnEtternavn()
+                barnISak1.belForskudd shouldBe BigDecimal(1320).setScale(2)
+
+                val barnISak2 = message.brev?.barnISak?.get(1)!!
+                barnISak2.fDato shouldBe BARN1.fødselsdato?.verdi
+                barnISak2.fnr shouldBe BARN1.ident.verdi
+                barnISak2.navn shouldBe BARN1.fornavnEtternavn()
+                barnISak2.belForskudd shouldBe BigDecimal(1320).setScale(2)
+
+                message.brev?.soknadBost?.saksnr shouldBe saksnummer
+                message.brev?.soknadBost?.sakstype shouldBe "E"
+                message.brev?.soknadBost?.rmISak shouldBe false
+                message.brev?.soknadBost?.sendtDato shouldBe LocalDate.now()
+
+                message.brev?.saksbehandler?.navn shouldBe "Saksbehandler Mellomnavn Saksbehandlersen"
+
+                val virkningDato = LocalDate.parse("2020-01-01")
+
+                // Valider forskudd vedtak resultater
+                val soknadDato = LocalDate.parse("2023-01-15")
+
+                val soknad = message.brev?.soknad!!
+                soknad.soknDato shouldBe soknadDato
+                soknad.type shouldBe "FO"
+                soknad.aarsakKd shouldBe "H"
+                soknad.undergrp shouldBe "S"
+                soknad.saksnr shouldBe saksnummer
+                soknad.sendtDato shouldBe LocalDate.parse("2023-05-19")
+                soknad.vedtattDato shouldBe LocalDate.parse("2023-05-19")
+                soknad.virkningDato shouldBe virkningDato
+
+                val soknadBost = message.brev?.soknadBost!!
+                soknadBost.hgKode shouldBe "FO"
+                soknadBost.ugKode shouldBe "S"
+                soknadBost.datoSakReg shouldBe SAK_OPPRETTET_DATO
+                soknadBost.gebyrsats shouldBe FASTSETTELSE_GEBYR_2023.toBigDecimal().setScale(1)
+                soknadBost.virkningsDato shouldBe virkningDato
+                soknadBost.mottatDato shouldBe soknadDato
+                soknadBost.soknGrKode shouldBe "FO"
+                soknadBost.soknFraKode shouldBe "MO"
+                soknadBost.soknType shouldBe "FA"
+
+                message.brev?.vedtak!! shouldHaveSize 12
+
+                message.brev?.forskuddVedtakPeriode!!.size shouldBe 12
+
+                message.brev?.bidragBarn!! shouldHaveSize 2
+                val barn2 = message?.brev?.bidragBarn!![0]
+                barn2.barn!!.fnr shouldBe BARN2.ident.verdi
+                barn2.barn!!.saksnr shouldBe saksnummer
+
+                val barn1 = message?.brev?.bidragBarn!![1]
+                barn1.barn!!.fnr shouldBe BARN1.ident.verdi
+                barn1.barn!!.saksnr shouldBe saksnummer
+
+                barn1.inntektGrunnlagForskuddPerioder shouldHaveSize 8 * 4 // 4 inntektgrenser for enslig, 4 for gift/samboer. Inntekgrenser vises for alle 4 perioder = total 8*4
+                barn2.inntektGrunnlagForskuddPerioder shouldHaveSize 8 * 4 // 4 inntektgrenser for enslig, 4 for gift/samboer. Inntekgrenser vises for alle 4 perioder = total 8*4
+
+                stubUtils.Verify().verifyHentEnhetKontaktInfoCalledWith()
+                stubUtils.Verify().verifyHentPersonCalled(BM1.ident.verdi)
+                stubUtils.Verify().verifyHentPersonCalled(BP1.ident.verdi)
+                stubUtils.Verify().verifyHentPersonCalled(BARN1.ident.verdi)
+                stubUtils.Verify().verifyHentPersonCalled(BARN2.ident.verdi)
+            }
+        }
+    }
+
+    @Test
     fun `skal produsere XML for fritekstsbrev`() {
         stubDefaultValues()
         val enhetKontaktInfo = createEnhetKontaktInformasjon()

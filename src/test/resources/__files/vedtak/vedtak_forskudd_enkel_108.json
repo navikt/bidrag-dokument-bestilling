@@ -154,7 +154,7 @@
       "innhold": {
         "soknadsbarnId": 1,
         "fodselsdato": "2017-05-25",
-        "fnr": "25451755601"
+        "fnr": "12461690252"
       }
     },
     {
@@ -163,7 +163,7 @@
       "innhold": {
         "soknadsbarnId": 2,
         "fodselsdato": "2012-05-16",
-        "fnr": "16451299577"
+        "fnr": "02461662466"
       }
     },
     {
@@ -181,7 +181,7 @@
       "type": "FORSKUDD",
       "sakId": "2300075",
       "skyldnerId": "NAV",
-      "kravhaverId": "16451299577",
+      "kravhaverId": "02461662466",
       "mottakerId": "30437516053",
       "indeksreguleringAar": "2024",
       "innkreving": "JA",
@@ -206,7 +206,7 @@
       "type": "FORSKUDD",
       "sakId": "2300075",
       "skyldnerId": "NAV",
-      "kravhaverId": "25451755601",
+      "kravhaverId": "12461690252",
       "mottakerId": "30437516053",
       "indeksreguleringAar": "2024",
       "innkreving": "JA",

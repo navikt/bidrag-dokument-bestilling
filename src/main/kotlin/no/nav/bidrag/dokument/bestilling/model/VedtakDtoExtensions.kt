@@ -1,6 +1,5 @@
 package no.nav.bidrag.dokument.bestilling.model
 
-import com.fasterxml.jackson.core.type.TypeReference
 import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
@@ -27,9 +26,8 @@ import no.nav.bidrag.dokument.bestilling.bestilling.dto.GrunnlagInntektType
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.InntektPeriode
 import java.math.BigDecimal
 
-val objectMapper = ObjectMapper().findAndRegisterModules()
+private val objectMapper = ObjectMapper().findAndRegisterModules()
     .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
-var reader = ObjectMapper().readerFor(object : TypeReference<List<String>>() {})
 fun VedtakDto.hentInntekter(referanser: List<String>, resultatKode: String): List<Inntekt> {
     val sluttBeregninger = hentGrunnagDetaljer(
         GrunnlagType.SLUTTBEREGNING_BBM,
@@ -56,7 +54,8 @@ fun SluttberegningBBM.hentKapitalInntekter(vedtakDto: VedtakDto): List<Kapitalin
         GrunnlagType.INNTEKT,
         JsonNode::class.java,
         referanserGrunnlag
-    ).filter { it["inntektType"].asText() == InntektType.KAPITALINNTEKT_EGNE_OPPLYSNINGER.name }
+    )
+        .filter { it["inntektType"].asText() == InntektType.KAPITALINNTEKT_EGNE_OPPLYSNINGER.name }
         .map { objectMapper.readValue(it.toString(), Kapitalinntekt::class.java) }
 }
 
@@ -253,4 +252,5 @@ fun List<InntektPeriode>.hentTotalInntektPeriodeForRolle(rolle: Rolle): InntektP
     }
 
 fun List<InntektPeriode>.totalBelopForRolle(rolle: Rolle): BigDecimal =
-    filter { it.rolle == rolle }.map { it.beløp }.reduceOrNull { acc, num -> acc + num } ?: BigDecimal.ZERO
+    filter { it.rolle == rolle }.map { it.beløp }.reduceOrNull { acc, num -> acc + num }
+        ?: BigDecimal.ZERO

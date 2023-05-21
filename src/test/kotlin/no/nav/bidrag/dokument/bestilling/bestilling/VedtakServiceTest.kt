@@ -17,6 +17,7 @@ import no.nav.bidrag.behandling.felles.enums.SivilstandKode
 import no.nav.bidrag.behandling.felles.enums.StonadType
 import no.nav.bidrag.behandling.felles.enums.VedtakKilde
 import no.nav.bidrag.behandling.felles.enums.VedtakType
+import no.nav.bidrag.dokument.bestilling.bestilling.dto.InntektPeriode
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.PeriodeFraTom
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.VedtakBarnStonad
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.VedtakDetaljer
@@ -78,7 +79,6 @@ class VedtakServiceTest {
         every { personService.hentPerson(BP1.ident.verdi, any()) } returns BP1
         every { personService.hentPerson(BARN1.ident.verdi, any()) } returns BARN1
         every { personService.hentPerson(BARN2.ident.verdi, any()) } returns BARN2
-        every { personService.hentPerson(any(), any()) } returns BARN2
         every { personService.hentSpråk(any()) } returns "NB"
         every { personService.hentPersonAdresse(any(), any()) } returns createPostAdresseResponse()
     }
@@ -88,7 +88,7 @@ class VedtakServiceTest {
         mockDefaultValues()
         val virkningDato = LocalDate.parse("2023-04-01")
         val vedtakResponse = ObjectMapper().findAndRegisterModules().readValue(readFile("vedtak/vedtak_forskudd_enkel_108.json"), VedtakDto::class.java)
-        every { vedtakConsumer.hentVedtak(any()) } returns vedtakResponse
+        every { vedtakConsumer.hentVedtak(eq("108")) } returns vedtakResponse
 
         val vedtakDetaljer = vedtakService.hentVedtakDetaljer("108")
 
@@ -108,7 +108,7 @@ class VedtakServiceTest {
 
             // Sivilstand
             vedtakDetaljer.sivilstandPerioder shouldHaveSize 1
-            val sivilstandPeriode = vedtakDetaljer.hentSivilstandPeriodeForDato(virkningDato)!!
+            val sivilstandPeriode = vedtakDetaljer.hentSivilstandPeriodeForDato(PeriodeFraTom(virkningDato))!!
             sivilstandPeriode.fomDato shouldBe LocalDate.parse("2023-04-01")
             sivilstandPeriode.tomDato shouldBe null
             sivilstandPeriode.sivilstandKode shouldBe SivilstandKode.ENSLIG
@@ -170,9 +170,9 @@ class VedtakServiceTest {
         val periode3 = PeriodeFraTom(LocalDate.parse("2021-07-01"), LocalDate.parse("2022-07-01"))
         val periode4 = PeriodeFraTom(LocalDate.parse("2022-07-01"), null)
         val vedtakResponse = ObjectMapper().findAndRegisterModules().readValue(readFile("vedtak/vedtak_forskudd_flere_perioder_186.json"), VedtakDto::class.java)
-        every { vedtakConsumer.hentVedtak(any()) } returns vedtakResponse
+        every { vedtakConsumer.hentVedtak(eq("186")) } returns vedtakResponse
 
-        val vedtakDetaljer = vedtakService.hentVedtakDetaljer("108")
+        val vedtakDetaljer = vedtakService.hentVedtakDetaljer("186")
 
         assertSoftly {
             vedtakDetaljer shouldNotBe null
@@ -276,6 +276,138 @@ class VedtakServiceTest {
         }
     }
 
+    @Test
+    fun `skal mappe vedtakdetaljer for vedtak med flere perioder og barn`() {
+        mockDefaultValues()
+        val virkningDato = LocalDate.parse("2020-01-01")
+        val periode1 = PeriodeFraTom(virkningDato, LocalDate.parse("2020-07-01"))
+        val periode2 = PeriodeFraTom(LocalDate.parse("2020-07-01"), LocalDate.parse("2021-01-01"))
+        val periode3 = PeriodeFraTom(LocalDate.parse("2021-01-01"), LocalDate.parse("2021-07-01"))
+        val periode4 = PeriodeFraTom(LocalDate.parse("2021-07-01"), LocalDate.parse("2022-01-01"))
+        val periode5 = PeriodeFraTom(LocalDate.parse("2022-01-01"), LocalDate.parse("2022-07-01"))
+        val periode6 = PeriodeFraTom(LocalDate.parse("2022-07-01"), null)
+        val antallPerioder = 6
+        val vedtakResponse = ObjectMapper().findAndRegisterModules().readValue(readFile("vedtak/vedtak_forskudd_flere_perioder_og_barn_192.json"), VedtakDto::class.java)
+        every { vedtakConsumer.hentVedtak(eq("192")) } returns vedtakResponse
+
+        val vedtakDetaljer = vedtakService.hentVedtakDetaljer("192")
+
+        assertSoftly {
+            vedtakDetaljer shouldNotBe null
+
+            vedtakDetaljer.kilde shouldBe VedtakKilde.MANUELT
+            vedtakDetaljer.vedtakType shouldBe VedtakType.FASTSETTELSE
+            vedtakDetaljer.stønadType shouldBe StonadType.FORSKUDD
+            vedtakDetaljer.virkningÅrsakKode shouldBe "H"
+            vedtakDetaljer.virkningDato!! shouldBe virkningDato
+            vedtakDetaljer.soknadDato!! shouldBe LocalDate.parse("2023-01-15")
+            vedtakDetaljer.soktFraDato!! shouldBe LocalDate.parse("2020-01-01")
+            vedtakDetaljer.vedtattDato!! shouldBe LocalDate.parse("2023-05-19")
+            vedtakDetaljer.saksbehandlerInfo.id shouldBe SAKSBEHANDLER_IDENT
+            vedtakDetaljer.saksbehandlerInfo.navn shouldBe SAKSBEHANDLER_NAVN
+
+            // Sivilstand
+            vedtakDetaljer.sivilstandPerioder shouldHaveSize 3
+            vedtakDetaljer.validerSivilstandPeriode(PeriodeFraTom(periode1.fraDato!!, periode3.tomDato), SivilstandKode.ENSLIG, "Enke")
+            vedtakDetaljer.validerSivilstandPeriode(PeriodeFraTom(periode3.tomDato!!, periode4.tomDato), SivilstandKode.ENSLIG, "Skilt")
+            vedtakDetaljer.validerSivilstandPeriode(PeriodeFraTom(periode4.tomDato!!, null), SivilstandKode.SAMBOER, "Samboer")
+
+            // Bostatus perioder
+            vedtakDetaljer.barnIHustandPerioder shouldHaveSize 2
+            vedtakDetaljer.validerBostatus(virkningDato, LocalDate.parse("2021-01-01"), 2)
+            vedtakDetaljer.validerBostatus(LocalDate.parse("2021-01-01"), null, 3)
+
+            vedtakDetaljer.vedtakBarn shouldHaveSize 2
+            val barn2 = vedtakDetaljer.vedtakBarn[0]
+            val barn1 = vedtakDetaljer.vedtakBarn[0]
+            barn1.bostatusPerioder shouldHaveSize antallPerioder
+            val barn1Bostatus = barn1.bostatusPerioder[antallPerioder - 1] // TODO: Er dette riktig??
+            barn1Bostatus.fomDato shouldBe LocalDate.parse("2022-07-01")
+            barn1Bostatus.tomDato shouldBe null
+            barn1Bostatus.bostatusKode shouldBe BostatusKode.MED_FORELDRE
+
+            val barn1StonadPeriode = barn1.stonader[0]
+            barn1StonadPeriode.type shouldBe StonadType.FORSKUDD
+            val vedtakPeriode1 = barn1StonadPeriode.hentVedtakPeriodeForDato(virkningDato)!!
+            vedtakPeriode1.fomDato shouldBe periode1.fraDato
+            vedtakPeriode1.tomDato shouldBe periode1.tomDato
+            vedtakPeriode1.beløp shouldBe BigDecimal(1230)
+            vedtakPeriode1.resultatKode shouldBe "75"
+            vedtakPeriode1.inntektGrense shouldBe FORSKUDD_INNTEKTGRENSE_2019_2020
+            vedtakPeriode1.maksInntekt shouldBe FORSKUDD_MAKS_INNTEKT_FORSKUDD_MOTTAKER_2019_2020
+
+            val vedtakPeriode6 = barn1StonadPeriode.hentVedtakPeriodeForDato(LocalDate.parse("2022-07-01"))!!
+            vedtakPeriode6.fomDato shouldBe periode6.fraDato
+            vedtakPeriode6.tomDato shouldBe periode6.tomDato
+            vedtakPeriode6.beløp shouldBe BigDecimal(1320)
+            vedtakPeriode6.resultatKode shouldBe "75"
+            vedtakPeriode6.inntektGrense shouldBe FORSKUDD_INNTEKTGRENSE_2022_2023
+            vedtakPeriode6.maksInntekt shouldBe FORSKUDD_MAKS_INNTEKT_FORSKUDD_MOTTAKER_2022_2023
+//
+            // Inntekt periode
+            val vedtakPeriode1Inntekter = vedtakPeriode1.inntekter
+            vedtakPeriode1Inntekter shouldHaveSize 3
+
+            vedtakPeriode1Inntekter[0].beløpType.inntektType shouldBe InntektType.EKSTRA_SMAABARNSTILLEGG
+            vedtakPeriode1Inntekter[0].beløp shouldBe BigDecimal(5000)
+            vedtakPeriode1Inntekter[0].periodeFomDato shouldBe vedtakPeriode1.fomDato
+            vedtakPeriode1Inntekter[0].periodeTomDato shouldBe vedtakPeriode1.tomDato
+
+            vedtakPeriode1Inntekter.hentGrunnlag()!!.beløp shouldBe BigDecimal(325000)
+            vedtakPeriode1Inntekter.hentNettoKapital() shouldBe null
+
+            val vedtakPeriode4Inntekter = vedtakPeriode6.inntekter
+            vedtakPeriode4Inntekter shouldHaveSize 5
+
+            vedtakPeriode4Inntekter[0].beløpType.inntektType shouldBe InntektType.INNTEKTSOPPLYSNINGER_ARBEIDSGIVER
+            vedtakPeriode4Inntekter.hentGrunnlag()!!.beløp shouldBe BigDecimal(438000)
+            vedtakPeriode4Inntekter.hentNettoKapital()!!.beløp shouldBe BigDecimal(28000)
+
+
+            // Validate barn 2
+
+            val barn2StonadPeriode = barn2.stonader[0]
+            barn2StonadPeriode.type shouldBe StonadType.FORSKUDD
+            val vedtakPeriode1barn2 = barn2StonadPeriode.hentVedtakPeriodeForDato(virkningDato)!!
+            vedtakPeriode1barn2.fomDato shouldBe periode1.fraDato
+            vedtakPeriode1barn2.tomDato shouldBe periode1.tomDato
+            vedtakPeriode1barn2.beløp shouldBe BigDecimal(1230)
+            vedtakPeriode1barn2.resultatKode shouldBe "75"
+            vedtakPeriode1barn2.inntektGrense shouldBe FORSKUDD_INNTEKTGRENSE_2019_2020
+            vedtakPeriode1barn2.maksInntekt shouldBe FORSKUDD_MAKS_INNTEKT_FORSKUDD_MOTTAKER_2019_2020
+
+            val vedtakPeriode6barn2 = barn2StonadPeriode.hentVedtakPeriodeForDato(LocalDate.parse("2022-07-01"))!!
+            vedtakPeriode6barn2.fomDato shouldBe periode6.fraDato
+            vedtakPeriode6barn2.tomDato shouldBe periode6.tomDato
+            vedtakPeriode6barn2.beløp shouldBe BigDecimal(1320)
+            vedtakPeriode6barn2.resultatKode shouldBe "75"
+            vedtakPeriode6barn2.inntektGrense shouldBe FORSKUDD_INNTEKTGRENSE_2022_2023
+            vedtakPeriode6barn2.maksInntekt shouldBe FORSKUDD_MAKS_INNTEKT_FORSKUDD_MOTTAKER_2022_2023
+//
+            // Inntekt periode
+            val vedtakPeriode1InntekterBarn2 = vedtakPeriode1barn2.inntekter
+            vedtakPeriode1InntekterBarn2 shouldHaveSize 3
+
+            vedtakPeriode1InntekterBarn2[0].beløpType.inntektType shouldBe InntektType.EKSTRA_SMAABARNSTILLEGG
+            vedtakPeriode1InntekterBarn2[0].beløp shouldBe BigDecimal(5000)
+            vedtakPeriode1InntekterBarn2[0].periodeFomDato shouldBe vedtakPeriode1.fomDato
+            vedtakPeriode1InntekterBarn2[0].periodeTomDato shouldBe vedtakPeriode1.tomDato
+
+            vedtakPeriode1InntekterBarn2.hentGrunnlag()!!.beløp shouldBe BigDecimal(325000)
+            vedtakPeriode1InntekterBarn2.hentNettoKapital() shouldBe null
+
+            val vedtakPeriode4InntekterBarn2 = vedtakPeriode6barn2.inntekter
+            vedtakPeriode4InntekterBarn2 shouldHaveSize 5
+
+            vedtakPeriode4InntekterBarn2[0].beløpType.inntektType shouldBe InntektType.INNTEKTSOPPLYSNINGER_ARBEIDSGIVER
+            vedtakPeriode4InntekterBarn2.hentGrunnlag()!!.beløp shouldBe BigDecimal(438000)
+            vedtakPeriode4InntekterBarn2.hentNettoKapital()!!.beløp shouldBe BigDecimal(28000)
+        }
+    }
+
+    fun List<InntektPeriode>.hentGrunnlag() = find{it.beløpType.periodeBeregningsGrunnlag == true}
+    fun List<InntektPeriode>.hentNettoKapital() = find{it.beløpType.nettoKapitalInntekt == true}
+
     fun VedtakBarnStonad.vedtakPeriode(fomDato: LocalDate, tomDato: LocalDate? = null, beløp: BigDecimal, resultatKode: String) {
         val vedtakPeriode = hentVedtakPeriodeForDato(fomDato)!!
         vedtakPeriode.fomDato shouldBe fomDato
@@ -294,15 +426,15 @@ class VedtakServiceTest {
     }
 
     fun VedtakDetaljer.validerSivilstandPeriode(periode: PeriodeFraTom, sivilstandKode: SivilstandKode, beskrivelse: String) {
-        val sivilstandPeriode = hentSivilstandPeriodeForDato(periode.fraDato)!!
+        val sivilstandPeriode = hentSivilstandPeriodeForDato(periode)!!
         sivilstandPeriode.fomDato shouldBe periode.fraDato
         sivilstandPeriode.tomDato shouldBe periode.tomDato
         sivilstandPeriode.sivilstandKode shouldBe sivilstandKode
         sivilstandPeriode.sivilstandBeskrivelse shouldBe beskrivelse
     }
-    fun VedtakBarnStonad.hentVedtakPeriodeForDato(dato: LocalDate) = this.vedtakPerioder.find { erInnenforPeriode(PeriodeFraTom(it.fomDato, it.tomDato), dato) }
-    fun VedtakDetaljer.hentSivilstandPeriodeForDato(dato: LocalDate) = this.sivilstandPerioder.find { it.fomDato <= dato && (it.tomDato == null || it.tomDato!! > dato) }
-    fun VedtakDetaljer.hentBarnIHustandPeriodeForDato(dato: LocalDate) = this.barnIHustandPerioder.sortedByDescending { it.tomDato }.find { it.fomDato <= dato && (it.tomDato == null || it.tomDato!! > dato) }
+    fun VedtakBarnStonad.hentVedtakPeriodeForDato(dato: LocalDate) = this.vedtakPerioder.sortedByDescending { it.fomDato }.find { erInnenforPeriode(PeriodeFraTom(it.fomDato, it.tomDato), dato) }
+    fun VedtakDetaljer.hentSivilstandPeriodeForDato(periode: PeriodeFraTom) = this.sivilstandPerioder.sortedByDescending { it.fomDato }.find { it.fomDato <= periode.fraDato && (it.tomDato == null || periode.tomDato == null || it.tomDato!! >= periode.tomDato) }
+    fun VedtakDetaljer.hentBarnIHustandPeriodeForDato(dato: LocalDate) = this.barnIHustandPerioder.sortedByDescending { it.fomDato }.find { it.fomDato <= dato && (it.tomDato == null || it.tomDato!! > dato) }
 
     fun erInnenforPeriode(periode: PeriodeFraTom, dato: LocalDate) = periode.fraDato <= dato && (periode.tomDato == null || periode.tomDato!! > dato)
 }
