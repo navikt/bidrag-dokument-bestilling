@@ -14,6 +14,7 @@ import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Profile
 import org.springframework.context.annotation.Scope
 import org.springframework.jms.annotation.EnableJms
+import org.springframework.jms.connection.CachingConnectionFactory
 import org.springframework.jms.connection.UserCredentialsConnectionFactoryAdapter
 import org.springframework.jms.core.JmsTemplate
 import org.springframework.oxm.jaxb.Jaxb2Marshaller
@@ -27,11 +28,17 @@ import javax.xml.bind.Marshaller
 @ConfigurationPropertiesScan
 class JMSConfig(private val mqProperties: MQProperties) {
 
+    fun createCachingConnectionFactory(mqQueueConnectionFactory: ConnectionFactory): CachingConnectionFactory {
+        val cachingConnectionFactory = CachingConnectionFactory()
+        cachingConnectionFactory.sessionCacheSize = 1
+        cachingConnectionFactory.targetConnectionFactory = mqQueueConnectionFactory
+        return cachingConnectionFactory
+    }
     @Bean
     @Scope("prototype")
     fun baseJmsTemplate(mqQueueConnectionFactory: ConnectionFactory): JmsTemplate {
         val template = JmsTemplate()
-        template.connectionFactory = mqQueueConnectionFactory
+        template.connectionFactory = createCachingConnectionFactory(mqQueueConnectionFactory)
         return template
     }
 
