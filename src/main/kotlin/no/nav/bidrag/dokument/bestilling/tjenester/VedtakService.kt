@@ -110,7 +110,9 @@ class VedtakService(private val bidragVedtakConsumer: BidragVedtakConsumer, priv
                     sluttBeregning.hentKapitalInntekter(vedtakDto)
                         .filter { it.valgt }
                         .hentNettoKapitalinntekter(periode, vedtakDto)
-                }
+                }.reduceOrNull { acc, inntektPeriode -> acc.copy(beløp = acc.beløp + inntektPeriode.beløp) }
+
+                val nettoKapitalInntekter = nettoKapitalInntekt?.let { listOf(it) } ?: emptyList()
                 val inntekter = vedtakDto.hentSluttberegninger(periode.grunnlagReferanseListe, periode.resultatkode).flatMap { sluttBeregning ->
                     sluttBeregning.hentInntekter(vedtakDto).filter { it.valgt }
                         .filter { it.inntektType != InntektType.KAPITALINNTEKT_EGNE_OPPLYSNINGER }
@@ -127,8 +129,8 @@ class VedtakService(private val bidragVedtakConsumer: BidragVedtakConsumer, priv
                                 fodselsnummer = rollePersonInfo?.fnr,
                                 beløp = it.belop
                             )
-                        } + nettoKapitalInntekt
-                }
+                        }
+                } + nettoKapitalInntekter
 
                 VedtakPeriode(
                     fomDato = periode.fomDato,
