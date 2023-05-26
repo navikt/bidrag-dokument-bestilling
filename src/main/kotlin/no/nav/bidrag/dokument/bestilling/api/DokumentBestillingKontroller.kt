@@ -62,7 +62,7 @@ class DokumentBestillingKontroller(val dokumentBestillingService: DokumentBestil
         security = [SecurityRequirement(name = "bearer-key")]
     )
     fun hentDokumentmalDetaljer(): Map<String, DokumentMalDetaljer> {
-        return DokumentMal.values().filter { it.enabled }
+        return DokumentMal.values()
             .associate { it.name to DokumentMalDetaljer(it.beskrivelse, it.brevtype) }
     }
 }
