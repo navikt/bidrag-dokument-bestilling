@@ -35,8 +35,16 @@ class DokumentBestillingKontroller(val dokumentBestillingService: DokumentBestil
         description = "Bestiller dokument for oppgitt brevkode/dokumentKode",
         security = [SecurityRequirement(name = "bearer-key")]
     )
-    @ApiResponses(value = [ApiResponse(responseCode = "400", description = "Dokument ble bestilt med ugyldig data")])
-    fun bestillBrev(@RequestBody bestillingRequest: DokumentBestillingForespørsel, @PathVariable dokumentMal: DokumentMal): DokumentBestillingResponse {
+    @ApiResponses(
+        value = [ApiResponse(
+            responseCode = "400",
+            description = "Dokument ble bestilt med ugyldig data"
+        )]
+    )
+    fun bestillBrev(
+        @RequestBody bestillingRequest: DokumentBestillingForespørsel,
+        @PathVariable dokumentMal: DokumentMal
+    ): DokumentBestillingResponse {
         LOGGER.info("Bestiller dokument for brevkode $dokumentMal og enhet ${bestillingRequest.enhet}")
         SIKKER_LOGG.info("Bestiller dokument for brevkode $dokumentMal med data $bestillingRequest og enhet ${bestillingRequest.enhet}")
         val result = dokumentBestillingService.bestill(bestillingRequest, dokumentMal)
@@ -63,6 +71,6 @@ class DokumentBestillingKontroller(val dokumentBestillingService: DokumentBestil
     )
     fun hentDokumentmalDetaljer(): Map<String, DokumentMalDetaljer> {
         return DokumentMal.values()
-            .associate { it.name to DokumentMalDetaljer(it.beskrivelse, it.brevtype) }
+            .associate { it.name to DokumentMalDetaljer(it.beskrivelse, it.brevtype, it.enabled) }
     }
 }

@@ -4,5 +4,6 @@ import no.nav.bidrag.dokument.bestilling.bestilling.dto.BrevType
 
 data class DokumentMalDetaljer(
     val beskrivelse: String,
-    val type: BrevType
+    val type: BrevType,
+    val kanBestilles: Boolean
 )
