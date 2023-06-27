@@ -33,6 +33,7 @@ class JMSConfig(private val mqProperties: MQProperties) {
         cachingConnectionFactory.targetConnectionFactory = mqQueueConnectionFactory
         return cachingConnectionFactory
     }
+
     @Bean
     @Scope("prototype")
     fun baseJmsTemplate(mqQueueConnectionFactory: ConnectionFactory): JmsTemplate {
