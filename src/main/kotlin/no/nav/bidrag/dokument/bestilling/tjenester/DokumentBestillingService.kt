@@ -5,7 +5,7 @@ import no.nav.bidrag.dokument.bestilling.api.dto.DokumentBestillingResponse
 import no.nav.bidrag.dokument.bestilling.bestilling.DokumentBestillingManager
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.BestillingSystem
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.BrevKode
-import no.nav.bidrag.dokument.dto.DokumentArkivSystemDto
+import no.nav.bidrag.transport.dokument.DokumentArkivSystemDto
 import org.springframework.stereotype.Service
 
 @Service

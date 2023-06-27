@@ -1,3 +1,5 @@
+package no.nav.bidrag.dokument.bestilling.utils
+
 import com.fasterxml.jackson.core.JsonProcessingException
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.github.tomakehurst.wiremock.client.ResponseDefinitionBuilder
@@ -10,13 +12,7 @@ import no.nav.bidrag.dokument.bestilling.consumer.dto.EnhetInfo
 import no.nav.bidrag.dokument.bestilling.consumer.dto.EnhetKontaktInfoDto
 import no.nav.bidrag.dokument.bestilling.consumer.dto.HentSakResponse
 import no.nav.bidrag.dokument.bestilling.consumer.dto.SaksbehandlerInfoResponse
-import no.nav.bidrag.dokument.bestilling.utils.SAKSBEHANDLER_IDENT
-import no.nav.bidrag.dokument.bestilling.utils.SAKSBEHANDLER_NAVN
-import no.nav.bidrag.dokument.bestilling.utils.createEnhetKontaktInformasjon
-import no.nav.bidrag.dokument.bestilling.utils.createOpprettJournalpostResponse
-import no.nav.bidrag.dokument.bestilling.utils.createPostAdresseResponse
-import no.nav.bidrag.dokument.bestilling.utils.createSakResponse
-import no.nav.bidrag.dokument.dto.OpprettJournalpostResponse
+import no.nav.bidrag.transport.dokument.OpprettJournalpostResponse
 import no.nav.bidrag.transport.person.PersonAdresseDto
 import no.nav.bidrag.transport.person.PersonDto
 import org.junit.Assert

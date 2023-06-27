@@ -14,10 +14,10 @@ import no.nav.bidrag.dokument.bestilling.bestilling.produksjon.dto.BrevMottaker
 import no.nav.bidrag.dokument.bestilling.bestilling.produksjon.dto.brevbestilling
 import no.nav.bidrag.dokument.bestilling.consumer.BidragDokumentConsumer
 import no.nav.bidrag.dokument.bestilling.consumer.dto.RolleType
-import no.nav.bidrag.dokument.dto.AvsenderMottakerDto
-import no.nav.bidrag.dokument.dto.JournalpostType
-import no.nav.bidrag.dokument.dto.OpprettDokumentDto
-import no.nav.bidrag.dokument.dto.OpprettJournalpostRequest
+import no.nav.bidrag.transport.dokument.AvsenderMottakerDto
+import no.nav.bidrag.transport.dokument.JournalpostType
+import no.nav.bidrag.transport.dokument.OpprettDokumentDto
+import no.nav.bidrag.transport.dokument.OpprettJournalpostRequest
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.jms.core.JmsTemplate
 import org.springframework.stereotype.Component

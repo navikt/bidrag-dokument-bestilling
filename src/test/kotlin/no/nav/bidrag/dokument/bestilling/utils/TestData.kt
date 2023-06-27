@@ -8,8 +8,6 @@ import no.nav.bidrag.dokument.bestilling.consumer.dto.EnhetPostadresseDto
 import no.nav.bidrag.dokument.bestilling.consumer.dto.HentSakResponse
 import no.nav.bidrag.dokument.bestilling.consumer.dto.RolleType
 import no.nav.bidrag.dokument.bestilling.consumer.dto.SakRolle
-import no.nav.bidrag.dokument.dto.OpprettDokumentDto
-import no.nav.bidrag.dokument.dto.OpprettJournalpostResponse
 import no.nav.bidrag.domain.enums.Adressetype
 import no.nav.bidrag.domain.enums.Diskresjonskode
 import no.nav.bidrag.domain.ident.AktørId
@@ -26,6 +24,8 @@ import no.nav.bidrag.domain.string.Postnummer
 import no.nav.bidrag.domain.string.Poststed
 import no.nav.bidrag.domain.tid.Dødsdato
 import no.nav.bidrag.domain.tid.Fødselsdato
+import no.nav.bidrag.transport.dokument.OpprettDokumentDto
+import no.nav.bidrag.transport.dokument.OpprettJournalpostResponse
 import no.nav.bidrag.transport.person.PersonAdresseDto
 import no.nav.bidrag.transport.person.PersonDto
 import java.time.LocalDate

@@ -1,6 +1,5 @@
 package no.nav.bidrag.dokument.bestilling.api
 
-import StubUtils
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.github.tomakehurst.wiremock.client.WireMock
 import com.ninjasquad.springmockk.MockkBean
@@ -22,6 +21,7 @@ import no.nav.bidrag.dokument.bestilling.utils.BM1
 import no.nav.bidrag.dokument.bestilling.utils.BP1
 import no.nav.bidrag.dokument.bestilling.utils.JmsTestConsumer
 import no.nav.bidrag.dokument.bestilling.utils.SAKSBEHANDLER_IDENT
+import no.nav.bidrag.dokument.bestilling.utils.StubUtils
 import no.nav.bidrag.dokument.bestilling.utils.createEnhetKontaktInformasjon
 import no.nav.bidrag.dokument.bestilling.utils.createPostAdresseResponse
 import no.nav.security.token.support.spring.test.EnableMockOAuth2Server
