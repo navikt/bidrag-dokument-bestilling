@@ -47,6 +47,7 @@ class BrevserverProducer(
             val response = bidragDokumentConsumer.opprettJournalpost(
                 OpprettJournalpostRequest(
                     tittel = tittel,
+                    journalfoerendeEnhet = dokumentBestilling.enhet,
                     journalførendeEnhet = dokumentBestilling.enhet,
                     tilknyttSaker = listOf(dokumentBestilling.saksnummer!!),
                     dokumenter = listOf(
