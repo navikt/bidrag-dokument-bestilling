@@ -77,20 +77,20 @@ enum class DokumentMal(
 
     // Brev relatert til forskudd
     BI01A50(
-        "Klage - vedtak forskudd",
+        "Klage - Vedtak bidragsforskudd",
         BrevType.UTGÅENDE,
         BestillingSystem.BREVSERVER,
         false,
-        true,
+        enabled = false,
         DokumentDataGrunnlag(vedtak = true),
-        støttetSpråk = støttetSpråkListeNynorsk
+        støttetSpråk = støttetSpråkListeNynorsk,
     ),
     BI01A01(
-        "Vedtak forskudd",
+        "Vedtak bidragsforskudd",
         BrevType.UTGÅENDE,
         BestillingSystem.BREVSERVER,
         false,
-        true,
+        enabled = false,
         DokumentDataGrunnlag(vedtak = true),
         støttetSpråk = støttetSpråkListeNynorsk
     ),
@@ -99,39 +99,45 @@ enum class DokumentMal(
         BrevType.UTGÅENDE,
         BestillingSystem.BREVSERVER,
         false,
-        true,
+        enabled = false,
         DokumentDataGrunnlag(vedtak = true),
         støttetSpråk = støttetSpråkListeNynorsk
     ),
-    BI01S08("Varsel revurd forskudd", BrevType.UTGÅENDE, BestillingSystem.BREVSERVER, false, true),
+    BI01S08(
+        "Varsel revurd forskudd",
+        BrevType.UTGÅENDE,
+        BestillingSystem.BREVSERVER,
+        false,
+        enabled = false
+    ),
     BI01S27(
-        "Varsel opph tilbake i tid §2 ikke opphold i Riket",
+        "Varsel opphør av bidragsforskudd tilbake i tid",
         BrevType.UTGÅENDE,
         BestillingSystem.BREVSERVER,
         false,
-        true
-    ),
+        enabled = false,
+    ), // MAIN
     BI01S28(
-        "Varsel opph tilbake i tid §2 partene bor sammen",
+        "Varsel opphør av bidragsforskudd tilbake i tid",
         BrevType.UTGÅENDE,
         BestillingSystem.BREVSERVER,
         false,
-        true
-    ),
+        enabled = false,
+    ), // TODO: Slettes og erstattes av S27
     BI01S29(
-        "Varsel opph tilbake i tid §3 direkte betalinger",
+        "Varsel opphør av bidragsforskudd tilbake i tid",
         BrevType.UTGÅENDE,
         BestillingSystem.BREVSERVER,
         false,
-        true
-    ),
+        enabled = false,
+    ), //TODO: Slettes og erstattes av S27
     BI01S30(
-        "Varsel opph tilbake i tid §6 ikke omsorg",
+        "Varsel opphør av bidragsforskudd tilbake i tid",
         BrevType.UTGÅENDE,
         BestillingSystem.BREVSERVER,
         false,
-        true
-    ),
+        enabled = false,
+    ), // TODO: Slettes og erstattes av S27
 
     // Brev ikke støttet av bestilling
     BI01G01(
@@ -155,7 +161,13 @@ enum class DokumentMal(
         false,
         false
     ),
-    BI01B50("Klage - vedtak bidrag", BrevType.UTGÅENDE, BestillingSystem.BREVSERVER, false, false),
+    BI01B50(
+        "Klage - Vedtak barnebidrag",
+        BrevType.UTGÅENDE,
+        BestillingSystem.BREVSERVER,
+        false,
+        false
+    ),
     BI01G50(
         "Klage - vedtak innkreving",
         BrevType.UTGÅENDE,
@@ -171,14 +183,14 @@ enum class DokumentMal(
         false
     ),
     BI01S20(
-        "Klage varsel til motparten",
+        "NAV har mottatt klage på vedtak",
         BrevType.UTGÅENDE,
         BestillingSystem.BREVSERVER,
         false,
         false
     ),
     BI01S21(
-        "Klage orientering til klageren",
+        "Du har klaget på vedtaket",
         BrevType.UTGÅENDE,
         BestillingSystem.BREVSERVER,
         false,
@@ -200,13 +212,14 @@ enum class DokumentMal(
     ),
     BI01S64("Varsel klage fvt 35", BrevType.UTGÅENDE, BestillingSystem.BREVSERVER, false, false),
     BI01S65("Varsel om motregning", BrevType.UTGÅENDE, BestillingSystem.BREVSERVER, false, false),
-    BI01S68(
-        "Varsel om overføring KO-fogd",
-        BrevType.UTGÅENDE,
-        BestillingSystem.BREVSERVER,
-        false,
-        false
-    ),
+
+    //    BI01S68(
+//        "Varsel om overføring KO-fogd",
+//        BrevType.UTGÅENDE,
+//        BestillingSystem.BREVSERVER,
+//        false,
+//        false
+//    ),
     BI01B10("Opphørsvedtak", BrevType.UTGÅENDE, BestillingSystem.BREVSERVER, false, false),
     BI01S07(
         "Fastsettelse eget tiltak varsel til BP",
@@ -311,13 +324,14 @@ enum class DokumentMal(
         false,
         false
     ),
-    BI01S70(
-        "Varsel om eget tiltak trekkes",
-        BrevType.UTGÅENDE,
-        BestillingSystem.BREVSERVER,
-        false,
-        false
-    ),
+
+    //    BI01S70(
+//        "Varsel om eget tiltak trekkes",
+//        BrevType.UTGÅENDE,
+//        BestillingSystem.BREVSERVER,
+//        false,
+//        false
+//    ),
     BI01S22(
         "Revurd bidrag pga FO til BM",
         BrevType.UTGÅENDE,
@@ -333,35 +347,35 @@ enum class DokumentMal(
         false
     ),
     BI01S01(
-        "Fastsettelse varsel til motparten",
+        "NAV har mottatt søknad om barnebidrag",
         BrevType.UTGÅENDE,
         BestillingSystem.BREVSERVER,
         false,
         false
     ),
     BI01S12(
-        "Fastsettelse orientering til BM",
+        "Du har søkt om barnebidrag",
         BrevType.UTGÅENDE,
         BestillingSystem.BREVSERVER,
         false,
         false
     ),
     BI01S52(
-        "Fastsettelse oppfostringsbidrag orienter kommune",
+        "Forhåndsvarsel om mottatt søknad om oppfostringsbidrag",
         BrevType.UTGÅENDE,
         BestillingSystem.BREVSERVER,
         false,
         false
     ),
     BI01S53(
-        "Fastsettelse oppfostringsbidrag varsel til BP",
+        "Forhåndsvarsel om mottatt søknad om oppfostringsbidrag",
         BrevType.UTGÅENDE,
         BestillingSystem.BREVSERVER,
         false,
         false
     ),
     BI01S13(
-        "Fastsettelse orientering til BP",
+        "Du har søkt om barnebidrag",
         BrevType.UTGÅENDE,
         BestillingSystem.BREVSERVER,
         false,
@@ -372,14 +386,14 @@ enum class DokumentMal(
         støttetSpråk = listOf(StøttetSpråk.NB, StøttetSpråk.EN, StøttetSpråk.DE)
     ),
     BI01S05(
-        "Ettergivelse varsel til motparten",
+        "NAV har mottatt søknad om sletting av bidragsgjeld",
         BrevType.UTGÅENDE,
         BestillingSystem.BREVSERVER,
         false,
         false
     ),
     BI01S14(
-        "Endring orientering til søkeren",
+        "Du har søkt om endring av barnebidraget",
         BrevType.UTGÅENDE,
         BestillingSystem.BREVSERVER,
         false,
@@ -393,21 +407,21 @@ enum class DokumentMal(
         false
     ),
     BI01S47(
-        "Endring oppfostringsbidrag orientering til BP",
+        "Forhåndsvarsel om mottatt søknad om endring av oppfostringsbidrag",
         BrevType.UTGÅENDE,
         BestillingSystem.BREVSERVER,
         false,
         false
     ),
     BI01S48(
-        "Endring oppfostringsbidrag orientering kommune",
+        "Forhåndsvarsel om mottatt søknad om endring av oppfostringsbidrag",
         BrevType.UTGÅENDE,
         BestillingSystem.BREVSERVER,
         false,
         false
     ),
     BI01S49(
-        "Endring oppfostringsbidrag varsel til motparten",
+        "Forhåndsvarsel om mottatt søknad om endring av oppfostringsbidrag",
         BrevType.UTGÅENDE,
         BestillingSystem.BREVSERVER,
         false,
@@ -471,12 +485,12 @@ enum class DokumentMal(
         false
     ),
     BI01S45(
-        "Varsel revurd forskudd tilbake i tid",
+        "Varsel opphør av bidragsforskudd tilbake i tid",
         BrevType.UTGÅENDE,
         BestillingSystem.BREVSERVER,
         false,
         false
-    ),
+    ), // TODO: Slettes og erstattes av S27
     BI01H01("Farskap innkalling mor", BrevType.UTGÅENDE, BestillingSystem.BREVSERVER, false, false),
     BI01H03(
         "Melding om blodprøver i farskapsak",
@@ -506,16 +520,17 @@ enum class DokumentMal(
         false,
         false
     ),
-    BI01S25(
-        "Info til BM når farskap OK",
-        BrevType.UTGÅENDE,
-        BestillingSystem.BREVSERVER,
-        false,
-        false
-    ),
+
+    //    BI01S25(
+//        "Info til BM når farskap OK",
+//        BrevType.UTGÅENDE,
+//        BestillingSystem.BREVSERVER,
+//        false,
+//        false
+//    ),
     BI01J50("Klage - vedtak gebyr", BrevType.UTGÅENDE, BestillingSystem.BREVSERVER, false, false),
     BI01S03(
-        "18 år varsel til motparten",
+        "NAV har mottatt søknad om barnebidrag etter fylte 18 år",
         BrevType.UTGÅENDE,
         BestillingSystem.BREVSERVER,
         false,
@@ -544,14 +559,14 @@ enum class DokumentMal(
         false
     ),
     BI01E50(
-        "Klage - vedtak særtilskudd",
+        "Klage - vedtak bidrag til særlige utgifter",
         BrevType.UTGÅENDE,
         BestillingSystem.BREVSERVER,
         false,
         false
     ),
     BI01E01(
-        "Vedtak særtilskudd innvilget",
+        "Vedtak bidrag til særlige utgifter",
         BrevType.UTGÅENDE,
         BestillingSystem.BREVSERVER,
         false,
@@ -565,21 +580,21 @@ enum class DokumentMal(
         false
     ),
     BI01E03(
-        "Vedtak særtilskudd tannregulering",
+        "Vedtak bidrag til særlige utgifter tannregulering",
         BrevType.UTGÅENDE,
         BestillingSystem.BREVSERVER,
         false,
         false
     ),
     BI01S04(
-        "Særtilskudd varsel til motparten",
+        "NAV har mottatt søknad om bidrag til særlige utgifter",
         BrevType.UTGÅENDE,
         BestillingSystem.BREVSERVER,
         false,
         false
     ),
     BI01S18(
-        "Særtilskudd orientering til søkeren",
+        "Du har søkt om bidrag til særlige utgifter",
         BrevType.UTGÅENDE,
         BestillingSystem.BREVSERVER,
         false,
@@ -607,7 +622,7 @@ enum class DokumentMal(
         false
     ),
     BI01S17(
-        "Ettergivelse varsel til søkeren",
+        "Informasjon om din søknad om sletting av bidragsgjeld",
         BrevType.UTGÅENDE,
         BestillingSystem.BREVSERVER,
         false,
@@ -632,7 +647,7 @@ enum class DokumentMal(
         støttetSpråk = støttetSpråkListeNynorsk
     ),
     BI01S54(
-        "Varsel tilb.kr. paragraf 5 inntekt",
+        "Varsel om tilbakekreving av bidragsforskudd",
         BrevType.UTGÅENDE,
         BestillingSystem.BREVSERVER,
         false,
@@ -667,35 +682,35 @@ enum class DokumentMal(
         false
     ),
     BI01S59(
-        "Orientering ettergivelse av tilbakekrevingsbeløp",
+        "Informasjon om din søknad om sletting av bidragsgjeld",
         BrevType.UTGÅENDE,
         BestillingSystem.BREVSERVER,
         false,
         false
     ),
     BI01S24(
-        "STANDARDBREV OM INNHENTING AV OPPLYSNINGER 18år",
+        "NAV har mottatt søknad om barnebidrag etter fylte 18 år",
         BrevType.UTGÅENDE,
         BestillingSystem.BREVSERVER,
         false,
         false
     ),
     BI01B03(
-        "Vedtak barnebidrag over 18 år",
+        "Vedtak barnebidrag etter fylte 18 år",
         BrevType.UTGÅENDE,
         BestillingSystem.BREVSERVER,
         false,
         false
     ),
     BI01S15(
-        "18år orientering til BP",
+        "Du har søkt om barnebidrag etter fylte 18 år",
         BrevType.UTGÅENDE,
         BestillingSystem.BREVSERVER,
         false,
         false
     ),
     BI01S16(
-        "18år orientering til BM",
+        "Du har søkt om barnebidrag etter fylte 18 år",
         BrevType.UTGÅENDE,
         BestillingSystem.BREVSERVER,
         false,
@@ -718,7 +733,7 @@ enum class DokumentMal(
         false
     ),
     BI01S09(
-        "Varsel opphør bidrag v 18 år",
+        "Varsel om opphør barnebidrag etter fylte 18 år",
         BrevType.UTGÅENDE,
         BestillingSystem.BREVSERVER,
         true,
