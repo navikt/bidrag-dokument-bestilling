@@ -104,7 +104,7 @@ enum class DokumentMal(
         støttetSpråk = støttetSpråkListeNynorsk
     ),
     BI01S08(
-        "Varsel revurd forskudd",
+        "Varsel revudering av bidragsforskudd",
         BrevType.UTGÅENDE,
         BestillingSystem.BREVSERVER,
         false,
@@ -359,7 +359,7 @@ enum class DokumentMal(
         BestillingSystem.BREVSERVER,
         false,
         false
-    ),
+    ), // BM - Samme tittel som BI01S13
     BI01S52(
         "Forhåndsvarsel om mottatt søknad om oppfostringsbidrag",
         BrevType.UTGÅENDE,
@@ -380,11 +380,12 @@ enum class DokumentMal(
         BestillingSystem.BREVSERVER,
         false,
         false
-    ),
-    BI01B02(
-        "Vedtak tilleggsbidrag", BrevType.UTGÅENDE, BestillingSystem.BREVSERVER, false, false,
-        støttetSpråk = listOf(StøttetSpråk.NB, StøttetSpråk.EN, StøttetSpråk.DE)
-    ),
+    ), // BP - Samme tittel som BI01S12
+
+    //    BI01B02(
+//        "Vedtak tilleggsbidrag", BrevType.UTGÅENDE, BestillingSystem.BREVSERVER, false, false,
+//        støttetSpråk = listOf(StøttetSpråk.NB, StøttetSpråk.EN, StøttetSpråk.DE)
+//    ),
     BI01S05(
         "NAV har mottatt søknad om sletting av bidragsgjeld",
         BrevType.UTGÅENDE,
@@ -579,13 +580,14 @@ enum class DokumentMal(
         false,
         false
     ),
-    BI01E03(
-        "Vedtak bidrag til særlige utgifter tannregulering",
-        BrevType.UTGÅENDE,
-        BestillingSystem.BREVSERVER,
-        false,
-        false
-    ),
+
+    //    BI01E03(
+//        "Vedtak bidrag til særlige utgifter tannregulering",
+//        BrevType.UTGÅENDE,
+//        BestillingSystem.BREVSERVER,
+//        false,
+//        false
+//    ),
     BI01S04(
         "NAV har mottatt søknad om bidrag til særlige utgifter",
         BrevType.UTGÅENDE,
@@ -708,21 +710,21 @@ enum class DokumentMal(
         BestillingSystem.BREVSERVER,
         false,
         false
-    ),
+    ), // BP - Samme tittel som BI01S16
     BI01S16(
         "Du har søkt om barnebidrag etter fylte 18 år",
         BrevType.UTGÅENDE,
         BestillingSystem.BREVSERVER,
         false,
         false
-    ),
-    BI01B11(
-        "Vedtak tilleggsbidrag over 18 år",
-        BrevType.UTGÅENDE,
-        BestillingSystem.BREVSERVER,
-        false,
-        false
-    ),
+    ), // BM - Samme tittel som BI01S16
+//    BI01B11(
+//        "Vedtak tilleggsbidrag over 18 år",
+//        BrevType.UTGÅENDE,
+//        BestillingSystem.BREVSERVER,
+//        false,
+//        false
+//    ),
 
     //Batchbrev
     BI01B05(
