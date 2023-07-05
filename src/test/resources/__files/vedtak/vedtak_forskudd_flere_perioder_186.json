@@ -1,0 +1,605 @@
+{
+  "kilde": "MANUELT",
+  "type": "FASTSETTELSE",
+  "opprettetAv": "Z99999",
+  "opprettetAvNavn": "Saksbehandlersen, Saksbehandler Mellomnavn",
+  "vedtakTidspunkt": "2023-05-15T09:08:40.000931",
+  "enhetId": "4806",
+  "utsattTilDato": null,
+  "opprettetTidspunkt": "2023-05-15T11:08:43.59566",
+  "grunnlagListe": [
+    {
+      "referanse": "Delberegning_SluttberegningBBM_SB1_20200101",
+      "type": "SLUTTBEREGNING_BBM",
+      "innhold": {
+        "datoFom": "2020-01-01",
+        "datoTil": "2020-07-01",
+        "grunnlagReferanseListe": [
+          "Mottatt_Inntekt_AG_BM_2020_20200101",
+          "Mottatt_Inntekt_ESBT_BM_2020_20200101",
+          "Mottatt_Inntekt_KIEO_BM_2020_20200101",
+          "Mottatt_Inntekt_MDOK_BM_2020_20200101",
+          "Mottatt_SoknadsbarnInfo_SB1"
+        ],
+        "soknadsbarnId": 1,
+        "beregnetBidragBelop": 0,
+        "endeligBidragBelop": 820,
+        "resultatKode": "50"
+      }
+    },
+    {
+      "referanse": "Delberegning_SluttberegningBBM_SB1_20200701",
+      "type": "SLUTTBEREGNING_BBM",
+      "innhold": {
+        "datoFom": "2020-07-01",
+        "datoTil": "2021-07-01",
+        "grunnlagReferanseListe": [
+          "Mottatt_Inntekt_ESBT_BM_2020_20200701",
+          "Mottatt_Inntekt_KIEO_BM_2020_20200701",
+          "Mottatt_Inntekt_PIEO_BM_2020_20200701",
+          "Mottatt_SoknadsbarnInfo_SB1"
+        ],
+        "soknadsbarnId": 1,
+        "beregnetBidragBelop": 0,
+        "endeligBidragBelop": 1250,
+        "resultatKode": "75"
+      }
+    },
+    {
+      "referanse": "Delberegning_SluttberegningBBM_SB1_20210701",
+      "type": "SLUTTBEREGNING_BBM",
+      "innhold": {
+        "datoFom": "2021-07-01",
+        "datoTil": "2022-07-01",
+        "grunnlagReferanseListe": [
+          "Mottatt_Inntekt_AG_BM_2021_20210701",
+          "Mottatt_Inntekt_ESBT_BM_2020_20210701",
+          "Mottatt_Inntekt_KIEO_BM_2021_20210701",
+          "Mottatt_Inntekt_UBAT_BM_2021_20210701",
+          "Mottatt_SoknadsbarnInfo_SB1"
+        ],
+        "soknadsbarnId": 1,
+        "beregnetBidragBelop": 0,
+        "endeligBidragBelop": 1280,
+        "resultatKode": "75"
+      }
+    },
+    {
+      "referanse": "Delberegning_SluttberegningBBM_SB1_20220701",
+      "type": "SLUTTBEREGNING_BBM",
+      "innhold": {
+        "datoFom": "2022-07-01",
+        "datoTil": null,
+        "grunnlagReferanseListe": [
+          "Mottatt_Inntekt_ESBT_BM_2022_20220701",
+          "Mottatt_Inntekt_KIEO_BM_2022_20220701",
+          "Mottatt_Inntekt_MDOK_BM_2022_20220701",
+          "Mottatt_Inntekt_PIEO_BM_2022_20220701",
+          "Mottatt_Inntekt_UBAT_BM_2022_20220701",
+          "Mottatt_SoknadsbarnInfo_SB1"
+        ],
+        "soknadsbarnId": 1,
+        "beregnetBidragBelop": 0,
+        "endeligBidragBelop": 1320,
+        "resultatKode": "75"
+      }
+    },
+    {
+      "referanse": "Mottatt_BarnIHusstand_20200101",
+      "type": "BARN_I_HUSSTAND",
+      "innhold": {
+        "datoFom": "2020-01-01",
+        "datoTil": "2022-07-01",
+        "antall": 1
+      }
+    },
+    {
+      "referanse": "Mottatt_BarnIHusstand_20220701",
+      "type": "BARN_I_HUSSTAND",
+      "innhold": {
+        "datoFom": "2022-07-01",
+        "datoTil": null,
+        "antall": 3
+      }
+    },
+    {
+      "referanse": "Mottatt_BarnInfo_1",
+      "type": "BARN_INFO",
+      "innhold": {
+        "datoFom": "2020-01-01",
+        "datoTil": null,
+        "fnr": "12461690252",
+        "navn": "SØt Jord",
+        "medIBeregning": true,
+        "andelForsorget": 1,
+        "harSammeAdresse": true
+      }
+    },
+    {
+      "referanse": "Mottatt_BarnInfo_2",
+      "type": "BARN_INFO",
+      "innhold": {
+        "datoFom": "2021-07-01",
+        "datoTil": null,
+        "fnr": "02461662466",
+        "navn": "Lystig Innestemme",
+        "medIBeregning": true,
+        "andelForsorget": 1,
+        "harSammeAdresse": true
+      }
+    },
+    {
+      "referanse": "Mottatt_BarnInfo_3",
+      "type": "BARN_INFO",
+      "innhold": {
+        "datoFom": "2022-07-01",
+        "datoTil": null,
+        "fnr": "27461456400",
+        "navn": "Fornem Ellipse",
+        "medIBeregning": true,
+        "andelForsorget": 1,
+        "harSammeAdresse": true
+      }
+    },
+    {
+      "referanse": "Mottatt_Bostatus_SB1_20200101",
+      "type": "BOSTATUS",
+      "innhold": {
+        "datoFom": "2020-01-01",
+        "datoTil": null,
+        "rolle": "SOKNADSBARN",
+        "bostatusKode": "MED_FORELDRE",
+        "soknadsbarnId": 1
+      }
+    },
+    {
+      "referanse": "Mottatt_Inntekt_AG_BM_2020_20200101",
+      "type": "INNTEKT",
+      "innhold": {
+        "datoFom": "2020-01-01",
+        "datoTil": "2020-07-01",
+        "rolle": "BIDRAGSMOTTAKER",
+        "inntektType": "INNTEKTSOPPLYSNINGER_ARBEIDSGIVER",
+        "belop": 350000,
+        "gjelderAar": "2020",
+        "valgt": false,
+        "inntekter": []
+      }
+    },
+    {
+      "referanse": "Mottatt_Inntekt_AG_BM_2021_20210701",
+      "type": "INNTEKT",
+      "innhold": {
+        "datoFom": "2021-07-01",
+        "datoTil": "2022-07-01",
+        "rolle": "BIDRAGSMOTTAKER",
+        "inntektType": "INNTEKTSOPPLYSNINGER_ARBEIDSGIVER",
+        "belop": 400000,
+        "gjelderAar": "2021",
+        "valgt": true,
+        "inntekter": []
+      }
+    },
+    {
+      "referanse": "Mottatt_Inntekt_ESBT_BM_2020_20200101",
+      "type": "INNTEKT",
+      "innhold": {
+        "datoFom": "2020-01-01",
+        "datoTil": "2020-07-01",
+        "rolle": "BIDRAGSMOTTAKER",
+        "inntektType": "EKSTRA_SMAABARNSTILLEGG",
+        "belop": 5000,
+        "gjelderAar": "2020",
+        "valgt": true,
+        "inntekter": []
+      }
+    },
+    {
+      "referanse": "Mottatt_Inntekt_ESBT_BM_2020_20200701",
+      "type": "INNTEKT",
+      "innhold": {
+        "datoFom": "2020-07-01",
+        "datoTil": "2021-07-01",
+        "rolle": "BIDRAGSMOTTAKER",
+        "inntektType": "EKSTRA_SMAABARNSTILLEGG",
+        "belop": 5000,
+        "gjelderAar": "2020",
+        "valgt": true,
+        "inntekter": []
+      }
+    },
+    {
+      "referanse": "Mottatt_Inntekt_ESBT_BM_2020_20210701",
+      "type": "INNTEKT",
+      "innhold": {
+        "datoFom": "2021-07-01",
+        "datoTil": "2022-07-01",
+        "rolle": "BIDRAGSMOTTAKER",
+        "inntektType": "EKSTRA_SMAABARNSTILLEGG",
+        "belop": 5000,
+        "gjelderAar": "2020",
+        "valgt": true,
+        "inntekter": []
+      }
+    },
+    {
+      "referanse": "Mottatt_Inntekt_ESBT_BM_2022_20220701",
+      "type": "INNTEKT",
+      "innhold": {
+        "datoFom": "2022-07-01",
+        "datoTil": null,
+        "rolle": "BIDRAGSMOTTAKER",
+        "inntektType": "EKSTRA_SMAABARNSTILLEGG",
+        "belop": 2000,
+        "gjelderAar": "2022",
+        "valgt": true,
+        "inntekter": []
+      }
+    },
+    {
+      "referanse": "Mottatt_Inntekt_KIEO_BM_2020_20200101",
+      "type": "INNTEKT",
+      "innhold": {
+        "datoFom": "2020-01-01",
+        "datoTil": "2020-07-01",
+        "rolle": "BIDRAGSMOTTAKER",
+        "inntektType": "KAPITALINNTEKT_EGNE_OPPLYSNINGER",
+        "belop": 5000,
+        "gjelderAar": "2020",
+        "valgt": true,
+        "inntekter": [],
+        "grunnlagReferanseListe": [
+          "Sjablon_InnslagKapitalInntektBeløp_20200101"
+        ]
+      }
+    },
+    {
+      "referanse": "Sjablon_InnslagKapitalInntektBeløp_20200101",
+      "type": "SJABLON",
+      "innhold": {
+        "datoFom": "2020-01-01",
+        "datoTil": "2020-07-01",
+        "sjablonNavn": "InnslagKapitalInntektBeløp",
+        "sjablonVerdi": "10000"
+      }
+    },
+    {
+      "referanse": "Mottatt_Inntekt_KIEO_BM_2020_20200701",
+      "type": "INNTEKT",
+      "innhold": {
+        "datoFom": "2020-07-01",
+        "datoTil": "2021-07-01",
+        "rolle": "BIDRAGSMOTTAKER",
+        "inntektType": "KAPITALINNTEKT_EGNE_OPPLYSNINGER",
+        "belop": 5000,
+        "gjelderAar": "2020",
+        "valgt": true,
+        "inntekter": [],
+        "grunnlagReferanseListe": [
+          "Sjablon_InnslagKapitalInntektBeløp_20200701"
+        ]
+      }
+    },
+    {
+      "referanse": "Sjablon_InnslagKapitalInntektBeløp_20200701",
+      "type": "SJABLON",
+      "innhold": {
+        "datoFom": "2020-01-01",
+        "datoTil": "2021-07-01",
+        "sjablonNavn": "InnslagKapitalInntektBeløp",
+        "sjablonVerdi": "10000"
+      }
+    },
+    {
+      "referanse": "Mottatt_Inntekt_KIEO_BM_2021_20210701",
+      "type": "INNTEKT",
+      "innhold": {
+        "datoFom": "2021-07-01",
+        "datoTil": "2022-07-01",
+        "rolle": "BIDRAGSMOTTAKER",
+        "inntektType": "KAPITALINNTEKT_EGNE_OPPLYSNINGER",
+        "belop": 5000,
+        "gjelderAar": "2021",
+        "valgt": true,
+        "inntekter": [],
+        "grunnlagReferanseListe": [
+          "Sjablon_InnslagKapitalInntektBeløp_20210701"
+        ]
+      }
+    },
+    {
+      "referanse": "Sjablon_InnslagKapitalInntektBeløp_20210701",
+      "type": "SJABLON",
+      "innhold": {
+        "datoFom": "2021-07-01",
+        "datoTil": "2022-07-01",
+        "sjablonNavn": "InnslagKapitalInntektBeløp",
+        "sjablonVerdi": "10000"
+      }
+    },
+    {
+      "referanse": "Mottatt_Inntekt_KIEO_BM_2022_20221101",
+      "type": "INNTEKT",
+      "innhold": {
+        "datoFom": "2022-11-01",
+        "datoTil": "2023-01-01",
+        "rolle": "BIDRAGSMOTTAKER",
+        "inntektType": "KAPITALINNTEKT_EGNE_OPPLYSNINGER",
+        "belop": 21000,
+        "gjelderAar": "2022",
+        "valgt": true,
+        "inntekter": [],
+        "grunnlagReferanseListe": [
+          "Sjablon_InnslagKapitalInntektBeløp_20221101"
+        ]
+      }
+    },
+    {
+      "referanse": "Sjablon_InnslagKapitalInntektBeløp_20221101",
+      "type": "SJABLON",
+      "innhold": {
+        "datoFom": "2022-11-01",
+        "datoTil": "2023-01-01",
+        "sjablonNavn": "InnslagKapitalInntektBeløp",
+        "sjablonVerdi": "10000"
+      }
+    },
+    {
+      "referanse": "Mottatt_Inntekt_KIEO_BM_2022_20220701",
+      "type": "INNTEKT",
+      "innhold": {
+        "datoFom": "2022-07-01",
+        "datoTil": null,
+        "rolle": "BIDRAGSMOTTAKER",
+        "inntektType": "KAPITALINNTEKT_EGNE_OPPLYSNINGER",
+        "belop": 29000,
+        "gjelderAar": "2022",
+        "valgt": true,
+        "inntekter": [],
+        "grunnlagReferanseListe": [
+          "Sjablon_InnslagKapitalInntektBeløp_20220701"
+        ]
+      }
+    },
+    {
+      "referanse": "Sjablon_InnslagKapitalInntektBeløp_20220701",
+      "type": "SJABLON",
+      "innhold": {
+        "datoFom": "2022-07-01",
+        "datoTil": null,
+        "sjablonNavn": "InnslagKapitalInntektBeløp",
+        "sjablonVerdi": "10000"
+      }
+    },
+    {
+      "referanse": "Mottatt_Inntekt_MDOK_BM_2020_20200101",
+      "type": "INNTEKT",
+      "innhold": {
+        "datoFom": "2020-01-01",
+        "datoTil": "2020-07-01",
+        "rolle": "BIDRAGSMOTTAKER",
+        "inntektType": "DOKUMENTASJON_MANGLER_SKJONN",
+        "belop": 350000,
+        "gjelderAar": "2020",
+        "valgt": true,
+        "inntekter": []
+      }
+    },
+    {
+      "referanse": "Mottatt_Inntekt_MDOK_BM_2022_20220701",
+      "type": "INNTEKT",
+      "innhold": {
+        "datoFom": "2022-07-01",
+        "datoTil": null,
+        "rolle": "BIDRAGSMOTTAKER",
+        "inntektType": "DOKUMENTASJON_MANGLER_SKJONN",
+        "belop": 3000,
+        "gjelderAar": "2022",
+        "valgt": false,
+        "inntekter": []
+      }
+    },
+    {
+      "referanse": "Mottatt_Inntekt_PIEO_BM_2020_20200701",
+      "type": "INNTEKT",
+      "innhold": {
+        "datoFom": "2020-07-01",
+        "datoTil": "2021-07-01",
+        "rolle": "BIDRAGSMOTTAKER",
+        "inntektType": "PERSONINNTEKT_EGNE_OPPLYSNINGER",
+        "belop": 360000,
+        "gjelderAar": "2020",
+        "valgt": true,
+        "inntekter": []
+      }
+    },
+    {
+      "referanse": "Mottatt_Inntekt_PIEO_BM_2022_20220701",
+      "type": "INNTEKT",
+      "innhold": {
+        "datoFom": "2022-07-01",
+        "datoTil": null,
+        "rolle": "BIDRAGSMOTTAKER",
+        "inntektType": "PERSONINNTEKT_EGNE_OPPLYSNINGER",
+        "belop": 410000,
+        "gjelderAar": "2022",
+        "valgt": true,
+        "inntekter": []
+      }
+    },
+    {
+      "referanse": "Mottatt_Inntekt_UBAT_BM_2021_20210701",
+      "type": "INNTEKT",
+      "innhold": {
+        "datoFom": "2021-07-01",
+        "datoTil": "2022-07-01",
+        "rolle": "BIDRAGSMOTTAKER",
+        "inntektType": "UTVIDET_BARNETRYGD",
+        "belop": 8000,
+        "gjelderAar": "2021",
+        "valgt": true,
+        "inntekter": [],
+        "deltFordel": false
+      }
+    },
+    {
+      "referanse": "Mottatt_Inntekt_UBAT_BM_2022_20220701",
+      "type": "INNTEKT",
+      "innhold": {
+        "datoFom": "2022-07-01",
+        "datoTil": null,
+        "rolle": "BIDRAGSMOTTAKER",
+        "inntektType": "UTVIDET_BARNETRYGD",
+        "belop": 1000,
+        "gjelderAar": "2022",
+        "valgt": true,
+        "inntekter": [],
+        "deltFordel": false
+      }
+    },
+    {
+      "referanse": "Mottatt_PersonInfo_BM",
+      "type": "PERSON_INFO",
+      "innhold": {
+        "fnr": "26417806511",
+        "navn": "Underfundig Kontradiksjon",
+        "rolle": "BIDRAGSMOTTAKER"
+      }
+    },
+    {
+      "referanse": "Mottatt_SaksbehandlerInfo",
+      "type": "SAKSBEHANDLER_INFO",
+      "innhold": {
+        "id": "Z99999",
+        "navn": "Saksbehandlersen, Saksbehandler Mellomnavn"
+      }
+    },
+    {
+      "referanse": "Mottatt_Sivilstand_20200101",
+      "type": "SIVILSTAND",
+      "innhold": {
+        "datoFom": "2020-01-01",
+        "datoTil": "2020-07-01",
+        "rolle": "BIDRAGSMOTTAKER",
+        "sivilstandKode": "GIFT",
+        "beskrivelse": "Gift"
+      }
+    },
+    {
+      "referanse": "Mottatt_Sivilstand_20200701",
+      "type": "SIVILSTAND",
+      "innhold": {
+        "datoFom": "2020-07-01",
+        "datoTil": "2022-07-01",
+        "rolle": "BIDRAGSMOTTAKER",
+        "sivilstandKode": "ENSLIG",
+        "beskrivelse": "Skilt"
+      }
+    },
+    {
+      "referanse": "Mottatt_Sivilstand_20220701",
+      "type": "SIVILSTAND",
+      "innhold": {
+        "datoFom": "2022-07-01",
+        "datoTil": null,
+        "rolle": "BIDRAGSMOTTAKER",
+        "sivilstandKode": "ENSLIG",
+        "beskrivelse": "Enke"
+      }
+    },
+    {
+      "referanse": "Mottatt_SoknadInfo",
+      "type": "SOKNAD_INFO",
+      "innhold": {
+        "soknadDato": "2023-01-11",
+        "soktFraDato": "2020-01-01",
+        "soknadId": "50001241"
+      }
+    },
+    {
+      "referanse": "Mottatt_SoknadsbarnInfo_SB1",
+      "type": "SOKNADSBARN_INFO",
+      "innhold": {
+        "soknadsbarnId": 1,
+        "fodselsdato": "2016-06-12",
+        "fnr": "12461690252"
+      }
+    },
+    {
+      "referanse": "Mottatt_VedtakInfo",
+      "type": "VEDTAK_INFO",
+      "innhold": {
+        "virkningDato": "2020-01-01",
+        "vedtakDato": "2023-05-15",
+        "kodeVirkningAarsak": "H"
+      }
+    }
+  ],
+  "stonadsendringListe": [
+    {
+      "type": "FORSKUDD",
+      "sakId": "2300263",
+      "skyldnerId": "NAV",
+      "kravhaverId": "12461690252",
+      "mottakerId": "26417806511",
+      "indeksreguleringAar": "2024",
+      "innkreving": "JA",
+      "endring": true,
+      "omgjorVedtakId": null,
+      "eksternReferanse": null,
+      "periodeListe": [
+        {
+          "fomDato": "2020-01-01",
+          "tilDato": "2020-07-01",
+          "belop": 820,
+          "valutakode": "NOK",
+          "resultatkode": "50",
+          "delytelseId": "10000743",
+          "grunnlagReferanseListe": [
+            "Delberegning_SluttberegningBBM_SB1_20200101"
+          ]
+        },
+        {
+          "fomDato": "2020-07-01",
+          "tilDato": "2021-07-01",
+          "belop": 1250,
+          "valutakode": "NOK",
+          "resultatkode": "75",
+          "delytelseId": "10000744",
+          "grunnlagReferanseListe": [
+            "Delberegning_SluttberegningBBM_SB1_20200701"
+          ]
+        },
+        {
+          "fomDato": "2021-07-01",
+          "tilDato": "2022-07-01",
+          "belop": 1280,
+          "valutakode": "NOK",
+          "resultatkode": "75",
+          "delytelseId": "10000745",
+          "grunnlagReferanseListe": [
+            "Delberegning_SluttberegningBBM_SB1_20210701"
+          ]
+        },
+        {
+          "fomDato": "2022-07-01",
+          "tilDato": null,
+          "belop": 1320,
+          "valutakode": "NOK",
+          "resultatkode": "75",
+          "delytelseId": "10000746",
+          "grunnlagReferanseListe": [
+            "Delberegning_SluttberegningBBM_SB1_20220701"
+          ]
+        }
+      ]
+    }
+  ],
+  "engangsbelopListe": [],
+  "behandlingsreferanseListe": [
+    {
+      "kilde": "BISYS_SOKNAD",
+      "referanse": "50001241"
+    }
+  ]
+}

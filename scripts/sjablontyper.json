@@ -1,0 +1,202 @@
+[
+  {
+    "type": "0001",
+    "beskrivelse": "Beløp ordinær barnetrygd                          "
+  },
+  {
+    "type": "0002",
+    "beskrivelse": "Beløp ordinært småbarnstillegg                    "
+  },
+  {
+    "type": "0003",
+    "beskrivelse": "Boutgifter bidragsbarn                            "
+  },
+  {
+    "type": "0004",
+    "beskrivelse": "Fordel skatteklasse 2                             "
+  },
+  {
+    "type": "0005",
+    "beskrivelse": "Forskuddssats                                     "
+  },
+  {
+    "type": "0006",
+    "beskrivelse": "Innslag kapitalinntekt                            "
+  },
+  {
+    "type": "0007",
+    "beskrivelse": "Inntektsintervall tilleggsbidrag                  "
+  },
+  {
+    "type": "0008",
+    "beskrivelse": "Maks prosent av inntekt bidragspliktig            "
+  },
+  {
+    "type": "0009",
+    "beskrivelse": "Multiplikator høy inntekt bidragspliktig          "
+  },
+  {
+    "type": "0010",
+    "beskrivelse": "Multiplikator inntektsinnslag bidragsbarn         "
+  },
+  {
+    "type": "0011",
+    "beskrivelse": "Multiplikator maks bidrag                         "
+  },
+  {
+    "type": "0012",
+    "beskrivelse": "Multiplikator maks inntekt bidragsbarn            "
+  },
+  {
+    "type": "0013",
+    "beskrivelse": "Multiplikator maks innt.grense forskudd mottaker  "
+  },
+  {
+    "type": "0014",
+    "beskrivelse": "Nedre inntektsgrense gebyr                        "
+  },
+  {
+    "type": "0015",
+    "beskrivelse": "Prosentsats skatt alminnelig inntekt              "
+  },
+  {
+    "type": "0016",
+    "beskrivelse": "Prosentsats tilleggsbidrag                        "
+  },
+  {
+    "type": "0017",
+    "beskrivelse": "Prosentsats trygdeavgift                          "
+  },
+  {
+    "type": "0018",
+    "beskrivelse": "Skatteprosent barnetillegg                        "
+  },
+  {
+    "type": "0019",
+    "beskrivelse": "Underhold barn egen hus bidragspliktig            "
+  },
+  {
+    "type": "0020",
+    "beskrivelse": "Prosentgrense for endring av bidrag (10%-regel)   "
+  },
+  {
+    "type": "0021",
+    "beskrivelse": "Barnetillegg fra forsvaret. Første barn.          "
+  },
+  {
+    "type": "0022",
+    "beskrivelse": "Barnetillegg fra forsvaret. Øvrige barn.          "
+  },
+  {
+    "type": "0023",
+    "beskrivelse": "Minstefradrag                                     "
+  },
+  {
+    "type": "0024",
+    "beskrivelse": "Gjennomsnitt antall virkedager pr måned           "
+  },
+  {
+    "type": "0025",
+    "beskrivelse": "Minstefradrag prosent inntekt                     "
+  },
+  {
+    "type": "0026",
+    "beskrivelse": "Daglig sats for barnetillegg                      "
+  },
+  {
+    "type": "0027",
+    "beskrivelse": "Personfradrag klasse 1                            "
+  },
+  {
+    "type": "0028",
+    "beskrivelse": "Personfradrag klasse 2                            "
+  },
+  {
+    "type": "0029",
+    "beskrivelse": "Kontantststøtte                                   "
+  },
+  {
+    "type": "0030",
+    "beskrivelse": "Øvre inntektsgrense for ikke i skatteposisjon     "
+  },
+  {
+    "type": "0031",
+    "beskrivelse": "Nedre inntektsgrense for full skatteposisjon      "
+  },
+  {
+    "type": "0032",
+    "beskrivelse": "Ekstra småbarnstillegg                            "
+  },
+  {
+    "type": "0033",
+    "beskrivelse": "Øvre inntektsgrense for fullt forskudd            "
+  },
+  {
+    "type": "0034",
+    "beskrivelse": "Øvre inntektsgrense for 75% forskudd (enslig)     "
+  },
+  {
+    "type": "0035",
+    "beskrivelse": "Øvre inntektsgrense for 75% forskudd (Gift/Samb)  "
+  },
+  {
+    "type": "0036",
+    "beskrivelse": "Inntektsintervall forskudd                        "
+  },
+  {
+    "type": "0037",
+    "beskrivelse": "Øvre grense for særtilskudd                       "
+  },
+  {
+    "type": "0038",
+    "beskrivelse": "Forskuddssats 75%                                 "
+  },
+  {
+    "type": "0039",
+    "beskrivelse": "Fordel  særfradrag                                "
+  },
+  {
+    "type": "005 ",
+    "beskrivelse": "F                                                 "
+  },
+  {
+    "type": "011 ",
+    "beskrivelse": "M                                                 "
+  },
+  {
+    "type": "03  ",
+    "beskrivelse": "B                                                 "
+  },
+  {
+    "type": "0040",
+    "beskrivelse": "Prosentsats alminnelig inntekt                    "
+  },
+  {
+    "type": "0100",
+    "beskrivelse": "Beløp fastsettelsesgebyr                          "
+  },
+  {
+    "type": "033 ",
+    "beskrivelse": "Ø                                                 "
+  },
+  {
+    "type": "034 ",
+    "beskrivelse": "ø                                                 "
+  },
+  {
+    "type": "035 ",
+    "beskrivelse": "ø                                                 "
+  },
+  {
+    "type": "036 ",
+    "beskrivelse": "i                                                 "
+  },
+  {
+    "type": "0041",
+    "beskrivelse": "Beløp forhøyet barnetrygd                         "
+  },
+  {
+    "type": "0042",
+    "beskrivelse": "Utvidet barnetrygd til bidragskalkulator          "
+  }
+]

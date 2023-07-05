@@ -1,0 +1,17 @@
+{
+  "name": "bidrag-ui-server",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "snyk-protect": "snyk protect",
+    "dev": "concurrently \"tsc --watch\" \"cross-env-shell NODE_ENV=development ts-node src/server.ts\"",
+    "start": "ts-node sjablon_to_json.ts"
+  },
+  "dependencies": {
+    "axios": "^1.4.0"
+  },
+  "devDependencies": {
+    "ts-node": "^10.9.1"
+  },
+  "snyk": true
+}

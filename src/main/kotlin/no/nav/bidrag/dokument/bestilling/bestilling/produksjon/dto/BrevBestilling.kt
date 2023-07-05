@@ -1,9 +1,13 @@
 package no.nav.bidrag.dokument.bestilling.bestilling.produksjon.dto
 
 import no.nav.bidrag.dokument.bestilling.model.LANDKODE3_NORGE
+import java.math.BigDecimal
+import java.math.RoundingMode
 import java.text.ParseException
 import java.time.LocalDate
+import java.time.ZoneId
 import java.time.format.DateTimeFormatter
+import java.util.*
 import javax.xml.bind.annotation.XmlAccessType
 import javax.xml.bind.annotation.XmlAccessorType
 import javax.xml.bind.annotation.XmlAttribute
@@ -80,14 +84,26 @@ class Brev {
     @XmlElement(name = "barniSak")
     var barnISak: MutableList<BarnISak> = mutableListOf()
 
-    @XmlElement(name = "soknBost")
+    @XmlElement(name = "soknad")
     var soknad: Soknad? = null
+
+    @XmlElement(name = "bidrVtak")
+    var vedtak: MutableList<BidragVedtak> = mutableListOf()
+
+    @XmlElement(name = "soknBost")
+    var soknadBost: SoknadBost? = null
+
+    @XmlElement(name = "perForskVtak")
+    var forskuddVedtakPeriode: MutableList<ForskuddVedtakPeriode> = mutableListOf()
 
     @XmlElement(name = "Kontaktinfo")
     var kontaktInfo: BrevKontaktinfo? = null
 
     @XmlElement(name = "Saksbehandl")
     var saksbehandler: BrevSaksbehandler? = null
+
+    @XmlElement(name = "bidrBarn")
+    var bidragBarn: MutableList<BidragBarn> = mutableListOf()
 
     fun brevKontaktinfo(init: BrevKontaktinfo.() -> Unit): BrevKontaktinfo {
         val brevKontaktinfo = BrevKontaktinfo()
@@ -106,6 +122,12 @@ class Brev {
         initSoknad.init()
         soknad = initSoknad
         return initSoknad
+    }
+    fun soknadBost(init: SoknadBost.() -> Unit): SoknadBost {
+        val initSoknadBost = SoknadBost()
+        initSoknadBost.init()
+        soknadBost = initSoknadBost
+        return initSoknadBost
     }
 
     fun barnISak(init: BarnISak.() -> Unit): BarnISak {
@@ -127,6 +149,27 @@ class Brev {
         initParter.init()
         parter = initParter
         return initParter
+    }
+
+    fun vedtak(init: BidragVedtak.() -> Unit): BidragVedtak {
+        val initVedtak = BidragVedtak()
+        initVedtak.init()
+        vedtak.add(initVedtak)
+        return initVedtak
+    }
+
+    fun forskuddVedtak(init: ForskuddVedtakPeriode.() -> Unit): ForskuddVedtakPeriode {
+        val initValue = ForskuddVedtakPeriode()
+        initValue.init()
+        forskuddVedtakPeriode.add(initValue)
+        return initValue
+    }
+
+    fun bidragBarn(init: BidragBarn.() -> Unit): BidragBarn {
+        val initValue = BidragBarn()
+        initValue.init()
+        bidragBarn.add(initValue)
+        return initValue
     }
 }
 
@@ -315,9 +358,50 @@ class Parter {
 }
 
 @Suppress("unused")
-@XmlRootElement(name = "soknBost")
+@XmlRootElement(name = "soknad")
 @XmlAccessorType(XmlAccessType.FIELD)
 class Soknad {
+
+    @XmlElement(name = "soknDato", nillable = true)
+    @XmlJavaTypeAdapter(DateAdapter::class)
+    var soknDato: LocalDate? = null
+
+    @XmlElement(name = "type", nillable = true)
+    var type: String? = null
+
+    @XmlElement(name = "vedtDato", nillable = true)
+    @XmlJavaTypeAdapter(DateAdapter::class)
+    var vedtattDato: LocalDate? = null
+
+    @XmlElement(name = "virknDato", nillable = true)
+    @XmlJavaTypeAdapter(DateAdapter::class)
+    var virkningDato: LocalDate? = null
+
+    @XmlElement(name = "aarsakKd", nillable = true)
+    var aarsakKd: String? = null
+
+    @XmlElement(name = "undergrp", nillable = true)
+    var undergrp: String? = null
+
+    @XmlElement(name = "saksnr", nillable = true)
+    var saksnr: String? = null
+
+    @XmlElement(name = "svarfrDato", nillable = true)
+    @XmlJavaTypeAdapter(DateAdapter::class)
+    var svarfrDato: LocalDate? = null
+
+    @XmlElement(name = "sendtDato", nillable = true)
+    @XmlJavaTypeAdapter(DateAdapter::class)
+    var sendtDato: LocalDate? = null
+
+    @XmlElement(name = "saksTypeOmr", nillable = true)
+    var saksTypeOmr: String? = null
+}
+
+@Suppress("unused")
+@XmlRootElement(name = "soknBost")
+@XmlAccessorType(XmlAccessType.FIELD)
+class SoknadBost {
     @XmlElement(name = "saksnr", nillable = true)
     var saksnr: String? = null
 
@@ -367,18 +451,21 @@ class Soknad {
     var sendtDato: LocalDate? = LocalDate.now()
 
     @XmlElement(name = "gebyrsats", nillable = true)
-    var gebyrsats: String? = null
+    @XmlJavaTypeAdapter(BelopDecimalSatsAdapter::class)
+    var gebyrsats: BigDecimal? = null
 
     @XmlElement(name = "innkrSamtid")
     @XmlJavaTypeAdapter(BooleanAdapter::class)
     var innkrSamtid: Boolean? = false
 
     @XmlElement(name = "mottDato", nillable = true)
-    @XmlJavaTypeAdapter(BirthDateAdapter::class)
+    @XmlJavaTypeAdapter(DateAdapter::class)
     var mottatDato: LocalDate? = null
 
     @XmlElement(name = "virknDato", nillable = true)
-    var virkningsDato: String? = null // TODO: Date format?
+    @XmlJavaTypeAdapter(DateAdapter::class)
+    var virkningsDato: LocalDate? = null
+
     @XmlElement(name = "myndighet", nillable = true)
     var myndighet: String? = null
 
@@ -428,10 +515,12 @@ class BarnISak {
     var belopGebyrRm: String? = null
 
     @XmlElement(name = "belForskudd", nillable = true)
-    var belForskudd: String? = null
+    @XmlJavaTypeAdapter(BelopDecimalAdapter::class)
+    var belForskudd: BigDecimal? = null
 
     @XmlElement(name = "belBidrag", nillable = true)
-    var belBidrag: String? = null
+    @XmlJavaTypeAdapter(BelopDecimalAdapter::class)
+    var belBidrag: BigDecimal? = null
 }
 
 @DslMarker
@@ -456,6 +545,7 @@ class BirthDateAdapter : XmlAdapter<String, LocalDate?>() {
 }
 
 class DateAdapter : XmlAdapter<String, LocalDate?>() {
+
     override fun marshal(date: LocalDate?): String? {
         return date?.format(BREV_SOKNAD_DATETIME_FORMAT)
     }
@@ -463,6 +553,71 @@ class DateAdapter : XmlAdapter<String, LocalDate?>() {
     @Throws(ParseException::class)
     override fun unmarshal(v: String): LocalDate {
         return LocalDate.parse(v, BREV_SOKNAD_DATETIME_FORMAT)
+    }
+}
+
+class PeriodDateAdapter : XmlAdapter<String, LocalDate?>() {
+    fun getLastDayOfPreviousMonth(date: LocalDate): LocalDate {
+        if (date.year == 9999) return date
+        val cDate = GregorianCalendar.from(date.atStartOfDay(ZoneId.systemDefault()))
+        // Subtract one month from the current date
+        cDate.add(Calendar.MONTH, -1)
+        // Set the day of the month to the last day of the month
+        cDate.set(Calendar.DAY_OF_MONTH, cDate.getActualMaximum(Calendar.DAY_OF_MONTH))
+        return LocalDate.from(cDate.toZonedDateTime())
+    }
+    override fun marshal(date: LocalDate?): String? {
+        val fromDate = date?.let { getLastDayOfPreviousMonth(it) } ?: LocalDate.parse("9999-12-31")
+        return fromDate.format(BREV_SOKNAD_DATETIME_FORMAT)
+    }
+
+    @Throws(ParseException::class)
+    override fun unmarshal(v: String): LocalDate {
+        return LocalDate.parse(v, BREV_SOKNAD_DATETIME_FORMAT)
+    }
+}
+
+class BelopAdapter : XmlAdapter<String, BigDecimal?>() {
+    override fun marshal(value: BigDecimal?): String? {
+        return value?.toBigInteger()?.toString()?.padStart(11, '0')
+    }
+
+    @Throws(ParseException::class)
+    override fun unmarshal(value: String?): BigDecimal? {
+        return value?.toBigDecimal()
+    }
+}
+
+class BelopDecimalSatsAdapter : XmlAdapter<String, BigDecimal?>() {
+    override fun marshal(value: BigDecimal?): String? {
+        return value?.setScale(1, RoundingMode.FLOOR).toString()?.padStart(7, '0')
+    }
+
+    @Throws(ParseException::class)
+    override fun unmarshal(value: String?): BigDecimal? {
+        return value?.toBigDecimal()
+    }
+}
+
+class BelopDecimalAdapter : XmlAdapter<String, BigDecimal?>() {
+    override fun marshal(value: BigDecimal?): String? {
+        return value?.setScale(2, RoundingMode.FLOOR).toString()?.padStart(11, '0')
+    }
+
+    @Throws(ParseException::class)
+    override fun unmarshal(value: String?): BigDecimal? {
+        return value?.toBigDecimal()
+    }
+}
+
+class NumberAdapter : XmlAdapter<String, Int?>() {
+    override fun marshal(value: Int?): String {
+        return value?.toString()?.padStart(2, '0') ?: "00"
+    }
+
+    @Throws(ParseException::class)
+    override fun unmarshal(value: String?): Int? {
+        return value?.toInt()
     }
 }
 

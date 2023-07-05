@@ -40,9 +40,28 @@ jobs:
     outputs:
       image: ${{ steps.docker-push.outputs.image }}
 
-  deploy:
+  deploy_feature:
     runs-on: ubuntu-latest
-    name: Deploy docker image to dev
+    name: Deploy to dev feature
+    if: github.ref != 'refs/heads/main'
+    needs: build
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          path: deploy
+      - name: Deploy feature to dev-gcp
+        uses: nais/deploy/actions/deploy@v1
+        env:
+          APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
+          CLUSTER: dev-gcp
+          RESOURCE: deploy/.nais/nais.yaml
+          VARS: deploy/.nais/feature.yaml
+          IMAGE: ${{ needs.build.outputs.image }}
+
+  deploy_main:
+    runs-on: ubuntu-latest
+    name: Deploy dev main
     needs: build
 
     steps:
@@ -57,12 +76,19 @@ jobs:
           RESOURCE: deploy/.nais/nais.yaml
           VARS: deploy/.nais/main.yaml
           IMAGE: ${{ needs.build.outputs.image }}
-      - name: Deploy feature to dev-gcp
-        if: github.ref != 'refs/heads/main'
+  deploy_unleash:
+    runs-on: ubuntu-latest
+    name: Deploy unleash
+    needs: build
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          path: deploy
+      - name: Deploy unleash to dev-gcp
         uses: nais/deploy/actions/deploy@v1
         env:
           APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
           CLUSTER: dev-gcp
-          RESOURCE: deploy/.nais/nais.yaml
-          VARS: deploy/.nais/feature.yaml
-          IMAGE: ${{ needs.build.outputs.image }}
+          RESOURCE: deploy/.nais/unleash.yaml
+          VARS: deploy/.nais/main.yaml

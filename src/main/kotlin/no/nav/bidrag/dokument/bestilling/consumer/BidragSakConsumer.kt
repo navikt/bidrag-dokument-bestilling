@@ -1,8 +1,8 @@
 package no.nav.bidrag.dokument.bestilling.consumer
 
 import no.nav.bidrag.commons.web.client.AbstractRestClient
-import no.nav.bidrag.dokument.bestilling.consumer.dto.HentSakResponse
 import no.nav.bidrag.dokument.bestilling.model.HentSakFeiletException
+import no.nav.bidrag.transport.sak.BidragssakDto
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.beans.factory.annotation.Value
@@ -26,8 +26,9 @@ class BidragSakConsumer(
     }
     private fun createUri(path: String?) = UriComponentsBuilder.fromUri(url)
         .path(path ?: "").build().toUri()
+
     @Retryable(maxAttempts = 3, backoff = Backoff(delay = 500, maxDelay = 1500, multiplier = 2.0))
-    fun hentSak(saksnr: String): HentSakResponse? {
+    fun hentSak(saksnr: String): BidragssakDto? {
         try {
             return getForEntity(createUri("/sak/$saksnr"))
         } catch (e: HttpStatusCodeException) {

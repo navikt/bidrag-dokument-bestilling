@@ -30,7 +30,7 @@ class LoggingMarshallingMessageConverter(jaxb2Marshaller: Jaxb2Marshaller, var r
             .replace("xsi:nil=\"true\"", "")
             .replace("xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"", "")
             .replace("\\s{2,}".toRegex(), "")
-        SIKKER_LOGG.info("Sending message $cleanedMessageString")
+        SIKKER_LOGG.info("Sending message \n\n$cleanedMessageString\n\n")
         val message = session.createTextMessage(cleanedMessageString)
         message.setIntProperty(JmsConstants.JMS_IBM_CHARACTER_SET, 277)
         message.setIntProperty(JmsConstants.JMS_IBM_MSGTYPE, CMQC.MQMT_DATAGRAM)

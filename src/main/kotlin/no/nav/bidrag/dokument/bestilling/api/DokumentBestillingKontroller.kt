@@ -9,7 +9,7 @@ import no.nav.bidrag.dokument.bestilling.SIKKER_LOGG
 import no.nav.bidrag.dokument.bestilling.api.dto.DokumentBestillingForespørsel
 import no.nav.bidrag.dokument.bestilling.api.dto.DokumentBestillingResponse
 import no.nav.bidrag.dokument.bestilling.api.dto.DokumentMalDetaljer
-import no.nav.bidrag.dokument.bestilling.bestilling.dto.BrevKode
+import no.nav.bidrag.dokument.bestilling.bestilling.dto.DokumentMal
 import no.nav.bidrag.dokument.bestilling.tjenester.DokumentBestillingService
 import no.nav.security.token.support.core.api.Protected
 import org.slf4j.LoggerFactory
@@ -30,17 +30,25 @@ class DokumentBestillingKontroller(val dokumentBestillingService: DokumentBestil
         private val LOGGER = LoggerFactory.getLogger(DokumentBestillingKontroller::class.java)
     }
 
-    @PostMapping("/bestill/{brevKode}")
+    @PostMapping("/bestill/{dokumentMal}")
     @Operation(
         description = "Bestiller dokument for oppgitt brevkode/dokumentKode",
         security = [SecurityRequirement(name = "bearer-key")]
     )
-    @ApiResponses(value = [ApiResponse(responseCode = "400", description = "Dokument ble bestilt med ugyldig data")])
-    fun bestillBrev(@RequestBody bestillingRequest: DokumentBestillingForespørsel, @PathVariable brevKode: BrevKode): DokumentBestillingResponse {
-        LOGGER.info("Bestiller dokument for brevkode $brevKode og enhet ${bestillingRequest.enhet}")
-        SIKKER_LOGG.info("Bestiller dokument for brevkode $brevKode med data $bestillingRequest og enhet ${bestillingRequest.enhet}")
-        val result = dokumentBestillingService.bestill(bestillingRequest, brevKode)
-        LOGGER.info("Bestilt dokument for brevkode $brevKode og enhet ${bestillingRequest.enhet} med respons $result")
+    @ApiResponses(
+        value = [ApiResponse(
+            responseCode = "400",
+            description = "Dokument ble bestilt med ugyldig data"
+        )]
+    )
+    fun bestillBrev(
+        @RequestBody bestillingRequest: DokumentBestillingForespørsel,
+        @PathVariable dokumentMal: DokumentMal
+    ): DokumentBestillingResponse {
+        LOGGER.info("Bestiller dokument for brevkode $dokumentMal og enhet ${bestillingRequest.enhet}")
+        SIKKER_LOGG.info("Bestiller dokument for brevkode $dokumentMal med data $bestillingRequest og enhet ${bestillingRequest.enhet}")
+        val result = dokumentBestillingService.bestill(bestillingRequest, dokumentMal)
+        LOGGER.info("Bestilt dokument for brevkode $dokumentMal og enhet ${bestillingRequest.enhet} med respons $result")
         return result
     }
 
@@ -50,7 +58,7 @@ class DokumentBestillingKontroller(val dokumentBestillingService: DokumentBestil
         security = [SecurityRequirement(name = "bearer-key")]
     )
     fun hentStottedeBrevkoder(): List<String> {
-        return BrevKode.values().filter { it.enabled }.map { it.name }.let {
+        return DokumentMal.values().filter { it.enabled }.map { it.name }.let {
             LOGGER.info("Hentet støttede brevkoder $it")
             it
         }
@@ -62,7 +70,7 @@ class DokumentBestillingKontroller(val dokumentBestillingService: DokumentBestil
         security = [SecurityRequirement(name = "bearer-key")]
     )
     fun hentDokumentmalDetaljer(): Map<String, DokumentMalDetaljer> {
-        return BrevKode.values().filter { it.enabled }
-            .associate { it.name to DokumentMalDetaljer(it.beskrivelse, it.brevtype) }
+        return DokumentMal.values()
+            .associate { it.name to DokumentMalDetaljer(it.beskrivelse, it.brevtype, it.enabled) }
     }
 }

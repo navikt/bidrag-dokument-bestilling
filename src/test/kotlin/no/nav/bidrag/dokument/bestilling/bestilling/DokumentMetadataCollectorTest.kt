@@ -2,7 +2,7 @@ package no.nav.bidrag.dokument.bestilling.bestilling
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import io.kotest.assertions.assertSoftly
-import io.kotest.assertions.throwables.shouldThrow
+import io.kotest.assertions.throwables.shouldThrowWithMessage
 import io.kotest.assertions.withClue
 import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.shouldBe
@@ -15,18 +15,22 @@ import io.mockk.junit5.MockKExtension
 import no.nav.bidrag.dokument.bestilling.api.dto.DokumentBestillingForespørsel
 import no.nav.bidrag.dokument.bestilling.api.dto.MottakerTo
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.DokumentBestilling
+import no.nav.bidrag.dokument.bestilling.bestilling.dto.DokumentMal
 import no.nav.bidrag.dokument.bestilling.config.SaksbehandlerInfoManager
+import no.nav.bidrag.dokument.bestilling.consumer.BidragVedtakConsumer
 import no.nav.bidrag.dokument.bestilling.consumer.KodeverkConsumer
+import no.nav.bidrag.dokument.bestilling.consumer.SjablonConsumer
 import no.nav.bidrag.dokument.bestilling.consumer.dto.KodeverkResponse
-import no.nav.bidrag.dokument.bestilling.consumer.dto.RolleType
-import no.nav.bidrag.dokument.bestilling.consumer.dto.SakRolle
+import no.nav.bidrag.dokument.bestilling.consumer.dto.SjablongerDto
 import no.nav.bidrag.dokument.bestilling.consumer.dto.fornavnEtternavn
-import no.nav.bidrag.dokument.bestilling.model.FantIkkeSakException
 import no.nav.bidrag.dokument.bestilling.model.Saksbehandler
+import no.nav.bidrag.dokument.bestilling.model.typeRef
 import no.nav.bidrag.dokument.bestilling.tjenester.KodeverkService
 import no.nav.bidrag.dokument.bestilling.tjenester.OrganisasjonService
 import no.nav.bidrag.dokument.bestilling.tjenester.PersonService
 import no.nav.bidrag.dokument.bestilling.tjenester.SakService
+import no.nav.bidrag.dokument.bestilling.tjenester.SjablongService
+import no.nav.bidrag.dokument.bestilling.tjenester.VedtakService
 import no.nav.bidrag.dokument.bestilling.utils.ANNEN_MOTTAKER
 import no.nav.bidrag.dokument.bestilling.utils.BARN1
 import no.nav.bidrag.dokument.bestilling.utils.BARN2
@@ -45,18 +49,22 @@ import no.nav.bidrag.dokument.bestilling.utils.createPostAdresseResponse
 import no.nav.bidrag.dokument.bestilling.utils.createSakResponse
 import no.nav.bidrag.dokument.bestilling.utils.readFile
 import no.nav.bidrag.domain.enums.Diskresjonskode
+import no.nav.bidrag.domain.enums.Rolletype
 import no.nav.bidrag.domain.ident.PersonIdent
 import no.nav.bidrag.domain.string.Bruksenhetsnummer
+import no.nav.bidrag.domain.string.Enhetsnummer
 import no.nav.bidrag.domain.string.Kortnavn
 import no.nav.bidrag.domain.string.Landkode2
 import no.nav.bidrag.domain.string.Landkode3
 import no.nav.bidrag.domain.tid.Dødsdato
 import no.nav.bidrag.domain.tid.Fødselsdato
+import no.nav.bidrag.transport.sak.RolleDto
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
+import org.springframework.web.client.HttpStatusCodeException
 
 @ExtendWith(MockKExtension::class)
 internal class DokumentMetadataCollectorTest {
@@ -71,6 +79,12 @@ internal class DokumentMetadataCollectorTest {
     lateinit var kodeverkConsumer: KodeverkConsumer
 
     @MockK
+    lateinit var vedtakConsumer: BidragVedtakConsumer
+
+    @MockK
+    lateinit var sjablonConsumer: SjablonConsumer
+
+    @MockK
     lateinit var saksbehandlerInfoManager: SaksbehandlerInfoManager
 
     @MockK
@@ -80,13 +94,23 @@ internal class DokumentMetadataCollectorTest {
     lateinit var kodeverkService: KodeverkService
 
     @InjectMockKs
+    lateinit var sjablongService: SjablongService
+
+    @InjectMockKs
+    lateinit var vedtakService: VedtakService
+
     lateinit var metadataCollector: DokumentMetadataCollector
 
     @BeforeEach
     fun initMocks() {
         val kodeverkResponse = ObjectMapper().findAndRegisterModules().readValue(readFile("api/landkoder.json"), KodeverkResponse::class.java)
+        val sjablonResponse = ObjectMapper().findAndRegisterModules().readValue(readFile("api/sjablon_all.json"), typeRef<SjablongerDto>())
         every { kodeverkConsumer.hentLandkoder() } returns kodeverkResponse
+        every { sjablonConsumer.hentSjablonger() } returns sjablonResponse
+        metadataCollector = withMetadataCollector()
     }
+
+    private fun withMetadataCollector() = DokumentMetadataCollector(personService, sakService, kodeverkService, vedtakService, sjablongService, saksbehandlerInfoManager, organisasjonService)
 
     @AfterEach
     fun resetMocks() {
@@ -124,9 +148,9 @@ internal class DokumentMetadataCollectorTest {
         val bestilling = mapToBestillingsdata(request)
         assertSoftly {
             bestilling.mottaker?.spraak shouldBe "NB"
-            bestilling.mottaker?.navn shouldBe BM1.navn?.verdi
+            bestilling.mottaker?.navn shouldBe BM1.kortnavn?.verdi
             bestilling.mottaker?.fodselsnummer shouldBe BM1.ident.verdi
-            bestilling.mottaker?.rolle shouldBe RolleType.BM
+            bestilling.mottaker?.rolle shouldBe Rolletype.BM
             bestilling.mottaker?.fodselsdato shouldBe BM1.fødselsdato?.verdi
             bestilling.mottaker?.adresse?.adresselinje1 shouldBe adresseResponse.adresselinje1?.verdi
             bestilling.mottaker?.adresse?.adresselinje2 shouldBe adresseResponse.adresselinje2?.verdi
@@ -140,7 +164,7 @@ internal class DokumentMetadataCollectorTest {
             bestilling.mottaker?.adresse?.land shouldBe "NORGE"
 
             bestilling.gjelder?.fodselsnummer shouldBe BM1.ident.verdi
-            bestilling.gjelder?.rolle shouldBe RolleType.BM
+            bestilling.gjelder?.rolle shouldBe Rolletype.BM
 
             bestilling.kontaktInfo?.navn shouldBe defaultKontaktinfo.enhetNavn
             bestilling.kontaktInfo?.telefonnummer shouldBe defaultKontaktinfo.telefonnummer
@@ -149,7 +173,7 @@ internal class DokumentMetadataCollectorTest {
             bestilling.kontaktInfo?.postadresse?.adresselinje2 shouldBe defaultKontaktinfo.postadresse?.adresselinje2
             bestilling.kontaktInfo?.postadresse?.postnummer shouldBe defaultKontaktinfo.postadresse?.postnummer
             bestilling.kontaktInfo?.postadresse?.poststed shouldBe defaultKontaktinfo.postadresse?.poststed
-            bestilling.kontaktInfo?.postadresse?.land shouldBe "Norge"
+            bestilling.kontaktInfo?.postadresse?.land shouldBe null
 
             bestilling.saksbehandler?.ident shouldBe SAKSBEHANDLER_IDENT
             bestilling.saksbehandler?.navn shouldBe "Saksbehandler Mellomnavn Saksbehandlersen"
@@ -474,7 +498,7 @@ internal class DokumentMetadataCollectorTest {
         val bestilling = mapToBestillingsdata(request)
         assertSoftly {
             bestilling.gjelder?.fodselsnummer shouldBe BM1.ident.verdi
-            bestilling.gjelder?.rolle shouldBe RolleType.BM
+            bestilling.gjelder?.rolle shouldBe Rolletype.BM
         }
     }
 
@@ -494,7 +518,7 @@ internal class DokumentMetadataCollectorTest {
         val bestilling = mapToBestillingsdata(request)
         assertSoftly {
             bestilling.gjelder?.fodselsnummer shouldBe BM1.ident.verdi
-            bestilling.gjelder?.rolle shouldBe RolleType.BM
+            bestilling.gjelder?.rolle shouldBe Rolletype.BM
         }
     }
 
@@ -505,17 +529,17 @@ internal class DokumentMetadataCollectorTest {
         val barn1Dod = BARN1.copy(dødsdato = Dødsdato.of(2022, 1, 1))
         val sak = createSakResponse().copy(
             roller = listOf(
-                SakRolle(
-                    foedselsnummer = BP1.ident.verdi,
-                    rolleType = RolleType.BP
+                RolleDto(
+                    fødselsnummer = BP1.ident,
+                    type = Rolletype.BP
                 ),
-                SakRolle(
-                    foedselsnummer = barn1Dod.ident.verdi,
-                    rolleType = RolleType.BA
+                RolleDto(
+                    fødselsnummer = barn1Dod.ident,
+                    type = Rolletype.BA
                 ),
-                SakRolle(
-                    foedselsnummer = BARN2.ident.verdi,
-                    rolleType = RolleType.BA
+                RolleDto(
+                    fødselsnummer = BARN2.ident,
+                    type = Rolletype.BA
                 )
             )
         )
@@ -534,14 +558,14 @@ internal class DokumentMetadataCollectorTest {
         val bestilling = mapToBestillingsdata(request)
         assertSoftly {
             bestilling.gjelder?.fodselsnummer shouldBe BP1.ident.verdi
-            bestilling.gjelder?.rolle shouldBe RolleType.BP
+            bestilling.gjelder?.rolle shouldBe Rolletype.BP
         }
     }
 
     @Test
     fun `should use enhet from sak when request is missing enhet`() {
         mockDefaultValues()
-        val sakresponse = createSakResponse().copy(eierfogd = "4888")
+        val sakresponse = createSakResponse().copy(eierfogd = Enhetsnummer("4888"))
         every { sakService.hentSak(any()) } returns sakresponse
         val request = DokumentBestillingForespørsel(
             mottakerId = BM1.ident.verdi,
@@ -626,7 +650,7 @@ internal class DokumentMetadataCollectorTest {
             spraak = "NB",
             samhandlerInformasjon = null
         )
-        shouldThrow<FantIkkeSakException> { mapToBestillingsdata(request) }
+        shouldThrowWithMessage<HttpStatusCodeException>("400 Fant ikke sak med id $saksnummer") { mapToBestillingsdata(request) }
     }
 
     @Test
@@ -653,9 +677,9 @@ internal class DokumentMetadataCollectorTest {
         val adresseResponse = createPostAdresseResponse()
         assertSoftly {
             bestilling.mottaker?.spraak shouldBe "NB"
-            bestilling.mottaker?.navn shouldBe bmKode6.navn?.verdi
+            bestilling.mottaker?.navn shouldBe bmKode6.kortnavn?.verdi
             bestilling.mottaker?.fodselsnummer shouldBe bmKode6.ident.verdi
-            bestilling.mottaker?.rolle shouldBe RolleType.BM
+            bestilling.mottaker?.rolle shouldBe Rolletype.BM
             bestilling.mottaker?.fodselsdato shouldBe BM1.fødselsdato?.verdi
             bestilling.mottaker?.adresse?.adresselinje1 shouldBe adresseResponse.adresselinje1?.verdi
             bestilling.mottaker?.adresse?.adresselinje2 shouldBe adresseResponse.adresselinje2?.verdi
@@ -764,9 +788,9 @@ internal class DokumentMetadataCollectorTest {
             val originalSakResponse = createSakResponse()
             val roller = originalSakResponse.roller.toMutableList()
             roller.add(
-                SakRolle(
-                    foedselsnummer = rmIdent,
-                    rolleType = RolleType.RM
+                RolleDto(
+                    fødselsnummer = PersonIdent(rmIdent),
+                    type = Rolletype.RM
                 )
             )
             val sak = originalSakResponse.copy(
@@ -792,17 +816,17 @@ internal class DokumentMetadataCollectorTest {
             val saksnummer = "22222"
             val sak = createSakResponse().copy(
                 roller = listOf(
-                    SakRolle(
-                        foedselsnummer = BP1.ident.verdi,
-                        rolleType = RolleType.BP
+                    RolleDto(
+                        fødselsnummer = BP1.ident,
+                        type = Rolletype.BP
                     ),
-                    SakRolle(
-                        foedselsnummer = BARN1.ident.verdi,
-                        rolleType = RolleType.BA
+                    RolleDto(
+                        fødselsnummer = BARN1.ident,
+                        type = Rolletype.BA
                     ),
-                    SakRolle(
-                        foedselsnummer = BARN2.ident.verdi,
-                        rolleType = RolleType.BA
+                    RolleDto(
+                        fødselsnummer = BARN2.ident,
+                        type = Rolletype.BA
                     )
                 )
             )
@@ -828,17 +852,17 @@ internal class DokumentMetadataCollectorTest {
             val saksnummer = "22222"
             val sak = createSakResponse().copy(
                 roller = listOf(
-                    SakRolle(
-                        foedselsnummer = BM1.ident.verdi,
-                        rolleType = RolleType.BM
+                    RolleDto(
+                        fødselsnummer = BM1.ident,
+                        type = Rolletype.BM
                     ),
-                    SakRolle(
-                        foedselsnummer = BARN1.ident.verdi,
-                        rolleType = RolleType.BA
+                    RolleDto(
+                        fødselsnummer = BARN1.ident,
+                        type = Rolletype.BA
                     ),
-                    SakRolle(
-                        foedselsnummer = BARN2.ident.verdi,
-                        rolleType = RolleType.BA
+                    RolleDto(
+                        fødselsnummer = BARN2.ident,
+                        type = Rolletype.BA
                     )
                 )
             )
@@ -864,9 +888,9 @@ internal class DokumentMetadataCollectorTest {
             val saksnummer = "22222"
             val sak = createSakResponse().copy(
                 roller = listOf(
-                    SakRolle(
-                        foedselsnummer = BM1.ident.verdi,
-                        rolleType = RolleType.BM
+                    RolleDto(
+                        fødselsnummer = BM1.ident,
+                        type = Rolletype.BM
                     )
                 )
             )
@@ -893,17 +917,17 @@ internal class DokumentMetadataCollectorTest {
             val barn1Dod = BARN1.copy(dødsdato = Dødsdato.of(2022, 1, 1))
             val sak = createSakResponse().copy(
                 roller = listOf(
-                    SakRolle(
-                        foedselsnummer = BM1.ident.verdi,
-                        rolleType = RolleType.BM
+                    RolleDto(
+                        fødselsnummer = BM1.ident,
+                        type = Rolletype.BM
                     ),
-                    SakRolle(
-                        foedselsnummer = barn1Dod.ident.verdi,
-                        rolleType = RolleType.BA
+                    RolleDto(
+                        fødselsnummer = barn1Dod.ident,
+                        type = Rolletype.BA
                     ),
-                    SakRolle(
-                        foedselsnummer = BARN2.ident.verdi,
-                        rolleType = RolleType.BA
+                    RolleDto(
+                        fødselsnummer = BARN2.ident,
+                        type = Rolletype.BA
                     )
                 )
             )
@@ -935,25 +959,25 @@ internal class DokumentMetadataCollectorTest {
         val barn4 = BARN3.copy(ident = PersonIdent("1231231233333333"), fødselsdato = Fødselsdato.of(2022, 3, 15))
         val sak = createSakResponse().copy(
             roller = listOf(
-                SakRolle(
-                    foedselsnummer = BM1.ident.verdi,
-                    rolleType = RolleType.BM
+                RolleDto(
+                    fødselsnummer = BM1.ident,
+                    type = Rolletype.BM
                 ),
-                SakRolle(
-                    foedselsnummer = barn1.ident.verdi,
-                    rolleType = RolleType.BA
+                RolleDto(
+                    fødselsnummer = barn1.ident,
+                    type = Rolletype.BA
                 ),
-                SakRolle(
-                    foedselsnummer = barn2.ident.verdi,
-                    rolleType = RolleType.BA
+                RolleDto(
+                    fødselsnummer = barn2.ident,
+                    type = Rolletype.BA
                 ),
-                SakRolle(
-                    foedselsnummer = barn3.ident.verdi,
-                    rolleType = RolleType.BA
+                RolleDto(
+                    fødselsnummer = barn3.ident,
+                    type = Rolletype.BA
                 ),
-                SakRolle(
-                    foedselsnummer = barn4.ident.verdi,
-                    rolleType = RolleType.BA
+                RolleDto(
+                    fødselsnummer = barn4.ident,
+                    type = Rolletype.BA
                 )
             )
         )
@@ -991,11 +1015,7 @@ internal class DokumentMetadataCollectorTest {
         }
     }
 
-    private fun mapToBestillingsdata(request: DokumentBestillingForespørsel): DokumentBestilling {
-        return metadataCollector.init(request)
-            .leggTilRoller()
-            .leggTilMottakerGjelder()
-            .leggTilEnhetKontaktInfo()
-            .hentBestillingData()
+    private fun mapToBestillingsdata(request: DokumentBestillingForespørsel, dokumentMal: DokumentMal = DokumentMal.BI01S02): DokumentBestilling {
+        return metadataCollector.collect(request, dokumentMal)
     }
 }

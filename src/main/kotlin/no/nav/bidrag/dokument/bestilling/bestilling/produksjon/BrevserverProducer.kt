@@ -1,19 +1,27 @@
 package no.nav.bidrag.dokument.bestilling.bestilling.produksjon
 
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.BestillingSystem
-import no.nav.bidrag.dokument.bestilling.bestilling.dto.BrevKode
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.BrevType
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.DokumentBestilling
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.DokumentBestillingResult
+import no.nav.bidrag.dokument.bestilling.bestilling.dto.DokumentMal
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.EnhetKontaktInfo
+import no.nav.bidrag.dokument.bestilling.bestilling.dto.ForsorgerType
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.Mottaker
+import no.nav.bidrag.dokument.bestilling.bestilling.dto.fraVerdi
+import no.nav.bidrag.dokument.bestilling.bestilling.dto.tilVerdi
 import no.nav.bidrag.dokument.bestilling.bestilling.produksjon.dto.Brev
 import no.nav.bidrag.dokument.bestilling.bestilling.produksjon.dto.BrevBestilling
 import no.nav.bidrag.dokument.bestilling.bestilling.produksjon.dto.BrevKontaktinfo
 import no.nav.bidrag.dokument.bestilling.bestilling.produksjon.dto.BrevMottaker
+import no.nav.bidrag.dokument.bestilling.bestilling.produksjon.dto.behandlingType
 import no.nav.bidrag.dokument.bestilling.bestilling.produksjon.dto.brevbestilling
+import no.nav.bidrag.dokument.bestilling.bestilling.produksjon.dto.soknadType
+import no.nav.bidrag.dokument.bestilling.bestilling.produksjon.dto.toKode
 import no.nav.bidrag.dokument.bestilling.consumer.BidragDokumentConsumer
-import no.nav.bidrag.dokument.bestilling.consumer.dto.RolleType
+import no.nav.bidrag.dokument.bestilling.model.BehandlingType
+import no.nav.bidrag.dokument.bestilling.model.MAX_DATE
+import no.nav.bidrag.dokument.bestilling.model.ResultatKoder
 import no.nav.bidrag.dokument.dto.AvsenderMottakerDto
 import no.nav.bidrag.dokument.dto.JournalpostType
 import no.nav.bidrag.dokument.dto.OpprettDokumentDto
@@ -21,18 +29,23 @@ import no.nav.bidrag.dokument.dto.OpprettJournalpostRequest
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.jms.core.JmsTemplate
 import org.springframework.stereotype.Component
+import java.util.*
 
 @Component(BestillingSystem.BREVSERVER)
 class BrevserverProducer(
     val onlinebrevTemplate: JmsTemplate,
     val bidragDokumentConsumer: BidragDokumentConsumer,
+    val hgUgKodeService: HgUgKodeService,
     @Value("\${BREVSERVER_PASSORD}") val brevPassord: String
 ) : DokumentProducer {
 
-    override fun produser(dokumentBestilling: DokumentBestilling, brevKode: BrevKode): DokumentBestillingResult {
-        val journalpostId = opprettJournalpost(dokumentBestilling, brevKode)
+    override fun produser(
+        dokumentBestilling: DokumentBestilling,
+        dokumentMal: DokumentMal
+    ): DokumentBestillingResult {
+        val journalpostId = opprettJournalpost(dokumentBestilling, dokumentMal)
 
-        onlinebrevTemplate.convertAndSend(mapToBrevserverMessage(dokumentBestilling, brevKode))
+        onlinebrevTemplate.convertAndSend(mapToBrevserverMessage(dokumentBestilling, dokumentMal))
         // TODO: Error handling
         return DokumentBestillingResult(
             dokumentReferanse = dokumentBestilling.dokumentreferanse!!,
@@ -41,9 +54,9 @@ class BrevserverProducer(
         )
     }
 
-    fun opprettJournalpost(dokumentBestilling: DokumentBestilling, brevKode: BrevKode): String {
+    fun opprettJournalpost(dokumentBestilling: DokumentBestilling, dokumentMal: DokumentMal): String {
         if (dokumentBestilling.dokumentreferanse.isNullOrEmpty()) {
-            val tittel = dokumentBestilling.tittel ?: brevKode.beskrivelse
+            val tittel = dokumentBestilling.tittel ?: dokumentMal.beskrivelse
             val response = bidragDokumentConsumer.opprettJournalpost(
                 OpprettJournalpostRequest(
                     tittel = tittel,
@@ -52,12 +65,15 @@ class BrevserverProducer(
                     dokumenter = listOf(
                         OpprettDokumentDto(
                             tittel = tittel,
-                            brevkode = brevKode.name
+                            brevkode = dokumentMal.name
                         )
                     ),
                     gjelderIdent = dokumentBestilling.gjelder?.fodselsnummer!!,
-                    avsenderMottaker = AvsenderMottakerDto(dokumentBestilling.mottaker?.navn, dokumentBestilling.mottaker?.fodselsnummer!!),
-                    journalposttype = when (brevKode.brevtype) {
+                    avsenderMottaker = AvsenderMottakerDto(
+                        dokumentBestilling.mottaker?.navn,
+                        dokumentBestilling.mottaker?.fodselsnummer!!
+                    ),
+                    journalposttype = when (dokumentMal.brevtype) {
                         BrevType.UTGÅENDE -> JournalpostType.UTGÅENDE
                         BrevType.NOTAT -> JournalpostType.NOTAT
                     },
@@ -71,15 +87,19 @@ class BrevserverProducer(
         return ""
     }
 
-    private fun mapToBrevserverMessage(dokumentBestilling: DokumentBestilling, brevKode: BrevKode): BrevBestilling {
+    private fun mapToBrevserverMessage(
+        dokumentBestilling: DokumentBestilling,
+        dokumentMal: DokumentMal
+    ): BrevBestilling {
         val dokumentSpraak = dokumentBestilling.spraak ?: "NB"
         val saksbehandlerNavn = dokumentBestilling.saksbehandler?.navn
+        val vedtakInfo = dokumentBestilling.vedtakDetaljer
         return brevbestilling {
             val roller = dokumentBestilling.roller
             val bp = roller.bidragspliktig
             val bm = roller.bidragsmottaker
-
-            malpakke = "BI01.${brevKode.name}"
+            val hgUgDto = vedtakInfo?.let { hgUgKodeService.findHgUg(it.soknadType, it.søknadFra, it.behandlingType) }
+            malpakke = "BI01.${dokumentMal.name}"
             passord = brevPassord
             saksbehandler = dokumentBestilling.saksbehandler?.ident!!
             brev {
@@ -88,10 +108,41 @@ class BrevserverProducer(
                 tknr = dokumentBestilling.enhet!!
                 mottaker = dokumentBestilling.mottaker?.let { mapBrevmottaker(this, it) }
                 kontaktInfo = mapKontaktInfo(this, dokumentBestilling.kontaktInfo)
-                soknad {
+                soknadBost {
                     saksnr = dokumentBestilling.saksnummer
                     rmISak = dokumentBestilling.rmISak
-                    sakstype = "E" // "X" hvis det er en ukjent part i saken, "U" hvis parter levde adskilt, "E" i alle andre tilfeller
+                    datoSakReg = dokumentBestilling.datoSakOpprettet
+                    hgKode = hgUgDto?.hg
+                    ugKode = hgUgDto?.ug
+                    sakstype = if (dokumentBestilling.sakDetaljer.harUkjentPart) {
+                        "X"
+                    } else if (dokumentBestilling.sakDetaljer.levdeAdskilt) {
+                        "U"
+                    } else {
+                        "E"
+                    }
+                    gebyrsats = dokumentBestilling.sjablonDetaljer.fastsettelseGebyr
+                    vedtakInfo?.let {
+                        soknGrKode = it.behandlingType?.kode
+                        soknFraKode = it.søknadFra?.kode
+                        soknType = it.soknadType?.kode
+                        virkningsDato = it.virkningDato
+                        mottatDato = it.soknadDato
+                    }
+                    forskUtBet = vedtakInfo != null
+                    // Kode fra beslutningårsak i Bisys.
+                    val vedtakPerioder = vedtakInfo?.vedtakBarn?.flatMap { it.stonader }?.flatMap { it.vedtakPerioder } ?: emptyList()
+                    val antallVedtakPerioder = vedtakPerioder.size
+                    resKode = if (antallVedtakPerioder > 1) {
+                        ResultatKoder.FLERE_BESLUTNING_LINJER
+                    } else if (antallVedtakPerioder == 1) {
+                        val resultatKode = vedtakPerioder[0].resultatKode
+                        val erInnkrevingPrivatAvtale = resultatKode == ResultatKoder.PRIVAT_AVTALE && DokumentMal.BI01G01 == dokumentMal
+                        val erInnkreving = listOf(ResultatKoder.INNVILGET_VEDTAK, ResultatKoder.UTENLANDSK_AVGJØRELSE).contains(resultatKode)
+                        if (erInnkreving || erInnkrevingPrivatAvtale) ResultatKoder.VEDTAK_VANLIG_INNKREVING else resultatKode
+                    } else {
+                        null
+                    }
                 }
                 parter {
                     bpfnr = bp?.fodselsnummer
@@ -108,18 +159,121 @@ class BrevserverProducer(
                 brevSaksbehandler {
                     navn = saksbehandlerNavn
                 }
+                vedtakInfo?.let {
+                    soknad {
+                        aarsakKd = it.virkningÅrsakKode
+                        undergrp = hgUgDto?.ug
+                        type = it.stønadType?.let { BehandlingType.valueOf(it.name).kode }
+
+                        vedtattDato = it.vedtattDato
+                        virkningDato = it.virkningDato
+                        soknDato = it.soknadDato
+                        sendtDato = it.vedtattDato // TODO: Er dette riktig?
+                        saksnr = dokumentBestilling.saksnummer
+                    }
+                }
+
+                vedtakInfo?.vedtakBarn?.forEach { vedtakBarn ->
+
+                    bidragBarn {
+                        barn {
+                            navn = vedtakBarn.navn
+                            fnr = vedtakBarn.fodselsnummer
+                            saksnr = dokumentBestilling.saksnummer
+                        }
+
+                        vedtakInfo.barnIHustandPerioder.forEach {
+                            forskuddBarnPeriode {
+                                fomDato = it.fomDato
+                                tomDato = it.tomDato ?: MAX_DATE
+                                antallBarn = it.antall
+                            }
+                        }
+
+                        vedtakInfo.sivilstandPerioder.forEach { sivilstand ->
+                            forskuddSivilstandPeriode {
+                                fomDato = sivilstand.fomDato
+                                tomDato = sivilstand.tomDato ?: MAX_DATE
+                                kode = sivilstand.sivilstandKode.toKode()
+                                beskrivelse = sivilstand.sivilstandBeskrivelse
+                            }
+                        }
+                        vedtakBarn.stonader.forEach { detaljer ->
+                            detaljer.forskuddInntektgrensePerioder.forEach {
+                                inntektGrunnlagForskuddPeriode {
+                                    fomDato = it.fomDato
+                                    tomDato = it.tomDato ?: MAX_DATE
+                                    antallBarn = it.antallBarn
+                                    forsorgerKode = when (it.forsorgerType) {
+                                        ForsorgerType.ENSLIG -> "EN"
+                                        ForsorgerType.GIFT_SAMBOER -> "GS"
+                                    }
+                                    belop50fra = it.beløp50Prosent.fraVerdi()
+                                    belop50til = it.beløp50Prosent.tilVerdi()
+                                    belop75fra = it.beløp75Prosent.fraVerdi()
+                                    belop75til = it.beløp75Prosent.tilVerdi()
+                                }
+                            }
+
+                            detaljer.vedtakPerioder.forEach { vedtakPeriode ->
+                                forskuddVedtakPeriode {
+                                    fomDato = vedtakPeriode.fomDato
+                                    tomDato = vedtakPeriode.tomDato ?: MAX_DATE
+                                    fnr = vedtakBarn.fodselsnummer
+                                    resultatKode = vedtakPeriode.resultatKode
+                                    beløp = vedtakPeriode.beløp
+                                    prosent = vedtakPeriode.resultatKode.padStart(3, '0')
+                                    maksInntekt = vedtakPeriode.maksInntekt
+                                }
+
+                                vedtakPeriode.inntekter.forEach {
+                                    inntektPeriode {
+                                        fomDato = it.periodeFomDato
+                                        tomDato = it.periodeTomDato ?: MAX_DATE
+                                        belopType = it.beløpType.belopstype
+                                        belopÅrsinntekt = it.beløp
+                                        beskrivelse = it.beløpType.beskrivelse
+                                        rolle = it.rolle.toKode()
+                                        fnr = it.fodselsnummer
+                                        inntektGrense = vedtakPeriode.inntektGrense
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    vedtakBarn.stonader.forEach { detaljer ->
+                        detaljer.vedtakPerioder.forEach {
+                            vedtak {
+                                fomDato = it.fomDato
+                                tomDato = it.tomDato ?: MAX_DATE
+                                fnr = vedtakBarn.fodselsnummer
+                                belopBidrag = it.beløp
+                                resultatKode = it.resultatKode
+                            }
+                            forskuddVedtak {
+                                fomDato = it.fomDato
+                                tomDato = it.tomDato ?: MAX_DATE
+                                fnr = vedtakBarn.fodselsnummer
+                                resultatKode = it.resultatKode
+                                beløp = it.beløp
+                                prosent = it.resultatKode.padStart(3, '0')
+                                maksInntekt = it.maksInntekt
+                            }
+                        }
+                    }
+                }
                 dokumentBestilling.roller.barn.forEach {
                     barnISak {
                         fnr = it.fodselsnummer
                         navn = it.navn
                         fDato = it.fodselsdato
                         fornavn = it.fornavn
+                        belForskudd = it.fodselsnummer?.let { it1 -> vedtakInfo?.hentForskuddBarn(it1) }
                     }
                 }
             }
         }
     }
-
     fun mapKontaktInfo(brev: Brev, _kontaktInfo: EnhetKontaktInfo?): BrevKontaktinfo? {
         val kontaktInfo = _kontaktInfo ?: return null
         return brev.brevKontaktinfo {
@@ -140,17 +294,13 @@ class BrevserverProducer(
             }
         }
     }
+
     fun mapBrevmottaker(brev: Brev, mottaker: Mottaker): BrevMottaker {
         return brev.brevmottaker {
             navn = mottaker.navn
             spraak = mottaker.spraak
             fodselsnummer = mottaker.fodselsnummer
-            rolle = when (mottaker.rolle) {
-                RolleType.BM -> "01"
-                RolleType.BP -> "02"
-                RolleType.RM -> "RM"
-                else -> "00"
-            }
+            rolle = mottaker.rolle?.toKode()
             fodselsdato = mottaker.fodselsdato
 
             val adresse = mottaker.adresse

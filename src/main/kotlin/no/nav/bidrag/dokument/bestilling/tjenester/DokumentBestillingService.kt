@@ -4,15 +4,15 @@ import no.nav.bidrag.dokument.bestilling.api.dto.DokumentBestillingForespørsel
 import no.nav.bidrag.dokument.bestilling.api.dto.DokumentBestillingResponse
 import no.nav.bidrag.dokument.bestilling.bestilling.DokumentBestillingManager
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.BestillingSystem
-import no.nav.bidrag.dokument.bestilling.bestilling.dto.BrevKode
+import no.nav.bidrag.dokument.bestilling.bestilling.dto.DokumentMal
 import no.nav.bidrag.dokument.dto.DokumentArkivSystemDto
 import org.springframework.stereotype.Service
 
 @Service
 class DokumentBestillingService(val dokumentBestillingManager: DokumentBestillingManager) {
 
-    fun bestill(bestillingRequest: DokumentBestillingForespørsel, brevKode: BrevKode): DokumentBestillingResponse {
-        val result = dokumentBestillingManager.bestill(bestillingRequest, brevKode)
+    fun bestill(bestillingRequest: DokumentBestillingForespørsel, dokumentMal: DokumentMal): DokumentBestillingResponse {
+        val result = dokumentBestillingManager.bestill(bestillingRequest, dokumentMal)
         return DokumentBestillingResponse(
             dokumentId = result.dokumentReferanse,
             journalpostId = result.journalpostId,

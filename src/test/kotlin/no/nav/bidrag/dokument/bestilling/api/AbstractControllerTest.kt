@@ -10,10 +10,13 @@ import io.mockk.every
 import no.nav.bidrag.commons.web.test.HttpHeaderTestRestTemplate
 import no.nav.bidrag.dokument.bestilling.BidragDokumentBestillingLocalTest
 import no.nav.bidrag.dokument.bestilling.JmsTestConfig
-import no.nav.bidrag.dokument.bestilling.bestilling.dto.BrevKode
+import no.nav.bidrag.dokument.bestilling.bestilling.dto.DokumentMal
 import no.nav.bidrag.dokument.bestilling.bestilling.produksjon.dto.BrevBestilling
 import no.nav.bidrag.dokument.bestilling.consumer.KodeverkConsumer
+import no.nav.bidrag.dokument.bestilling.consumer.SjablonConsumer
 import no.nav.bidrag.dokument.bestilling.consumer.dto.KodeverkResponse
+import no.nav.bidrag.dokument.bestilling.consumer.dto.SjablongerDto
+import no.nav.bidrag.dokument.bestilling.model.typeRef
 import no.nav.bidrag.dokument.bestilling.utils.ANNEN_MOTTAKER
 import no.nav.bidrag.dokument.bestilling.utils.BARN1
 import no.nav.bidrag.dokument.bestilling.utils.BARN2
@@ -46,6 +49,9 @@ abstract class AbstractControllerTest {
     private val port = 0
 
     @MockkBean
+    lateinit var sjablonConsumer: SjablonConsumer
+
+    @MockkBean
     lateinit var kodeverkConsumer: KodeverkConsumer
 
     @Autowired
@@ -70,7 +76,9 @@ abstract class AbstractControllerTest {
         stubUtils.stubHentSaksbehandlerInfo()
         stubUtils.stubHentPersonSpraak()
         val kodeverkResponse = ObjectMapper().findAndRegisterModules().readValue(readFile("api/landkoder.json"), KodeverkResponse::class.java)
+        val sjablonResponse = ObjectMapper().findAndRegisterModules().readValue(readFile("api/sjablon_all.json"), typeRef<SjablongerDto>())
         every { kodeverkConsumer.hentLandkoder() } returns kodeverkResponse
+        every { sjablonConsumer.hentSjablonger() } returns sjablonResponse
     }
 
     @AfterEach
@@ -84,7 +92,7 @@ abstract class AbstractControllerTest {
     }
 
     fun readFile(filePath: String): String {
-        return String(ClassPathResource("testdata/$filePath").inputStream.readAllBytes())
+        return String(ClassPathResource("__files/$filePath").inputStream.readAllBytes())
     }
 
     fun stubDefaultValues() {
@@ -99,7 +107,7 @@ abstract class AbstractControllerTest {
         stubUtils.stubEnhetKontaktInfo(createEnhetKontaktInformasjon())
     }
 
-    fun verifyBrevbestillingHeaders(bestilling: BrevBestilling, brevKode: BrevKode) {
+    fun verifyBrevbestillingHeaders(bestilling: BrevBestilling, dokumentMal: DokumentMal) {
         bestilling.passord shouldBe "pass"
         bestilling.sysid shouldBe "BI12"
         bestilling.arkiver shouldBe "JA"
@@ -108,6 +116,6 @@ abstract class AbstractControllerTest {
         bestilling.skuff shouldBe ""
         bestilling.skriver shouldBe ""
         bestilling.saksbehandler shouldBe SAKSBEHANDLER_IDENT
-        bestilling.malpakke shouldBe "BI01.${brevKode.name}"
+        bestilling.malpakke shouldBe "BI01.${dokumentMal.name}"
     }
 }

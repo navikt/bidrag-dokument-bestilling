@@ -5,38 +5,47 @@ import no.nav.bidrag.dokument.bestilling.api.dto.SamhandlerAdresse
 import no.nav.bidrag.dokument.bestilling.api.dto.SamhandlerInformasjon
 import no.nav.bidrag.dokument.bestilling.consumer.dto.EnhetKontaktInfoDto
 import no.nav.bidrag.dokument.bestilling.consumer.dto.EnhetPostadresseDto
-import no.nav.bidrag.dokument.bestilling.consumer.dto.HentSakResponse
-import no.nav.bidrag.dokument.bestilling.consumer.dto.RolleType
-import no.nav.bidrag.dokument.bestilling.consumer.dto.SakRolle
 import no.nav.bidrag.dokument.dto.OpprettDokumentDto
 import no.nav.bidrag.dokument.dto.OpprettJournalpostResponse
+import no.nav.bidrag.domain.bool.LevdeAdskilt
+import no.nav.bidrag.domain.bool.UkjentPart
 import no.nav.bidrag.domain.enums.Adressetype
+import no.nav.bidrag.domain.enums.Bidragssakstatus
 import no.nav.bidrag.domain.enums.Diskresjonskode
+import no.nav.bidrag.domain.enums.Rolletype
+import no.nav.bidrag.domain.enums.Sakskategori
 import no.nav.bidrag.domain.ident.AktørId
 import no.nav.bidrag.domain.ident.PersonIdent
 import no.nav.bidrag.domain.string.Adresselinje1
 import no.nav.bidrag.domain.string.Adresselinje2
 import no.nav.bidrag.domain.string.Adresselinje3
 import no.nav.bidrag.domain.string.Bruksenhetsnummer
+import no.nav.bidrag.domain.string.Enhetsnummer
 import no.nav.bidrag.domain.string.FulltNavn
 import no.nav.bidrag.domain.string.Kortnavn
 import no.nav.bidrag.domain.string.Landkode2
 import no.nav.bidrag.domain.string.Landkode3
 import no.nav.bidrag.domain.string.Postnummer
 import no.nav.bidrag.domain.string.Poststed
+import no.nav.bidrag.domain.string.Saksnummer
 import no.nav.bidrag.domain.tid.Dødsdato
 import no.nav.bidrag.domain.tid.Fødselsdato
+import no.nav.bidrag.domain.tid.OpprettetDato
 import no.nav.bidrag.transport.person.PersonAdresseDto
 import no.nav.bidrag.transport.person.PersonDto
+import no.nav.bidrag.transport.sak.BidragssakDto
+import no.nav.bidrag.transport.sak.RolleDto
 import java.time.LocalDate
 
 val DEFAULT_TITLE_DOKUMENT = "Tittel på dokumentet"
 val DEFAULT_SAKSNUMMER = "123312321321"
 
 val SAMHANDLER_IDENT = "80000123213"
+val BREVREF = "BIF12321321321"
 
 val SAKSBEHANDLER_IDENT = "Z99999"
 val SAKSBEHANDLER_NAVN = "Saksbehandlersen, Saksbehandler Mellomnavn"
+val SAK_OPPRETTET_DATO = LocalDate.parse("2023-02-02")
 
 val SAMHANDLER_INFO = SamhandlerInformasjon(
     navn = "Samhandler samhandlersen",
@@ -67,52 +76,62 @@ val ANNEN_MOTTAKER = createPersonResponse(
 val BP1 = createPersonResponse(
     "444213123123",
     "Etternavn, BPFornavn Bidragspliktig",
+    kortNavn = "BPFornavn Etternavn",
     fodselsdato = LocalDate.parse("2001-05-06")
 )
 val BM1 = createPersonResponse(
-    "123123123123",
+    "26417806511",
     "Etternavn, BMFornavn Bidragsmottaker",
+    kortNavn = "BMFornavn Etternavn",
     fodselsdato = LocalDate.parse("2000-03-06")
 )
 val BARN1 = createPersonResponse(
-    "3323213",
+    "12461690252",
     "Etternavn, Barn1 Mellomnavn",
+    kortNavn = "Barn1 Etternavn",
     fodselsdato = LocalDate.parse("2020-05-06")
 )
 val BARN2 = createPersonResponse(
-    "333333323213",
+    "02461662466",
     "Etternavn, Barn2 Mellomnavn",
+    kortNavn = "Barn2 Etternavn",
     fodselsdato = LocalDate.parse("2018-03-20")
 )
 
 val BARN3 = createPersonResponse(
-    "412421412421",
+    "27461456400",
     "Etternavn, Barn3",
+    kortNavn = "Barn3 Etternavn",
     fodselsdato = LocalDate.parse("2014-03-20")
 )
 
-fun createSakResponse(): HentSakResponse {
-    return HentSakResponse(
-        saksnummer = DEFAULT_SAKSNUMMER,
-        eierfogd = "4806",
+fun createSakResponse(): BidragssakDto {
+    return BidragssakDto(
+        saksnummer = Saksnummer(DEFAULT_SAKSNUMMER),
+        eierfogd = Enhetsnummer("4806"),
         roller = listOf(
-            SakRolle(
-                foedselsnummer = BM1.ident.verdi,
-                rolleType = RolleType.BM
+            RolleDto(
+                fødselsnummer = BM1.ident,
+                type = Rolletype.BM
             ),
-            SakRolle(
-                foedselsnummer = BP1.ident.verdi,
-                rolleType = RolleType.BP
+            RolleDto(
+                fødselsnummer = BP1.ident,
+                type = Rolletype.BP
             ),
-            SakRolle(
-                foedselsnummer = BARN1.ident.verdi,
-                rolleType = RolleType.BA
+            RolleDto(
+                fødselsnummer = BARN1.ident,
+                type = Rolletype.BA
             ),
-            SakRolle(
-                foedselsnummer = BARN2.ident.verdi,
-                rolleType = RolleType.BA
+            RolleDto(
+                fødselsnummer = BARN2.ident,
+                type = Rolletype.BA
             )
-        )
+        ),
+        saksstatus = Bidragssakstatus.IN,
+        kategori = Sakskategori.N,
+        opprettetDato = OpprettetDato(SAK_OPPRETTET_DATO),
+        levdeAdskilt = LevdeAdskilt(false),
+        ukjentPart = UkjentPart(false)
     )
 }
 
@@ -177,7 +196,7 @@ fun createOpprettJournalpostResponse(
     )
 }
 
-fun createEnhetKontaktInformasjon(): EnhetKontaktInfoDto {
+fun createEnhetKontaktInformasjon(land: String = "Norge"): EnhetKontaktInfoDto {
     return EnhetKontaktInfoDto(
         enhetIdent = "4806",
         enhetNavn = "NAV Familie- og pensjonsytelser Drammen",
@@ -187,7 +206,7 @@ fun createEnhetKontaktInformasjon(): EnhetKontaktInfoDto {
             adresselinje2 = "Linje2",
             postnummer = "3040",
             poststed = "Drammen",
-            land = "Norge"
+            land = land
         )
     )
 }
