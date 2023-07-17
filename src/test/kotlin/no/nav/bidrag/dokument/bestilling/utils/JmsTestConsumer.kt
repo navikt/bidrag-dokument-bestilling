@@ -1,5 +1,6 @@
 package no.nav.bidrag.dokument.bestilling.utils
 
+import mu.KotlinLogging
 import org.apache.activemq.command.ActiveMQTextMessage
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Profile
@@ -10,6 +11,8 @@ import javax.jms.MessageConsumer
 import javax.jms.Queue
 import javax.jms.Session
 import javax.xml.bind.JAXB
+
+private val log = KotlinLogging.logger {}
 
 @Component
 @Profile("!nais")
@@ -29,7 +32,7 @@ class JmsTestConsumer {
         }
     }
 
-    class JmsConnection(jmsTemplate: JmsTemplate, queue: Queue) {
+    class JmsConnection(val jmsTemplate: JmsTemplate, val queue: Queue) {
         var connection: Connection? = null
         var session: Session? = null
         var consumer: MessageConsumer? = null
@@ -42,10 +45,18 @@ class JmsTestConsumer {
         }
 
         fun close() {
+            purge()
             consumer?.close()
             session?.close()
             connection?.close()
         }
+
+        fun purge() {
+            while (!hasNoMessage()) {
+                log.info { "Purged message" }
+            }
+        }
+
 
         fun getMessageAsString(): String {
             val message: ActiveMQTextMessage = consumer?.receive(1000) as ActiveMQTextMessage
