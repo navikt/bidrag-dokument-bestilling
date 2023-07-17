@@ -363,7 +363,6 @@ class VedtakServiceTest {
             vedtakPeriode4Inntekter.hentGrunnlag()!!.beløp shouldBe BigDecimal(438000)
             vedtakPeriode4Inntekter.hentNettoKapital()!!.beløp shouldBe BigDecimal(28000)
 
-
             // Validate barn 2
 
             val barn2StonadPeriode = barn2.stonader[0]
@@ -405,8 +404,8 @@ class VedtakServiceTest {
         }
     }
 
-    fun List<InntektPeriode>.hentGrunnlag() = find{it.beløpType.periodeBeregningsGrunnlag == true}
-    fun List<InntektPeriode>.hentNettoKapital() = find{it.beløpType.nettoKapitalInntekt == true}
+    fun List<InntektPeriode>.hentGrunnlag() = find { it.beløpType.periodeBeregningsGrunnlag == true }
+    fun List<InntektPeriode>.hentNettoKapital() = find { it.beløpType.nettoKapitalInntekt == true }
 
     fun VedtakBarnStonad.vedtakPeriode(fomDato: LocalDate, tomDato: LocalDate? = null, beløp: BigDecimal, resultatKode: String) {
         val vedtakPeriode = hentVedtakPeriodeForDato(fomDato)!!

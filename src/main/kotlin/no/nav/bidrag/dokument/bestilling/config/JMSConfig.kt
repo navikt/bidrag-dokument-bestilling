@@ -18,7 +18,7 @@ import org.springframework.jms.connection.CachingConnectionFactory
 import org.springframework.jms.connection.UserCredentialsConnectionFactoryAdapter
 import org.springframework.jms.core.JmsTemplate
 import org.springframework.oxm.jaxb.Jaxb2Marshaller
-import java.util.Locale
+import java.util.*
 import javax.jms.ConnectionFactory
 import javax.jms.JMSException
 import javax.xml.bind.Marshaller
@@ -34,6 +34,7 @@ class JMSConfig(private val mqProperties: MQProperties) {
         cachingConnectionFactory.targetConnectionFactory = mqQueueConnectionFactory
         return cachingConnectionFactory
     }
+
     @Bean
     @Scope("prototype")
     fun baseJmsTemplate(mqQueueConnectionFactory: ConnectionFactory): JmsTemplate {
@@ -44,12 +45,17 @@ class JMSConfig(private val mqProperties: MQProperties) {
 
     @Bean
     @Throws(JMSException::class)
-    fun onlinebrevTemplate(baseJmsTemplate: JmsTemplate, @Value("\${BREVSERVER_ONLINEBREV_QUEUE}") queueName: String, @Value("\${BREVSERVER_KVITTERING_QUEUE}") replyQueueName: String): JmsTemplate {
+    fun onlinebrevTemplate(
+        baseJmsTemplate: JmsTemplate,
+        @Value("\${BREVSERVER_ONLINEBREV_QUEUE}") queueName: String,
+        @Value("\${BREVSERVER_KVITTERING_QUEUE}") replyQueueName: String
+    ): JmsTemplate {
         baseJmsTemplate.defaultDestinationName = queueName
         val jaxb2Marshaller = Jaxb2Marshaller()
         jaxb2Marshaller.setClassesToBeBound(BrevBestilling::class.java)
         jaxb2Marshaller.setMarshallerProperties(mapOf(Marshaller.JAXB_ENCODING to "ISO-8859-1"))
-        baseJmsTemplate.messageConverter = LoggingMarshallingMessageConverter(jaxb2Marshaller, replyQueueName)
+        baseJmsTemplate.messageConverter =
+            LoggingMarshallingMessageConverter(jaxb2Marshaller, replyQueueName)
         return baseJmsTemplate
     }
 

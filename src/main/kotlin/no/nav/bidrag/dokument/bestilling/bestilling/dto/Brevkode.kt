@@ -28,7 +28,8 @@ enum class StøttetSpråk {
 private val støttetSpråkListeNynorsk = listOf(StøttetSpråk.NB, StøttetSpråk.NN)
 
 enum class DokumentMal(
-    val beskrivelse: String, var brevtype: BrevType,
+    val beskrivelse: String,
+    var brevtype: BrevType,
     val bestillingSystem: BestillingSystemType,
     val batchbrev: Boolean = false,
     val enabled: Boolean = true,
@@ -83,7 +84,7 @@ enum class DokumentMal(
         false,
         enabled = false,
         DokumentDataGrunnlag(vedtak = true),
-        støttetSpråk = støttetSpråkListeNynorsk,
+        støttetSpråk = støttetSpråkListeNynorsk
     ),
     BI01A01(
         "Vedtak bidragsforskudd",
@@ -115,28 +116,28 @@ enum class DokumentMal(
         BrevType.UTGÅENDE,
         BestillingSystem.BREVSERVER,
         false,
-        enabled = false,
+        enabled = false
     ), // MAIN
     BI01S28(
         "Varsel opphør av bidragsforskudd tilbake i tid",
         BrevType.UTGÅENDE,
         BestillingSystem.BREVSERVER,
         false,
-        enabled = false,
+        enabled = false
     ), // TODO: Slettes og erstattes av S27
     BI01S29(
         "Varsel opphør av bidragsforskudd tilbake i tid",
         BrevType.UTGÅENDE,
         BestillingSystem.BREVSERVER,
         false,
-        enabled = false,
-    ), //TODO: Slettes og erstattes av S27
+        enabled = false
+    ), // TODO: Slettes og erstattes av S27
     BI01S30(
         "Varsel opphør av bidragsforskudd tilbake i tid",
         BrevType.UTGÅENDE,
         BestillingSystem.BREVSERVER,
         false,
-        enabled = false,
+        enabled = false
     ), // TODO: Slettes og erstattes av S27
 
     // Brev ikke støttet av bestilling
@@ -229,7 +230,11 @@ enum class DokumentMal(
         false
     ),
     BI01B01(
-        "Vedtak barnebidrag", BrevType.UTGÅENDE, BestillingSystem.BREVSERVER, false, false,
+        "Vedtak barnebidrag",
+        BrevType.UTGÅENDE,
+        BestillingSystem.BREVSERVER,
+        false,
+        false,
         støttetSpråk = listOf(StøttetSpråk.NB, StøttetSpråk.EN, StøttetSpråk.FR)
     ),
     BI01B04(
@@ -382,7 +387,11 @@ enum class DokumentMal(
         false
     ),
     BI01B02(
-        "Vedtak tilleggsbidrag", BrevType.UTGÅENDE, BestillingSystem.BREVSERVER, false, false,
+        "Vedtak tilleggsbidrag",
+        BrevType.UTGÅENDE,
+        BestillingSystem.BREVSERVER,
+        false,
+        false,
         støttetSpråk = listOf(StøttetSpråk.NB, StøttetSpråk.EN, StøttetSpråk.DE)
     ),
     BI01S05(
@@ -643,7 +652,11 @@ enum class DokumentMal(
         false
     ),
     BI01A02(
-        "Vedtak tilbakekreving", BrevType.UTGÅENDE, BestillingSystem.BREVSERVER, false, false,
+        "Vedtak tilbakekreving",
+        BrevType.UTGÅENDE,
+        BestillingSystem.BREVSERVER,
+        false,
+        false,
         støttetSpråk = støttetSpråkListeNynorsk
     ),
     BI01S54(
@@ -724,7 +737,7 @@ enum class DokumentMal(
         false
     ),
 
-    //Batchbrev
+    // Batchbrev
     BI01B05(
         "VEDTAK AUTOMATISK JUSTERING BARNEBIDRAG",
         BrevType.UTGÅENDE,
@@ -738,5 +751,5 @@ enum class DokumentMal(
         BestillingSystem.BREVSERVER,
         true,
         false
-    ),
+    )
 }

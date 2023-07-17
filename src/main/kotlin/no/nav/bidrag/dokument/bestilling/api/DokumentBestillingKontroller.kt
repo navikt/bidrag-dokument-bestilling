@@ -36,10 +36,12 @@ class DokumentBestillingKontroller(val dokumentBestillingService: DokumentBestil
         security = [SecurityRequirement(name = "bearer-key")]
     )
     @ApiResponses(
-        value = [ApiResponse(
-            responseCode = "400",
-            description = "Dokument ble bestilt med ugyldig data"
-        )]
+        value = [
+            ApiResponse(
+                responseCode = "400",
+                description = "Dokument ble bestilt med ugyldig data"
+            )
+        ]
     )
     fun bestillBrev(
         @RequestBody bestillingRequest: DokumentBestillingForespørsel,
