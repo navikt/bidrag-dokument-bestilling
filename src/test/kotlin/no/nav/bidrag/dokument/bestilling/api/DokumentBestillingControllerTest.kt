@@ -52,7 +52,6 @@ import java.time.LocalDate
 fun BidragBarn.hentInntektPerioder(periodeFraTom: PeriodeFraTom) =
     inntektPerioder.filter { it.fomDato == periodeFraTom.fraDato && it.tomDato == periodeFraTom.tomDato }
 
-@Disabled("")
 class DokumentBestillingControllerTest : AbstractControllerTest() {
 
     @Test
