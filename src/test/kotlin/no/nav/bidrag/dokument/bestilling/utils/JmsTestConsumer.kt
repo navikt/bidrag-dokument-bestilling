@@ -29,10 +29,20 @@ class JmsTestConsumer {
         }
     }
 
+    fun reset() {
+        val conn = JmsConnection(onlinebrevTemplate, onlineBrevQueue)
+        try {
+            conn.reset()
+        } finally {
+            conn.close()
+        }
+    }
+
     class JmsConnection(jmsTemplate: JmsTemplate, queue: Queue) {
         var connection: Connection? = null
         var session: Session? = null
         var consumer: MessageConsumer? = null
+
         init {
             connection = jmsTemplate.connectionFactory?.createConnection()
             connection?.start()
@@ -44,6 +54,12 @@ class JmsTestConsumer {
             consumer?.close()
             session?.close()
             connection?.close()
+        }
+
+        fun reset() {
+            while (!hasNoMessage()) {
+
+            }
         }
 
         fun getMessageAsString(): String {
