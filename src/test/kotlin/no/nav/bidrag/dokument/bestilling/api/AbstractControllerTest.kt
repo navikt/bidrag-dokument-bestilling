@@ -82,7 +82,6 @@ abstract class AbstractControllerTest {
             .readValue(readFile("api/sjablon_all.json"), typeRef<SjablongerDto>())
         every { kodeverkConsumer.hentLandkoder() } returns kodeverkResponse
         every { sjablonConsumer.hentSjablonger() } returns sjablonResponse
-        jmsTestConsumer.reset()
     }
 
     @AfterEach
