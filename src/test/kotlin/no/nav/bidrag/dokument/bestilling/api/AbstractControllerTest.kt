@@ -37,6 +37,7 @@ import org.springframework.core.io.ClassPathResource
 import org.springframework.jms.core.JmsTemplate
 import org.springframework.test.context.ActiveProfiles
 import javax.jms.Queue
+
 @ActiveProfiles("test")
 @SpringBootTest(
     classes = [BidragDokumentBestillingLocalTest::class, StubUtils::class, JmsTestConfig::class],
@@ -75,8 +76,10 @@ abstract class AbstractControllerTest {
         stubUtils.stubEnhetKontaktInfo()
         stubUtils.stubHentSaksbehandlerInfo()
         stubUtils.stubHentPersonSpraak()
-        val kodeverkResponse = ObjectMapper().findAndRegisterModules().readValue(readFile("api/landkoder.json"), KodeverkResponse::class.java)
-        val sjablonResponse = ObjectMapper().findAndRegisterModules().readValue(readFile("api/sjablon_all.json"), typeRef<SjablongerDto>())
+        val kodeverkResponse = ObjectMapper().findAndRegisterModules()
+            .readValue(readFile("api/landkoder.json"), KodeverkResponse::class.java)
+        val sjablonResponse = ObjectMapper().findAndRegisterModules()
+            .readValue(readFile("api/sjablon_all.json"), typeRef<SjablongerDto>())
         every { kodeverkConsumer.hentLandkoder() } returns kodeverkResponse
         every { sjablonConsumer.hentSjablonger() } returns sjablonResponse
     }
