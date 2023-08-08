@@ -61,7 +61,7 @@ enum class DokumentMal(
         BestillingSystem.BREVSERVER,
         kreverDataGrunnlag = DokumentDataGrunnlag(roller = false, enhetKontaktInfo = false)
     ),
-    BI01S10("KOPIFORSIDE T", BrevType.UTGÅENDE, BestillingSystem.BREVSERVER),
+    BI01S10("Oversendelse av informasjon", BrevType.UTGÅENDE, BestillingSystem.BREVSERVER),
     BI01S67("ADRESSEFORESPØRSEL", BrevType.UTGÅENDE, BestillingSystem.BREVSERVER),
     BI01S02(
         "Fritekstbrev",
@@ -96,7 +96,7 @@ enum class DokumentMal(
         støttetSpråk = støttetSpråkListeNynorsk
     ),
     BI01A04(
-        "Revurdering forskudd settes ned",
+        "Endring av bidragsforskudd",
         BrevType.UTGÅENDE,
         BestillingSystem.BREVSERVER,
         false,
@@ -378,7 +378,7 @@ enum class DokumentMal(
         BestillingSystem.BREVSERVER,
         false,
         false
-    ),
+    ), // Erstattes av BI01S52
     BI01S13(
         "Du har søkt om barnebidrag",
         BrevType.UTGÅENDE,
@@ -494,7 +494,7 @@ enum class DokumentMal(
         false
     ),
     BI01S45(
-        "Varsel opphør av bidragsforskudd tilbake i tid",
+        "Varsel om ny beregning av bidragsforskudd og varsel om mulig tilbakebetaling",
         BrevType.UTGÅENDE,
         BestillingSystem.BREVSERVER,
         false,
