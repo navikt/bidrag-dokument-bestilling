@@ -366,19 +366,19 @@ enum class DokumentMal(
         false
     ),
     BI01S52(
-        "Forhåndsvarsel om mottatt søknad om oppfostringsbidrag - orientering",
+        "Forhåndsvarsel om mottatt søknad om oppfostringsbidrag",
         BrevType.UTGÅENDE,
         BestillingSystem.BREVSERVER,
         false,
         false
     ),
     BI01S53(
-        "Forhåndsvarsel om mottatt søknad om oppfostringsbidrag - varsel",
+        "Forhåndsvarsel om mottatt søknad om oppfostringsbidrag",
         BrevType.UTGÅENDE,
         BestillingSystem.BREVSERVER,
         false,
         false
-    ),
+    ), // Erstattes av BI01S52
     BI01S13(
         "Du har søkt om barnebidrag",
         BrevType.UTGÅENDE,
