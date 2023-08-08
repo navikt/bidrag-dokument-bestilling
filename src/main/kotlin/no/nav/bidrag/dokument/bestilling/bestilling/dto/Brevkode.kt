@@ -61,7 +61,7 @@ enum class DokumentMal(
         BestillingSystem.BREVSERVER,
         kreverDataGrunnlag = DokumentDataGrunnlag(roller = false, enhetKontaktInfo = false)
     ),
-    BI01S10("KOPIFORSIDE T", BrevType.UTGÅENDE, BestillingSystem.BREVSERVER),
+    BI01S10("Oversendelse av informasjon", BrevType.UTGÅENDE, BestillingSystem.BREVSERVER),
     BI01S67("ADRESSEFORESPØRSEL", BrevType.UTGÅENDE, BestillingSystem.BREVSERVER),
     BI01S02(
         "Fritekstbrev",
