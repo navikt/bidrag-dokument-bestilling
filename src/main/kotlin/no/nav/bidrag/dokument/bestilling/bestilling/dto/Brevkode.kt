@@ -96,7 +96,7 @@ enum class DokumentMal(
         støttetSpråk = støttetSpråkListeNynorsk
     ),
     BI01A04(
-        "Endring av bidragsforskudd",
+        "Revurdering av bidragsforskudd",
         BrevType.UTGÅENDE,
         BestillingSystem.BREVSERVER,
         false,
@@ -112,7 +112,7 @@ enum class DokumentMal(
         enabled = false
     ),
     BI01S27(
-        "Varsel opphør av bidragsforskudd tilbake i tid",
+        "Varsel om ny beregning av bidragsforskudd og varsel om mulig tilbakebetaling",
         BrevType.UTGÅENDE,
         BestillingSystem.BREVSERVER,
         false,
