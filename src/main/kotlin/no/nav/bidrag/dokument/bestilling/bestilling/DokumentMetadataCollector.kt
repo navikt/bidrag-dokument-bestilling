@@ -218,7 +218,8 @@ class DokumentMetadataCollector(
                 navn = mottaker.kortnavn?.verdi ?: mottaker.navn?.verdi ?: "",
                 rolle = hentRolle(mottaker.ident.verdi),
                 spraak = forespørsel.mottaker?.språk
-                    ?: personService.hentSpråk(mottaker.ident.verdi),
+                    ?: mottaker.ident.verdi?.let { personService.hentSpråk(mottaker.ident.verdi) }
+                    ?: "NB",
                 adresse = if (adresse != null) {
                     val postnummerSted =
                         if (adresse.postnummer?.verdi.isNullOrEmpty() && adresse.poststed?.verdi.isNullOrEmpty()) {
@@ -227,17 +228,21 @@ class DokumentMetadataCollector(
                             "${adresse.postnummer ?: ""} ${adresse.poststed ?: ""}".trim()
                         }
                     val landNavn =
-                        adresse.land3.verdi.let { kodeverkService.hentLandFullnavnForKode(it) }
+                        kodeverkService.hentLandFullnavnForKode(adresse.land3.verdi.ifBlank { adresse.land.verdi })
                     val adresselinje3 = if (forespørsel.erMottakerSamhandler()) {
                         "${adresse.postnummer} ${adresse.adresselinje3?.verdi?.take(25) ?: ""}".trim()
                     } else {
-                        adresse.adresselinje3?.verdi ?: postnummerSted
+                        adresse.adresselinje3?.verdi?.ifBlank { postnummerSted } ?: postnummerSted
                     }
+                    val adresselinje4 =
+                        if (!adresse.land3.verdi.isEmpty() && adresse.land3.verdi != LANDKODE3_NORGE && !forespørsel.erMottakerSamhandler()) landNavn
+                        else if (!forespørsel.erMottakerSamhandler() && adresse.adresselinje3?.verdi?.isNotBlank() == true) postnummerSted
+                        else null
                     Adresse(
                         adresselinje1 = adresse.adresselinje1?.verdi ?: "",
                         adresselinje2 = adresse.adresselinje2?.verdi,
                         adresselinje3 = adresselinje3,
-                        adresselinje4 = if (!adresse.land3.verdi.isEmpty() && adresse.land3.verdi != LANDKODE3_NORGE && !forespørsel.erMottakerSamhandler()) landNavn else null,
+                        adresselinje4 = adresselinje4,
                         bruksenhetsnummer = if (adresse.bruksenhetsnummer?.verdi == BRUKSHENETSNUMMER_STANDARD) null else adresse.bruksenhetsnummer?.verdi,
                         poststed = adresse.poststed?.verdi,
                         postnummer = adresse.postnummer?.verdi,

@@ -13,6 +13,7 @@ import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
 import io.mockk.junit5.MockKExtension
 import no.nav.bidrag.dokument.bestilling.api.dto.DokumentBestillingForespørsel
+import no.nav.bidrag.dokument.bestilling.api.dto.MottakerAdresseTo
 import no.nav.bidrag.dokument.bestilling.api.dto.MottakerTo
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.DokumentBestilling
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.DokumentMal
@@ -103,14 +104,27 @@ internal class DokumentMetadataCollectorTest {
 
     @BeforeEach
     fun initMocks() {
-        val kodeverkResponse = ObjectMapper().findAndRegisterModules().readValue(readFile("api/landkoder.json"), KodeverkResponse::class.java)
-        val sjablonResponse = ObjectMapper().findAndRegisterModules().readValue(readFile("api/sjablon_all.json"), typeRef<SjablongerDto>())
+        val kodeverkResponse = ObjectMapper().findAndRegisterModules()
+            .readValue(readFile("api/landkoder.json"), KodeverkResponse::class.java)
+        val kodeverkISO2Response = ObjectMapper().findAndRegisterModules()
+            .readValue(readFile("api/landkoderISO2.json"), KodeverkResponse::class.java)
+        val sjablonResponse = ObjectMapper().findAndRegisterModules()
+            .readValue(readFile("api/sjablon_all.json"), typeRef<SjablongerDto>())
         every { kodeverkConsumer.hentLandkoder() } returns kodeverkResponse
+        every { kodeverkConsumer.hentLandkoderISO2() } returns kodeverkISO2Response
         every { sjablonConsumer.hentSjablonger() } returns sjablonResponse
         metadataCollector = withMetadataCollector()
     }
 
-    private fun withMetadataCollector() = DokumentMetadataCollector(personService, sakService, kodeverkService, vedtakService, sjablongService, saksbehandlerInfoManager, organisasjonService)
+    private fun withMetadataCollector() = DokumentMetadataCollector(
+        personService,
+        sakService,
+        kodeverkService,
+        vedtakService,
+        sjablongService,
+        saksbehandlerInfoManager,
+        organisasjonService
+    )
 
     @AfterEach
     fun resetMocks() {
@@ -125,9 +139,17 @@ internal class DokumentMetadataCollectorTest {
         every { personService.hentSpråk(any()) } returns "NB"
         every { personService.hentPersonAdresse(any(), any()) } returns createPostAdresseResponse()
 
-        every { organisasjonService.hentEnhetKontaktInfo(any(), any()) } returns createEnhetKontaktInformasjon()
+        every {
+            organisasjonService.hentEnhetKontaktInfo(
+                any(),
+                any()
+            )
+        } returns createEnhetKontaktInformasjon()
         every { sakService.hentSak(any()) } returns createSakResponse()
-        every { saksbehandlerInfoManager.hentSaksbehandler() } returns Saksbehandler(SAKSBEHANDLER_IDENT, SAKSBEHANDLER_NAVN)
+        every { saksbehandlerInfoManager.hentSaksbehandler() } returns Saksbehandler(
+            SAKSBEHANDLER_IDENT,
+            SAKSBEHANDLER_NAVN
+        )
         every { saksbehandlerInfoManager.hentSaksbehandlerBrukerId() } returns SAKSBEHANDLER_IDENT
     }
 
@@ -234,7 +256,10 @@ internal class DokumentMetadataCollectorTest {
     fun `should add saksbehandler from request when available`() {
         mockDefaultValues()
         val saksbehandlerId = "Z123213"
-        every { saksbehandlerInfoManager.hentSaksbehandler(any()) } returns Saksbehandler(saksbehandlerId, "Navn saksbehandler")
+        every { saksbehandlerInfoManager.hentSaksbehandler(any()) } returns Saksbehandler(
+            saksbehandlerId,
+            "Navn saksbehandler"
+        )
 
         val request = DokumentBestillingForespørsel(
             mottakerId = BM1.ident.verdi,
@@ -650,7 +675,11 @@ internal class DokumentMetadataCollectorTest {
             spraak = "NB",
             samhandlerInformasjon = null
         )
-        shouldThrowWithMessage<HttpStatusCodeException>("400 Fant ikke sak med id $saksnummer") { mapToBestillingsdata(request) }
+        shouldThrowWithMessage<HttpStatusCodeException>("400 Fant ikke sak med id $saksnummer") {
+            mapToBestillingsdata(
+                request
+            )
+        }
     }
 
     @Test
@@ -956,7 +985,10 @@ internal class DokumentMetadataCollectorTest {
         val barn1 = BARN1.copy(fødselsdato = Fødselsdato.of(2020, 1, 2))
         val barn2 = BARN2.copy(fødselsdato = Fødselsdato.of(2020, 5, 15))
         val barn3 = BARN3.copy(fødselsdato = Fødselsdato.of(2021, 7, 20))
-        val barn4 = BARN3.copy(ident = PersonIdent("1231231233333333"), fødselsdato = Fødselsdato.of(2022, 3, 15))
+        val barn4 = BARN3.copy(
+            ident = PersonIdent("1231231233333333"),
+            fødselsdato = Fødselsdato.of(2022, 3, 15)
+        )
         val sak = createSakResponse().copy(
             roller = listOf(
                 RolleDto(
@@ -1015,7 +1047,52 @@ internal class DokumentMetadataCollectorTest {
         }
     }
 
-    private fun mapToBestillingsdata(request: DokumentBestillingForespørsel, dokumentMal: DokumentMal = DokumentMal.BI01S02): DokumentBestilling {
+    @Test
+    fun `should map with only adresse and not mottakerid`() {
+        mockDefaultValues()
+        val request = DokumentBestillingForespørsel(
+            gjelderId = BM1.ident.verdi,
+            saksnummer = DEFAULT_SAKSNUMMER,
+            tittel = DEFAULT_TITLE_DOKUMENT,
+            enhet = "4806",
+            spraak = "NB",
+            mottaker = MottakerTo(
+                navn = "Mottaker Mottakersen",
+                språk = "NB",
+                adresse = MottakerAdresseTo(
+                    adresselinje1 = "adresselinje 1",
+                    adresselinje2 = "adresselinje 2",
+                    adresselinje3 = "adresselinje 3",
+                    postnummer = "3030",
+                    poststed = "Drammen",
+                    landkode = "NO",
+                )
+            ),
+        )
+        val bestilling = mapToBestillingsdata(request)
+        assertSoftly {
+            bestilling.mottaker?.spraak shouldBe "NB"
+            bestilling.mottaker?.navn shouldBe "Mottaker Mottakersen"
+            bestilling.mottaker?.fodselsnummer shouldBe ""
+            bestilling.mottaker?.rolle shouldBe null
+            bestilling.mottaker?.fodselsdato shouldBe null
+            bestilling.mottaker?.adresse?.adresselinje1 shouldBe "adresselinje 1"
+            bestilling.mottaker?.adresse?.adresselinje2 shouldBe "adresselinje 2"
+            bestilling.mottaker?.adresse?.adresselinje3 shouldBe "adresselinje 3"
+            bestilling.mottaker?.adresse?.adresselinje4 shouldBe "3030 Drammen"
+            bestilling.mottaker?.adresse?.bruksenhetsnummer shouldBe null
+            bestilling.mottaker?.adresse?.postnummer shouldBe "3030"
+            bestilling.mottaker?.adresse?.poststed shouldBe "Drammen"
+            bestilling.mottaker?.adresse?.landkode shouldBe "NO"
+            bestilling.mottaker?.adresse?.landkode3 shouldBe ""
+            bestilling.mottaker?.adresse?.land shouldBe "NORGE"
+        }
+    }
+
+    private fun mapToBestillingsdata(
+        request: DokumentBestillingForespørsel,
+        dokumentMal: DokumentMal = DokumentMal.BI01S02
+    ): DokumentBestilling {
         return metadataCollector.collect(request, dokumentMal)
     }
 }
