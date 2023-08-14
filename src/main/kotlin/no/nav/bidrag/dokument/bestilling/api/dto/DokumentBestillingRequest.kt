@@ -1,7 +1,6 @@
 package no.nav.bidrag.dokument.bestilling.api.dto
 
 import io.swagger.v3.oas.annotations.media.Schema
-import no.nav.bidrag.dokument.bestilling.model.BestillingManglerMottaker
 import no.nav.bidrag.dokument.bestilling.model.FeilSpråkKoder
 import no.nav.bidrag.dokument.bestilling.model.Ident
 import no.nav.bidrag.dokument.bestilling.model.Saksbehandler
@@ -13,7 +12,10 @@ import no.nav.bidrag.dokument.dto.DokumentArkivSystemDto
 data class DokumentBestillingForespørsel(
     val mottakerId: Ident? = null,
     val mottaker: MottakerTo? = null,
-    @Schema(description = "Informasjon samhandler hvis mottakerid er en samhandlerid. Påkrevd hvis mottaker er en samhandler", deprecated = true)
+    @Schema(
+        description = "Informasjon samhandler hvis mottakerid er en samhandlerid. Påkrevd hvis mottaker er en samhandler",
+        deprecated = true
+    )
     val samhandlerInformasjon: SamhandlerInformasjon? = null,
     @Schema(description = "Informasjon om saksbehandler som skal brukes ved opprettelse av dokument")
     val saksbehandler: Saksbehandler? = null,
@@ -31,9 +33,11 @@ data class DokumentBestillingForespørsel(
     val spraak: String? = null,
     val språk: String? = null
 ) {
-    val mottakerIdent get() = mottaker?.ident ?: mottakerId ?: throw BestillingManglerMottaker()
+    val mottakerIdent get(): String? = mottaker?.ident ?: mottakerId
     fun hentSpråk() = språk ?: spraak
-    fun erMottakerSamhandler(): Boolean = mottaker?.ident?.erSamhandler ?: mottakerIdent.erSamhandler
+    fun erMottakerSamhandler(): Boolean =
+        (mottaker?.ident?.erSamhandler ?: mottakerIdent?.erSamhandler) == true
+
     fun harMottakerKontaktinformasjon() = mottaker?.adresse != null
     fun hentRiktigSpråkkode(): String {
         val språk = hentSpråk()
@@ -50,18 +54,19 @@ data class DokumentBestillingForespørsel(
 }
 
 data class MottakerTo(
-    val ident: Ident,
+    val ident: Ident? = null,
     val navn: String? = null,
     val språk: String? = null,
     val adresse: MottakerAdresseTo? = null
 )
+
 data class MottakerAdresseTo(
     val adresselinje1: String,
     val adresselinje2: String? = null,
     val adresselinje3: String? = null,
     val bruksenhetsnummer: String? = null,
     @Schema(description = "Lankode må være i ISO 3166-1 alpha-2 format") val landkode: String,
-    @Schema(description = "Lankode må være i ISO 3166-1 alpha-3 format") val landkode3: String,
+    @Schema(description = "Lankode må være i ISO 3166-1 alpha-3 format") val landkode3: String? = null,
     val postnummer: String? = null,
     val poststed: String? = null
 )
@@ -71,6 +76,7 @@ data class DokumentBestillingResponse(
     val journalpostId: String,
     val arkivSystem: DokumentArkivSystemDto? = null
 )
+
 data class SamhandlerAdresse(
     val adresselinje1: String? = null,
     val adresselinje2: String? = null,
