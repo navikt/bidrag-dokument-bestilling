@@ -19,7 +19,7 @@ import no.nav.bidrag.dokument.bestilling.consumer.dto.isKode6
 import no.nav.bidrag.dokument.bestilling.model.BRUKSHENETSNUMMER_STANDARD
 import no.nav.bidrag.dokument.bestilling.model.FantIkkeEnhetException
 import no.nav.bidrag.dokument.bestilling.model.Ident
-import no.nav.bidrag.dokument.bestilling.model.LANDKODE3_NORGE
+import no.nav.bidrag.dokument.bestilling.model.LANDNAVN_NORGE
 import no.nav.bidrag.dokument.bestilling.model.ManglerGjelderException
 import no.nav.bidrag.dokument.bestilling.model.Saksbehandler
 import no.nav.bidrag.dokument.bestilling.model.SpråkKoder
@@ -229,13 +229,15 @@ class DokumentMetadataCollector(
                         }
                     val landNavn =
                         kodeverkService.hentLandFullnavnForKode(adresse.land3.verdi.ifBlank { adresse.land.verdi })
-                    val adresselinje3 = if (forespørsel.erMottakerSamhandler()) {
-                        "${adresse.postnummer} ${adresse.adresselinje3?.verdi?.take(25) ?: ""}".trim()
-                    } else {
-                        adresse.adresselinje3?.verdi?.ifBlank { postnummerSted } ?: postnummerSted
-                    }
+                    val adresselinje3 =
+                        if (forespørsel.erMottakerSamhandler() && !adresse.adresselinje3?.verdi.isNullOrEmpty()) {
+                            "${adresse.postnummer} ${adresse.adresselinje3?.verdi?.take(25) ?: ""}".trim()
+                        } else {
+                            adresse.adresselinje3?.verdi?.ifBlank { postnummerSted }
+                                ?: postnummerSted
+                        }
                     val adresselinje4 =
-                        if (!adresse.land3.verdi.isEmpty() && adresse.land3.verdi != LANDKODE3_NORGE && !forespørsel.erMottakerSamhandler()) landNavn
+                        if (landNavn != LANDNAVN_NORGE && !forespørsel.erMottakerSamhandler()) landNavn
                         else if (!forespørsel.erMottakerSamhandler() && adresse.adresselinje3?.verdi?.isNotBlank() == true) postnummerSted
                         else null
                     Adresse(
