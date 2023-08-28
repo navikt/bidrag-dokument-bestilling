@@ -976,6 +976,82 @@ internal class DokumentMetadataCollectorTest {
             bestilling.roller.bidragsmottaker shouldNotBe null
             bestilling.roller.barn shouldHaveSize 1
         }
+
+        @Test
+        fun `skal legge til alle barn`() {
+            mockDefaultValues()
+            val saksnummer = "22222"
+            val sak = createSakResponse().copy(
+                roller = listOf(
+                    RolleDto(
+                        fødselsnummer = BM1.ident,
+                        type = Rolletype.BM
+                    ),
+                    RolleDto(
+                        fødselsnummer = BARN1.ident,
+                        type = Rolletype.BA
+                    ),
+                    RolleDto(
+                        fødselsnummer = BARN2.ident,
+                        type = Rolletype.BA
+                    )
+                )
+            )
+            every { sakService.hentSak(saksnummer) } returns sak
+
+            val request = DokumentBestillingForespørsel(
+                mottakerId = BM1.ident.verdi,
+                saksnummer = saksnummer,
+                tittel = DEFAULT_TITLE_DOKUMENT,
+                enhet = "4806",
+                spraak = "NB",
+                samhandlerInformasjon = null
+            )
+            val bestilling = mapToBestillingsdata(request)
+            bestilling.roller.bidragspliktig shouldBe null
+            bestilling.roller.bidragsmottaker shouldNotBe null
+            bestilling.roller.barn shouldHaveSize 2
+            bestilling.roller.barn[1].fodselsnummer shouldBe BARN1.ident.verdi
+            bestilling.roller.barn[0].fodselsnummer shouldBe BARN2.ident.verdi
+        }
+
+        @Test
+        fun `skal bare legge til barn hvis forespørsel inneholder barnIBehandling`() {
+            mockDefaultValues()
+            val saksnummer = "22222"
+            val sak = createSakResponse().copy(
+                roller = listOf(
+                    RolleDto(
+                        fødselsnummer = BM1.ident,
+                        type = Rolletype.BM
+                    ),
+                    RolleDto(
+                        fødselsnummer = BARN1.ident,
+                        type = Rolletype.BA
+                    ),
+                    RolleDto(
+                        fødselsnummer = BARN2.ident,
+                        type = Rolletype.BA
+                    )
+                )
+            )
+            every { sakService.hentSak(saksnummer) } returns sak
+
+            val request = DokumentBestillingForespørsel(
+                mottakerId = BM1.ident.verdi,
+                saksnummer = saksnummer,
+                tittel = DEFAULT_TITLE_DOKUMENT,
+                enhet = "4806",
+                spraak = "NB",
+                samhandlerInformasjon = null,
+                barnIBehandling = listOf(BARN1.ident.verdi)
+            )
+            val bestilling = mapToBestillingsdata(request)
+            bestilling.roller.bidragspliktig shouldBe null
+            bestilling.roller.bidragsmottaker shouldNotBe null
+            bestilling.roller.barn shouldHaveSize 1
+            bestilling.roller.barn[0].fodselsnummer shouldBe BARN1.ident.verdi
+        }
     }
 
     @Test

@@ -31,7 +31,8 @@ data class DokumentBestillingForespørsel(
     val enhet: String? = null,
     @Schema(deprecated = true)
     val spraak: String? = null,
-    val språk: String? = null
+    val språk: String? = null,
+    val barnIBehandling: List<String> = emptyList()
 ) {
     val mottakerIdent get(): String? = mottaker?.ident ?: mottakerId
     fun hentSpråk() = språk ?: spraak
