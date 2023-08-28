@@ -429,7 +429,7 @@ class DokumentBestillingControllerTest : AbstractControllerTest() {
                 message.brev?.parter?.bmdatodod shouldBe null
                 message.brev?.parter?.bpdatodod shouldBe null
 
-                message.brev?.barnISak?.shouldHaveAtLeastSize(2)
+                message.brev?.barnISak?.shouldHaveSize(2)
 
                 val barnISak1 = message.brev?.barnISak?.get(0)!!
                 barnISak1.fDato shouldBe BARN2.fødselsdato?.verdi
@@ -603,6 +603,54 @@ class DokumentBestillingControllerTest : AbstractControllerTest() {
     }
 
     @Test
+    fun `skal produsere XML for fritekstsbrev med bare barnIBehandling verdi fra forespørsel`() {
+        stubDefaultValues()
+        val enhetKontaktInfo = createEnhetKontaktInformasjon()
+        val bmAdresse = createPostAdresseResponse()
+        val dokumentMal = DokumentMal.BI01S02
+        val tittel = "Tittel på dokument"
+        val saksnummer = "123213"
+        val mottakerId = BM1.ident
+        val gjelderId = BP1.ident
+
+        stubUtils.stubHentAdresse(postAdresse = bmAdresse)
+        stubUtils.stubEnhetKontaktInfo(enhetKontaktInfo)
+
+        stubUtils.stubOpprettJournalpost(createOpprettJournalpostResponse(dokumentReferanse = "DOKREF_1"))
+
+        val request = DokumentBestillingForespørsel(
+            mottakerId = mottakerId.verdi,
+            gjelderId = gjelderId.verdi,
+            saksnummer = saksnummer,
+            tittel = tittel,
+            enhet = "4806",
+            spraak = "NB",
+            barnIBehandling = listOf(BARN1.ident.verdi)
+
+        )
+
+        jmsTestConsumer.withOnlinebrev {
+            val response = httpHeaderTestRestTemplate.exchange(
+                "${rootUri()}/bestill/${dokumentMal.name}",
+                HttpMethod.POST,
+                HttpEntity(request),
+                DokumentBestillingResponse::class.java
+            )
+
+            response.statusCode shouldBe HttpStatus.OK
+
+            val message: BrevBestilling = this.getMessageAsObject(BrevBestilling::class.java)!!
+            assertSoftly {
+
+                message.brev?.barnISak?.shouldHaveSize(1)
+
+                message.brev?.barnISak?.get(0)?.fDato shouldBe BARN1.fødselsdato?.verdi
+                message.brev?.barnISak?.get(0)?.fnr shouldBe BARN1.ident!!.verdi
+            }
+        }
+    }
+
+    @Test
     fun `skal produsere XML for fritekstsbrev for utenlandsk adresse and engelsk språk`() {
         stubDefaultValues()
         val enhetKontaktInfo = createEnhetKontaktInformasjon(land = "USA")
@@ -620,8 +668,7 @@ class DokumentBestillingControllerTest : AbstractControllerTest() {
             saksnummer = "123213",
             tittel = "Tittel på dokument",
             enhet = "4806",
-            spraak = "EN"
-
+            spraak = "EN",
         )
 
         jmsTestConsumer.withOnlinebrev {

@@ -139,12 +139,14 @@ class DokumentMetadataCollector(
         }
 
         val soknadsbarn = mutableListOf<String>()
-        forespørsel.vedtakId?.let {
+        if (!forespørsel.vedtakId.isNullOrEmpty()) {
             soknadsbarn.addAll(
                 vedtakService.hentVedtakSoknadsbarnFodselsnummer(
-                    it
+                    forespørsel.vedtakId
                 )
             )
+        } else {
+            soknadsbarn.addAll(forespørsel.barnIBehandling)
         }
 
         val barn = sak.roller.filter { it.type == Rolletype.BA }
