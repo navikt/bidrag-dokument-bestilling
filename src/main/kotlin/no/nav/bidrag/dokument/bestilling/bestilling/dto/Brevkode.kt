@@ -178,7 +178,7 @@ enum class DokumentMal(
     ),
     BI01P17(
         "Innstilling til klageinstans",
-        BrevType.UTGÅENDE,
+        BrevType.NOTAT,
         BestillingSystem.BREVSERVER,
         false,
         false
