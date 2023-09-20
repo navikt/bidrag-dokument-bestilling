@@ -57,7 +57,6 @@ class JmsTestConsumer {
             }
         }
 
-
         fun getMessageAsString(): String {
             val message: ActiveMQTextMessage = consumer?.receive(1000) as ActiveMQTextMessage
 //            val byteArr = ByteArray(message.bodyLength.toInt())

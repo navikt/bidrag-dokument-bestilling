@@ -589,14 +589,14 @@ class DokumentBestillingControllerTest : AbstractControllerTest() {
                 stubUtils.Verify().verifyHentPersonCalled(BARN2.ident.verdi)
                 stubUtils.Verify().verifyOpprettJournalpostCalledWith(
                     "{\"skalFerdigstilles\":false," +
-                            "\"tittel\":\"$tittel\"," +
-                            "\"gjelderIdent\":\"${gjelderId.verdi}\"," +
-                            "\"avsenderMottaker\":{\"navn\":\"${BM1.kortnavn!!.verdi}\",\"ident\":\"${mottakerId.verdi}\",\"type\":\"FNR\",\"adresse\":null}," +
-                            "\"dokumenter\":[{\"tittel\":\"$tittel\",\"brevkode\":\"${dokumentMal.name}\"}]," +
-                            "\"tilknyttSaker\":[\"$saksnummer\"]," +
-                            "\"journalposttype\":\"UTGÅENDE\"," +
-                            "\"journalførendeEnhet\":\"4806\"," +
-                            "\"saksbehandlerIdent\":\"Z99999\"}"
+                        "\"tittel\":\"$tittel\"," +
+                        "\"gjelderIdent\":\"${gjelderId.verdi}\"," +
+                        "\"avsenderMottaker\":{\"navn\":\"${BM1.kortnavn!!.verdi}\",\"ident\":\"${mottakerId.verdi}\",\"type\":\"FNR\",\"adresse\":null}," +
+                        "\"dokumenter\":[{\"tittel\":\"$tittel\",\"brevkode\":\"${dokumentMal.name}\"}]," +
+                        "\"tilknyttSaker\":[\"$saksnummer\"]," +
+                        "\"journalposttype\":\"UTGÅENDE\"," +
+                        "\"journalførendeEnhet\":\"4806\"," +
+                        "\"saksbehandlerIdent\":\"Z99999\"}"
                 )
             }
         }
@@ -641,7 +641,6 @@ class DokumentBestillingControllerTest : AbstractControllerTest() {
 
             val message: BrevBestilling = this.getMessageAsObject(BrevBestilling::class.java)!!
             assertSoftly {
-
                 message.brev?.barnISak?.shouldHaveSize(1)
 
                 message.brev?.barnISak?.get(0)?.fDato shouldBe BARN1.fødselsdato?.verdi
@@ -668,7 +667,7 @@ class DokumentBestillingControllerTest : AbstractControllerTest() {
             saksnummer = "123213",
             tittel = "Tittel på dokument",
             enhet = "4806",
-            spraak = "EN",
+            spraak = "EN"
         )
 
         jmsTestConsumer.withOnlinebrev {
