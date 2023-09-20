@@ -71,7 +71,6 @@ class KodeverkConsumer(
             ?.get(DEFAULT_CACHE, KodeverkResponse::class.java)
     }
 
-
     companion object {
         private val LOGGER = LoggerFactory.getLogger(KodeverkConsumer::class.java)
         private const val DEFAULT_CACHE = "DEFAULT"

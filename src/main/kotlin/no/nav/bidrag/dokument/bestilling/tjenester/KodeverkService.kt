@@ -9,7 +9,7 @@ class KodeverkService(val kodeverkConsumer: KodeverkConsumer) {
     fun hentLandFullnavnForKode(landkode: String): String? {
         return hentLandFullnavnForKodeISO3(landkode) ?: hentLandFullnavnForKodeISO2(landkode)
     }
-    
+
     fun hentLandFullnavnForKodeISO3(landkode: String): String? {
         val landkoder = kodeverkConsumer.hentLandkoder()
         return landkoder?.hentFraKode(landkode)?.hentNorskNavn()

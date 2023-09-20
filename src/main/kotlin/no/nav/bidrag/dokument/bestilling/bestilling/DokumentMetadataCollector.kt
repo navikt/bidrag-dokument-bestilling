@@ -153,26 +153,38 @@ class DokumentMetadataCollector(
         barn.filter { it.fødselsnummer != null && (soknadsbarn.isEmpty() || soknadsbarn.contains(it.fødselsnummer?.verdi)) }
             .forEach {
                 val barnInfo =
-                    if (it.fødselsnummer!!.verdi.erDødfødt) null else personService.hentPerson(
-                        it.fødselsnummer!!.verdi,
-                        "Barn"
-                    )
+                    if (it.fødselsnummer!!.verdi.erDødfødt) {
+                        null
+                    } else {
+                        personService.hentPerson(
+                            it.fødselsnummer!!.verdi,
+                            "Barn"
+                        )
+                    }
                 if (barnInfo == null || !barnInfo.isDod()) {
                     roller.add(
                         Barn(
                             fodselsnummer = it.fødselsnummer!!.verdi,
                             navn = barnInfo?.let {
-                                if (barnInfo.isKode6()) hentKode6NavnBarn(
-                                    barnInfo,
-                                    forespørsel
-                                ) else barnInfo.fornavnEtternavn()
+                                if (barnInfo.isKode6()) {
+                                    hentKode6NavnBarn(
+                                        barnInfo,
+                                        forespørsel
+                                    )
+                                } else {
+                                    barnInfo.fornavnEtternavn()
+                                }
                             } ?: "",
                             fodselsdato = barnInfo?.let { hentFodselsdato(barnInfo) },
                             fornavn = barnInfo?.let {
-                                if (barnInfo.isKode6()) hentKode6NavnBarn(
-                                    barnInfo,
-                                    forespørsel
-                                ) else barnInfo.fornavn?.verdi
+                                if (barnInfo.isKode6()) {
+                                    hentKode6NavnBarn(
+                                        barnInfo,
+                                        forespørsel
+                                    )
+                                } else {
+                                    barnInfo.fornavn?.verdi
+                                }
                             },
                             fodselsnummerRm = it.rmFødselsnummer()?.verdi
                         )
@@ -239,9 +251,13 @@ class DokumentMetadataCollector(
                                 ?: postnummerSted
                         }
                     val adresselinje4 =
-                        if (landNavn != LANDNAVN_NORGE && !forespørsel.erMottakerSamhandler()) landNavn
-                        else if (!forespørsel.erMottakerSamhandler() && adresse.adresselinje3?.verdi?.isNotBlank() == true) postnummerSted
-                        else null
+                        if (landNavn != LANDNAVN_NORGE && !forespørsel.erMottakerSamhandler()) {
+                            landNavn
+                        } else if (!forespørsel.erMottakerSamhandler() && adresse.adresselinje3?.verdi?.isNotBlank() == true) {
+                            postnummerSted
+                        } else {
+                            null
+                        }
                     Adresse(
                         adresselinje1 = adresse.adresselinje1?.verdi ?: "",
                         adresselinje2 = adresse.adresselinje2?.verdi,
@@ -312,10 +328,14 @@ class DokumentMetadataCollector(
 
     private fun hentBidragsmottaker(): PersonDto? {
         val bmFnr = hentIdentForRolle(Rolletype.BM)
-        return if (!bmFnr.isNullOrEmpty()) personService.hentPerson(
-            bmFnr,
-            "Bidragsmottaker"
-        ) else null
+        return if (!bmFnr.isNullOrEmpty()) {
+            personService.hentPerson(
+                bmFnr,
+                "Bidragsmottaker"
+            )
+        } else {
+            null
+        }
     }
 
     private fun hentBidragspliktig(): PersonDto? {
@@ -325,18 +345,26 @@ class DokumentMetadataCollector(
 
     private fun hentBidragspliktigAdresse(): PersonAdresseDto? {
         val fnr = hentIdentForRolle(Rolletype.BP)
-        return if (!fnr.isNullOrEmpty()) personService.hentPersonAdresse(
-            fnr,
-            "Bidragspliktig adresse"
-        ) else null
+        return if (!fnr.isNullOrEmpty()) {
+            personService.hentPersonAdresse(
+                fnr,
+                "Bidragspliktig adresse"
+            )
+        } else {
+            null
+        }
     }
 
     private fun hentBidragsmottakerAdresse(): PersonAdresseDto? {
         val fnr = hentIdentForRolle(Rolletype.BM)
-        return if (!fnr.isNullOrEmpty()) personService.hentPersonAdresse(
-            fnr,
-            "Bidragsmottaker adresse"
-        ) else null
+        return if (!fnr.isNullOrEmpty()) {
+            personService.hentPersonAdresse(
+                fnr,
+                "Bidragsmottaker adresse"
+            )
+        } else {
+            null
+        }
     }
 
     private fun hentMottaker(forespørsel: DokumentBestillingForespørsel): PersonDto {
@@ -375,7 +403,7 @@ class DokumentMetadataCollector(
 
     private fun hentGjelderFraRoller(): Ident? {
         return hentIdentForRolle(Rolletype.BM) ?: hentIdentForRolle(Rolletype.BP)
-        ?: hentIdentForRolle(Rolletype.BA)
+            ?: hentIdentForRolle(Rolletype.BA)
     }
 
     private fun hentSaksbehandler(request: DokumentBestillingForespørsel): Saksbehandler {

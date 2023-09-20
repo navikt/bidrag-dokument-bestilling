@@ -1141,9 +1141,9 @@ internal class DokumentMetadataCollectorTest {
                     adresselinje3 = "adresselinje 3",
                     postnummer = "3030",
                     poststed = "Drammen",
-                    landkode = "NO",
+                    landkode = "NO"
                 )
-            ),
+            )
         )
         val bestilling = mapToBestillingsdata(request)
         assertSoftly {
