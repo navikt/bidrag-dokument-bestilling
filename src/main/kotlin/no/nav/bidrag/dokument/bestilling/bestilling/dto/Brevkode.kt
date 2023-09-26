@@ -223,7 +223,7 @@ enum class DokumentMal(
 //    ),
     BI01B10("Opphørsvedtak", BrevType.UTGÅENDE, BestillingSystem.BREVSERVER, false, false),
     BI01S07(
-        "Fastsettelse eget tiltak varsel til BP",
+        "Varsel om begrenset fastsettelse av barnebidrag",
         BrevType.UTGÅENDE,
         BestillingSystem.BREVSERVER,
         false,
@@ -260,7 +260,7 @@ enum class DokumentMal(
         false
     ),
     BI01S06(
-        "Varsel eget tiltak nyfødt barn",
+        "Varsel om fastsettelse av barnebidrag fra barnets fødsel",
         BrevType.UTGÅENDE,
         BestillingSystem.BREVSERVER,
         false,
@@ -295,7 +295,7 @@ enum class DokumentMal(
         false
     ),
     BI01S35(
-        "Endring varsel eget tiltak pga forholds fordel",
+        "Varsel om endring av barnebidraget på grunn av forholdsmessig fordeling",
         BrevType.UTGÅENDE,
         BestillingSystem.BREVSERVER,
         false,
@@ -309,14 +309,14 @@ enum class DokumentMal(
         false
     ),
     BI01S46(
-        "Varsel oppfostringsbidrag forholdsmessig fordeling",
+        "Varsel om endring av oppfostringsbidraget på grunn av forholdsmessig fordeling",
         BrevType.UTGÅENDE,
         BestillingSystem.BREVSERVER,
         false,
         false
     ),
     BI01S62(
-        "Fastsettelse bidrag barnetillegg varsel partene",
+        "Varsel om fastsettelse av barnebidrag til den bidragspliktiges barnetillegg",
         BrevType.UTGÅENDE,
         BestillingSystem.BREVSERVER,
         false,
