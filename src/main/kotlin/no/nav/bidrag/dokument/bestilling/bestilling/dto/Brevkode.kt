@@ -223,7 +223,7 @@ enum class DokumentMal(
 //    ),
     BI01B10("Opphørsvedtak", BrevType.UTGÅENDE, BestillingSystem.BREVSERVER, false, false),
     BI01S07(
-        "Varsel om begrenset fastsettelse av barnebidrag",
+        "Varsel om begrenset revurdering av barnebidrag",
         BrevType.UTGÅENDE,
         BestillingSystem.BREVSERVER,
         false,
@@ -539,7 +539,7 @@ enum class DokumentMal(
 //    ),
     BI01J50("Klage - vedtak gebyr", BrevType.UTGÅENDE, BestillingSystem.BREVSERVER, false, false),
     BI01S03(
-        "NAV har mottatt søknad om barnebidrag etter fylte 18 år",
+        "NAV har mottatt søknad om barnebidrag etter fylte 18 år - forhåndsvarsel",
         BrevType.UTGÅENDE,
         BestillingSystem.BREVSERVER,
         false,
@@ -702,7 +702,7 @@ enum class DokumentMal(
         false
     ),
     BI01S24(
-        "NAV har mottatt søknad om barnebidrag etter fylte 18 år",
+        "NAV har mottatt søknad om barnebidrag etter fylte 18 år - innhenting av opplysninger",
         BrevType.UTGÅENDE,
         BestillingSystem.BREVSERVER,
         false,
