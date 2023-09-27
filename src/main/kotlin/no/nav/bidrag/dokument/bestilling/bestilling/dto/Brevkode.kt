@@ -223,7 +223,7 @@ enum class DokumentMal(
 //    ),
     BI01B10("Opphørsvedtak", BrevType.UTGÅENDE, BestillingSystem.BREVSERVER, false, false),
     BI01S07(
-        "Varsel om begrenset fastsettelse av barnebidrag",
+        "Varsel om begrenset revurdering av barnebidrag",
         BrevType.UTGÅENDE,
         BestillingSystem.BREVSERVER,
         false,
