@@ -338,14 +338,14 @@ enum class DokumentMal(
 //        false
 //    ),
     BI01S22(
-        "Revurd bidrag pga FO til BM",
+        "Revurdering bidrag pga bidragsforskudd til bidragsmottaker",
         BrevType.UTGÅENDE,
         BestillingSystem.BREVSERVER,
         false,
         false
     ),
     BI01S23(
-        "Revurd bidrag pga FO til BP",
+        "Revurdering bidrag pga bidragsforskudd til bidragspliktig",
         BrevType.UTGÅENDE,
         BestillingSystem.BREVSERVER,
         false,
@@ -660,35 +660,35 @@ enum class DokumentMal(
         støttetSpråk = støttetSpråkListeNynorsk
     ),
     BI01S54(
-        "Varsel om tilbakekreving av bidragsforskudd",
+        "Varsel om tilbakekreving av bidragsforskudd - inntekt",
         BrevType.UTGÅENDE,
         BestillingSystem.BREVSERVER,
         false,
         false
     ),
     BI01S55(
-        "Varsel tilb.kr. paragraf 2 - partene bor sammen",
+        "Varsel tilbakekreving av bidragsforskudd - partene bor sammen",
         BrevType.UTGÅENDE,
         BestillingSystem.BREVSERVER,
         false,
         false
     ),
     BI01S56(
-        "Varsel tilb.kr. paragraf 2 ikke opphold i Riket",
+        "Varsel tilbakekreving av bidragsforskudd - ikke opphold i Riket",
         BrevType.UTGÅENDE,
         BestillingSystem.BREVSERVER,
         false,
         false
     ),
     BI01S57(
-        "Varsel tilb.kr. NAV paragraf 3 direkte betalinger",
+        "Varsel tilbakekreving av bidragsforskudd - direkte betalinger",
         BrevType.UTGÅENDE,
         BestillingSystem.BREVSERVER,
         false,
         false
     ),
     BI01S58(
-        "Varsel tilb.kr. NAV paragraf 6 ikke omsorg",
+        "Varsel tilbakekreving av bidragsforskudd - ikke omsorg",
         BrevType.UTGÅENDE,
         BestillingSystem.BREVSERVER,
         false,
