@@ -338,14 +338,14 @@ enum class DokumentMal(
 //        false
 //    ),
     BI01S22(
-        "Revurdering bidrag pga FO til BM",
+        "Revurdering bidrag pga bidragsforskudd til bidragsmottaker",
         BrevType.UTGÅENDE,
         BestillingSystem.BREVSERVER,
         false,
         false
     ),
     BI01S23(
-        "Revurdering bidrag pga FO til BP",
+        "Revurdering bidrag pga bidragsforskudd til bidragspliktig",
         BrevType.UTGÅENDE,
         BestillingSystem.BREVSERVER,
         false,
