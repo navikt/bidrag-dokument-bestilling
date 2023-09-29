@@ -5,7 +5,7 @@ BIDRAG_SAK_URL: http://localhost:${wiremock.server.port}/sak
 BIDRAG_VEDTAK_URL: http://localhost:${wiremock.server.port}/vedtak
 SJABLON_URL: http://localhost:${wiremock.server.port}/sjablon
 KODEVERK_URL: http://localhost:${wiremock.server.port}/kodeverk
-
+BUCKET_NAME: bidrag-dokument-bestilling-local
 AZURE_OPENID_CONFIG_ISSUER: http://localhost:${mock-oauth2-server.port}/aad
 AZURE_APP_TENANT_ID: 12321321-123213-3213123
 AZURE_APP_CLIENT_ID: asdasd-sadas-ddas-qwe

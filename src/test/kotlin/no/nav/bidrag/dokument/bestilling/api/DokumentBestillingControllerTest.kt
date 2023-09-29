@@ -12,8 +12,9 @@ import no.nav.bidrag.commons.web.EnhetFilter.Companion.X_ENHET_HEADER
 import no.nav.bidrag.dokument.bestilling.api.dto.DokumentBestillingForespørsel
 import no.nav.bidrag.dokument.bestilling.api.dto.DokumentBestillingResponse
 import no.nav.bidrag.dokument.bestilling.api.dto.MottakerTo
-import no.nav.bidrag.dokument.bestilling.bestilling.dto.DokumentMal
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.PeriodeFraTom
+import no.nav.bidrag.dokument.bestilling.bestilling.dto.alleDokumentmaler
+import no.nav.bidrag.dokument.bestilling.bestilling.dto.hentDokumentMal
 import no.nav.bidrag.dokument.bestilling.bestilling.produksjon.dto.BidragBarn
 import no.nav.bidrag.dokument.bestilling.bestilling.produksjon.dto.BrevBestilling
 import no.nav.bidrag.dokument.bestilling.consumer.dto.fornavnEtternavn
@@ -64,11 +65,12 @@ class DokumentBestillingControllerTest : AbstractControllerTest() {
         )
 
         response.body?.forEach {
-            it shouldBeIn DokumentMal.values().map { bk -> bk.name }
-            it shouldNotBeIn DokumentMal.values().filter { bk -> !bk.enabled }.map { bk -> bk.name }
+            it shouldBeIn alleDokumentmaler.map { bk -> bk.kode }
+            it shouldNotBeIn alleDokumentmaler.filter { bk -> !bk.enabled }
+                .map { bk -> bk.kode }
         }
 
-        response.body?.shouldHaveSize(DokumentMal.values().filter { it.enabled }.size)
+        response.body?.shouldHaveSize(alleDokumentmaler.filter { it.enabled }.size)
     }
 
     @Test
@@ -80,7 +82,7 @@ class DokumentBestillingControllerTest : AbstractControllerTest() {
         stubUtils.stubHentVedtak("vedtak_forskudd_flere_perioder_186.json")
         val enhetKontaktInfo = createEnhetKontaktInformasjon()
         val bmAdresse = createPostAdresseResponse()
-        val dokumentMal = DokumentMal.BI01A01
+        val dokumentMal = hentDokumentMal("BI01A01D")!!
         val tittel = "Tittel på dokument"
         val saksnummer = "123213"
         val mottakerId = BM1.ident
@@ -103,7 +105,7 @@ class DokumentBestillingControllerTest : AbstractControllerTest() {
 
         jmsTestConsumer.withOnlinebrev {
             val response = httpHeaderTestRestTemplate.exchange(
-                "${rootUri()}/bestill/${dokumentMal.name}",
+                "${rootUri()}/bestill/${dokumentMal.kode}",
                 HttpMethod.POST,
                 HttpEntity(request),
                 DokumentBestillingResponse::class.java
@@ -125,7 +127,7 @@ class DokumentBestillingControllerTest : AbstractControllerTest() {
         stubUtils.stubHentVedtak("vedtak_forskudd_flere_perioder_186.json")
         val enhetKontaktInfo = createEnhetKontaktInformasjon()
         val bmAdresse = createPostAdresseResponse()
-        val dokumentMal = DokumentMal.BI01A01
+        val dokumentMal = hentDokumentMal("BI01A01D")!!
         val tittel = "Tittel på dokument"
         val saksnummer = "123213"
         val mottakerId = BM1.ident
@@ -148,7 +150,7 @@ class DokumentBestillingControllerTest : AbstractControllerTest() {
 
         jmsTestConsumer.withOnlinebrev {
             val response = httpHeaderTestRestTemplate.exchange(
-                "${rootUri()}/bestill/${dokumentMal.name}",
+                "${rootUri()}/bestill/${dokumentMal.kode}",
                 HttpMethod.POST,
                 HttpEntity(request),
                 DokumentBestillingResponse::class.java
@@ -384,7 +386,7 @@ class DokumentBestillingControllerTest : AbstractControllerTest() {
         stubUtils.stubHentVedtak("vedtak_forskudd_flere_perioder_og_barn_192.json")
         val enhetKontaktInfo = createEnhetKontaktInformasjon()
         val bmAdresse = createPostAdresseResponse()
-        val dokumentMal = DokumentMal.BI01A01
+        val dokumentMal = hentDokumentMal("BI01A01")!!
         val tittel = "Tittel på dokument"
         val saksnummer = "123213"
         val mottakerId = BM1.ident
@@ -407,7 +409,7 @@ class DokumentBestillingControllerTest : AbstractControllerTest() {
 
         jmsTestConsumer.withOnlinebrev {
             val response = httpHeaderTestRestTemplate.exchange(
-                "${rootUri()}/bestill/${dokumentMal.name}",
+                "${rootUri()}/bestill/${dokumentMal.kode}",
                 HttpMethod.POST,
                 HttpEntity(request),
                 DokumentBestillingResponse::class.java
@@ -506,7 +508,7 @@ class DokumentBestillingControllerTest : AbstractControllerTest() {
         stubDefaultValues()
         val enhetKontaktInfo = createEnhetKontaktInformasjon()
         val bmAdresse = createPostAdresseResponse()
-        val dokumentMal = DokumentMal.BI01S02
+        val dokumentMal = hentDokumentMal("BI01S02")!!
         val tittel = "Tittel på dokument"
         val saksnummer = "123213"
         val mottakerId = BM1.ident
@@ -529,7 +531,7 @@ class DokumentBestillingControllerTest : AbstractControllerTest() {
 
         jmsTestConsumer.withOnlinebrev {
             val response = httpHeaderTestRestTemplate.exchange(
-                "${rootUri()}/bestill/${dokumentMal.name}",
+                "${rootUri()}/bestill/${dokumentMal.kode}",
                 HttpMethod.POST,
                 HttpEntity(request),
                 DokumentBestillingResponse::class.java
@@ -589,14 +591,14 @@ class DokumentBestillingControllerTest : AbstractControllerTest() {
                 stubUtils.Verify().verifyHentPersonCalled(BARN2.ident.verdi)
                 stubUtils.Verify().verifyOpprettJournalpostCalledWith(
                     "{\"skalFerdigstilles\":false," +
-                        "\"tittel\":\"$tittel\"," +
-                        "\"gjelderIdent\":\"${gjelderId.verdi}\"," +
-                        "\"avsenderMottaker\":{\"navn\":\"${BM1.kortnavn!!.verdi}\",\"ident\":\"${mottakerId.verdi}\",\"type\":\"FNR\",\"adresse\":null}," +
-                        "\"dokumenter\":[{\"tittel\":\"$tittel\",\"brevkode\":\"${dokumentMal.name}\"}]," +
-                        "\"tilknyttSaker\":[\"$saksnummer\"]," +
-                        "\"journalposttype\":\"UTGÅENDE\"," +
-                        "\"journalførendeEnhet\":\"4806\"," +
-                        "\"saksbehandlerIdent\":\"Z99999\"}"
+                            "\"tittel\":\"$tittel\"," +
+                            "\"gjelderIdent\":\"${gjelderId.verdi}\"," +
+                            "\"avsenderMottaker\":{\"navn\":\"${BM1.kortnavn!!.verdi}\",\"ident\":\"${mottakerId.verdi}\",\"type\":\"FNR\",\"adresse\":null}," +
+                            "\"dokumenter\":[{\"tittel\":\"$tittel\",\"brevkode\":\"${dokumentMal.kode}\"}]," +
+                            "\"tilknyttSaker\":[\"$saksnummer\"]," +
+                            "\"journalposttype\":\"UTGÅENDE\"," +
+                            "\"journalførendeEnhet\":\"4806\"," +
+                            "\"saksbehandlerIdent\":\"Z99999\"}"
                 )
             }
         }
@@ -607,7 +609,7 @@ class DokumentBestillingControllerTest : AbstractControllerTest() {
         stubDefaultValues()
         val enhetKontaktInfo = createEnhetKontaktInformasjon()
         val bmAdresse = createPostAdresseResponse()
-        val dokumentMal = DokumentMal.BI01S02
+        val dokumentMal = hentDokumentMal("BI01S02")!!
         val tittel = "Tittel på dokument"
         val saksnummer = "123213"
         val mottakerId = BM1.ident
@@ -631,7 +633,7 @@ class DokumentBestillingControllerTest : AbstractControllerTest() {
 
         jmsTestConsumer.withOnlinebrev {
             val response = httpHeaderTestRestTemplate.exchange(
-                "${rootUri()}/bestill/${dokumentMal.name}",
+                "${rootUri()}/bestill/${dokumentMal.kode}",
                 HttpMethod.POST,
                 HttpEntity(request),
                 DokumentBestillingResponse::class.java
@@ -654,7 +656,7 @@ class DokumentBestillingControllerTest : AbstractControllerTest() {
         stubDefaultValues()
         val enhetKontaktInfo = createEnhetKontaktInformasjon(land = "USA")
         val bmAdresse = createPostAdresseResponseUtenlandsk()
-        val dokumentMal = DokumentMal.BI01S02
+        val dokumentMal = hentDokumentMal("BI01S02")!!
         stubUtils.stubHentPersonSpraak("en")
         stubUtils.stubHentAdresse(postAdresse = bmAdresse)
         stubUtils.stubEnhetKontaktInfo(enhetKontaktInfo)
@@ -672,7 +674,7 @@ class DokumentBestillingControllerTest : AbstractControllerTest() {
 
         jmsTestConsumer.withOnlinebrev {
             val response = httpHeaderTestRestTemplate.exchange(
-                "${rootUri()}/bestill/${dokumentMal.name}",
+                "${rootUri()}/bestill/${dokumentMal.kode}",
                 HttpMethod.POST,
                 HttpEntity(request),
                 DokumentBestillingResponse::class.java
@@ -704,7 +706,7 @@ class DokumentBestillingControllerTest : AbstractControllerTest() {
 
     @Test
     fun `should use title from brevkode if title missing in request`() {
-        val dokumentMal = DokumentMal.BI01S02
+        val dokumentMal = hentDokumentMal("BI01S02")!!
         stubDefaultValues()
 
         stubUtils.stubOpprettJournalpost(createOpprettJournalpostResponse(dokumentReferanse = "DOKREF_1"))
@@ -720,7 +722,7 @@ class DokumentBestillingControllerTest : AbstractControllerTest() {
 
         jmsTestConsumer.withOnlinebrev {
             val response = httpHeaderTestRestTemplate.exchange(
-                "${rootUri()}/bestill/${dokumentMal.name}",
+                "${rootUri()}/bestill/${dokumentMal.kode}",
                 HttpMethod.POST,
                 HttpEntity(request, headers),
                 DokumentBestillingResponse::class.java
@@ -736,7 +738,7 @@ class DokumentBestillingControllerTest : AbstractControllerTest() {
 
     @Test
     fun `should produse XML for brevkode notat`() {
-        val dokumentMal = DokumentMal.BI01X01
+        val dokumentMal = hentDokumentMal("BI01X01")!!
         stubDefaultValues()
 
         stubUtils.stubOpprettJournalpost(createOpprettJournalpostResponse(dokumentReferanse = "DOKREF_1"))
@@ -749,7 +751,7 @@ class DokumentBestillingControllerTest : AbstractControllerTest() {
 
         jmsTestConsumer.withOnlinebrev {
             val response = httpHeaderTestRestTemplate.exchange(
-                "${rootUri()}/bestill/${dokumentMal.name}",
+                "${rootUri()}/bestill/${dokumentMal.kode}",
                 HttpMethod.POST,
                 HttpEntity(request),
                 DokumentBestillingResponse::class.java
@@ -758,7 +760,7 @@ class DokumentBestillingControllerTest : AbstractControllerTest() {
             response.statusCode shouldBe HttpStatus.OK
 
             val message = this.getMessageAsObject(BrevBestilling::class.java)!!
-            message.malpakke shouldContain dokumentMal.name
+            message.malpakke shouldContain dokumentMal.kode
 
             stubUtils.Verify().verifyOpprettJournalpostCalledWith("\"journalposttype\":\"NOTAT\"")
             stubUtils.Verify()
@@ -768,7 +770,7 @@ class DokumentBestillingControllerTest : AbstractControllerTest() {
 
     @Test
     fun `should produse XML without adresse when samhandler mottaker has not adresse`() {
-        val dokumentMal = DokumentMal.BI01S02
+        val dokumentMal = hentDokumentMal("BI01S02")!!
         stubDefaultValues()
         stubUtils.stubHentAdresse(postAdresse = null, status = HttpStatus.NO_CONTENT)
 
@@ -785,7 +787,7 @@ class DokumentBestillingControllerTest : AbstractControllerTest() {
 
         jmsTestConsumer.withOnlinebrev {
             val response = httpHeaderTestRestTemplate.exchange(
-                "${rootUri()}/bestill/${dokumentMal.name}",
+                "${rootUri()}/bestill/${dokumentMal.kode}",
                 HttpMethod.POST,
                 HttpEntity(request),
                 DokumentBestillingResponse::class.java
@@ -805,7 +807,7 @@ class DokumentBestillingControllerTest : AbstractControllerTest() {
 
     @Test
     fun `should produse XML without adresse when mottaker has not adresse`() {
-        val dokumentMal = DokumentMal.BI01S02
+        val dokumentMal = hentDokumentMal("BI01S02")!!
         stubDefaultValues()
         stubUtils.stubHentAdresse(postAdresse = null, status = HttpStatus.NO_CONTENT)
 
@@ -821,7 +823,7 @@ class DokumentBestillingControllerTest : AbstractControllerTest() {
 
         jmsTestConsumer.withOnlinebrev {
             val response = httpHeaderTestRestTemplate.exchange(
-                "${rootUri()}/bestill/${dokumentMal.name}",
+                "${rootUri()}/bestill/${dokumentMal.kode}",
                 HttpMethod.POST,
                 HttpEntity(request),
                 DokumentBestillingResponse::class.java
@@ -841,7 +843,7 @@ class DokumentBestillingControllerTest : AbstractControllerTest() {
 
     @Test
     fun `should not send XML when opprett journalpost fails`() {
-        val dokumentMal = DokumentMal.BI01X01
+        val dokumentMal = hentDokumentMal("BI01S02")!!
         stubDefaultValues()
 
         stubUtils.stubOpprettJournalpost(status = HttpStatus.BAD_REQUEST)
@@ -854,7 +856,7 @@ class DokumentBestillingControllerTest : AbstractControllerTest() {
 
         jmsTestConsumer.withOnlinebrev {
             val response = httpHeaderTestRestTemplate.exchange(
-                "${rootUri()}/bestill/${dokumentMal.name}",
+                "${rootUri()}/bestill/${dokumentMal.kode}",
                 HttpMethod.POST,
                 HttpEntity(request),
                 DokumentBestillingResponse::class.java
@@ -893,7 +895,7 @@ class DokumentBestillingControllerTest : AbstractControllerTest() {
 
     @Test
     fun `should produse XML with mottaker role RM`() {
-        val dokumentMal = DokumentMal.BI01X01
+        val dokumentMal = hentDokumentMal("BI01X01")!!
         val sak = createSakResponse().copy(
             roller = listOf(
                 RolleDto(
@@ -931,7 +933,7 @@ class DokumentBestillingControllerTest : AbstractControllerTest() {
 
         jmsTestConsumer.withOnlinebrev {
             val response = httpHeaderTestRestTemplate.exchange(
-                "${rootUri()}/bestill/${dokumentMal.name}",
+                "${rootUri()}/bestill/${dokumentMal.kode}",
                 HttpMethod.POST,
                 HttpEntity(request),
                 DokumentBestillingResponse::class.java

@@ -69,7 +69,7 @@ class DokumentMetadataCollector(
         forespørsel: DokumentBestillingForespørsel,
         dokumentMal: DokumentMal
     ): DokumentBestilling {
-        val kreverDataGrunnlag = dokumentMal.kreverDataGrunnlag
+        val kreverDataGrunnlag = dokumentMal.kreverDataGrunnlag!!
         this.sak = sakService.hentSak(forespørsel.saksnummer) ?: fantIkkeSak(forespørsel.saksnummer)
         this.enhet = forespørsel.enhet ?: sak.eierfogd?.verdi ?: "9999"
         return DokumentBestilling(
@@ -403,7 +403,7 @@ class DokumentMetadataCollector(
 
     private fun hentGjelderFraRoller(): Ident? {
         return hentIdentForRolle(Rolletype.BM) ?: hentIdentForRolle(Rolletype.BP)
-            ?: hentIdentForRolle(Rolletype.BA)
+        ?: hentIdentForRolle(Rolletype.BA)
     }
 
     private fun hentSaksbehandler(request: DokumentBestillingForespørsel): Saksbehandler {

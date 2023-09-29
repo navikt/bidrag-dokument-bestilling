@@ -110,7 +110,7 @@ abstract class AbstractControllerTest {
         stubUtils.stubEnhetKontaktInfo(createEnhetKontaktInformasjon())
     }
 
-    fun verifyBrevbestillingHeaders(bestilling: BrevBestilling, dokumentMal: DokumentMal) {
+    fun verifyBrevbestillingHeaders(bestilling: BrevBestilling, dokumentMalEnum: DokumentMal) {
         bestilling.passord shouldBe "pass"
         bestilling.sysid shouldBe "BI12"
         bestilling.arkiver shouldBe "JA"
@@ -119,6 +119,6 @@ abstract class AbstractControllerTest {
         bestilling.skuff shouldBe ""
         bestilling.skriver shouldBe ""
         bestilling.saksbehandler shouldBe SAKSBEHANDLER_IDENT
-        bestilling.malpakke shouldBe "BI01.${dokumentMal.name}"
+        bestilling.malpakke shouldBe "BI01.${dokumentMalEnum.kode}"
     }
 }
