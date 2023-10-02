@@ -50,17 +50,19 @@ enum class StøttetSpråk {
 }
 
 
-interface DokumentMal {
-    val kode: String
-    val beskrivelse: String
-    val tittel: String
-    val dokumentType: DokumentType
-    val bestillingSystem: BestillingSystemType
-    val batchbrev: Boolean
-    val enabled: Boolean
-    val kreverDataGrunnlag: DokumentDataGrunnlag?
-    val innholdType: InnholdType
-    val redigerbar: Boolean
+abstract class DokumentMal(
+    open val kode: String,
+    open val beskrivelse: String,
+    open val tittel: String,
+    open val dokumentType: DokumentType,
+    open val bestillingSystem: BestillingSystemType,
+    open val batchbrev: Boolean,
+    open val enabled: Boolean,
+    open val kreverDataGrunnlag: DokumentDataGrunnlag?,
+    open val innholdType: InnholdType,
+    open val redigerbar: Boolean,
+) {
+    val statiskInnhold get() = kreverDataGrunnlag == null && !redigerbar
 }
 
 
@@ -111,10 +113,24 @@ open class DokumentMalBucket(
     override val kreverDataGrunnlag: DokumentDataGrunnlag? = null,
     override val bestillingSystem: BestillingSystemType = BestillingSystem.BUCKET,
     open val folderName: String,
+    open val filnavn: String? = null,
     open val tilhørerEnheter: List<String> = emptyList(),
     open val språk: StøttetSpråk = StøttetSpråk.NB
-) : DokumentMal {
-    val filePath get() = "$folderName/$kode.pdf"
+) : DokumentMal(
+    kode = kode,
+    beskrivelse = beskrivelse,
+    tittel = tittel,
+    dokumentType = dokumentType,
+    bestillingSystem = bestillingSystem,
+    batchbrev = batchbrev,
+    enabled = enabled,
+    kreverDataGrunnlag = kreverDataGrunnlag,
+    innholdType = innholdType,
+    redigerbar = redigerbar
+) {
+
+    private val bucketFilename get() = filnavn?.substringBefore(".pdf") ?: kode
+    val filePath get() = "$folderName/$bucketFilename.pdf"
 }
 
 data class DokumentMalBrevserver(
@@ -129,7 +145,18 @@ data class DokumentMalBrevserver(
     override val kreverDataGrunnlag: DokumentDataGrunnlag = DokumentDataGrunnlag(),
     override val bestillingSystem: BestillingSystemType = BestillingSystem.BREVSERVER,
     val støttetSpråk: List<StøttetSpråk> = listOf(StøttetSpråk.NB),
-) : DokumentMal
+) : DokumentMal(
+    kode = kode,
+    beskrivelse = beskrivelse,
+    tittel = tittel,
+    dokumentType = dokumentType,
+    bestillingSystem = bestillingSystem,
+    batchbrev = batchbrev,
+    enabled = enabled,
+    kreverDataGrunnlag = kreverDataGrunnlag,
+    innholdType = innholdType,
+    redigerbar = redigerbar
+)
 
 private inline fun <reified T> lastDokumentMalerFraFil(filnavn: String): List<T> {
     return try {

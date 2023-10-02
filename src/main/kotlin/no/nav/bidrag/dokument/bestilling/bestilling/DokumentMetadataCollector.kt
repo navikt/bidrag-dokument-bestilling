@@ -390,7 +390,7 @@ class DokumentMetadataCollector(
                 bruksenhetsnummer = adresse.bruksenhetsnummer?.let { Bruksenhetsnummer(it) },
                 poststed = adresse.poststed?.let { Poststed(it) },
                 postnummer = adresse.postnummer?.let { Postnummer(it) },
-                land = Landkode2(adresse.landkode),
+                land = Landkode2(adresse.landkode ?: "NO"),
                 land3 = Landkode3(adresse.landkode3 ?: ""),
                 adressetype = Adressetype.BOSTEDSADRESSE
             )

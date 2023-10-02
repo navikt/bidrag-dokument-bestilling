@@ -119,7 +119,7 @@ class DokumentBestillingKontroller(val dokumentBestillingService: DokumentBestil
                     type = it.dokumentType,
                     kanBestilles = it.enabled,
                     innholdType = it.innholdType,
-                    statiskInnhold = !it.redigerbar && it.kreverDataGrunnlag == null,
+                    statiskInnhold = it.statiskInnhold,
                     tilhorerEnheter = if (it is DokumentMalBucket) it.tilhørerEnheter else emptyList()
                 )
             }
