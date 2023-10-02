@@ -1,4 +1,5 @@
 name: bidrag-dokument-bestilling-feature
+bucket_name: bidrag-dokument-bestilling-dev
 ingresses:
   - https://bidrag-dokument-bestilling-feature.intern.dev.nav.no
 env:
@@ -30,13 +31,13 @@ env:
 outbound-access-apps:
   - bidrag-vedtak
 outbound-access-hosts:
-   - bidrag-dokument-feature.dev-fss-pub.nais.io
-   - bidrag-person-feature.dev-fss-pub.nais.io
-   - bidrag-sak-feature.dev-fss-pub.nais.io
-   - bidrag-organisasjon-feature.dev-fss-pub.nais.io
-   - bidrag-sjablon.dev-fss-pub.nais.io
-   - kodeverk.dev-fss-pub.nais.io
-   - bidrag-unleash-api.nav.cloud.nais.io
+  - bidrag-dokument-feature.dev-fss-pub.nais.io
+  - bidrag-person-feature.dev-fss-pub.nais.io
+  - bidrag-sak-feature.dev-fss-pub.nais.io
+  - bidrag-organisasjon-feature.dev-fss-pub.nais.io
+  - bidrag-sjablon.dev-fss-pub.nais.io
+  - kodeverk.dev-fss-pub.nais.io
+  - bidrag-unleash-api.nav.cloud.nais.io
 azure_access_inbound:
   - application: bisys
     namespace: bidrag
