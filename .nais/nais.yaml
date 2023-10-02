@@ -59,6 +59,9 @@ spec:
     requests:
       cpu: 500m
       memory: 1024Mi
+  gcp:
+    buckets:
+      - name: {{bucket_name}}
   envFrom:
     - secret: bidrag-dokument-bestilling-secrets
     - secret: {{unleash.secret_name}}
