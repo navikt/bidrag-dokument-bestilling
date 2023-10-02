@@ -34,15 +34,12 @@ class DokumentBestillingService(
         )
     }
 
-    fun hent(
+    fun hentDokument(
         bestillingRequest: DokumentBestillingForespørsel?,
         dokumentMal: DokumentMal
     ): ByteArray {
         val kreverDataGrunnlag = dokumentMal.kreverDataGrunnlag != null
         if (kreverDataGrunnlag && bestillingRequest == null) manglerDataGrunnlag(dokumentMal)
-//        if (bestillingRequest != null) {
-//            return bestillOgHent(bestillingRequest, dokumentMal)
-//        }
         return fetchingManager.fetchDocumentByte(dokumentMal)
     }
 

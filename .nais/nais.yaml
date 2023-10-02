@@ -72,4 +72,6 @@ spec:
      - name: {{@key}}
        value: "{{this}}"
   {{/each}}
+     - name: BUCKET_NAME
+       value: {{ bucket_name }}
 

@@ -1,5 +1,5 @@
 name: bidrag-dokument-bestilling
-bucket_name: bidrag-dokument-bestilling-dev
+bucket_name: bidrag-dokument-bestilling-main
 ingresses:
   - https://bidrag-dokument-bestilling.intern.dev.nav.no
 env:

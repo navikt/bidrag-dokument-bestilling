@@ -62,9 +62,9 @@ class DokumentBestillingKontroller(val dokumentBestillingService: DokumentBestil
         return result
     }
 
-    @PostMapping("/bestill/{dokumentMalKode}/hent")
+    @PostMapping("/dokument/{dokumentMalKode}")
     @Operation(
-        description = "Bestiller dokument for oppgitt brevkode/dokumentKode",
+        description = "Henter dokument for oppgitt brevkode/dokumentKode",
         security = [SecurityRequirement(name = "bearer-key")]
     )
     @ApiResponses(
@@ -84,11 +84,11 @@ class DokumentBestillingKontroller(val dokumentBestillingService: DokumentBestil
 
         LOGGER.info("Henter dokument for dokumentmal $dokumentMal og enhet ${bestillingRequest?.enhet}")
         SIKKER_LOGG.info("Henter dokument for dokumentmal $dokumentMal med data $bestillingRequest og enhet ${bestillingRequest?.enhet}")
-        val result = dokumentBestillingService.hent(bestillingRequest, dokumentMal)
+        val result = dokumentBestillingService.hentDokument(bestillingRequest, dokumentMal)
         LOGGER.info("Hentet dokument for dokumentmal $dokumentMal og enhet ${bestillingRequest?.enhet} med respons $result")
         return ResponseEntity.ok()
             .contentType(MediaType.APPLICATION_PDF)
-            .header(HttpHeaders.CONTENT_DISPOSITION, dokumentMal.beskrivelse)
+            .header(HttpHeaders.CONTENT_DISPOSITION, dokumentMal.tittel)
             .body(result)
     }
 
