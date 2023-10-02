@@ -29,9 +29,7 @@ spec:
       {{/each}}
           - host: {{env.MQ_HOSTNAME}}
             ports:
-              - name: MQ
-                port: {{env.MQ_PORT}}
-                protocol: TCP
+               - port: {{env.MQ_PORT}}
       rules:
       {{#each outbound-access-apps}}
           - application: {{this}}
