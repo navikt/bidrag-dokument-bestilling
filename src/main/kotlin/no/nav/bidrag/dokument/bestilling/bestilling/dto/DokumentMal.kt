@@ -158,7 +158,10 @@ data class DokumentMalBrevserver(
     redigerbar = redigerbar
 )
 
-private inline fun <reified T> lastDokumentMalerFraFil(filnavn: String): List<T> {
+private inline fun <reified T> lastDokumentMalerFraFil(
+    filnavn: String,
+    prefiks: String? = null
+): List<T> {
     return try {
         val objectMapper = ObjectMapper(YAMLFactory())
         objectMapper.findAndRegisterModules()
