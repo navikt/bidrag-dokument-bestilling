@@ -1,0 +1,51 @@
+[
+  {
+    "kode": "VARSEL_BM_EN",
+    "beskrivelse": "Svar på forhåndsvarsel i sak om barnebidrag til bidragsmottaker (EN)",
+    "språk": "EN",
+    "tittel": "Response to Advance Notice Regarding Child Support Form for Custodial Parent",
+    "innholdType": "VARSEL"
+  },
+  {
+    "kode": "VARSEL_BP_EN",
+    "beskrivelse": "Svar på forhåndsvarsel i sak om barnebidrag til bidragspliktig (EN)",
+    "språk": "EN",
+    "tittel": "Response to Advance Notice Regarding Child Support Form for Non-Custodial Parent",
+    "innholdType": "VARSEL"
+  },
+  {
+    "kode": "VARSEL_BM_NB",
+    "beskrivelse": "Svar på forhåndsvarsel i sak om barnebidrag til bidragsmottaker",
+    "språk": "NB",
+    "tittel": "Svar på forhåndsvarsel i sak om barnebidrag til bidragsmottaker",
+    "innholdType": "VARSEL"
+  },
+  {
+    "kode": "VARSEL_BP_NB",
+    "beskrivelse": "Svar på forhåndsvarsel i sak om barnebidrag til bidragspliktig",
+    "språk": "NB",
+    "tittel": "Svar på forhåndsvarsel i sak om barnebidrag til bidragspliktig",
+    "innholdType": "VARSEL"
+  },
+  {
+    "kode": "SVARSKJEMA_BP_FR",
+    "beskrivelse": "Svarskjema bidragspliktig (FR)",
+    "språk": "FR",
+    "tittel": "Réponse à l’avis concernant pension alimentaire pour enfant(s) - formulaire de réponse pour le parent débiteur",
+    "innholdType": "SKJEMA"
+  },
+  {
+    "kode": "SVARSKJEMA_BP_PL",
+    "beskrivelse": "Svarskjema bidragspliktig (PL)",
+    "språk": "PL",
+    "tittel": "Formularz dla rodzica zobowiązanego do płacenia alimentów",
+    "innholdType": "SKJEMA"
+  },
+  {
+    "kode": "SVARSKJEMA_BP_DE",
+    "beskrivelse": "Svarskjema bidragspliktig (DE)",
+    "språk": "DE",
+    "tittel": "Antwortformular für Unterhaltspflichtige",
+    "innholdType": "SKJEMA"
+  }
+]

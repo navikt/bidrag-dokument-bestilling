@@ -9,6 +9,7 @@ import no.nav.bidrag.dokument.bestilling.SIKKER_LOGG
 import no.nav.bidrag.dokument.bestilling.api.dto.DokumentBestillingForespørsel
 import no.nav.bidrag.dokument.bestilling.api.dto.DokumentBestillingResponse
 import no.nav.bidrag.dokument.bestilling.api.dto.DokumentMalDetaljer
+import no.nav.bidrag.dokument.bestilling.bestilling.dto.DokumentMalBucket
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.alleDokumentmaler
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.hentDokumentMal
 import no.nav.bidrag.dokument.bestilling.model.dokumentMalEksistererIkke
@@ -97,7 +98,7 @@ class DokumentBestillingKontroller(val dokumentBestillingService: DokumentBestil
         security = [SecurityRequirement(name = "bearer-key")]
     )
     fun hentStottedeBrevkoder(): List<String> {
-        return alleDokumentmaler.filter { it.enabled }.map { it.kode }
+        return alleDokumentmaler.filter { it.enabled && it !is DokumentMalBucket }.map { it.kode }
             .let {
                 LOGGER.info("Hentet støttede brevkoder $it")
                 it
@@ -113,10 +114,13 @@ class DokumentBestillingKontroller(val dokumentBestillingService: DokumentBestil
         return alleDokumentmaler
             .associate {
                 it.kode to DokumentMalDetaljer(
-                    it.beskrivelse,
-                    it.tittel,
-                    it.dokumentType,
-                    it.enabled
+                    beskrivelse = it.beskrivelse,
+                    tittel = it.tittel,
+                    type = it.dokumentType,
+                    kanBestilles = it.enabled,
+                    innholdType = it.innholdType,
+                    statiskInnhold = !it.redigerbar && it.kreverDataGrunnlag == null,
+                    tilhorerEnheter = if (it is DokumentMalBucket) it.tilhørerEnheter else emptyList()
                 )
             }
     }

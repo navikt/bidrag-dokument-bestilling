@@ -1,42 +1,62 @@
 package no.nav.bidrag.dokument.bestilling.model
 
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter
+import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider
 import mu.KotlinLogging
-import no.nav.bidrag.dokument.bestilling.bestilling.dto.DokumentDataGrunnlag
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.DokumentMalBrevserver
-import no.nav.bidrag.dokument.bestilling.bestilling.dto.DokumentMalEnum
-import no.nav.bidrag.dokument.bestilling.bestilling.dto.DokumentType
+import no.nav.bidrag.dokument.bestilling.bestilling.dto.dokumentmalerBrevserver
+import no.nav.bidrag.dokument.bestilling.bestilling.dto.dokumentmalerBucket
 import org.junit.jupiter.api.Test
 
 private val LOGGER = KotlinLogging.logger {}
 
 class DokumentMalTest {
 
-
     @Test
-    fun `skal mappe dokumentmaler`() {
-        val dokumentmalerConverted = DokumentMalEnum.values().map {
-            DokumentMalBrevserver(
-                kode = it.name,
-                beskrivelse = it.beskrivelse,
-                batchbrev = it.batchbrev,
-                enabled = it.enabled,
-                kreverDataGrunnlag = it.kreverDataGrunnlag ?: DokumentDataGrunnlag(),
-                støttetSpråk = it.støttetSpråk,
-                dokumentType = it.brevtype
-            )
-        }
-
-
-        val text = dokumentmalerConverted.map {
-            """
-                    
-                    DokumentMalBrevserver(
-                        kode = "${it.kode}",
-                        beskrivelse = "${it.beskrivelse}" ${if (it.dokumentType == DokumentType.NOTAT) ",\n\tdokumentType = DokumentType.${it.dokumentType}" else ""} ${if (it.enabled) ",\n\tenabled = true" else ""} ${if (it.batchbrev) ",\n\tbatchbrev = true" else ""}
+    fun `skal mappe dokumentmaler to json`() {
+        val filter = SimpleFilterProvider()
+            .addFilter(
+                "myFilter", SimpleBeanPropertyFilter
+                    .serializeAllExcept(
+                        "filePath",
+                        "innholdtype",
+                        "tittel",
+                        "bestillingSystem",
+                        "folderName",
+                        "tilhørerEnheter",
                     )
-            """.trimIndent()
+            )
+
+        LOGGER.info {
+            ObjectMapper().findAndRegisterModules()
+                .writer(filter)
+                .writeValueAsString(dokumentmalerBrevserver.filter { it is DokumentMalBrevserver })
         }
-        LOGGER.info { text }
+
+        val filter2 = SimpleFilterProvider()
+            .addFilter(
+                "myFilter", SimpleBeanPropertyFilter
+                    .serializeAllExcept(
+                        "filePath",
+                        "innholdtype",
+                        "bestillingSystem",
+                        "folderName",
+                        "batchbrev",
+                        "enabled",
+                        "redigerbar",
+                        "kreverDataGrunnlag",
+                        "tilhørerEnheter",
+                        "dokumentType",
+                    )
+            )
+
+        LOGGER.info {
+            ObjectMapper().findAndRegisterModules()
+                .writer(filter2)
+                .writeValueAsString(dokumentmalerBucket)
+        }
     }
+
 
 }

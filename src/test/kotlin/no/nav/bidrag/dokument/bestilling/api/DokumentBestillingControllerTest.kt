@@ -127,7 +127,7 @@ class DokumentBestillingControllerTest : AbstractControllerTest() {
         stubUtils.stubHentVedtak("vedtak_forskudd_flere_perioder_186.json")
         val enhetKontaktInfo = createEnhetKontaktInformasjon()
         val bmAdresse = createPostAdresseResponse()
-        val dokumentMal = hentDokumentMal("BI01A01D")!!
+        val dokumentMal = hentDokumentMal("BI01A01")!!
         val tittel = "Tittel på dokument"
         val saksnummer = "123213"
         val mottakerId = BM1.ident
