@@ -2,6 +2,7 @@ package no.nav.bidrag.dokument.bestilling.api
 
 import io.kotest.assertions.assertSoftly
 import io.kotest.matchers.collections.shouldBeIn
+import io.kotest.matchers.collections.shouldContain
 import io.kotest.matchers.collections.shouldHaveAtLeastSize
 import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.collections.shouldNotBeIn
@@ -14,6 +15,7 @@ import no.nav.bidrag.dokument.bestilling.api.dto.DokumentBestillingForespørsel
 import no.nav.bidrag.dokument.bestilling.api.dto.DokumentBestillingResponse
 import no.nav.bidrag.dokument.bestilling.api.dto.DokumentMalDetaljer
 import no.nav.bidrag.dokument.bestilling.api.dto.MottakerTo
+import no.nav.bidrag.dokument.bestilling.bestilling.dto.DokumentMalBrevserver
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.InnholdType
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.PeriodeFraTom
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.StøttetSpråk
@@ -80,7 +82,7 @@ class DokumentBestillingControllerTest : AbstractControllerTest() {
                 .map { bk -> bk.kode }
         }
 
-        response.body?.shouldHaveSize(alleDokumentmaler.filter { it.enabled }.size)
+        response.body?.shouldHaveSize(alleDokumentmaler.filter { it.enabled && it is DokumentMalBrevserver }.size)
     }
 
     @Test
@@ -104,7 +106,8 @@ class DokumentBestillingControllerTest : AbstractControllerTest() {
         responseDokumentMalerBrevserver.size shouldBe dokumentmalerBrevserver.size
 
         responseDokumentMalerBucket["UTLAND_VEDLEGG_VEDTAK_BP_DE"] shouldNotBe null
-        responseDokumentMalerBucket["UTLAND_VEDLEGG_VEDTAK_BP_DE"]!!.språk shouldBe StøttetSpråk.DE
+        responseDokumentMalerBucket["UTLAND_VEDLEGG_VEDTAK_BP_DE"]!!.språk shouldHaveSize 1
+        responseDokumentMalerBucket["UTLAND_VEDLEGG_VEDTAK_BP_DE"]!!.språk shouldContain StøttetSpråk.DE
         responseDokumentMalerBucket["UTLAND_VEDLEGG_VEDTAK_BP_DE"]!!.innholdType shouldBe InnholdType.VEDLEGG_VEDTAK
     }
 
