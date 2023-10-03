@@ -9,6 +9,7 @@ import no.nav.bidrag.dokument.bestilling.SIKKER_LOGG
 import no.nav.bidrag.dokument.bestilling.api.dto.DokumentBestillingForespørsel
 import no.nav.bidrag.dokument.bestilling.api.dto.DokumentBestillingResponse
 import no.nav.bidrag.dokument.bestilling.api.dto.DokumentMalDetaljer
+import no.nav.bidrag.dokument.bestilling.bestilling.dto.DokumentMalBrevserver
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.DokumentMalBucket
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.alleDokumentmaler
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.hentDokumentMal
@@ -118,6 +119,7 @@ class DokumentBestillingKontroller(val dokumentBestillingService: DokumentBestil
                     tittel = it.tittel,
                     type = it.dokumentType,
                     kanBestilles = it.enabled,
+                    språk = if (it is DokumentMalBucket) listOf(it.språk) else if (it is DokumentMalBrevserver) it.støttetSpråk else emptyList(),
                     innholdType = it.innholdType,
                     statiskInnhold = it.statiskInnhold,
                     tilhorerEnheter = if (it is DokumentMalBucket) it.tilhørerEnheter else emptyList()

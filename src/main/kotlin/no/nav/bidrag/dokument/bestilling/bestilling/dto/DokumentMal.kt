@@ -3,6 +3,7 @@ package no.nav.bidrag.dokument.bestilling.bestilling.dto
 import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.JavaType
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.databind.node.ObjectNode
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory
 import org.springframework.core.io.ClassPathResource
 import java.io.IOException
@@ -158,7 +159,7 @@ data class DokumentMalBrevserver(
     redigerbar = redigerbar
 )
 
-private inline fun <reified T> lastDokumentMalerFraFil(
+private inline fun <reified T : DokumentMal> lastDokumentMalerFraFil(
     filnavn: String,
     prefiks: String? = null
 ): List<T> {
@@ -168,19 +169,30 @@ private inline fun <reified T> lastDokumentMalerFraFil(
             .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
         val inputstream = ClassPathResource("files/dokumentmaler/$filnavn.json").inputStream
         val text = String(inputstream.readAllBytes(), StandardCharsets.UTF_8)
+        val textWithPrefiks = if (prefiks != null) {
+            val json = objectMapper.readTree(text)
+            json.asSequence().forEach {
+                (it as ObjectNode).put("kode", "${prefiks}_${it.get("kode").asText()}")
+            }
+            json.toString()
+        } else text
+
         val listType: JavaType =
             objectMapper.typeFactory.constructCollectionType(MutableList::class.java, T::class.java)
-        objectMapper.readValue(
-            text,
+        val dokumentmalerMap: List<T> = objectMapper.readValue(
+            textWithPrefiks,
             listType
         )
+
+        dokumentmalerMap.map { it }
     } catch (e: IOException) {
         throw RuntimeException("Kunne ikke laste fil", e)
     }
 }
 
 val dokumentmalerBrevserver: List<DokumentMalBrevserver> = lastDokumentMalerFraFil("brevserver")
-val dokumentmalerBucket: List<DokumentMalBucketUtland> = lastDokumentMalerFraFil("vedlegg_utland")
+val dokumentmalerBucket: List<DokumentMalBucketUtland> =
+    lastDokumentMalerFraFil("vedlegg_utland", "UTLAND")
 val alleDokumentmaler = dokumentmalerBrevserver + dokumentmalerBucket
 
 fun hentDokumentMal(kode: String): DokumentMal? = alleDokumentmaler.find { it.kode == kode }

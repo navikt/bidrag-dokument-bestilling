@@ -1,19 +1,19 @@
 [
   {
     "kode": "VARSEL_BM_EN",
-    "beskrivelse": "Svar på forhåndsvarsel i sak om barnebidrag til bidragsmottaker (EN)",
+    "beskrivelse": "Svar på forhåndsvarsel i sak om barnebidrag til bidragsmottaker",
     "språk": "EN",
     "filnavn": "54-00.04 Svar på varsel_bidragsmottaker_ENGELSK.pdf",
     "tittel": "Response to Advance Notice Regarding Child Support Form for Custodial Parent",
-    "innholdType": "VARSEL"
+    "innholdType": "SKJEMA"
   },
   {
     "kode": "VARSEL_BP_EN",
-    "beskrivelse": "Svar på forhåndsvarsel i sak om barnebidrag til bidragspliktig (EN)",
+    "beskrivelse": "Svar på forhåndsvarsel i sak om barnebidrag til bidragspliktig",
     "filnavn": "54-00.07 Svar på varsel_bidragspliktig_ENGELSK.pdf",
     "språk": "EN",
     "tittel": "Response to Advance Notice Regarding Child Support Form for Non-Custodial Parent",
-    "innholdType": "VARSEL"
+    "innholdType": "SKJEMA"
   },
   {
     "kode": "VARSEL_BM_NB",
@@ -21,7 +21,7 @@
     "filnavn": "54-00.04 Svar på varsel_bidragsmottaker_NORSK.pdf",
     "språk": "NB",
     "tittel": "Svar på forhåndsvarsel i sak om barnebidrag til bidragsmottaker",
-    "innholdType": "VARSEL"
+    "innholdType": "SKJEMA"
   },
   {
     "kode": "VARSEL_BP_NB",
@@ -29,11 +29,11 @@
     "filnavn": "54-00.07 Svar på varsel_bidragspliktig_NORSK.pdf",
     "språk": "NB",
     "tittel": "Svar på forhåndsvarsel i sak om barnebidrag til bidragspliktig",
-    "innholdType": "VARSEL"
+    "innholdType": "SKJEMA"
   },
   {
     "kode": "SVARSKJEMA_BP_FR",
-    "beskrivelse": "Svarskjema bidragspliktig (FR)",
+    "beskrivelse": "Svarskjema bidragspliktig",
     "filnavn": "Svarskjema_bidragspliktig_FRANSK.pdf",
     "språk": "FR",
     "tittel": "Réponse à l’avis concernant pension alimentaire pour enfant(s) - formulaire de réponse pour le parent débiteur",
@@ -41,7 +41,7 @@
   },
   {
     "kode": "SVARSKJEMA_BP_PL",
-    "beskrivelse": "Svarskjema bidragspliktig (PL)",
+    "beskrivelse": "Svarskjema bidragspliktig",
     "filnavn": "Svarskjema_bidragspliktig_POLSK.pdf",
     "språk": "PL",
     "tittel": "Formularz dla rodzica zobowiązanego do płacenia alimentów",
@@ -49,7 +49,7 @@
   },
   {
     "kode": "SVARSKJEMA_BP_DE",
-    "beskrivelse": "Svarskjema bidragspliktig (DE)",
+    "beskrivelse": "Svarskjema bidragspliktig",
     "filnavn": "Svarskjema_bidragspliktig_TYSK.pdf",
     "språk": "DE",
     "tittel": "Antwortformular für Unterhaltspflichtige",
@@ -57,7 +57,7 @@
   },
   {
     "kode": "VEDLEGG_VARSEL_EN",
-    "beskrivelse": "Vedlegg til forhåndsvarsel (EN)",
+    "beskrivelse": "Vedlegg til forhåndsvarsel",
     "filnavn": "Vedlegg til forhåndsvarsel ENGELSK.pdf",
     "språk": "EN",
     "tittel": "Attachment to advance notice. Claim for child support when one of the parties resides abroad",
@@ -73,15 +73,15 @@
   },
   {
     "kode": "VEDLEGG_VARSEL_DE",
-    "beskrivelse": "Vedlegg til forhåndsvarsel (DE)",
+    "beskrivelse": "Vedlegg til forhåndsvarsel",
     "filnavn": "Vedlegg til forhåndsvarsel TYSK.pdf",
     "språk": "DE",
-    "tittel": "Anlage Zur Mitteilung",
+    "tittel": "Anlage Zur Mitteilung. Festsetzung von Kindesunterhalt wenn eine Partei im Ausland lebt",
     "innholdType": "VEDLEGG_VARSEL"
   },
   {
     "kode": "VEDLEGG_VEDTAK_BM_EN",
-    "beskrivelse": "Vedlegg til vedtak bidragsmottaker (EN)",
+    "beskrivelse": "Vedlegg til vedtak bidragsmottaker",
     "filnavn": "Vedlegg til vedtak_bidragsmottaker_ENGELSK.pdf",
     "språk": "EN",
     "tittel": "Information to the custodial parent when one of the parties is living abroad",
@@ -97,7 +97,7 @@
   },
   {
     "kode": "VEDLEGG_VEDTAK_BM_DE",
-    "beskrivelse": "Vedlegg til vedtak bidragsmottaker (DE)",
+    "beskrivelse": "Vedlegg til vedtak bidragsmottaker",
     "filnavn": "Vedlegg til vedtak_bidragsmottaker_TYSK.pdf",
     "språk": "DE",
     "tittel": "Orientierung für den Unterhaltsempfänger, wenn eine der Parteien im Ausland lebt",
@@ -105,7 +105,7 @@
   },
   {
     "kode": "VEDLEGG_VEDTAK_BP_EN",
-    "beskrivelse": "Vedlegg til vedtak bidragspliktig (EN)",
+    "beskrivelse": "Vedlegg til vedtak bidragspliktig",
     "filnavn": "Vedlegg til vedtak_bidragspliktig_ENGELSK.pdf",
     "språk": "EN",
     "tittel": "Information to the non−custodial parent when one of the parties is living abroad",
@@ -113,7 +113,7 @@
   },
   {
     "kode": "VEDLEGG_VEDTAK_BP_DE",
-    "beskrivelse": "Vedlegg til vedtak bidragspliktig (DE)",
+    "beskrivelse": "Vedlegg til vedtak bidragspliktig",
     "filnavn": "Vedlegg til vedtak_bidragspliktig_TYSK.pdf",
     "språk": "DE",
     "tittel": "Orientierung für den Unterhaltspflichtigen, wenn eine der Parteien im Ausland lebt",

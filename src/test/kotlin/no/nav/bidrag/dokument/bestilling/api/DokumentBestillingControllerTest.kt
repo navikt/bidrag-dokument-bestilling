@@ -7,13 +7,19 @@ import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.collections.shouldNotBeIn
 import io.kotest.matchers.comparables.shouldBeEqualComparingTo
 import io.kotest.matchers.shouldBe
+import io.kotest.matchers.shouldNotBe
 import io.kotest.matchers.string.shouldContain
 import no.nav.bidrag.commons.web.EnhetFilter.Companion.X_ENHET_HEADER
 import no.nav.bidrag.dokument.bestilling.api.dto.DokumentBestillingForespørsel
 import no.nav.bidrag.dokument.bestilling.api.dto.DokumentBestillingResponse
+import no.nav.bidrag.dokument.bestilling.api.dto.DokumentMalDetaljer
 import no.nav.bidrag.dokument.bestilling.api.dto.MottakerTo
+import no.nav.bidrag.dokument.bestilling.bestilling.dto.InnholdType
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.PeriodeFraTom
+import no.nav.bidrag.dokument.bestilling.bestilling.dto.StøttetSpråk
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.alleDokumentmaler
+import no.nav.bidrag.dokument.bestilling.bestilling.dto.dokumentmalerBrevserver
+import no.nav.bidrag.dokument.bestilling.bestilling.dto.dokumentmalerBucket
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.hentDokumentMal
 import no.nav.bidrag.dokument.bestilling.bestilling.produksjon.dto.BidragBarn
 import no.nav.bidrag.dokument.bestilling.bestilling.produksjon.dto.BrevBestilling
@@ -34,6 +40,7 @@ import no.nav.bidrag.dokument.bestilling.utils.FORSKUDD_MAKS_INNTEKT_FORSKUDD_MO
 import no.nav.bidrag.dokument.bestilling.utils.SAKSBEHANDLER_NAVN
 import no.nav.bidrag.dokument.bestilling.utils.SAK_OPPRETTET_DATO
 import no.nav.bidrag.dokument.bestilling.utils.SAMHANDLER_IDENT
+import no.nav.bidrag.dokument.bestilling.utils.TEST_DOKUMENT
 import no.nav.bidrag.dokument.bestilling.utils.createEnhetKontaktInformasjon
 import no.nav.bidrag.dokument.bestilling.utils.createOpprettJournalpostResponse
 import no.nav.bidrag.dokument.bestilling.utils.createPostAdresseResponse
@@ -43,12 +50,15 @@ import no.nav.bidrag.domain.enums.Rolletype
 import no.nav.bidrag.transport.sak.RolleDto
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
+import org.springframework.core.ParameterizedTypeReference
 import org.springframework.http.HttpEntity
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpMethod
 import org.springframework.http.HttpStatus
+import org.springframework.http.ResponseEntity
 import java.math.BigDecimal
 import java.time.LocalDate
+
 
 fun BidragBarn.hentInntektPerioder(periodeFraTom: PeriodeFraTom) =
     inntektPerioder.filter { it.fomDato == periodeFraTom.fraDato && it.tomDato == periodeFraTom.tomDato }
@@ -71,6 +81,31 @@ class DokumentBestillingControllerTest : AbstractControllerTest() {
         }
 
         response.body?.shouldHaveSize(alleDokumentmaler.filter { it.enabled }.size)
+    }
+
+    @Test
+    fun `skal returnere liste over dokumentmal detaljer som er støttet`() {
+        val responseType: ParameterizedTypeReference<Map<String, DokumentMalDetaljer>> =
+            object : ParameterizedTypeReference<Map<String, DokumentMalDetaljer>>() {}
+        val response: ResponseEntity<Map<String, DokumentMalDetaljer>> =
+            httpHeaderTestRestTemplate.exchange(
+                "${rootUri()}/dokumentmal/detaljer",
+                HttpMethod.GET,
+                null,
+                responseType
+            )
+
+        val responseBody = response.body!!
+        responseBody.size shouldBe alleDokumentmaler.size
+        val responseDokumentMalerBrevserver = responseBody.filter { !it.value.statiskInnhold }
+        val responseDokumentMalerBucket = responseBody.filter { it.value.statiskInnhold }
+
+        responseDokumentMalerBucket.size shouldBe dokumentmalerBucket.size
+        responseDokumentMalerBrevserver.size shouldBe dokumentmalerBrevserver.size
+
+        responseDokumentMalerBucket["UTLAND_VEDLEGG_VEDTAK_BP_DE"] shouldNotBe null
+        responseDokumentMalerBucket["UTLAND_VEDLEGG_VEDTAK_BP_DE"]!!.språk shouldBe StøttetSpråk.DE
+        responseDokumentMalerBucket["UTLAND_VEDLEGG_VEDTAK_BP_DE"]!!.innholdType shouldBe InnholdType.VEDLEGG_VEDTAK
     }
 
     @Test
@@ -946,5 +981,34 @@ class DokumentBestillingControllerTest : AbstractControllerTest() {
                 message.brev?.mottaker?.rolle shouldBe "RM"
             }
         }
+    }
+
+    @Test
+    fun `skal hente statisk dokument`() {
+        val response =
+            httpHeaderTestRestTemplate.exchange(
+                "${rootUri()}/dokument/UTLAND_VEDLEGG_VEDTAK_BP_DE",
+                HttpMethod.POST,
+                null,
+                ByteArray::class.java
+            )
+
+        response.statusCode shouldBe HttpStatus.OK
+
+        response.body shouldBe TEST_DOKUMENT
+    }
+
+    @Test
+    fun `skal feile med bad request hvis prøver å hente redigerbar dokument`() {
+        val response =
+            httpHeaderTestRestTemplate.exchange(
+                "${rootUri()}/dokument/BI01P11",
+                HttpMethod.POST,
+                null,
+                ByteArray::class.java
+            )
+
+        response.statusCode shouldBe HttpStatus.BAD_REQUEST
+        response.headers["Warning"]?.first() shouldBe "Det skjedde en feil:  - Forespørsel mangler informasjon for å opprette dokumentmal BI01P11."
     }
 }

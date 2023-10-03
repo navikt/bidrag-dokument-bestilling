@@ -65,7 +65,7 @@ class DokumentMalTest {
 
 
     @Test
-    fun `Should not have duplicate dokumentmal kode`() {
+    fun `Skal ikke ha duplikat dokumentmal kode`() {
 
         alleDokumentmaler.forEach { mal ->
             val antall = alleDokumentmaler.filter { it.kode == mal.kode }.size
@@ -73,6 +73,12 @@ class DokumentMalTest {
                 antall shouldBe 1
             }
         }
+    }
+
+    @Test
+    fun `Skal hente dokumentmaler utland`() {
+
+        dokumentmalerBucket.filter { it.kode.startsWith("UTLAND_") }.size shouldBe 16
     }
 
 }
