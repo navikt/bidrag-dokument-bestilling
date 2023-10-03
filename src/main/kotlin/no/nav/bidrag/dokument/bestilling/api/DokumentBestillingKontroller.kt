@@ -9,10 +9,17 @@ import no.nav.bidrag.dokument.bestilling.SIKKER_LOGG
 import no.nav.bidrag.dokument.bestilling.api.dto.DokumentBestillingForespørsel
 import no.nav.bidrag.dokument.bestilling.api.dto.DokumentBestillingResponse
 import no.nav.bidrag.dokument.bestilling.api.dto.DokumentMalDetaljer
-import no.nav.bidrag.dokument.bestilling.bestilling.dto.DokumentMal
+import no.nav.bidrag.dokument.bestilling.bestilling.dto.DokumentMalBrevserver
+import no.nav.bidrag.dokument.bestilling.bestilling.dto.DokumentMalBucket
+import no.nav.bidrag.dokument.bestilling.bestilling.dto.alleDokumentmaler
+import no.nav.bidrag.dokument.bestilling.bestilling.dto.hentDokumentMal
+import no.nav.bidrag.dokument.bestilling.model.dokumentMalEksistererIkke
 import no.nav.bidrag.dokument.bestilling.tjenester.DokumentBestillingService
 import no.nav.security.token.support.core.api.Protected
 import org.slf4j.LoggerFactory
+import org.springframework.http.HttpHeaders
+import org.springframework.http.MediaType
+import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
@@ -30,7 +37,7 @@ class DokumentBestillingKontroller(val dokumentBestillingService: DokumentBestil
         private val LOGGER = LoggerFactory.getLogger(DokumentBestillingKontroller::class.java)
     }
 
-    @PostMapping("/bestill/{dokumentMal}")
+    @PostMapping("/bestill/{dokumentMalKode}")
     @Operation(
         description = "Bestiller dokument for oppgitt brevkode/dokumentKode",
         security = [SecurityRequirement(name = "bearer-key")]
@@ -45,13 +52,45 @@ class DokumentBestillingKontroller(val dokumentBestillingService: DokumentBestil
     )
     fun bestillBrev(
         @RequestBody bestillingRequest: DokumentBestillingForespørsel,
-        @PathVariable dokumentMal: DokumentMal
+        @PathVariable dokumentMalKode: String
     ): DokumentBestillingResponse {
-        LOGGER.info("Bestiller dokument for brevkode $dokumentMal og enhet ${bestillingRequest.enhet}")
-        SIKKER_LOGG.info("Bestiller dokument for brevkode $dokumentMal med data $bestillingRequest og enhet ${bestillingRequest.enhet}")
+        val dokumentMal =
+            hentDokumentMal(dokumentMalKode) ?: dokumentMalEksistererIkke(dokumentMalKode)
+        LOGGER.info("Bestiller dokument for dokumentmal $dokumentMal og enhet ${bestillingRequest.enhet}")
+        SIKKER_LOGG.info("Bestiller dokument for dokumentmal $dokumentMal med data $bestillingRequest og enhet ${bestillingRequest.enhet}")
         val result = dokumentBestillingService.bestill(bestillingRequest, dokumentMal)
         LOGGER.info("Bestilt dokument for brevkode $dokumentMal og enhet ${bestillingRequest.enhet} med respons $result")
         return result
+    }
+
+    @PostMapping("/dokument/{dokumentMalKode}")
+    @Operation(
+        description = "Henter dokument for oppgitt brevkode/dokumentKode",
+        security = [SecurityRequirement(name = "bearer-key")]
+    )
+    @ApiResponses(
+        value = [
+            ApiResponse(
+                responseCode = "400",
+                description = "Dokument ble bestilt med ugyldig data"
+            )
+        ]
+    )
+    fun hentDokument(
+        @RequestBody(required = false) bestillingRequest: DokumentBestillingForespørsel?,
+        @PathVariable dokumentMalKode: String
+    ): ResponseEntity<ByteArray> {
+        val dokumentMal =
+            hentDokumentMal(dokumentMalKode) ?: dokumentMalEksistererIkke(dokumentMalKode)
+
+        LOGGER.info("Henter dokument for dokumentmal $dokumentMal og enhet ${bestillingRequest?.enhet}")
+        SIKKER_LOGG.info("Henter dokument for dokumentmal $dokumentMal med data $bestillingRequest og enhet ${bestillingRequest?.enhet}")
+        val result = dokumentBestillingService.hentDokument(bestillingRequest, dokumentMal)
+        LOGGER.info("Hentet dokument for dokumentmal $dokumentMal og enhet ${bestillingRequest?.enhet} med respons $result")
+        return ResponseEntity.ok()
+            .contentType(MediaType.APPLICATION_PDF)
+            .header(HttpHeaders.CONTENT_DISPOSITION, dokumentMal.tittel)
+            .body(result)
     }
 
     @RequestMapping("/brevkoder", method = [RequestMethod.OPTIONS])
@@ -60,10 +99,11 @@ class DokumentBestillingKontroller(val dokumentBestillingService: DokumentBestil
         security = [SecurityRequirement(name = "bearer-key")]
     )
     fun hentStottedeBrevkoder(): List<String> {
-        return DokumentMal.values().filter { it.enabled }.map { it.name }.let {
-            LOGGER.info("Hentet støttede brevkoder $it")
-            it
-        }
+        return alleDokumentmaler.filter { it.enabled && it !is DokumentMalBucket }.map { it.kode }
+            .let {
+                LOGGER.info("Hentet støttede brevkoder $it")
+                it
+            }
     }
 
     @GetMapping("/dokumentmal/detaljer")
@@ -72,7 +112,18 @@ class DokumentBestillingKontroller(val dokumentBestillingService: DokumentBestil
         security = [SecurityRequirement(name = "bearer-key")]
     )
     fun hentDokumentmalDetaljer(): Map<String, DokumentMalDetaljer> {
-        return DokumentMal.values()
-            .associate { it.name to DokumentMalDetaljer(it.beskrivelse, it.brevtype, it.enabled) }
+        return alleDokumentmaler
+            .associate {
+                it.kode to DokumentMalDetaljer(
+                    beskrivelse = it.beskrivelse,
+                    tittel = it.tittel,
+                    type = it.dokumentType,
+                    kanBestilles = it.enabled,
+                    språk = if (it is DokumentMalBucket) listOf(it.språk) else if (it is DokumentMalBrevserver) it.støttetSpråk else emptyList(),
+                    innholdType = it.innholdType,
+                    statiskInnhold = it.statiskInnhold,
+                    tilhorerEnheter = if (it is DokumentMalBucket) it.tilhørerEnheter else emptyList()
+                )
+            }
     }
 }

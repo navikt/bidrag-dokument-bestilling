@@ -1,10 +1,10 @@
 package no.nav.bidrag.dokument.bestilling.bestilling.produksjon
 
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.BestillingSystem
-import no.nav.bidrag.dokument.bestilling.bestilling.dto.BrevType
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.DokumentBestilling
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.DokumentBestillingResult
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.DokumentMal
+import no.nav.bidrag.dokument.bestilling.bestilling.dto.DokumentType
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.EnhetKontaktInfo
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.ForsorgerType
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.Mottaker
@@ -45,7 +45,12 @@ class BrevserverProducer(
     ): DokumentBestillingResult {
         val journalpostId = opprettJournalpost(dokumentBestilling, dokumentMal)
 
-        onlinebrevTemplate.convertAndSend(mapToBrevserverMessage(dokumentBestilling, dokumentMal))
+        onlinebrevTemplate.convertAndSend(
+            mapToBrevserverMessage(
+                dokumentBestilling,
+                dokumentMal
+            )
+        )
         // TODO: Error handling
         return DokumentBestillingResult(
             dokumentReferanse = dokumentBestilling.dokumentreferanse!!,
@@ -54,7 +59,10 @@ class BrevserverProducer(
         )
     }
 
-    fun opprettJournalpost(dokumentBestilling: DokumentBestilling, dokumentMal: DokumentMal): String {
+    fun opprettJournalpost(
+        dokumentBestilling: DokumentBestilling,
+        dokumentMal: DokumentMal
+    ): String {
         if (dokumentBestilling.dokumentreferanse.isNullOrEmpty()) {
             val tittel = dokumentBestilling.tittel ?: dokumentMal.beskrivelse
             val response = bidragDokumentConsumer.opprettJournalpost(
@@ -65,7 +73,7 @@ class BrevserverProducer(
                     dokumenter = listOf(
                         OpprettDokumentDto(
                             tittel = tittel,
-                            brevkode = dokumentMal.name
+                            brevkode = dokumentMal.kode
                         )
                     ),
                     gjelderIdent = dokumentBestilling.gjelder?.fodselsnummer!!,
@@ -73,9 +81,9 @@ class BrevserverProducer(
                         dokumentBestilling.mottaker?.navn,
                         dokumentBestilling.mottaker?.fodselsnummer!!
                     ),
-                    journalposttype = when (dokumentMal.brevtype) {
-                        BrevType.UTGÅENDE -> JournalpostType.UTGÅENDE
-                        BrevType.NOTAT -> JournalpostType.NOTAT
+                    journalposttype = when (dokumentMal.dokumentType) {
+                        DokumentType.UTGÅENDE -> JournalpostType.UTGÅENDE
+                        DokumentType.NOTAT -> JournalpostType.NOTAT
                     },
                     saksbehandlerIdent = dokumentBestilling.saksbehandler?.ident
                 )
@@ -98,8 +106,14 @@ class BrevserverProducer(
             val roller = dokumentBestilling.roller
             val bp = roller.bidragspliktig
             val bm = roller.bidragsmottaker
-            val hgUgDto = vedtakInfo?.let { hgUgKodeService.findHgUg(it.soknadType, it.søknadFra, it.behandlingType) }
-            malpakke = "BI01.${dokumentMal.name}"
+            val hgUgDto = vedtakInfo?.let {
+                hgUgKodeService.findHgUg(
+                    it.soknadType,
+                    it.søknadFra,
+                    it.behandlingType
+                )
+            }
+            malpakke = "BI01.${dokumentMal.kode}"
             passord = brevPassord
             saksbehandler = dokumentBestilling.saksbehandler?.ident!!
             brev {
@@ -131,14 +145,19 @@ class BrevserverProducer(
                     }
                     forskUtBet = vedtakInfo != null
                     // Kode fra beslutningårsak i Bisys.
-                    val vedtakPerioder = vedtakInfo?.vedtakBarn?.flatMap { it.stonader }?.flatMap { it.vedtakPerioder } ?: emptyList()
+                    val vedtakPerioder = vedtakInfo?.vedtakBarn?.flatMap { it.stonader }
+                        ?.flatMap { it.vedtakPerioder } ?: emptyList()
                     val antallVedtakPerioder = vedtakPerioder.size
                     resKode = if (antallVedtakPerioder > 1) {
                         ResultatKoder.FLERE_BESLUTNING_LINJER
                     } else if (antallVedtakPerioder == 1) {
                         val resultatKode = vedtakPerioder[0].resultatKode
-                        val erInnkrevingPrivatAvtale = resultatKode == ResultatKoder.PRIVAT_AVTALE && DokumentMal.BI01G01 == dokumentMal
-                        val erInnkreving = listOf(ResultatKoder.INNVILGET_VEDTAK, ResultatKoder.UTENLANDSK_AVGJØRELSE).contains(resultatKode)
+                        val erInnkrevingPrivatAvtale =
+                            resultatKode == ResultatKoder.PRIVAT_AVTALE && "BI01G01" == dokumentMal.kode
+                        val erInnkreving = listOf(
+                            ResultatKoder.INNVILGET_VEDTAK,
+                            ResultatKoder.UTENLANDSK_AVGJØRELSE
+                        ).contains(resultatKode)
                         if (erInnkreving || erInnkrevingPrivatAvtale) ResultatKoder.VEDTAK_VANLIG_INNKREVING else resultatKode
                     } else {
                         null
@@ -268,12 +287,14 @@ class BrevserverProducer(
                         navn = it.navn
                         fDato = it.fodselsdato
                         fornavn = it.fornavn
-                        belForskudd = it.fodselsnummer?.let { it1 -> vedtakInfo?.hentForskuddBarn(it1) }
+                        belForskudd =
+                            it.fodselsnummer?.let { it1 -> vedtakInfo?.hentForskuddBarn(it1) }
                     }
                 }
             }
         }
     }
+
     fun mapKontaktInfo(brev: Brev, _kontaktInfo: EnhetKontaktInfo?): BrevKontaktinfo? {
         val kontaktInfo = _kontaktInfo ?: return null
         return brev.brevKontaktinfo {

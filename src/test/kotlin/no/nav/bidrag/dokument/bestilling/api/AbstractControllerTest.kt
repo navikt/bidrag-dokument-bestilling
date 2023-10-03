@@ -17,6 +17,7 @@ import no.nav.bidrag.dokument.bestilling.consumer.SjablonConsumer
 import no.nav.bidrag.dokument.bestilling.consumer.dto.KodeverkResponse
 import no.nav.bidrag.dokument.bestilling.consumer.dto.SjablongerDto
 import no.nav.bidrag.dokument.bestilling.model.typeRef
+import no.nav.bidrag.dokument.bestilling.persistence.bucket.GcpCloudStorage
 import no.nav.bidrag.dokument.bestilling.utils.ANNEN_MOTTAKER
 import no.nav.bidrag.dokument.bestilling.utils.BARN1
 import no.nav.bidrag.dokument.bestilling.utils.BARN2
@@ -24,6 +25,7 @@ import no.nav.bidrag.dokument.bestilling.utils.BM1
 import no.nav.bidrag.dokument.bestilling.utils.BP1
 import no.nav.bidrag.dokument.bestilling.utils.JmsTestConsumer
 import no.nav.bidrag.dokument.bestilling.utils.SAKSBEHANDLER_IDENT
+import no.nav.bidrag.dokument.bestilling.utils.TEST_DOKUMENT
 import no.nav.bidrag.dokument.bestilling.utils.createEnhetKontaktInformasjon
 import no.nav.bidrag.dokument.bestilling.utils.createPostAdresseResponse
 import no.nav.security.token.support.spring.test.EnableMockOAuth2Server
@@ -55,6 +57,9 @@ abstract class AbstractControllerTest {
     @MockkBean
     lateinit var kodeverkConsumer: KodeverkConsumer
 
+    @MockkBean
+    lateinit var gcpCloudStorage: GcpCloudStorage
+
     @Autowired
     lateinit var stubUtils: StubUtils
 
@@ -82,6 +87,7 @@ abstract class AbstractControllerTest {
             .readValue(readFile("api/sjablon_all.json"), typeRef<SjablongerDto>())
         every { kodeverkConsumer.hentLandkoder() } returns kodeverkResponse
         every { sjablonConsumer.hentSjablonger() } returns sjablonResponse
+        every { gcpCloudStorage.hentFil(any()) } returns TEST_DOKUMENT
     }
 
     @AfterEach
@@ -110,7 +116,7 @@ abstract class AbstractControllerTest {
         stubUtils.stubEnhetKontaktInfo(createEnhetKontaktInformasjon())
     }
 
-    fun verifyBrevbestillingHeaders(bestilling: BrevBestilling, dokumentMal: DokumentMal) {
+    fun verifyBrevbestillingHeaders(bestilling: BrevBestilling, dokumentMalEnum: DokumentMal) {
         bestilling.passord shouldBe "pass"
         bestilling.sysid shouldBe "BI12"
         bestilling.arkiver shouldBe "JA"
@@ -119,6 +125,6 @@ abstract class AbstractControllerTest {
         bestilling.skuff shouldBe ""
         bestilling.skriver shouldBe ""
         bestilling.saksbehandler shouldBe SAKSBEHANDLER_IDENT
-        bestilling.malpakke shouldBe "BI01.${dokumentMal.name}"
+        bestilling.malpakke shouldBe "BI01.${dokumentMalEnum.kode}"
     }
 }

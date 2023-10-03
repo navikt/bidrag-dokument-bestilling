@@ -37,6 +37,7 @@ import no.nav.bidrag.transport.sak.BidragssakDto
 import no.nav.bidrag.transport.sak.RolleDto
 import java.time.LocalDate
 
+val TEST_DOKUMENT = "Test dokument".toByteArray()
 val DEFAULT_TITLE_DOKUMENT = "Tittel på dokumentet"
 val DEFAULT_SAKSNUMMER = "123312321321"
 

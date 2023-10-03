@@ -17,6 +17,7 @@ import no.nav.bidrag.dokument.bestilling.api.dto.MottakerAdresseTo
 import no.nav.bidrag.dokument.bestilling.api.dto.MottakerTo
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.DokumentBestilling
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.DokumentMal
+import no.nav.bidrag.dokument.bestilling.bestilling.dto.hentDokumentMal
 import no.nav.bidrag.dokument.bestilling.config.SaksbehandlerInfoManager
 import no.nav.bidrag.dokument.bestilling.consumer.BidragVedtakConsumer
 import no.nav.bidrag.dokument.bestilling.consumer.KodeverkConsumer
@@ -1167,7 +1168,7 @@ internal class DokumentMetadataCollectorTest {
 
     private fun mapToBestillingsdata(
         request: DokumentBestillingForespørsel,
-        dokumentMal: DokumentMal = DokumentMal.BI01S02
+        dokumentMal: DokumentMal = hentDokumentMal("BI01S02")!!
     ): DokumentBestilling {
         return metadataCollector.collect(request, dokumentMal)
     }

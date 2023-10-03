@@ -66,7 +66,7 @@ data class MottakerAdresseTo(
     val adresselinje2: String? = null,
     val adresselinje3: String? = null,
     val bruksenhetsnummer: String? = null,
-    @Schema(description = "Lankode må være i ISO 3166-1 alpha-2 format") val landkode: String,
+    @Schema(description = "Lankode må være i ISO 3166-1 alpha-2 format") val landkode: String? = null,
     @Schema(description = "Lankode må være i ISO 3166-1 alpha-3 format") val landkode3: String? = null,
     val postnummer: String? = null,
     val poststed: String? = null
