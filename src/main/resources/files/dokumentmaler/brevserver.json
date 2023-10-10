@@ -381,7 +381,8 @@
   },
   {
     "kode": "BI01S07",
-    "tittel": "Varsel om begrenset revurdering av barnebidrag",
+    "beskrivelse": "Varsel om fastsettelse begrenset revurdering barnebidrag",
+    "tittel": "Vi skal fastsette barnebidraget",
     "kreverDataGrunnlag": {
       "vedtak": false,
       "behandling": false,
@@ -446,7 +447,8 @@
   },
   {
     "kode": "BI01S06",
-    "tittel": "Varsel om fastsettelse av barnebidrag fra barnets fødsel",
+    "beskrivelse": "Varsel om fastsettelse av barnebidrag fra barnets fødsel",
+    "tittel": "Vi skal fastsette barnebidraget",
     "kreverDataGrunnlag": {
       "vedtak": false,
       "behandling": false,
@@ -511,7 +513,8 @@
   },
   {
     "kode": "BI01S35",
-    "tittel": "Varsel om endring av barnebidraget på grunn av forholdsmessig fordeling",
+    "beskrivelse": "Varsel om endring av barnebidraget på grunn av forholdsmessig fordeling",
+    "tittel": "Vi skal endre barnebidraget",
     "kreverDataGrunnlag": {
       "vedtak": false,
       "behandling": false,
@@ -537,7 +540,8 @@
   },
   {
     "kode": "BI01S46",
-    "tittel": "Varsel om endring av oppfostringsbidraget på grunn av forholdsmessig fordeling",
+    "beskrivelse": "Varsel om endring av oppfostringsbidraget på grunn av forholdsmessig fordeling",
+    "tittel": "Vi skal endre oppfostringsbidraget",
     "kreverDataGrunnlag": {
       "vedtak": false,
       "behandling": false,
@@ -550,7 +554,8 @@
   },
   {
     "kode": "BI01S62",
-    "tittel": "Varsel om fastsettelse av barnebidrag til den bidragspliktiges barnetillegg",
+    "beskrivelse": "Varsel om fastsettelse av barnebidrag til den bidragspliktiges barnetillegg",
+    "tittel": "Vi skal endre barnebidraget",
     "kreverDataGrunnlag": {
       "vedtak": false,
       "behandling": false,
@@ -576,7 +581,8 @@
   },
   {
     "kode": "BI01S22",
-    "tittel": "Revurdering bidrag pga bidragsforskudd til bidragsmottaker",
+    "beskrivelse": "Varsel om endring begrenset revurdering barnebidrag",
+    "tittel": "Vi skal endre barnebidraget",
     "kreverDataGrunnlag": {
       "vedtak": false,
       "behandling": false,
@@ -589,7 +595,8 @@
   },
   {
     "kode": "BI01S23",
-    "tittel": "Revurdering bidrag pga bidragsforskudd til bidragspliktig",
+    "beskrivelse": "Varsel om endring begrenset revurdering barnebidrag",
+    "tittel": "Vi skal endre barnebidraget",
     "kreverDataGrunnlag": {
       "vedtak": false,
       "behandling": false,
