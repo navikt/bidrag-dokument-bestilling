@@ -408,7 +408,8 @@
   },
   {
     "kode": "BI01B04",
-    "tittel": "Revurdering Bidrags pga forskudd",
+    "beskrivelse": "Vedtak begrenset revurdering",
+    "tittel": "Vedtak barnebidrag",
     "kreverDataGrunnlag": {
       "vedtak": false,
       "behandling": false,
