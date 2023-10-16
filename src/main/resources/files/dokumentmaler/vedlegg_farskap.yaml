@@ -1,42 +1,42 @@
 Innkalling:
   - kode: VARSEL_BIDRAGFORSKUDD_BOR_IKKE_SAMMEN
-    filnavn: Informasjon om bidrag og bidragsforskudd – gjelder foreldre som ikke bor sammen.pdf
+    filsti: ikke_redigerbar/Informasjon om bidrag og bidragsforskudd – gjelder foreldre som ikke bor sammen.pdf
     tittel: Informasjon om bidrag og bidragsforskudd – gjelder foreldre som ikke bor sammen
   - kode: INFO_OM_SAKSGANG_TIMEBESTILLING
-    filnavn: Informasjon om saksgang og timebestilling i farskapssaker.pdf
+    filsti: ikke_redigerbar/Informasjon om saksgang og timebestilling i farskapssaker.pdf
     tittel: Informasjon om saksgang og timebestilling i farskapssaker
   - kode: SKJEMA_FASTSETTELSE_OG_RETTSVIRKNINGER
-    filnavn: "NAV 55-00.05 - Fastsettelse og rettsvirkninger av farskap når foreldrene ikke er gift med hverandre.pdf"
+    filsti: "ikke_redigerbar/NAV 55-00.05 - Fastsettelse og rettsvirkninger av farskap når foreldrene ikke er gift med hverandre.pdf"
     tittel: NAV 55-00.05 Fastsettelse og rettsvirkninger av farskap når foreldrene ikke er gift med hverandre
 Henleggelse:
   - kode: VEDLEGG_BARNELOVEN_11
-    filnavn: Utdrag fra barneloven § 11.pdf
+    filsti: ikke_redigerbar/Utdrag fra barneloven § 11.pdf
     tittel: 'Vedlegg: Utdrag fra barneloven § 11'
   - kode: VARSEL_BIDRAGFORSKUDD_BM_FARSKAP_HENLAGT
-    filnavn: Informasjon om forskudd til BM hvor farskap er henlagt.pdf
+    filsti: ikke_redigerbar/Informasjon om forskudd til BM hvor farskap er henlagt.pdf
     tittel: Informasjon om forskudd til bidragsmottaker hvor farskap er henlagt
 Endring:
   - kode: VEDLEGG_BARNELOVEN_6_7
-    filnavn: Utdrag fra barnelova §§ 6 og 7.pdf
+    filsti: Utdrag fra barnelova §§ 6 og 7.pdf
     tittel: Utdrag fra barnelova §§ 6 og 7
 Fastsettelse av farskap i Norge:
   - kode: VEDLEGG_BARNELOVEN_4_FEMTE_LEDD
-    filnavn: Vedlegg Barneloven § 4 femte ledd.pdf
+    filsti: Vedlegg Barneloven § 4 femte ledd.pdf
     tittel: 'Vedlegg: Barneloven § 4 femte ledd'
   - kode: VEDLEGG_BARNELOVEN_4_81
-    filnavn: Vedlegg Barneloven § 4 og § 81.pdf
+    filsti: Vedlegg Barneloven § 4 og § 81.pdf
     tittel: 'Vedlegg: Barneloven § 4 og § 81'
   - kode: VEDLEGG_BARNELOVEN_81_ANDRE_LEDD
-    filnavn: Vedlegg Barneloven § 81 andre ledd.pdf
+    filsti: Vedlegg Barneloven § 81 andre ledd.pdf
     tittel: 'Vedlegg: Barneloven § 81 annet ledd '
   - kode: VEDLEGG_BARNELOVEN_81
-    filnavn: Vedlegg Barneloven § 81.pdf
+    filsti: Vedlegg Barneloven § 81.pdf
     tittel: 'Vedlegg: Barneloven § 81'
 Klage:
   - kode: VEDLEGG_KLAGE
-    filnavn: Klage vedlegg.pdf
+    filsti: ikke_redigerbar/Klage vedlegg.pdf
     tittel: Klage vedlegg
 Barn død:
   - kode: VEDLEGG_BARN_DOD
-    filnavn: Barn død/Informasjon om saksgang og timebestilling i farskapssak.pdf
+    filsti: ikke_redigerbar/Barn død/Informasjon om saksgang og timebestilling i farskapssak.pdf
     tittel: Informasjon om saksgang og timebestilling i farskapssak

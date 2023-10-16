@@ -120,7 +120,7 @@ open class DokumentMalBucket(
     override val kreverDataGrunnlag: DokumentDataGrunnlag? = null,
     override val bestillingSystem: BestillingSystemType = BestillingSystem.BUCKET,
     open val folderName: String,
-    open val filnavn: String? = null,
+    open val filsti: String? = null,
     open val tilhørerEnheter: List<String> = emptyList(),
     open val språk: StøttetSpråk = StøttetSpråk.NB,
     open val gruppeVisningsnavn: String? = null,
@@ -137,7 +137,7 @@ open class DokumentMalBucket(
     redigerbar = redigerbar
 ) {
 
-    private val bucketFilename get() = filnavn?.substringBefore(".pdf") ?: kode
+    private val bucketFilename get() = filsti?.substringBefore(".pdf") ?: kode
     val filePath get() = "$folderName/$bucketFilename.pdf"
 }
 
