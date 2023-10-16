@@ -27,6 +27,8 @@ env:
   MQ_PORT: 1414
   MQ_HOSTNAME: mpls02.adeo.no
   MQ_CHANNEL: P_BDBESTILLING
+
+  VEDLEGG_FARSKAP_ENABLED: false
 outbound-access-apps:
   - bidrag-vedtak
 outbound-access-hosts:

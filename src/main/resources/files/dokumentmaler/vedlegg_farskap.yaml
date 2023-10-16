@@ -1,0 +1,42 @@
+Innkalling:
+  - kode: INFO_OM_SAKSGANG_TIMEBESTILLING
+    filsti: ikke_redigerbar/Informasjon om saksgang og timebestilling i farskapssaker.pdf
+    tittel: Informasjon om saksgang og timebestilling i farskapssaker
+  - kode: VARSEL_BIDRAGFORSKUDD_BOR_IKKE_SAMMEN
+    filsti: ikke_redigerbar/Informasjon om bidrag og bidragsforskudd – gjelder foreldre som ikke bor sammen.pdf
+    tittel: Informasjon om bidrag og bidragsforskudd – gjelder foreldre som ikke bor sammen
+  - kode: SKJEMA_FASTSETTELSE_OG_RETTSVIRKNINGER
+    filsti: ikke_redigerbar/NAV 55-00.05 - Fastsettelse og rettsvirkninger av farskap når foreldrene ikke er gift med hverandre.pdf
+    tittel: NAV 55-00.05 Fastsettelse og rettsvirkninger av farskap når foreldrene ikke er gift med hverandre
+Henleggelse:
+  - kode: VARSEL_BIDRAGFORSKUDD_BM_FARSKAP_HENLAGT
+    filsti: ikke_redigerbar/Informasjon om forskudd til BM hvor farskap er henlagt.pdf
+    tittel: Informasjon om forskudd til bidragsmottaker hvor farskap er henlagt
+  - kode: VEDLEGG_BARNELOVEN_11
+    filsti: ikke_redigerbar/Utdrag fra barneloven § 11.pdf
+    tittel: 'Vedlegg: Utdrag fra barneloven § 11'
+Endring:
+  - kode: VEDLEGG_BARNELOVEN_6_7
+    filsti: ikke_redigerbar/Utdrag fra barnelova §§ 6 og 7.pdf
+    tittel: Utdrag fra barnelova §§ 6 og 7
+Fastsettelse av farskap i Norge:
+  - kode: VEDLEGG_BARNELOVEN_81
+    filsti: ikke_redigerbar/Vedlegg Barneloven § 81.pdf
+    tittel: 'Vedlegg: Barneloven § 81'
+  - kode: VEDLEGG_BARNELOVEN_4_81
+    filsti: ikke_redigerbar/Vedlegg Barneloven § 4 og § 81.pdf
+    tittel: 'Vedlegg: Barneloven § 4 og § 81'
+  - kode: VEDLEGG_BARNELOVEN_81_ANDRE_LEDD
+    filsti: ikke_redigerbar/Vedlegg Barneloven § 81 andre ledd.pdf
+    tittel: 'Vedlegg: Barneloven § 81 annet ledd'
+  - kode: VEDLEGG_BARNELOVEN_4_FEMTE_LEDD
+    filsti: ikke_redigerbar/Vedlegg Barneloven § 4 femte ledd.pdf
+    tittel: 'Vedlegg: Barneloven § 4 femte ledd'
+Klage:
+  - kode: VEDLEGG_KLAGE
+    filsti: ikke_redigerbar/Klage vedlegg.pdf
+    tittel: Klage vedlegg
+Barn død:
+  - kode: VEDLEGG_BARN_DOD
+    filsti: ikke_redigerbar/Barn død/Informasjon om saksgang og timebestilling i farskapssak.pdf
+    tittel: Informasjon om saksgang og timebestilling i farskapssak
