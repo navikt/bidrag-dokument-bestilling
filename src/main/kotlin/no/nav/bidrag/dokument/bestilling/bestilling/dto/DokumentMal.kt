@@ -3,6 +3,8 @@ package no.nav.bidrag.dokument.bestilling.bestilling.dto
 import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.JavaType
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.databind.SerializationFeature
+import com.fasterxml.jackson.databind.node.ArrayNode
 import com.fasterxml.jackson.databind.node.ObjectNode
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory
 import org.springframework.core.io.ClassPathResource
@@ -74,7 +76,8 @@ data class DokumentMalBucketUtland(
     override val språk: StøttetSpråk,
     override val tittel: String = beskrivelse,
     override val tilhørerEnheter: List<String> = listOf(EnhetKode.UTLAND),
-    override val innholdType: InnholdType = InnholdType.VARSEL
+    override val innholdType: InnholdType = InnholdType.VARSEL,
+    override val gruppeVisningsnavn: String,
 ) : DokumentMalBucket(
     kode = kode,
     beskrivelse = beskrivelse,
@@ -82,23 +85,26 @@ data class DokumentMalBucketUtland(
     tittel = tittel,
     tilhørerEnheter = tilhørerEnheter,
     språk = språk,
-    innholdType = innholdType
+    innholdType = innholdType,
+    gruppeVisningsnavn = gruppeVisningsnavn
 )
 
 data class DokumentMalBucketFarskap(
     override val folderName: String = "vedlegg_farskap",
     override val kode: String,
-    override val beskrivelse: String,
-    override val tittel: String = beskrivelse,
+    override val tittel: String,
+    override val beskrivelse: String = tittel,
     override val tilhørerEnheter: List<String> = listOf(EnhetKode.FARSKAP),
-    override val innholdType: InnholdType = InnholdType.VARSEL
+    override val innholdType: InnholdType = InnholdType.VARSEL,
+    override val gruppeVisningsnavn: String,
 ) : DokumentMalBucket(
     kode = kode,
     beskrivelse = beskrivelse,
     folderName = folderName,
     tittel = tittel,
     tilhørerEnheter = tilhørerEnheter,
-    innholdType = innholdType
+    innholdType = innholdType,
+    gruppeVisningsnavn = gruppeVisningsnavn
 )
 
 
@@ -116,7 +122,8 @@ open class DokumentMalBucket(
     open val folderName: String,
     open val filnavn: String? = null,
     open val tilhørerEnheter: List<String> = emptyList(),
-    open val språk: StøttetSpråk = StøttetSpråk.NB
+    open val språk: StøttetSpråk = StøttetSpråk.NB,
+    open val gruppeVisningsnavn: String? = null,
 ) : DokumentMal(
     kode = kode,
     beskrivelse = beskrivelse,
@@ -159,23 +166,34 @@ data class DokumentMalBrevserver(
     redigerbar = redigerbar
 )
 
+enum class FilType {
+    JSON,
+    YAML
+}
+
 private inline fun <reified T : DokumentMal> lastDokumentMalerFraFil(
     filnavn: String,
-    prefiks: String? = null
+    prefiks: String? = null,
+    type: FilType = FilType.JSON,
+    withGroupname: Boolean = false
 ): List<T> {
     return try {
+        val fileending = if (type == FilType.JSON) "json" else "yaml"
         val objectMapper = ObjectMapper(YAMLFactory())
         objectMapper.findAndRegisterModules()
             .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
-        val inputstream = ClassPathResource("files/dokumentmaler/$filnavn.json").inputStream
+        val inputstream = ClassPathResource("files/dokumentmaler/$filnavn.$fileending").inputStream
         val text = String(inputstream.readAllBytes(), StandardCharsets.UTF_8)
+        val textConverted =
+            if (withGroupname)
+                konverterGruppeNavnTilParameter(text, "gruppeVisningsnavn") else text
         val textWithPrefiks = if (prefiks != null) {
-            val json = objectMapper.readTree(text)
+            val json = objectMapper.readTree(textConverted)
             json.asSequence().forEach {
                 (it as ObjectNode).put("kode", "${prefiks}_${it.get("kode").asText()}")
             }
             json.toString()
-        } else text
+        } else textConverted
 
         val listType: JavaType =
             objectMapper.typeFactory.constructCollectionType(MutableList::class.java, T::class.java)
@@ -190,9 +208,41 @@ private inline fun <reified T : DokumentMal> lastDokumentMalerFraFil(
     }
 }
 
+private fun konverterGruppeNavnTilParameter(
+    payload: String,
+    parameterName: String
+): String {
+    return try {
+        val objectMapper = ObjectMapper(YAMLFactory())
+        objectMapper.findAndRegisterModules()
+            .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
+            .configure(SerializationFeature.ORDER_MAP_ENTRIES_BY_KEYS, true)
+        val mapType: JavaType =
+            objectMapper.typeFactory.constructMapType(
+                Map::class.java,
+                String::class.java,
+                ArrayNode::class.java
+            )
+        val payloadMap: Map<String, ArrayNode> = objectMapper.readValue(
+            payload,
+            mapType
+        )
+
+        objectMapper.writeValueAsString(payloadMap.keys.flatMap { key ->
+            payloadMap[key]?.map {
+                (it as ObjectNode).put(parameterName, key)
+            } ?: emptyList()
+        })
+    } catch (e: IOException) {
+        throw RuntimeException("Kunne ikke laste fil", e)
+    }
+}
+
 val dokumentmalerBrevserver: List<DokumentMalBrevserver> = lastDokumentMalerFraFil("brevserver")
-val dokumentmalerBucket: List<DokumentMalBucketUtland> =
-    lastDokumentMalerFraFil("vedlegg_utland", "UTLAND")
-val alleDokumentmaler = dokumentmalerBrevserver + dokumentmalerBucket
+val dokumentmalerUtland: List<DokumentMalBucketUtland> =
+    lastDokumentMalerFraFil("vedlegg_utland", "UTLAND", type = FilType.YAML, true)
+val dokumentmalerFarskap: List<DokumentMalBucketFarskap> =
+    lastDokumentMalerFraFil("vedlegg_farskap", "FARSKAP", type = FilType.YAML, true)
+val alleDokumentmaler = dokumentmalerBrevserver + dokumentmalerUtland + dokumentmalerFarskap
 
 fun hentDokumentMal(kode: String): DokumentMal? = alleDokumentmaler.find { it.kode == kode }

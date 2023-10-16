@@ -5,11 +5,13 @@ import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter
 import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider
 import io.kotest.assertions.withClue
 import io.kotest.matchers.shouldBe
+import io.kotest.matchers.shouldNotBe
 import mu.KotlinLogging
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.DokumentMalBrevserver
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.alleDokumentmaler
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.dokumentmalerBrevserver
-import no.nav.bidrag.dokument.bestilling.bestilling.dto.dokumentmalerBucket
+import no.nav.bidrag.dokument.bestilling.bestilling.dto.dokumentmalerFarskap
+import no.nav.bidrag.dokument.bestilling.bestilling.dto.dokumentmalerUtland
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 
@@ -59,7 +61,7 @@ class DokumentMalTest {
         LOGGER.info {
             ObjectMapper().findAndRegisterModules()
                 .writer(filter2)
-                .writeValueAsString(dokumentmalerBucket)
+                .writeValueAsString(dokumentmalerUtland)
         }
     }
 
@@ -78,7 +80,15 @@ class DokumentMalTest {
     @Test
     fun `Skal hente dokumentmaler utland`() {
 
-        dokumentmalerBucket.filter { it.kode.startsWith("UTLAND_") }.size shouldBe 16
+        dokumentmalerUtland.filter { it.kode.startsWith("UTLAND_") }.size shouldBe 16
     }
 
+    @Test
+    fun `Skal hente dokumentmaler farskap`() {
+
+        dokumentmalerFarskap.filter { it.kode.startsWith("FARSKAP_") }.size shouldBe 12
+        dokumentmalerFarskap.forEach {
+            it.gruppeVisningsnavn shouldNotBe null
+        }
+    }
 }

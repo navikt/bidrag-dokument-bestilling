@@ -122,6 +122,7 @@ class DokumentBestillingKontroller(val dokumentBestillingService: DokumentBestil
                     språk = if (it is DokumentMalBucket) listOf(it.språk) else if (it is DokumentMalBrevserver) it.støttetSpråk else emptyList(),
                     innholdType = it.innholdType,
                     statiskInnhold = it.statiskInnhold,
+                    gruppeVisningsnavn = if (it is DokumentMalBucket) it.gruppeVisningsnavn else null,
                     tilhorerEnheter = if (it is DokumentMalBucket) it.tilhørerEnheter else emptyList()
                 )
             }

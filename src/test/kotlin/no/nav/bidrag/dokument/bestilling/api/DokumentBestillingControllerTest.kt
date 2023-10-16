@@ -21,7 +21,8 @@ import no.nav.bidrag.dokument.bestilling.bestilling.dto.PeriodeFraTom
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.StøttetSpråk
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.alleDokumentmaler
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.dokumentmalerBrevserver
-import no.nav.bidrag.dokument.bestilling.bestilling.dto.dokumentmalerBucket
+import no.nav.bidrag.dokument.bestilling.bestilling.dto.dokumentmalerFarskap
+import no.nav.bidrag.dokument.bestilling.bestilling.dto.dokumentmalerUtland
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.hentDokumentMal
 import no.nav.bidrag.dokument.bestilling.bestilling.produksjon.dto.BidragBarn
 import no.nav.bidrag.dokument.bestilling.bestilling.produksjon.dto.BrevBestilling
@@ -102,13 +103,16 @@ class DokumentBestillingControllerTest : AbstractControllerTest() {
         val responseDokumentMalerBrevserver = responseBody.filter { !it.value.statiskInnhold }
         val responseDokumentMalerBucket = responseBody.filter { it.value.statiskInnhold }
 
-        responseDokumentMalerBucket.size shouldBe dokumentmalerBucket.size
+        responseDokumentMalerBucket.size shouldBe dokumentmalerUtland.size + dokumentmalerFarskap.size
         responseDokumentMalerBrevserver.size shouldBe dokumentmalerBrevserver.size
 
         responseDokumentMalerBucket["UTLAND_VEDLEGG_VEDTAK_BP_DE"] shouldNotBe null
         responseDokumentMalerBucket["UTLAND_VEDLEGG_VEDTAK_BP_DE"]!!.språk shouldHaveSize 1
         responseDokumentMalerBucket["UTLAND_VEDLEGG_VEDTAK_BP_DE"]!!.språk shouldContain StøttetSpråk.DE
         responseDokumentMalerBucket["UTLAND_VEDLEGG_VEDTAK_BP_DE"]!!.innholdType shouldBe InnholdType.VEDLEGG_VEDTAK
+
+        responseDokumentMalerBucket["FARSKAP_VARSEL_BIDRAGFORSKUDD_BOR_IKKE_SAMMEN"] shouldNotBe null
+        responseDokumentMalerBucket["FARSKAP_VARSEL_BIDRAGFORSKUDD_BOR_IKKE_SAMMEN"]!!.gruppeVisningsnavn shouldBe "Innkalling"
     }
 
     @Test

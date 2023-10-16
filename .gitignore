@@ -31,4 +31,6 @@ build/
 ### VS Code ###
 .vscode/
 
+**/bucket/bidrag-dokument-bestilling-local/vedlegg*
+
 application-lokal-nais-secrets*

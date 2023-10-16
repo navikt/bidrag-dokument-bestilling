@@ -12,5 +12,6 @@ data class DokumentMalDetaljer(
     val språk: List<StøttetSpråk>,
     val statiskInnhold: Boolean = false,
     val innholdType: InnholdType,
+    val gruppeVisningsnavn: String? = null,
     val tilhorerEnheter: List<String> = emptyList(),
 )
