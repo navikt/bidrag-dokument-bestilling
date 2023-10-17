@@ -158,12 +158,7 @@
       <scope>runtime</scope>
       <optional>true</optional>
     </dependency>
-
-    <dependency>
-      <groupId>no.nav.bidrag.dokument</groupId>
-      <artifactId>bidrag-dokument-dto</artifactId>
-      <version>${bidrag-dokument-dto.version}</version>
-    </dependency>
+    
     <dependency>
       <groupId>org.apache.cxf</groupId>
       <artifactId>cxf-spring-boot-starter-jaxws</artifactId>
