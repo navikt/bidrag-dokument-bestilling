@@ -8,9 +8,9 @@ import no.nav.bidrag.dokument.bestilling.model.SoknadType
 import no.nav.bidrag.domain.enums.Rolletype
 
 fun Rolletype.toKode() = when (this) {
-    Rolletype.BM -> "02"
-    Rolletype.BP -> "01"
-    Rolletype.RM -> "RM"
+    Rolletype.BIDRAGSMOTTAKER -> "02"
+    Rolletype.BIDRAGSPLIKTIG -> "01"
+    Rolletype.REELMOTTAKER -> "RM"
     else -> "00"
 }
 
@@ -21,6 +21,7 @@ fun Rolle.toKode() = when (this) {
     Rolle.SOKNADSBARN -> "03"
     else -> "00"
 }
+
 fun SivilstandKode.toKode() = when (this) {
     SivilstandKode.ENKE_ELLER_ENKEMANN, SivilstandKode.ENSLIG -> "ENKE"
     SivilstandKode.GIFT -> "GIFT"
@@ -36,5 +37,16 @@ fun SivilstandKode.toKode() = when (this) {
     else -> "NULL"
 }
 
-val VedtakDetaljer.behandlingType get(): BehandlingType? = stønadType?.let { type -> BehandlingType.from(type, engangsbelopType) }
-val VedtakDetaljer.soknadType get(): SoknadType? = vedtakType.let { type -> SoknadType.fromVedtakType(type) }
+val VedtakDetaljer.behandlingType
+    get(): BehandlingType? = stønadType?.let { type ->
+        BehandlingType.from(
+            type,
+            engangsbelopType
+        )
+    }
+val VedtakDetaljer.soknadType
+    get(): SoknadType? = vedtakType.let { type ->
+        SoknadType.fromVedtakType(
+            type
+        )
+    }

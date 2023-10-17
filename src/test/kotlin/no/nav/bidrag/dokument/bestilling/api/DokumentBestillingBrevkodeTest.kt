@@ -99,12 +99,12 @@ class DokumentBestillingBrevkodeTest : AbstractControllerTest() {
                         bestilling.mottaker?.spraak shouldBe "NB"
                         bestilling.mottaker?.navn shouldBe BM1.kortnavn?.verdi
                         bestilling.mottaker?.fodselsnummer shouldBe BM1.ident.verdi
-                        bestilling.mottaker?.rolle shouldBe Rolletype.BM
+                        bestilling.mottaker?.rolle shouldBe Rolletype.BIDRAGSMOTTAKER
                         bestilling.mottaker?.fodselsdato shouldBe BM1.fødselsdato?.verdi
                         bestilling.mottaker?.adresse shouldNotBe null
 
                         bestilling.gjelder?.fodselsnummer shouldBe gjelderId
-                        bestilling.gjelder?.rolle shouldBe Rolletype.BP
+                        bestilling.gjelder?.rolle shouldBe Rolletype.BIDRAGSPLIKTIG
 
                         bestilling.saksbehandler?.ident shouldBe SAKSBEHANDLER_IDENT
                         bestilling.saksbehandler?.navn shouldBe "Saksbehandler Mellomnavn Saksbehandlersen"

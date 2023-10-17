@@ -15,6 +15,7 @@ BIDRAG_VEDTAK_URL: https://bidrag-vedtak.intern.dev.nav.no
 BIDRAG_VEDTAK_SCOPE: dev-gcp.bidrag.bidrag-vedtak
 
 AZURE_APP_TENANT_ID: 966ac572-f5b7-4bbe-aa88-c76419c0f851
+VEDLEGG_FARSKAP_ENABLED: true
 
 server.port: 8998
 NAIS_APP_NAME: bidrag-dokument-bestilling

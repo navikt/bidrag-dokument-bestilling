@@ -173,7 +173,7 @@ internal class DokumentMetadataCollectorTest {
             bestilling.mottaker?.spraak shouldBe "NB"
             bestilling.mottaker?.navn shouldBe BM1.kortnavn?.verdi
             bestilling.mottaker?.fodselsnummer shouldBe BM1.ident.verdi
-            bestilling.mottaker?.rolle shouldBe Rolletype.BM
+            bestilling.mottaker?.rolle shouldBe Rolletype.BIDRAGSMOTTAKER
             bestilling.mottaker?.fodselsdato shouldBe BM1.fødselsdato?.verdi
             bestilling.mottaker?.adresse?.adresselinje1 shouldBe adresseResponse.adresselinje1?.verdi
             bestilling.mottaker?.adresse?.adresselinje2 shouldBe adresseResponse.adresselinje2?.verdi
@@ -187,7 +187,7 @@ internal class DokumentMetadataCollectorTest {
             bestilling.mottaker?.adresse?.land shouldBe "NORGE"
 
             bestilling.gjelder?.fodselsnummer shouldBe BM1.ident.verdi
-            bestilling.gjelder?.rolle shouldBe Rolletype.BM
+            bestilling.gjelder?.rolle shouldBe Rolletype.BIDRAGSMOTTAKER
 
             bestilling.kontaktInfo?.navn shouldBe defaultKontaktinfo.enhetNavn
             bestilling.kontaktInfo?.telefonnummer shouldBe defaultKontaktinfo.telefonnummer
@@ -524,7 +524,7 @@ internal class DokumentMetadataCollectorTest {
         val bestilling = mapToBestillingsdata(request)
         assertSoftly {
             bestilling.gjelder?.fodselsnummer shouldBe BM1.ident.verdi
-            bestilling.gjelder?.rolle shouldBe Rolletype.BM
+            bestilling.gjelder?.rolle shouldBe Rolletype.BIDRAGSMOTTAKER
         }
     }
 
@@ -544,7 +544,7 @@ internal class DokumentMetadataCollectorTest {
         val bestilling = mapToBestillingsdata(request)
         assertSoftly {
             bestilling.gjelder?.fodselsnummer shouldBe BM1.ident.verdi
-            bestilling.gjelder?.rolle shouldBe Rolletype.BM
+            bestilling.gjelder?.rolle shouldBe Rolletype.BIDRAGSMOTTAKER
         }
     }
 
@@ -557,15 +557,15 @@ internal class DokumentMetadataCollectorTest {
             roller = listOf(
                 RolleDto(
                     fødselsnummer = BP1.ident,
-                    type = Rolletype.BP
+                    type = Rolletype.BIDRAGSPLIKTIG
                 ),
                 RolleDto(
                     fødselsnummer = barn1Dod.ident,
-                    type = Rolletype.BA
+                    type = Rolletype.BARN
                 ),
                 RolleDto(
                     fødselsnummer = BARN2.ident,
-                    type = Rolletype.BA
+                    type = Rolletype.BARN
                 )
             )
         )
@@ -584,7 +584,7 @@ internal class DokumentMetadataCollectorTest {
         val bestilling = mapToBestillingsdata(request)
         assertSoftly {
             bestilling.gjelder?.fodselsnummer shouldBe BP1.ident.verdi
-            bestilling.gjelder?.rolle shouldBe Rolletype.BP
+            bestilling.gjelder?.rolle shouldBe Rolletype.BIDRAGSPLIKTIG
         }
     }
 
@@ -709,7 +709,7 @@ internal class DokumentMetadataCollectorTest {
             bestilling.mottaker?.spraak shouldBe "NB"
             bestilling.mottaker?.navn shouldBe bmKode6.kortnavn?.verdi
             bestilling.mottaker?.fodselsnummer shouldBe bmKode6.ident.verdi
-            bestilling.mottaker?.rolle shouldBe Rolletype.BM
+            bestilling.mottaker?.rolle shouldBe Rolletype.BIDRAGSMOTTAKER
             bestilling.mottaker?.fodselsdato shouldBe BM1.fødselsdato?.verdi
             bestilling.mottaker?.adresse?.adresselinje1 shouldBe adresseResponse.adresselinje1?.verdi
             bestilling.mottaker?.adresse?.adresselinje2 shouldBe adresseResponse.adresselinje2?.verdi
@@ -820,7 +820,7 @@ internal class DokumentMetadataCollectorTest {
             roller.add(
                 RolleDto(
                     fødselsnummer = PersonIdent(rmIdent),
-                    type = Rolletype.RM
+                    type = Rolletype.REELMOTTAKER
                 )
             )
             val sak = originalSakResponse.copy(
@@ -848,15 +848,15 @@ internal class DokumentMetadataCollectorTest {
                 roller = listOf(
                     RolleDto(
                         fødselsnummer = BP1.ident,
-                        type = Rolletype.BP
+                        type = Rolletype.BIDRAGSPLIKTIG
                     ),
                     RolleDto(
                         fødselsnummer = BARN1.ident,
-                        type = Rolletype.BA
+                        type = Rolletype.BARN
                     ),
                     RolleDto(
                         fødselsnummer = BARN2.ident,
-                        type = Rolletype.BA
+                        type = Rolletype.BARN
                     )
                 )
             )
@@ -884,15 +884,15 @@ internal class DokumentMetadataCollectorTest {
                 roller = listOf(
                     RolleDto(
                         fødselsnummer = BM1.ident,
-                        type = Rolletype.BM
+                        type = Rolletype.BIDRAGSMOTTAKER
                     ),
                     RolleDto(
                         fødselsnummer = BARN1.ident,
-                        type = Rolletype.BA
+                        type = Rolletype.BARN
                     ),
                     RolleDto(
                         fødselsnummer = BARN2.ident,
-                        type = Rolletype.BA
+                        type = Rolletype.BARN
                     )
                 )
             )
@@ -920,7 +920,7 @@ internal class DokumentMetadataCollectorTest {
                 roller = listOf(
                     RolleDto(
                         fødselsnummer = BM1.ident,
-                        type = Rolletype.BM
+                        type = Rolletype.BIDRAGSMOTTAKER
                     )
                 )
             )
@@ -949,15 +949,15 @@ internal class DokumentMetadataCollectorTest {
                 roller = listOf(
                     RolleDto(
                         fødselsnummer = BM1.ident,
-                        type = Rolletype.BM
+                        type = Rolletype.BIDRAGSMOTTAKER
                     ),
                     RolleDto(
                         fødselsnummer = barn1Dod.ident,
-                        type = Rolletype.BA
+                        type = Rolletype.BARN
                     ),
                     RolleDto(
                         fødselsnummer = BARN2.ident,
-                        type = Rolletype.BA
+                        type = Rolletype.BARN
                     )
                 )
             )
@@ -986,15 +986,15 @@ internal class DokumentMetadataCollectorTest {
                 roller = listOf(
                     RolleDto(
                         fødselsnummer = BM1.ident,
-                        type = Rolletype.BM
+                        type = Rolletype.BIDRAGSMOTTAKER
                     ),
                     RolleDto(
                         fødselsnummer = BARN1.ident,
-                        type = Rolletype.BA
+                        type = Rolletype.BARN
                     ),
                     RolleDto(
                         fødselsnummer = BARN2.ident,
-                        type = Rolletype.BA
+                        type = Rolletype.BARN
                     )
                 )
             )
@@ -1024,15 +1024,15 @@ internal class DokumentMetadataCollectorTest {
                 roller = listOf(
                     RolleDto(
                         fødselsnummer = BM1.ident,
-                        type = Rolletype.BM
+                        type = Rolletype.BIDRAGSMOTTAKER
                     ),
                     RolleDto(
                         fødselsnummer = BARN1.ident,
-                        type = Rolletype.BA
+                        type = Rolletype.BARN
                     ),
                     RolleDto(
                         fødselsnummer = BARN2.ident,
-                        type = Rolletype.BA
+                        type = Rolletype.BARN
                     )
                 )
             )
@@ -1070,23 +1070,23 @@ internal class DokumentMetadataCollectorTest {
             roller = listOf(
                 RolleDto(
                     fødselsnummer = BM1.ident,
-                    type = Rolletype.BM
+                    type = Rolletype.BIDRAGSMOTTAKER
                 ),
                 RolleDto(
                     fødselsnummer = barn1.ident,
-                    type = Rolletype.BA
+                    type = Rolletype.BARN
                 ),
                 RolleDto(
                     fødselsnummer = barn2.ident,
-                    type = Rolletype.BA
+                    type = Rolletype.BARN
                 ),
                 RolleDto(
                     fødselsnummer = barn3.ident,
-                    type = Rolletype.BA
+                    type = Rolletype.BARN
                 ),
                 RolleDto(
                     fødselsnummer = barn4.ident,
-                    type = Rolletype.BA
+                    type = Rolletype.BARN
                 )
             )
         )

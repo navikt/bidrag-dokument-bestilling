@@ -5,8 +5,6 @@ import no.nav.bidrag.dokument.bestilling.api.dto.SamhandlerAdresse
 import no.nav.bidrag.dokument.bestilling.api.dto.SamhandlerInformasjon
 import no.nav.bidrag.dokument.bestilling.consumer.dto.EnhetKontaktInfoDto
 import no.nav.bidrag.dokument.bestilling.consumer.dto.EnhetPostadresseDto
-import no.nav.bidrag.dokument.dto.OpprettDokumentDto
-import no.nav.bidrag.dokument.dto.OpprettJournalpostResponse
 import no.nav.bidrag.domain.bool.LevdeAdskilt
 import no.nav.bidrag.domain.bool.UkjentPart
 import no.nav.bidrag.domain.enums.Adressetype
@@ -31,6 +29,8 @@ import no.nav.bidrag.domain.string.Saksnummer
 import no.nav.bidrag.domain.tid.Dødsdato
 import no.nav.bidrag.domain.tid.Fødselsdato
 import no.nav.bidrag.domain.tid.OpprettetDato
+import no.nav.bidrag.transport.dokument.OpprettDokumentDto
+import no.nav.bidrag.transport.dokument.OpprettJournalpostResponse
 import no.nav.bidrag.transport.person.PersonAdresseDto
 import no.nav.bidrag.transport.person.PersonDto
 import no.nav.bidrag.transport.sak.BidragssakDto
@@ -113,19 +113,19 @@ fun createSakResponse(): BidragssakDto {
         roller = listOf(
             RolleDto(
                 fødselsnummer = BM1.ident,
-                type = Rolletype.BM
+                type = Rolletype.BIDRAGSMOTTAKER
             ),
             RolleDto(
                 fødselsnummer = BP1.ident,
-                type = Rolletype.BP
+                type = Rolletype.BIDRAGSPLIKTIG
             ),
             RolleDto(
                 fødselsnummer = BARN1.ident,
-                type = Rolletype.BA
+                type = Rolletype.BARN
             ),
             RolleDto(
                 fødselsnummer = BARN2.ident,
-                type = Rolletype.BA
+                type = Rolletype.BARN
             )
         ),
         saksstatus = Bidragssakstatus.IN,
