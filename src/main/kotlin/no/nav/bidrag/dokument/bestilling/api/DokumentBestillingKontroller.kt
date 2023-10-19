@@ -11,7 +11,6 @@ import no.nav.bidrag.dokument.bestilling.api.dto.DokumentBestillingResponse
 import no.nav.bidrag.dokument.bestilling.api.dto.DokumentMalDetaljer
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.DokumentMalBrevserver
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.DokumentMalBucket
-import no.nav.bidrag.dokument.bestilling.bestilling.dto.DokumentMalBucketFarskap
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.alleDokumentmaler
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.hentDokumentMal
 import no.nav.bidrag.dokument.bestilling.model.dokumentMalEksistererIkke
@@ -118,16 +117,16 @@ class DokumentBestillingKontroller(
     )
     fun hentDokumentmalDetaljer(): Map<String, DokumentMalDetaljer> {
         return alleDokumentmaler
-            .filter { it !is DokumentMalBucketFarskap || vedleggFarskapEnabled }
             .associate {
                 it.kode to DokumentMalDetaljer(
                     beskrivelse = it.beskrivelse,
                     tittel = it.tittel,
                     type = it.dokumentType,
                     kanBestilles = it.enabled,
+                    redigerbar = it.redigerbar,
                     språk = if (it is DokumentMalBucket) listOf(it.språk) else if (it is DokumentMalBrevserver) it.støttetSpråk else emptyList(),
                     innholdType = it.innholdType,
-                    statiskInnhold = it.statiskInnhold,
+                    statiskInnhold = it is DokumentMalBucket,
                     gruppeVisningsnavn = if (it is DokumentMalBucket) it.gruppeVisningsnavn else null,
                     tilhorerEnheter = if (it is DokumentMalBucket) it.tilhørerEnheter else emptyList()
                 )

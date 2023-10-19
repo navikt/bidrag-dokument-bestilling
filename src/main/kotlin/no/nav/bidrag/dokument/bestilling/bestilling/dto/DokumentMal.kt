@@ -30,6 +30,7 @@ enum class DokumentType {
 enum class InnholdType {
     VARSEL,
     VEDTAK,
+    VEDLEGG,
     VEDLEGG_VEDTAK,
     VEDLEGG_VARSEL,
     SKJEMA,
@@ -64,9 +65,7 @@ abstract class DokumentMal(
     open val kreverDataGrunnlag: DokumentDataGrunnlag?,
     open val innholdType: InnholdType,
     open val redigerbar: Boolean,
-) {
-    val statiskInnhold get() = kreverDataGrunnlag == null && !redigerbar
-}
+)
 
 
 data class DokumentMalBucketUtland(
