@@ -86,7 +86,7 @@ class DokumentMalTest {
     @Test
     fun `Skal hente dokumentmaler farskap`() {
 
-        dokumentmalerFarskap.filter { it.kode.startsWith("FARSKAP_") }.size shouldBe 12
+        dokumentmalerFarskap.filter { it.kode.startsWith("FARSKAP_") }.size shouldBe 30
         dokumentmalerFarskap.forEach {
             it.gruppeVisningsnavn shouldNotBe null
         }
