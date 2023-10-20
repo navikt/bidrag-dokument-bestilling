@@ -2,9 +2,11 @@ Innkalling:
   - kode: INFO_OM_SAKSGANG_TIMEBESTILLING
     filsti: ikke_redigerbar/Informasjon om saksgang og timebestilling i farskapssaker.pdf
     tittel: Informasjon om saksgang og timebestilling i farskapssaker
+    innholdType: VEDLEGG_VARSEL
   - kode: VARSEL_BIDRAGFORSKUDD_BOR_IKKE_SAMMEN
     filsti: ikke_redigerbar/Informasjon om bidrag og bidragsforskudd – gjelder foreldre som ikke bor sammen.pdf
     tittel: Informasjon om bidrag og bidragsforskudd – gjelder foreldre som ikke bor sammen
+    innholdType: VEDLEGG_VARSEL
   - kode: SKJEMA_FASTSETTELSE_OG_RETTSVIRKNINGER
     filsti: ikke_redigerbar/NAV 55-00.05 - Fastsettelse og rettsvirkninger av farskap når foreldrene ikke er gift med hverandre.pdf
     tittel: NAV 55-00.05 Fastsettelse og rettsvirkninger av farskap når foreldrene ikke er gift med hverandre
@@ -21,7 +23,7 @@ Erklæring:
     innholdType: SKJEMA
   - kode: SKJEMA_ERKLARING_FARSKAP_EN
     filsti: redigerbar_skjema/nav_skjema/NAV 55-00.10 - DECLARATION OF PATERNITY.pdf
-    tittel: NAV 55-00.10 - DECLARATION OF PATERNITY
+    tittel: NAV 55-00.10 - DECLARATION OF PATERNITY (engelsk)
     redigerbar: true
     innholdType: SKJEMA
   - kode: SKJEMA_ERKLARING_FARSKAP_UTEN_PERSONLIG_FRAMMOTE
@@ -32,6 +34,27 @@ Erklæring:
   - kode: SKJEMA_MELDING_PERSONREG_BIDRAGGFOGD_FARSKAP
     filsti: redigerbar_skjema/nav_skjema/NAV 55-00.25 - Melding til Personregisteret fra bidragsfogden (NAV) om farskap.pdf
     tittel: NAV 55-00.25 - Melding til Personregisteret fra bidragsfogden (NAV) om farskap
+    redigerbar: true
+    innholdType: SKJEMA
+Svarslipper:
+  - kode: SKJEMA_SVARSLIPP_OPPLYSNING_OPPGITT_FAR
+    filsti: redigerbar_skjema/intern_skjema/Svarslipp for opplysninger om oppgitt far.pdf
+    tittel: Svarslipp for opplysninger om oppgitt far
+    redigerbar: true
+    innholdType: SKJEMA
+  - kode: SKJEMA_SVARSLIPP_OPPLYSNING_OPPGITT_MOR
+    filsti: redigerbar_skjema/intern_skjema/Svarslipp for opplysninger om mor.pdf
+    tittel: Svarslipp for opplysninger om mor
+    redigerbar: true
+    innholdType: SKJEMA
+  - kode: SKJEMA_SVARSLIPP_OPPLYSNING_OPPGITT_JURIDISK_FAR
+    filsti: redigerbar_skjema/intern_skjema/Svarslipp for opplysninger om juridiske far.pdf
+    tittel: Svarslipp for opplysninger om juridiske far
+    redigerbar: true
+    innholdType: SKJEMA
+  - kode: SKJEMA_SVARSLIPP_SAMTYKKE_HENLEGGELSE
+    filsti: redigerbar_skjema/intern_skjema/Svarslipp for samtykke til henleggelse.pdf
+    tittel: Svarslipp for samtykke til henleggelse
     redigerbar: true
     innholdType: SKJEMA
 Henleggelse:
@@ -45,6 +68,7 @@ Endring:
   - kode: VEDLEGG_BARNELOVEN_6_7
     filsti: ikke_redigerbar/Utdrag fra barnelova §§ 6 og 7.pdf
     tittel: Utdrag fra barnelova §§ 6 og 7
+    innholdType: VEDLEGG_VEDTAK
   - kode: SKJEMA_PROVETAKING_JURIDSK_FARSKAP
     filsti: redigerbar_skjema/nav_skjema/NAV 55-00.28 - Godkjenning av erklæring om farskap (juridiske far).pdf
     tittel: NAV 55-00.28 - Godkjenning av erklæring om farskap (juridiske far)
@@ -64,19 +88,24 @@ Fastsettelse av farskap i Norge:
   - kode: VEDLEGG_BARNELOVEN_81
     filsti: ikke_redigerbar/Vedlegg Barneloven § 81.pdf
     tittel: 'Vedlegg: Barneloven § 81'
+    innholdType: VEDLEGG_VEDTAK
   - kode: VEDLEGG_BARNELOVEN_4_81
     filsti: ikke_redigerbar/Vedlegg Barneloven § 4 og § 81.pdf
     tittel: 'Vedlegg: Barneloven § 4 og § 81'
+    innholdType: VEDLEGG_VEDTAK
   - kode: VEDLEGG_BARNELOVEN_81_ANDRE_LEDD
     filsti: ikke_redigerbar/Vedlegg Barneloven § 81 andre ledd.pdf
     tittel: 'Vedlegg: Barneloven § 81 annet ledd'
+    innholdType: VEDLEGG_VEDTAK
   - kode: VEDLEGG_BARNELOVEN_4_FEMTE_LEDD
     filsti: ikke_redigerbar/Vedlegg Barneloven § 4 femte ledd.pdf
     tittel: 'Vedlegg: Barneloven § 4 femte ledd'
+    innholdType: VEDLEGG_VEDTAK
 Klage:
   - kode: VEDLEGG_KLAGE
     filsti: ikke_redigerbar/Klage vedlegg.pdf
     tittel: Klage vedlegg
+    innholdType: VEDLEGG_VEDTAK
 DNA:
   - kode: SKJEMA_PROVETAKING_FARSKAP
     filsti: redigerbar_skjema/intern_skjema/Refusjonsskjema for prøvetaking i farskapssak.pdf
