@@ -133,12 +133,12 @@ DNA:
     redigerbar: true
     innholdType: SKJEMA
   - kode: SKJEMA_DNA_UTENRIKSSTASJON_BIOLOGISK_FAR
-    filsti: redigerbar_skjema/nav_skjema/NAV 55-00.38 - Tilbud om å gi prøve til DNA-analyse ved norsk utenriksstasjon i sak om biologisk farskap.pdf
+    filsti: redigerbar_skjema/nav_skjema/NAV 55-00.38 - Tilbud om å gi prøve til DNA-analyse ved norsk utenriksstasjon i sak om biologisk farskap.pdf
     tittel: NAV 55-00.38 - Tilbud om å gi prøve til DNA-analyse ved norsk utenriksstasjon i sak om biologisk farskap
     redigerbar: true
     innholdType: SKJEMA
   - kode: SKJEMA_DNA_PALEGG_BIOLOGISK_FAR
-    filsti: redigerbar_skjema/nav_skjema/NAV 55-00.39 - Pålegg om å gi prøve til DNA-analyse i sak om biologisk farskap.pdf
+    filsti: redigerbar_skjema/nav_skjema/NAV 55-00.39 - Pålegg om å gi prøve til DNA-analyse i sak om biologisk farskap.pdf
     tittel: NAV 55-00.39 - Pålegg om å gi prøve til DNA-analyse i sak om biologisk farskap
     redigerbar: true
     innholdType: SKJEMA
@@ -153,12 +153,12 @@ DNA:
     redigerbar: true
     innholdType: SKJEMA
   - kode: SKJEMA_DNA_PROVE_ANMODNING_ANALYSE_BARN_UTLAND
-    filsti: redigerbar_skjema/nav_skjema/NAV 55-00.65 - Anmodning om å gi prøve til DNA - analyse i farskapssak når barnet er født i utlandet.pdf
+    filsti: redigerbar_skjema/nav_skjema/NAV 55-00.65 - Anmodning om å gi prøve til DNA - analyse i farskapssak når barnet er født i utlandet.pdf
     tittel: NAV 55-00.65 - Anmodning om å gi prøve til DNA – analyse i farskapssak når barnet er født i utlandet
     redigerbar: true
     innholdType: SKJEMA
   - kode: SKJEMA_DNA_PROVE_MELDING_ANALYSE_BARN_UTLAND
-    filsti: redigerbar_skjema/nav_skjema/NAV 55-00.66 - Melding om prøve til DNA - analyse i farskapssak når barnet er født i utlandet.pdf
+    filsti: redigerbar_skjema/nav_skjema/NAV 55-00.66 - Melding om prøve til DNA - analyse i farskapssak når barnet er født i utlandet.pdf
     tittel: NAV 55-00.66 - Melding om prøve til DNA – analyse i farskapssak når barnet er født i utlandet
     redigerbar: true
     innholdType: SKJEMA
