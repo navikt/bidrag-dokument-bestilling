@@ -17,7 +17,6 @@ import no.nav.bidrag.dokument.bestilling.model.dokumentMalEksistererIkke
 import no.nav.bidrag.dokument.bestilling.tjenester.DokumentBestillingService
 import no.nav.security.token.support.core.api.Protected
 import org.slf4j.LoggerFactory
-import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.HttpHeaders
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
@@ -32,10 +31,7 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 @Protected
 @Timed
-class DokumentBestillingKontroller(
-    val dokumentBestillingService: DokumentBestillingService,
-    @Value("\${VEDLEGG_FARSKAP_ENABLED:false}") private val vedleggFarskapEnabled: Boolean
-) {
+class DokumentBestillingKontroller(private val dokumentBestillingService: DokumentBestillingService) {
 
     companion object {
         private val LOGGER = LoggerFactory.getLogger(DokumentBestillingKontroller::class.java)
