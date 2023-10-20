@@ -3,9 +3,11 @@ package no.nav.bidrag.dokument.bestilling.model
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter
 import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider
+import io.kotest.assertions.assertSoftly
 import io.kotest.assertions.withClue
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
+import io.kotest.matchers.string.shouldHaveMaxLength
 import mu.KotlinLogging
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.DokumentMalBrevserver
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.alleDokumentmaler
@@ -76,6 +78,20 @@ class DokumentMalTest {
             }
         }
     }
+
+    @Test
+    fun `Skal ikke ha dokumentmal kode lengre enn 50 tegn`() {
+
+        assertSoftly {
+            alleDokumentmaler.forEach { mal ->
+                withClue("Dokumentmal med kode ${mal.kode} er lengre enn 50 tegn") {
+                    mal.kode shouldHaveMaxLength 49
+                }
+            }
+        }
+
+    }
+
 
     @Test
     fun `Skal hente dokumentmaler utland`() {

@@ -112,17 +112,17 @@ class DokumentBestillingControllerTest : AbstractControllerTest() {
         responseDokumentMalerBucket["UTLAND_VEDLEGG_VEDTAK_BP_DE"]!!.statiskInnhold shouldBe true
         responseDokumentMalerBucket["UTLAND_VEDLEGG_VEDTAK_BP_DE"]!!.innholdType shouldBe InnholdType.VEDLEGG_VEDTAK
 
-        responseDokumentMalerBucket["FARSKAP_VARSEL_BIDRAGFORSKUDD_BOR_IKKE_SAMMEN"] shouldNotBe null
-        responseDokumentMalerBucket["FARSKAP_VARSEL_BIDRAGFORSKUDD_BOR_IKKE_SAMMEN"]!!.gruppeVisningsnavn shouldBe "Innkalling"
-        responseDokumentMalerBucket["FARSKAP_VARSEL_BIDRAGFORSKUDD_BOR_IKKE_SAMMEN"]!!.redigerbar shouldBe false
-        responseDokumentMalerBucket["FARSKAP_VARSEL_BIDRAGFORSKUDD_BOR_IKKE_SAMMEN"]!!.statiskInnhold shouldBe true
-        responseDokumentMalerBucket["FARSKAP_VARSEL_BIDRAGFORSKUDD_BOR_IKKE_SAMMEN"]!!.innholdType shouldBe InnholdType.VEDLEGG_VARSEL
+        responseDokumentMalerBucket["FARSKAP_BIDRAGFORSKUDD_BOR_IKKE_SAMMEN"] shouldNotBe null
+        responseDokumentMalerBucket["FARSKAP_BIDRAGFORSKUDD_BOR_IKKE_SAMMEN"]!!.gruppeVisningsnavn shouldBe "Innkalling"
+        responseDokumentMalerBucket["FARSKAP_BIDRAGFORSKUDD_BOR_IKKE_SAMMEN"]!!.redigerbar shouldBe false
+        responseDokumentMalerBucket["FARSKAP_BIDRAGFORSKUDD_BOR_IKKE_SAMMEN"]!!.statiskInnhold shouldBe true
+        responseDokumentMalerBucket["FARSKAP_BIDRAGFORSKUDD_BOR_IKKE_SAMMEN"]!!.innholdType shouldBe InnholdType.VEDLEGG_VARSEL
 
-        responseDokumentMalerBucket["FARSKAP_SKJEMA_PROVETAKING_FARSKAP"] shouldNotBe null
-        responseDokumentMalerBucket["FARSKAP_SKJEMA_PROVETAKING_FARSKAP"]!!.gruppeVisningsnavn shouldBe "DNA"
-        responseDokumentMalerBucket["FARSKAP_SKJEMA_PROVETAKING_FARSKAP"]!!.redigerbar shouldBe true
-        responseDokumentMalerBucket["FARSKAP_SKJEMA_PROVETAKING_FARSKAP"]!!.statiskInnhold shouldBe true
-        responseDokumentMalerBucket["FARSKAP_SKJEMA_PROVETAKING_FARSKAP"]!!.innholdType shouldBe InnholdType.SKJEMA
+        responseDokumentMalerBucket["FARSKAP_PROVETAKING_FARSKAP"] shouldNotBe null
+        responseDokumentMalerBucket["FARSKAP_PROVETAKING_FARSKAP"]!!.gruppeVisningsnavn shouldBe "DNA"
+        responseDokumentMalerBucket["FARSKAP_PROVETAKING_FARSKAP"]!!.redigerbar shouldBe true
+        responseDokumentMalerBucket["FARSKAP_PROVETAKING_FARSKAP"]!!.statiskInnhold shouldBe true
+        responseDokumentMalerBucket["FARSKAP_PROVETAKING_FARSKAP"]!!.innholdType shouldBe InnholdType.SKJEMA
     }
 
     @Test
