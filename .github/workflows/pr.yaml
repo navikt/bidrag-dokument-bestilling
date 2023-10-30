@@ -12,8 +12,11 @@ jobs:
     permissions:
       contents: "read"
       id-token: "write"
-    uses: navikt/bidrag-workflow/.github/workflows/pr.yaml@main
+    uses: navikt/bidrag-workflow/.github/workflows/deploy.yaml@main
     secrets: inherit
+    with:
+      nais_vars_file_name: main
+
 
   deploy_unleash:
     runs-on: ubuntu-latest
