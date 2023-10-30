@@ -1,4 +1,4 @@
-name: Deploy to dev
+name: Deploy to dev / main
 on:
   pull_request:
     types: [ ready_for_review, opened, synchronize ]
