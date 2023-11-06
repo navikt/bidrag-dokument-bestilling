@@ -1,13 +1,16 @@
 # bidrag-dokument-bestilling
+
 Tjeneste for å bestille redigerbar og ikke-redigerbare bidrag dokumenter
 
 [![continuous integration](https://github.com/navikt/bidrag-dokument-bestilling/actions/workflows/ci.yaml/badge.svg)](https://github.com/navikt/bidrag-dokument-bestilling/actions/workflows/ci.yaml)
 [![release bidrag-dokument-bestilling](https://github.com/navikt/bidrag-dokument-bestilling/actions/workflows/release.yaml/badge.svg)](https://github.com/navikt/bidrag-dokument-bestilling/actions/workflows/release.yaml)
 
-## Beskrivelse
+## Beskrivelse2
 
 ## Secrets
+
 Applikasjonen bruker noen hemmeligheter som må settes opp før deploy til NAIS
+
 ```
 kubectl create secret generic bidrag-dokument-bestilling-secrets \
   --from-literal=MQ_USER_USERNAME=username \
@@ -16,17 +19,25 @@ kubectl create secret generic bidrag-dokument-bestilling-secrets \
 ```
 
 ### Live reload
-Med `spring-boot-devtools` har Spring støtte for live-reload av applikasjon. Dette betyr i praksis at Spring vil automatisk restarte applikasjonen når en fil endres. Du vil derfor slippe å restarte applikasjonen hver gang du gjør endringer. Dette er forklart i [dokumentasjonen](https://docs.spring.io/spring-boot/docs/1.5.16.RELEASE/reference/html/using-boot-devtools.html#using-boot-devtools-restart).
-For at dette skal fungere må det gjøres noe endringer i Intellij instillingene slik at Intellij automatisk re-bygger filene som er endret:
+
+Med `spring-boot-devtools` har Spring støtte for live-reload av applikasjon. Dette betyr i praksis
+at Spring vil automatisk restarte applikasjonen når en fil endres. Du vil derfor slippe å restarte
+applikasjonen hver gang du gjør endringer. Dette er forklart
+i [dokumentasjonen](https://docs.spring.io/spring-boot/docs/1.5.16.RELEASE/reference/html/using-boot-devtools.html#using-boot-devtools-restart).
+For at dette skal fungere må det gjøres noe endringer i Intellij instillingene slik at Intellij
+automatisk re-bygger filene som er endret:
 
 * Gå til `Preference -> Compiler -> check "Build project automatically"`
-* Gå til `Preference -> Advanced settings -> check "Allow auto-make to start even if developed application is currently running"`
+* Gå
+  til `Preference -> Advanced settings -> check "Allow auto-make to start even if developed application is currently running"`
 
 #### Kjøre lokalt mot nais tjenester
+
 For å kunne kjøre lokalt mot sky må du gjøre følgende
 
 Åpne terminal på root mappen til `bidrag-dokument-bestilling`
 Konfigurer kubectl til å gå mot kluster `dev-gcp`
+
 ```bash
 # Log inn til GPC
 gcp auth login --update-adc
@@ -39,14 +50,17 @@ kubens bidrag
 # (da må -n=bidrag legges til etter exec i neste kommando)
 kubectl config use dev-gcp
 ```
-Deretter kjør følgende kommando for å importere secrets. Viktig at filen som opprettes ikke committes til git
+
+Deretter kjør følgende kommando for å importere secrets. Viktig at filen som opprettes ikke
+committes til git
 
 ```bash
 kubectl exec --tty deployment/bidrag-dokument-bestilling-feature printenv | grep -E 'AZURE_|_URL|SCOPE' | grep -v -e 'BIDRAG_VEDTAK_URL' > src/test/resources/application-lokal-nais-secrets.properties
 kubectl exec --tty deployment/bidrag-dokument-bestilling printenv | grep -E 'AZURE_|_URL|SCOPE' | grep -v -e 'BIDRAG_VEDTAK_URL' > src/test/resources/application-lokal-nais-secrets.properties
 ```
 
-Start opp applikasjonen ved å kjøre [BidragDokumentBestillingLokal.kt](src/test/kotlin/no/nav/bidrag/dokument/bestilling/BidragDokumentBestillingLokal.kt).
+Start opp applikasjonen ved å
+kjøre [BidragDokumentBestillingLokal.kt](src/test/kotlin/no/nav/bidrag/dokument/bestilling/BidragDokumentBestillingLokal.kt).
 
 Deretter kan tokenet brukes til å logge inn på swagger-ui http://localhost:8999/swagger-ui.html
 
