@@ -3,8 +3,6 @@ on:
   push:
     branches:
       - 'main'
-env:
-  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 jobs:
   build-deploy:
@@ -14,6 +12,8 @@ jobs:
       id-token: "write"
     uses: navikt/bidrag-workflow/.github/workflows/deploy_prod.yaml@main
     secrets: inherit
+    with:
+      java-version: 21
 
   deploy_unleash:
     runs-on: ubuntu-latest

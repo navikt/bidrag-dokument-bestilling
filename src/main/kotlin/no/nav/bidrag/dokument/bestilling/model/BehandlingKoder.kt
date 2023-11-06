@@ -23,7 +23,9 @@ enum class SoknadType(val kode: String) {
     PRIVAT_AVTALE("PA"),
     BEGR_REVURD("RB"),
     REVURDERING("RF"),
-    KORRIGERING("KR");
+    KORRIGERING("KR"),
+    ;
+
     companion object {
         fun fromKode(kode: String): SoknadType? {
             return SoknadType.values().find { it.kode == kode }
@@ -59,7 +61,8 @@ enum class SoknadFra(val kode: String) {
     UTENLANDSKE_MYNDIGH("UM"),
     VERGE("VE"),
     TRYGDEETATEN_INNKREVING("TI"),
-    KLAGE_ENHET("FK"); // FTK
+    KLAGE_ENHET("FK"), // FTK
+    ;
 
     companion object {
         fun fromKode(kode: String): SoknadFra? {
@@ -95,14 +98,18 @@ enum class BehandlingType(val kode: String) {
     KUNNSKAP_BIOLOGISK_FAR("FB"),
     BARNEBORTFORING("BF"),
     KONVERTERING("KV"),
-    REISEKOSTNADER("RK");
+    REISEKOSTNADER("RK"),
+    ;
 
     companion object {
         fun fromKode(kode: String): BehandlingType? {
             return BehandlingType.values().find { it.kode == kode }
         }
 
-        fun from(stonadType: StonadType, engangsbelopType: EngangsbelopType?): BehandlingType? {
+        fun from(
+            stonadType: StonadType,
+            engangsbelopType: EngangsbelopType?,
+        ): BehandlingType? {
             return when (stonadType) {
                 StonadType.FORSKUDD -> FORSKUDD
                 StonadType.BIDRAG -> BIDRAG // Inneholder BIDRAG, BIDRAG_TILLEGGSBIDRAG, TILLEGGSBIDRAG
@@ -110,14 +117,15 @@ enum class BehandlingType(val kode: String) {
                 StonadType.EKTEFELLEBIDRAG -> EKTEFELLEBIDRAG
                 StonadType.MOTREGNING -> MOTREGNING
                 StonadType.OPPFOSTRINGSBIDRAG -> OPPFOSTRINGSBIDRAG
-                else -> when (engangsbelopType) {
-                    EngangsbelopType.SAERTILSKUDD -> SARTILSKUDD
-                    EngangsbelopType.GEBYR_SKYLDNER, EngangsbelopType.GEBYR_MOTTAKER -> GEBYR
-                    EngangsbelopType.ETTERGIVELSE -> ETTERGIVELSE
-                    EngangsbelopType.TILBAKEKREVING -> TILBAKEKREVING
-                    EngangsbelopType.ETTERGIVELSE_TILBAKEKREVING -> TILBAKEKR_ETTERGIVELSE
-                    else -> null
-                }
+                else ->
+                    when (engangsbelopType) {
+                        EngangsbelopType.SAERTILSKUDD -> SARTILSKUDD
+                        EngangsbelopType.GEBYR_SKYLDNER, EngangsbelopType.GEBYR_MOTTAKER -> GEBYR
+                        EngangsbelopType.ETTERGIVELSE -> ETTERGIVELSE
+                        EngangsbelopType.TILBAKEKREVING -> TILBAKEKREVING
+                        EngangsbelopType.ETTERGIVELSE_TILBAKEKREVING -> TILBAKEKR_ETTERGIVELSE
+                        else -> null
+                    }
             }
         }
     }

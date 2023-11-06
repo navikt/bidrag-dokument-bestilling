@@ -1,12 +1,12 @@
 package no.nav.bidrag.dokument.bestilling.bestilling.produksjon.dto
 
+import jakarta.xml.bind.annotation.XmlAccessType
+import jakarta.xml.bind.annotation.XmlAccessorType
+import jakarta.xml.bind.annotation.XmlElement
+import jakarta.xml.bind.annotation.XmlRootElement
+import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter
 import java.math.BigDecimal
 import java.time.LocalDate
-import javax.xml.bind.annotation.XmlAccessType
-import javax.xml.bind.annotation.XmlAccessorType
-import javax.xml.bind.annotation.XmlElement
-import javax.xml.bind.annotation.XmlRootElement
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter
 
 @Suppress("unused")
 @XmlRootElement(name = "bidrBarn")
@@ -38,6 +38,7 @@ class BidragBarn {
 
     @XmlElement(name = "perBidrEvne", nillable = true)
     var bidragEvnePerioder: MutableList<BidragEvnePeriode> = mutableListOf()
+
     fun barn(init: Barn.() -> Unit): Barn {
         val initValue = Barn()
         initValue.init()
@@ -65,12 +66,14 @@ class BidragBarn {
         forskuddSivilstandPerioder.add(initValue)
         return initValue
     }
+
     fun forskuddVedtakPeriode(init: ForskuddVedtakPeriode.() -> Unit): ForskuddVedtakPeriode {
         val initValue = ForskuddVedtakPeriode()
         initValue.init()
         forskuddVedtakPerioder.add(initValue)
         return initValue
     }
+
     fun inntektGrunnlagForskuddPeriode(init: InntektGrunnlagForskuddPeriode.() -> Unit): InntektGrunnlagForskuddPeriode {
         val initValue = InntektGrunnlagForskuddPeriode()
         initValue.init()
@@ -104,7 +107,6 @@ class BidragBarn {
 @XmlRootElement(name = "perForskBarn")
 @XmlAccessorType(XmlAccessType.FIELD)
 class ForskuddBarnPeriode {
-
     @XmlElement(name = "fomDato", nillable = true)
     @XmlJavaTypeAdapter(DateAdapter::class)
     var fomDato: LocalDate? = null
@@ -122,7 +124,6 @@ class ForskuddBarnPeriode {
 @XmlRootElement(name = "perForskSiv")
 @XmlAccessorType(XmlAccessType.FIELD)
 class ForskuddSivilstandPeriode {
-
     @XmlElement(name = "fomDato", nillable = true)
     @XmlJavaTypeAdapter(DateAdapter::class)
     var fomDato: LocalDate? = null
@@ -211,7 +212,6 @@ class InntektGrunnlagForskuddPeriode {
 @XmlRootElement(name = "perInntekt")
 @XmlAccessorType(XmlAccessType.FIELD)
 class InntektPeriode {
-
     @XmlElement(name = "fomDato", nillable = true)
     @XmlJavaTypeAdapter(DateAdapter::class)
     var fomDato: LocalDate? = null

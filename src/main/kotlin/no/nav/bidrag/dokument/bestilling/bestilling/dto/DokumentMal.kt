@@ -23,9 +23,8 @@ object BestillingSystem {
 
 enum class DokumentType {
     UTGÅENDE,
-    NOTAT
+    NOTAT,
 }
-
 
 enum class InnholdType {
     VARSEL,
@@ -41,7 +40,7 @@ data class DokumentDataGrunnlag(
     val vedtak: Boolean = false,
     val behandling: Boolean = false,
     val roller: Boolean = true,
-    val enhetKontaktInfo: Boolean = true
+    val enhetKontaktInfo: Boolean = true,
 )
 
 enum class StøttetSpråk {
@@ -50,9 +49,8 @@ enum class StøttetSpråk {
     NN,
     DE,
     PL,
-    FR
+    FR,
 }
-
 
 abstract class DokumentMal(
     open val kode: String,
@@ -67,7 +65,6 @@ abstract class DokumentMal(
     open val redigerbar: Boolean,
 )
 
-
 data class DokumentMalBucketUtland(
     override val folderName: String = "vedlegg_utland",
     override val kode: String,
@@ -78,15 +75,15 @@ data class DokumentMalBucketUtland(
     override val innholdType: InnholdType = InnholdType.VARSEL,
     override val gruppeVisningsnavn: String,
 ) : DokumentMalBucket(
-    kode = kode,
-    beskrivelse = beskrivelse,
-    folderName = folderName,
-    tittel = tittel,
-    tilhørerEnheter = tilhørerEnheter,
-    språk = språk,
-    innholdType = innholdType,
-    gruppeVisningsnavn = gruppeVisningsnavn
-)
+        kode = kode,
+        beskrivelse = beskrivelse,
+        folderName = folderName,
+        tittel = tittel,
+        tilhørerEnheter = tilhørerEnheter,
+        språk = språk,
+        innholdType = innholdType,
+        gruppeVisningsnavn = gruppeVisningsnavn,
+    )
 
 data class DokumentMalBucketFarskap(
     override val folderName: String = "vedlegg_farskap",
@@ -97,15 +94,14 @@ data class DokumentMalBucketFarskap(
     override val innholdType: InnholdType = InnholdType.VARSEL,
     override val gruppeVisningsnavn: String,
 ) : DokumentMalBucket(
-    kode = kode,
-    beskrivelse = beskrivelse,
-    folderName = folderName,
-    tittel = tittel,
-    tilhørerEnheter = tilhørerEnheter,
-    innholdType = innholdType,
-    gruppeVisningsnavn = gruppeVisningsnavn
-)
-
+        kode = kode,
+        beskrivelse = beskrivelse,
+        folderName = folderName,
+        tittel = tittel,
+        tilhørerEnheter = tilhørerEnheter,
+        innholdType = innholdType,
+        gruppeVisningsnavn = gruppeVisningsnavn,
+    )
 
 open class DokumentMalBucket(
     override val kode: String,
@@ -124,18 +120,17 @@ open class DokumentMalBucket(
     open val språk: StøttetSpråk = StøttetSpråk.NB,
     open val gruppeVisningsnavn: String? = null,
 ) : DokumentMal(
-    kode = kode,
-    beskrivelse = beskrivelse,
-    tittel = tittel,
-    dokumentType = dokumentType,
-    bestillingSystem = bestillingSystem,
-    batchbrev = batchbrev,
-    enabled = enabled,
-    kreverDataGrunnlag = kreverDataGrunnlag,
-    innholdType = innholdType,
-    redigerbar = redigerbar
-) {
-
+        kode = kode,
+        beskrivelse = beskrivelse,
+        tittel = tittel,
+        dokumentType = dokumentType,
+        bestillingSystem = bestillingSystem,
+        batchbrev = batchbrev,
+        enabled = enabled,
+        kreverDataGrunnlag = kreverDataGrunnlag,
+        innholdType = innholdType,
+        redigerbar = redigerbar,
+    ) {
     private val bucketFilename get() = filsti?.substringBefore(".pdf") ?: kode
     val filePath get() = "$folderName/$bucketFilename.pdf"
 }
@@ -153,28 +148,28 @@ data class DokumentMalBrevserver(
     override val bestillingSystem: BestillingSystemType = BestillingSystem.BREVSERVER,
     val støttetSpråk: List<StøttetSpråk> = listOf(StøttetSpråk.NB),
 ) : DokumentMal(
-    kode = kode,
-    beskrivelse = beskrivelse,
-    tittel = tittel,
-    dokumentType = dokumentType,
-    bestillingSystem = bestillingSystem,
-    batchbrev = batchbrev,
-    enabled = enabled,
-    kreverDataGrunnlag = kreverDataGrunnlag,
-    innholdType = innholdType,
-    redigerbar = redigerbar
-)
+        kode = kode,
+        beskrivelse = beskrivelse,
+        tittel = tittel,
+        dokumentType = dokumentType,
+        bestillingSystem = bestillingSystem,
+        batchbrev = batchbrev,
+        enabled = enabled,
+        kreverDataGrunnlag = kreverDataGrunnlag,
+        innholdType = innholdType,
+        redigerbar = redigerbar,
+    )
 
 enum class FilType {
     JSON,
-    YAML
+    YAML,
 }
 
 private inline fun <reified T : DokumentMal> lastDokumentMalerFraFil(
     filnavn: String,
     prefiks: String? = null,
     type: FilType = FilType.JSON,
-    withGroupname: Boolean = false
+    withGroupname: Boolean = false,
 ): List<T> {
     return try {
         val fileending = if (type == FilType.JSON) "json" else "yaml"
@@ -184,22 +179,29 @@ private inline fun <reified T : DokumentMal> lastDokumentMalerFraFil(
         val inputstream = ClassPathResource("files/dokumentmaler/$filnavn.$fileending").inputStream
         val text = String(inputstream.readAllBytes(), StandardCharsets.UTF_8)
         val textConverted =
-            if (withGroupname)
-                konverterGruppeNavnTilParameter(text, "gruppeVisningsnavn") else text
-        val textWithPrefiks = if (prefiks != null) {
-            val json = objectMapper.readTree(textConverted)
-            json.asSequence().forEach {
-                (it as ObjectNode).put("kode", "${prefiks}_${it.get("kode").asText()}")
+            if (withGroupname) {
+                konverterGruppeNavnTilParameter(text, "gruppeVisningsnavn")
+            } else {
+                text
             }
-            json.toString()
-        } else textConverted
+        val textWithPrefiks =
+            if (prefiks != null) {
+                val json = objectMapper.readTree(textConverted)
+                json.asSequence().forEach {
+                    (it as ObjectNode).put("kode", "${prefiks}_${it.get("kode").asText()}")
+                }
+                json.toString()
+            } else {
+                textConverted
+            }
 
         val listType: JavaType =
             objectMapper.typeFactory.constructCollectionType(MutableList::class.java, T::class.java)
-        val dokumentmalerMap: List<T> = objectMapper.readValue(
-            textWithPrefiks,
-            listType
-        )
+        val dokumentmalerMap: List<T> =
+            objectMapper.readValue(
+                textWithPrefiks,
+                listType,
+            )
 
         dokumentmalerMap.map { it }
     } catch (e: IOException) {
@@ -209,7 +211,7 @@ private inline fun <reified T : DokumentMal> lastDokumentMalerFraFil(
 
 private fun konverterGruppeNavnTilParameter(
     payload: String,
-    parameterName: String
+    parameterName: String,
 ): String {
     return try {
         val objectMapper = ObjectMapper(YAMLFactory())
@@ -220,18 +222,21 @@ private fun konverterGruppeNavnTilParameter(
             objectMapper.typeFactory.constructMapType(
                 Map::class.java,
                 String::class.java,
-                ArrayNode::class.java
+                ArrayNode::class.java,
             )
-        val payloadMap: Map<String, ArrayNode> = objectMapper.readValue(
-            payload,
-            mapType
-        )
+        val payloadMap: Map<String, ArrayNode> =
+            objectMapper.readValue(
+                payload,
+                mapType,
+            )
 
-        objectMapper.writeValueAsString(payloadMap.keys.flatMap { key ->
-            payloadMap[key]?.map {
-                (it as ObjectNode).put(parameterName, key)
-            } ?: emptyList()
-        })
+        objectMapper.writeValueAsString(
+            payloadMap.keys.flatMap { key ->
+                payloadMap[key]?.map {
+                    (it as ObjectNode).put(parameterName, key)
+                } ?: emptyList()
+            },
+        )
     } catch (e: IOException) {
         throw RuntimeException("Kunne ikke laste fil", e)
     }

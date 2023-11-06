@@ -6,8 +6,6 @@ on:
       - '!main'
       - '!dependabot/**'
 
-env:
-  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 jobs:
   build-deploy:
@@ -17,3 +15,5 @@ jobs:
       id-token: "write"
     uses: navikt/bidrag-workflow/.github/workflows/deploy.yaml@main
     secrets: inherit
+    with:
+      java-version: 21

@@ -50,16 +50,16 @@ import no.nav.bidrag.dokument.bestilling.utils.createEnhetKontaktInformasjon
 import no.nav.bidrag.dokument.bestilling.utils.createPostAdresseResponse
 import no.nav.bidrag.dokument.bestilling.utils.createSakResponse
 import no.nav.bidrag.dokument.bestilling.utils.readFile
-import no.nav.bidrag.domain.enums.Diskresjonskode
-import no.nav.bidrag.domain.enums.Rolletype
-import no.nav.bidrag.domain.ident.PersonIdent
-import no.nav.bidrag.domain.string.Bruksenhetsnummer
-import no.nav.bidrag.domain.string.Enhetsnummer
-import no.nav.bidrag.domain.string.Kortnavn
-import no.nav.bidrag.domain.string.Landkode2
-import no.nav.bidrag.domain.string.Landkode3
-import no.nav.bidrag.domain.tid.Dødsdato
-import no.nav.bidrag.domain.tid.Fødselsdato
+import no.nav.bidrag.domene.enums.Diskresjonskode
+import no.nav.bidrag.domene.enums.Rolletype
+import no.nav.bidrag.domene.ident.Personident
+import no.nav.bidrag.domene.streng.Bruksenhetsnummer
+import no.nav.bidrag.domene.streng.Enhetsnummer
+import no.nav.bidrag.domene.streng.Kortnavn
+import no.nav.bidrag.domene.streng.Landkode2
+import no.nav.bidrag.domene.streng.Landkode3
+import no.nav.bidrag.domene.tid.Dødsdato
+import no.nav.bidrag.domene.tid.Fødselsdato
 import no.nav.bidrag.transport.sak.RolleDto
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
@@ -70,7 +70,6 @@ import org.springframework.web.client.HttpStatusCodeException
 
 @ExtendWith(MockKExtension::class)
 internal class DokumentMetadataCollectorTest {
-
     @MockK
     lateinit var personService: PersonService
 
@@ -105,27 +104,31 @@ internal class DokumentMetadataCollectorTest {
 
     @BeforeEach
     fun initMocks() {
-        val kodeverkResponse = ObjectMapper().findAndRegisterModules()
-            .readValue(readFile("api/landkoder.json"), KodeverkResponse::class.java)
-        val kodeverkISO2Response = ObjectMapper().findAndRegisterModules()
-            .readValue(readFile("api/landkoderISO2.json"), KodeverkResponse::class.java)
-        val sjablonResponse = ObjectMapper().findAndRegisterModules()
-            .readValue(readFile("api/sjablon_all.json"), typeRef<SjablongerDto>())
+        val kodeverkResponse =
+            ObjectMapper().findAndRegisterModules()
+                .readValue(readFile("api/landkoder.json"), KodeverkResponse::class.java)
+        val kodeverkISO2Response =
+            ObjectMapper().findAndRegisterModules()
+                .readValue(readFile("api/landkoderISO2.json"), KodeverkResponse::class.java)
+        val sjablonResponse =
+            ObjectMapper().findAndRegisterModules()
+                .readValue(readFile("api/sjablon_all.json"), typeRef<SjablongerDto>())
         every { kodeverkConsumer.hentLandkoder() } returns kodeverkResponse
         every { kodeverkConsumer.hentLandkoderISO2() } returns kodeverkISO2Response
         every { sjablonConsumer.hentSjablonger() } returns sjablonResponse
         metadataCollector = withMetadataCollector()
     }
 
-    private fun withMetadataCollector() = DokumentMetadataCollector(
-        personService,
-        sakService,
-        kodeverkService,
-        vedtakService,
-        sjablongService,
-        saksbehandlerInfoManager,
-        organisasjonService
-    )
+    private fun withMetadataCollector() =
+        DokumentMetadataCollector(
+            personService,
+            sakService,
+            kodeverkService,
+            vedtakService,
+            sjablongService,
+            saksbehandlerInfoManager,
+            organisasjonService,
+        )
 
     @AfterEach
     fun resetMocks() {
@@ -143,14 +146,15 @@ internal class DokumentMetadataCollectorTest {
         every {
             organisasjonService.hentEnhetKontaktInfo(
                 any(),
-                any()
+                any(),
             )
         } returns createEnhetKontaktInformasjon()
         every { sakService.hentSak(any()) } returns createSakResponse()
-        every { saksbehandlerInfoManager.hentSaksbehandler() } returns Saksbehandler(
-            SAKSBEHANDLER_IDENT,
-            SAKSBEHANDLER_NAVN
-        )
+        every { saksbehandlerInfoManager.hentSaksbehandler() } returns
+            Saksbehandler(
+                SAKSBEHANDLER_IDENT,
+                SAKSBEHANDLER_NAVN,
+            )
         every { saksbehandlerInfoManager.hentSaksbehandlerBrukerId() } returns SAKSBEHANDLER_IDENT
     }
 
@@ -160,20 +164,21 @@ internal class DokumentMetadataCollectorTest {
         val adresseResponse = createPostAdresseResponse()
         val defaultKontaktinfo = createEnhetKontaktInformasjon()
         every { personService.hentPersonAdresse(any(), any()) } returns adresseResponse
-        val request = DokumentBestillingForespørsel(
-            mottakerId = BM1.ident.verdi,
-            gjelderId = BM1.ident.verdi,
-            saksnummer = DEFAULT_SAKSNUMMER,
-            tittel = DEFAULT_TITLE_DOKUMENT,
-            enhet = "4806",
-            spraak = "NB"
-        )
+        val request =
+            DokumentBestillingForespørsel(
+                mottakerId = BM1.ident.verdi,
+                gjelderId = BM1.ident.verdi,
+                saksnummer = DEFAULT_SAKSNUMMER,
+                tittel = DEFAULT_TITLE_DOKUMENT,
+                enhet = "4806",
+                spraak = "NB",
+            )
         val bestilling = mapToBestillingsdata(request)
         assertSoftly {
             bestilling.mottaker?.spraak shouldBe "NB"
             bestilling.mottaker?.navn shouldBe BM1.kortnavn?.verdi
             bestilling.mottaker?.fodselsnummer shouldBe BM1.ident.verdi
-            bestilling.mottaker?.rolle shouldBe Rolletype.BM
+            bestilling.mottaker?.rolle shouldBe Rolletype.BIDRAGSMOTTAKER
             bestilling.mottaker?.fodselsdato shouldBe BM1.fødselsdato?.verdi
             bestilling.mottaker?.adresse?.adresselinje1 shouldBe adresseResponse.adresselinje1?.verdi
             bestilling.mottaker?.adresse?.adresselinje2 shouldBe adresseResponse.adresselinje2?.verdi
@@ -187,7 +192,7 @@ internal class DokumentMetadataCollectorTest {
             bestilling.mottaker?.adresse?.land shouldBe "NORGE"
 
             bestilling.gjelder?.fodselsnummer shouldBe BM1.ident.verdi
-            bestilling.gjelder?.rolle shouldBe Rolletype.BM
+            bestilling.gjelder?.rolle shouldBe Rolletype.BIDRAGSMOTTAKER
 
             bestilling.kontaktInfo?.navn shouldBe defaultKontaktinfo.enhetNavn
             bestilling.kontaktInfo?.telefonnummer shouldBe defaultKontaktinfo.telefonnummer
@@ -237,14 +242,15 @@ internal class DokumentMetadataCollectorTest {
     fun `should map when person missing adresse`() {
         mockDefaultValues()
         every { personService.hentPersonAdresse(any(), any()) } returns null
-        val request = DokumentBestillingForespørsel(
-            mottakerId = BM1.ident.verdi,
-            gjelderId = BM1.ident.verdi,
-            saksnummer = DEFAULT_SAKSNUMMER,
-            tittel = DEFAULT_TITLE_DOKUMENT,
-            enhet = "4806",
-            spraak = "NB"
-        )
+        val request =
+            DokumentBestillingForespørsel(
+                mottakerId = BM1.ident.verdi,
+                gjelderId = BM1.ident.verdi,
+                saksnummer = DEFAULT_SAKSNUMMER,
+                tittel = DEFAULT_TITLE_DOKUMENT,
+                enhet = "4806",
+                spraak = "NB",
+            )
         val bestilling = mapToBestillingsdata(request)
         assertSoftly {
             bestilling.mottaker?.adresse shouldBe null
@@ -257,20 +263,22 @@ internal class DokumentMetadataCollectorTest {
     fun `should add saksbehandler from request when available`() {
         mockDefaultValues()
         val saksbehandlerId = "Z123213"
-        every { saksbehandlerInfoManager.hentSaksbehandler(any()) } returns Saksbehandler(
-            saksbehandlerId,
-            "Navn saksbehandler"
-        )
+        every { saksbehandlerInfoManager.hentSaksbehandler(any()) } returns
+            Saksbehandler(
+                saksbehandlerId,
+                "Navn saksbehandler",
+            )
 
-        val request = DokumentBestillingForespørsel(
-            mottakerId = BM1.ident.verdi,
-            gjelderId = BM1.ident.verdi,
-            saksnummer = DEFAULT_SAKSNUMMER,
-            tittel = DEFAULT_TITLE_DOKUMENT,
-            enhet = "4806",
-            spraak = "NB",
-            saksbehandler = Saksbehandler(saksbehandlerId)
-        )
+        val request =
+            DokumentBestillingForespørsel(
+                mottakerId = BM1.ident.verdi,
+                gjelderId = BM1.ident.verdi,
+                saksnummer = DEFAULT_SAKSNUMMER,
+                tittel = DEFAULT_TITLE_DOKUMENT,
+                enhet = "4806",
+                spraak = "NB",
+                saksbehandler = Saksbehandler(saksbehandlerId),
+            )
         val bestilling = mapToBestillingsdata(request)
         assertSoftly {
             bestilling.saksbehandler?.ident shouldBe saksbehandlerId
@@ -282,15 +290,16 @@ internal class DokumentMetadataCollectorTest {
     fun `should add saksbehandler ident and name from request when available`() {
         mockDefaultValues()
         val saksbehandlerId = "Z123213"
-        val request = DokumentBestillingForespørsel(
-            mottakerId = BM1.ident.verdi,
-            gjelderId = BM1.ident.verdi,
-            saksnummer = DEFAULT_SAKSNUMMER,
-            tittel = DEFAULT_TITLE_DOKUMENT,
-            enhet = "4806",
-            spraak = "NB",
-            saksbehandler = Saksbehandler(saksbehandlerId, "Navn fra request")
-        )
+        val request =
+            DokumentBestillingForespørsel(
+                mottakerId = BM1.ident.verdi,
+                gjelderId = BM1.ident.verdi,
+                saksnummer = DEFAULT_SAKSNUMMER,
+                tittel = DEFAULT_TITLE_DOKUMENT,
+                enhet = "4806",
+                spraak = "NB",
+                saksbehandler = Saksbehandler(saksbehandlerId, "Navn fra request"),
+            )
         val bestilling = mapToBestillingsdata(request)
         assertSoftly {
             bestilling.saksbehandler?.ident shouldBe saksbehandlerId
@@ -301,17 +310,19 @@ internal class DokumentMetadataCollectorTest {
     @Test
     fun `should map mottaker adresse with bruksenhetsnummer standard value`() {
         mockDefaultValues()
-        val adresseResponse = createPostAdresseResponse()
-            .copy(bruksenhetsnummer = Bruksenhetsnummer("H0101"))
+        val adresseResponse =
+            createPostAdresseResponse()
+                .copy(bruksenhetsnummer = Bruksenhetsnummer("H0101"))
         every { personService.hentPersonAdresse(any(), any()) } returns adresseResponse
-        val request = DokumentBestillingForespørsel(
-            mottakerId = BM1.ident.verdi,
-            gjelderId = BM1.ident.verdi,
-            saksnummer = DEFAULT_SAKSNUMMER,
-            tittel = DEFAULT_TITLE_DOKUMENT,
-            enhet = "4806",
-            spraak = "NB"
-        )
+        val request =
+            DokumentBestillingForespørsel(
+                mottakerId = BM1.ident.verdi,
+                gjelderId = BM1.ident.verdi,
+                saksnummer = DEFAULT_SAKSNUMMER,
+                tittel = DEFAULT_TITLE_DOKUMENT,
+                enhet = "4806",
+                spraak = "NB",
+            )
         val bestilling = mapToBestillingsdata(request)
         assertSoftly {
             bestilling.mottaker?.adresse?.adresselinje1 shouldBe adresseResponse.adresselinje1?.verdi
@@ -330,17 +341,19 @@ internal class DokumentMetadataCollectorTest {
     @Test
     fun `should map mottaker add country name to adresselinje 4 when land not Norway`() {
         mockDefaultValues()
-        val adresseResponse = createPostAdresseResponse()
-            .copy(bruksenhetsnummer = null, land = Landkode2("TR"), land3 = Landkode3("TUR"))
+        val adresseResponse =
+            createPostAdresseResponse()
+                .copy(bruksenhetsnummer = null, land = Landkode2("TR"), land3 = Landkode3("TUR"))
         every { personService.hentPersonAdresse(any(), any()) } returns adresseResponse
-        val request = DokumentBestillingForespørsel(
-            mottakerId = BM1.ident.verdi,
-            gjelderId = BM1.ident.verdi,
-            saksnummer = DEFAULT_SAKSNUMMER,
-            tittel = DEFAULT_TITLE_DOKUMENT,
-            enhet = "4806",
-            spraak = "NB"
-        )
+        val request =
+            DokumentBestillingForespørsel(
+                mottakerId = BM1.ident.verdi,
+                gjelderId = BM1.ident.verdi,
+                saksnummer = DEFAULT_SAKSNUMMER,
+                tittel = DEFAULT_TITLE_DOKUMENT,
+                enhet = "4806",
+                spraak = "NB",
+            )
         val bestilling = mapToBestillingsdata(request)
         assertSoftly {
             bestilling.mottaker?.adresse?.adresselinje1 shouldBe adresseResponse.adresselinje1?.verdi
@@ -361,14 +374,15 @@ internal class DokumentMetadataCollectorTest {
         mockDefaultValues()
         val mottaker = BM1.copy(kortnavn = Kortnavn("Etternavn, Kortnavn"))
         every { personService.hentPerson(mottaker.ident.verdi, any()) } returns mottaker
-        val request = DokumentBestillingForespørsel(
-            mottakerId = mottaker.ident.verdi,
-            gjelderId = BM1.ident.verdi,
-            saksnummer = DEFAULT_SAKSNUMMER,
-            tittel = DEFAULT_TITLE_DOKUMENT,
-            enhet = "4806",
-            spraak = "NB"
-        )
+        val request =
+            DokumentBestillingForespørsel(
+                mottakerId = mottaker.ident.verdi,
+                gjelderId = BM1.ident.verdi,
+                saksnummer = DEFAULT_SAKSNUMMER,
+                tittel = DEFAULT_TITLE_DOKUMENT,
+                enhet = "4806",
+                spraak = "NB",
+            )
         val bestilling = mapToBestillingsdata(request)
         bestilling.mottaker?.navn shouldBe mottaker.kortnavn?.verdi
     }
@@ -377,19 +391,21 @@ internal class DokumentMetadataCollectorTest {
     fun `should map with mottaker kontaktinformasjon`() {
         mockDefaultValues()
 
-        val request = DokumentBestillingForespørsel(
-            mottaker = MottakerTo(
-                ident = SAMHANDLER_IDENT,
-                navn = "Samhandler samhandlersen",
-                språk = "NB",
-                adresse = SAMHANDLER_MOTTAKER_ADRESSE
-            ),
-            gjelderId = BM1.ident.verdi,
-            saksnummer = DEFAULT_SAKSNUMMER,
-            tittel = DEFAULT_TITLE_DOKUMENT,
-            enhet = "4806",
-            spraak = "NB"
-        )
+        val request =
+            DokumentBestillingForespørsel(
+                mottaker =
+                    MottakerTo(
+                        ident = SAMHANDLER_IDENT,
+                        navn = "Samhandler samhandlersen",
+                        språk = "NB",
+                        adresse = SAMHANDLER_MOTTAKER_ADRESSE,
+                    ),
+                gjelderId = BM1.ident.verdi,
+                saksnummer = DEFAULT_SAKSNUMMER,
+                tittel = DEFAULT_TITLE_DOKUMENT,
+                enhet = "4806",
+                spraak = "NB",
+            )
         val bestilling = mapToBestillingsdata(request)
         val adresseResponse = SAMHANDLER_MOTTAKER_ADRESSE
         assertSoftly {
@@ -415,15 +431,16 @@ internal class DokumentMetadataCollectorTest {
     fun `should map with samhandler mottaker`() {
         mockDefaultValues()
 
-        val request = DokumentBestillingForespørsel(
-            mottakerId = SAMHANDLER_IDENT,
-            gjelderId = BM1.ident.verdi,
-            saksnummer = DEFAULT_SAKSNUMMER,
-            tittel = DEFAULT_TITLE_DOKUMENT,
-            enhet = "4806",
-            spraak = "NB",
-            samhandlerInformasjon = SAMHANDLER_INFO
-        )
+        val request =
+            DokumentBestillingForespørsel(
+                mottakerId = SAMHANDLER_IDENT,
+                gjelderId = BM1.ident.verdi,
+                saksnummer = DEFAULT_SAKSNUMMER,
+                tittel = DEFAULT_TITLE_DOKUMENT,
+                enhet = "4806",
+                spraak = "NB",
+                samhandlerInformasjon = SAMHANDLER_INFO,
+            )
         val bestilling = mapToBestillingsdata(request)
         val adresseResponse = SAMHANDLER_INFO.adresse
         assertSoftly {
@@ -449,21 +466,24 @@ internal class DokumentMetadataCollectorTest {
     fun `should map with samhandler mottaker having utenlandsk adresse and long adresselinje3`() {
         mockDefaultValues()
 
-        val samhandlerInfo = SAMHANDLER_INFO.copy(
-            adresse = SAMHANDLER_INFO.adresse?.copy(
-                adresselinje3 = "En veldig lang adresselinje3 som er litt lenger",
-                landkode = "TUR"
+        val samhandlerInfo =
+            SAMHANDLER_INFO.copy(
+                adresse =
+                    SAMHANDLER_INFO.adresse?.copy(
+                        adresselinje3 = "En veldig lang adresselinje3 som er litt lenger",
+                        landkode = "TUR",
+                    ),
             )
-        )
-        val request = DokumentBestillingForespørsel(
-            mottakerId = SAMHANDLER_IDENT,
-            gjelderId = BM1.ident.verdi,
-            saksnummer = DEFAULT_SAKSNUMMER,
-            tittel = DEFAULT_TITLE_DOKUMENT,
-            enhet = "4806",
-            spraak = "NB",
-            samhandlerInformasjon = samhandlerInfo
-        )
+        val request =
+            DokumentBestillingForespørsel(
+                mottakerId = SAMHANDLER_IDENT,
+                gjelderId = BM1.ident.verdi,
+                saksnummer = DEFAULT_SAKSNUMMER,
+                tittel = DEFAULT_TITLE_DOKUMENT,
+                enhet = "4806",
+                spraak = "NB",
+                samhandlerInformasjon = samhandlerInfo,
+            )
         val bestilling = mapToBestillingsdata(request)
         val adresseResponse = samhandlerInfo.adresse
         assertSoftly {
@@ -490,14 +510,15 @@ internal class DokumentMetadataCollectorTest {
         mockDefaultValues()
         every { personService.hentPerson(ANNEN_MOTTAKER.ident.verdi, any()) } returns ANNEN_MOTTAKER
 
-        val request = DokumentBestillingForespørsel(
-            mottakerId = ANNEN_MOTTAKER.ident.verdi,
-            gjelderId = BM1.ident.verdi,
-            saksnummer = DEFAULT_SAKSNUMMER,
-            tittel = DEFAULT_TITLE_DOKUMENT,
-            enhet = "4806",
-            spraak = "NB"
-        )
+        val request =
+            DokumentBestillingForespørsel(
+                mottakerId = ANNEN_MOTTAKER.ident.verdi,
+                gjelderId = BM1.ident.verdi,
+                saksnummer = DEFAULT_SAKSNUMMER,
+                tittel = DEFAULT_TITLE_DOKUMENT,
+                enhet = "4806",
+                spraak = "NB",
+            )
         val bestilling = mapToBestillingsdata(request)
         assertSoftly {
             bestilling.mottaker?.spraak shouldBe "NB"
@@ -513,18 +534,19 @@ internal class DokumentMetadataCollectorTest {
         mockDefaultValues()
         every { personService.hentPerson(ANNEN_MOTTAKER.ident.verdi, any()) } returns ANNEN_MOTTAKER
 
-        val request = DokumentBestillingForespørsel(
-            mottakerId = ANNEN_MOTTAKER.ident.verdi,
-            gjelderId = null,
-            saksnummer = DEFAULT_SAKSNUMMER,
-            tittel = DEFAULT_TITLE_DOKUMENT,
-            enhet = "4806",
-            spraak = "NB"
-        )
+        val request =
+            DokumentBestillingForespørsel(
+                mottakerId = ANNEN_MOTTAKER.ident.verdi,
+                gjelderId = null,
+                saksnummer = DEFAULT_SAKSNUMMER,
+                tittel = DEFAULT_TITLE_DOKUMENT,
+                enhet = "4806",
+                spraak = "NB",
+            )
         val bestilling = mapToBestillingsdata(request)
         assertSoftly {
             bestilling.gjelder?.fodselsnummer shouldBe BM1.ident.verdi
-            bestilling.gjelder?.rolle shouldBe Rolletype.BM
+            bestilling.gjelder?.rolle shouldBe Rolletype.BIDRAGSMOTTAKER
         }
     }
 
@@ -533,18 +555,19 @@ internal class DokumentMetadataCollectorTest {
         mockDefaultValues()
         every { personService.hentPerson(ANNEN_MOTTAKER.ident.verdi, any()) } returns ANNEN_MOTTAKER
 
-        val request = DokumentBestillingForespørsel(
-            mottakerId = ANNEN_MOTTAKER.ident.verdi,
-            gjelderId = "3123213213",
-            saksnummer = DEFAULT_SAKSNUMMER,
-            tittel = DEFAULT_TITLE_DOKUMENT,
-            enhet = "4806",
-            spraak = "NB"
-        )
+        val request =
+            DokumentBestillingForespørsel(
+                mottakerId = ANNEN_MOTTAKER.ident.verdi,
+                gjelderId = "3123213213",
+                saksnummer = DEFAULT_SAKSNUMMER,
+                tittel = DEFAULT_TITLE_DOKUMENT,
+                enhet = "4806",
+                spraak = "NB",
+            )
         val bestilling = mapToBestillingsdata(request)
         assertSoftly {
             bestilling.gjelder?.fodselsnummer shouldBe BM1.ident.verdi
-            bestilling.gjelder?.rolle shouldBe Rolletype.BM
+            bestilling.gjelder?.rolle shouldBe Rolletype.BIDRAGSMOTTAKER
         }
     }
 
@@ -553,38 +576,41 @@ internal class DokumentMetadataCollectorTest {
         mockDefaultValues()
         val saksnummer = "22222"
         val barn1Dod = BARN1.copy(dødsdato = Dødsdato.of(2022, 1, 1))
-        val sak = createSakResponse().copy(
-            roller = listOf(
-                RolleDto(
-                    fødselsnummer = BP1.ident,
-                    type = Rolletype.BP
-                ),
-                RolleDto(
-                    fødselsnummer = barn1Dod.ident,
-                    type = Rolletype.BA
-                ),
-                RolleDto(
-                    fødselsnummer = BARN2.ident,
-                    type = Rolletype.BA
-                )
+        val sak =
+            createSakResponse().copy(
+                roller =
+                    listOf(
+                        RolleDto(
+                            fødselsnummer = BP1.ident,
+                            type = Rolletype.BIDRAGSPLIKTIG,
+                        ),
+                        RolleDto(
+                            fødselsnummer = barn1Dod.ident,
+                            type = Rolletype.BARN,
+                        ),
+                        RolleDto(
+                            fødselsnummer = BARN2.ident,
+                            type = Rolletype.BARN,
+                        ),
+                    ),
             )
-        )
         every { sakService.hentSak(saksnummer) } returns sak
         every { personService.hentPerson(barn1Dod.ident.verdi, any()) } returns barn1Dod
 
-        val request = DokumentBestillingForespørsel(
-            mottakerId = BM1.ident.verdi,
-            gjelderId = "213213213213213",
-            saksnummer = saksnummer,
-            tittel = DEFAULT_TITLE_DOKUMENT,
-            enhet = "4806",
-            spraak = "NB",
-            samhandlerInformasjon = null
-        )
+        val request =
+            DokumentBestillingForespørsel(
+                mottakerId = BM1.ident.verdi,
+                gjelderId = "213213213213213",
+                saksnummer = saksnummer,
+                tittel = DEFAULT_TITLE_DOKUMENT,
+                enhet = "4806",
+                spraak = "NB",
+                samhandlerInformasjon = null,
+            )
         val bestilling = mapToBestillingsdata(request)
         assertSoftly {
             bestilling.gjelder?.fodselsnummer shouldBe BP1.ident.verdi
-            bestilling.gjelder?.rolle shouldBe Rolletype.BP
+            bestilling.gjelder?.rolle shouldBe Rolletype.BIDRAGSPLIKTIG
         }
     }
 
@@ -593,14 +619,15 @@ internal class DokumentMetadataCollectorTest {
         mockDefaultValues()
         val sakresponse = createSakResponse().copy(eierfogd = Enhetsnummer("4888"))
         every { sakService.hentSak(any()) } returns sakresponse
-        val request = DokumentBestillingForespørsel(
-            mottakerId = BM1.ident.verdi,
-            saksnummer = DEFAULT_SAKSNUMMER,
-            tittel = DEFAULT_TITLE_DOKUMENT,
-            enhet = null,
-            spraak = "NB",
-            samhandlerInformasjon = null
-        )
+        val request =
+            DokumentBestillingForespørsel(
+                mottakerId = BM1.ident.verdi,
+                saksnummer = DEFAULT_SAKSNUMMER,
+                tittel = DEFAULT_TITLE_DOKUMENT,
+                enhet = null,
+                spraak = "NB",
+                samhandlerInformasjon = null,
+            )
         val bestilling = mapToBestillingsdata(request)
         bestilling.enhet shouldBe "4888"
     }
@@ -609,19 +636,21 @@ internal class DokumentMetadataCollectorTest {
     fun `should not throw when mottaker is samhandler but is missing samhandlerInformasjon`() {
         mockDefaultValues()
 
-        val request = DokumentBestillingForespørsel(
-            gjelderId = BM1.ident.verdi,
-            saksnummer = DEFAULT_SAKSNUMMER,
-            tittel = DEFAULT_TITLE_DOKUMENT,
-            enhet = "4806",
-            spraak = "NB",
-            samhandlerInformasjon = null,
-            mottaker = MottakerTo(
-                ident = SAMHANDLER_IDENT,
-                navn = SAKSBEHANDLER_NAVN,
-                adresse = SAMHANDLER_MOTTAKER_ADRESSE
+        val request =
+            DokumentBestillingForespørsel(
+                gjelderId = BM1.ident.verdi,
+                saksnummer = DEFAULT_SAKSNUMMER,
+                tittel = DEFAULT_TITLE_DOKUMENT,
+                enhet = "4806",
+                spraak = "NB",
+                samhandlerInformasjon = null,
+                mottaker =
+                    MottakerTo(
+                        ident = SAMHANDLER_IDENT,
+                        navn = SAKSBEHANDLER_NAVN,
+                        adresse = SAMHANDLER_MOTTAKER_ADRESSE,
+                    ),
             )
-        )
         val bestilling = mapToBestillingsdata(request)
         assertSoftly {
             bestilling.mottaker?.spraak shouldBe "NB"
@@ -640,18 +669,20 @@ internal class DokumentMetadataCollectorTest {
     fun `should not throw when mottaker is samhandler but is missing adresse`() {
         mockDefaultValues()
 
-        val request = DokumentBestillingForespørsel(
-            gjelderId = BM1.ident.verdi,
-            saksnummer = DEFAULT_SAKSNUMMER,
-            tittel = DEFAULT_TITLE_DOKUMENT,
-            enhet = "4806",
-            spraak = "NB",
-            samhandlerInformasjon = null,
-            mottaker = MottakerTo(
-                ident = SAMHANDLER_IDENT,
-                navn = SAKSBEHANDLER_NAVN
+        val request =
+            DokumentBestillingForespørsel(
+                gjelderId = BM1.ident.verdi,
+                saksnummer = DEFAULT_SAKSNUMMER,
+                tittel = DEFAULT_TITLE_DOKUMENT,
+                enhet = "4806",
+                spraak = "NB",
+                samhandlerInformasjon = null,
+                mottaker =
+                    MottakerTo(
+                        ident = SAMHANDLER_IDENT,
+                        navn = SAKSBEHANDLER_NAVN,
+                    ),
             )
-        )
         val bestilling = mapToBestillingsdata(request)
         assertSoftly {
             bestilling.mottaker?.spraak shouldBe "NB"
@@ -668,17 +699,18 @@ internal class DokumentMetadataCollectorTest {
         val saksnummer = "111111"
         every { sakService.hentSak(saksnummer) } returns null
 
-        val request = DokumentBestillingForespørsel(
-            mottakerId = "123213213",
-            saksnummer = saksnummer,
-            tittel = DEFAULT_TITLE_DOKUMENT,
-            enhet = "4806",
-            spraak = "NB",
-            samhandlerInformasjon = null
-        )
+        val request =
+            DokumentBestillingForespørsel(
+                mottakerId = "123213213",
+                saksnummer = saksnummer,
+                tittel = DEFAULT_TITLE_DOKUMENT,
+                enhet = "4806",
+                spraak = "NB",
+                samhandlerInformasjon = null,
+            )
         shouldThrowWithMessage<HttpStatusCodeException>("400 Fant ikke sak med id $saksnummer") {
             mapToBestillingsdata(
-                request
+                request,
             )
         }
     }
@@ -695,21 +727,22 @@ internal class DokumentMetadataCollectorTest {
         every { personService.hentPerson(BARN1.ident.verdi, any()) } returns barn1Kode6
         every { personService.hentPerson(BARN2.ident.verdi, any()) } returns barn2Kode6
 
-        val request = DokumentBestillingForespørsel(
-            mottakerId = BM1.ident.verdi,
-            gjelderId = BM1.ident.verdi,
-            saksnummer = DEFAULT_SAKSNUMMER,
-            tittel = DEFAULT_TITLE_DOKUMENT,
-            enhet = "4806",
-            spraak = "NB"
-        )
+        val request =
+            DokumentBestillingForespørsel(
+                mottakerId = BM1.ident.verdi,
+                gjelderId = BM1.ident.verdi,
+                saksnummer = DEFAULT_SAKSNUMMER,
+                tittel = DEFAULT_TITLE_DOKUMENT,
+                enhet = "4806",
+                spraak = "NB",
+            )
         val bestilling = mapToBestillingsdata(request)
         val adresseResponse = createPostAdresseResponse()
         assertSoftly {
             bestilling.mottaker?.spraak shouldBe "NB"
             bestilling.mottaker?.navn shouldBe bmKode6.kortnavn?.verdi
             bestilling.mottaker?.fodselsnummer shouldBe bmKode6.ident.verdi
-            bestilling.mottaker?.rolle shouldBe Rolletype.BM
+            bestilling.mottaker?.rolle shouldBe Rolletype.BIDRAGSMOTTAKER
             bestilling.mottaker?.fodselsdato shouldBe BM1.fødselsdato?.verdi
             bestilling.mottaker?.adresse?.adresselinje1 shouldBe adresseResponse.adresselinje1?.verdi
             bestilling.mottaker?.adresse?.adresselinje2 shouldBe adresseResponse.adresselinje2?.verdi
@@ -760,14 +793,15 @@ internal class DokumentMetadataCollectorTest {
         every { personService.hentPerson(BARN1.ident.verdi, any()) } returns barn1Kode6
         every { personService.hentPerson(BARN2.ident.verdi, any()) } returns barn2Kode6
 
-        val request = DokumentBestillingForespørsel(
-            mottakerId = BM1.ident.verdi,
-            gjelderId = BM1.ident.verdi,
-            saksnummer = DEFAULT_SAKSNUMMER,
-            tittel = DEFAULT_TITLE_DOKUMENT,
-            enhet = "4806",
-            spraak = "EN"
-        )
+        val request =
+            DokumentBestillingForespørsel(
+                mottakerId = BM1.ident.verdi,
+                gjelderId = BM1.ident.verdi,
+                saksnummer = DEFAULT_SAKSNUMMER,
+                tittel = DEFAULT_TITLE_DOKUMENT,
+                enhet = "4806",
+                spraak = "EN",
+            )
         val bestilling = mapToBestillingsdata(request)
         assertSoftly {
             bestilling.roller.barn[0].fornavn shouldBe "(CHILD BORN IN ${barn1Kode6.fødselsdato?.verdi?.year})"
@@ -790,14 +824,15 @@ internal class DokumentMetadataCollectorTest {
         every { personService.hentPerson(BARN1.ident.verdi, any()) } returns barn1Kode6
         every { personService.hentPerson(BARN2.ident.verdi, any()) } returns barn2Kode6
 
-        val request = DokumentBestillingForespørsel(
-            mottakerId = BM1.ident.verdi,
-            gjelderId = BM1.ident.verdi,
-            saksnummer = DEFAULT_SAKSNUMMER,
-            tittel = DEFAULT_TITLE_DOKUMENT,
-            enhet = "4806",
-            spraak = "NN"
-        )
+        val request =
+            DokumentBestillingForespørsel(
+                mottakerId = BM1.ident.verdi,
+                gjelderId = BM1.ident.verdi,
+                saksnummer = DEFAULT_SAKSNUMMER,
+                tittel = DEFAULT_TITLE_DOKUMENT,
+                enhet = "4806",
+                spraak = "NN",
+            )
         val bestilling = mapToBestillingsdata(request)
         assertSoftly {
             bestilling.roller.barn[0].fornavn shouldBe "(BARN FØDD I ${barn1Kode6.fødselsdato?.verdi?.year})"
@@ -819,23 +854,25 @@ internal class DokumentMetadataCollectorTest {
             val roller = originalSakResponse.roller.toMutableList()
             roller.add(
                 RolleDto(
-                    fødselsnummer = PersonIdent(rmIdent),
-                    type = Rolletype.RM
+                    fødselsnummer = Personident(rmIdent),
+                    type = Rolletype.REELMOTTAKER,
+                ),
+            )
+            val sak =
+                originalSakResponse.copy(
+                    roller = roller,
                 )
-            )
-            val sak = originalSakResponse.copy(
-                roller = roller
-            )
             every { sakService.hentSak(saksnummer) } returns sak
 
-            val request = DokumentBestillingForespørsel(
-                mottakerId = BM1.ident.verdi,
-                saksnummer = saksnummer,
-                tittel = DEFAULT_TITLE_DOKUMENT,
-                enhet = "4806",
-                spraak = "NB",
-                samhandlerInformasjon = null
-            )
+            val request =
+                DokumentBestillingForespørsel(
+                    mottakerId = BM1.ident.verdi,
+                    saksnummer = saksnummer,
+                    tittel = DEFAULT_TITLE_DOKUMENT,
+                    enhet = "4806",
+                    spraak = "NB",
+                    samhandlerInformasjon = null,
+                )
             val bestilling = mapToBestillingsdata(request)
             bestilling.rmISak shouldBe true
         }
@@ -844,32 +881,35 @@ internal class DokumentMetadataCollectorTest {
         fun `should map when bidragsmottaker is missing in sak`() {
             mockDefaultValues()
             val saksnummer = "22222"
-            val sak = createSakResponse().copy(
-                roller = listOf(
-                    RolleDto(
-                        fødselsnummer = BP1.ident,
-                        type = Rolletype.BP
-                    ),
-                    RolleDto(
-                        fødselsnummer = BARN1.ident,
-                        type = Rolletype.BA
-                    ),
-                    RolleDto(
-                        fødselsnummer = BARN2.ident,
-                        type = Rolletype.BA
-                    )
+            val sak =
+                createSakResponse().copy(
+                    roller =
+                        listOf(
+                            RolleDto(
+                                fødselsnummer = BP1.ident,
+                                type = Rolletype.BIDRAGSPLIKTIG,
+                            ),
+                            RolleDto(
+                                fødselsnummer = BARN1.ident,
+                                type = Rolletype.BARN,
+                            ),
+                            RolleDto(
+                                fødselsnummer = BARN2.ident,
+                                type = Rolletype.BARN,
+                            ),
+                        ),
                 )
-            )
             every { sakService.hentSak(saksnummer) } returns sak
 
-            val request = DokumentBestillingForespørsel(
-                mottakerId = BM1.ident.verdi,
-                saksnummer = saksnummer,
-                tittel = DEFAULT_TITLE_DOKUMENT,
-                enhet = "4806",
-                spraak = "NB",
-                samhandlerInformasjon = null
-            )
+            val request =
+                DokumentBestillingForespørsel(
+                    mottakerId = BM1.ident.verdi,
+                    saksnummer = saksnummer,
+                    tittel = DEFAULT_TITLE_DOKUMENT,
+                    enhet = "4806",
+                    spraak = "NB",
+                    samhandlerInformasjon = null,
+                )
             val bestilling = mapToBestillingsdata(request)
             bestilling.roller.bidragsmottaker shouldBe null
             bestilling.roller.bidragspliktig shouldNotBe null
@@ -880,32 +920,35 @@ internal class DokumentMetadataCollectorTest {
         fun `should map when bidragsplitkig is missing in sak`() {
             mockDefaultValues()
             val saksnummer = "22222"
-            val sak = createSakResponse().copy(
-                roller = listOf(
-                    RolleDto(
-                        fødselsnummer = BM1.ident,
-                        type = Rolletype.BM
-                    ),
-                    RolleDto(
-                        fødselsnummer = BARN1.ident,
-                        type = Rolletype.BA
-                    ),
-                    RolleDto(
-                        fødselsnummer = BARN2.ident,
-                        type = Rolletype.BA
-                    )
+            val sak =
+                createSakResponse().copy(
+                    roller =
+                        listOf(
+                            RolleDto(
+                                fødselsnummer = BM1.ident,
+                                type = Rolletype.BIDRAGSMOTTAKER,
+                            ),
+                            RolleDto(
+                                fødselsnummer = BARN1.ident,
+                                type = Rolletype.BARN,
+                            ),
+                            RolleDto(
+                                fødselsnummer = BARN2.ident,
+                                type = Rolletype.BARN,
+                            ),
+                        ),
                 )
-            )
             every { sakService.hentSak(saksnummer) } returns sak
 
-            val request = DokumentBestillingForespørsel(
-                mottakerId = BM1.ident.verdi,
-                saksnummer = saksnummer,
-                tittel = DEFAULT_TITLE_DOKUMENT,
-                enhet = "4806",
-                spraak = "NB",
-                samhandlerInformasjon = null
-            )
+            val request =
+                DokumentBestillingForespørsel(
+                    mottakerId = BM1.ident.verdi,
+                    saksnummer = saksnummer,
+                    tittel = DEFAULT_TITLE_DOKUMENT,
+                    enhet = "4806",
+                    spraak = "NB",
+                    samhandlerInformasjon = null,
+                )
             val bestilling = mapToBestillingsdata(request)
             bestilling.roller.bidragspliktig shouldBe null
             bestilling.roller.bidragsmottaker shouldNotBe null
@@ -916,24 +959,27 @@ internal class DokumentMetadataCollectorTest {
         fun `should map when barn is missing in sak`() {
             mockDefaultValues()
             val saksnummer = "22222"
-            val sak = createSakResponse().copy(
-                roller = listOf(
-                    RolleDto(
-                        fødselsnummer = BM1.ident,
-                        type = Rolletype.BM
-                    )
+            val sak =
+                createSakResponse().copy(
+                    roller =
+                        listOf(
+                            RolleDto(
+                                fødselsnummer = BM1.ident,
+                                type = Rolletype.BIDRAGSMOTTAKER,
+                            ),
+                        ),
                 )
-            )
             every { sakService.hentSak(saksnummer) } returns sak
 
-            val request = DokumentBestillingForespørsel(
-                mottakerId = BM1.ident.verdi,
-                saksnummer = saksnummer,
-                tittel = DEFAULT_TITLE_DOKUMENT,
-                enhet = "4806",
-                spraak = "NB",
-                samhandlerInformasjon = null
-            )
+            val request =
+                DokumentBestillingForespørsel(
+                    mottakerId = BM1.ident.verdi,
+                    saksnummer = saksnummer,
+                    tittel = DEFAULT_TITLE_DOKUMENT,
+                    enhet = "4806",
+                    spraak = "NB",
+                    samhandlerInformasjon = null,
+                )
             val bestilling = mapToBestillingsdata(request)
             bestilling.roller.bidragspliktig shouldBe null
             bestilling.roller.bidragsmottaker shouldNotBe null
@@ -945,33 +991,36 @@ internal class DokumentMetadataCollectorTest {
             mockDefaultValues()
             val saksnummer = "22222"
             val barn1Dod = BARN1.copy(dødsdato = Dødsdato.of(2022, 1, 1))
-            val sak = createSakResponse().copy(
-                roller = listOf(
-                    RolleDto(
-                        fødselsnummer = BM1.ident,
-                        type = Rolletype.BM
-                    ),
-                    RolleDto(
-                        fødselsnummer = barn1Dod.ident,
-                        type = Rolletype.BA
-                    ),
-                    RolleDto(
-                        fødselsnummer = BARN2.ident,
-                        type = Rolletype.BA
-                    )
+            val sak =
+                createSakResponse().copy(
+                    roller =
+                        listOf(
+                            RolleDto(
+                                fødselsnummer = BM1.ident,
+                                type = Rolletype.BIDRAGSMOTTAKER,
+                            ),
+                            RolleDto(
+                                fødselsnummer = barn1Dod.ident,
+                                type = Rolletype.BARN,
+                            ),
+                            RolleDto(
+                                fødselsnummer = BARN2.ident,
+                                type = Rolletype.BARN,
+                            ),
+                        ),
                 )
-            )
             every { sakService.hentSak(saksnummer) } returns sak
             every { personService.hentPerson(barn1Dod.ident.verdi, any()) } returns barn1Dod
 
-            val request = DokumentBestillingForespørsel(
-                mottakerId = BM1.ident.verdi,
-                saksnummer = saksnummer,
-                tittel = DEFAULT_TITLE_DOKUMENT,
-                enhet = "4806",
-                spraak = "NB",
-                samhandlerInformasjon = null
-            )
+            val request =
+                DokumentBestillingForespørsel(
+                    mottakerId = BM1.ident.verdi,
+                    saksnummer = saksnummer,
+                    tittel = DEFAULT_TITLE_DOKUMENT,
+                    enhet = "4806",
+                    spraak = "NB",
+                    samhandlerInformasjon = null,
+                )
             val bestilling = mapToBestillingsdata(request)
             bestilling.roller.bidragspliktig shouldBe null
             bestilling.roller.bidragsmottaker shouldNotBe null
@@ -982,32 +1031,35 @@ internal class DokumentMetadataCollectorTest {
         fun `skal legge til alle barn`() {
             mockDefaultValues()
             val saksnummer = "22222"
-            val sak = createSakResponse().copy(
-                roller = listOf(
-                    RolleDto(
-                        fødselsnummer = BM1.ident,
-                        type = Rolletype.BM
-                    ),
-                    RolleDto(
-                        fødselsnummer = BARN1.ident,
-                        type = Rolletype.BA
-                    ),
-                    RolleDto(
-                        fødselsnummer = BARN2.ident,
-                        type = Rolletype.BA
-                    )
+            val sak =
+                createSakResponse().copy(
+                    roller =
+                        listOf(
+                            RolleDto(
+                                fødselsnummer = BM1.ident,
+                                type = Rolletype.BIDRAGSMOTTAKER,
+                            ),
+                            RolleDto(
+                                fødselsnummer = BARN1.ident,
+                                type = Rolletype.BARN,
+                            ),
+                            RolleDto(
+                                fødselsnummer = BARN2.ident,
+                                type = Rolletype.BARN,
+                            ),
+                        ),
                 )
-            )
             every { sakService.hentSak(saksnummer) } returns sak
 
-            val request = DokumentBestillingForespørsel(
-                mottakerId = BM1.ident.verdi,
-                saksnummer = saksnummer,
-                tittel = DEFAULT_TITLE_DOKUMENT,
-                enhet = "4806",
-                spraak = "NB",
-                samhandlerInformasjon = null
-            )
+            val request =
+                DokumentBestillingForespørsel(
+                    mottakerId = BM1.ident.verdi,
+                    saksnummer = saksnummer,
+                    tittel = DEFAULT_TITLE_DOKUMENT,
+                    enhet = "4806",
+                    spraak = "NB",
+                    samhandlerInformasjon = null,
+                )
             val bestilling = mapToBestillingsdata(request)
             bestilling.roller.bidragspliktig shouldBe null
             bestilling.roller.bidragsmottaker shouldNotBe null
@@ -1020,33 +1072,36 @@ internal class DokumentMetadataCollectorTest {
         fun `skal bare legge til barn hvis forespørsel inneholder barnIBehandling`() {
             mockDefaultValues()
             val saksnummer = "22222"
-            val sak = createSakResponse().copy(
-                roller = listOf(
-                    RolleDto(
-                        fødselsnummer = BM1.ident,
-                        type = Rolletype.BM
-                    ),
-                    RolleDto(
-                        fødselsnummer = BARN1.ident,
-                        type = Rolletype.BA
-                    ),
-                    RolleDto(
-                        fødselsnummer = BARN2.ident,
-                        type = Rolletype.BA
-                    )
+            val sak =
+                createSakResponse().copy(
+                    roller =
+                        listOf(
+                            RolleDto(
+                                fødselsnummer = BM1.ident,
+                                type = Rolletype.BIDRAGSMOTTAKER,
+                            ),
+                            RolleDto(
+                                fødselsnummer = BARN1.ident,
+                                type = Rolletype.BARN,
+                            ),
+                            RolleDto(
+                                fødselsnummer = BARN2.ident,
+                                type = Rolletype.BARN,
+                            ),
+                        ),
                 )
-            )
             every { sakService.hentSak(saksnummer) } returns sak
 
-            val request = DokumentBestillingForespørsel(
-                mottakerId = BM1.ident.verdi,
-                saksnummer = saksnummer,
-                tittel = DEFAULT_TITLE_DOKUMENT,
-                enhet = "4806",
-                spraak = "NB",
-                samhandlerInformasjon = null,
-                barnIBehandling = listOf(BARN1.ident.verdi)
-            )
+            val request =
+                DokumentBestillingForespørsel(
+                    mottakerId = BM1.ident.verdi,
+                    saksnummer = saksnummer,
+                    tittel = DEFAULT_TITLE_DOKUMENT,
+                    enhet = "4806",
+                    spraak = "NB",
+                    samhandlerInformasjon = null,
+                    barnIBehandling = listOf(BARN1.ident.verdi),
+                )
             val bestilling = mapToBestillingsdata(request)
             bestilling.roller.bidragspliktig shouldBe null
             bestilling.roller.bidragsmottaker shouldNotBe null
@@ -1062,48 +1117,52 @@ internal class DokumentMetadataCollectorTest {
         val barn1 = BARN1.copy(fødselsdato = Fødselsdato.of(2020, 1, 2))
         val barn2 = BARN2.copy(fødselsdato = Fødselsdato.of(2020, 5, 15))
         val barn3 = BARN3.copy(fødselsdato = Fødselsdato.of(2021, 7, 20))
-        val barn4 = BARN3.copy(
-            ident = PersonIdent("1231231233333333"),
-            fødselsdato = Fødselsdato.of(2022, 3, 15)
-        )
-        val sak = createSakResponse().copy(
-            roller = listOf(
-                RolleDto(
-                    fødselsnummer = BM1.ident,
-                    type = Rolletype.BM
-                ),
-                RolleDto(
-                    fødselsnummer = barn1.ident,
-                    type = Rolletype.BA
-                ),
-                RolleDto(
-                    fødselsnummer = barn2.ident,
-                    type = Rolletype.BA
-                ),
-                RolleDto(
-                    fødselsnummer = barn3.ident,
-                    type = Rolletype.BA
-                ),
-                RolleDto(
-                    fødselsnummer = barn4.ident,
-                    type = Rolletype.BA
-                )
+        val barn4 =
+            BARN3.copy(
+                ident = Personident("1231231233333333"),
+                fødselsdato = Fødselsdato.of(2022, 3, 15),
             )
-        )
+        val sak =
+            createSakResponse().copy(
+                roller =
+                    listOf(
+                        RolleDto(
+                            fødselsnummer = BM1.ident,
+                            type = Rolletype.BIDRAGSMOTTAKER,
+                        ),
+                        RolleDto(
+                            fødselsnummer = barn1.ident,
+                            type = Rolletype.BARN,
+                        ),
+                        RolleDto(
+                            fødselsnummer = barn2.ident,
+                            type = Rolletype.BARN,
+                        ),
+                        RolleDto(
+                            fødselsnummer = barn3.ident,
+                            type = Rolletype.BARN,
+                        ),
+                        RolleDto(
+                            fødselsnummer = barn4.ident,
+                            type = Rolletype.BARN,
+                        ),
+                    ),
+            )
         every { sakService.hentSak(saksnummer) } returns sak
         every { personService.hentPerson(barn1.ident.verdi, any()) } returns barn1
         every { personService.hentPerson(barn2.ident.verdi, any()) } returns barn2
         every { personService.hentPerson(barn3.ident.verdi, any()) } returns barn3
         every { personService.hentPerson(barn4.ident.verdi, any()) } returns barn4
 
-        val request = DokumentBestillingForespørsel(
-            mottakerId = BM1.ident.verdi,
-            saksnummer = saksnummer,
-            tittel = DEFAULT_TITLE_DOKUMENT,
-            enhet = "4806",
-            spraak = "NB",
-            samhandlerInformasjon = null
-        )
+        val request =
+            DokumentBestillingForespørsel(
+                mottakerId = BM1.ident.verdi,
+                saksnummer = saksnummer,
+                tittel = DEFAULT_TITLE_DOKUMENT,
+                enhet = "4806",
+                spraak = "NB",
+                samhandlerInformasjon = null,
+            )
         val bestilling = mapToBestillingsdata(request)
         assertSoftly {
             bestilling.roller.bidragspliktig shouldBe null
@@ -1127,25 +1186,28 @@ internal class DokumentMetadataCollectorTest {
     @Test
     fun `should map with only adresse and not mottakerid`() {
         mockDefaultValues()
-        val request = DokumentBestillingForespørsel(
-            gjelderId = BM1.ident.verdi,
-            saksnummer = DEFAULT_SAKSNUMMER,
-            tittel = DEFAULT_TITLE_DOKUMENT,
-            enhet = "4806",
-            spraak = "NB",
-            mottaker = MottakerTo(
-                navn = "Mottaker Mottakersen",
-                språk = "NB",
-                adresse = MottakerAdresseTo(
-                    adresselinje1 = "adresselinje 1",
-                    adresselinje2 = "adresselinje 2",
-                    adresselinje3 = "adresselinje 3",
-                    postnummer = "3030",
-                    poststed = "Drammen",
-                    landkode = "NO"
-                )
+        val request =
+            DokumentBestillingForespørsel(
+                gjelderId = BM1.ident.verdi,
+                saksnummer = DEFAULT_SAKSNUMMER,
+                tittel = DEFAULT_TITLE_DOKUMENT,
+                enhet = "4806",
+                spraak = "NB",
+                mottaker =
+                    MottakerTo(
+                        navn = "Mottaker Mottakersen",
+                        språk = "NB",
+                        adresse =
+                            MottakerAdresseTo(
+                                adresselinje1 = "adresselinje 1",
+                                adresselinje2 = "adresselinje 2",
+                                adresselinje3 = "adresselinje 3",
+                                postnummer = "3030",
+                                poststed = "Drammen",
+                                landkode = "NO",
+                            ),
+                    ),
             )
-        )
         val bestilling = mapToBestillingsdata(request)
         assertSoftly {
             bestilling.mottaker?.spraak shouldBe "NB"
@@ -1168,7 +1230,7 @@ internal class DokumentMetadataCollectorTest {
 
     private fun mapToBestillingsdata(
         request: DokumentBestillingForespørsel,
-        dokumentMal: DokumentMal = hentDokumentMal("BI01S02")!!
+        dokumentMal: DokumentMal = hentDokumentMal("BI01S02")!!,
     ): DokumentBestilling {
         return metadataCollector.collect(request, dokumentMal)
     }

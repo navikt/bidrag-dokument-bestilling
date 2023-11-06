@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component
 class DokumentBestillingManager(val applicationContext: ApplicationContext) {
     fun bestill(
         reqest: DokumentBestillingForespørsel,
-        dokumentMal: DokumentMal
+        dokumentMal: DokumentMal,
     ): DokumentBestillingResult {
         val bestillingData = buildDokumentBestilling(reqest, dokumentMal)
         val dokumentProducer = fetchProducer(dokumentMal)
@@ -22,13 +22,13 @@ class DokumentBestillingManager(val applicationContext: ApplicationContext) {
     private fun fetchProducer(dokumentMal: DokumentMal): DokumentProducer {
         return applicationContext.getBean(
             dokumentMal.bestillingSystem,
-            DokumentProducer::class.java
+            DokumentProducer::class.java,
         )
     }
 
     private fun buildDokumentBestilling(
         dokumentBestilling: DokumentBestillingForespørsel,
-        dokumentMal: DokumentMal
+        dokumentMal: DokumentMal,
     ): DokumentBestilling {
         return applicationContext.getBean(DokumentMetadataCollector::class.java)
             .collect(dokumentBestilling, dokumentMal)

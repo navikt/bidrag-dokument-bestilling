@@ -52,7 +52,6 @@ import java.time.LocalDate
 
 @ExtendWith(MockKExtension::class)
 class VedtakServiceTest {
-
     @MockK
     lateinit var personService: PersonService
 
@@ -405,9 +404,15 @@ class VedtakServiceTest {
     }
 
     fun List<InntektPeriode>.hentGrunnlag() = find { it.beløpType.periodeBeregningsGrunnlag == true }
+
     fun List<InntektPeriode>.hentNettoKapital() = find { it.beløpType.nettoKapitalInntekt == true }
 
-    fun VedtakBarnStonad.vedtakPeriode(fomDato: LocalDate, tomDato: LocalDate? = null, beløp: BigDecimal, resultatKode: String) {
+    fun VedtakBarnStonad.vedtakPeriode(
+        fomDato: LocalDate,
+        tomDato: LocalDate? = null,
+        beløp: BigDecimal,
+        resultatKode: String,
+    ) {
         val vedtakPeriode = hentVedtakPeriodeForDato(fomDato)!!
         vedtakPeriode.fomDato shouldBe fomDato
         vedtakPeriode.tomDato shouldBe tomDato
@@ -417,23 +422,37 @@ class VedtakServiceTest {
         vedtakPeriode.maksInntekt shouldBe if (tomDato == null) FORSKUDD_MAKS_INNTEKT_FORSKUDD_MOTTAKER_2022_2023 else FORSKUDD_MAKS_INNTEKT_FORSKUDD_MOTTAKER_2021_2022
     }
 
-    fun VedtakDetaljer.validerBostatus(fomDato: LocalDate, tomDato: LocalDate? = null, antallBarn: Int) {
+    fun VedtakDetaljer.validerBostatus(
+        fomDato: LocalDate,
+        tomDato: LocalDate? = null,
+        antallBarn: Int,
+    ) {
         val barnIHustandPeriode = hentBarnIHustandPeriodeForDato(fomDato)!!
         barnIHustandPeriode.fomDato shouldBe fomDato
         barnIHustandPeriode.tomDato shouldBe tomDato
         barnIHustandPeriode.antall shouldBe antallBarn
     }
 
-    fun VedtakDetaljer.validerSivilstandPeriode(periode: PeriodeFraTom, sivilstandKode: SivilstandKode, beskrivelse: String) {
+    fun VedtakDetaljer.validerSivilstandPeriode(
+        periode: PeriodeFraTom,
+        sivilstandKode: SivilstandKode,
+        beskrivelse: String,
+    ) {
         val sivilstandPeriode = hentSivilstandPeriodeForDato(periode)!!
         sivilstandPeriode.fomDato shouldBe periode.fraDato
         sivilstandPeriode.tomDato shouldBe periode.tomDato
         sivilstandPeriode.sivilstandKode shouldBe sivilstandKode
         sivilstandPeriode.sivilstandBeskrivelse shouldBe beskrivelse
     }
+
     fun VedtakBarnStonad.hentVedtakPeriodeForDato(dato: LocalDate) = this.vedtakPerioder.sortedByDescending { it.fomDato }.find { erInnenforPeriode(PeriodeFraTom(it.fomDato, it.tomDato), dato) }
+
     fun VedtakDetaljer.hentSivilstandPeriodeForDato(periode: PeriodeFraTom) = this.sivilstandPerioder.sortedByDescending { it.fomDato }.find { it.fomDato <= periode.fraDato && (it.tomDato == null || periode.tomDato == null || it.tomDato!! >= periode.tomDato) }
+
     fun VedtakDetaljer.hentBarnIHustandPeriodeForDato(dato: LocalDate) = this.barnIHustandPerioder.sortedByDescending { it.fomDato }.find { it.fomDato <= dato && (it.tomDato == null || it.tomDato!! > dato) }
 
-    fun erInnenforPeriode(periode: PeriodeFraTom, dato: LocalDate) = periode.fraDato <= dato && (periode.tomDato == null || periode.tomDato!! > dato)
+    fun erInnenforPeriode(
+        periode: PeriodeFraTom,
+        dato: LocalDate,
+    ) = periode.fraDato <= dato && (periode.tomDato == null || periode.tomDato!! > dato)
 }

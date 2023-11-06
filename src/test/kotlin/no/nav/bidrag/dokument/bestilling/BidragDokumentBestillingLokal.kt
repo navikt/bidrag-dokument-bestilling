@@ -6,10 +6,12 @@ import org.springframework.boot.actuate.autoconfigure.security.servlet.Managemen
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration
 import org.springframework.context.annotation.EnableAspectJAutoProxy
+import org.springframework.context.annotation.Import
 
 @SpringBootApplication(exclude = [SecurityAutoConfiguration::class, ManagementWebSecurityAutoConfiguration::class])
 @EnableAspectJAutoProxy
 @EnableJwtTokenValidation(ignore = ["org.springframework", "org.springdoc"])
+@Import(JmsTestConfig::class)
 class BidragDokumentBestillingLokal
 
 fun main(args: Array<String>) {
@@ -18,7 +20,7 @@ fun main(args: Array<String>) {
         "lokal-nais",
         "lokal-nais-secrets",
         "lokal",
-        "lokal-bucket-nais-secrets"
+        "lokal-bucket-nais-secrets",
     )
     app.run(*args)
 }

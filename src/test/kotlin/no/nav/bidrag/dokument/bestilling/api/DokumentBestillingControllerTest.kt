@@ -49,7 +49,7 @@ import no.nav.bidrag.dokument.bestilling.utils.createOpprettJournalpostResponse
 import no.nav.bidrag.dokument.bestilling.utils.createPostAdresseResponse
 import no.nav.bidrag.dokument.bestilling.utils.createPostAdresseResponseUtenlandsk
 import no.nav.bidrag.dokument.bestilling.utils.createSakResponse
-import no.nav.bidrag.domain.enums.Rolletype
+import no.nav.bidrag.domene.enums.Rolletype
 import no.nav.bidrag.transport.sak.RolleDto
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
@@ -62,25 +62,25 @@ import org.springframework.http.ResponseEntity
 import java.math.BigDecimal
 import java.time.LocalDate
 
-
 fun BidragBarn.hentInntektPerioder(periodeFraTom: PeriodeFraTom) =
     inntektPerioder.filter { it.fomDato == periodeFraTom.fraDato && it.tomDato == periodeFraTom.tomDato }
 
 class DokumentBestillingControllerTest : AbstractControllerTest() {
-
     @Test
     fun `skal returnere liste over brevkoder som er støttet`() {
-        val response = httpHeaderTestRestTemplate.exchange(
-            "${rootUri()}/brevkoder",
-            HttpMethod.OPTIONS,
-            null,
-            List::class.java
-        )
+        val response =
+            httpHeaderTestRestTemplate.exchange(
+                "${rootUri()}/brevkoder",
+                HttpMethod.OPTIONS,
+                null,
+                List::class.java,
+            )
 
         response.body?.forEach {
             it shouldBeIn alleDokumentmaler.map { bk -> bk.kode }
-            it shouldNotBeIn alleDokumentmaler.filter { bk -> !bk.enabled }
-                .map { bk -> bk.kode }
+            it shouldNotBeIn
+                alleDokumentmaler.filter { bk -> !bk.enabled }
+                    .map { bk -> bk.kode }
         }
 
         response.body?.shouldHaveSize(alleDokumentmaler.filter { it.enabled && it is DokumentMalBrevserver }.size)
@@ -95,7 +95,7 @@ class DokumentBestillingControllerTest : AbstractControllerTest() {
                 "${rootUri()}/dokumentmal/detaljer",
                 HttpMethod.GET,
                 null,
-                responseType
+                responseType,
             )
 
         val responseBody = response.body!!
@@ -143,25 +143,26 @@ class DokumentBestillingControllerTest : AbstractControllerTest() {
         stubUtils.stubHentAdresse(postAdresse = bmAdresse)
         stubUtils.stubEnhetKontaktInfo(enhetKontaktInfo)
 
-        val request = DokumentBestillingForespørsel(
-            mottakerId = mottakerId.verdi,
-            gjelderId = gjelderId.verdi,
-            saksnummer = saksnummer,
-            tittel = tittel,
-            vedtakId = "12312",
-            enhet = "4806",
-            spraak = "NB",
-            dokumentreferanse = "BIF12321321321"
-
-        )
+        val request =
+            DokumentBestillingForespørsel(
+                mottakerId = mottakerId.verdi,
+                gjelderId = gjelderId.verdi,
+                saksnummer = saksnummer,
+                tittel = tittel,
+                vedtakId = "12312",
+                enhet = "4806",
+                spraak = "NB",
+                dokumentreferanse = "BIF12321321321",
+            )
 
         jmsTestConsumer.withOnlinebrev {
-            val response = httpHeaderTestRestTemplate.exchange(
-                "${rootUri()}/bestill/${dokumentMal.kode}",
-                HttpMethod.POST,
-                HttpEntity(request),
-                DokumentBestillingResponse::class.java
-            )
+            val response =
+                httpHeaderTestRestTemplate.exchange(
+                    "${rootUri()}/bestill/${dokumentMal.kode}",
+                    HttpMethod.POST,
+                    HttpEntity(request),
+                    DokumentBestillingResponse::class.java,
+                )
 
             response.statusCode shouldBe HttpStatus.OK
 
@@ -188,25 +189,26 @@ class DokumentBestillingControllerTest : AbstractControllerTest() {
         stubUtils.stubHentAdresse(postAdresse = bmAdresse)
         stubUtils.stubEnhetKontaktInfo(enhetKontaktInfo)
 
-        val request = DokumentBestillingForespørsel(
-            mottakerId = mottakerId.verdi,
-            gjelderId = gjelderId.verdi,
-            saksnummer = saksnummer,
-            tittel = tittel,
-            vedtakId = "12312",
-            enhet = "4806",
-            spraak = "NB",
-            dokumentreferanse = "BIF12321321321"
-
-        )
+        val request =
+            DokumentBestillingForespørsel(
+                mottakerId = mottakerId.verdi,
+                gjelderId = gjelderId.verdi,
+                saksnummer = saksnummer,
+                tittel = tittel,
+                vedtakId = "12312",
+                enhet = "4806",
+                spraak = "NB",
+                dokumentreferanse = "BIF12321321321",
+            )
 
         jmsTestConsumer.withOnlinebrev {
-            val response = httpHeaderTestRestTemplate.exchange(
-                "${rootUri()}/bestill/${dokumentMal.kode}",
-                HttpMethod.POST,
-                HttpEntity(request),
-                DokumentBestillingResponse::class.java
-            )
+            val response =
+                httpHeaderTestRestTemplate.exchange(
+                    "${rootUri()}/bestill/${dokumentMal.kode}",
+                    HttpMethod.POST,
+                    HttpEntity(request),
+                    DokumentBestillingResponse::class.java,
+                )
 
             response.statusCode shouldBe HttpStatus.OK
 
@@ -447,25 +449,26 @@ class DokumentBestillingControllerTest : AbstractControllerTest() {
         stubUtils.stubHentAdresse(postAdresse = bmAdresse)
         stubUtils.stubEnhetKontaktInfo(enhetKontaktInfo)
 
-        val request = DokumentBestillingForespørsel(
-            mottakerId = mottakerId.verdi,
-            gjelderId = gjelderId.verdi,
-            saksnummer = saksnummer,
-            tittel = tittel,
-            vedtakId = "12312",
-            enhet = "4806",
-            spraak = "NB",
-            dokumentreferanse = "BIF12321321321"
-
-        )
+        val request =
+            DokumentBestillingForespørsel(
+                mottakerId = mottakerId.verdi,
+                gjelderId = gjelderId.verdi,
+                saksnummer = saksnummer,
+                tittel = tittel,
+                vedtakId = "12312",
+                enhet = "4806",
+                spraak = "NB",
+                dokumentreferanse = "BIF12321321321",
+            )
 
         jmsTestConsumer.withOnlinebrev {
-            val response = httpHeaderTestRestTemplate.exchange(
-                "${rootUri()}/bestill/${dokumentMal.kode}",
-                HttpMethod.POST,
-                HttpEntity(request),
-                DokumentBestillingResponse::class.java
-            )
+            val response =
+                httpHeaderTestRestTemplate.exchange(
+                    "${rootUri()}/bestill/${dokumentMal.kode}",
+                    HttpMethod.POST,
+                    HttpEntity(request),
+                    DokumentBestillingResponse::class.java,
+                )
 
             response.statusCode shouldBe HttpStatus.OK
 
@@ -571,23 +574,24 @@ class DokumentBestillingControllerTest : AbstractControllerTest() {
 
         stubUtils.stubOpprettJournalpost(createOpprettJournalpostResponse(dokumentReferanse = "DOKREF_1"))
 
-        val request = DokumentBestillingForespørsel(
-            mottakerId = mottakerId.verdi,
-            gjelderId = gjelderId.verdi,
-            saksnummer = saksnummer,
-            tittel = tittel,
-            enhet = "4806",
-            spraak = "NB"
-
-        )
+        val request =
+            DokumentBestillingForespørsel(
+                mottakerId = mottakerId.verdi,
+                gjelderId = gjelderId.verdi,
+                saksnummer = saksnummer,
+                tittel = tittel,
+                enhet = "4806",
+                spraak = "NB",
+            )
 
         jmsTestConsumer.withOnlinebrev {
-            val response = httpHeaderTestRestTemplate.exchange(
-                "${rootUri()}/bestill/${dokumentMal.kode}",
-                HttpMethod.POST,
-                HttpEntity(request),
-                DokumentBestillingResponse::class.java
-            )
+            val response =
+                httpHeaderTestRestTemplate.exchange(
+                    "${rootUri()}/bestill/${dokumentMal.kode}",
+                    HttpMethod.POST,
+                    HttpEntity(request),
+                    DokumentBestillingResponse::class.java,
+                )
 
             response.statusCode shouldBe HttpStatus.OK
 
@@ -599,7 +603,7 @@ class DokumentBestillingControllerTest : AbstractControllerTest() {
                     BM1,
                     BP1,
                     bmAdresse,
-                    "DOKREF_1"
+                    "DOKREF_1",
                 )
 
                 message.brev?.parter?.bmkravkfremav shouldBe ""
@@ -643,14 +647,15 @@ class DokumentBestillingControllerTest : AbstractControllerTest() {
                 stubUtils.Verify().verifyHentPersonCalled(BARN2.ident.verdi)
                 stubUtils.Verify().verifyOpprettJournalpostCalledWith(
                     "{\"skalFerdigstilles\":false," +
-                            "\"tittel\":\"$tittel\"," +
-                            "\"gjelderIdent\":\"${gjelderId.verdi}\"," +
-                            "\"avsenderMottaker\":{\"navn\":\"${BM1.kortnavn!!.verdi}\",\"ident\":\"${mottakerId.verdi}\",\"type\":\"FNR\",\"adresse\":null}," +
-                            "\"dokumenter\":[{\"tittel\":\"$tittel\",\"brevkode\":\"${dokumentMal.kode}\"}]," +
-                            "\"tilknyttSaker\":[\"$saksnummer\"]," +
-                            "\"journalposttype\":\"UTGÅENDE\"," +
-                            "\"journalførendeEnhet\":\"4806\"," +
-                            "\"saksbehandlerIdent\":\"Z99999\"}"
+                        "\"tittel\":\"$tittel\"," +
+                        "\"gjelderIdent\":\"${gjelderId.verdi}\"," +
+                        "\"avsenderMottaker\":{\"navn\":\"${BM1.kortnavn!!.verdi}\",\"ident\":\"${mottakerId.verdi}\",\"type\":\"FNR\",\"adresse\":null}," +
+                        "\"dokumenter\":[{\"tittel\":\"$tittel\",\"brevkode\":\"${dokumentMal.kode}\",\"dokumentmalId\":\"BI01S02\"}]," +
+                        "\"tilknyttSaker\":[\"$saksnummer\"]," +
+                        "\"tema\":\"BID\"," +
+                        "\"journalposttype\":\"UTGÅENDE\"," +
+                        "\"journalførendeEnhet\":\"4806\"," +
+                        "\"saksbehandlerIdent\":\"Z99999\"}",
                 )
             }
         }
@@ -672,24 +677,25 @@ class DokumentBestillingControllerTest : AbstractControllerTest() {
 
         stubUtils.stubOpprettJournalpost(createOpprettJournalpostResponse(dokumentReferanse = "DOKREF_1"))
 
-        val request = DokumentBestillingForespørsel(
-            mottakerId = mottakerId.verdi,
-            gjelderId = gjelderId.verdi,
-            saksnummer = saksnummer,
-            tittel = tittel,
-            enhet = "4806",
-            spraak = "NB",
-            barnIBehandling = listOf(BARN1.ident.verdi)
-
-        )
+        val request =
+            DokumentBestillingForespørsel(
+                mottakerId = mottakerId.verdi,
+                gjelderId = gjelderId.verdi,
+                saksnummer = saksnummer,
+                tittel = tittel,
+                enhet = "4806",
+                spraak = "NB",
+                barnIBehandling = listOf(BARN1.ident.verdi),
+            )
 
         jmsTestConsumer.withOnlinebrev {
-            val response = httpHeaderTestRestTemplate.exchange(
-                "${rootUri()}/bestill/${dokumentMal.kode}",
-                HttpMethod.POST,
-                HttpEntity(request),
-                DokumentBestillingResponse::class.java
-            )
+            val response =
+                httpHeaderTestRestTemplate.exchange(
+                    "${rootUri()}/bestill/${dokumentMal.kode}",
+                    HttpMethod.POST,
+                    HttpEntity(request),
+                    DokumentBestillingResponse::class.java,
+                )
 
             response.statusCode shouldBe HttpStatus.OK
 
@@ -715,22 +721,24 @@ class DokumentBestillingControllerTest : AbstractControllerTest() {
 
         stubUtils.stubOpprettJournalpost(createOpprettJournalpostResponse(dokumentReferanse = "DOKREF_1"))
 
-        val request = DokumentBestillingForespørsel(
-            mottakerId = BM1.ident.verdi,
-            gjelderId = BP1.ident.verdi,
-            saksnummer = "123213",
-            tittel = "Tittel på dokument",
-            enhet = "4806",
-            spraak = "EN"
-        )
+        val request =
+            DokumentBestillingForespørsel(
+                mottakerId = BM1.ident.verdi,
+                gjelderId = BP1.ident.verdi,
+                saksnummer = "123213",
+                tittel = "Tittel på dokument",
+                enhet = "4806",
+                spraak = "EN",
+            )
 
         jmsTestConsumer.withOnlinebrev {
-            val response = httpHeaderTestRestTemplate.exchange(
-                "${rootUri()}/bestill/${dokumentMal.kode}",
-                HttpMethod.POST,
-                HttpEntity(request),
-                DokumentBestillingResponse::class.java
-            )
+            val response =
+                httpHeaderTestRestTemplate.exchange(
+                    "${rootUri()}/bestill/${dokumentMal.kode}",
+                    HttpMethod.POST,
+                    HttpEntity(request),
+                    DokumentBestillingResponse::class.java,
+                )
 
             response.statusCode shouldBe HttpStatus.OK
 
@@ -765,20 +773,22 @@ class DokumentBestillingControllerTest : AbstractControllerTest() {
         val headers = HttpHeaders()
         headers.set(X_ENHET_HEADER, "4806")
 
-        val request = DokumentBestillingForespørsel(
-            mottakerId = BM1.ident.verdi,
-            gjelderId = BP1.ident.verdi,
-            saksnummer = "123213",
-            enhet = "4806"
-        )
+        val request =
+            DokumentBestillingForespørsel(
+                mottakerId = BM1.ident.verdi,
+                gjelderId = BP1.ident.verdi,
+                saksnummer = "123213",
+                enhet = "4806",
+            )
 
         jmsTestConsumer.withOnlinebrev {
-            val response = httpHeaderTestRestTemplate.exchange(
-                "${rootUri()}/bestill/${dokumentMal.kode}",
-                HttpMethod.POST,
-                HttpEntity(request, headers),
-                DokumentBestillingResponse::class.java
-            )
+            val response =
+                httpHeaderTestRestTemplate.exchange(
+                    "${rootUri()}/bestill/${dokumentMal.kode}",
+                    HttpMethod.POST,
+                    HttpEntity(request, headers),
+                    DokumentBestillingResponse::class.java,
+                )
 
             response.statusCode shouldBe HttpStatus.OK
 
@@ -794,20 +804,22 @@ class DokumentBestillingControllerTest : AbstractControllerTest() {
         stubDefaultValues()
 
         stubUtils.stubOpprettJournalpost(createOpprettJournalpostResponse(dokumentReferanse = "DOKREF_1"))
-        val request = DokumentBestillingForespørsel(
-            mottakerId = BM1.ident.verdi,
-            gjelderId = BP1.ident.verdi,
-            saksnummer = "123213",
-            enhet = "4806"
-        )
+        val request =
+            DokumentBestillingForespørsel(
+                mottakerId = BM1.ident.verdi,
+                gjelderId = BP1.ident.verdi,
+                saksnummer = "123213",
+                enhet = "4806",
+            )
 
         jmsTestConsumer.withOnlinebrev {
-            val response = httpHeaderTestRestTemplate.exchange(
-                "${rootUri()}/bestill/${dokumentMal.kode}",
-                HttpMethod.POST,
-                HttpEntity(request),
-                DokumentBestillingResponse::class.java
-            )
+            val response =
+                httpHeaderTestRestTemplate.exchange(
+                    "${rootUri()}/bestill/${dokumentMal.kode}",
+                    HttpMethod.POST,
+                    HttpEntity(request),
+                    DokumentBestillingResponse::class.java,
+                )
 
             response.statusCode shouldBe HttpStatus.OK
 
@@ -827,23 +839,26 @@ class DokumentBestillingControllerTest : AbstractControllerTest() {
         stubUtils.stubHentAdresse(postAdresse = null, status = HttpStatus.NO_CONTENT)
 
         stubUtils.stubOpprettJournalpost(createOpprettJournalpostResponse(dokumentReferanse = "DOKREF_1"))
-        val request = DokumentBestillingForespørsel(
-            gjelderId = BP1.ident.verdi,
-            saksnummer = "123213",
-            enhet = "4806",
-            mottaker = MottakerTo(
-                ident = SAMHANDLER_IDENT,
-                navn = SAKSBEHANDLER_NAVN
+        val request =
+            DokumentBestillingForespørsel(
+                gjelderId = BP1.ident.verdi,
+                saksnummer = "123213",
+                enhet = "4806",
+                mottaker =
+                    MottakerTo(
+                        ident = SAMHANDLER_IDENT,
+                        navn = SAKSBEHANDLER_NAVN,
+                    ),
             )
-        )
 
         jmsTestConsumer.withOnlinebrev {
-            val response = httpHeaderTestRestTemplate.exchange(
-                "${rootUri()}/bestill/${dokumentMal.kode}",
-                HttpMethod.POST,
-                HttpEntity(request),
-                DokumentBestillingResponse::class.java
-            )
+            val response =
+                httpHeaderTestRestTemplate.exchange(
+                    "${rootUri()}/bestill/${dokumentMal.kode}",
+                    HttpMethod.POST,
+                    HttpEntity(request),
+                    DokumentBestillingResponse::class.java,
+                )
 
             response.statusCode shouldBe HttpStatus.OK
 
@@ -864,22 +879,25 @@ class DokumentBestillingControllerTest : AbstractControllerTest() {
         stubUtils.stubHentAdresse(postAdresse = null, status = HttpStatus.NO_CONTENT)
 
         stubUtils.stubOpprettJournalpost(createOpprettJournalpostResponse(dokumentReferanse = "DOKREF_1"))
-        val request = DokumentBestillingForespørsel(
-            gjelderId = BP1.ident.verdi,
-            saksnummer = "123213",
-            enhet = "4806",
-            mottaker = MottakerTo(
-                ident = BM1.ident.verdi
+        val request =
+            DokumentBestillingForespørsel(
+                gjelderId = BP1.ident.verdi,
+                saksnummer = "123213",
+                enhet = "4806",
+                mottaker =
+                    MottakerTo(
+                        ident = BM1.ident.verdi,
+                    ),
             )
-        )
 
         jmsTestConsumer.withOnlinebrev {
-            val response = httpHeaderTestRestTemplate.exchange(
-                "${rootUri()}/bestill/${dokumentMal.kode}",
-                HttpMethod.POST,
-                HttpEntity(request),
-                DokumentBestillingResponse::class.java
-            )
+            val response =
+                httpHeaderTestRestTemplate.exchange(
+                    "${rootUri()}/bestill/${dokumentMal.kode}",
+                    HttpMethod.POST,
+                    HttpEntity(request),
+                    DokumentBestillingResponse::class.java,
+                )
 
             response.statusCode shouldBe HttpStatus.OK
 
@@ -899,20 +917,22 @@ class DokumentBestillingControllerTest : AbstractControllerTest() {
         stubDefaultValues()
 
         stubUtils.stubOpprettJournalpost(status = HttpStatus.BAD_REQUEST)
-        val request = DokumentBestillingForespørsel(
-            mottakerId = BM1.ident.verdi,
-            gjelderId = BP1.ident.verdi,
-            saksnummer = "123213",
-            enhet = "4806"
-        )
+        val request =
+            DokumentBestillingForespørsel(
+                mottakerId = BM1.ident.verdi,
+                gjelderId = BP1.ident.verdi,
+                saksnummer = "123213",
+                enhet = "4806",
+            )
 
         jmsTestConsumer.withOnlinebrev {
-            val response = httpHeaderTestRestTemplate.exchange(
-                "${rootUri()}/bestill/${dokumentMal.kode}",
-                HttpMethod.POST,
-                HttpEntity(request),
-                DokumentBestillingResponse::class.java
-            )
+            val response =
+                httpHeaderTestRestTemplate.exchange(
+                    "${rootUri()}/bestill/${dokumentMal.kode}",
+                    HttpMethod.POST,
+                    HttpEntity(request),
+                    DokumentBestillingResponse::class.java,
+                )
 
             response.statusCode shouldBe HttpStatus.BAD_REQUEST
 
@@ -924,20 +944,22 @@ class DokumentBestillingControllerTest : AbstractControllerTest() {
     fun `should fail when request with invalid brevkode`() {
         stubDefaultValues()
 
-        val request = DokumentBestillingForespørsel(
-            mottakerId = BM1.ident.verdi,
-            gjelderId = BP1.ident.verdi,
-            saksnummer = "123213",
-            enhet = "4806"
-        )
+        val request =
+            DokumentBestillingForespørsel(
+                mottakerId = BM1.ident.verdi,
+                gjelderId = BP1.ident.verdi,
+                saksnummer = "123213",
+                enhet = "4806",
+            )
 
         jmsTestConsumer.withOnlinebrev {
-            val response = httpHeaderTestRestTemplate.exchange(
-                "${rootUri()}/bestill/BI01INVALID",
-                HttpMethod.POST,
-                HttpEntity(request),
-                DokumentBestillingResponse::class.java
-            )
+            val response =
+                httpHeaderTestRestTemplate.exchange(
+                    "${rootUri()}/bestill/BI01INVALID",
+                    HttpMethod.POST,
+                    HttpEntity(request),
+                    DokumentBestillingResponse::class.java,
+                )
 
             response.statusCode shouldBe HttpStatus.BAD_REQUEST
 
@@ -948,54 +970,58 @@ class DokumentBestillingControllerTest : AbstractControllerTest() {
     @Test
     fun `should produse XML with mottaker role RM`() {
         val dokumentMal = hentDokumentMal("BI01X01")!!
-        val sak = createSakResponse().copy(
-            roller = listOf(
-                RolleDto(
-                    fødselsnummer = BM1.ident,
-                    type = Rolletype.BM
-                ),
-                RolleDto(
-                    fødselsnummer = BP1.ident,
-                    type = Rolletype.BP
-                ),
-                RolleDto(
-                    fødselsnummer = BARN1.ident,
-                    type = Rolletype.BA
-                ),
-                RolleDto(
-                    fødselsnummer = BARN2.ident,
-                    type = Rolletype.BA
-                ),
-                RolleDto(
-                    fødselsnummer = ANNEN_MOTTAKER.ident,
-                    type = Rolletype.RM
-                )
+        val sak =
+            createSakResponse().copy(
+                roller =
+                    listOf(
+                        RolleDto(
+                            fødselsnummer = BM1.ident,
+                            type = Rolletype.BIDRAGSMOTTAKER,
+                        ),
+                        RolleDto(
+                            fødselsnummer = BP1.ident,
+                            type = Rolletype.BIDRAGSPLIKTIG,
+                        ),
+                        RolleDto(
+                            fødselsnummer = BARN1.ident,
+                            type = Rolletype.BARN,
+                        ),
+                        RolleDto(
+                            fødselsnummer = BARN2.ident,
+                            type = Rolletype.BARN,
+                        ),
+                        RolleDto(
+                            fødselsnummer = ANNEN_MOTTAKER.ident,
+                            type = Rolletype.REELMOTTAKER,
+                        ),
+                    ),
             )
-        )
         stubDefaultValues()
         stubUtils.stubHentSak(sak)
         stubUtils.stubOpprettJournalpost(createOpprettJournalpostResponse(dokumentReferanse = "DOKREF_1"))
 
-        val request = DokumentBestillingForespørsel(
-            mottakerId = ANNEN_MOTTAKER.ident.verdi,
-            gjelderId = BP1.ident.verdi,
-            saksnummer = "123213",
-            enhet = "4806"
-        )
+        val request =
+            DokumentBestillingForespørsel(
+                mottakerId = ANNEN_MOTTAKER.ident.verdi,
+                gjelderId = BP1.ident.verdi,
+                saksnummer = "123213",
+                enhet = "4806",
+            )
 
         jmsTestConsumer.withOnlinebrev {
-            val response = httpHeaderTestRestTemplate.exchange(
-                "${rootUri()}/bestill/${dokumentMal.kode}",
-                HttpMethod.POST,
-                HttpEntity(request),
-                DokumentBestillingResponse::class.java
-            )
+            val response =
+                httpHeaderTestRestTemplate.exchange(
+                    "${rootUri()}/bestill/${dokumentMal.kode}",
+                    HttpMethod.POST,
+                    HttpEntity(request),
+                    DokumentBestillingResponse::class.java,
+                )
 
             response.statusCode shouldBe HttpStatus.OK
 
             val message = this.getMessageAsObject(BrevBestilling::class.java)!!
             assertSoftly {
-                message.brev?.mottaker?.rolle shouldBe "RM"
+                message.brev?.mottaker?.rolle shouldBe "00"
             }
         }
     }
@@ -1007,7 +1033,7 @@ class DokumentBestillingControllerTest : AbstractControllerTest() {
                 "${rootUri()}/dokument/UTLAND_VEDLEGG_VEDTAK_BP_DE",
                 HttpMethod.POST,
                 null,
-                ByteArray::class.java
+                ByteArray::class.java,
             )
 
         response.statusCode shouldBe HttpStatus.OK
@@ -1022,7 +1048,7 @@ class DokumentBestillingControllerTest : AbstractControllerTest() {
                 "${rootUri()}/dokument/BI01P11",
                 HttpMethod.POST,
                 null,
-                ByteArray::class.java
+                ByteArray::class.java,
             )
 
         response.statusCode shouldBe HttpStatus.BAD_REQUEST

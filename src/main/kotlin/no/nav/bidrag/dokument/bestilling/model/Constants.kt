@@ -5,9 +5,13 @@ import org.springframework.core.ParameterizedTypeReference
 import java.time.LocalDate
 import java.time.ZoneId
 import java.util.*
+
 inline fun <reified T : Any> parameterizedTypeReference(): ParameterizedTypeReference<T> = object : ParameterizedTypeReference<T>() {}
+
 inline fun <reified T : Any> typeRef(): TypeReference<T> = object : TypeReference<T>() {}
+
 val MAX_DATE = LocalDate.parse("9999-12-31")
+
 fun getLastDayOfPreviousMonth(date: LocalDate?): LocalDate? {
     if (date == null) return date
     if (date.year == 9999) return date

@@ -9,34 +9,34 @@ import no.nav.bidrag.dokument.bestilling.bestilling.dto.DokumentMal
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.DokumentMalBucket
 import no.nav.bidrag.dokument.bestilling.model.kanIkkeBestilleDokumentMal
 import no.nav.bidrag.dokument.bestilling.model.manglerDataGrunnlag
-import no.nav.bidrag.dokument.dto.DokumentArkivSystemDto
+import no.nav.bidrag.transport.dokument.DokumentArkivSystemDto
 import org.springframework.stereotype.Service
 
 @Service
 class DokumentBestillingService(
     val dokumentBestillingManager: DokumentBestillingManager,
-    private val fetchingManager: DokumentFetchingManager
+    private val fetchingManager: DokumentFetchingManager,
 ) {
-
     fun bestill(
         bestillingRequest: DokumentBestillingForespørsel,
-        dokumentMal: DokumentMal
+        dokumentMal: DokumentMal,
     ): DokumentBestillingResponse {
         if (dokumentMal is DokumentMalBucket) kanIkkeBestilleDokumentMal(dokumentMal.kode)
         val result = dokumentBestillingManager.bestill(bestillingRequest, dokumentMal)
         return DokumentBestillingResponse(
             dokumentId = result.dokumentReferanse,
             journalpostId = result.journalpostId,
-            arkivSystem = when (result.bestillingSystem) {
-                BestillingSystem.BREVSERVER -> DokumentArkivSystemDto.MIDLERTIDLIG_BREVLAGER
-                else -> null
-            }
+            arkivSystem =
+                when (result.bestillingSystem) {
+                    BestillingSystem.BREVSERVER -> DokumentArkivSystemDto.MIDLERTIDLIG_BREVLAGER
+                    else -> null
+                },
         )
     }
 
     fun hentDokument(
         bestillingRequest: DokumentBestillingForespørsel?,
-        dokumentMal: DokumentMal
+        dokumentMal: DokumentMal,
     ): ByteArray {
         val kreverDataGrunnlag = dokumentMal.kreverDataGrunnlag != null
         if (kreverDataGrunnlag && bestillingRequest == null) manglerDataGrunnlag(dokumentMal)
@@ -45,16 +45,17 @@ class DokumentBestillingService(
 
     fun bestillOgHent(
         bestillingRequest: DokumentBestillingForespørsel,
-        dokumentMal: DokumentMal
+        dokumentMal: DokumentMal,
     ): DokumentBestillingResponse {
         val result = dokumentBestillingManager.bestill(bestillingRequest, dokumentMal)
         return DokumentBestillingResponse(
             dokumentId = result.dokumentReferanse,
             journalpostId = result.journalpostId,
-            arkivSystem = when (result.bestillingSystem) {
-                BestillingSystem.BREVSERVER -> DokumentArkivSystemDto.MIDLERTIDLIG_BREVLAGER
-                else -> null
-            }
+            arkivSystem =
+                when (result.bestillingSystem) {
+                    BestillingSystem.BREVSERVER -> DokumentArkivSystemDto.MIDLERTIDLIG_BREVLAGER
+                    else -> null
+                },
         )
     }
 }

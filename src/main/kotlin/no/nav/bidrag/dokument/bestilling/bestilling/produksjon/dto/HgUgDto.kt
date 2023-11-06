@@ -15,7 +15,7 @@ data class HgUgDtoFromJson(
     @JsonProperty("HG")
     val hg: String?,
     @JsonProperty("UG")
-    val ug: String?
+    val ug: String?,
 )
 
 data class HgUgDto(
@@ -23,5 +23,5 @@ data class HgUgDto(
     val soknadFra: SoknadFra?,
     val behandlingType: BehandlingType?,
     val hg: String?,
-    val ug: String?
+    val ug: String?,
 )

@@ -23,15 +23,14 @@ private val LOGGER = KotlinLogging.logger {}
 
 @RestControllerAdvice
 class DefaultRestControllerAdvice {
-
     @ResponseBody
     @ExceptionHandler(
         value = [
             ManglerGjelderException::class,
             FantIkkeEnhetException::class,
             FantIkkePersonException::class,
-            SamhandlerManglerKontaktinformasjon::class
-        ]
+            SamhandlerManglerKontaktinformasjon::class,
+        ],
     )
     fun fantIkkeData(exception: RuntimeException): ResponseEntity<*> {
         LOGGER.warn(exception.message)
@@ -48,21 +47,21 @@ class DefaultRestControllerAdvice {
         val valideringsFeil =
             if (cause is MissingKotlinParameterException) {
                 createMissingKotlinParameterViolation(
-                    cause
+                    cause,
                 )
             } else {
                 null
             }
         LOGGER.warn(
             "Forespørselen inneholder ugyldig verdi: ${valideringsFeil ?: "ukjent feil"}",
-            exception
+            exception,
         )
 
         return ResponseEntity
             .status(HttpStatus.BAD_REQUEST)
             .header(
                 HttpHeaders.WARNING,
-                "Forespørselen inneholder ugyldig verdi: ${valideringsFeil ?: exception.message}"
+                "Forespørselen inneholder ugyldig verdi: ${valideringsFeil ?: exception.message}",
             )
             .build<Any>()
     }
@@ -87,6 +86,7 @@ class DefaultRestControllerAdvice {
             .header(HttpHeaders.WARNING, errorMessage)
             .build<Any>()
     }
+
     private fun getErrorMessage(exception: HttpStatusCodeException): String {
         val errorMessage = StringBuilder()
         errorMessage.append("Det skjedde en feil: ")
@@ -121,10 +121,11 @@ class DefaultRestControllerAdvice {
 
     private fun createMissingKotlinParameterViolation(ex: MissingKotlinParameterException): String {
         val errorFieldRegex = Regex("\\.([^.]*)\\[\\\"(.*)\"\\]\$")
-        val paths = ex.path.map { errorFieldRegex.find(it.description)!! }.map {
-            val (objectName, field) = it.destructured
-            "$objectName.$field"
-        }
+        val paths =
+            ex.path.map { errorFieldRegex.find(it.description)!! }.map {
+                val (objectName, field) = it.destructured
+                "$objectName.$field"
+            }
         return "${paths.joinToString("->")} kan ikke være null"
     }
 }

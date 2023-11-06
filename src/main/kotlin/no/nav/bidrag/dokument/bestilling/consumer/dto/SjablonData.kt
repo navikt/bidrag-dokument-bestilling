@@ -10,20 +10,27 @@ data class SjablonData(
     val typeSjablon: String,
     val datoFom: LocalDate,
     val datoTom: LocalDate,
-    val verdi: BigDecimal
+    val verdi: BigDecimal,
 )
 
 typealias SjablongerDto = List<SjablonData>
+
 fun SjablongerDto.hentSisteSjablong(type: SjablongType): SjablonData? {
     return find { it.typeSjablon == type.kode && it.datoTom.isAfter(LocalDate.now()) }
 }
 
-fun SjablongerDto.hentSjablongForTomDato(type: SjablongType, tomDato: LocalDate?): SjablonData? {
+fun SjablongerDto.hentSjablongForTomDato(
+    type: SjablongType,
+    tomDato: LocalDate?,
+): SjablonData? {
     if (tomDato == null) return hentSisteSjablong(type)
     return sortedBy { it.datoTom }.find { it.typeSjablon == type.kode && (it.datoTom.isAfter(tomDato) || it.datoTom == tomDato) }
 }
 
-fun SjablongerDto.hentNestePeriodeForSjabloner(typer: List<SjablongType>, fraDato: LocalDate): PeriodeFraTom? {
+fun SjablongerDto.hentNestePeriodeForSjabloner(
+    typer: List<SjablongType>,
+    fraDato: LocalDate,
+): PeriodeFraTom? {
     val typerKode = typer.map { it.kode }
     return sortedBy { it.datoTom }.find { typerKode.contains(it.typeSjablon) && it.datoTom >= fraDato }?.let {
         val fraDatoPeriode = if (it.datoFom < fraDato) fraDato else it.datoFom
@@ -31,7 +38,11 @@ fun SjablongerDto.hentNestePeriodeForSjabloner(typer: List<SjablongType>, fraDat
     }
 }
 
-fun SjablongerDto.hentPerioderForSjabloner(typer: List<SjablongType>, fraDato: LocalDate, tomDato: LocalDate?): List<PeriodeFraTom> {
+fun SjablongerDto.hentPerioderForSjabloner(
+    typer: List<SjablongType>,
+    fraDato: LocalDate,
+    tomDato: LocalDate?,
+): List<PeriodeFraTom> {
     val perioder = mutableListOf<PeriodeFraTom>()
     val periodeTomDato = tomDato ?: LocalDate.parse("9999-12-31")
     var periode = hentNestePeriodeForSjabloner(typer, fraDato) ?: return perioder
@@ -86,5 +97,5 @@ enum class SjablongType(val kode: String) {
     PROSENTSATS_ALMINNELIG_INNTEKT("0040"),
     BELØP_FASTSETTELSESGEBYR("0100"),
     BELØP_FORHØYET_BARNETRYGD("0041"),
-    UTVIDET_BARNETRYGD_TIL_BIDRAGSKALKULATOR("0042")
+    UTVIDET_BARNETRYGD_TIL_BIDRAGSKALKULATOR("0042"),
 }

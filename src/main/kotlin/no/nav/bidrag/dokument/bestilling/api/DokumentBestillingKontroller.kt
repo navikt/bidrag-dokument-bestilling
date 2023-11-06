@@ -32,7 +32,6 @@ import org.springframework.web.bind.annotation.RestController
 @Protected
 @Timed
 class DokumentBestillingKontroller(private val dokumentBestillingService: DokumentBestillingService) {
-
     companion object {
         private val LOGGER = LoggerFactory.getLogger(DokumentBestillingKontroller::class.java)
     }
@@ -40,19 +39,19 @@ class DokumentBestillingKontroller(private val dokumentBestillingService: Dokume
     @PostMapping("/bestill/{dokumentMalKode}")
     @Operation(
         description = "Bestiller dokument for oppgitt brevkode/dokumentKode",
-        security = [SecurityRequirement(name = "bearer-key")]
+        security = [SecurityRequirement(name = "bearer-key")],
     )
     @ApiResponses(
         value = [
             ApiResponse(
                 responseCode = "400",
-                description = "Dokument ble bestilt med ugyldig data"
-            )
-        ]
+                description = "Dokument ble bestilt med ugyldig data",
+            ),
+        ],
     )
     fun bestillBrev(
         @RequestBody bestillingRequest: DokumentBestillingForespørsel,
-        @PathVariable dokumentMalKode: String
+        @PathVariable dokumentMalKode: String,
     ): DokumentBestillingResponse {
         val dokumentMal =
             hentDokumentMal(dokumentMalKode) ?: dokumentMalEksistererIkke(dokumentMalKode)
@@ -66,19 +65,19 @@ class DokumentBestillingKontroller(private val dokumentBestillingService: Dokume
     @PostMapping("/dokument/{dokumentMalKode}")
     @Operation(
         description = "Henter dokument for oppgitt brevkode/dokumentKode",
-        security = [SecurityRequirement(name = "bearer-key")]
+        security = [SecurityRequirement(name = "bearer-key")],
     )
     @ApiResponses(
         value = [
             ApiResponse(
                 responseCode = "400",
-                description = "Dokument ble bestilt med ugyldig data"
-            )
-        ]
+                description = "Dokument ble bestilt med ugyldig data",
+            ),
+        ],
     )
     fun hentDokument(
         @RequestBody(required = false) bestillingRequest: DokumentBestillingForespørsel?,
-        @PathVariable dokumentMalKode: String
+        @PathVariable dokumentMalKode: String,
     ): ResponseEntity<ByteArray> {
         val dokumentMal =
             hentDokumentMal(dokumentMalKode) ?: dokumentMalEksistererIkke(dokumentMalKode)
@@ -96,7 +95,7 @@ class DokumentBestillingKontroller(private val dokumentBestillingService: Dokume
     @RequestMapping("/brevkoder", method = [RequestMethod.OPTIONS])
     @Operation(
         description = "Henter brevkoder som er støttet av applikasjonen",
-        security = [SecurityRequirement(name = "bearer-key")]
+        security = [SecurityRequirement(name = "bearer-key")],
     )
     fun hentStottedeBrevkoder(): List<String> {
         return alleDokumentmaler.filter { it.enabled && it !is DokumentMalBucket }.map { it.kode }
@@ -109,23 +108,31 @@ class DokumentBestillingKontroller(private val dokumentBestillingService: Dokume
     @GetMapping("/dokumentmal/detaljer")
     @Operation(
         description = "Henter detaljer om alle støttede dokumentmaler",
-        security = [SecurityRequirement(name = "bearer-key")]
+        security = [SecurityRequirement(name = "bearer-key")],
     )
     fun hentDokumentmalDetaljer(): Map<String, DokumentMalDetaljer> {
         return alleDokumentmaler
             .associate {
-                it.kode to DokumentMalDetaljer(
-                    beskrivelse = it.beskrivelse,
-                    tittel = it.tittel,
-                    type = it.dokumentType,
-                    kanBestilles = it.enabled,
-                    redigerbar = it.redigerbar,
-                    språk = if (it is DokumentMalBucket) listOf(it.språk) else if (it is DokumentMalBrevserver) it.støttetSpråk else emptyList(),
-                    innholdType = it.innholdType,
-                    statiskInnhold = it is DokumentMalBucket,
-                    gruppeVisningsnavn = if (it is DokumentMalBucket) it.gruppeVisningsnavn else null,
-                    tilhorerEnheter = if (it is DokumentMalBucket) it.tilhørerEnheter else emptyList()
-                )
+                it.kode to
+                    DokumentMalDetaljer(
+                        beskrivelse = it.beskrivelse,
+                        tittel = it.tittel,
+                        type = it.dokumentType,
+                        kanBestilles = it.enabled,
+                        redigerbar = it.redigerbar,
+                        språk =
+                            if (it is DokumentMalBucket) {
+                                listOf(it.språk)
+                            } else if (it is DokumentMalBrevserver) {
+                                it.støttetSpråk
+                            } else {
+                                emptyList()
+                            },
+                        innholdType = it.innholdType,
+                        statiskInnhold = it is DokumentMalBucket,
+                        gruppeVisningsnavn = if (it is DokumentMalBucket) it.gruppeVisningsnavn else null,
+                        tilhorerEnheter = if (it is DokumentMalBucket) it.tilhørerEnheter else emptyList(),
+                    )
             }
     }
 }
