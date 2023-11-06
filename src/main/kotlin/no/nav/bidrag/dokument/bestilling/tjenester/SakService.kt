@@ -6,7 +6,6 @@ import org.springframework.stereotype.Service
 
 @Service
 class SakService(private val bidragSakConsumer: BidragSakConsumer) {
-
     fun hentSak(saksnr: String): BidragssakDto? {
         return bidragSakConsumer.hentSak(saksnr)
     }

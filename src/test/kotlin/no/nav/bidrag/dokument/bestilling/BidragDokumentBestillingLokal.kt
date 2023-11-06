@@ -18,7 +18,7 @@ fun main(args: Array<String>) {
         "lokal-nais",
         "lokal-nais-secrets",
         "lokal",
-        "lokal-bucket-nais-secrets"
+        "lokal-bucket-nais-secrets",
     )
     app.run(*args)
 }

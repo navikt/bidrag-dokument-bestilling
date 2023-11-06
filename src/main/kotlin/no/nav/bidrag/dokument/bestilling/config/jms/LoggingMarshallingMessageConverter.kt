@@ -15,21 +15,25 @@ import javax.xml.transform.Result
 import javax.xml.transform.stream.StreamResult
 
 class LoggingMarshallingMessageConverter(jaxb2Marshaller: Jaxb2Marshaller, var replyQueue: String) : MarshallingMessageConverter(jaxb2Marshaller) {
-
     init {
         setTargetType(MessageType.TEXT)
     }
 
-    override fun marshalToTextMessage(o: Any, session: Session, marshaller: Marshaller): TextMessage {
+    override fun marshalToTextMessage(
+        o: Any,
+        session: Session,
+        marshaller: Marshaller,
+    ): TextMessage {
         val rq = MQQueue(replyQueue)
         val writer = StringWriter(1024)
         val result: Result = StreamResult(writer)
         marshaller.marshal(o, result)
         val messageString = writer.toString()
-        val cleanedMessageString = messageString
-            .replace("xsi:nil=\"true\"", "")
-            .replace("xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"", "")
-            .replace("\\s{2,}".toRegex(), "")
+        val cleanedMessageString =
+            messageString
+                .replace("xsi:nil=\"true\"", "")
+                .replace("xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"", "")
+                .replace("\\s{2,}".toRegex(), "")
         SIKKER_LOGG.info("Sending message \n\n$cleanedMessageString\n\n")
         val message = session.createTextMessage(cleanedMessageString)
         message.setIntProperty(JmsConstants.JMS_IBM_CHARACTER_SET, 277)

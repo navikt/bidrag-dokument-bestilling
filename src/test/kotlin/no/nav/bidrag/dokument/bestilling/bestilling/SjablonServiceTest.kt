@@ -1,3 +1,5 @@
+@file:Suppress("ktlint:standard:property-naming")
+
 package no.nav.bidrag.dokument.bestilling.bestilling
 
 import com.fasterxml.jackson.databind.ObjectMapper
@@ -25,7 +27,6 @@ import java.time.LocalDate
 
 @ExtendWith(MockKExtension::class)
 class SjablonServiceTest {
-
     @MockK
     lateinit var sjablonConsumer: SjablonConsumer
 
@@ -34,8 +35,9 @@ class SjablonServiceTest {
 
     @BeforeEach
     fun initMocks() {
-        val sjablonResponse = ObjectMapper().findAndRegisterModules()
-            .readValue(readFile("api/sjablon_all.json"), typeRef<SjablongerDto>())
+        val sjablonResponse =
+            ObjectMapper().findAndRegisterModules()
+                .readValue(readFile("api/sjablon_all.json"), typeRef<SjablongerDto>())
         every { sjablonConsumer.hentSjablonger() } returns sjablonResponse
     }
 

@@ -48,91 +48,101 @@ val SAKSBEHANDLER_IDENT = "Z99999"
 val SAKSBEHANDLER_NAVN = "Saksbehandlersen, Saksbehandler Mellomnavn"
 val SAK_OPPRETTET_DATO = LocalDate.parse("2023-02-02")
 
-val SAMHANDLER_INFO = SamhandlerInformasjon(
-    navn = "Samhandler samhandlersen",
-    spraak = "NB",
-    adresse = SamhandlerAdresse(
+val SAMHANDLER_INFO =
+    SamhandlerInformasjon(
+        navn = "Samhandler samhandlersen",
+        spraak = "NB",
+        adresse =
+            SamhandlerAdresse(
+                adresselinje1 = "Samhandler adresselinje 1",
+                adresselinje2 = "Samhandler adresselinje 2",
+                adresselinje3 = "Samhandler adresselinje 3",
+                postnummer = "3000",
+                landkode = "NOR",
+            ),
+    )
+
+val SAMHANDLER_MOTTAKER_ADRESSE =
+    MottakerAdresseTo(
         adresselinje1 = "Samhandler adresselinje 1",
         adresselinje2 = "Samhandler adresselinje 2",
         adresselinje3 = "Samhandler adresselinje 3",
         postnummer = "3000",
-        landkode = "NOR"
+        landkode = "NO",
+        landkode3 = "NOR",
     )
-)
 
-val SAMHANDLER_MOTTAKER_ADRESSE = MottakerAdresseTo(
-    adresselinje1 = "Samhandler adresselinje 1",
-    adresselinje2 = "Samhandler adresselinje 2",
-    adresselinje3 = "Samhandler adresselinje 3",
-    postnummer = "3000",
-    landkode = "NO",
-    landkode3 = "NOR"
-)
+val ANNEN_MOTTAKER =
+    createPersonResponse(
+        "444213123123333",
+        "Etternavn, BPFornavn Annen mottaker",
+        fodselsdato = LocalDate.parse("2001-05-06"),
+    )
+val BP1 =
+    createPersonResponse(
+        "444213123123",
+        "Etternavn, BPFornavn Bidragspliktig",
+        kortNavn = "BPFornavn Etternavn",
+        fodselsdato = LocalDate.parse("2001-05-06"),
+    )
+val BM1 =
+    createPersonResponse(
+        "26417806511",
+        "Etternavn, BMFornavn Bidragsmottaker",
+        kortNavn = "BMFornavn Etternavn",
+        fodselsdato = LocalDate.parse("2000-03-06"),
+    )
+val BARN1 =
+    createPersonResponse(
+        "12461690252",
+        "Etternavn, Barn1 Mellomnavn",
+        kortNavn = "Barn1 Etternavn",
+        fodselsdato = LocalDate.parse("2020-05-06"),
+    )
+val BARN2 =
+    createPersonResponse(
+        "02461662466",
+        "Etternavn, Barn2 Mellomnavn",
+        kortNavn = "Barn2 Etternavn",
+        fodselsdato = LocalDate.parse("2018-03-20"),
+    )
 
-val ANNEN_MOTTAKER = createPersonResponse(
-    "444213123123333",
-    "Etternavn, BPFornavn Annen mottaker",
-    fodselsdato = LocalDate.parse("2001-05-06")
-)
-val BP1 = createPersonResponse(
-    "444213123123",
-    "Etternavn, BPFornavn Bidragspliktig",
-    kortNavn = "BPFornavn Etternavn",
-    fodselsdato = LocalDate.parse("2001-05-06")
-)
-val BM1 = createPersonResponse(
-    "26417806511",
-    "Etternavn, BMFornavn Bidragsmottaker",
-    kortNavn = "BMFornavn Etternavn",
-    fodselsdato = LocalDate.parse("2000-03-06")
-)
-val BARN1 = createPersonResponse(
-    "12461690252",
-    "Etternavn, Barn1 Mellomnavn",
-    kortNavn = "Barn1 Etternavn",
-    fodselsdato = LocalDate.parse("2020-05-06")
-)
-val BARN2 = createPersonResponse(
-    "02461662466",
-    "Etternavn, Barn2 Mellomnavn",
-    kortNavn = "Barn2 Etternavn",
-    fodselsdato = LocalDate.parse("2018-03-20")
-)
-
-val BARN3 = createPersonResponse(
-    "27461456400",
-    "Etternavn, Barn3",
-    kortNavn = "Barn3 Etternavn",
-    fodselsdato = LocalDate.parse("2014-03-20")
-)
+val BARN3 =
+    createPersonResponse(
+        "27461456400",
+        "Etternavn, Barn3",
+        kortNavn = "Barn3 Etternavn",
+        fodselsdato = LocalDate.parse("2014-03-20"),
+    )
 
 fun createSakResponse(): BidragssakDto {
     return BidragssakDto(
         saksnummer = Saksnummer(DEFAULT_SAKSNUMMER),
         eierfogd = Enhetsnummer("4806"),
-        roller = listOf(
-            RolleDto(
-                fødselsnummer = BM1.ident,
-                type = Rolletype.BIDRAGSMOTTAKER
+        roller =
+            listOf(
+                RolleDto(
+                    fødselsnummer = BM1.ident,
+                    type = Rolletype.BIDRAGSMOTTAKER,
+                ),
+                RolleDto(
+                    fødselsnummer = BP1.ident,
+                    type = Rolletype.BIDRAGSPLIKTIG,
+                ),
+                RolleDto(
+                    fødselsnummer = BARN1.ident,
+                    type = Rolletype.BARN,
+                ),
+                RolleDto(
+                    fødselsnummer = BARN2.ident,
+                    type = Rolletype.BARN,
+                ),
             ),
-            RolleDto(
-                fødselsnummer = BP1.ident,
-                type = Rolletype.BIDRAGSPLIKTIG
-            ),
-            RolleDto(
-                fødselsnummer = BARN1.ident,
-                type = Rolletype.BARN
-            ),
-            RolleDto(
-                fødselsnummer = BARN2.ident,
-                type = Rolletype.BARN
-            )
-        ),
         saksstatus = Bidragssakstatus.IN,
         kategori = Sakskategori.N,
         opprettetDato = OpprettetDato(SAK_OPPRETTET_DATO),
         levdeAdskilt = LevdeAdskilt(false),
-        ukjentPart = UkjentPart(false)
+        ukjentPart = UkjentPart(false),
     )
 }
 
@@ -143,8 +153,7 @@ fun createPersonResponse(
     fodselsdato: LocalDate? = null,
     dodsdato: LocalDate? = null,
     aktorId: String? = "313213",
-    diskresjonskode: Diskresjonskode? = null
-
+    diskresjonskode: Diskresjonskode? = null,
 ): PersonDto {
     return PersonDto(
         ident = Personident(ident),
@@ -153,7 +162,7 @@ fun createPersonResponse(
         fødselsdato = fodselsdato?.let { Fødselsdato(it) },
         dødsdato = dodsdato?.let { Dødsdato(it) },
         aktørId = aktorId?.let { AktørId(it) },
-        diskresjonskode = diskresjonskode
+        diskresjonskode = diskresjonskode,
     )
 }
 
@@ -166,7 +175,7 @@ fun createPostAdresseResponse(): PersonAdresseDto {
         land = Landkode2("NO"),
         land3 = Landkode3("NOR"),
         bruksenhetsnummer = Bruksenhetsnummer("H0201"),
-        adressetype = Adressetype.BOSTEDSADRESSE
+        adressetype = Adressetype.BOSTEDSADRESSE,
     )
 }
 
@@ -177,23 +186,24 @@ fun createPostAdresseResponseUtenlandsk(): PersonAdresseDto {
         adresselinje3 = Adresselinje3("United states of America"),
         land = Landkode2("US"),
         land3 = Landkode3("USA"),
-        adressetype = Adressetype.BOSTEDSADRESSE
+        adressetype = Adressetype.BOSTEDSADRESSE,
     )
 }
 
 fun createOpprettJournalpostResponse(
     tittel: String = "Tittel på dokument",
     journalpostId: String = "123123",
-    dokumentReferanse: String = "dokref1"
+    dokumentReferanse: String = "dokref1",
 ): OpprettJournalpostResponse {
     return OpprettJournalpostResponse(
-        dokumenter = listOf(
-            OpprettDokumentDto(
-                tittel = tittel,
-                dokumentreferanse = dokumentReferanse
-            )
-        ),
-        journalpostId = journalpostId
+        dokumenter =
+            listOf(
+                OpprettDokumentDto(
+                    tittel = tittel,
+                    dokumentreferanse = dokumentReferanse,
+                ),
+            ),
+        journalpostId = journalpostId,
     )
 }
 
@@ -202,12 +212,13 @@ fun createEnhetKontaktInformasjon(land: String = "Norge"): EnhetKontaktInfoDto {
         enhetIdent = "4806",
         enhetNavn = "NAV Familie- og pensjonsytelser Drammen",
         telefonnummer = "55553333",
-        postadresse = EnhetPostadresseDto(
-            adresselinje1 = "Postboks 1583",
-            adresselinje2 = "Linje2",
-            postnummer = "3040",
-            poststed = "Drammen",
-            land = land
-        )
+        postadresse =
+            EnhetPostadresseDto(
+                adresselinje1 = "Postboks 1583",
+                adresselinje2 = "Linje2",
+                postnummer = "3040",
+                poststed = "Drammen",
+                land = land,
+            ),
     )
 }

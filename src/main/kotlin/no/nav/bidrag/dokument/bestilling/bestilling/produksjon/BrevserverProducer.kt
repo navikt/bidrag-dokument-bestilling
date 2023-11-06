@@ -36,58 +36,61 @@ class BrevserverProducer(
     val onlinebrevTemplate: JmsTemplate,
     val bidragDokumentConsumer: BidragDokumentConsumer,
     val hgUgKodeService: HgUgKodeService,
-    @Value("\${BREVSERVER_PASSORD}") val brevPassord: String
+    @Value("\${BREVSERVER_PASSORD}") val brevPassord: String,
 ) : DokumentProducer {
-
     override fun produser(
         dokumentBestilling: DokumentBestilling,
-        dokumentMal: DokumentMal
+        dokumentMal: DokumentMal,
     ): DokumentBestillingResult {
         val journalpostId = opprettJournalpost(dokumentBestilling, dokumentMal)
 
         onlinebrevTemplate.convertAndSend(
             mapToBrevserverMessage(
                 dokumentBestilling,
-                dokumentMal
-            )
+                dokumentMal,
+            ),
         )
         // TODO: Error handling
         return DokumentBestillingResult(
             dokumentReferanse = dokumentBestilling.dokumentreferanse!!,
             journalpostId = journalpostId,
-            bestillingSystem = BestillingSystem.BREVSERVER
+            bestillingSystem = BestillingSystem.BREVSERVER,
         )
     }
 
     fun opprettJournalpost(
         dokumentBestilling: DokumentBestilling,
-        dokumentMal: DokumentMal
+        dokumentMal: DokumentMal,
     ): String {
         if (dokumentBestilling.dokumentreferanse.isNullOrEmpty()) {
             val tittel = dokumentBestilling.tittel ?: dokumentMal.beskrivelse
-            val response = bidragDokumentConsumer.opprettJournalpost(
-                OpprettJournalpostRequest(
-                    tittel = tittel,
-                    journalførendeEnhet = dokumentBestilling.enhet,
-                    tilknyttSaker = listOf(dokumentBestilling.saksnummer!!),
-                    dokumenter = listOf(
-                        OpprettDokumentDto(
-                            tittel = tittel,
-                            brevkode = dokumentMal.kode
-                        )
+            val response =
+                bidragDokumentConsumer.opprettJournalpost(
+                    OpprettJournalpostRequest(
+                        tittel = tittel,
+                        journalførendeEnhet = dokumentBestilling.enhet,
+                        tilknyttSaker = listOf(dokumentBestilling.saksnummer!!),
+                        dokumenter =
+                            listOf(
+                                OpprettDokumentDto(
+                                    tittel = tittel,
+                                    brevkode = dokumentMal.kode,
+                                ),
+                            ),
+                        gjelderIdent = dokumentBestilling.gjelder?.fodselsnummer!!,
+                        avsenderMottaker =
+                            AvsenderMottakerDto(
+                                dokumentBestilling.mottaker?.navn,
+                                dokumentBestilling.mottaker?.fodselsnummer!!,
+                            ),
+                        journalposttype =
+                            when (dokumentMal.dokumentType) {
+                                DokumentType.UTGÅENDE -> JournalpostType.UTGÅENDE
+                                DokumentType.NOTAT -> JournalpostType.NOTAT
+                            },
+                        saksbehandlerIdent = dokumentBestilling.saksbehandler?.ident,
                     ),
-                    gjelderIdent = dokumentBestilling.gjelder?.fodselsnummer!!,
-                    avsenderMottaker = AvsenderMottakerDto(
-                        dokumentBestilling.mottaker?.navn,
-                        dokumentBestilling.mottaker?.fodselsnummer!!
-                    ),
-                    journalposttype = when (dokumentMal.dokumentType) {
-                        DokumentType.UTGÅENDE -> JournalpostType.UTGÅENDE
-                        DokumentType.NOTAT -> JournalpostType.NOTAT
-                    },
-                    saksbehandlerIdent = dokumentBestilling.saksbehandler?.ident
                 )
-            )
 
             dokumentBestilling.dokumentreferanse = response?.dokumenter?.get(0)?.dokumentreferanse
             return response?.journalpostId!!
@@ -97,7 +100,7 @@ class BrevserverProducer(
 
     private fun mapToBrevserverMessage(
         dokumentBestilling: DokumentBestilling,
-        dokumentMal: DokumentMal
+        dokumentMal: DokumentMal,
     ): BrevBestilling {
         val dokumentSpraak = dokumentBestilling.spraak ?: "NB"
         val saksbehandlerNavn = dokumentBestilling.saksbehandler?.navn
@@ -106,13 +109,14 @@ class BrevserverProducer(
             val roller = dokumentBestilling.roller
             val bp = roller.bidragspliktig
             val bm = roller.bidragsmottaker
-            val hgUgDto = vedtakInfo?.let {
-                hgUgKodeService.findHgUg(
-                    it.soknadType,
-                    it.søknadFra,
-                    it.behandlingType
-                )
-            }
+            val hgUgDto =
+                vedtakInfo?.let {
+                    hgUgKodeService.findHgUg(
+                        it.soknadType,
+                        it.søknadFra,
+                        it.behandlingType,
+                    )
+                }
             malpakke = "BI01.${dokumentMal.kode}"
             passord = brevPassord
             saksbehandler = dokumentBestilling.saksbehandler?.ident!!
@@ -128,13 +132,14 @@ class BrevserverProducer(
                     datoSakReg = dokumentBestilling.datoSakOpprettet
                     hgKode = hgUgDto?.hg
                     ugKode = hgUgDto?.ug
-                    sakstype = if (dokumentBestilling.sakDetaljer.harUkjentPart) {
-                        "X"
-                    } else if (dokumentBestilling.sakDetaljer.levdeAdskilt) {
-                        "U"
-                    } else {
-                        "E"
-                    }
+                    sakstype =
+                        if (dokumentBestilling.sakDetaljer.harUkjentPart) {
+                            "X"
+                        } else if (dokumentBestilling.sakDetaljer.levdeAdskilt) {
+                            "U"
+                        } else {
+                            "E"
+                        }
                     gebyrsats = dokumentBestilling.sjablonDetaljer.fastsettelseGebyr
                     vedtakInfo?.let {
                         soknGrKode = it.behandlingType?.kode
@@ -145,23 +150,26 @@ class BrevserverProducer(
                     }
                     forskUtBet = vedtakInfo != null
                     // Kode fra beslutningårsak i Bisys.
-                    val vedtakPerioder = vedtakInfo?.vedtakBarn?.flatMap { it.stonader }
-                        ?.flatMap { it.vedtakPerioder } ?: emptyList()
+                    val vedtakPerioder =
+                        vedtakInfo?.vedtakBarn?.flatMap { it.stonader }
+                            ?.flatMap { it.vedtakPerioder } ?: emptyList()
                     val antallVedtakPerioder = vedtakPerioder.size
-                    resKode = if (antallVedtakPerioder > 1) {
-                        ResultatKoder.FLERE_BESLUTNING_LINJER
-                    } else if (antallVedtakPerioder == 1) {
-                        val resultatKode = vedtakPerioder[0].resultatKode
-                        val erInnkrevingPrivatAvtale =
-                            resultatKode == ResultatKoder.PRIVAT_AVTALE && "BI01G01" == dokumentMal.kode
-                        val erInnkreving = listOf(
-                            ResultatKoder.INNVILGET_VEDTAK,
-                            ResultatKoder.UTENLANDSK_AVGJØRELSE
-                        ).contains(resultatKode)
-                        if (erInnkreving || erInnkrevingPrivatAvtale) ResultatKoder.VEDTAK_VANLIG_INNKREVING else resultatKode
-                    } else {
-                        null
-                    }
+                    resKode =
+                        if (antallVedtakPerioder > 1) {
+                            ResultatKoder.FLERE_BESLUTNING_LINJER
+                        } else if (antallVedtakPerioder == 1) {
+                            val resultatKode = vedtakPerioder[0].resultatKode
+                            val erInnkrevingPrivatAvtale =
+                                resultatKode == ResultatKoder.PRIVAT_AVTALE && "BI01G01" == dokumentMal.kode
+                            val erInnkreving =
+                                listOf(
+                                    ResultatKoder.INNVILGET_VEDTAK,
+                                    ResultatKoder.UTENLANDSK_AVGJØRELSE,
+                                ).contains(resultatKode)
+                            if (erInnkreving || erInnkrevingPrivatAvtale) ResultatKoder.VEDTAK_VANLIG_INNKREVING else resultatKode
+                        } else {
+                            null
+                        }
                 }
                 parter {
                     bpfnr = bp?.fodselsnummer
@@ -223,10 +231,11 @@ class BrevserverProducer(
                                     fomDato = it.fomDato
                                     tomDato = it.tomDato ?: MAX_DATE
                                     antallBarn = it.antallBarn
-                                    forsorgerKode = when (it.forsorgerType) {
-                                        ForsorgerType.ENSLIG -> "EN"
-                                        ForsorgerType.GIFT_SAMBOER -> "GS"
-                                    }
+                                    forsorgerKode =
+                                        when (it.forsorgerType) {
+                                            ForsorgerType.ENSLIG -> "EN"
+                                            ForsorgerType.GIFT_SAMBOER -> "GS"
+                                        }
                                     belop50fra = it.beløp50Prosent.fraVerdi()
                                     belop50til = it.beløp50Prosent.tilVerdi()
                                     belop75fra = it.beløp75Prosent.fraVerdi()
@@ -295,7 +304,10 @@ class BrevserverProducer(
         }
     }
 
-    fun mapKontaktInfo(brev: Brev, _kontaktInfo: EnhetKontaktInfo?): BrevKontaktinfo? {
+    fun mapKontaktInfo(
+        brev: Brev,
+        _kontaktInfo: EnhetKontaktInfo?,
+    ): BrevKontaktinfo? {
         val kontaktInfo = _kontaktInfo ?: return null
         return brev.brevKontaktinfo {
             returOgPostadresse {
@@ -307,16 +319,21 @@ class BrevserverProducer(
                 poststed = kontaktInfo.postadresse.poststed
                 land = kontaktInfo.postadresse.land
             }
-            avsender = avsender {
-                navn = kontaktInfo.navn
-            }
-            tlfAvsender = tlfAvsender {
-                telefonnummer = kontaktInfo.telefonnummer
-            }
+            avsender =
+                avsender {
+                    navn = kontaktInfo.navn
+                }
+            tlfAvsender =
+                tlfAvsender {
+                    telefonnummer = kontaktInfo.telefonnummer
+                }
         }
     }
 
-    fun mapBrevmottaker(brev: Brev, mottaker: Mottaker): BrevMottaker {
+    fun mapBrevmottaker(
+        brev: Brev,
+        mottaker: Mottaker,
+    ): BrevMottaker {
         return brev.brevmottaker {
             navn = mottaker.navn
             spraak = mottaker.spraak

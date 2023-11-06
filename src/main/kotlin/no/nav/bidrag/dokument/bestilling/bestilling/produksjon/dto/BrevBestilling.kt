@@ -16,13 +16,12 @@ import javax.xml.bind.annotation.XmlRootElement
 import javax.xml.bind.annotation.adapters.XmlAdapter
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter
 
-var BREV_DATETIME_FORMAT = DateTimeFormatter.ofPattern("ddMMyy")
-var BREV_SOKNAD_DATETIME_FORMAT = DateTimeFormatter.ofPattern("yyyyMMdd")
+val BREV_DATETIME_FORMAT = DateTimeFormatter.ofPattern("ddMMyy")
+val BREV_SOKNAD_DATETIME_FORMAT = DateTimeFormatter.ofPattern("yyyyMMdd")
 
 @XmlRootElement(name = "rtv-brev")
 @XmlAccessorType(XmlAccessType.FIELD)
 class BrevBestilling {
-
     @XmlAttribute
     var sysid: String = "BI12"
 
@@ -111,18 +110,21 @@ class Brev {
         kontaktInfo = brevKontaktinfo
         return brevKontaktinfo
     }
+
     fun brevSaksbehandler(init: BrevSaksbehandler.() -> Unit): BrevSaksbehandler {
         val brevSaksbehandler = BrevSaksbehandler()
         brevSaksbehandler.init()
         saksbehandler = brevSaksbehandler
         return brevSaksbehandler
     }
+
     fun soknad(init: Soknad.() -> Unit): Soknad {
         val initSoknad = Soknad()
         initSoknad.init()
         soknad = initSoknad
         return initSoknad
     }
+
     fun soknadBost(init: SoknadBost.() -> Unit): SoknadBost {
         val initSoknadBost = SoknadBost()
         initSoknadBost.init()
@@ -177,7 +179,6 @@ class Brev {
 @XmlRootElement(name = "Saksbehandl")
 @XmlAccessorType(XmlAccessType.FIELD)
 class BrevSaksbehandler {
-
     @XmlElement(name = "saksbNavn")
     var navn: String? = null
 }
@@ -361,7 +362,6 @@ class Parter {
 @XmlRootElement(name = "soknad")
 @XmlAccessorType(XmlAccessType.FIELD)
 class Soknad {
-
     @XmlElement(name = "soknDato", nillable = true)
     @XmlJavaTypeAdapter(DateAdapter::class)
     var soknDato: LocalDate? = null
@@ -419,6 +419,7 @@ class SoknadBost {
 
     @XmlElement(name = "indexRegDato", nillable = true)
     var indexRegDato: String? = null // TODO: Date format?
+
     @XmlElement(name = "indexRegPro", nillable = true)
     var indexRegPro: String? = null
 
@@ -545,7 +546,6 @@ class BirthDateAdapter : XmlAdapter<String, LocalDate?>() {
 }
 
 class DateAdapter : XmlAdapter<String, LocalDate?>() {
-
     override fun marshal(date: LocalDate?): String? {
         return date?.format(BREV_SOKNAD_DATETIME_FORMAT)
     }
@@ -566,6 +566,7 @@ class PeriodDateAdapter : XmlAdapter<String, LocalDate?>() {
         cDate.set(Calendar.DAY_OF_MONTH, cDate.getActualMaximum(Calendar.DAY_OF_MONTH))
         return LocalDate.from(cDate.toZonedDateTime())
     }
+
     override fun marshal(date: LocalDate?): String? {
         val fromDate = date?.let { getLastDayOfPreviousMonth(it) } ?: LocalDate.parse("9999-12-31")
         return fromDate.format(BREV_SOKNAD_DATETIME_FORMAT)

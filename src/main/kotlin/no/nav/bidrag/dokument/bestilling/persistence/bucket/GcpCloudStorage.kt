@@ -14,7 +14,6 @@ import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Component
 import org.springframework.web.client.HttpClientErrorException
 import org.threeten.bp.Duration
-import java.util.*
 
 private val LOGGER = KotlinLogging.logger {}
 
@@ -24,13 +23,15 @@ class GcpCloudStorage(
     @Value("\${BUCKET_NAME}") private val bucketNavn: String,
     @Value("\${GCP_HOST:#{null}}") private val host: String? = null,
 ) {
-    private val retrySetting = RetrySettings.newBuilder()
-        .setMaxAttempts(3)
-        .setTotalTimeout(Duration.ofMillis(3000)).build()
-    private val storage = StorageOptions.newBuilder()
-        .setHost(host)
-        .setCredentials(if (host != null) NoCredentials.getInstance() else GoogleCredentials.getApplicationDefault())
-        .setRetrySettings(retrySetting).build().service
+    private val retrySetting =
+        RetrySettings.newBuilder()
+            .setMaxAttempts(3)
+            .setTotalTimeout(Duration.ofMillis(3000)).build()
+    private val storage =
+        StorageOptions.newBuilder()
+            .setHost(host)
+            .setCredentials(if (host != null) NoCredentials.getInstance() else GoogleCredentials.getApplicationDefault())
+            .setRetrySettings(retrySetting).build().service
 
     fun hentFil(filnavn: String): ByteArray {
         LOGGER.info("Henter fil ${lagBlobinfo(filnavn).blobId} fra bucket $bucketNavn")
@@ -40,7 +41,7 @@ class GcpCloudStorage(
         } catch (e: StorageException) {
             throw HttpClientErrorException(
                 HttpStatus.NOT_FOUND,
-                "Finnes ingen dokumentfil i bucket $bucketNavn med filsti ${lagBlobinfo(filnavn).blobId}"
+                "Finnes ingen dokumentfil i bucket $bucketNavn med filsti ${lagBlobinfo(filnavn).blobId}",
             )
         }
     }

@@ -17,7 +17,7 @@ import javax.annotation.PostConstruct
 @Service
 class KodeverkConsumer(
     @Value("\${KODEVERK_URL}") kodeverkUrl: String,
-    val cacheManager: CacheManager
+    val cacheManager: CacheManager,
 ) {
     private val restTemplate: RestTemplate
 
@@ -39,12 +39,13 @@ class KodeverkConsumer(
 
     private fun loadLandkoder() {
         LOGGER.info("Henter Landkoder fra kodeverk")
-        val response = restTemplate.exchange(
-            "/Landkoder/koder/betydninger?spraak=nb",
-            HttpMethod.GET,
-            null,
-            KodeverkResponse::class.java
-        )
+        val response =
+            restTemplate.exchange(
+                "/Landkoder/koder/betydninger?spraak=nb",
+                HttpMethod.GET,
+                null,
+                KodeverkResponse::class.java,
+            )
         val kommuner = response.body
         cacheManager.getCache(LANDKODER_CACHE)?.put(DEFAULT_CACHE, kommuner)
     }
@@ -56,12 +57,13 @@ class KodeverkConsumer(
 
     private fun loadLandkoderISO2() {
         LOGGER.info("Henter Landkoder fra kodeverk")
-        val response = restTemplate.exchange(
-            "/LandkoderISO2/koder/betydninger?spraak=nb",
-            HttpMethod.GET,
-            null,
-            KodeverkResponse::class.java
-        )
+        val response =
+            restTemplate.exchange(
+                "/LandkoderISO2/koder/betydninger?spraak=nb",
+                HttpMethod.GET,
+                null,
+                KodeverkResponse::class.java,
+            )
         val landkoder = response.body
         cacheManager.getCache(LANDKODER_ISO2_CACHE)?.put(DEFAULT_CACHE, landkoder)
     }

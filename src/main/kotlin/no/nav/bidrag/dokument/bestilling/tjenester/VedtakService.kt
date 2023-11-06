@@ -41,10 +41,10 @@ import java.math.BigDecimal
 
 @Service
 class VedtakService(private val bidragVedtakConsumer: BidragVedtakConsumer, private val sjablongService: SjablongService, private val personService: PersonService) {
-
     fun hentVedtak(vedtakId: String): VedtakDto {
         return bidragVedtakConsumer.hentVedtak(vedtakId) ?: fantIkkeVedtak(vedtakId)
     }
+
     fun hentVedtakSoknadsbarnFodselsnummer(vedtakId: String): List<String> {
         val vedtakDto = hentVedtak(vedtakId)
         val vedtakBarnInfo = vedtakDto.hentSøknadBarnInfo()
@@ -68,16 +68,17 @@ class VedtakService(private val bidragVedtakConsumer: BidragVedtakConsumer, priv
             engangsbelopType = vedtakDto.engangsbelopListe.firstOrNull()?.type,
             stønadType = vedtakDto.stonadsendringListe.firstOrNull()?.type,
             søknadFra = SoknadFra.BIDRAGSMOTTAKER,
-            sivilstandPerioder = vedtakDto.hentSivilstand().map {
-                SivilstandPeriode(
-                    fomDato = it.datoFom,
-                    tomDato = it.datoTil,
-                    sivilstandKode = it.sivilstandKode,
-                    sivilstandBeskrivelse = it.beskrivelse
-                )
-            },
+            sivilstandPerioder =
+                vedtakDto.hentSivilstand().map {
+                    SivilstandPeriode(
+                        fomDato = it.datoFom,
+                        tomDato = it.datoTil,
+                        sivilstandKode = it.sivilstandKode,
+                        sivilstandBeskrivelse = it.beskrivelse,
+                    )
+                },
             vedtakBarn = vedtakBarnInfo.distinctBy { it.fnr }.sortedBy { it.fnr }.map { mapVedtakBarn(it, vedtakDto) },
-            barnIHustandPerioder = vedtakDto.hentBarnIHustand().map { BarnIHustandPeriode(it.datoFom, it.datoTil, it.antall.toInt()) }
+            barnIHustandPerioder = vedtakDto.hentBarnIHustand().map { BarnIHustandPeriode(it.datoFom, it.datoTil, it.antall.toInt()) },
         )
     }
 
@@ -90,7 +91,10 @@ class VedtakService(private val bidragVedtakConsumer: BidragVedtakConsumer, priv
         return sjablongService.hentForskuddInntektgrensePerioder(fraDato, tomDato)
     }
 
-    fun mapVedtakBarn(soknadBarn: SoknadsbarnInfo, vedtak: VedtakDto): VedtakBarn {
+    fun mapVedtakBarn(
+        soknadBarn: SoknadsbarnInfo,
+        vedtak: VedtakDto,
+    ): VedtakBarn {
         val bostatus = vedtak.hentBostatus(soknadBarn.fnr)
         val barnInfo = vedtak.hentBarnInfoForFnr(soknadBarn.fnr)
         val personInfo = personService.hentPerson(soknadBarn.fnr)
@@ -99,54 +103,62 @@ class VedtakService(private val bidragVedtakConsumer: BidragVedtakConsumer, priv
             navn = personInfo.kortnavn?.verdi,
             harSammeAdresse = barnInfo?.harSammeAdresse ?: true,
             bostatusPerioder = bostatus.map { BostatusPeriode(it.datoFom, it.datoTil, it.bostatusKode) },
-            stonader = hentStonader(soknadBarn.fnr, vedtak)
+            stonader = hentStonader(soknadBarn.fnr, vedtak),
         )
     }
-    fun hentStonader(barnFodselsnummer: String, vedtakDto: VedtakDto): List<VedtakBarnStonad> {
+
+    fun hentStonader(
+        barnFodselsnummer: String,
+        vedtakDto: VedtakDto,
+    ): List<VedtakBarnStonad> {
         val stonadListeBarn = vedtakDto.stonadsendringListe.filter { it.kravhaverId == barnFodselsnummer }
         return stonadListeBarn.map { vedtak ->
-            val vedtakPerioder = vedtak.periodeListe.map { periode ->
-                val nettoKapitalInntekt = vedtakDto.hentSluttberegninger(periode.grunnlagReferanseListe, periode.resultatkode).flatMap { sluttBeregning ->
-                    sluttBeregning.hentKapitalInntekter(vedtakDto)
-                        .filter { it.valgt }
-                        .hentNettoKapitalinntekter(periode, vedtakDto)
-                }.reduceOrNull { acc, inntektPeriode -> acc.copy(beløp = acc.beløp + inntektPeriode.beløp) }
+            val vedtakPerioder =
+                vedtak.periodeListe.map { periode ->
+                    val nettoKapitalInntekt =
+                        vedtakDto.hentSluttberegninger(periode.grunnlagReferanseListe, periode.resultatkode).flatMap { sluttBeregning ->
+                            sluttBeregning.hentKapitalInntekter(vedtakDto)
+                                .filter { it.valgt }
+                                .hentNettoKapitalinntekter(periode, vedtakDto)
+                        }.reduceOrNull { acc, inntektPeriode -> acc.copy(beløp = acc.beløp + inntektPeriode.beløp) }
 
-                val nettoKapitalInntekter = nettoKapitalInntekt?.let { listOf(it) } ?: emptyList()
-                val inntekter = vedtakDto.hentSluttberegninger(periode.grunnlagReferanseListe, periode.resultatkode).flatMap { sluttBeregning ->
-                    sluttBeregning.hentInntekter(vedtakDto).filter { it.valgt }
-                        .filter { it.inntektType != InntektType.KAPITALINNTEKT_EGNE_OPPLYSNINGER }
-                        .map {
-                            val rollePersonInfo = vedtakDto.hentPersonInfo(it.rolle)
-                            InntektPeriode(
-                                fomDato = it.datoFom,
-                                tomDato = it.datoTil,
-                                periodeFomDato = periode.fomDato,
-                                periodeTomDato = periode.tilDato,
-                                beløpType = GrunnlagInntektType(it.inntektType),
-                                beløpÅr = it.gjelderAar.toInt(),
-                                rolle = it.rolle,
-                                fodselsnummer = rollePersonInfo?.fnr,
-                                beløp = it.belop
-                            )
-                        }
-                } + nettoKapitalInntekter
+                    val nettoKapitalInntekter = nettoKapitalInntekt?.let { listOf(it) } ?: emptyList()
+                    val inntekter =
+                        vedtakDto.hentSluttberegninger(periode.grunnlagReferanseListe, periode.resultatkode).flatMap { sluttBeregning ->
+                            sluttBeregning.hentInntekter(vedtakDto).filter { it.valgt }
+                                .filter { it.inntektType != InntektType.KAPITALINNTEKT_EGNE_OPPLYSNINGER }
+                                .map {
+                                    val rollePersonInfo = vedtakDto.hentPersonInfo(it.rolle)
+                                    InntektPeriode(
+                                        fomDato = it.datoFom,
+                                        tomDato = it.datoTil,
+                                        periodeFomDato = periode.fomDato,
+                                        periodeTomDato = periode.tilDato,
+                                        beløpType = GrunnlagInntektType(it.inntektType),
+                                        beløpÅr = it.gjelderAar.toInt(),
+                                        rolle = it.rolle,
+                                        fodselsnummer = rollePersonInfo?.fnr,
+                                        beløp = it.belop,
+                                    )
+                                }
+                        } + nettoKapitalInntekter
 
-                VedtakPeriode(
-                    fomDato = periode.fomDato,
-                    tomDato = if (periode.resultatkode == "AHI") inntekter[0].tomDato else periode.tilDato, // TODO: Er dette riktig??
-                    beløp = periode.belop ?: BigDecimal(0),
-                    resultatKode = periode.resultatkode,
-                    inntekter = inntekter + inntekter.hentBeregningsgrunnlag(),
-                    inntektGrense = sjablongService.hentInntektGrenseForPeriode(getLastDayOfPreviousMonth(periode.tilDato)),
-                    maksInntekt = sjablongService.hentMaksInntektForPeriode(getLastDayOfPreviousMonth(periode.tilDato))
-                )
-            }
+                    VedtakPeriode(
+                        fomDato = periode.fomDato,
+                        // TODO: Er dette riktig??
+                        tomDato = if (periode.resultatkode == "AHI") inntekter[0].tomDato else periode.tilDato,
+                        beløp = periode.belop ?: BigDecimal(0),
+                        resultatKode = periode.resultatkode,
+                        inntekter = inntekter + inntekter.hentBeregningsgrunnlag(),
+                        inntektGrense = sjablongService.hentInntektGrenseForPeriode(getLastDayOfPreviousMonth(periode.tilDato)),
+                        maksInntekt = sjablongService.hentMaksInntektForPeriode(getLastDayOfPreviousMonth(periode.tilDato)),
+                    )
+                }
             VedtakBarnStonad(
                 type = vedtak.type,
                 innkreving = vedtak.innkreving == Innkreving.JA,
                 forskuddInntektgrensePerioder = hentGrunnlagForskudd(stonadListeBarn),
-                vedtakPerioder = vedtakPerioder
+                vedtakPerioder = vedtakPerioder,
             )
         }
     }

@@ -14,7 +14,13 @@ import no.nav.bidrag.transport.person.PersonAdresseDto
 import no.nav.bidrag.transport.person.PersonDto
 import java.math.BigDecimal
 
-fun BrevBestilling.validateKontaktInformasjon(enhetKontaktInfo: EnhetKontaktInfoDto, bm: PersonDto, bp: PersonDto, adresse: PersonAdresseDto, brevRef: String = BREVREF) {
+fun BrevBestilling.validateKontaktInformasjon(
+    enhetKontaktInfo: EnhetKontaktInfoDto,
+    bm: PersonDto,
+    bp: PersonDto,
+    adresse: PersonAdresseDto,
+    brevRef: String = BREVREF,
+) {
     brev?.tknr shouldBe enhetKontaktInfo.enhetIdent
     brev?.spraak shouldBe "NB"
     brev?.brevref shouldBe brevRef
@@ -49,7 +55,13 @@ fun BrevBestilling.validateKontaktInformasjon(enhetKontaktInfo: EnhetKontaktInfo
     brev?.parter?.bpfodselsdato shouldBe bp.fødselsdato?.verdi
 }
 
-fun BidragBarn.validerInntekt(periode: PeriodeFraTom, index: Int, inntekt: Int, type: String, beskrivelse: String?) {
+fun BidragBarn.validerInntekt(
+    periode: PeriodeFraTom,
+    index: Int,
+    inntekt: Int,
+    type: String,
+    beskrivelse: String?,
+) {
     val inntekterPeriode = hentInntektPerioder(periode)
     inntekterPeriode[index].inntektGrense shouldBe FORSKUDD_INNTEKTGRENSE_2020_2021
     inntekterPeriode[index].belopType shouldBe type

@@ -27,7 +27,6 @@ import javax.xml.bind.Marshaller
 @EnableJms
 @ConfigurationPropertiesScan
 class JMSConfig(private val mqProperties: MQProperties) {
-
     fun createCachingConnectionFactory(mqQueueConnectionFactory: ConnectionFactory): CachingConnectionFactory {
         val cachingConnectionFactory = CachingConnectionFactory()
         cachingConnectionFactory.sessionCacheSize = 1
@@ -48,7 +47,7 @@ class JMSConfig(private val mqProperties: MQProperties) {
     fun onlinebrevTemplate(
         baseJmsTemplate: JmsTemplate,
         @Value("\${BREVSERVER_ONLINEBREV_QUEUE}") queueName: String,
-        @Value("\${BREVSERVER_KVITTERING_QUEUE}") replyQueueName: String
+        @Value("\${BREVSERVER_KVITTERING_QUEUE}") replyQueueName: String,
     ): JmsTemplate {
         baseJmsTemplate.defaultDestinationName = queueName
         val jaxb2Marshaller = Jaxb2Marshaller()
@@ -62,7 +61,9 @@ class JMSConfig(private val mqProperties: MQProperties) {
     @Bean
     @Profile("nais")
     @Throws(JMSException::class)
-    fun mqQueueConnectionFactory(@Value("\${BREVSERVER_KVITTERING_QUEUE}") replyQueueName: String): ConnectionFactory {
+    fun mqQueueConnectionFactory(
+        @Value("\${BREVSERVER_KVITTERING_QUEUE}") replyQueueName: String,
+    ): ConnectionFactory {
         val connectionFactory = MQQueueConnectionFactory()
         connectionFactory.hostName = mqProperties.hostname
         connectionFactory.port = mqProperties.port

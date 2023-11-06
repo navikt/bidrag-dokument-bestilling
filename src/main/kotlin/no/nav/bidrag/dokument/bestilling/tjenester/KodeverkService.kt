@@ -5,7 +5,6 @@ import org.springframework.stereotype.Service
 
 @Service
 class KodeverkService(val kodeverkConsumer: KodeverkConsumer) {
-
     fun hentLandFullnavnForKode(landkode: String): String? {
         return hentLandFullnavnForKodeISO3(landkode) ?: hentLandFullnavnForKodeISO2(landkode)
     }

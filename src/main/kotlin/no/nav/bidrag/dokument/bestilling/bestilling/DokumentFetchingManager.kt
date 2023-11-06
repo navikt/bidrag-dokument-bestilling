@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component
 class DokumentFetchingManager(val applicationContext: ApplicationContext) {
     fun fetchDocumentByte(
         dokumentMal: DokumentMal,
-        dokumentReferanse: String? = null
+        dokumentReferanse: String? = null,
     ): ByteArray {
         val dokumentProducer = getFetcher(dokumentMal)
         return dokumentProducer.fetch(dokumentMal)
@@ -18,7 +18,7 @@ class DokumentFetchingManager(val applicationContext: ApplicationContext) {
     private fun getFetcher(dokumentMal: DokumentMal): DocumentFetcher {
         return applicationContext.getBean(
             dokumentMal.bestillingSystem,
-            DocumentFetcher::class.java
+            DocumentFetcher::class.java,
         )
     }
 }

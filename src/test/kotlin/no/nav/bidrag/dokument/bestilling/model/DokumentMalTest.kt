@@ -20,22 +20,23 @@ import org.junit.jupiter.api.Test
 private val LOGGER = KotlinLogging.logger {}
 
 class DokumentMalTest {
-
     @Test
     @Disabled
     fun `skal mappe dokumentmaler to json`() {
-        val filter = SimpleFilterProvider()
-            .addFilter(
-                "myFilter", SimpleBeanPropertyFilter
-                    .serializeAllExcept(
-                        "filePath",
-                        "innholdtype",
-                        "tittel",
-                        "bestillingSystem",
-                        "folderName",
-                        "tilhørerEnheter",
-                    )
-            )
+        val filter =
+            SimpleFilterProvider()
+                .addFilter(
+                    "myFilter",
+                    SimpleBeanPropertyFilter
+                        .serializeAllExcept(
+                            "filePath",
+                            "innholdtype",
+                            "tittel",
+                            "bestillingSystem",
+                            "folderName",
+                            "tilhørerEnheter",
+                        ),
+                )
 
         LOGGER.info {
             ObjectMapper().findAndRegisterModules()
@@ -43,22 +44,24 @@ class DokumentMalTest {
                 .writeValueAsString(dokumentmalerBrevserver.filter { it is DokumentMalBrevserver })
         }
 
-        val filter2 = SimpleFilterProvider()
-            .addFilter(
-                "myFilter", SimpleBeanPropertyFilter
-                    .serializeAllExcept(
-                        "filePath",
-                        "innholdtype",
-                        "bestillingSystem",
-                        "folderName",
-                        "batchbrev",
-                        "enabled",
-                        "redigerbar",
-                        "kreverDataGrunnlag",
-                        "tilhørerEnheter",
-                        "dokumentType",
-                    )
-            )
+        val filter2 =
+            SimpleFilterProvider()
+                .addFilter(
+                    "myFilter",
+                    SimpleBeanPropertyFilter
+                        .serializeAllExcept(
+                            "filePath",
+                            "innholdtype",
+                            "bestillingSystem",
+                            "folderName",
+                            "batchbrev",
+                            "enabled",
+                            "redigerbar",
+                            "kreverDataGrunnlag",
+                            "tilhørerEnheter",
+                            "dokumentType",
+                        ),
+                )
 
         LOGGER.info {
             ObjectMapper().findAndRegisterModules()
@@ -67,10 +70,8 @@ class DokumentMalTest {
         }
     }
 
-
     @Test
     fun `Skal ikke ha duplikat dokumentmal kode`() {
-
         alleDokumentmaler.forEach { mal ->
             val antall = alleDokumentmaler.filter { it.kode == mal.kode }.size
             withClue("Flere dokumentmaler har kode ${mal.kode}. Dokumentmal kode må være unik") {
@@ -81,7 +82,6 @@ class DokumentMalTest {
 
     @Test
     fun `Skal ikke ha dokumentmal kode lengre enn 50 tegn`() {
-
         assertSoftly {
             alleDokumentmaler.forEach { mal ->
                 withClue("Dokumentmal med kode ${mal.kode} er lengre enn 50 tegn") {
@@ -89,19 +89,15 @@ class DokumentMalTest {
                 }
             }
         }
-
     }
-
 
     @Test
     fun `Skal hente dokumentmaler utland`() {
-
         dokumentmalerUtland.filter { it.kode.startsWith("UTLAND_") }.size shouldBe 16
     }
 
     @Test
     fun `Skal hente dokumentmaler farskap`() {
-
         dokumentmalerFarskap.filter { it.kode.startsWith("FARSKAP_") }.size shouldBe 34
         dokumentmalerFarskap.forEach {
             it.gruppeVisningsnavn shouldNotBe null

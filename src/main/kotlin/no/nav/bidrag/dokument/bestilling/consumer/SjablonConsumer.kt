@@ -17,7 +17,10 @@ import javax.annotation.PostConstruct
 private val log = KotlinLogging.logger {}
 
 @Service
-class SjablonConsumer(@Value("\${SJABLON_URL}") url: String, val cacheManager: CacheManager) {
+class SjablonConsumer(
+    @Value("\${SJABLON_URL}") url: String,
+    val cacheManager: CacheManager,
+) {
     private val restTemplate: RestTemplate
 
     init {

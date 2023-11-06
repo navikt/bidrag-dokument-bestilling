@@ -8,9 +8,13 @@ class ProduksjonAvDokumentStottesIkke(dokumentMal: DokumentMal) :
     RuntimeException("Produksjon av dokument med brevkode=${dokumentMal.kode} støttes ikke")
 
 class FantIkkePersonException(msg: String) : RuntimeException(msg)
+
 class FantIkkeEnhetException(msg: String) : RuntimeException(msg)
+
 class FantIkkeSakException(msg: String) : RuntimeException(msg)
+
 class HentSakFeiletException(msg: String, throwable: Throwable) : RuntimeException(msg, throwable)
+
 class HentVedtakFeiletException(msg: String, throwable: Throwable) :
     RuntimeException(msg, throwable)
 
@@ -18,7 +22,9 @@ class HentPersonFeiletException(msg: String, throwable: Throwable) :
     RuntimeException(msg, throwable)
 
 class SamhandlerManglerKontaktinformasjon(msg: String) : RuntimeException(msg)
+
 class ManglerGjelderException(msg: String) : RuntimeException(msg)
+
 class BestillingManglerMottaker() : RuntimeException("Bestilling mangler mottaker")
 
 fun fantIkkeVedtak(vedtakId: String): Nothing =
@@ -27,7 +33,7 @@ fun fantIkkeVedtak(vedtakId: String): Nothing =
 fun manglerVedtakId(): Nothing =
     throw HttpClientErrorException(
         HttpStatus.BAD_REQUEST,
-        "Forespørsel for opprettelse av vedtaksbrev mangler vedtakId"
+        "Forespørsel for opprettelse av vedtaksbrev mangler vedtakId",
     )
 
 fun fantIkkeSak(saksnummer: String): Nothing =
@@ -36,17 +42,17 @@ fun fantIkkeSak(saksnummer: String): Nothing =
 fun dokumentMalEksistererIkke(dokumentmalKode: String): Nothing =
     throw HttpClientErrorException(
         HttpStatus.BAD_REQUEST,
-        "Dokumentmal $dokumentmalKode eksisterer ikke"
+        "Dokumentmal $dokumentmalKode eksisterer ikke",
     )
 
 fun kanIkkeBestilleDokumentMal(kode: String): Nothing =
     throw HttpClientErrorException(
         HttpStatus.BAD_REQUEST,
-        "Kan ikke bestille dokumentmal ${kode}."
+        "Kan ikke bestille dokumentmal $kode.",
     )
 
 fun manglerDataGrunnlag(dokumentMal: DokumentMal): Nothing =
     throw HttpClientErrorException(
         HttpStatus.BAD_REQUEST,
-        "Forespørsel mangler informasjon for å opprette dokumentmal ${dokumentMal.kode}."
+        "Forespørsel mangler informasjon for å opprette dokumentmal ${dokumentMal.kode}.",
     )

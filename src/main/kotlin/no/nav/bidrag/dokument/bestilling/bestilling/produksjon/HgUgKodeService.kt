@@ -14,27 +14,27 @@ import java.nio.charset.StandardCharsets
 
 @Component
 class HgUgKodeService {
-
     private final val hgUgList: List<HgUgDto>
 
     init {
-        hgUgList = fetchHgUgKodeListFromFile().map {
-            val hg = it.hg?.trim()
-            val ug = it.ug?.trim()
-            HgUgDto(
-                behandlingType = BehandlingType.fromKode(it.behandlingType),
-                soknadFra = SoknadFra.fromKode(it.soknadFra),
-                soknadType = SoknadType.fromKode(it.soknadType),
-                hg = hg?.ifEmpty { null },
-                ug = ug?.ifEmpty { null }
-            )
-        }
+        hgUgList =
+            fetchHgUgKodeListFromFile().map {
+                val hg = it.hg?.trim()
+                val ug = it.ug?.trim()
+                HgUgDto(
+                    behandlingType = BehandlingType.fromKode(it.behandlingType),
+                    soknadFra = SoknadFra.fromKode(it.soknadFra),
+                    soknadType = SoknadType.fromKode(it.soknadType),
+                    hg = hg?.ifEmpty { null },
+                    ug = ug?.ifEmpty { null },
+                )
+            }
     }
 
     fun findHgUg(
         soknadType: SoknadType?,
         soknadFra: SoknadFra?,
-        behandlingType: BehandlingType?
+        behandlingType: BehandlingType?,
     ): HgUgDto? {
         val behandlingTypeConverted = if (behandlingType == BehandlingType.BIDRAG18AAR) BehandlingType.BIDRAG_18_AR else behandlingType
         return hgUgList.find { it.behandlingType == behandlingTypeConverted && it.soknadType == soknadType && it.soknadFra == soknadFra }
@@ -50,8 +50,8 @@ class HgUgKodeService {
                 text,
                 objectMapper.typeFactory.constructCollectionType(
                     MutableList::class.java,
-                    HgUgDtoFromJson::class.java
-                )
+                    HgUgDtoFromJson::class.java,
+                ),
             )
         } catch (e: IOException) {
             throw RuntimeException("Kunne ikke laste fil", e)

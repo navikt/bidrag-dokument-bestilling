@@ -9,15 +9,20 @@ import org.springframework.stereotype.Service
 
 @Service
 class PersonService(private val bidragPersonConsumer: BidragPersonConsumer) {
-
-    fun hentPerson(personId: String, rolle: String? = "UKJENT"): PersonDto {
+    fun hentPerson(
+        personId: String,
+        rolle: String? = "UKJENT",
+    ): PersonDto {
         return bidragPersonConsumer.hentPerson(personId) ?: run {
             SIKKER_LOGG.warn("Fant ikke person med fnr $personId og rolle $rolle")
             throw FantIkkePersonException("Fant ikke person med rolle $rolle")
         }
     }
 
-    fun hentPersonAdresse(personId: String, rolle: String? = "UKJENT"): PersonAdresseDto? {
+    fun hentPersonAdresse(
+        personId: String,
+        rolle: String? = "UKJENT",
+    ): PersonAdresseDto? {
         return bidragPersonConsumer.hentAdresse(personId) ?: run {
             SIKKER_LOGG.warn("Fant ikke adresse for person $personId med rolle $rolle")
             null

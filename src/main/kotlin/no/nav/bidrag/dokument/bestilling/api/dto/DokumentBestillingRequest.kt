@@ -14,7 +14,7 @@ data class DokumentBestillingForespørsel(
     val mottaker: MottakerTo? = null,
     @Schema(
         description = "Informasjon samhandler hvis mottakerid er en samhandlerid. Påkrevd hvis mottaker er en samhandler",
-        deprecated = true
+        deprecated = true,
     )
     val samhandlerInformasjon: SamhandlerInformasjon? = null,
     @Schema(description = "Informasjon om saksbehandler som skal brukes ved opprettelse av dokument")
@@ -32,14 +32,17 @@ data class DokumentBestillingForespørsel(
     @Schema(deprecated = true)
     val spraak: String? = null,
     val språk: String? = null,
-    val barnIBehandling: List<String> = emptyList()
+    val barnIBehandling: List<String> = emptyList(),
 ) {
     val mottakerIdent get(): String? = mottaker?.ident ?: mottakerId
+
     fun hentSpråk() = språk ?: spraak
+
     fun erMottakerSamhandler(): Boolean =
         (mottaker?.ident?.erSamhandler ?: mottakerIdent?.erSamhandler) == true
 
     fun harMottakerKontaktinformasjon() = mottaker?.adresse != null
+
     fun hentRiktigSpråkkode(): String {
         val språk = hentSpråk()
         if (språk.isNullOrEmpty()) {
@@ -58,7 +61,7 @@ data class MottakerTo(
     val ident: Ident? = null,
     val navn: String? = null,
     val språk: String? = null,
-    val adresse: MottakerAdresseTo? = null
+    val adresse: MottakerAdresseTo? = null,
 )
 
 data class MottakerAdresseTo(
@@ -69,13 +72,13 @@ data class MottakerAdresseTo(
     @Schema(description = "Lankode må være i ISO 3166-1 alpha-2 format") val landkode: String? = null,
     @Schema(description = "Lankode må være i ISO 3166-1 alpha-3 format") val landkode3: String? = null,
     val postnummer: String? = null,
-    val poststed: String? = null
+    val poststed: String? = null,
 )
 
 data class DokumentBestillingResponse(
     val dokumentId: String,
     val journalpostId: String,
-    val arkivSystem: DokumentArkivSystemDto? = null
+    val arkivSystem: DokumentArkivSystemDto? = null,
 )
 
 data class SamhandlerAdresse(
@@ -83,11 +86,11 @@ data class SamhandlerAdresse(
     val adresselinje2: String? = null,
     val adresselinje3: String? = null,
     val postnummer: String? = null,
-    val landkode: String? = null
+    val landkode: String? = null,
 )
 
 data class SamhandlerInformasjon(
     val navn: String? = null,
     val spraak: String? = null,
-    val adresse: SamhandlerAdresse? = null
+    val adresse: SamhandlerAdresse? = null,
 )

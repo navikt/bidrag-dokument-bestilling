@@ -43,7 +43,7 @@ import javax.jms.Queue
 @ActiveProfiles("test")
 @SpringBootTest(
     classes = [BidragDokumentBestillingLocalTest::class, StubUtils::class, JmsTestConfig::class],
-    webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT
+    webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
 )
 @AutoConfigureWireMock(port = 0)
 @EnableMockOAuth2Server
@@ -81,10 +81,12 @@ abstract class AbstractControllerTest {
         stubUtils.stubEnhetKontaktInfo()
         stubUtils.stubHentSaksbehandlerInfo()
         stubUtils.stubHentPersonSpraak()
-        val kodeverkResponse = ObjectMapper().findAndRegisterModules()
-            .readValue(readFile("api/landkoder.json"), KodeverkResponse::class.java)
-        val sjablonResponse = ObjectMapper().findAndRegisterModules()
-            .readValue(readFile("api/sjablon_all.json"), typeRef<SjablongerDto>())
+        val kodeverkResponse =
+            ObjectMapper().findAndRegisterModules()
+                .readValue(readFile("api/landkoder.json"), KodeverkResponse::class.java)
+        val sjablonResponse =
+            ObjectMapper().findAndRegisterModules()
+                .readValue(readFile("api/sjablon_all.json"), typeRef<SjablongerDto>())
         every { kodeverkConsumer.hentLandkoder() } returns kodeverkResponse
         every { sjablonConsumer.hentSjablonger() } returns sjablonResponse
         every { gcpCloudStorage.hentFil(any()) } returns TEST_DOKUMENT
@@ -116,7 +118,10 @@ abstract class AbstractControllerTest {
         stubUtils.stubEnhetKontaktInfo(createEnhetKontaktInformasjon())
     }
 
-    fun verifyBrevbestillingHeaders(bestilling: BrevBestilling, dokumentMalEnum: DokumentMal) {
+    fun verifyBrevbestillingHeaders(
+        bestilling: BrevBestilling,
+        dokumentMalEnum: DokumentMal,
+    ) {
         bestilling.passord shouldBe "pass"
         bestilling.sysid shouldBe "BI12"
         bestilling.arkiver shouldBe "JA"

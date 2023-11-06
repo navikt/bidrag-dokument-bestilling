@@ -30,7 +30,6 @@ import org.springframework.http.HttpMethod
 import org.springframework.http.HttpStatus
 
 class DokumentBestillingBrevkodeTest : AbstractControllerTest() {
-
     @SpykBean
     lateinit var dokumentProducer: DokumentProducer
 
@@ -38,7 +37,6 @@ class DokumentBestillingBrevkodeTest : AbstractControllerTest() {
         listOf("BI01A50", "BI01A01", "BI01A04")
 
     companion object {
-
         @JvmStatic
         fun alleDokumentmaler() = alleDokumentmaler
 
@@ -73,22 +71,23 @@ class DokumentBestillingBrevkodeTest : AbstractControllerTest() {
 
         stubUtils.stubOpprettJournalpost(createOpprettJournalpostResponse(dokumentReferanse = "DOKREF_1"))
 
-        val request = DokumentBestillingForespørsel(
-            mottakerId = mottakerId,
-            gjelderId = gjelderId,
-            saksnummer = saksnummer,
-            tittel = tittel,
-            enhet = "4806",
-            spraak = "NB"
+        val request =
+            DokumentBestillingForespørsel(
+                mottakerId = mottakerId,
+                gjelderId = gjelderId,
+                saksnummer = saksnummer,
+                tittel = tittel,
+                enhet = "4806",
+                spraak = "NB",
+            )
 
-        )
-
-        val response = httpHeaderTestRestTemplate.exchange(
-            "${rootUri()}/bestill/${dokumentMal.kode}",
-            HttpMethod.POST,
-            HttpEntity(request),
-            DokumentBestillingResponse::class.java
-        )
+        val response =
+            httpHeaderTestRestTemplate.exchange(
+                "${rootUri()}/bestill/${dokumentMal.kode}",
+                HttpMethod.POST,
+                HttpEntity(request),
+                DokumentBestillingResponse::class.java,
+            )
 
         response.statusCode shouldBe HttpStatus.OK
 
@@ -116,7 +115,7 @@ class DokumentBestillingBrevkodeTest : AbstractControllerTest() {
                         bestilling.rmISak shouldBe false
                     }
                 },
-                dokumentMal
+                dokumentMal,
             )
         }
     }
@@ -139,22 +138,23 @@ class DokumentBestillingBrevkodeTest : AbstractControllerTest() {
 
         stubUtils.stubOpprettJournalpost(createOpprettJournalpostResponse(dokumentReferanse = "DOKREF_1"))
 
-        val request = DokumentBestillingForespørsel(
-            mottakerId = mottakerId,
-            gjelderId = gjelderId,
-            saksnummer = saksnummer,
-            tittel = tittel,
-            enhet = "4806",
-            spraak = "NB"
+        val request =
+            DokumentBestillingForespørsel(
+                mottakerId = mottakerId,
+                gjelderId = gjelderId,
+                saksnummer = saksnummer,
+                tittel = tittel,
+                enhet = "4806",
+                spraak = "NB",
+            )
 
-        )
-
-        val response = httpHeaderTestRestTemplate.exchange(
-            "${rootUri()}/bestill/${dokumentMal.kode}",
-            HttpMethod.POST,
-            HttpEntity(request),
-            DokumentBestillingResponse::class.java
-        )
+        val response =
+            httpHeaderTestRestTemplate.exchange(
+                "${rootUri()}/bestill/${dokumentMal.kode}",
+                HttpMethod.POST,
+                HttpEntity(request),
+                DokumentBestillingResponse::class.java,
+            )
 
         response.statusCode shouldBe HttpStatus.OK
 
@@ -187,7 +187,7 @@ class DokumentBestillingBrevkodeTest : AbstractControllerTest() {
                         bestilling.roller.barn[1].navn shouldBe BARN1.fornavnEtternavn()
                     }
                 },
-                dokumentMal
+                dokumentMal,
             )
         }
     }
@@ -211,21 +211,22 @@ class DokumentBestillingBrevkodeTest : AbstractControllerTest() {
 
         stubUtils.stubOpprettJournalpost(createOpprettJournalpostResponse(dokumentReferanse = "DOKREF_1"))
 
-        val request = DokumentBestillingForespørsel(
-            mottakerId = mottakerId.verdi,
-            gjelderId = gjelderId.verdi,
-            saksnummer = saksnummer,
-            tittel = tittel,
-            enhet = "4806",
-            spraak = "NB"
-
-        )
-        val response = httpHeaderTestRestTemplate.exchange(
-            "${rootUri()}/bestill/${dokumentMal.kode}",
-            HttpMethod.POST,
-            HttpEntity(request),
-            DokumentBestillingResponse::class.java
-        )
+        val request =
+            DokumentBestillingForespørsel(
+                mottakerId = mottakerId.verdi,
+                gjelderId = gjelderId.verdi,
+                saksnummer = saksnummer,
+                tittel = tittel,
+                enhet = "4806",
+                spraak = "NB",
+            )
+        val response =
+            httpHeaderTestRestTemplate.exchange(
+                "${rootUri()}/bestill/${dokumentMal.kode}",
+                HttpMethod.POST,
+                HttpEntity(request),
+                DokumentBestillingResponse::class.java,
+            )
 
         response.statusCode shouldBe HttpStatus.OK
 
@@ -243,7 +244,7 @@ class DokumentBestillingBrevkodeTest : AbstractControllerTest() {
                         bestilling.kontaktInfo?.postadresse?.land shouldBe null
                     }
                 },
-                dokumentMal
+                dokumentMal,
             )
         }
     }

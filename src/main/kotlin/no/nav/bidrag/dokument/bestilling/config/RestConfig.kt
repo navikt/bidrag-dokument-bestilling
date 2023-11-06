@@ -14,7 +14,6 @@ import org.springframework.retry.annotation.EnableRetry
 @EnableRetry
 @Import(RestOperationsAzure::class)
 class RestConfig {
-
     @Bean
     fun jackson2ObjectMapperBuilder(): Jackson2ObjectMapperBuilder {
         return Jackson2ObjectMapperBuilder().serializationInclusion(JsonInclude.Include.NON_NULL)

@@ -4,7 +4,6 @@ import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.Test
 
 class SaksbehandlerTest {
-
     @Test
     fun skalReturnereFornavnEtternavn() {
         val saksbehandler = Saksbehandler("Z123123", "Etternavn, Fornavn Mellomnavn")

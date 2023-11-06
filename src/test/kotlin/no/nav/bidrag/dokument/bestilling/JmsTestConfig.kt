@@ -13,7 +13,6 @@ import javax.jms.Queue
 
 @TestConfiguration
 class JmsTestConfig {
-
     @Bean
     @Profile("!nais")
     fun mqQueueConnectionFactory(): ConnectionFactory {
@@ -21,7 +20,9 @@ class JmsTestConfig {
     }
 
     @Bean
-    fun onlineBrevQueue(@Value("\${BREVSERVER_ONLINEBREV_QUEUE}") queuename: String): Queue {
+    fun onlineBrevQueue(
+        @Value("\${BREVSERVER_ONLINEBREV_QUEUE}") queuename: String,
+    ): Queue {
         return ActiveMQQueue(queuename)
     }
 

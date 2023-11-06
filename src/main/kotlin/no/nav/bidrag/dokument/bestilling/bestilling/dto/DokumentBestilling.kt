@@ -18,14 +18,22 @@ typealias GrunnlagRolleType = no.nav.bidrag.behandling.felles.enums.Rolle
 
 data class GrunnlagInntektType(val inntektType: InntektType? = null, val periodeBeregningsGrunnlag: Boolean? = false, val nettoKapitalInntekt: Boolean? = false) {
     val beskrivelse
-        get() = inntektType?.beskrivelse ?: if (periodeBeregningsGrunnlag == true) {
-            "Personens beregningsgrunnlag i perioden"
+        get() =
+            inntektType?.beskrivelse ?: if (periodeBeregningsGrunnlag == true) {
+                "Personens beregningsgrunnlag i perioden"
+            } else if (nettoKapitalInntekt == true) {
+                "Netto positive kapitalinntekter"
+            } else {
+                ""
+            }
+    val belopstype get() =
+        inntektType?.belopstype ?: if (periodeBeregningsGrunnlag == true) {
+            "XINN"
         } else if (nettoKapitalInntekt == true) {
-            "Netto positive kapitalinntekter"
+            "XKAP"
         } else {
             ""
         }
-    val belopstype get() = inntektType?.belopstype ?: if (periodeBeregningsGrunnlag == true) "XINN" else if (nettoKapitalInntekt == true) "XKAP" else ""
 
     override fun equals(other: Any?): Boolean {
         return if (other is GrunnlagInntektType) {
@@ -39,7 +47,7 @@ data class GrunnlagInntektType(val inntektType: InntektType? = null, val periode
 data class DokumentBestillingResult(
     val dokumentReferanse: String,
     val journalpostId: String,
-    val bestillingSystem: String
+    val bestillingSystem: String,
 )
 
 data class DokumentBestilling(
@@ -57,7 +65,7 @@ data class DokumentBestilling(
     val rmISak: Boolean? = false,
     val vedtakDetaljer: VedtakDetaljer? = null,
     val sjablonDetaljer: SjablonDetaljer,
-    val sakDetaljer: SakDetaljer
+    val sakDetaljer: SakDetaljer,
 )
 
 class Roller : MutableList<Rolle> by mutableListOf() {
@@ -82,12 +90,12 @@ data class Barn(
     val bidragsbelop: Int? = null,
     val forskuddsbelop: Int? = null,
     val gebyrRm: Int? = null,
-    val fodselsnummerRm: String? = null
+    val fodselsnummerRm: String? = null,
 ) : Rolle
 
 data class SoknadsPart(
     val bidragsPliktigInfo: PartInfo? = null,
-    val bidragsMottakerInfo: PartInfo? = null
+    val bidragsMottakerInfo: PartInfo? = null,
 )
 
 data class PartInfo(
@@ -100,21 +108,21 @@ data class PartInfo(
     val landkode3: String? = null,
     val datoDod: LocalDate? = null,
     val gebyr: Number? = null,
-    val kravFremAv: String? = null
+    val kravFremAv: String? = null,
 ) : Rolle
 
 data class EnhetKontaktInfo(
     val navn: String,
     val telefonnummer: String,
     val postadresse: Adresse,
-    val enhetId: String
+    val enhetId: String,
 )
 
 data class Gjelder(
     val fodselsnummer: String,
     val navn: String? = null,
     val adresse: Adresse? = null,
-    val rolle: Rolletype?
+    val rolle: Rolletype?,
 )
 
 data class Mottaker(
@@ -123,7 +131,7 @@ data class Mottaker(
     val spraak: String,
     val adresse: Adresse?,
     val rolle: Rolletype?,
-    val fodselsdato: LocalDate?
+    val fodselsdato: LocalDate?,
 )
 
 data class Adresse(
@@ -136,14 +144,16 @@ data class Adresse(
     val poststed: String? = null,
     val landkode: String? = null,
     val landkode3: String? = null,
-    val land: String? = null
+    val land: String? = null,
 )
 
 data class PeriodeFraTom(val fraDato: LocalDate, val tomDato: LocalDate? = null)
 typealias BeløpFraTil = Pair<BigDecimal, BigDecimal>
 
 fun BeløpFraTil.fraVerdi() = this.first
+
 fun BeløpFraTil.tilVerdi() = this.second
+
 data class VedtakPeriode(
     val fomDato: LocalDate,
     val tomDato: LocalDate? = null,
@@ -152,7 +162,7 @@ data class VedtakPeriode(
     val resultatKode: String,
     val inntektGrense: BigDecimal,
     val maksInntekt: BigDecimal,
-    val inntekter: List<InntektPeriode> = emptyList()
+    val inntekter: List<InntektPeriode> = emptyList(),
 )
 
 data class InntektPeriode(
@@ -164,7 +174,7 @@ data class InntektPeriode(
     val beløpÅr: Int,
     val fodselsnummer: String?,
     val beløp: BigDecimal,
-    val rolle: GrunnlagRolleType
+    val rolle: GrunnlagRolleType,
 )
 
 data class ForskuddInntektgrensePeriode(
@@ -173,7 +183,7 @@ data class ForskuddInntektgrensePeriode(
     val forsorgerType: ForsorgerType,
     val antallBarn: Int,
     val beløp50Prosent: BeløpFraTil,
-    val beløp75Prosent: BeløpFraTil
+    val beløp75Prosent: BeløpFraTil,
 )
 
 data class VedtakDetaljer(
@@ -191,20 +201,21 @@ data class VedtakDetaljer(
     val vedtakBarn: List<VedtakBarn> = emptyList(),
     val barnIHustandPerioder: List<BarnIHustandPeriode> = emptyList(),
     val sivilstandPerioder: List<SivilstandPeriode> = emptyList(),
-    val inntektPerioder: List<InntektPeriode> = emptyList()
+    val inntektPerioder: List<InntektPeriode> = emptyList(),
 ) {
-    fun hentForskuddBarn(fodselsnummer: String): BigDecimal? = vedtakBarn
-        .find { it.fodselsnummer == fodselsnummer }
-        ?.stonader
-        ?.find { it.type == StonadType.FORSKUDD }
-        ?.vedtakPerioder?.find { it.tomDato == null }
-        ?.beløp
+    fun hentForskuddBarn(fodselsnummer: String): BigDecimal? =
+        vedtakBarn
+            .find { it.fodselsnummer == fodselsnummer }
+            ?.stonader
+            ?.find { it.type == StonadType.FORSKUDD }
+            ?.vedtakPerioder?.find { it.tomDato == null }
+            ?.beløp
 }
 
 data class BarnIHustandPeriode(
     val fomDato: LocalDate,
     val tomDato: LocalDate? = null,
-    val antall: Int
+    val antall: Int,
 )
 
 data class VedtakBarn(
@@ -212,32 +223,32 @@ data class VedtakBarn(
     val navn: String?,
     val harSammeAdresse: Boolean,
     val bostatusPerioder: List<BostatusPeriode>,
-    val stonader: List<VedtakBarnStonad> = emptyList()
+    val stonader: List<VedtakBarnStonad> = emptyList(),
 )
 
 data class BostatusPeriode(
     val fomDato: LocalDate,
     val tomDato: LocalDate? = null,
-    val bostatusKode: BostatusKode
+    val bostatusKode: BostatusKode,
 )
 
 data class VedtakBarnStonad(
     val type: StonadType,
     val innkreving: Boolean,
     val vedtakPerioder: List<VedtakPeriode> = emptyList(),
-    val forskuddInntektgrensePerioder: List<ForskuddInntektgrensePeriode> = emptyList()
+    val forskuddInntektgrensePerioder: List<ForskuddInntektgrensePeriode> = emptyList(),
 )
 
 data class SivilstandPeriode(
     val fomDato: LocalDate,
     val tomDato: LocalDate? = null,
     val sivilstandKode: SivilstandKode,
-    val sivilstandBeskrivelse: String
+    val sivilstandBeskrivelse: String,
 )
 
 enum class ForsorgerType {
     ENSLIG,
-    GIFT_SAMBOER
+    GIFT_SAMBOER,
 }
 
 data class SjablonDetaljer(
@@ -245,10 +256,10 @@ data class SjablonDetaljer(
     val fastsettelseGebyr: BigDecimal,
     val forskuddInntektIntervall: BigDecimal,
     val forskuddSats: BigDecimal,
-    val multiplikatorInnteksinslagBarn: BigDecimal
+    val multiplikatorInnteksinslagBarn: BigDecimal,
 )
 
 data class SakDetaljer(
     val harUkjentPart: Boolean,
-    val levdeAdskilt: Boolean
+    val levdeAdskilt: Boolean,
 )

@@ -60,14 +60,14 @@ class DokumentMetadataCollector(
     val vedtakService: VedtakService,
     val sjablongService: SjablongService,
     val saksbehandlerInfoManager: SaksbehandlerInfoManager,
-    val organisasjonService: OrganisasjonService
+    val organisasjonService: OrganisasjonService,
 ) {
-
     private lateinit var enhet: String
     private lateinit var sak: BidragssakDto
+
     fun collect(
         forespørsel: DokumentBestillingForespørsel,
-        dokumentMal: DokumentMal
+        dokumentMal: DokumentMal,
     ): DokumentBestilling {
         val kreverDataGrunnlag = dokumentMal.kreverDataGrunnlag!!
         this.sak = sakService.hentSak(forespørsel.saksnummer) ?: fantIkkeSak(forespørsel.saksnummer)
@@ -82,18 +82,22 @@ class DokumentMetadataCollector(
             datoSakOpprettet = sak.opprettetDato.verdi,
             rmISak = sak.roller.any { it.type == Rolletype.REELMOTTAKER },
             sjablonDetaljer = sjablongService.hentSjablonDetaljer(),
-            sakDetaljer = SakDetaljer(
-                harUkjentPart = sak.ukjentPart.verdi,
-                levdeAdskilt = sak.levdeAdskilt.verdi
-            ),
+            sakDetaljer =
+                SakDetaljer(
+                    harUkjentPart = sak.ukjentPart.verdi,
+                    levdeAdskilt = sak.levdeAdskilt.verdi,
+                ),
             mottaker = hentMottakerData(forespørsel),
             gjelder = hentGjelderData(forespørsel),
-            kontaktInfo = kreverDataGrunnlag.takeIf { it.enhetKontaktInfo }
-                ?.let { hentEnhetKontakInfo(forespørsel) },
-            roller = kreverDataGrunnlag.takeIf { it.roller }?.let { hentRolleData(forespørsel) }
-                ?: Roller(),
-            vedtakDetaljer = kreverDataGrunnlag.takeIf { it.vedtak }
-                ?.let { hentVedtakData(forespørsel.vedtakId) }
+            kontaktInfo =
+                kreverDataGrunnlag.takeIf { it.enhetKontaktInfo }
+                    ?.let { hentEnhetKontakInfo(forespørsel) },
+            roller =
+                kreverDataGrunnlag.takeIf { it.roller }?.let { hentRolleData(forespørsel) }
+                    ?: Roller(),
+            vedtakDetaljer =
+                kreverDataGrunnlag.takeIf { it.vedtak }
+                    ?.let { hentVedtakData(forespørsel.vedtakId) },
         )
     }
 
@@ -119,8 +123,8 @@ class DokumentMetadataCollector(
                     fodselsdato = hentFodselsdato(bidragsmottaker),
                     doedsdato = bidragsmottaker.dødsdato?.verdi,
                     landkode = bidragsmottakerAdresse?.land?.verdi,
-                    landkode3 = bidragsmottakerAdresse?.land3?.verdi
-                )
+                    landkode3 = bidragsmottakerAdresse?.land3?.verdi,
+                ),
             )
         }
 
@@ -133,8 +137,8 @@ class DokumentMetadataCollector(
                     fodselsdato = hentFodselsdato(bidragspliktig),
                     doedsdato = bidragspliktig.dødsdato?.verdi,
                     landkode = bidragspliktigAdresse?.land?.verdi,
-                    landkode3 = bidragspliktigAdresse?.land3?.verdi
-                )
+                    landkode3 = bidragspliktigAdresse?.land3?.verdi,
+                ),
             )
         }
 
@@ -142,8 +146,8 @@ class DokumentMetadataCollector(
         if (!forespørsel.vedtakId.isNullOrEmpty()) {
             soknadsbarn.addAll(
                 vedtakService.hentVedtakSoknadsbarnFodselsnummer(
-                    forespørsel.vedtakId
-                )
+                    forespørsel.vedtakId,
+                ),
             )
         } else {
             soknadsbarn.addAll(forespørsel.barnIBehandling)
@@ -158,36 +162,38 @@ class DokumentMetadataCollector(
                     } else {
                         personService.hentPerson(
                             it.fødselsnummer!!.verdi,
-                            "Barn"
+                            "Barn",
                         )
                     }
                 if (barnInfo == null || !barnInfo.isDod()) {
                     roller.add(
                         Barn(
                             fodselsnummer = it.fødselsnummer!!.verdi,
-                            navn = barnInfo?.let {
-                                if (barnInfo.isKode6()) {
-                                    hentKode6NavnBarn(
-                                        barnInfo,
-                                        forespørsel
-                                    )
-                                } else {
-                                    barnInfo.fornavnEtternavn()
-                                }
-                            } ?: "",
+                            navn =
+                                barnInfo?.let {
+                                    if (barnInfo.isKode6()) {
+                                        hentKode6NavnBarn(
+                                            barnInfo,
+                                            forespørsel,
+                                        )
+                                    } else {
+                                        barnInfo.fornavnEtternavn()
+                                    }
+                                } ?: "",
                             fodselsdato = barnInfo?.let { hentFodselsdato(barnInfo) },
-                            fornavn = barnInfo?.let {
-                                if (barnInfo.isKode6()) {
-                                    hentKode6NavnBarn(
-                                        barnInfo,
-                                        forespørsel
-                                    )
-                                } else {
-                                    barnInfo.fornavn?.verdi
-                                }
-                            },
-                            fodselsnummerRm = it.rmFødselsnummer()?.verdi
-                        )
+                            fornavn =
+                                barnInfo?.let {
+                                    if (barnInfo.isKode6()) {
+                                        hentKode6NavnBarn(
+                                            barnInfo,
+                                            forespørsel,
+                                        )
+                                    } else {
+                                        barnInfo.fornavn?.verdi
+                                    }
+                                },
+                            fodselsnummerRm = it.rmFødselsnummer()?.verdi,
+                        ),
                     )
                 }
             }
@@ -198,7 +204,7 @@ class DokumentMetadataCollector(
     private fun hentGjelderData(forespørsel: DokumentBestillingForespørsel): Gjelder {
         return Gjelder(
             fodselsnummer = forespørsel.actualGjelderId,
-            rolle = hentRolle(forespørsel.actualGjelderId)
+            rolle = hentRolle(forespørsel.actualGjelderId),
         )
     }
 
@@ -212,15 +218,16 @@ class DokumentMetadataCollector(
                 rolle = null,
                 navn = samhandler.navn ?: "Ukjent",
                 spraak = samhandler.spraak ?: "NB",
-                adresse = Adresse(
-                    adresselinje1 = adresse?.adresselinje1 ?: "",
-                    adresselinje2 = adresse?.adresselinje2 ?: "",
-                    adresselinje3 = "${adresse?.postnummer} ${adresse?.adresselinje3?.take(25) ?: ""}".trim(),
-                    postnummer = adresse?.postnummer,
-                    landkode = adresse?.landkode,
-                    landkode3 = adresse?.landkode,
-                    land = adresse?.landkode?.let { kodeverkService.hentLandFullnavnForKode(it) }
-                )
+                adresse =
+                    Adresse(
+                        adresselinje1 = adresse?.adresselinje1 ?: "",
+                        adresselinje2 = adresse?.adresselinje2 ?: "",
+                        adresselinje3 = "${adresse?.postnummer} ${adresse?.adresselinje3?.take(25) ?: ""}".trim(),
+                        postnummer = adresse?.postnummer,
+                        landkode = adresse?.landkode,
+                        landkode3 = adresse?.landkode,
+                        land = adresse?.landkode?.let { kodeverkService.hentLandFullnavnForKode(it) },
+                    ),
             )
         } else {
             val mottaker = hentMottaker(forespørsel)
@@ -231,48 +238,50 @@ class DokumentMetadataCollector(
                 fodselsdato = mottaker.fødselsdato?.verdi,
                 navn = mottaker.kortnavn?.verdi ?: mottaker.navn?.verdi ?: "",
                 rolle = hentRolle(mottaker.ident.verdi),
-                spraak = forespørsel.mottaker?.språk
-                    ?: mottaker.ident.verdi?.let { personService.hentSpråk(mottaker.ident.verdi) }
-                    ?: "NB",
-                adresse = if (adresse != null) {
-                    val postnummerSted =
-                        if (adresse.postnummer?.verdi.isNullOrEmpty() && adresse.poststed?.verdi.isNullOrEmpty()) {
-                            null
-                        } else {
-                            "${adresse.postnummer ?: ""} ${adresse.poststed ?: ""}".trim()
-                        }
-                    val landNavn =
-                        kodeverkService.hentLandFullnavnForKode(adresse.land3.verdi.ifBlank { adresse.land.verdi })
-                    val adresselinje3 =
-                        if (forespørsel.erMottakerSamhandler() && !adresse.adresselinje3?.verdi.isNullOrEmpty()) {
-                            "${adresse.postnummer} ${adresse.adresselinje3?.verdi?.take(25) ?: ""}".trim()
-                        } else {
-                            adresse.adresselinje3?.verdi?.ifBlank { postnummerSted }
-                                ?: postnummerSted
-                        }
-                    val adresselinje4 =
-                        if (landNavn != LANDNAVN_NORGE && !forespørsel.erMottakerSamhandler()) {
-                            landNavn
-                        } else if (!forespørsel.erMottakerSamhandler() && adresse.adresselinje3?.verdi?.isNotBlank() == true) {
-                            postnummerSted
-                        } else {
-                            null
-                        }
-                    Adresse(
-                        adresselinje1 = adresse.adresselinje1?.verdi ?: "",
-                        adresselinje2 = adresse.adresselinje2?.verdi,
-                        adresselinje3 = adresselinje3,
-                        adresselinje4 = adresselinje4,
-                        bruksenhetsnummer = if (adresse.bruksenhetsnummer?.verdi == BRUKSHENETSNUMMER_STANDARD) null else adresse.bruksenhetsnummer?.verdi,
-                        poststed = adresse.poststed?.verdi,
-                        postnummer = adresse.postnummer?.verdi,
-                        landkode = adresse.land.verdi,
-                        landkode3 = adresse.land3.verdi,
-                        land = landNavn
-                    )
-                } else {
-                    null
-                }
+                spraak =
+                    forespørsel.mottaker?.språk
+                        ?: mottaker.ident.verdi?.let { personService.hentSpråk(mottaker.ident.verdi) }
+                        ?: "NB",
+                adresse =
+                    if (adresse != null) {
+                        val postnummerSted =
+                            if (adresse.postnummer?.verdi.isNullOrEmpty() && adresse.poststed?.verdi.isNullOrEmpty()) {
+                                null
+                            } else {
+                                "${adresse.postnummer ?: ""} ${adresse.poststed ?: ""}".trim()
+                            }
+                        val landNavn =
+                            kodeverkService.hentLandFullnavnForKode(adresse.land3.verdi.ifBlank { adresse.land.verdi })
+                        val adresselinje3 =
+                            if (forespørsel.erMottakerSamhandler() && !adresse.adresselinje3?.verdi.isNullOrEmpty()) {
+                                "${adresse.postnummer} ${adresse.adresselinje3?.verdi?.take(25) ?: ""}".trim()
+                            } else {
+                                adresse.adresselinje3?.verdi?.ifBlank { postnummerSted }
+                                    ?: postnummerSted
+                            }
+                        val adresselinje4 =
+                            if (landNavn != LANDNAVN_NORGE && !forespørsel.erMottakerSamhandler()) {
+                                landNavn
+                            } else if (!forespørsel.erMottakerSamhandler() && adresse.adresselinje3?.verdi?.isNotBlank() == true) {
+                                postnummerSted
+                            } else {
+                                null
+                            }
+                        Adresse(
+                            adresselinje1 = adresse.adresselinje1?.verdi ?: "",
+                            adresselinje2 = adresse.adresselinje2?.verdi,
+                            adresselinje3 = adresselinje3,
+                            adresselinje4 = adresselinje4,
+                            bruksenhetsnummer = if (adresse.bruksenhetsnummer?.verdi == BRUKSHENETSNUMMER_STANDARD) null else adresse.bruksenhetsnummer?.verdi,
+                            poststed = adresse.poststed?.verdi,
+                            postnummer = adresse.postnummer?.verdi,
+                            landkode = adresse.land.verdi,
+                            landkode3 = adresse.land3.verdi,
+                            land = landNavn,
+                        )
+                    } else {
+                        null
+                    },
             )
         }
     }
@@ -287,20 +296,22 @@ class DokumentMetadataCollector(
         return EnhetKontaktInfo(
             navn = enhetKontaktInfo.enhetNavn ?: "",
             telefonnummer = enhetKontaktInfo.telefonnummer ?: "",
-            postadresse = Adresse(
-                adresselinje1 = enhetKontaktInfo.postadresse?.adresselinje1 ?: "",
-                adresselinje2 = enhetKontaktInfo.postadresse?.adresselinje2,
-                poststed = enhetKontaktInfo.postadresse?.poststed,
-                postnummer = enhetKontaktInfo.postadresse?.postnummer,
-                land = if (!erNorge) land else null
-            ),
-            enhetId = enhet
+            postadresse =
+                Adresse(
+                    adresselinje1 = enhetKontaktInfo.postadresse?.adresselinje1 ?: "",
+                    adresselinje2 = enhetKontaktInfo.postadresse?.adresselinje2,
+                    poststed = enhetKontaktInfo.postadresse?.poststed,
+                    postnummer = enhetKontaktInfo.postadresse?.postnummer,
+                    land = if (!erNorge) land else null,
+                ),
+            enhetId = enhet,
         )
     }
 
     private val DokumentBestillingForespørsel.actualGjelderId
-        get() = (if (hentRolle(this.gjelderId) != null) this.gjelderId else hentGjelderFraRoller())
-            ?: throw ManglerGjelderException("Fant ingen gjelder")
+        get() =
+            (if (hentRolle(this.gjelderId) != null) this.gjelderId else hentGjelderFraRoller())
+                ?: throw ManglerGjelderException("Fant ingen gjelder")
 
     private fun hentFodselsdato(person: PersonDto): LocalDate? {
         return if (person.isKode6()) null else person.fødselsdato?.verdi
@@ -308,7 +319,7 @@ class DokumentMetadataCollector(
 
     private fun hentKode6NavnBarn(
         person: PersonDto,
-        forespørsel: DokumentBestillingForespørsel
+        forespørsel: DokumentBestillingForespørsel,
     ): String {
         val fodtaar = person.fødselsdato?.verdi?.year
         return when (forespørsel.hentRiktigSpråkkode()) {
@@ -331,7 +342,7 @@ class DokumentMetadataCollector(
         return if (!bmFnr.isNullOrEmpty()) {
             personService.hentPerson(
                 bmFnr,
-                "Bidragsmottaker"
+                "Bidragsmottaker",
             )
         } else {
             null
@@ -348,7 +359,7 @@ class DokumentMetadataCollector(
         return if (!fnr.isNullOrEmpty()) {
             personService.hentPersonAdresse(
                 fnr,
-                "Bidragspliktig adresse"
+                "Bidragspliktig adresse",
             )
         } else {
             null
@@ -360,7 +371,7 @@ class DokumentMetadataCollector(
         return if (!fnr.isNullOrEmpty()) {
             personService.hentPersonAdresse(
                 fnr,
-                "Bidragsmottaker adresse"
+                "Bidragsmottaker adresse",
             )
         } else {
             null
@@ -372,7 +383,7 @@ class DokumentMetadataCollector(
         return if (forespørsel.erMottakerSamhandler() || mottakerIdent.isNullOrEmpty()) {
             PersonDto(
                 navn = FulltNavn(forespørsel.mottaker?.navn ?: ""),
-                ident = Personident(mottakerIdent ?: "")
+                ident = Personident(mottakerIdent ?: ""),
             )
         } else {
             personService.hentPerson(mottakerIdent, "Mottaker")
@@ -392,7 +403,7 @@ class DokumentMetadataCollector(
                 postnummer = adresse.postnummer?.let { Postnummer(it) },
                 land = Landkode2(adresse.landkode ?: "NO"),
                 land3 = Landkode3(adresse.landkode3 ?: ""),
-                adressetype = Adressetype.BOSTEDSADRESSE
+                adressetype = Adressetype.BOSTEDSADRESSE,
             )
         } else if (!forespørsel.erMottakerSamhandler() && mottakerIdent != null) {
             personService.hentPersonAdresse(mottakerIdent, "Mottaker")
@@ -409,9 +420,10 @@ class DokumentMetadataCollector(
 
     private fun hentSaksbehandler(request: DokumentBestillingForespørsel): Saksbehandler {
         if (request.saksbehandler != null && !request.saksbehandler.ident.isNullOrEmpty()) {
-            val saksbehandlerNavn = request.saksbehandler.navn
-                ?: saksbehandlerInfoManager.hentSaksbehandler(request.saksbehandler.ident)?.navn
-                ?: saksbehandlerInfoManager.hentSaksbehandlerBrukerId()
+            val saksbehandlerNavn =
+                request.saksbehandler.navn
+                    ?: saksbehandlerInfoManager.hentSaksbehandler(request.saksbehandler.ident)?.navn
+                    ?: saksbehandlerInfoManager.hentSaksbehandlerBrukerId()
             return Saksbehandler(request.saksbehandler.ident, saksbehandlerNavn)
         }
 
