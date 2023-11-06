@@ -1,10 +1,13 @@
 package no.nav.bidrag.dokument.bestilling.config
 
 import com.ibm.mq.constants.CMQC
+import com.ibm.mq.jakarta.jms.MQQueue
 import com.ibm.mq.jakarta.jms.MQQueueConnectionFactory
 import com.ibm.msg.client.jakarta.jms.JmsConstants
 import com.ibm.msg.client.jakarta.wmq.common.CommonConstants
 import jakarta.jms.ConnectionFactory
+import jakarta.jms.Destination
+import jakarta.jms.JMSException
 import jakarta.xml.bind.Marshaller
 import no.nav.bidrag.dokument.bestilling.bestilling.produksjon.dto.BrevBestilling
 import no.nav.bidrag.dokument.bestilling.config.jms.LoggingMarshallingMessageConverter
@@ -42,18 +45,22 @@ class JMSConfig(private val mqProperties: MQProperties) {
     }
 
     @Bean
+    @Profile("nais")
+    fun replyDestinationQueue(@Value("\${BREVSERVER_KVITTERING_QUEUE}") replyQueueName: String): Destination = MQQueue(replyQueueName)
+
+    @Bean
     @Throws(JMSException::class)
     fun onlinebrevTemplate(
         baseJmsTemplate: JmsTemplate,
         @Value("\${BREVSERVER_ONLINEBREV_QUEUE}") queueName: String,
-        @Value("\${BREVSERVER_KVITTERING_QUEUE}") replyQueueName: String,
+        replyDestinationQueue: Destination
     ): JmsTemplate {
         baseJmsTemplate.defaultDestinationName = queueName
         val jaxb2Marshaller = Jaxb2Marshaller()
         jaxb2Marshaller.setClassesToBeBound(BrevBestilling::class.java)
         jaxb2Marshaller.setMarshallerProperties(mapOf(Marshaller.JAXB_ENCODING to "ISO-8859-1"))
         baseJmsTemplate.messageConverter =
-            LoggingMarshallingMessageConverter(jaxb2Marshaller, replyQueueName)
+            LoggingMarshallingMessageConverter(jaxb2Marshaller, replyDestinationQueue)
         return baseJmsTemplate
     }
 

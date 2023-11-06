@@ -20,6 +20,16 @@ VEDLEGG_FARSKAP_ENABLED: true
 BREVSERVER_ONLINEBREV_QUEUE: brevserver_queue
 BREVSERVER_KVITTERING_QUEUE: brevserver_queue
 BREVSERVER_PASSORD: pass
+
+
+#spring.artemis.mode: EMBEDDED
+#spring.artemis.embedded.persistent: false
+#spring.artemis.broker-url: vm://0
+#
+#spring.artemis.embedded.enabled: true
+#
+#spring.jms.template.default-destination: my-queue-1
+
 no.nav.security.jwt:
   client:
     registration:

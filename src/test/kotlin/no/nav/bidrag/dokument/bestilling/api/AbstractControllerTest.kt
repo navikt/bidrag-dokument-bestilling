@@ -7,6 +7,7 @@ import com.ninjasquad.springmockk.MockkBean
 import io.kotest.matchers.shouldBe
 import io.mockk.clearAllMocks
 import io.mockk.every
+import jakarta.jms.Queue
 import no.nav.bidrag.commons.web.test.HttpHeaderTestRestTemplate
 import no.nav.bidrag.dokument.bestilling.BidragDokumentBestillingLocalTest
 import no.nav.bidrag.dokument.bestilling.JmsTestConfig
@@ -38,7 +39,6 @@ import org.springframework.cloud.contract.wiremock.AutoConfigureWireMock
 import org.springframework.core.io.ClassPathResource
 import org.springframework.jms.core.JmsTemplate
 import org.springframework.test.context.ActiveProfiles
-import javax.jms.Queue
 
 @ActiveProfiles("test")
 @SpringBootTest(

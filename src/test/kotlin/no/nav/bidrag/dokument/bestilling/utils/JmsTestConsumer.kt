@@ -6,16 +6,11 @@ import jakarta.jms.Queue
 import jakarta.jms.Session
 import jakarta.xml.bind.JAXB
 import mu.KotlinLogging
-import org.apache.activemq.command.ActiveMQTextMessage
+import org.apache.activemq.artemis.jms.client.ActiveMQTextMessage
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Profile
 import org.springframework.jms.core.JmsTemplate
 import org.springframework.stereotype.Component
-import javax.jms.Connection
-import javax.jms.MessageConsumer
-import javax.jms.Queue
-import javax.jms.Session
-import javax.xml.bind.JAXB
 
 private val log = KotlinLogging.logger {}
 
@@ -37,7 +32,7 @@ class JmsTestConsumer {
         }
     }
 
-    class JmsConnection(val jmsTemplate: JmsTemplate, val queue: Queue) {
+    class JmsConnection(jmsTemplate: JmsTemplate, queue: Queue) {
         var connection: Connection? = null
         var session: Session? = null
         var consumer: MessageConsumer? = null
