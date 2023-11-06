@@ -79,8 +79,8 @@ class DokumentBestillingControllerTest : AbstractControllerTest() {
         response.body?.forEach {
             it shouldBeIn alleDokumentmaler.map { bk -> bk.kode }
             it shouldNotBeIn
-                    alleDokumentmaler.filter { bk -> !bk.enabled }
-                        .map { bk -> bk.kode }
+                alleDokumentmaler.filter { bk -> !bk.enabled }
+                    .map { bk -> bk.kode }
         }
 
         response.body?.shouldHaveSize(alleDokumentmaler.filter { it.enabled && it is DokumentMalBrevserver }.size)
@@ -647,15 +647,15 @@ class DokumentBestillingControllerTest : AbstractControllerTest() {
                 stubUtils.Verify().verifyHentPersonCalled(BARN2.ident.verdi)
                 stubUtils.Verify().verifyOpprettJournalpostCalledWith(
                     "{\"skalFerdigstilles\":false," +
-                            "\"tittel\":\"$tittel\"," +
-                            "\"gjelderIdent\":\"${gjelderId.verdi}\"," +
-                            "\"avsenderMottaker\":{\"navn\":\"${BM1.kortnavn!!.verdi}\",\"ident\":\"${mottakerId.verdi}\",\"type\":\"FNR\",\"adresse\":null}," +
-                            "\"dokumenter\":[{\"tittel\":\"$tittel\",\"brevkode\":\"${dokumentMal.kode}\",\"dokumentmalId\":\"BI01S02\"}]," +
-                            "\"tilknyttSaker\":[\"$saksnummer\"]," +
-                            "\"tema\":\"BID\"," +
-                            "\"journalposttype\":\"UTGÅENDE\"," +
-                            "\"journalførendeEnhet\":\"4806\"," +
-                            "\"saksbehandlerIdent\":\"Z99999\"}",
+                        "\"tittel\":\"$tittel\"," +
+                        "\"gjelderIdent\":\"${gjelderId.verdi}\"," +
+                        "\"avsenderMottaker\":{\"navn\":\"${BM1.kortnavn!!.verdi}\",\"ident\":\"${mottakerId.verdi}\",\"type\":\"FNR\",\"adresse\":null}," +
+                        "\"dokumenter\":[{\"tittel\":\"$tittel\",\"brevkode\":\"${dokumentMal.kode}\",\"dokumentmalId\":\"BI01S02\"}]," +
+                        "\"tilknyttSaker\":[\"$saksnummer\"]," +
+                        "\"tema\":\"BID\"," +
+                        "\"journalposttype\":\"UTGÅENDE\"," +
+                        "\"journalførendeEnhet\":\"4806\"," +
+                        "\"saksbehandlerIdent\":\"Z99999\"}",
                 )
             }
         }
@@ -845,10 +845,10 @@ class DokumentBestillingControllerTest : AbstractControllerTest() {
                 saksnummer = "123213",
                 enhet = "4806",
                 mottaker =
-                MottakerTo(
-                    ident = SAMHANDLER_IDENT,
-                    navn = SAKSBEHANDLER_NAVN,
-                ),
+                    MottakerTo(
+                        ident = SAMHANDLER_IDENT,
+                        navn = SAKSBEHANDLER_NAVN,
+                    ),
             )
 
         jmsTestConsumer.withOnlinebrev {
@@ -885,9 +885,9 @@ class DokumentBestillingControllerTest : AbstractControllerTest() {
                 saksnummer = "123213",
                 enhet = "4806",
                 mottaker =
-                MottakerTo(
-                    ident = BM1.ident.verdi,
-                ),
+                    MottakerTo(
+                        ident = BM1.ident.verdi,
+                    ),
             )
 
         jmsTestConsumer.withOnlinebrev {
@@ -973,28 +973,28 @@ class DokumentBestillingControllerTest : AbstractControllerTest() {
         val sak =
             createSakResponse().copy(
                 roller =
-                listOf(
-                    RolleDto(
-                        fødselsnummer = BM1.ident,
-                        type = Rolletype.BIDRAGSMOTTAKER,
+                    listOf(
+                        RolleDto(
+                            fødselsnummer = BM1.ident,
+                            type = Rolletype.BIDRAGSMOTTAKER,
+                        ),
+                        RolleDto(
+                            fødselsnummer = BP1.ident,
+                            type = Rolletype.BIDRAGSPLIKTIG,
+                        ),
+                        RolleDto(
+                            fødselsnummer = BARN1.ident,
+                            type = Rolletype.BARN,
+                        ),
+                        RolleDto(
+                            fødselsnummer = BARN2.ident,
+                            type = Rolletype.BARN,
+                        ),
+                        RolleDto(
+                            fødselsnummer = ANNEN_MOTTAKER.ident,
+                            type = Rolletype.REELMOTTAKER,
+                        ),
                     ),
-                    RolleDto(
-                        fødselsnummer = BP1.ident,
-                        type = Rolletype.BIDRAGSPLIKTIG,
-                    ),
-                    RolleDto(
-                        fødselsnummer = BARN1.ident,
-                        type = Rolletype.BARN,
-                    ),
-                    RolleDto(
-                        fødselsnummer = BARN2.ident,
-                        type = Rolletype.BARN,
-                    ),
-                    RolleDto(
-                        fødselsnummer = ANNEN_MOTTAKER.ident,
-                        type = Rolletype.REELMOTTAKER,
-                    ),
-                ),
             )
         stubDefaultValues()
         stubUtils.stubHentSak(sak)

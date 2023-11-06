@@ -46,14 +46,16 @@ class JMSConfig(private val mqProperties: MQProperties) {
 
     @Bean
     @Profile("nais")
-    fun replyDestinationQueue(@Value("\${BREVSERVER_KVITTERING_QUEUE}") replyQueueName: String): Destination = MQQueue(replyQueueName)
+    fun replyDestinationQueue(
+        @Value("\${BREVSERVER_KVITTERING_QUEUE}") replyQueueName: String,
+    ): Destination = MQQueue(replyQueueName)
 
     @Bean
     @Throws(JMSException::class)
     fun onlinebrevTemplate(
         baseJmsTemplate: JmsTemplate,
         @Value("\${BREVSERVER_ONLINEBREV_QUEUE}") queueName: String,
-        replyDestinationQueue: Destination
+        replyDestinationQueue: Destination,
     ): JmsTemplate {
         baseJmsTemplate.defaultDestinationName = queueName
         val jaxb2Marshaller = Jaxb2Marshaller()

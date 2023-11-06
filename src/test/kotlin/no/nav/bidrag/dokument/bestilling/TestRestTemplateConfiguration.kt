@@ -34,18 +34,19 @@ class TestRestTemplateConfiguration {
     fun generateBearerToken(): String {
         val iss = mockOAuth2Server.issuerUrl("aad")
         val newIssuer = iss.newBuilder().host("localhost").build()
-        val token = mockOAuth2Server.issueToken(
-            "aad",
-            clientId,
-            DefaultOAuth2TokenCallback(
+        val token =
+            mockOAuth2Server.issueToken(
                 "aad",
-                SAKSBEHANDLER_IDENT,
-                JOSEObjectType.JWT.type,
-                listOf(clientId),
-                mapOf("iss" to newIssuer.toString(), "azp_name" to "bidrag-dokument-bestilling-test"),
-                3600
+                clientId,
+                DefaultOAuth2TokenCallback(
+                    "aad",
+                    SAKSBEHANDLER_IDENT,
+                    JOSEObjectType.JWT.type,
+                    listOf(clientId),
+                    mapOf("iss" to newIssuer.toString(), "azp_name" to "bidrag-dokument-bestilling-test"),
+                    3600,
+                ),
             )
-        )
         return "Bearer " + token.serialize()
     }
 }

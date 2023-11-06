@@ -15,7 +15,6 @@ import org.springframework.cache.support.NoOpCacheManager
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Profile
 
-
 @TestConfiguration
 class JmsTestConfig {
     init {
@@ -36,8 +35,9 @@ class JmsTestConfig {
 
     @Bean
     @Profile("!nais")
-    fun replyDestinationQueue(@Value("\${BREVSERVER_KVITTERING_QUEUE}") replyQueueName: String): Destination = ActiveMQDestination.createDestination(replyQueueName, ActiveMQDestination.TYPE.QUEUE)
-
+    fun replyDestinationQueue(
+        @Value("\${BREVSERVER_KVITTERING_QUEUE}") replyQueueName: String,
+    ): Destination = ActiveMQDestination.createDestination(replyQueueName, ActiveMQDestination.TYPE.QUEUE)
 
     @Bean
     fun onlineBrevQueue(
