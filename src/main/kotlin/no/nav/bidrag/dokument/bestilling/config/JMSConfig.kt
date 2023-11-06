@@ -1,9 +1,11 @@
 package no.nav.bidrag.dokument.bestilling.config
 
 import com.ibm.mq.constants.CMQC
-import com.ibm.mq.jms.MQQueueConnectionFactory
-import com.ibm.msg.client.jms.JmsConstants
-import com.ibm.msg.client.wmq.common.CommonConstants
+import com.ibm.mq.jakarta.jms.MQQueueConnectionFactory
+import com.ibm.msg.client.jakarta.jms.JmsConstants
+import com.ibm.msg.client.jakarta.wmq.common.CommonConstants
+import jakarta.jms.ConnectionFactory
+import jakarta.xml.bind.Marshaller
 import no.nav.bidrag.dokument.bestilling.bestilling.produksjon.dto.BrevBestilling
 import no.nav.bidrag.dokument.bestilling.config.jms.LoggingMarshallingMessageConverter
 import no.nav.bidrag.dokument.bestilling.config.jms.MQProperties
@@ -18,10 +20,7 @@ import org.springframework.jms.connection.CachingConnectionFactory
 import org.springframework.jms.connection.UserCredentialsConnectionFactoryAdapter
 import org.springframework.jms.core.JmsTemplate
 import org.springframework.oxm.jaxb.Jaxb2Marshaller
-import java.util.*
-import javax.jms.ConnectionFactory
-import javax.jms.JMSException
-import javax.xml.bind.Marshaller
+import java.util.Locale
 
 @Configuration
 @EnableJms

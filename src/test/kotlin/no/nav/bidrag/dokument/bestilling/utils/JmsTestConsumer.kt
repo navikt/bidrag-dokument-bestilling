@@ -1,5 +1,10 @@
 package no.nav.bidrag.dokument.bestilling.utils
 
+import jakarta.jms.Connection
+import jakarta.jms.MessageConsumer
+import jakarta.jms.Queue
+import jakarta.jms.Session
+import jakarta.xml.bind.JAXB
 import mu.KotlinLogging
 import org.apache.activemq.command.ActiveMQTextMessage
 import org.springframework.beans.factory.annotation.Autowired
