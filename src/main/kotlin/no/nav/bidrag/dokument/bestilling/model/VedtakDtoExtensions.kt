@@ -28,6 +28,7 @@ import java.math.BigDecimal
 
 private val objectMapper = ObjectMapper().findAndRegisterModules()
     .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
+
 fun VedtakDto.hentInntekter(referanser: List<String>, resultatKode: String): List<Inntekt> {
     val sluttBeregninger = hentGrunnagDetaljer(
         GrunnlagType.SLUTTBEREGNING_BBM,

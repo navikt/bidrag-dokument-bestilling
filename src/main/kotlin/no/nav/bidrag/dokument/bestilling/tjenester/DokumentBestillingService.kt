@@ -9,7 +9,7 @@ import no.nav.bidrag.dokument.bestilling.bestilling.dto.DokumentMal
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.DokumentMalBucket
 import no.nav.bidrag.dokument.bestilling.model.kanIkkeBestilleDokumentMal
 import no.nav.bidrag.dokument.bestilling.model.manglerDataGrunnlag
-import no.nav.bidrag.dokument.dto.DokumentArkivSystemDto
+import no.nav.bidrag.transport.dokument.DokumentArkivSystemDto
 import org.springframework.stereotype.Service
 
 @Service

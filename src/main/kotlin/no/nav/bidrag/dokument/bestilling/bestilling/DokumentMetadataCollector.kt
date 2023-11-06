@@ -32,18 +32,18 @@ import no.nav.bidrag.dokument.bestilling.tjenester.PersonService
 import no.nav.bidrag.dokument.bestilling.tjenester.SakService
 import no.nav.bidrag.dokument.bestilling.tjenester.SjablongService
 import no.nav.bidrag.dokument.bestilling.tjenester.VedtakService
-import no.nav.bidrag.domain.enums.Adressetype
-import no.nav.bidrag.domain.enums.Rolletype
-import no.nav.bidrag.domain.ident.PersonIdent
-import no.nav.bidrag.domain.string.Adresselinje1
-import no.nav.bidrag.domain.string.Adresselinje2
-import no.nav.bidrag.domain.string.Adresselinje3
-import no.nav.bidrag.domain.string.Bruksenhetsnummer
-import no.nav.bidrag.domain.string.FulltNavn
-import no.nav.bidrag.domain.string.Landkode2
-import no.nav.bidrag.domain.string.Landkode3
-import no.nav.bidrag.domain.string.Postnummer
-import no.nav.bidrag.domain.string.Poststed
+import no.nav.bidrag.domene.enums.Adressetype
+import no.nav.bidrag.domene.enums.Rolletype
+import no.nav.bidrag.domene.ident.Personident
+import no.nav.bidrag.domene.streng.Adresselinje1
+import no.nav.bidrag.domene.streng.Adresselinje2
+import no.nav.bidrag.domene.streng.Adresselinje3
+import no.nav.bidrag.domene.streng.Bruksenhetsnummer
+import no.nav.bidrag.domene.streng.FulltNavn
+import no.nav.bidrag.domene.streng.Landkode2
+import no.nav.bidrag.domene.streng.Landkode3
+import no.nav.bidrag.domene.streng.Postnummer
+import no.nav.bidrag.domene.streng.Poststed
 import no.nav.bidrag.transport.person.PersonAdresseDto
 import no.nav.bidrag.transport.person.PersonDto
 import no.nav.bidrag.transport.sak.BidragssakDto
@@ -80,7 +80,7 @@ class DokumentMetadataCollector(
             saksbehandler = hentSaksbehandler(forespørsel),
             enhet = enhet,
             datoSakOpprettet = sak.opprettetDato.verdi,
-            rmISak = sak.roller.any { it.type == Rolletype.RM },
+            rmISak = sak.roller.any { it.type == Rolletype.REELMOTTAKER },
             sjablonDetaljer = sjablongService.hentSjablonDetaljer(),
             sakDetaljer = SakDetaljer(
                 harUkjentPart = sak.ukjentPart.verdi,
@@ -113,7 +113,7 @@ class DokumentMetadataCollector(
         if (bidragsmottaker != null) {
             roller.add(
                 PartInfo(
-                    rolle = Rolletype.BM,
+                    rolle = Rolletype.BIDRAGSMOTTAKER,
                     fodselsnummer = bidragsmottaker.ident.verdi,
                     navn = if (bidragsmottaker.isKode6()) "" else bidragsmottaker.fornavnEtternavn(),
                     fodselsdato = hentFodselsdato(bidragsmottaker),
@@ -127,7 +127,7 @@ class DokumentMetadataCollector(
         if (bidragspliktig != null) {
             roller.add(
                 PartInfo(
-                    rolle = Rolletype.BP,
+                    rolle = Rolletype.BIDRAGSPLIKTIG,
                     fodselsnummer = bidragspliktig.ident.verdi,
                     navn = if (bidragspliktig.isKode6()) "" else bidragspliktig.fornavnEtternavn(),
                     fodselsdato = hentFodselsdato(bidragspliktig),
@@ -149,7 +149,7 @@ class DokumentMetadataCollector(
             soknadsbarn.addAll(forespørsel.barnIBehandling)
         }
 
-        val barn = sak.roller.filter { it.type == Rolletype.BA }
+        val barn = sak.roller.filter { it.type == Rolletype.BARN }
         barn.filter { it.fødselsnummer != null && (soknadsbarn.isEmpty() || soknadsbarn.contains(it.fødselsnummer?.verdi)) }
             .forEach {
                 val barnInfo =
@@ -327,7 +327,7 @@ class DokumentMetadataCollector(
     }
 
     private fun hentBidragsmottaker(): PersonDto? {
-        val bmFnr = hentIdentForRolle(Rolletype.BM)
+        val bmFnr = hentIdentForRolle(Rolletype.BIDRAGSMOTTAKER)
         return if (!bmFnr.isNullOrEmpty()) {
             personService.hentPerson(
                 bmFnr,
@@ -339,12 +339,12 @@ class DokumentMetadataCollector(
     }
 
     private fun hentBidragspliktig(): PersonDto? {
-        val fnr = hentIdentForRolle(Rolletype.BP)
+        val fnr = hentIdentForRolle(Rolletype.BIDRAGSPLIKTIG)
         return if (!fnr.isNullOrEmpty()) personService.hentPerson(fnr, "Bidragspliktig") else null
     }
 
     private fun hentBidragspliktigAdresse(): PersonAdresseDto? {
-        val fnr = hentIdentForRolle(Rolletype.BP)
+        val fnr = hentIdentForRolle(Rolletype.BIDRAGSPLIKTIG)
         return if (!fnr.isNullOrEmpty()) {
             personService.hentPersonAdresse(
                 fnr,
@@ -356,7 +356,7 @@ class DokumentMetadataCollector(
     }
 
     private fun hentBidragsmottakerAdresse(): PersonAdresseDto? {
-        val fnr = hentIdentForRolle(Rolletype.BM)
+        val fnr = hentIdentForRolle(Rolletype.BIDRAGSMOTTAKER)
         return if (!fnr.isNullOrEmpty()) {
             personService.hentPersonAdresse(
                 fnr,
@@ -372,7 +372,7 @@ class DokumentMetadataCollector(
         return if (forespørsel.erMottakerSamhandler() || mottakerIdent.isNullOrEmpty()) {
             PersonDto(
                 navn = FulltNavn(forespørsel.mottaker?.navn ?: ""),
-                ident = PersonIdent(mottakerIdent ?: "")
+                ident = Personident(mottakerIdent ?: "")
             )
         } else {
             personService.hentPerson(mottakerIdent, "Mottaker")
@@ -402,8 +402,9 @@ class DokumentMetadataCollector(
     }
 
     private fun hentGjelderFraRoller(): Ident? {
-        return hentIdentForRolle(Rolletype.BM) ?: hentIdentForRolle(Rolletype.BP)
-        ?: hentIdentForRolle(Rolletype.BA)
+        return hentIdentForRolle(Rolletype.BIDRAGSMOTTAKER)
+            ?: hentIdentForRolle(Rolletype.BIDRAGSPLIKTIG)
+            ?: hentIdentForRolle(Rolletype.BARN)
     }
 
     private fun hentSaksbehandler(request: DokumentBestillingForespørsel): Saksbehandler {

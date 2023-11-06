@@ -49,7 +49,7 @@ import no.nav.bidrag.dokument.bestilling.utils.createOpprettJournalpostResponse
 import no.nav.bidrag.dokument.bestilling.utils.createPostAdresseResponse
 import no.nav.bidrag.dokument.bestilling.utils.createPostAdresseResponseUtenlandsk
 import no.nav.bidrag.dokument.bestilling.utils.createSakResponse
-import no.nav.bidrag.domain.enums.Rolletype
+import no.nav.bidrag.domene.enums.Rolletype
 import no.nav.bidrag.transport.sak.RolleDto
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
@@ -952,23 +952,23 @@ class DokumentBestillingControllerTest : AbstractControllerTest() {
             roller = listOf(
                 RolleDto(
                     fødselsnummer = BM1.ident,
-                    type = Rolletype.BM
+                    type = Rolletype.BIDRAGSMOTTAKER
                 ),
                 RolleDto(
                     fødselsnummer = BP1.ident,
-                    type = Rolletype.BP
+                    type = Rolletype.BIDRAGSPLIKTIG
                 ),
                 RolleDto(
                     fødselsnummer = BARN1.ident,
-                    type = Rolletype.BA
+                    type = Rolletype.BARN
                 ),
                 RolleDto(
                     fødselsnummer = BARN2.ident,
-                    type = Rolletype.BA
+                    type = Rolletype.BARN
                 ),
                 RolleDto(
                     fødselsnummer = ANNEN_MOTTAKER.ident,
-                    type = Rolletype.RM
+                    type = Rolletype.REELMOTTAKER
                 )
             )
         )

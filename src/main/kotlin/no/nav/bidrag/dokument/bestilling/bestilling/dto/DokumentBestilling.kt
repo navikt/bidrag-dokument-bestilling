@@ -10,19 +10,21 @@ import no.nav.bidrag.behandling.felles.enums.VedtakType
 import no.nav.bidrag.behandling.felles.grunnlag.SaksbehandlerInfo
 import no.nav.bidrag.dokument.bestilling.model.Saksbehandler
 import no.nav.bidrag.dokument.bestilling.model.SoknadFra
-import no.nav.bidrag.domain.enums.Rolletype
+import no.nav.bidrag.domene.enums.Rolletype
 import java.math.BigDecimal
 import java.time.LocalDate
 
 typealias GrunnlagRolleType = no.nav.bidrag.behandling.felles.enums.Rolle
+
 data class GrunnlagInntektType(val inntektType: InntektType? = null, val periodeBeregningsGrunnlag: Boolean? = false, val nettoKapitalInntekt: Boolean? = false) {
-    val beskrivelse get() = inntektType?.beskrivelse ?: if (periodeBeregningsGrunnlag == true) {
-        "Personens beregningsgrunnlag i perioden"
-    } else if (nettoKapitalInntekt == true) {
-        "Netto positive kapitalinntekter"
-    } else {
-        ""
-    }
+    val beskrivelse
+        get() = inntektType?.beskrivelse ?: if (periodeBeregningsGrunnlag == true) {
+            "Personens beregningsgrunnlag i perioden"
+        } else if (nettoKapitalInntekt == true) {
+            "Netto positive kapitalinntekter"
+        } else {
+            ""
+        }
     val belopstype get() = inntektType?.belopstype ?: if (periodeBeregningsGrunnlag == true) "XINN" else if (nettoKapitalInntekt == true) "XKAP" else ""
 
     override fun equals(other: Any?): Boolean {
@@ -33,6 +35,7 @@ data class GrunnlagInntektType(val inntektType: InntektType? = null, val periode
         }
     }
 }
+
 data class DokumentBestillingResult(
     val dokumentReferanse: String,
     val journalpostId: String,
@@ -59,9 +62,10 @@ data class DokumentBestilling(
 
 class Roller : MutableList<Rolle> by mutableListOf() {
     val barn: List<Barn> get() = filterIsInstance<Barn>().sortedBy { it.fodselsdato }
-    val bidragsmottaker get() = filterIsInstance<PartInfo>().find { it.rolle == Rolletype.BM }
-    val bidragspliktig get() = filterIsInstance<PartInfo>().find { it.rolle == Rolletype.BP }
+    val bidragsmottaker get() = filterIsInstance<PartInfo>().find { it.rolle == Rolletype.BIDRAGSMOTTAKER }
+    val bidragspliktig get() = filterIsInstance<PartInfo>().find { it.rolle == Rolletype.BIDRAGSPLIKTIG }
 }
+
 interface Rolle {
     val rolle: Rolletype
     val fodselsnummer: String?
@@ -70,7 +74,7 @@ interface Rolle {
 }
 
 data class Barn(
-    override val rolle: Rolletype = Rolletype.BA,
+    override val rolle: Rolletype = Rolletype.BARN,
     override val fodselsnummer: String?,
     override val navn: String,
     override val fodselsdato: LocalDate?,
@@ -80,6 +84,7 @@ data class Barn(
     val gebyrRm: Int? = null,
     val fodselsnummerRm: String? = null
 ) : Rolle
+
 data class SoknadsPart(
     val bidragsPliktigInfo: PartInfo? = null,
     val bidragsMottakerInfo: PartInfo? = null
@@ -97,6 +102,7 @@ data class PartInfo(
     val gebyr: Number? = null,
     val kravFremAv: String? = null
 ) : Rolle
+
 data class EnhetKontaktInfo(
     val navn: String,
     val telefonnummer: String,
@@ -135,6 +141,7 @@ data class Adresse(
 
 data class PeriodeFraTom(val fraDato: LocalDate, val tomDato: LocalDate? = null)
 typealias BeløpFraTil = Pair<BigDecimal, BigDecimal>
+
 fun BeløpFraTil.fraVerdi() = this.first
 fun BeløpFraTil.tilVerdi() = this.second
 data class VedtakPeriode(
@@ -147,6 +154,7 @@ data class VedtakPeriode(
     val maksInntekt: BigDecimal,
     val inntekter: List<InntektPeriode> = emptyList()
 )
+
 data class InntektPeriode(
     val fomDato: LocalDate,
     val tomDato: LocalDate? = null,
@@ -192,11 +200,13 @@ data class VedtakDetaljer(
         ?.vedtakPerioder?.find { it.tomDato == null }
         ?.beløp
 }
+
 data class BarnIHustandPeriode(
     val fomDato: LocalDate,
     val tomDato: LocalDate? = null,
     val antall: Int
 )
+
 data class VedtakBarn(
     val fodselsnummer: String,
     val navn: String?,
@@ -217,6 +227,7 @@ data class VedtakBarnStonad(
     val vedtakPerioder: List<VedtakPeriode> = emptyList(),
     val forskuddInntektgrensePerioder: List<ForskuddInntektgrensePeriode> = emptyList()
 )
+
 data class SivilstandPeriode(
     val fomDato: LocalDate,
     val tomDato: LocalDate? = null,

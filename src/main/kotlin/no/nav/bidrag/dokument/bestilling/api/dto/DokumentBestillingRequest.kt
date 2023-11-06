@@ -6,7 +6,7 @@ import no.nav.bidrag.dokument.bestilling.model.Ident
 import no.nav.bidrag.dokument.bestilling.model.Saksbehandler
 import no.nav.bidrag.dokument.bestilling.model.SpråkKoder
 import no.nav.bidrag.dokument.bestilling.model.erSamhandler
-import no.nav.bidrag.dokument.dto.DokumentArkivSystemDto
+import no.nav.bidrag.transport.dokument.DokumentArkivSystemDto
 
 @Schema(description = "Metadata som brukes ved bestilling av ny dokument")
 data class DokumentBestillingForespørsel(

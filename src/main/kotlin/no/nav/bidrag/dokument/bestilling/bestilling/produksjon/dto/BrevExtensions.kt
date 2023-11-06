@@ -5,12 +5,11 @@ import no.nav.bidrag.behandling.felles.enums.SivilstandKode
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.VedtakDetaljer
 import no.nav.bidrag.dokument.bestilling.model.BehandlingType
 import no.nav.bidrag.dokument.bestilling.model.SoknadType
-import no.nav.bidrag.domain.enums.Rolletype
+import no.nav.bidrag.domene.enums.Rolletype
 
 fun Rolletype.toKode() = when (this) {
-    Rolletype.BM -> "02"
-    Rolletype.BP -> "01"
-    Rolletype.RM -> "RM"
+    Rolletype.BIDRAGSMOTTAKER -> "02"
+    Rolletype.BIDRAGSPLIKTIG -> "01"
     else -> "00"
 }
 
@@ -21,6 +20,7 @@ fun Rolle.toKode() = when (this) {
     Rolle.SOKNADSBARN -> "03"
     else -> "00"
 }
+
 fun SivilstandKode.toKode() = when (this) {
     SivilstandKode.ENKE_ELLER_ENKEMANN, SivilstandKode.ENSLIG -> "ENKE"
     SivilstandKode.GIFT -> "GIFT"

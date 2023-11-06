@@ -5,32 +5,32 @@ import no.nav.bidrag.dokument.bestilling.api.dto.SamhandlerAdresse
 import no.nav.bidrag.dokument.bestilling.api.dto.SamhandlerInformasjon
 import no.nav.bidrag.dokument.bestilling.consumer.dto.EnhetKontaktInfoDto
 import no.nav.bidrag.dokument.bestilling.consumer.dto.EnhetPostadresseDto
-import no.nav.bidrag.dokument.dto.OpprettDokumentDto
-import no.nav.bidrag.dokument.dto.OpprettJournalpostResponse
-import no.nav.bidrag.domain.bool.LevdeAdskilt
-import no.nav.bidrag.domain.bool.UkjentPart
-import no.nav.bidrag.domain.enums.Adressetype
-import no.nav.bidrag.domain.enums.Bidragssakstatus
-import no.nav.bidrag.domain.enums.Diskresjonskode
-import no.nav.bidrag.domain.enums.Rolletype
-import no.nav.bidrag.domain.enums.Sakskategori
-import no.nav.bidrag.domain.ident.AktørId
-import no.nav.bidrag.domain.ident.PersonIdent
-import no.nav.bidrag.domain.string.Adresselinje1
-import no.nav.bidrag.domain.string.Adresselinje2
-import no.nav.bidrag.domain.string.Adresselinje3
-import no.nav.bidrag.domain.string.Bruksenhetsnummer
-import no.nav.bidrag.domain.string.Enhetsnummer
-import no.nav.bidrag.domain.string.FulltNavn
-import no.nav.bidrag.domain.string.Kortnavn
-import no.nav.bidrag.domain.string.Landkode2
-import no.nav.bidrag.domain.string.Landkode3
-import no.nav.bidrag.domain.string.Postnummer
-import no.nav.bidrag.domain.string.Poststed
-import no.nav.bidrag.domain.string.Saksnummer
-import no.nav.bidrag.domain.tid.Dødsdato
-import no.nav.bidrag.domain.tid.Fødselsdato
-import no.nav.bidrag.domain.tid.OpprettetDato
+import no.nav.bidrag.domene.bool.LevdeAdskilt
+import no.nav.bidrag.domene.bool.UkjentPart
+import no.nav.bidrag.domene.enums.Adressetype
+import no.nav.bidrag.domene.enums.Bidragssakstatus
+import no.nav.bidrag.domene.enums.Diskresjonskode
+import no.nav.bidrag.domene.enums.Rolletype
+import no.nav.bidrag.domene.enums.Sakskategori
+import no.nav.bidrag.domene.ident.AktørId
+import no.nav.bidrag.domene.ident.Personident
+import no.nav.bidrag.domene.streng.Adresselinje1
+import no.nav.bidrag.domene.streng.Adresselinje2
+import no.nav.bidrag.domene.streng.Adresselinje3
+import no.nav.bidrag.domene.streng.Bruksenhetsnummer
+import no.nav.bidrag.domene.streng.Enhetsnummer
+import no.nav.bidrag.domene.streng.FulltNavn
+import no.nav.bidrag.domene.streng.Kortnavn
+import no.nav.bidrag.domene.streng.Landkode2
+import no.nav.bidrag.domene.streng.Landkode3
+import no.nav.bidrag.domene.streng.Postnummer
+import no.nav.bidrag.domene.streng.Poststed
+import no.nav.bidrag.domene.streng.Saksnummer
+import no.nav.bidrag.domene.tid.Dødsdato
+import no.nav.bidrag.domene.tid.Fødselsdato
+import no.nav.bidrag.domene.tid.OpprettetDato
+import no.nav.bidrag.transport.dokument.OpprettDokumentDto
+import no.nav.bidrag.transport.dokument.OpprettJournalpostResponse
 import no.nav.bidrag.transport.person.PersonAdresseDto
 import no.nav.bidrag.transport.person.PersonDto
 import no.nav.bidrag.transport.sak.BidragssakDto
@@ -113,19 +113,19 @@ fun createSakResponse(): BidragssakDto {
         roller = listOf(
             RolleDto(
                 fødselsnummer = BM1.ident,
-                type = Rolletype.BM
+                type = Rolletype.BIDRAGSMOTTAKER
             ),
             RolleDto(
                 fødselsnummer = BP1.ident,
-                type = Rolletype.BP
+                type = Rolletype.BIDRAGSPLIKTIG
             ),
             RolleDto(
                 fødselsnummer = BARN1.ident,
-                type = Rolletype.BA
+                type = Rolletype.BARN
             ),
             RolleDto(
                 fødselsnummer = BARN2.ident,
-                type = Rolletype.BA
+                type = Rolletype.BARN
             )
         ),
         saksstatus = Bidragssakstatus.IN,
@@ -147,7 +147,7 @@ fun createPersonResponse(
 
 ): PersonDto {
     return PersonDto(
-        ident = PersonIdent(ident),
+        ident = Personident(ident),
         navn = FulltNavn(navn),
         kortnavn = kortNavn?.let { Kortnavn(it) },
         fødselsdato = fodselsdato?.let { Fødselsdato(it) },
