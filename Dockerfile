@@ -13,5 +13,5 @@ WORKDIR /app
 EXPOSE 8080
 ENV TZ="Europe/Oslo"
 ENV SPRING_PROFILES_ACTIVE=nais
-
+ENV JAVA_OPTS="-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005"
 CMD ["app.jar"]
