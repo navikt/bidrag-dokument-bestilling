@@ -12,8 +12,6 @@ jobs:
       id-token: "write"
     uses: navikt/bidrag-workflow/.github/workflows/deploy_prod.yaml@main
     secrets: inherit
-    with:
-      java-version: 21
 
   deploy_unleash:
     runs-on: ubuntu-latest
