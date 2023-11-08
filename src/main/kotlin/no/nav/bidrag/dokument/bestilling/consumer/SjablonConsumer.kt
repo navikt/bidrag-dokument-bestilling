@@ -21,7 +21,7 @@ class SjablonConsumer(
     @Value("\${SJABLON_URL}") url: String,
     val cacheManager: CacheManager,
 ) {
-    private val restTemplate: RestTemplate
+    private final val restTemplate: RestTemplate
 
     init {
         val restTemplate = HttpHeaderRestTemplate()

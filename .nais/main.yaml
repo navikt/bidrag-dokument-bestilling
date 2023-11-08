@@ -27,7 +27,7 @@ env:
   MQ_PORT: 1413
   MQ_HOSTNAME: mqls02.preprod.local
   MQ_CHANNEL: Q2_BDBESTILLING
-  JAVA_OPTS: -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005
+  JAVA_TOOL_OPTIONS: -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005
 outbound-access-apps:
   - bidrag-vedtak
 outbound-access-hosts:
