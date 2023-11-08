@@ -6,10 +6,10 @@ LABEL maintainer="Team Bidrag" \
 
 COPY --from=busybox /bin/sh /bin/sh
 COPY --from=busybox /bin/printenv /bin/printenv
-
-COPY ./target/bidrag-dokument-bestilling-*.jar /app/app.jar
-
 WORKDIR /app
+
+COPY ./target/app.jar app.jar
+
 EXPOSE 8080
 ENV TZ="Europe/Oslo"
 ENV SPRING_PROFILES_ACTIVE=nais
