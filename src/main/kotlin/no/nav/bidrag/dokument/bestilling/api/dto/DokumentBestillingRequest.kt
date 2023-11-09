@@ -61,7 +61,7 @@ data class MottakerTo(
     val ident: Ident? = null,
     val navn: String? = null,
     val språk: String? = null,
-    val adresse: MottakerAdresseTo? = null,
+    val adresse: MottakerAdresseTo? = null
 )
 
 data class MottakerAdresseTo(
