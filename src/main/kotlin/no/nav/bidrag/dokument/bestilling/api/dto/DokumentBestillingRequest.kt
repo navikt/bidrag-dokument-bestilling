@@ -72,7 +72,7 @@ data class MottakerAdresseTo(
     @Schema(description = "Lankode må være i ISO 3166-1 alpha-2 format") val landkode: String? = null,
     @Schema(description = "Lankode må være i ISO 3166-1 alpha-3 format") val landkode3: String? = null,
     val postnummer: String? = null,
-    val poststed: String? = null,
+    val poststed: String? = null
 )
 
 data class DokumentBestillingResponse(
