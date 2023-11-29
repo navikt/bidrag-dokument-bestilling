@@ -22,7 +22,7 @@ import no.nav.bidrag.dokument.bestilling.utils.SAKSBEHANDLER_IDENT
 import no.nav.bidrag.dokument.bestilling.utils.createEnhetKontaktInformasjon
 import no.nav.bidrag.dokument.bestilling.utils.createOpprettJournalpostResponse
 import no.nav.bidrag.dokument.bestilling.utils.createPostAdresseResponse
-import no.nav.bidrag.domene.enums.Rolletype
+import no.nav.bidrag.domene.enums.rolle.Rolletype
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
 import org.springframework.http.HttpEntity
@@ -96,10 +96,10 @@ class DokumentBestillingBrevkodeTest : AbstractControllerTest() {
                 withArg { bestilling ->
                     assertSoftly {
                         bestilling.mottaker?.spraak shouldBe "NB"
-                        bestilling.mottaker?.navn shouldBe BM1.kortnavn?.verdi
+                        bestilling.mottaker?.navn shouldBe BM1.visningsnavn
                         bestilling.mottaker?.fodselsnummer shouldBe BM1.ident.verdi
                         bestilling.mottaker?.rolle shouldBe Rolletype.BIDRAGSMOTTAKER
-                        bestilling.mottaker?.fodselsdato shouldBe BM1.fødselsdato?.verdi
+                        bestilling.mottaker?.fodselsdato shouldBe BM1.fødselsdato
                         bestilling.mottaker?.adresse shouldNotBe null
 
                         bestilling.gjelder?.fodselsnummer shouldBe gjelderId
@@ -165,25 +165,25 @@ class DokumentBestillingBrevkodeTest : AbstractControllerTest() {
                         bestilling.roller shouldHaveSize 4
                         bestilling.roller.bidragsmottaker?.fodselsnummer shouldBe BM1.ident.verdi
                         bestilling.roller.bidragsmottaker?.navn shouldBe BM1.fornavnEtternavn()
-                        bestilling.roller.bidragsmottaker?.fodselsdato shouldBe BM1.fødselsdato?.verdi
+                        bestilling.roller.bidragsmottaker?.fodselsdato shouldBe BM1.fødselsdato
                         bestilling.roller.bidragsmottaker?.landkode shouldBe "NO"
                         bestilling.roller.bidragsmottaker?.landkode3 shouldBe "NOR"
 
                         bestilling.roller.bidragspliktig?.fodselsnummer shouldBe BP1.ident.verdi
                         bestilling.roller.bidragspliktig?.navn shouldBe BP1.fornavnEtternavn()
-                        bestilling.roller.bidragspliktig?.fodselsdato shouldBe BP1.fødselsdato?.verdi
+                        bestilling.roller.bidragspliktig?.fodselsdato shouldBe BP1.fødselsdato
                         bestilling.roller.bidragspliktig?.landkode shouldBe "NO"
                         bestilling.roller.bidragspliktig?.landkode3 shouldBe "NOR"
 
                         bestilling.roller.barn shouldHaveSize 2
                         bestilling.roller.barn[0].fodselsnummer shouldBe BARN2.ident.verdi
-                        bestilling.roller.barn[0].fodselsdato shouldBe BARN2.fødselsdato?.verdi
-                        bestilling.roller.barn[0].fornavn shouldBe BARN2.fornavn?.verdi
+                        bestilling.roller.barn[0].fodselsdato shouldBe BARN2.fødselsdato
+                        bestilling.roller.barn[0].fornavn shouldBe BARN2.fornavn
                         bestilling.roller.barn[0].navn shouldBe BARN2.fornavnEtternavn()
 
                         bestilling.roller.barn[1].fodselsnummer shouldBe BARN1.ident.verdi
-                        bestilling.roller.barn[1].fodselsdato shouldBe BARN1.fødselsdato?.verdi
-                        bestilling.roller.barn[1].fornavn shouldBe BARN1.fornavn?.verdi
+                        bestilling.roller.barn[1].fodselsdato shouldBe BARN1.fødselsdato
+                        bestilling.roller.barn[1].fornavn shouldBe BARN1.fornavn
                         bestilling.roller.barn[1].navn shouldBe BARN1.fornavnEtternavn()
                     }
                 },

@@ -5,30 +5,16 @@ import no.nav.bidrag.dokument.bestilling.api.dto.SamhandlerAdresse
 import no.nav.bidrag.dokument.bestilling.api.dto.SamhandlerInformasjon
 import no.nav.bidrag.dokument.bestilling.consumer.dto.EnhetKontaktInfoDto
 import no.nav.bidrag.dokument.bestilling.consumer.dto.EnhetPostadresseDto
-import no.nav.bidrag.domene.bool.LevdeAdskilt
-import no.nav.bidrag.domene.bool.UkjentPart
-import no.nav.bidrag.domene.enums.Adressetype
-import no.nav.bidrag.domene.enums.Bidragssakstatus
-import no.nav.bidrag.domene.enums.Diskresjonskode
-import no.nav.bidrag.domene.enums.Rolletype
-import no.nav.bidrag.domene.enums.Sakskategori
-import no.nav.bidrag.domene.ident.AktørId
+import no.nav.bidrag.domene.enums.adresse.Adressetype
+import no.nav.bidrag.domene.enums.person.Diskresjonskode
+import no.nav.bidrag.domene.enums.rolle.Rolletype
+import no.nav.bidrag.domene.enums.sak.Bidragssakstatus
+import no.nav.bidrag.domene.enums.sak.Sakskategori
 import no.nav.bidrag.domene.ident.Personident
-import no.nav.bidrag.domene.streng.Adresselinje1
-import no.nav.bidrag.domene.streng.Adresselinje2
-import no.nav.bidrag.domene.streng.Adresselinje3
-import no.nav.bidrag.domene.streng.Bruksenhetsnummer
-import no.nav.bidrag.domene.streng.Enhetsnummer
-import no.nav.bidrag.domene.streng.FulltNavn
-import no.nav.bidrag.domene.streng.Kortnavn
-import no.nav.bidrag.domene.streng.Landkode2
-import no.nav.bidrag.domene.streng.Landkode3
-import no.nav.bidrag.domene.streng.Postnummer
-import no.nav.bidrag.domene.streng.Poststed
-import no.nav.bidrag.domene.streng.Saksnummer
-import no.nav.bidrag.domene.tid.Dødsdato
-import no.nav.bidrag.domene.tid.Fødselsdato
-import no.nav.bidrag.domene.tid.OpprettetDato
+import no.nav.bidrag.domene.land.Landkode2
+import no.nav.bidrag.domene.land.Landkode3
+import no.nav.bidrag.domene.organisasjon.Enhetsnummer
+import no.nav.bidrag.domene.sak.Saksnummer
 import no.nav.bidrag.transport.dokument.OpprettDokumentDto
 import no.nav.bidrag.transport.dokument.OpprettJournalpostResponse
 import no.nav.bidrag.transport.person.PersonAdresseDto
@@ -140,9 +126,9 @@ fun createSakResponse(): BidragssakDto {
             ),
         saksstatus = Bidragssakstatus.IN,
         kategori = Sakskategori.N,
-        opprettetDato = OpprettetDato(SAK_OPPRETTET_DATO),
-        levdeAdskilt = LevdeAdskilt(false),
-        ukjentPart = UkjentPart(false),
+        opprettetDato = SAK_OPPRETTET_DATO,
+        levdeAdskilt = false,
+        ukjentPart = false,
     )
 }
 
@@ -157,33 +143,34 @@ fun createPersonResponse(
 ): PersonDto {
     return PersonDto(
         ident = Personident(ident),
-        navn = FulltNavn(navn),
-        kortnavn = kortNavn?.let { Kortnavn(it) },
-        fødselsdato = fodselsdato?.let { Fødselsdato(it) },
-        dødsdato = dodsdato?.let { Dødsdato(it) },
-        aktørId = aktorId?.let { AktørId(it) },
+        navn = navn,
+        kortnavn = kortNavn,
+        visningsnavn = navn,
+        fødselsdato = fodselsdato,
+        dødsdato = dodsdato,
+        aktørId = aktorId,
         diskresjonskode = diskresjonskode,
     )
 }
 
 fun createPostAdresseResponse(): PersonAdresseDto {
     return PersonAdresseDto(
-        adresselinje1 = Adresselinje1("Adresselinje1"),
-        adresselinje2 = Adresselinje2("Adresselinje2"),
-        postnummer = Postnummer("3030"),
-        poststed = Poststed("Drammen"),
+        adresselinje1 = "Adresselinje1",
+        adresselinje2 = "Adresselinje2",
+        postnummer = "3030",
+        poststed = "Drammen",
         land = Landkode2("NO"),
         land3 = Landkode3("NOR"),
-        bruksenhetsnummer = Bruksenhetsnummer("H0201"),
+        bruksenhetsnummer = "H0201",
         adressetype = Adressetype.BOSTEDSADRESSE,
     )
 }
 
 fun createPostAdresseResponseUtenlandsk(): PersonAdresseDto {
     return PersonAdresseDto(
-        adresselinje1 = Adresselinje1("Utenlandsk Adresselinje1"),
-        adresselinje2 = Adresselinje2("Utenlandsk Adresselinje2"),
-        adresselinje3 = Adresselinje3("United states of America"),
+        adresselinje1 = "Utenlandsk Adresselinje1",
+        adresselinje2 = "Utenlandsk Adresselinje2",
+        adresselinje3 = "United states of America",
         land = Landkode2("US"),
         land3 = Landkode3("USA"),
         adressetype = Adressetype.BOSTEDSADRESSE,

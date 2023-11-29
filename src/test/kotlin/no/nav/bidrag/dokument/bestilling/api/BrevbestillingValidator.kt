@@ -36,23 +36,23 @@ fun BrevBestilling.validateKontaktInformasjon(
     brev?.kontaktInfo?.returAdresse?.land shouldBe ""
     brev?.kontaktInfo?.returAdresse?.shouldBeEqualToComparingFields(brev?.kontaktInfo?.postadresse as BrevKontaktinfo.Adresse)
 
-    brev?.mottaker?.navn shouldBe bm.kortnavn?.verdi
-    brev?.mottaker?.adresselinje1 shouldBe adresse.adresselinje1?.verdi
-    brev?.mottaker?.adresselinje2 shouldBe adresse.adresselinje2?.verdi
+    brev?.mottaker?.navn shouldBe bm.visningsnavn
+    brev?.mottaker?.adresselinje1 shouldBe adresse.adresselinje1
+    brev?.mottaker?.adresselinje2 shouldBe adresse.adresselinje2
     brev?.mottaker?.adresselinje3 shouldBe "3030 Drammen"
-    brev?.mottaker?.boligNr shouldBe adresse.bruksenhetsnummer?.verdi
-    brev?.mottaker?.postnummer shouldBe adresse.postnummer?.verdi
+    brev?.mottaker?.boligNr shouldBe adresse.bruksenhetsnummer
+    brev?.mottaker?.postnummer shouldBe adresse.postnummer
     brev?.mottaker?.spraak shouldBe "NB"
     brev?.mottaker?.rolle shouldBe "02"
     brev?.mottaker?.fodselsnummer shouldBe bm.ident.verdi
-    brev?.mottaker?.fodselsdato shouldBe bm.fødselsdato?.verdi
+    brev?.mottaker?.fodselsdato shouldBe bm.fødselsdato
 
     brev?.parter?.bmfnr shouldBe bm.ident.verdi
     brev?.parter?.bmnavn shouldBe bm.fornavnEtternavn()
     brev?.parter?.bpfnr shouldBe bp.ident.verdi
     brev?.parter?.bpnavn shouldBe bp.fornavnEtternavn()
-    brev?.parter?.bmfodselsdato shouldBe bm.fødselsdato?.verdi
-    brev?.parter?.bpfodselsdato shouldBe bp.fødselsdato?.verdi
+    brev?.parter?.bmfodselsdato shouldBe bm.fødselsdato
+    brev?.parter?.bpfodselsdato shouldBe bp.fødselsdato
 }
 
 fun BidragBarn.validerInntekt(

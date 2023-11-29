@@ -100,7 +100,7 @@ class VedtakService(private val bidragVedtakConsumer: BidragVedtakConsumer, priv
         val personInfo = personService.hentPerson(soknadBarn.fnr)
         return VedtakBarn(
             fodselsnummer = soknadBarn.fnr,
-            navn = personInfo.kortnavn?.verdi,
+            navn = personInfo.visningsnavn,
             harSammeAdresse = barnInfo?.harSammeAdresse ?: true,
             bostatusPerioder = bostatus.map { BostatusPeriode(it.datoFom, it.datoTil, it.bostatusKode) },
             stonader = hentStonader(soknadBarn.fnr, vedtak),

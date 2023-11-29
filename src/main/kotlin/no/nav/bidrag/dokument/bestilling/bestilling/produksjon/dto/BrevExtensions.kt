@@ -5,7 +5,7 @@ import no.nav.bidrag.behandling.felles.enums.SivilstandKode
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.VedtakDetaljer
 import no.nav.bidrag.dokument.bestilling.model.BehandlingType
 import no.nav.bidrag.dokument.bestilling.model.SoknadType
-import no.nav.bidrag.domene.enums.Rolletype
+import no.nav.bidrag.domene.enums.rolle.Rolletype
 
 fun Rolletype.toKode() =
     when (this) {
