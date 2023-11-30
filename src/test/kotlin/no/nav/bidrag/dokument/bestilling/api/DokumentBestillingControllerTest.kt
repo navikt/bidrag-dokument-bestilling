@@ -49,7 +49,7 @@ import no.nav.bidrag.dokument.bestilling.utils.createOpprettJournalpostResponse
 import no.nav.bidrag.dokument.bestilling.utils.createPostAdresseResponse
 import no.nav.bidrag.dokument.bestilling.utils.createPostAdresseResponseUtenlandsk
 import no.nav.bidrag.dokument.bestilling.utils.createSakResponse
-import no.nav.bidrag.domene.enums.Rolletype
+import no.nav.bidrag.domene.enums.rolle.Rolletype
 import no.nav.bidrag.transport.sak.RolleDto
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
@@ -229,7 +229,7 @@ class DokumentBestillingControllerTest : AbstractControllerTest() {
                 message.brev?.barnISak?.shouldHaveAtLeastSize(1)
 
                 val barnISak1 = message.brev?.barnISak?.get(0)!!
-                barnISak1.fDato shouldBe BARN1.fødselsdato?.verdi
+                barnISak1.fDato shouldBe BARN1.fødselsdato
                 barnISak1.fnr shouldBe BARN1.ident.verdi
                 barnISak1.navn shouldBe BARN1.fornavnEtternavn()
                 barnISak1.personIdRm shouldBe ""
@@ -489,13 +489,13 @@ class DokumentBestillingControllerTest : AbstractControllerTest() {
                 message.brev?.barnISak?.shouldHaveSize(2)
 
                 val barnISak1 = message.brev?.barnISak?.get(0)!!
-                barnISak1.fDato shouldBe BARN2.fødselsdato?.verdi
+                barnISak1.fDato shouldBe BARN2.fødselsdato
                 barnISak1.fnr shouldBe BARN2.ident.verdi
                 barnISak1.navn shouldBe BARN2.fornavnEtternavn()
                 barnISak1.belForskudd shouldBe BigDecimal(1320).setScale(2)
 
                 val barnISak2 = message.brev?.barnISak?.get(1)!!
-                barnISak2.fDato shouldBe BARN1.fødselsdato?.verdi
+                barnISak2.fDato shouldBe BARN1.fødselsdato
                 barnISak2.fnr shouldBe BARN1.ident.verdi
                 barnISak2.navn shouldBe BARN1.fornavnEtternavn()
                 barnISak2.belForskudd shouldBe BigDecimal(1320).setScale(2)
@@ -618,13 +618,13 @@ class DokumentBestillingControllerTest : AbstractControllerTest() {
                 message.brev?.barnISak?.shouldHaveAtLeastSize(2)
                 message.brev?.barnISak?.get(0)?.fnr shouldBe BARN2.ident.verdi
                 message.brev?.barnISak?.get(0)?.navn shouldBe BARN2.fornavnEtternavn()
-                message.brev?.barnISak?.get(0)?.fDato shouldBe BARN2.fødselsdato?.verdi
+                message.brev?.barnISak?.get(0)?.fDato shouldBe BARN2.fødselsdato
                 message.brev?.barnISak?.get(0)?.personIdRm shouldBe ""
                 message.brev?.barnISak?.get(0)?.belopGebyrRm shouldBe ""
                 message.brev?.barnISak?.get(0)?.belForskudd shouldBe null
                 message.brev?.barnISak?.get(0)?.belBidrag shouldBe null
 
-                message.brev?.barnISak?.get(1)?.fDato shouldBe BARN1.fødselsdato?.verdi
+                message.brev?.barnISak?.get(1)?.fDato shouldBe BARN1.fødselsdato
                 message.brev?.barnISak?.get(1)?.fnr shouldBe BARN1.ident!!.verdi
                 message.brev?.barnISak?.get(1)?.navn shouldBe BARN1.fornavnEtternavn()
                 message.brev?.barnISak?.get(1)?.personIdRm shouldBe ""
@@ -649,7 +649,7 @@ class DokumentBestillingControllerTest : AbstractControllerTest() {
                     "{\"skalFerdigstilles\":false," +
                         "\"tittel\":\"$tittel\"," +
                         "\"gjelderIdent\":\"${gjelderId.verdi}\"," +
-                        "\"avsenderMottaker\":{\"navn\":\"${BM1.kortnavn!!.verdi}\",\"ident\":\"${mottakerId.verdi}\",\"type\":\"FNR\",\"adresse\":null}," +
+                        "\"avsenderMottaker\":{\"navn\":\"${BM1.visningsnavn}\",\"ident\":\"${mottakerId.verdi}\",\"type\":\"FNR\",\"adresse\":null}," +
                         "\"dokumenter\":[{\"tittel\":\"$tittel\",\"brevkode\":\"${dokumentMal.kode}\",\"dokumentmalId\":\"BI01S02\"}]," +
                         "\"tilknyttSaker\":[\"$saksnummer\"]," +
                         "\"tema\":\"BID\"," +
@@ -703,7 +703,7 @@ class DokumentBestillingControllerTest : AbstractControllerTest() {
             assertSoftly {
                 message.brev?.barnISak?.shouldHaveSize(1)
 
-                message.brev?.barnISak?.get(0)?.fDato shouldBe BARN1.fødselsdato?.verdi
+                message.brev?.barnISak?.get(0)?.fDato shouldBe BARN1.fødselsdato
                 message.brev?.barnISak?.get(0)?.fnr shouldBe BARN1.ident!!.verdi
             }
         }
@@ -745,17 +745,17 @@ class DokumentBestillingControllerTest : AbstractControllerTest() {
             val message: BrevBestilling = this.getMessageAsObject(BrevBestilling::class.java)!!
             assertSoftly {
                 message.brev?.spraak shouldBe "EN"
-                message.brev?.mottaker?.navn shouldBe BM1.kortnavn?.verdi
-                message.brev?.mottaker?.adresselinje1 shouldBe bmAdresse.adresselinje1?.verdi
-                message.brev?.mottaker?.adresselinje2 shouldBe bmAdresse.adresselinje2?.verdi
-                message.brev?.mottaker?.adresselinje3 shouldBe bmAdresse.adresselinje3?.verdi
+                message.brev?.mottaker?.navn shouldBe BM1.visningsnavn
+                message.brev?.mottaker?.adresselinje1 shouldBe bmAdresse.adresselinje1
+                message.brev?.mottaker?.adresselinje2 shouldBe bmAdresse.adresselinje2
+                message.brev?.mottaker?.adresselinje3 shouldBe bmAdresse.adresselinje3
                 message.brev?.mottaker?.adresselinje4 shouldBe "USA"
                 message.brev?.mottaker?.boligNr shouldBe ""
                 message.brev?.mottaker?.postnummer shouldBe ""
                 message.brev?.mottaker?.spraak shouldBe "EN"
                 message.brev?.mottaker?.rolle shouldBe "02"
                 message.brev?.mottaker?.fodselsnummer shouldBe BM1.ident.verdi
-                message.brev?.mottaker?.fodselsdato shouldBe BM1.fødselsdato?.verdi
+                message.brev?.mottaker?.fodselsdato shouldBe BM1.fødselsdato
 
                 message.brev?.kontaktInfo?.returAdresse?.land shouldBe "USA"
 
@@ -902,7 +902,7 @@ class DokumentBestillingControllerTest : AbstractControllerTest() {
             response.statusCode shouldBe HttpStatus.OK
 
             val message = this.getMessageAsObject(BrevBestilling::class.java)!!
-            message.brev?.mottaker?.navn shouldBe BM1.kortnavn?.verdi
+            message.brev?.mottaker?.navn shouldBe BM1.visningsnavn
             message.brev?.mottaker?.adresselinje1 shouldBe ""
             message.brev?.mottaker?.adresselinje2 shouldBe ""
             message.brev?.mottaker?.adresselinje3 shouldBe ""

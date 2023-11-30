@@ -22,12 +22,13 @@
   <appender name="secureLog" class="ch.qos.logback.core.ConsoleAppender">
     <layout class="ch.qos.logback.classic.PatternLayout">
       <Pattern>
-        SECURE_LOG -- %d{yyyy-MM-dd HH:mm:ss} %X{correlationId} [%thread] %-5level %logger{70} - %msg%n
+        SECURE_LOG -- %d{yyyy-MM-dd HH:mm:ss} %X{correlationId} [%thread] %-5level %logger{70} -
+        %msg%n
       </Pattern>
     </layout>
   </appender>
 
-  <springProfile name="nais">
+  <springProfile name="nais2">
     <appender name="secureLog" class="ch.qos.logback.core.rolling.RollingFileAppender">
       <file>/secure-logs/secure.log</file>
       <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
@@ -38,7 +39,7 @@
       <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
         <maxFileSize>50MB</maxFileSize>
       </triggeringPolicy>
-      <encoder class="net.logstash.logback.encoder.LogstashEncoder" />
+      <encoder class="net.logstash.logback.encoder.LogstashEncoder"/>
     </appender>
   </springProfile>
 
@@ -56,7 +57,7 @@
     <appender-ref ref="stdout_json"/>
   </root>
 
-  <logger name="secureLogger" level="INFO" additivity="false" >
-    <appender-ref ref="secureLog" />
+  <logger name="secureLogger" level="INFO" additivity="false">
+    <appender-ref ref="secureLog"/>
   </logger>
 </configuration>

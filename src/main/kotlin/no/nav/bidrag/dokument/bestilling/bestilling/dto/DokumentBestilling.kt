@@ -10,7 +10,7 @@ import no.nav.bidrag.behandling.felles.enums.VedtakType
 import no.nav.bidrag.behandling.felles.grunnlag.SaksbehandlerInfo
 import no.nav.bidrag.dokument.bestilling.model.Saksbehandler
 import no.nav.bidrag.dokument.bestilling.model.SoknadFra
-import no.nav.bidrag.domene.enums.Rolletype
+import no.nav.bidrag.domene.enums.rolle.Rolletype
 import java.math.BigDecimal
 import java.time.LocalDate
 
@@ -26,14 +26,15 @@ data class GrunnlagInntektType(val inntektType: InntektType? = null, val periode
             } else {
                 ""
             }
-    val belopstype get() =
-        inntektType?.belopstype ?: if (periodeBeregningsGrunnlag == true) {
-            "XINN"
-        } else if (nettoKapitalInntekt == true) {
-            "XKAP"
-        } else {
-            ""
-        }
+    val belopstype
+        get() =
+            inntektType?.belopstype ?: if (periodeBeregningsGrunnlag == true) {
+                "XINN"
+            } else if (nettoKapitalInntekt == true) {
+                "XKAP"
+            } else {
+                ""
+            }
 
     override fun equals(other: Any?): Boolean {
         return if (other is GrunnlagInntektType) {
