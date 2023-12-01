@@ -1,7 +1,7 @@
 [
   {
     "kode": "BI01P11",
-    "tittel": "NOTAT P11 T",
+    "tittel": "Notat P11 T",
     "enabled": true,
     "dokumentType": "NOTAT",
     "kreverDataGrunnlag": {
@@ -31,7 +31,7 @@
   },
   {
     "kode": "BI01X01",
-    "tittel": "REFERAT FRA SAMTALE",
+    "tittel": "Referat fra samtale",
     "enabled": true,
     "dokumentType": "NOTAT",
     "kreverDataGrunnlag": {
@@ -46,7 +46,7 @@
   },
   {
     "kode": "BI01X02",
-    "tittel": "ELEKTRONISK DIALOG",
+    "tittel": "Elektronisk dialog",
     "enabled": true,
     "dokumentType": "NOTAT",
     "kreverDataGrunnlag": {
@@ -211,7 +211,7 @@
   },
   {
     "kode": "BI01G01",
-    "tittel": "Vedtak innkrev. barnebidrag og gjeld",
+    "tittel": "Vedtak innkrevering barnebidrag og gjeld",
     "kreverDataGrunnlag": {
       "vedtak": true,
       "behandling": false,
@@ -475,7 +475,7 @@
   },
   {
     "kode": "BI01S32",
-    "tittel": "Fastsettelse eget tiltak varsel til BM",
+    "tittel": "Fastsettelse eget tiltak varsel til Bidragsmottaker",
     "kreverDataGrunnlag": {
       "vedtak": false,
       "behandling": false,
@@ -805,7 +805,7 @@
   },
   {
     "kode": "BI01S44",
-    "tittel": "Fastsettelse ektefellebidrag varsel til BP",
+    "tittel": "Fastsettelse ektefellebidrag varsel til Bidragspliktig",
     "kreverDataGrunnlag": {
       "vedtak": false,
       "behandling": false,
@@ -818,7 +818,7 @@
   },
   {
     "kode": "BI01S37",
-    "tittel": "Bortfall ektefellebidrag BP død orientering til BM",
+    "tittel": "Bortfall ektefellebidrag Bidragspliktig død orientering til Bidragsmottaker",
     "kreverDataGrunnlag": {
       "vedtak": false,
       "behandling": false,
@@ -1156,7 +1156,7 @@
   },
   {
     "kode": "BI01S50",
-    "tittel": "Ettergivelse oppfostringsbidrag orientering til BP",
+    "tittel": "Ettergivelse oppfostringsbidrag orientering til Bidragspliktig",
     "kreverDataGrunnlag": {
       "vedtak": false,
       "behandling": false,
