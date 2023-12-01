@@ -316,7 +316,7 @@
   },
   {
     "kode": "BI01S60",
-    "tittel": "Infobrev til partene oversendelse klageinstans",
+    "tittel": "Klagen er sendt til NAV Klageinstans",
     "kreverDataGrunnlag": {
       "vedtak": false,
       "behandling": false,
