@@ -76,15 +76,15 @@ data class DokumentMalBucketUtland(
     override val innholdType: InnholdType = InnholdType.VARSEL,
     override val gruppeVisningsnavn: String,
 ) : DokumentMalBucket(
-    kode = kode,
-    beskrivelse = beskrivelse,
-    folderName = folderName,
-    tittel = tittel,
-    tilhørerEnheter = tilhørerEnheter,
-    språk = språk,
-    innholdType = innholdType,
-    gruppeVisningsnavn = gruppeVisningsnavn,
-)
+        kode = kode,
+        beskrivelse = beskrivelse,
+        folderName = folderName,
+        tittel = tittel,
+        tilhørerEnheter = tilhørerEnheter,
+        språk = språk,
+        innholdType = innholdType,
+        gruppeVisningsnavn = gruppeVisningsnavn,
+    )
 
 data class DokumentMalBucketFarskap(
     override val folderName: String = "vedlegg_farskap",
@@ -95,14 +95,14 @@ data class DokumentMalBucketFarskap(
     override val innholdType: InnholdType = InnholdType.VARSEL,
     override val gruppeVisningsnavn: String,
 ) : DokumentMalBucket(
-    kode = kode,
-    beskrivelse = beskrivelse,
-    folderName = folderName,
-    tittel = tittel,
-    tilhørerEnheter = tilhørerEnheter,
-    innholdType = innholdType,
-    gruppeVisningsnavn = gruppeVisningsnavn,
-)
+        kode = kode,
+        beskrivelse = beskrivelse,
+        folderName = folderName,
+        tittel = tittel,
+        tilhørerEnheter = tilhørerEnheter,
+        innholdType = innholdType,
+        gruppeVisningsnavn = gruppeVisningsnavn,
+    )
 
 open class DokumentMalBucket(
     override val kode: String,
@@ -121,17 +121,17 @@ open class DokumentMalBucket(
     open val språk: StøttetSpråk = StøttetSpråk.NB,
     open val gruppeVisningsnavn: String? = null,
 ) : DokumentMal(
-    kode = kode,
-    beskrivelse = beskrivelse,
-    tittel = tittel,
-    dokumentType = dokumentType,
-    bestillingSystem = bestillingSystem,
-    batchbrev = batchbrev,
-    enabled = enabled,
-    kreverDataGrunnlag = kreverDataGrunnlag,
-    innholdType = innholdType,
-    redigerbar = redigerbar,
-) {
+        kode = kode,
+        beskrivelse = beskrivelse,
+        tittel = tittel,
+        dokumentType = dokumentType,
+        bestillingSystem = bestillingSystem,
+        batchbrev = batchbrev,
+        enabled = enabled,
+        kreverDataGrunnlag = kreverDataGrunnlag,
+        innholdType = innholdType,
+        redigerbar = redigerbar,
+    ) {
     private val bucketFilename get() = filsti?.substringBefore(".pdf") ?: kode
     val filePath get() = "$folderName/$bucketFilename.pdf"
 }
@@ -149,17 +149,17 @@ data class DokumentMalBrevserver(
     override val bestillingSystem: BestillingSystemType = BestillingSystem.BREVSERVER,
     val støttetSpråk: List<StøttetSpråk> = listOf(StøttetSpråk.NB),
 ) : DokumentMal(
-    kode = kode,
-    beskrivelse = beskrivelse,
-    tittel = tittel,
-    dokumentType = dokumentType,
-    bestillingSystem = bestillingSystem,
-    batchbrev = batchbrev,
-    enabled = enabled,
-    kreverDataGrunnlag = kreverDataGrunnlag,
-    innholdType = innholdType,
-    redigerbar = redigerbar,
-)
+        kode = kode,
+        beskrivelse = beskrivelse,
+        tittel = tittel,
+        dokumentType = dokumentType,
+        bestillingSystem = bestillingSystem,
+        batchbrev = batchbrev,
+        enabled = enabled,
+        kreverDataGrunnlag = kreverDataGrunnlag,
+        innholdType = innholdType,
+        redigerbar = redigerbar,
+    )
 
 enum class FilType {
     JSON,
