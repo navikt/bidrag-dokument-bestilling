@@ -14,6 +14,7 @@ import java.nio.charset.StandardCharsets
 object EnhetKode {
     const val FARSKAP = "4860"
     const val UTLAND = "4865"
+    const val EGENANSATT = "4883"
 }
 
 object BestillingSystem {
@@ -71,7 +72,7 @@ data class DokumentMalBucketUtland(
     override val beskrivelse: String,
     override val språk: StøttetSpråk,
     override val tittel: String = beskrivelse,
-    override val tilhørerEnheter: List<String> = listOf(EnhetKode.UTLAND),
+    override val tilhørerEnheter: List<String> = listOf(EnhetKode.UTLAND, EnhetKode.EGENANSATT),
     override val innholdType: InnholdType = InnholdType.VARSEL,
     override val gruppeVisningsnavn: String,
 ) : DokumentMalBucket(
