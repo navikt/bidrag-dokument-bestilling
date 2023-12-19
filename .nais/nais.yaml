@@ -37,6 +37,9 @@ spec:
   secureLogs:
     enabled: true
   image: {{ image }}
+  replicas:
+    min: {{min_replicas}}
+    max: 4
   liveness:
     path: /actuator/health
     initialDelay: 20
@@ -52,11 +55,9 @@ spec:
     path: /actuator/prometheus
   resources:
     limits:
-      cpu: 1000m
-      memory: 2048Mi
-    requests:
-      cpu: 500m
       memory: 1024Mi
+    requests:
+      memory: 512Mi
   gcp:
     buckets:
       - name: {{bucket_name}}

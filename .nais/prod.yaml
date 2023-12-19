@@ -1,5 +1,6 @@
 name: bidrag-dokument-bestilling
 bucket_name: bidrag-dokument-bestilling-prod
+min_replicas: 2
 ingresses:
   - https://bidrag-dokument-bestilling.intern.nav.no
 env:
