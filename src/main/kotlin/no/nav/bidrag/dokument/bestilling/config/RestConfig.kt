@@ -6,6 +6,7 @@ import no.nav.bidrag.commons.web.config.RestOperationsAzure
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Import
+import org.springframework.http.client.observation.DefaultClientRequestObservationConvention
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder
 import org.springframework.retry.annotation.EnableRetry
 
@@ -14,6 +15,9 @@ import org.springframework.retry.annotation.EnableRetry
 @EnableRetry
 @Import(RestOperationsAzure::class)
 class RestConfig {
+    @Bean
+    fun clientRequestObservationConvention() = DefaultClientRequestObservationConvention()
+
     @Bean
     fun jackson2ObjectMapperBuilder(): Jackson2ObjectMapperBuilder {
         return Jackson2ObjectMapperBuilder().serializationInclusion(JsonInclude.Include.NON_NULL)
