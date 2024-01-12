@@ -102,4 +102,10 @@ Vedlegg til vedtakbrev:
       språk: DE
       tittel: Orientierung für den Unterhaltspflichtigen, wenn eine der Parteien im Ausland lebt
       innholdType: VEDLEGG_VEDTAK
+    - kode: VEDLEGG_VEDTAK_BP_FR
+      beskrivelse: Vedlegg til vedtak bidragspliktig
+      filsti: Vedlegg til vedtak_bidragspliktig_ FRANSK.pdf
+      språk: FR
+      tittel: INFORMATIONS RELATIVES AUX PENSIONS ALIMENTAIRES
+      innholdType: VEDLEGG_VEDTAK
 
