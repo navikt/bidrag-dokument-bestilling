@@ -39,7 +39,7 @@ spec:
   image: {{ image }}
   replicas:
     min: {{min_replicas}}
-    max: 4
+    max: 2
   liveness:
     path: /actuator/health
     initialDelay: 20
@@ -55,8 +55,10 @@ spec:
     path: /actuator/prometheus
   resources:
     limits:
+      cpu: 1000m
       memory: 1024Mi
     requests:
+      cpu: 100m
       memory: 512Mi
   gcp:
     buckets:
