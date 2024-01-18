@@ -12,5 +12,5 @@ jobs:
     permissions:
       contents: "write"
       id-token: "write"
-    uses: navikt/bidrag-workflow/.github/workflows/rollback_prod.yaml@chore/deploy_v2
+    uses: navikt/bidrag-workflow/.github/workflows/rollback_prod.yaml@main
     secrets: inherit
