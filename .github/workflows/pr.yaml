@@ -9,7 +9,7 @@ jobs:
     permissions:
       contents: "read"
       id-token: "write"
-    uses: navikt/bidrag-workflow/.github/workflows/deploy.yaml@main
+    uses: navikt/bidrag-workflow/.github/workflows/deploy.yaml@chore/deploy_v2
     secrets: inherit
     with:
       nais_variabler_filnavn: main.yaml
@@ -25,7 +25,7 @@ jobs:
         with:
           path: deploy
       - name: Deploy unleash to dev-gcp
-        uses: nais/deploy/actions/deploy@v1
+        uses: nais/deploy/actions/deploy@v2
         env:
           APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
           CLUSTER: dev-gcp
