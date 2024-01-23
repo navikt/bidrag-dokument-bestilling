@@ -138,7 +138,7 @@ class DokumentMetadataCollector(
         }
 
         val soknadsbarn = mutableListOf<String>()
-        if (!forespørsel.vedtakId.isNullOrEmpty()) {
+        if (!forespørsel.vedtakId.isNullOrEmpty() && enableHentVedtak) {
             soknadsbarn.addAll(
                 vedtakService.hentVedtakSoknadsbarnFodselsnummer(
                     forespørsel.vedtakId,
