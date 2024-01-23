@@ -40,6 +40,7 @@ import no.nav.bidrag.domene.land.Landkode3
 import no.nav.bidrag.transport.person.PersonAdresseDto
 import no.nav.bidrag.transport.person.PersonDto
 import no.nav.bidrag.transport.sak.BidragssakDto
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Scope
 import org.springframework.stereotype.Component
 import java.time.LocalDate
@@ -54,6 +55,7 @@ class DokumentMetadataCollector(
     val sjablongService: SjablongService,
     val saksbehandlerInfoManager: SaksbehandlerInfoManager,
     val organisasjonService: OrganisasjonService,
+    @Value("\${ENABLE_HENT_VEDTAK:false}") val enableHentVedtak: Boolean,
 ) {
     private lateinit var enhet: String
     private lateinit var sak: BidragssakDto
@@ -89,7 +91,7 @@ class DokumentMetadataCollector(
                 kreverDataGrunnlag.takeIf { it.roller }?.let { hentRolleData(forespørsel) }
                     ?: Roller(),
             vedtakDetaljer =
-                kreverDataGrunnlag.takeIf { it.vedtak }
+                kreverDataGrunnlag.takeIf { it.vedtak && enableHentVedtak }
                     ?.let { hentVedtakData(forespørsel.vedtakId) },
         )
     }
