@@ -26,7 +26,7 @@
         <kotlin-logging-jvm.version>3.0.5</kotlin-logging-jvm.version>
         <bidrag-behandling-felles-dto.version>0.0.87</bidrag-behandling-felles-dto.version>
         <bidrag-behandling-felles.version>0.0.84</bidrag-behandling-felles.version>
-        <google-api-extention.version>2.38.0</google-api-extention.version>
+        <google-api-extention.version>2.45.0</google-api-extention.version>
     </properties>
 
     <repositories>
