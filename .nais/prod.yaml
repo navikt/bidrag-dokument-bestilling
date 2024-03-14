@@ -15,7 +15,7 @@ env:
 
   BIDRAG_SAK_URL: https://bidrag-sak.prod-fss-pub.nais.io/bidrag-sak
   BIDRAG_SAK_SCOPE: prod-fss.bidrag.bidrag-sak
-  KODEVERK_URL: https://kodeverk.prod-fss-pub.nais.io
+  KODEVERK_URL: https://kodeverk-api.nav.no
 
   BIDRAG_VEDTAK_URL: http://bidrag-vedtak
   BIDRAG_VEDTAK_SCOPE: prod-gcp.bidrag.bidrag-vedtak
@@ -36,7 +36,7 @@ outbound-access-hosts:
   - bidrag-sak.prod-fss-pub.nais.io
   - bidrag-organisasjon.prod-fss-pub.nais.io
   - bidrag-sjablon.prod-fss-pub.nais.io
-  - kodeverk.prod-fss-pub.nais.io
+  - kodeverk-api.nav.no
 azure_access_inbound:
   - application: bisys
     namespace: bidrag
