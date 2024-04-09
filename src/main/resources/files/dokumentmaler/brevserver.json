@@ -211,7 +211,7 @@
   },
   {
     "kode": "BI01G01",
-    "tittel": "Vedtak innkreving barnebidrag og gjeld",
+    "tittel": "Vedtak innkreving av bidragsgjeld",
     "kreverDataGrunnlag": {
       "vedtak": true,
       "behandling": false,
