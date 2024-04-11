@@ -224,7 +224,7 @@
   },
   {
     "kode": "BI01G02",
-    "tittel": "Vedtak innkreving opphør",
+    "tittel": "Vedtak om innkreving av fremtidig bidrag",
     "kreverDataGrunnlag": {
       "vedtak": true,
       "behandling": false,
