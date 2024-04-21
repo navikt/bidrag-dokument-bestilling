@@ -20,6 +20,7 @@ import no.nav.bidrag.transport.behandling.felles.grunnlag.SivilstandPeriode
 import no.nav.bidrag.transport.behandling.felles.grunnlag.SjablonGrunnlag
 import no.nav.bidrag.transport.behandling.felles.grunnlag.SøknadGrunnlag
 import no.nav.bidrag.transport.behandling.felles.grunnlag.VirkningstidspunktGrunnlag
+import no.nav.bidrag.transport.behandling.felles.grunnlag.bidragsmottaker
 import no.nav.bidrag.transport.behandling.felles.grunnlag.filtrerBasertPåEgenReferanse
 import no.nav.bidrag.transport.behandling.felles.grunnlag.filtrerBasertPåFremmedReferanse
 import no.nav.bidrag.transport.behandling.felles.grunnlag.hentPersonMedReferanse
@@ -199,14 +200,15 @@ fun List<GrunnlagDto>.hentTotalInntektForPeriode(vedtakPeriode: VedtakPeriodeDto
     return hentDelberegningInntektForPeriode(vedtakPeriode)?.let { inntektPeriode ->
         val sluttberegning = this.filtrerBasertPåFremmedReferanse(null, inntektPeriode.referanse).firstOrNull()
         val delberegningInntekt = inntektPeriode.innholdTilObjekt<DelberegningSumInntekt>()
-        val gjelderPersonGrunnlag = hentPersonMedReferanse(sluttberegning?.gjelderReferanse)!!
+        val gjelderPersonGrunnlag = bidragsmottaker!!
         listOf(
             InntektPeriode(
                 periode = vedtakPeriode.periode,
                 beløp = delberegningInntekt.totalinntekt,
                 periodeTotalinntekt = true,
                 beløpÅr = vedtakPeriode.periode.fom.year,
-                rolle = gjelderPersonGrunnlag.type.tilRolletype(),
+                // TODO Gjelder bare for Forskudd
+                rolle = Rolletype.BIDRAGSMOTTAKER,
                 fødselsnummer = gjelderPersonGrunnlag.personIdent,
             ),
         )
