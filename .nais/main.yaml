@@ -30,7 +30,7 @@ env:
   MQ_CHANNEL: Q2_BDBESTILLING
   JAVA_TOOL_OPTIONS: -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005
 outbound-access-apps:
-  - bidrag-vedtak
+  - bidrag-vedtak-syntetisk
 outbound-access-hosts:
   - bidrag-dokument.dev-fss-pub.nais.io
   - bidrag-person.dev-fss-pub.nais.io
