@@ -5,8 +5,8 @@ import com.fasterxml.jackson.dataformat.yaml.YAMLFactory
 import no.nav.bidrag.dokument.bestilling.bestilling.produksjon.dto.HgUgDto
 import no.nav.bidrag.dokument.bestilling.bestilling.produksjon.dto.HgUgDtoFromJson
 import no.nav.bidrag.dokument.bestilling.model.BehandlingType
-import no.nav.bidrag.dokument.bestilling.model.SoknadFra
 import no.nav.bidrag.dokument.bestilling.model.SoknadType
+import no.nav.bidrag.domene.enums.rolle.SøktAvType
 import org.springframework.core.io.ClassPathResource
 import org.springframework.stereotype.Component
 import java.io.IOException
@@ -23,7 +23,7 @@ class HgUgKodeService {
                 val ug = it.ug?.trim()
                 HgUgDto(
                     behandlingType = BehandlingType.fromKode(it.behandlingType),
-                    soknadFra = SoknadFra.fromKode(it.soknadFra),
+                    soknadFra = SøktAvType.fraKode(it.soknadFra),
                     soknadType = SoknadType.fromKode(it.soknadType),
                     hg = hg?.ifEmpty { null },
                     ug = ug?.ifEmpty { null },
@@ -33,7 +33,7 @@ class HgUgKodeService {
 
     fun findHgUg(
         soknadType: SoknadType?,
-        soknadFra: SoknadFra?,
+        soknadFra: SøktAvType?,
         behandlingType: BehandlingType?,
     ): HgUgDto? {
         val behandlingTypeConverted = if (behandlingType == BehandlingType.BIDRAG18AAR) BehandlingType.BIDRAG_18_AR else behandlingType

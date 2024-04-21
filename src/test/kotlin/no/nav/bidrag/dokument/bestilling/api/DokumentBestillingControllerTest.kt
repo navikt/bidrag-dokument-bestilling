@@ -72,7 +72,7 @@ class DokumentBestillingControllerTest : AbstractControllerTest() {
             httpHeaderTestRestTemplate.exchange(
                 "${rootUri()}/brevkoder",
                 HttpMethod.OPTIONS,
-                null,
+                HttpEntity.EMPTY,
                 List::class.java,
             )
 
@@ -94,7 +94,7 @@ class DokumentBestillingControllerTest : AbstractControllerTest() {
             httpHeaderTestRestTemplate.exchange(
                 "${rootUri()}/dokumentmal/detaljer",
                 HttpMethod.GET,
-                null,
+                HttpEntity.EMPTY,
                 responseType,
             )
 
@@ -1032,7 +1032,7 @@ class DokumentBestillingControllerTest : AbstractControllerTest() {
             httpHeaderTestRestTemplate.exchange(
                 "${rootUri()}/dokument/UTLAND_VEDLEGG_VEDTAK_BP_DE",
                 HttpMethod.POST,
-                null,
+                HttpEntity.EMPTY,
                 ByteArray::class.java,
             )
 
@@ -1047,7 +1047,7 @@ class DokumentBestillingControllerTest : AbstractControllerTest() {
             httpHeaderTestRestTemplate.exchange(
                 "${rootUri()}/dokument/BI01P11",
                 HttpMethod.POST,
-                null,
+                HttpEntity.EMPTY,
                 ByteArray::class.java,
             )
 

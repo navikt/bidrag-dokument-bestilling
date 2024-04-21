@@ -2,7 +2,6 @@ package no.nav.bidrag.dokument.bestilling.tjenester
 
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.BeløpFraTil
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.ForskuddInntektgrensePeriode
-import no.nav.bidrag.dokument.bestilling.bestilling.dto.ForsorgerType
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.PeriodeFraTom
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.SjablonDetaljer
 import no.nav.bidrag.dokument.bestilling.consumer.SjablonConsumer
@@ -10,6 +9,7 @@ import no.nav.bidrag.dokument.bestilling.consumer.dto.SjablongType
 import no.nav.bidrag.dokument.bestilling.consumer.dto.hentPerioderForSjabloner
 import no.nav.bidrag.dokument.bestilling.consumer.dto.hentSisteSjablong
 import no.nav.bidrag.dokument.bestilling.consumer.dto.hentSjablongForTomDato
+import no.nav.bidrag.domene.enums.person.Sivilstandskode
 import org.springframework.stereotype.Service
 import java.math.BigDecimal
 import java.time.LocalDate
@@ -78,7 +78,7 @@ class SjablongService(val sjablonConsumer: SjablonConsumer) {
                 fomDato = periodeFra,
                 tomDato = periodTomDato,
                 antallBarn = 1,
-                forsorgerType = ForsorgerType.ENSLIG,
+                forsorgerType = Sivilstandskode.ENSLIG,
                 beløp75Prosent = BeløpFraTil(grenseFullForskudd.verdi + BigDecimal.ONE, forskudd75ProsentEnslig.verdi),
                 beløp50Prosent = BeløpFraTil(forskudd75ProsentEnslig.verdi + BigDecimal.ONE, forskuddMaksVerdi),
             )
@@ -87,7 +87,7 @@ class SjablongService(val sjablonConsumer: SjablonConsumer) {
                 fomDato = periodeFra,
                 tomDato = periodTomDato,
                 antallBarn = 1,
-                forsorgerType = ForsorgerType.GIFT_SAMBOER,
+                forsorgerType = Sivilstandskode.GIFT_SAMBOER,
                 beløp75Prosent = BeløpFraTil(grenseFullForskudd.verdi + BigDecimal.ONE, forskudd75ProsentGift.verdi),
                 beløp50Prosent = BeløpFraTil(forskudd75ProsentGift.verdi + BigDecimal.ONE, forskuddMaksVerdi),
             )

@@ -6,7 +6,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.2.1</version>
+        <version>3.2.5</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>no.nav</groupId>
@@ -15,18 +15,17 @@
     <name>bidrag-dokument-bestilling</name>
     <properties>
         <java.version>21</java.version>
-        <kotlin.version>1.9.22</kotlin.version>
-        <bidrag-felles.version>2024.0111.144947</bidrag-felles.version>
+        <kotlin.version>1.9.23</kotlin.version>
+        <bidrag-felles.version>2024.04.21.095424</bidrag-felles.version>
         <logback-encoder.version>7.4</logback-encoder.version>
         <token-support.version>3.2.0</token-support.version>
         <springframework-cloud.version>4.0.4</springframework-cloud.version>
         <springdoc.version>2.2.0</springdoc.version>
-        <bidrag-commons-test.version>0.2.2</bidrag-commons-test.version>
         <ibmmq.version>9.3.0.1</ibmmq.version>
         <kotlin-logging-jvm.version>3.0.5</kotlin-logging-jvm.version>
         <bidrag-behandling-felles-dto.version>0.0.87</bidrag-behandling-felles-dto.version>
         <bidrag-behandling-felles.version>0.0.84</bidrag-behandling-felles.version>
-        <google-api-extention.version>2.38.0</google-api-extention.version>
+        <google-api-extention.version>2.47.0</google-api-extention.version>
     </properties>
 
     <repositories>
@@ -51,7 +50,7 @@
             <dependency>
                 <groupId>com.google.cloud</groupId>
                 <artifactId>libraries-bom</artifactId>
-                <version>26.29.0</version>
+                <version>26.37.0</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -69,12 +68,12 @@
         <dependency>
             <groupId>com.google.crypto.tink</groupId>
             <artifactId>tink</artifactId>
-            <version>1.12.0</version>
+            <version>1.13.0</version>
         </dependency>
         <dependency>
             <groupId>com.google.crypto.tink</groupId>
             <artifactId>tink-gcpkms</artifactId>
-            <version>1.9.0</version>
+            <version>1.10.0</version>
         </dependency>
         <dependency>
             <groupId>com.google.cloud</groupId>
@@ -204,7 +203,7 @@
         <dependency>
             <groupId>org.apache.cxf</groupId>
             <artifactId>cxf-spring-boot-starter-jaxws</artifactId>
-            <version>4.0.3</version>
+            <version>4.0.4</version>
         </dependency>
 
         <dependency>
@@ -216,13 +215,13 @@
         <dependency>
             <groupId>org.jetbrains.kotlinx</groupId>
             <artifactId>kotlinx-coroutines-android</artifactId>
-            <version>1.7.0</version>
+            <version>1.8.0</version>
         </dependency>
         <!-- IBM MQ -->
         <dependency>
             <groupId>com.ibm.mq</groupId>
             <artifactId>mq-jms-spring-boot-starter</artifactId>
-            <version>3.1.5</version>
+            <version>3.2.3</version>
         </dependency>
 
 
@@ -270,6 +269,7 @@
             <artifactId>bidrag-transport-felles</artifactId>
             <version>${bidrag-felles.version}</version>
         </dependency>
+
         <!--Diverse-->
         <dependency>
             <groupId>org.jetbrains.kotlin</groupId>
@@ -293,12 +293,12 @@
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-core</artifactId>
-            <version>1.4.14</version>
+            <version>1.5.6</version>
         </dependency>
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
-            <version>1.4.14</version>
+            <version>1.5.6</version>
         </dependency>
         <dependency>
             <groupId>net.logstash.logback</groupId>
@@ -313,6 +313,12 @@
 
         <!--Test-->
         <dependency>
+            <groupId>no.nav.bidrag</groupId>
+            <artifactId>bidrag-commons-test-felles</artifactId>
+            <version>${bidrag-felles.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-inline</artifactId>
             <version>5.2.0</version>
@@ -321,7 +327,7 @@
         <dependency>
             <groupId>org.mockito.kotlin</groupId>
             <artifactId>mockito-kotlin</artifactId>
-            <version>4.1.0</version>
+            <version>5.3.1</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -349,7 +355,7 @@
         <dependency>
             <groupId>io.kotest</groupId>
             <artifactId>kotest-assertions-core-jvm</artifactId>
-            <version>5.8.0</version>
+            <version>5.8.1</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -368,12 +374,6 @@
             <groupId>no.nav.security</groupId>
             <artifactId>token-validation-spring-test</artifactId>
             <version>${token-support.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>no.nav.bidrag</groupId>
-            <artifactId>bidrag-commons-test</artifactId>
-            <version>${bidrag-commons-test.version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>

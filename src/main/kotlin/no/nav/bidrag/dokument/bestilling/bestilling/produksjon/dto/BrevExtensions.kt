@@ -1,10 +1,10 @@
 package no.nav.bidrag.dokument.bestilling.bestilling.produksjon.dto
 
-import no.nav.bidrag.behandling.felles.enums.Rolle
-import no.nav.bidrag.behandling.felles.enums.SivilstandKode
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.VedtakDetaljer
 import no.nav.bidrag.dokument.bestilling.model.BehandlingType
 import no.nav.bidrag.dokument.bestilling.model.SoknadType
+import no.nav.bidrag.domene.enums.person.Sivilstandskode
+import no.nav.bidrag.domene.enums.rolle.Rolle
 import no.nav.bidrag.domene.enums.rolle.Rolletype
 
 fun Rolletype.toKode() =
@@ -19,23 +19,24 @@ fun Rolle.toKode() =
     when (this) {
         Rolle.BIDRAGSMOTTAKER -> "02"
         Rolle.BIDRAGSPLIKTIG -> "01"
-        Rolle.SOKNADSBARN -> "03"
+        Rolle.SØKNADSBARN -> "03"
         else -> "00"
     }
 
-fun SivilstandKode.toKode() =
+fun Sivilstandskode.toKode() =
     when (this) {
-        SivilstandKode.ENKE_ELLER_ENKEMANN, SivilstandKode.ENSLIG -> "ENKE"
-        SivilstandKode.GIFT -> "GIFT"
-        SivilstandKode.GJENLEVENDE_PARTNER -> "GJPA"
-//                                    SivilstandKode.GIFT_LEVER_ADSKILT -> "GLAD"
-        SivilstandKode.REGISTRERT_PARTNER -> "REPA"
-        SivilstandKode.SAMBOER -> "SAMB"
-        SivilstandKode.SEPARERT_PARTNER -> "SEPA"
-        SivilstandKode.SEPARERT -> "SEPR"
-        SivilstandKode.SKILT -> "SKIL"
-        SivilstandKode.SKILT_PARTNER -> "SKPA"
-        SivilstandKode.UGIFT -> "UGIF"
+        Sivilstandskode.ENSLIG -> "ENKE"
+        Sivilstandskode.GIFT_SAMBOER -> "GIFT"
+        Sivilstandskode.SAMBOER -> "SAMB"
+        Sivilstandskode.BOR_ALENE_MED_BARN -> "SEPA"
+//        Sivilstandskode.GJENLEVENDE_PARTNER -> "GJPA"
+// //                                    SivilstandKode.GIFT_LEVER_ADSKILT -> "GLAD"
+//        Sivilstandskode.REGISTRERT_PARTNER -> "REPA"
+//        Sivilstandskode.SEPARERT_PARTNER -> "SEPA"
+//        Sivilstandskode.SEPARERT -> "SEPR"
+//        Sivilstandskode.SKILT -> "SKIL"
+//        Sivilstandskode.SKILT_PARTNER -> "SKPA"
+//        Sivilstandskode.UGIFT -> "UGIF"
         else -> "NULL"
     }
 

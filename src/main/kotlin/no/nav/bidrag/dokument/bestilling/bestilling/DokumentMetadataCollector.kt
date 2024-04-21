@@ -91,7 +91,7 @@ class DokumentMetadataCollector(
                 kreverDataGrunnlag.takeIf { it.roller }?.let { hentRolleData(forespørsel) }
                     ?: Roller(),
             vedtakDetaljer =
-                kreverDataGrunnlag.takeIf { it.vedtak && enableHentVedtak }
+                kreverDataGrunnlag.takeIf { it.vedtak }
                     ?.let { hentVedtakData(forespørsel.vedtakId) },
         )
     }

@@ -6,7 +6,6 @@ import no.nav.bidrag.dokument.bestilling.bestilling.dto.DokumentBestillingResult
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.DokumentMal
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.DokumentType
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.EnhetKontaktInfo
-import no.nav.bidrag.dokument.bestilling.bestilling.dto.ForsorgerType
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.Mottaker
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.fraVerdi
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.tilVerdi
@@ -22,6 +21,11 @@ import no.nav.bidrag.dokument.bestilling.consumer.BidragDokumentConsumer
 import no.nav.bidrag.dokument.bestilling.model.BehandlingType
 import no.nav.bidrag.dokument.bestilling.model.MAX_DATE
 import no.nav.bidrag.dokument.bestilling.model.ResultatKoder
+import no.nav.bidrag.dokument.bestilling.model.tilLocalDateFom
+import no.nav.bidrag.dokument.bestilling.model.tilLocalDateTil
+import no.nav.bidrag.domene.enums.diverse.Språk
+import no.nav.bidrag.domene.enums.person.Sivilstandskode
+import no.nav.bidrag.domene.util.visningsnavn
 import no.nav.bidrag.transport.dokument.AvsenderMottakerDto
 import no.nav.bidrag.transport.dokument.JournalpostType
 import no.nav.bidrag.transport.dokument.OpprettDokumentDto
@@ -29,7 +33,6 @@ import no.nav.bidrag.transport.dokument.OpprettJournalpostRequest
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.jms.core.JmsTemplate
 import org.springframework.stereotype.Component
-import java.util.*
 
 @Component(BestillingSystem.BREVSERVER)
 class BrevserverProducer(
@@ -145,8 +148,8 @@ class BrevserverProducer(
                         soknGrKode = it.behandlingType?.kode
                         soknFraKode = it.søknadFra?.kode
                         soknType = it.soknadType?.kode
-                        virkningsDato = it.virkningDato
-                        mottatDato = it.soknadDato
+                        virkningsDato = it.virkningstidspunkt
+                        mottatDato = it.mottattDato
                     }
                     forskUtBet = vedtakInfo != null
                     // Kode fra beslutningårsak i Bisys.
@@ -188,13 +191,13 @@ class BrevserverProducer(
                 }
                 vedtakInfo?.let {
                     soknad {
-                        aarsakKd = it.virkningÅrsakKode
+                        aarsakKd = it.årsakKode?.legacyKode ?: it.avslagsKode?.legacyKode // TODO: Oversett til riktig kode
                         undergrp = hgUgDto?.ug
                         type = it.stønadType?.let { BehandlingType.valueOf(it.name).kode }
 
                         vedtattDato = it.vedtattDato
-                        virkningDato = it.virkningDato
-                        soknDato = it.soknadDato
+                        virkningDato = it.virkningstidspunkt
+                        soknDato = it.mottattDato
                         sendtDato = it.vedtattDato // TODO: Er dette riktig?
                         saksnr = dokumentBestilling.saksnummer
                     }
@@ -219,10 +222,10 @@ class BrevserverProducer(
 
                         vedtakInfo.sivilstandPerioder.forEach { sivilstand ->
                             forskuddSivilstandPeriode {
-                                fomDato = sivilstand.fomDato
-                                tomDato = sivilstand.tomDato ?: MAX_DATE
-                                kode = sivilstand.sivilstandKode.toKode()
-                                beskrivelse = sivilstand.sivilstandBeskrivelse
+                                fomDato = sivilstand.periode.tilLocalDateFom()
+                                tomDato = sivilstand.periode.tilLocalDateTil() ?: MAX_DATE
+                                kode = sivilstand.sivilstand.toKode()
+                                beskrivelse = sivilstand.sivilstand.visningsnavn.bruker[Språk.NB]
                             }
                         }
                         vedtakBarn.stonader.forEach { detaljer ->
@@ -233,8 +236,9 @@ class BrevserverProducer(
                                     antallBarn = it.antallBarn
                                     forsorgerKode =
                                         when (it.forsorgerType) {
-                                            ForsorgerType.ENSLIG -> "EN"
-                                            ForsorgerType.GIFT_SAMBOER -> "GS"
+                                            Sivilstandskode.ENSLIG -> "EN"
+                                            Sivilstandskode.GIFT_SAMBOER -> "GS"
+                                            else -> ""
                                         }
                                     belop50fra = it.beløp50Prosent.fraVerdi()
                                     belop50til = it.beløp50Prosent.tilVerdi()
@@ -256,13 +260,13 @@ class BrevserverProducer(
 
                                 vedtakPeriode.inntekter.forEach {
                                     inntektPeriode {
-                                        fomDato = it.periodeFomDato
-                                        tomDato = it.periodeTomDato ?: MAX_DATE
+                                        fomDato = it.periode?.tilLocalDateFom()
+                                        tomDato = it.periode.tilLocalDateTil() ?: MAX_DATE
                                         belopType = it.beløpType.belopstype
                                         belopÅrsinntekt = it.beløp
                                         beskrivelse = it.beløpType.beskrivelse
                                         rolle = it.rolle.toKode()
-                                        fnr = it.fodselsnummer
+                                        fnr = it.fødselsnummer
                                         inntektGrense = vedtakPeriode.inntektGrense
                                     }
                                 }

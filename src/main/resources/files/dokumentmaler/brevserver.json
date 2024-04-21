@@ -121,6 +121,7 @@
   {
     "kode": "BI01A01",
     "tittel": "Vedtak bidragsforskudd",
+    "enabled": true,
     "kreverDataGrunnlag": {
       "vedtak": true,
       "behandling": false,
