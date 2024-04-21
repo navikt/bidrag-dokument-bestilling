@@ -3,6 +3,7 @@ package no.nav.bidrag.dokument.bestilling.bestilling.dto
 import no.nav.bidrag.dokument.bestilling.model.Saksbehandler
 import no.nav.bidrag.dokument.bestilling.model.VedtakSaksbehandlerInfo
 import no.nav.bidrag.dokument.bestilling.model.tilLegacyKode
+import no.nav.bidrag.dokument.bestilling.model.visningsnavnBruker
 import no.nav.bidrag.domene.enums.beregning.Resultatkode
 import no.nav.bidrag.domene.enums.diverse.Språk
 import no.nav.bidrag.domene.enums.inntekt.Inntektsrapportering
@@ -15,40 +16,10 @@ import no.nav.bidrag.domene.enums.vedtak.Vedtakskilde
 import no.nav.bidrag.domene.enums.vedtak.Vedtakstype
 import no.nav.bidrag.domene.enums.vedtak.VirkningstidspunktÅrsakstype
 import no.nav.bidrag.domene.tid.ÅrMånedsperiode
-import no.nav.bidrag.domene.util.visningsnavn
 import no.nav.bidrag.transport.behandling.felles.grunnlag.BostatusPeriode
 import no.nav.bidrag.transport.behandling.felles.grunnlag.SivilstandPeriode
 import java.math.BigDecimal
 import java.time.LocalDate
-
-data class GrunnlagInntektstype(val type: Inntektsrapportering? = null, val periodeTotalinntekt: Boolean? = false, val nettoKapitalInntekt: Boolean? = false) {
-    val beskrivelse
-        get() =
-            type?.visningsnavn?.bruker?.get(Språk.NB) ?: if (periodeTotalinntekt == true) {
-                "Personens beregningsgrunnlag i perioden"
-            } else if (nettoKapitalInntekt == true) {
-                "Netto positive kapitalinntekter"
-            } else {
-                ""
-            }
-    val belopstype
-        get() =
-            type?.tilLegacyKode() ?: if (periodeTotalinntekt == true) {
-                "XINN"
-            } else if (nettoKapitalInntekt == true) {
-                "XKAP"
-            } else {
-                ""
-            }
-
-    override fun equals(other: Any?): Boolean {
-        return if (other is GrunnlagInntektstype) {
-            type == other.type && periodeTotalinntekt == other.periodeTotalinntekt
-        } else {
-            super.equals(other)
-        }
-    }
-}
 
 data class DokumentBestillingResult(
     val dokumentReferanse: String,
@@ -174,12 +145,33 @@ data class VedtakPeriode(
 data class InntektPeriode(
     val inntektPeriode: ÅrMånedsperiode? = null,
     val periode: ÅrMånedsperiode,
-    val beløpType: GrunnlagInntektstype,
+    val type: Inntektsrapportering? = null,
+    val periodeTotalinntekt: Boolean? = false,
+    val nettoKapitalInntekt: Boolean? = false,
     val beløpÅr: Int? = null,
     val fødselsnummer: String?,
     val beløp: BigDecimal,
     val rolle: Rolletype,
-)
+) {
+    val beskrivelse
+        get() =
+            type?.visningsnavnBruker(Språk.NB, inntektPeriode?.fom?.year) ?: if (periodeTotalinntekt == true) {
+                "Personens beregningsgrunnlag i perioden"
+            } else if (nettoKapitalInntekt == true) {
+                "Netto positive kapitalinntekter"
+            } else {
+                ""
+            }
+    val beløpKode
+        get() =
+            type?.tilLegacyKode() ?: if (periodeTotalinntekt == true) {
+                "XINN"
+            } else if (nettoKapitalInntekt == true) {
+                "XKAP"
+            } else {
+                ""
+            }
+}
 
 data class ForskuddInntektgrensePeriode(
     val fomDato: LocalDate,

@@ -1,7 +1,6 @@
 package no.nav.bidrag.dokument.bestilling.tjenester
 
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.ForskuddInntektgrensePeriode
-import no.nav.bidrag.dokument.bestilling.bestilling.dto.GrunnlagInntektstype
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.InntektPeriode
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.VedtakBarn
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.VedtakBarnStonad
@@ -21,6 +20,7 @@ import no.nav.bidrag.dokument.bestilling.model.mapBarnIHusstandPerioder
 import no.nav.bidrag.dokument.bestilling.model.mapSivilstand
 import no.nav.bidrag.dokument.bestilling.model.tilRolletype
 import no.nav.bidrag.dokument.bestilling.model.tilSaksbehandler
+import no.nav.bidrag.domene.enums.beregning.Resultatkode
 import no.nav.bidrag.domene.enums.vedtak.Innkrevingstype
 import no.nav.bidrag.domene.enums.vedtak.Stønadstype
 import no.nav.bidrag.transport.behandling.felles.grunnlag.BaseGrunnlag
@@ -117,7 +117,7 @@ class VedtakService(private val bidragVedtakConsumer: BidragVedtakConsumer, priv
                             InntektPeriode(
                                 inntektPeriode = inntekt.periode,
                                 periode = vedtakPeriode.periode,
-                                beløpType = GrunnlagInntektstype(inntekt.inntektsrapportering),
+                                type = inntekt.inntektsrapportering,
                                 beløpÅr = inntekt.periode.fom.year,
                                 rolle = gjelderPersonGrunnlag.type.tilRolletype(),
                                 fødselsnummer = gjelderPerson.ident!!.verdi,
@@ -130,7 +130,7 @@ class VedtakService(private val bidragVedtakConsumer: BidragVedtakConsumer, priv
                         // TODO: Er dette riktig??
                         tomDato = vedtakPeriode.periode.til?.atEndOfMonth(),
                         beløp = vedtakPeriode.beløp ?: BigDecimal(0),
-                        resultatKode = vedtakPeriode.resultatkode,
+                        resultatKode = Resultatkode.fraKode(vedtakPeriode.resultatkode)?.legacyKode ?: vedtakPeriode.resultatkode,
                         inntekter = inntekter + grunnlagListe.hentTotalInntektForPeriode(vedtakPeriode),
                         inntektGrense = sjablongService.hentInntektGrenseForPeriode(getLastDayOfPreviousMonth(vedtakPeriode.periode.til?.atEndOfMonth())),
                         maksInntekt = sjablongService.hentMaksInntektForPeriode(getLastDayOfPreviousMonth(vedtakPeriode.periode.til?.atEndOfMonth())),

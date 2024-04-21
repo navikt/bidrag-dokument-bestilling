@@ -262,9 +262,9 @@ class BrevserverProducer(
                                     inntektPeriode {
                                         fomDato = it.periode?.tilLocalDateFom()
                                         tomDato = it.periode.tilLocalDateTil() ?: MAX_DATE
-                                        belopType = it.beløpType.belopstype
+                                        belopType = it.beløpKode
                                         belopÅrsinntekt = it.beløp
-                                        beskrivelse = it.beløpType.beskrivelse
+                                        beskrivelse = it.beskrivelse
                                         rolle = it.rolle.toKode()
                                         fnr = it.fødselsnummer
                                         inntektGrense = vedtakPeriode.inntektGrense

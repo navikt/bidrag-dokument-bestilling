@@ -143,8 +143,8 @@ class VedtakServiceTest {
             val barn1InntektPeriode1 = barnVedtakPeriode.inntekter[0]
             val barn1InntektBeregningsgrunnlag = barnVedtakPeriode.inntekter[1]
 
-            barn1InntektPeriode1.beløpType.type shouldBe Inntektsrapportering.INNTEKTSOPPLYSNINGER_ARBEIDSGIVER
-            barn1InntektBeregningsgrunnlag.beløpType.periodeTotalinntekt shouldBe true
+            barn1InntektPeriode1.type shouldBe Inntektsrapportering.INNTEKTSOPPLYSNINGER_ARBEIDSGIVER
+            barn1InntektBeregningsgrunnlag.periodeTotalinntekt shouldBe true
 
             barn1InntektPeriode1.inntektPeriode?.tilLocalDateFom() shouldBe LocalDate.parse("2023-04-01")
             barn1InntektPeriode1.inntektPeriode?.til shouldBe null
@@ -245,34 +245,34 @@ class VedtakServiceTest {
             val vedtakPeriode1Inntekter = vedtakPeriode1.inntekter
             vedtakPeriode1Inntekter shouldHaveSize 3
 
-            vedtakPeriode1Inntekter[0].beløpType.type shouldBe Inntektsrapportering.SMÅBARNSTILLEGG
+            vedtakPeriode1Inntekter[0].type shouldBe Inntektsrapportering.SMÅBARNSTILLEGG
             vedtakPeriode1Inntekter[0].beløp shouldBe BigDecimal(5000)
             vedtakPeriode1Inntekter[0].periode.tilLocalDateFom() shouldBe vedtakPeriode1.fomDato
             vedtakPeriode1Inntekter[0].periode.tilLocalDateTil() shouldBe vedtakPeriode1.tomDato
 
-            vedtakPeriode1Inntekter[1].beløpType.type shouldBe Inntektsrapportering.DOKUMENTASJON_MANGLER_SKJØNN
+            vedtakPeriode1Inntekter[1].type shouldBe Inntektsrapportering.DOKUMENTASJON_MANGLER_SKJØNN
             vedtakPeriode1Inntekter[1].beløp shouldBe BigDecimal(350000)
 
-            vedtakPeriode1Inntekter[2].beløpType.type shouldBe null
-            vedtakPeriode1Inntekter[2].beløpType.periodeTotalinntekt shouldBe true
+            vedtakPeriode1Inntekter[2].type shouldBe null
+            vedtakPeriode1Inntekter[2].periodeTotalinntekt shouldBe true
             vedtakPeriode1Inntekter[2].beløp shouldBe (vedtakPeriode1Inntekter[0].beløp + vedtakPeriode1Inntekter[1].beløp)
 
-            vedtakPeriode1Inntekter.find { it.beløpType.type == Inntektsrapportering.KAPITALINNTEKT_EGNE_OPPLYSNINGER || it.beløpType.nettoKapitalInntekt == true } shouldBe null
-            vedtakPeriode2.inntekter.find { it.beløpType.type == Inntektsrapportering.KAPITALINNTEKT_EGNE_OPPLYSNINGER || it.beløpType.nettoKapitalInntekt == true } shouldBe null
-            vedtakPeriode3.inntekter.find { it.beløpType.type == Inntektsrapportering.KAPITALINNTEKT_EGNE_OPPLYSNINGER || it.beløpType.nettoKapitalInntekt == true } shouldBe null
+            vedtakPeriode1Inntekter.find { it.type == Inntektsrapportering.KAPITALINNTEKT_EGNE_OPPLYSNINGER || it.nettoKapitalInntekt == true } shouldBe null
+            vedtakPeriode2.inntekter.find { it.type == Inntektsrapportering.KAPITALINNTEKT_EGNE_OPPLYSNINGER || it.nettoKapitalInntekt == true } shouldBe null
+            vedtakPeriode3.inntekter.find { it.type == Inntektsrapportering.KAPITALINNTEKT_EGNE_OPPLYSNINGER || it.nettoKapitalInntekt == true } shouldBe null
 
             val vedtakPeriode4Inntekter = vedtakPeriode4.inntekter
             vedtakPeriode4Inntekter shouldHaveSize 5
 
-            vedtakPeriode4Inntekter[0].beløpType.type shouldBe Inntektsrapportering.SMÅBARNSTILLEGG
-            vedtakPeriode4Inntekter[1].beløpType.type shouldBe Inntektsrapportering.PERSONINNTEKT_EGNE_OPPLYSNINGER
-            vedtakPeriode4Inntekter[2].beløpType.type shouldBe Inntektsrapportering.UTVIDET_BARNETRYGD
-            vedtakPeriode4Inntekter[3].beløpType.type shouldBe null
-            vedtakPeriode4Inntekter[3].beløpType.nettoKapitalInntekt shouldBe true
+            vedtakPeriode4Inntekter[0].type shouldBe Inntektsrapportering.SMÅBARNSTILLEGG
+            vedtakPeriode4Inntekter[1].type shouldBe Inntektsrapportering.PERSONINNTEKT_EGNE_OPPLYSNINGER
+            vedtakPeriode4Inntekter[2].type shouldBe Inntektsrapportering.UTVIDET_BARNETRYGD
+            vedtakPeriode4Inntekter[3].type shouldBe null
+            vedtakPeriode4Inntekter[3].nettoKapitalInntekt shouldBe true
             vedtakPeriode4Inntekter[3].beløp shouldBe BigDecimal(19000)
 
-            vedtakPeriode4Inntekter[4].beløpType.type shouldBe null
-            vedtakPeriode4Inntekter[4].beløpType.periodeTotalinntekt shouldBe true
+            vedtakPeriode4Inntekter[4].type shouldBe null
+            vedtakPeriode4Inntekter[4].periodeTotalinntekt shouldBe true
             vedtakPeriode4Inntekter[4].beløp shouldBe BigDecimal(432000)
         }
     }
@@ -349,7 +349,7 @@ class VedtakServiceTest {
             val vedtakPeriode1Inntekter = vedtakPeriode1.inntekter
             vedtakPeriode1Inntekter shouldHaveSize 3
 
-            vedtakPeriode1Inntekter[0].beløpType.type shouldBe Inntektsrapportering.SMÅBARNSTILLEGG
+            vedtakPeriode1Inntekter[0].type shouldBe Inntektsrapportering.SMÅBARNSTILLEGG
             vedtakPeriode1Inntekter[0].beløp shouldBe BigDecimal(5000)
             vedtakPeriode1Inntekter[0].periode.tilLocalDateFom() shouldBe vedtakPeriode1.fomDato
             vedtakPeriode1Inntekter[0].periode.tilLocalDateTil() shouldBe vedtakPeriode1.tomDato
@@ -360,7 +360,7 @@ class VedtakServiceTest {
             val vedtakPeriode4Inntekter = vedtakPeriode6.inntekter
             vedtakPeriode4Inntekter shouldHaveSize 5
 
-            vedtakPeriode4Inntekter[0].beløpType.type shouldBe Inntektsrapportering.INNTEKTSOPPLYSNINGER_ARBEIDSGIVER
+            vedtakPeriode4Inntekter[0].type shouldBe Inntektsrapportering.INNTEKTSOPPLYSNINGER_ARBEIDSGIVER
             vedtakPeriode4Inntekter.hentGrunnlag()!!.beløp shouldBe BigDecimal(438000)
             vedtakPeriode4Inntekter.hentNettoKapital()!!.beløp shouldBe BigDecimal(28000)
 
@@ -388,7 +388,7 @@ class VedtakServiceTest {
             val vedtakPeriode1InntekterBarn2 = vedtakPeriode1barn2.inntekter
             vedtakPeriode1InntekterBarn2 shouldHaveSize 3
 
-            vedtakPeriode1InntekterBarn2[0].beløpType.type shouldBe Inntektsrapportering.SMÅBARNSTILLEGG
+            vedtakPeriode1InntekterBarn2[0].type shouldBe Inntektsrapportering.SMÅBARNSTILLEGG
             vedtakPeriode1InntekterBarn2[0].beløp shouldBe BigDecimal(5000)
             vedtakPeriode1InntekterBarn2[0].periode.tilLocalDateFom() shouldBe vedtakPeriode1.fomDato
             vedtakPeriode1InntekterBarn2[0].periode.tilLocalDateTil() shouldBe vedtakPeriode1.tomDato
@@ -399,15 +399,15 @@ class VedtakServiceTest {
             val vedtakPeriode4InntekterBarn2 = vedtakPeriode6barn2.inntekter
             vedtakPeriode4InntekterBarn2 shouldHaveSize 5
 
-            vedtakPeriode4InntekterBarn2[0].beløpType.type shouldBe Inntektsrapportering.INNTEKTSOPPLYSNINGER_ARBEIDSGIVER
+            vedtakPeriode4InntekterBarn2[0].type shouldBe Inntektsrapportering.INNTEKTSOPPLYSNINGER_ARBEIDSGIVER
             vedtakPeriode4InntekterBarn2.hentGrunnlag()!!.beløp shouldBe BigDecimal(438000)
             vedtakPeriode4InntekterBarn2.hentNettoKapital()!!.beløp shouldBe BigDecimal(28000)
         }
     }
 
-    fun List<InntektPeriode>.hentGrunnlag() = find { it.beløpType.periodeTotalinntekt == true }
+    fun List<InntektPeriode>.hentGrunnlag() = find { it.periodeTotalinntekt == true }
 
-    fun List<InntektPeriode>.hentNettoKapital() = find { it.beløpType.nettoKapitalInntekt == true }
+    fun List<InntektPeriode>.hentNettoKapital() = find { it.nettoKapitalInntekt == true }
 
     fun VedtakBarnStonad.vedtakPeriode(
         fomDato: LocalDate,
