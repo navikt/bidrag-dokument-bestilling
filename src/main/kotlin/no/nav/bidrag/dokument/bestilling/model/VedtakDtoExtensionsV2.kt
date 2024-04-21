@@ -18,7 +18,6 @@ import no.nav.bidrag.transport.behandling.felles.grunnlag.InntektsrapporteringPe
 import no.nav.bidrag.transport.behandling.felles.grunnlag.Person
 import no.nav.bidrag.transport.behandling.felles.grunnlag.SivilstandPeriode
 import no.nav.bidrag.transport.behandling.felles.grunnlag.SjablonGrunnlag
-import no.nav.bidrag.transport.behandling.felles.grunnlag.SluttberegningForskudd
 import no.nav.bidrag.transport.behandling.felles.grunnlag.SøknadGrunnlag
 import no.nav.bidrag.transport.behandling.felles.grunnlag.VirkningstidspunktGrunnlag
 import no.nav.bidrag.transport.behandling.felles.grunnlag.filtrerBasertPåEgenReferanse
@@ -100,18 +99,6 @@ fun List<GrunnlagDto>.hentBarnIHusstandPerioderForBarn(ident: String): Husstands
     return mapHusstandsbarn().find { it.gjelderBarn.ident?.verdi == ident }!!
 }
 
-fun List<GrunnlagDto>.hentSluttberegninger(
-    referanser: List<Grunnlagsreferanse>,
-): List<SluttberegningForskudd> {
-    return filtrerBasertPåEgenReferanse(Grunnlagstype.SLUTTBEREGNING_FORSKUDD).filter {
-        referanser.contains(it.referanse)
-    }.map { it.innholdTilObjekt<SluttberegningForskudd>() }
-}
-
-fun List<GrunnlagDto>.hentSluttberegningerGrunnlag(referanser: List<Grunnlagsreferanse>): List<BaseGrunnlag> {
-    return filtrerBasertPåEgenReferanser(Grunnlagstype.SLUTTBEREGNING_FORSKUDD, referanser)
-}
-
 fun List<GrunnlagDto>.hentDelberegningInntektForPeriode(periode: VedtakPeriodeDto): BaseGrunnlag? {
     val sluttberegning = filtrerBasertPåEgenReferanser(Grunnlagstype.SLUTTBEREGNING_FORSKUDD, periode.grunnlagReferanseListe).firstOrNull() ?: return null
     return filtrerBasertPåEgenReferanser(Grunnlagstype.DELBEREGNING_SUM_INNTEKT, sluttberegning.grunnlagsreferanseListe).firstOrNull()
@@ -157,18 +144,12 @@ fun List<GrunnlagDto>.hentNettoKapitalinntektForRolle(
                 InntektPeriode(
                     periode = vedtakPeriodeDto.periode,
                     beløpType = GrunnlagInntektstype(nettoKapitalInntekt = true),
-                    rolle = rolle.type.tilRolletype(), // ,
+                    rolle = rolle.type.tilRolletype(),
                     fødselsnummer = rollePersonInfo.ident!!.verdi,
                     beløp = it,
                 )
             }
         }
-
-fun VedtakDto.hentInntektSjablonGrunnlag(sluttberegningForskudd: GrunnlagDto): SjablonGrunnlag? {
-    return grunnlagListe.filtrerBasertPåEgenReferanse(Grunnlagstype.SJABLON)
-        .filter { sluttberegningForskudd.grunnlagsreferanseListe.contains(it.referanse) }
-        .map { it.innholdTilObjekt<SjablonGrunnlag>() }.find { it.sjablon == SjablonTallNavn.INNSLAG_KAPITALINNTEKT_BELØP }
-}
 
 data class Husstandsbarn(
     val gjelderBarn: Person,
