@@ -154,7 +154,7 @@ class BrevserverProducer(
                     forskUtBet = vedtakInfo != null
                     // Kode fra beslutningårsak i Bisys.
                     val vedtakPerioder =
-                        vedtakInfo?.vedtakBarn?.flatMap { it.stonader }
+                        vedtakInfo?.vedtakBarn?.flatMap { it.stønadsendringer }
                             ?.flatMap { it.vedtakPerioder } ?: emptyList()
                     val antallVedtakPerioder = vedtakPerioder.size
                     resKode =
@@ -208,14 +208,14 @@ class BrevserverProducer(
                     bidragBarn {
                         barn {
                             navn = vedtakBarn.navn
-                            fnr = vedtakBarn.fodselsnummer
+                            fnr = vedtakBarn.fødselsnummer
                             saksnr = dokumentBestilling.saksnummer
                         }
 
-                        vedtakInfo.barnIHustandPerioder.forEach {
+                        vedtakInfo.barnIHusstandPerioder.forEach {
                             forskuddBarnPeriode {
-                                fomDato = it.fomDato
-                                tomDato = it.tomDato ?: MAX_DATE
+                                fomDato = it.periode.tilLocalDateFom()
+                                tomDato = it.periode.tilLocalDateTil() ?: MAX_DATE
                                 antallBarn = it.antall
                             }
                         }
@@ -228,7 +228,7 @@ class BrevserverProducer(
                                 beskrivelse = sivilstand.sivilstand.visningsnavn.bruker[Språk.NB]
                             }
                         }
-                        vedtakBarn.stonader.forEach { detaljer ->
+                        vedtakBarn.stønadsendringer.forEach { detaljer ->
                             detaljer.forskuddInntektgrensePerioder.forEach {
                                 inntektGrunnlagForskuddPeriode {
                                     fomDato = it.fomDato
@@ -251,7 +251,7 @@ class BrevserverProducer(
                                 forskuddVedtakPeriode {
                                     fomDato = vedtakPeriode.fomDato
                                     tomDato = vedtakPeriode.tomDato ?: MAX_DATE
-                                    fnr = vedtakBarn.fodselsnummer
+                                    fnr = vedtakBarn.fødselsnummer
                                     resultatKode = vedtakPeriode.resultatKode
                                     beløp = vedtakPeriode.beløp
                                     prosent = vedtakPeriode.resultatKode.padStart(3, '0')
@@ -273,19 +273,19 @@ class BrevserverProducer(
                             }
                         }
                     }
-                    vedtakBarn.stonader.forEach { detaljer ->
+                    vedtakBarn.stønadsendringer.forEach { detaljer ->
                         detaljer.vedtakPerioder.forEach {
                             vedtak {
                                 fomDato = it.fomDato
                                 tomDato = it.tomDato ?: MAX_DATE
-                                fnr = vedtakBarn.fodselsnummer
+                                fnr = vedtakBarn.fødselsnummer
                                 belopBidrag = it.beløp
                                 resultatKode = it.resultatKode
                             }
                             forskuddVedtak {
                                 fomDato = it.fomDato
                                 tomDato = it.tomDato ?: MAX_DATE
-                                fnr = vedtakBarn.fodselsnummer
+                                fnr = vedtakBarn.fødselsnummer
                                 resultatKode = it.resultatKode
                                 beløp = it.beløp
                                 prosent = it.resultatKode.padStart(3, '0')

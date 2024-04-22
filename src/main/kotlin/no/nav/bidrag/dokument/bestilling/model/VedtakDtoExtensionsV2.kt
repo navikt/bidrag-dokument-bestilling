@@ -1,7 +1,8 @@
 package no.nav.bidrag.dokument.bestilling.model
 
-import no.nav.bidrag.dokument.bestilling.bestilling.dto.BarnIHustandPeriode
+import no.nav.bidrag.dokument.bestilling.bestilling.dto.BarnIHusstandPeriode
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.InntektPeriode
+import no.nav.bidrag.dokument.bestilling.bestilling.dto.VedtakSaksbehandlerInfo
 import no.nav.bidrag.dokument.bestilling.tjenester.hentInnslagKapitalinntekt
 import no.nav.bidrag.domene.enums.grunnlag.Grunnlagstype
 import no.nav.bidrag.domene.enums.inntekt.Inntektsrapportering
@@ -22,7 +23,6 @@ import no.nav.bidrag.transport.behandling.felles.grunnlag.SøknadGrunnlag
 import no.nav.bidrag.transport.behandling.felles.grunnlag.VirkningstidspunktGrunnlag
 import no.nav.bidrag.transport.behandling.felles.grunnlag.bidragsmottaker
 import no.nav.bidrag.transport.behandling.felles.grunnlag.filtrerBasertPåEgenReferanse
-import no.nav.bidrag.transport.behandling.felles.grunnlag.filtrerBasertPåFremmedReferanse
 import no.nav.bidrag.transport.behandling.felles.grunnlag.hentPersonMedReferanse
 import no.nav.bidrag.transport.behandling.felles.grunnlag.innholdTilObjekt
 import no.nav.bidrag.transport.behandling.felles.grunnlag.personIdent
@@ -32,25 +32,6 @@ import no.nav.bidrag.transport.behandling.vedtak.response.VedtakPeriodeDto
 import java.math.BigDecimal
 
 val kapitalinntektTyper = listOf(Inntektsrapportering.KAPITALINNTEKT, Inntektsrapportering.KAPITALINNTEKT_EGNE_OPPLYSNINGER)
-val grunnlagstyperRolle =
-    listOf(
-        Grunnlagstype.PERSON_SØKNADSBARN,
-        Grunnlagstype.PERSON_BIDRAGSMOTTAKER,
-        Grunnlagstype.PERSON_BIDRAGSPLIKTIG,
-    )
-val inntektsrapporteringSomKreverBarn =
-    listOf(
-        Inntektsrapportering.BARNETILLEGG,
-        Inntektsrapportering.KONTANTSTØTTE,
-    )
-
-data class VedtakSaksbehandlerInfo(
-    val navn: String,
-    val ident: String,
-)
-
-fun List<GrunnlagDto>.hentRoller(): List<Person> =
-    filter { grunnlagstyperRolle.contains(it.type) }.map { it.innholdTilObjekt<Person>() }
 
 fun VedtakDto.tilSaksbehandler() =
     VedtakSaksbehandlerInfo(
@@ -82,15 +63,14 @@ fun List<GrunnlagDto>.mapHusstandsbarn(): List<Husstandsbarn> =
             )
         }
 
-fun List<GrunnlagDto>.mapBarnIHusstandPerioder(): List<BarnIHustandPeriode> {
+fun List<GrunnlagDto>.mapBarnIHusstandPerioder(): List<BarnIHusstandPeriode> {
     val barnIHusstand =
         filtrerBasertPåEgenReferanse(Grunnlagstype.DELBEREGNING_BARN_I_HUSSTAND)
             .map { it.innholdTilObjekt<DelberegningBarnIHusstand>() }
 
     return barnIHusstand.sortedBy { it.periode.fom }.map {
-        BarnIHustandPeriode(
-            it.periode.tilLocalDateFom(),
-            it.periode.tilLocalDateTil(),
+        BarnIHusstandPeriode(
+            it.periode,
             it.antallBarn,
         )
     }
@@ -109,15 +89,13 @@ fun List<GrunnlagDto>.hentInntekterForPeriode(
     periode: VedtakPeriodeDto,
     person: BaseGrunnlag? = null,
 ): List<BaseGrunnlag> {
-    val sluttberegning = filtrerBasertPåEgenReferanser(Grunnlagstype.SLUTTBEREGNING_FORSKUDD, periode.grunnlagReferanseListe).firstOrNull() ?: return emptyList()
-    val delberegningInntekt =
-        filtrerBasertPåEgenReferanser(Grunnlagstype.DELBEREGNING_SUM_INNTEKT, sluttberegning.grunnlagsreferanseListe)
+    val delberegningInntekt = hentDelberegningInntektForPeriode(periode) ?: return emptyList()
     return filtrerBasertPåEgenReferanse(Grunnlagstype.INNTEKT_RAPPORTERING_PERIODE).filter { inntekt ->
-        delberegningInntekt.any { it.grunnlagsreferanseListe.contains(inntekt.referanse) } && (person == null || inntekt.gjelderReferanse == person.referanse)
+        delberegningInntekt.grunnlagsreferanseListe.contains(inntekt.referanse) && (person == null || inntekt.gjelderReferanse == person.referanse)
     }
 }
 
-fun List<GrunnlagDto>.hentKapitalInntekterForPeriode(
+fun List<GrunnlagDto>.hentKapitalinntekterForPeriode(
     periode: VedtakPeriodeDto,
     rolle: BaseGrunnlag? = null,
 ): List<InntektsrapporteringPeriode> {
@@ -134,7 +112,7 @@ fun List<GrunnlagDto>.hentNettoKapitalinntektForRolle(
     vedtakPeriodeDto: VedtakPeriodeDto,
     rolle: BaseGrunnlag,
 ): InntektPeriode? =
-    hentKapitalInntekterForPeriode(vedtakPeriodeDto, rolle).totalKapitalinntekt()
+    hentKapitalinntekterForPeriode(vedtakPeriodeDto, rolle).totalKapitalinntekt()
         .takeIf { it > BigDecimal.ZERO }
         ?.let { totalBelop ->
             val rollePersonInfo = rolle.personObjekt
@@ -198,7 +176,7 @@ fun ÅrMånedsperiode?.tilLocalDateTil() = this?.til?.atEndOfMonth()
 
 fun List<GrunnlagDto>.hentTotalInntektForPeriode(vedtakPeriode: VedtakPeriodeDto): List<InntektPeriode> {
     return hentDelberegningInntektForPeriode(vedtakPeriode)?.let { inntektPeriode ->
-        val sluttberegning = this.filtrerBasertPåFremmedReferanse(null, inntektPeriode.referanse).firstOrNull()
+//        val førsteInntekt = filtrerBasertPåFremmedReferanse(Grunnlagstype.INNTEKT_RAPPORTERING_PERIODE, inntektPeriode.grunnlagsreferanseListe).firstOrNull()
         val delberegningInntekt = inntektPeriode.innholdTilObjekt<DelberegningSumInntekt>()
         val gjelderPersonGrunnlag = bidragsmottaker!!
         listOf(
@@ -207,10 +185,12 @@ fun List<GrunnlagDto>.hentTotalInntektForPeriode(vedtakPeriode: VedtakPeriodeDto
                 beløp = delberegningInntekt.totalinntekt,
                 periodeTotalinntekt = true,
                 beløpÅr = vedtakPeriode.periode.fom.year,
-                // TODO Gjelder bare for Forskudd
+                // TODO Hvordan skal dette settes for særlige utgifter og bidrag?
                 rolle = Rolletype.BIDRAGSMOTTAKER,
                 fødselsnummer = gjelderPersonGrunnlag.personIdent,
             ),
         )
     } ?: emptyList()
 }
+
+fun <T> T?.toList() = this?.let { listOf(it) } ?: emptyList()

@@ -1,7 +1,6 @@
 package no.nav.bidrag.dokument.bestilling.bestilling.dto
 
 import no.nav.bidrag.dokument.bestilling.model.Saksbehandler
-import no.nav.bidrag.dokument.bestilling.model.VedtakSaksbehandlerInfo
 import no.nav.bidrag.dokument.bestilling.model.tilLegacyKode
 import no.nav.bidrag.dokument.bestilling.model.visningsnavnBruker
 import no.nav.bidrag.domene.enums.beregning.Resultatkode
@@ -155,21 +154,19 @@ data class InntektPeriode(
 ) {
     val beskrivelse
         get() =
-            type?.visningsnavnBruker(Språk.NB, inntektPeriode?.fom?.year) ?: if (periodeTotalinntekt == true) {
-                "Personens beregningsgrunnlag i perioden"
-            } else if (nettoKapitalInntekt == true) {
-                "Netto positive kapitalinntekter"
-            } else {
-                ""
+            when {
+                type != null -> type.visningsnavnBruker(Språk.NB, beløpÅr ?: inntektPeriode?.fom?.year)
+                periodeTotalinntekt == true -> "Personens beregningsgrunnlag i perioden"
+                nettoKapitalInntekt == true -> "Netto positive kapitalinntekter"
+                else -> ""
             }
     val beløpKode
         get() =
-            type?.tilLegacyKode() ?: if (periodeTotalinntekt == true) {
-                "XINN"
-            } else if (nettoKapitalInntekt == true) {
-                "XKAP"
-            } else {
-                ""
+            when {
+                type != null -> type.tilLegacyKode()
+                periodeTotalinntekt == true -> "XINN"
+                nettoKapitalInntekt == true -> "XKAP"
+                else -> ""
             }
 }
 
@@ -196,29 +193,28 @@ data class VedtakDetaljer(
     val søknadFra: SøktAvType? = null,
     val kilde: Vedtakskilde,
     val vedtakBarn: List<VedtakBarn> = emptyList(),
-    val barnIHustandPerioder: List<BarnIHustandPeriode> = emptyList(),
+    val barnIHusstandPerioder: List<BarnIHusstandPeriode> = emptyList(),
     val sivilstandPerioder: List<SivilstandPeriode> = emptyList(),
 ) {
     fun hentForskuddBarn(fodselsnummer: String): BigDecimal? =
         vedtakBarn
-            .find { it.fodselsnummer == fodselsnummer }
-            ?.stonader
+            .find { it.fødselsnummer == fodselsnummer }
+            ?.stønadsendringer
             ?.find { it.type == Stønadstype.FORSKUDD }
             ?.vedtakPerioder?.find { it.tomDato == null }
             ?.beløp
 }
 
-data class BarnIHustandPeriode(
-    val fomDato: LocalDate,
-    val tomDato: LocalDate? = null,
+data class BarnIHusstandPeriode(
+    val periode: ÅrMånedsperiode,
     val antall: Int,
 )
 
 data class VedtakBarn(
-    val fodselsnummer: String,
+    val fødselsnummer: String,
     val navn: String?,
     val bostatusPerioder: List<BostatusPeriode>,
-    val stonader: List<VedtakBarnStonad> = emptyList(),
+    val stønadsendringer: List<VedtakBarnStonad> = emptyList(),
 )
 
 data class VedtakBarnStonad(
@@ -239,4 +235,9 @@ data class SjablonDetaljer(
 data class SakDetaljer(
     val harUkjentPart: Boolean,
     val levdeAdskilt: Boolean,
+)
+
+data class VedtakSaksbehandlerInfo(
+    val navn: String,
+    val ident: String,
 )

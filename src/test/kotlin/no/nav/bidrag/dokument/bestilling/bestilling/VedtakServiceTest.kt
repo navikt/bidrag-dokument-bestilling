@@ -116,10 +116,10 @@ class VedtakServiceTest {
             sivilstandPeriode.sivilstand shouldBe SivilstandKode.ENSLIG
 
             // Bostatus perioder
-            vedtakDetaljer.barnIHustandPerioder shouldHaveSize 1
+            vedtakDetaljer.barnIHusstandPerioder shouldHaveSize 1
             val barnIHustandPeriode = vedtakDetaljer.hentBarnIHustandPeriodeForDato(virkningDato)!!
-            barnIHustandPeriode.fomDato shouldBe LocalDate.parse("2023-04-01")
-            barnIHustandPeriode.tomDato shouldBe null
+            barnIHustandPeriode.periode.tilLocalDateFom() shouldBe LocalDate.parse("2023-04-01")
+            barnIHustandPeriode.periode.tilLocalDateTil() shouldBe null
             barnIHustandPeriode.antall shouldBe 2
 
             vedtakDetaljer.vedtakBarn shouldHaveSize 2
@@ -129,7 +129,7 @@ class VedtakServiceTest {
             barn1Bostatus.periode.til shouldBe null
             barn1Bostatus.bostatus shouldBe Bostatuskode.MED_FORELDER
 
-            val barn1StonadPeriode = barn1.stonader[0]
+            val barn1StonadPeriode = barn1.stønadsendringer[0]
             barn1StonadPeriode.type shouldBe Stønadstype.FORSKUDD
             val barnVedtakPeriode = barn1StonadPeriode.vedtakPerioder[0]
             barnVedtakPeriode.fomDato shouldBe LocalDate.parse("2023-04-01")
@@ -196,7 +196,7 @@ class VedtakServiceTest {
             vedtakDetaljer.validerSivilstandPeriode(periode4, Sivilstandskode.ENSLIG, "Enke")
 
             // Bostatus perioder
-            vedtakDetaljer.barnIHustandPerioder shouldHaveSize 2
+            vedtakDetaljer.barnIHusstandPerioder shouldHaveSize 2
             vedtakDetaljer.validerBostatus(virkningDato, LocalDate.parse("2022-07-01"), 1)
             vedtakDetaljer.validerBostatus(LocalDate.parse("2022-07-01"), null, 3)
 
@@ -207,7 +207,7 @@ class VedtakServiceTest {
             barn1Bostatus.periode.tilLocalDateTil() shouldBe null
             barn1Bostatus.bostatus shouldBe Bostatuskode.MED_FORELDER
 
-            val barn1StonadPeriode = barn1.stonader[0]
+            val barn1StonadPeriode = barn1.stønadsendringer[0]
             barn1StonadPeriode.type shouldBe Stønadstype.FORSKUDD
             val vedtakPeriode1 = barn1StonadPeriode.hentVedtakPeriodeForDato(virkningDato)!!
             vedtakPeriode1.fomDato shouldBe periode1.fraDato
@@ -314,7 +314,7 @@ class VedtakServiceTest {
             vedtakDetaljer.validerSivilstandPeriode(PeriodeFraTom(periode4.tomDato!!, null), Sivilstandskode.SAMBOER, "Samboer")
 
             // Bostatus perioder
-            vedtakDetaljer.barnIHustandPerioder shouldHaveSize 2
+            vedtakDetaljer.barnIHusstandPerioder shouldHaveSize 2
             vedtakDetaljer.validerBostatus(virkningDato, LocalDate.parse("2021-01-01"), 2)
             vedtakDetaljer.validerBostatus(LocalDate.parse("2021-01-01"), null, 3)
 
@@ -327,7 +327,7 @@ class VedtakServiceTest {
             barn1Bostatus.periode.tilLocalDateTil() shouldBe null
             barn1Bostatus.bostatus shouldBe Bostatuskode.MED_FORELDER
 
-            val barn1StonadPeriode = barn1.stonader[0]
+            val barn1StonadPeriode = barn1.stønadsendringer[0]
             barn1StonadPeriode.type shouldBe Stønadstype.FORSKUDD
             val vedtakPeriode1 = barn1StonadPeriode.hentVedtakPeriodeForDato(virkningDato)!!
             vedtakPeriode1.fomDato shouldBe periode1.fraDato
@@ -366,7 +366,7 @@ class VedtakServiceTest {
 
             // Validate barn 2
 
-            val barn2StonadPeriode = barn2.stonader[0]
+            val barn2StonadPeriode = barn2.stønadsendringer[0]
             barn2StonadPeriode.type shouldBe Stønadstype.FORSKUDD
             val vedtakPeriode1barn2 = barn2StonadPeriode.hentVedtakPeriodeForDato(virkningDato)!!
             vedtakPeriode1barn2.fomDato shouldBe periode1.fraDato
@@ -430,8 +430,8 @@ class VedtakServiceTest {
         antallBarn: Int,
     ) {
         val barnIHustandPeriode = hentBarnIHustandPeriodeForDato(fomDato)!!
-        barnIHustandPeriode.fomDato shouldBe fomDato
-        barnIHustandPeriode.tomDato shouldBe tomDato
+        barnIHustandPeriode.periode.tilLocalDateFom() shouldBe fomDato
+        barnIHustandPeriode.periode.tilLocalDateTil() shouldBe tomDato
         barnIHustandPeriode.antall shouldBe antallBarn
     }
 
@@ -450,7 +450,7 @@ class VedtakServiceTest {
 
     fun VedtakDetaljer.hentSivilstandPeriodeForDato(periode: PeriodeFraTom) = this.sivilstandPerioder.sortedByDescending { it.periode.fom }.find { it.periode.tilLocalDateFom() <= periode.fraDato && (it.periode.til == null || periode.tomDato == null || it.periode.tilLocalDateTil()!! >= periode.tomDato) }
 
-    fun VedtakDetaljer.hentBarnIHustandPeriodeForDato(dato: LocalDate) = this.barnIHustandPerioder.sortedByDescending { it.fomDato }.find { it.fomDato <= dato && (it.tomDato == null || it.tomDato!! > dato) }
+    fun VedtakDetaljer.hentBarnIHustandPeriodeForDato(dato: LocalDate) = this.barnIHusstandPerioder.sortedByDescending { it.periode.tilLocalDateFom() }.find { it.periode.tilLocalDateFom() <= dato && (it.periode.tilLocalDateTil() == null || it.periode.tilLocalDateTil()!! > dato) }
 
     fun erInnenforPeriode(
         periode: PeriodeFraTom,
