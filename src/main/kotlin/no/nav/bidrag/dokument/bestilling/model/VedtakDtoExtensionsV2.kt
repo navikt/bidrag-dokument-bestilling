@@ -51,7 +51,7 @@ fun VedtakDto.hentSøknad(): SøknadGrunnlag {
 
 fun List<GrunnlagDto>.mapSivilstand(): List<SivilstandPeriode> =
     filtrerBasertPåEgenReferanse(Grunnlagstype.SIVILSTAND_PERIODE)
-        .map { it.innholdTilObjekt<SivilstandPeriode>() }
+        .map { it.innholdTilObjekt<SivilstandPeriode>() }.sammenstillSivilstand()
 
 fun List<GrunnlagDto>.mapHusstandsbarn(): List<Husstandsbarn> =
     filtrerBasertPåEgenReferanse(Grunnlagstype.BOSTATUS_PERIODE)
@@ -73,13 +73,85 @@ fun List<GrunnlagDto>.mapBarnIHusstandPerioder(): List<BarnIHusstandPeriode> {
             it.periode,
             it.antallBarn,
         )
+    }.sammenstillBarnIHusstandPerioder()
+}
+
+fun List<SivilstandPeriode>.sammenstillSivilstand(): List<SivilstandPeriode> {
+    val sortedList = this.sortedBy { it.periode.fom }
+    val resulterendePeriode = mutableListOf<SivilstandPeriode>()
+
+    var nåværendePeriode = sortedList.firstOrNull()
+    for (nestePeriode in sortedList.drop(1)) {
+        if (nåværendePeriode != null && nåværendePeriode.sivilstand == nestePeriode.sivilstand) {
+            // Extend the current period to include the next period
+            nåværendePeriode =
+                SivilstandPeriode(
+                    ÅrMånedsperiode(nåværendePeriode.periode.fom, maxOfNullable(nestePeriode.periode.til, nåværendePeriode.periode.til)),
+                    nåværendePeriode.sivilstand,
+                    nåværendePeriode.manueltRegistrert,
+                )
+        } else {
+            // Add the current period to the result list and start a new current period
+            if (nåværendePeriode != null) {
+                resulterendePeriode.add(nåværendePeriode)
+            }
+            nåværendePeriode = nestePeriode
+        }
     }
+
+    // Add the last period to the result list
+    if (nåværendePeriode != null) {
+        resulterendePeriode.add(nåværendePeriode)
+    }
+
+    return resulterendePeriode
+}
+
+fun List<BarnIHusstandPeriode>.sammenstillBarnIHusstandPerioder(): List<BarnIHusstandPeriode> {
+    val sortedList = this.sortedBy { it.periode.fom }
+    val resulterendePeriode = mutableListOf<BarnIHusstandPeriode>()
+
+    var nåværendePeriode = sortedList.firstOrNull()
+    for (nestePeriode in sortedList.drop(1)) {
+        if (nåværendePeriode != null && nåværendePeriode.antall == nestePeriode.antall) {
+            // Extend the current period to include the next period
+            nåværendePeriode =
+                BarnIHusstandPeriode(
+                    ÅrMånedsperiode(nåværendePeriode.periode.fom, maxOfNullable(nestePeriode.periode.til, nåværendePeriode.periode.til)),
+                    nåværendePeriode.antall,
+                )
+        } else {
+            // Add the current period to the result list and start a new current period
+            if (nåværendePeriode != null) {
+                resulterendePeriode.add(nåværendePeriode)
+            }
+            nåværendePeriode = nestePeriode
+        }
+    }
+
+    // Add the last period to the result list
+    if (nåværendePeriode != null) {
+        resulterendePeriode.add(nåværendePeriode)
+    }
+
+    return resulterendePeriode
 }
 
 fun List<GrunnlagDto>.hentBarnIHusstandPerioderForBarn(ident: String): Husstandsbarn {
     return mapHusstandsbarn().find { it.gjelderBarn.ident?.verdi == ident }!!
 }
 
+// fun List<GrunnlagDto>.hentBosstatusForPeriode(ident: String, vedtakPeriode: VedtakPeriodeDto): Bostatuskode {
+//    return mapHusstandsbarn().find { it.gjelderBarn.ident?.verdi == ident && it. }!!
+// }
+fun List<GrunnlagDto>.hentDelberegningBarnIHusstand(periode: VedtakPeriodeDto): BaseGrunnlag? {
+    val sluttberegning = filtrerBasertPåEgenReferanser(Grunnlagstype.SLUTTBEREGNING_FORSKUDD, periode.grunnlagReferanseListe).firstOrNull() ?: return null
+    return filtrerBasertPåEgenReferanser(Grunnlagstype.DELBEREGNING_BARN_I_HUSSTAND, sluttberegning.grunnlagsreferanseListe).firstOrNull()
+}
+
+fun List<GrunnlagDto>.hentDelberegningBarnIHusstandInnhold(periode: VedtakPeriodeDto): DelberegningBarnIHusstand? {
+    return hentDelberegningBarnIHusstand(periode)?.innholdTilObjekt<DelberegningBarnIHusstand>()
+}
 fun List<GrunnlagDto>.hentDelberegningInntektForPeriode(periode: VedtakPeriodeDto): BaseGrunnlag? {
     val sluttberegning = filtrerBasertPåEgenReferanser(Grunnlagstype.SLUTTBEREGNING_FORSKUDD, periode.grunnlagReferanseListe).firstOrNull() ?: return null
     return filtrerBasertPåEgenReferanser(Grunnlagstype.DELBEREGNING_SUM_INNTEKT, sluttberegning.grunnlagsreferanseListe).firstOrNull()
@@ -196,3 +268,18 @@ fun List<GrunnlagDto>.hentTotalInntektForPeriode(vedtakPeriode: VedtakPeriodeDto
 fun <T> T?.toList() = this?.let { listOf(it) } ?: emptyList()
 
 fun <T> T?.toSet() = this?.let { setOf(it) } ?: emptySet()
+
+fun <T : Comparable<T>> maxOfNullable(
+    a: T?,
+    b: T?,
+): T? {
+    return if (a == null && b == null) {
+        null
+    } else if (a == null) {
+        b
+    } else if (b == null) {
+        a
+    } else {
+        maxOf(a, b)
+    }
+}

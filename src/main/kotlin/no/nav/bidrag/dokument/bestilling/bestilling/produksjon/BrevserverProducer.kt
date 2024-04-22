@@ -23,6 +23,7 @@ import no.nav.bidrag.dokument.bestilling.model.MAX_DATE
 import no.nav.bidrag.dokument.bestilling.model.ResultatKoder
 import no.nav.bidrag.dokument.bestilling.model.tilLocalDateFom
 import no.nav.bidrag.dokument.bestilling.model.tilLocalDateTil
+import no.nav.bidrag.domene.enums.beregning.Resultatkode
 import no.nav.bidrag.domene.enums.diverse.Språk
 import no.nav.bidrag.domene.enums.person.Sivilstandskode
 import no.nav.bidrag.domene.util.visningsnavn
@@ -30,6 +31,7 @@ import no.nav.bidrag.transport.dokument.AvsenderMottakerDto
 import no.nav.bidrag.transport.dokument.JournalpostType
 import no.nav.bidrag.transport.dokument.OpprettDokumentDto
 import no.nav.bidrag.transport.dokument.OpprettJournalpostRequest
+import no.nav.bidrag.transport.dokument.isNumeric
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.jms.core.JmsTemplate
 import org.springframework.stereotype.Component
@@ -253,8 +255,8 @@ class BrevserverProducer(
                                     tomDato = vedtakPeriode.tomDato ?: MAX_DATE
                                     fnr = vedtakBarn.fødselsnummer
                                     resultatKode = vedtakPeriode.resultatKode
-                                    beløp = vedtakPeriode.beløp
-                                    prosent = vedtakPeriode.resultatKode.padStart(3, '0')
+                                    forskKode = Resultatkode.fraKode(vedtakPeriode.resultatKode)?.tilForskuddKode()
+                                    prosent = if (vedtakPeriode.resultatKode.isNumeric) vedtakPeriode.resultatKode.padStart(3, '0') else "000"
                                     maksInntekt = vedtakPeriode.maksInntekt
                                 }
 
@@ -287,8 +289,9 @@ class BrevserverProducer(
                                 tomDato = it.tomDato ?: MAX_DATE
                                 fnr = vedtakBarn.fødselsnummer
                                 resultatKode = it.resultatKode
+                                forskKode = Resultatkode.fraKode(it.resultatKode)?.tilForskuddKode()
                                 beløp = it.beløp
-                                prosent = it.resultatKode.padStart(3, '0')
+                                prosent = if (it.resultatKode.isNumeric) it.resultatKode.padStart(3, '0') else "000"
                                 maksInntekt = it.maksInntekt
                             }
                         }
@@ -358,3 +361,10 @@ class BrevserverProducer(
         }
     }
 }
+
+fun Resultatkode.tilForskuddKode() =
+    when (this) {
+        Resultatkode.AVSLAG_OVER_18_ÅR -> "BOA"
+        Resultatkode.AVSLAG_IKKE_REGISTRERT_PÅ_ADRESSE -> "BAF"
+        else -> null
+    }

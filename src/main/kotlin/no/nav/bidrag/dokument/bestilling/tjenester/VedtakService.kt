@@ -149,7 +149,7 @@ class VedtakService(private val bidragVedtakConsumer: BidragVedtakConsumer, priv
 }
 
 fun List<InntektPeriode>.sammenstillDeMedSammeBeskrivelse() =
-    groupBy { it.beskrivelse }.map { (beskrivelse, inntekter) ->
+    groupBy { it.beskrivelse }.map { (_, inntekter) ->
         inntekter.reduce { acc, inntekt ->
             InntektPeriode(
                 inntektPerioder = acc.inntektPerioder + inntekt.inntektPerioder,
