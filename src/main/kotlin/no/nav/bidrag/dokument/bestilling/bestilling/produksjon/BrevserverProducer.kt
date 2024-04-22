@@ -364,7 +364,7 @@ class BrevserverProducer(
 
 fun Resultatkode.tilForskuddKode() =
     when (this) {
-        Resultatkode.AVSLAG_OVER_18_ÅR -> "BOA"
-        Resultatkode.AVSLAG_IKKE_REGISTRERT_PÅ_ADRESSE -> "BAF"
+//        Resultatkode.AVSLAG_OVER_18_ÅR -> "BOA"
+//        Resultatkode.AVSLAG_IKKE_REGISTRERT_PÅ_ADRESSE -> "BAF"
         else -> null
     }
