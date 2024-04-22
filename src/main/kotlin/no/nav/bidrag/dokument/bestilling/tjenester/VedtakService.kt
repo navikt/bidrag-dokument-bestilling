@@ -120,7 +120,7 @@ class VedtakService(private val bidragVedtakConsumer: BidragVedtakConsumer, priv
                                 inntektOpprinneligPerioder = inntekt.opprinneligPeriode.toSet(),
                                 periode = vedtakPeriode.periode,
                                 typer = inntekt.inntektsrapportering.toSet(),
-                                beløpÅr = inntekt.periode.fom.year,
+                                beløpÅr = inntekt.opprinneligPeriode?.fom?.year ?: inntekt.periode.fom.year,
                                 rolle = gjelderPersonGrunnlag.type.tilRolletype(),
                                 fødselsnummer = gjelderPerson.ident!!.verdi,
                                 beløp = inntekt.beløp,
