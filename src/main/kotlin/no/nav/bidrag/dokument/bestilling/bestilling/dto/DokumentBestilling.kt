@@ -143,6 +143,7 @@ data class VedtakPeriode(
 
 data class InntektPeriode(
     val inntektPerioder: Set<ÅrMånedsperiode> = emptySet(),
+    val inntektOpprinneligPerioder: Set<ÅrMånedsperiode> = emptySet(),
     val periode: ÅrMånedsperiode,
     val typer: Set<Inntektsrapportering> = emptySet(),
     val periodeTotalinntekt: Boolean? = false,
@@ -154,10 +155,11 @@ data class InntektPeriode(
 ) {
     val type get() = typer.firstOrNull()
     val inntektPeriode get() = inntektPerioder.minByOrNull { it.fom }
+    val opprinneligPeriode get() = inntektOpprinneligPerioder.minByOrNull { it.fom }
     val beskrivelse
         get() =
             when {
-                typer.isNotEmpty() -> typer.first().visningsnavnBruker(Språk.NB, beløpÅr ?: inntektPeriode?.fom?.year)
+                typer.isNotEmpty() -> typer.first().visningsnavnBruker(Språk.NB, beløpÅr ?: opprinneligPeriode?.fom?.year)
                 periodeTotalinntekt == true -> "Personens beregningsgrunnlag i perioden"
                 nettoKapitalInntekt == true -> "Netto positive kapitalinntekter"
                 else -> ""

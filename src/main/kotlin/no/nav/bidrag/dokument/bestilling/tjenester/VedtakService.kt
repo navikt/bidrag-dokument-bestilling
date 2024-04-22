@@ -117,6 +117,7 @@ class VedtakService(private val bidragVedtakConsumer: BidragVedtakConsumer, priv
                             val gjelderPerson = gjelderPersonGrunnlag.personObjekt
                             InntektPeriode(
                                 inntektPerioder = inntekt.periode.toSet(),
+                                inntektOpprinneligPerioder = inntekt.opprinneligPeriode.toSet(),
                                 periode = vedtakPeriode.periode,
                                 typer = inntekt.inntektsrapportering.toSet(),
                                 beløpÅr = inntekt.periode.fom.year,
@@ -152,6 +153,7 @@ fun List<InntektPeriode>.sammenstillDeMedSammeBeskrivelse() =
         inntekter.reduce { acc, inntekt ->
             InntektPeriode(
                 inntektPerioder = acc.inntektPerioder + inntekt.inntektPerioder,
+                inntektOpprinneligPerioder = acc.inntektOpprinneligPerioder + inntekt.inntektOpprinneligPerioder,
                 periode = acc.periode,
                 typer = acc.typer + inntekt.typer,
                 periodeTotalinntekt = acc.periodeTotalinntekt,
