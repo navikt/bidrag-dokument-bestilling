@@ -256,6 +256,7 @@ class BrevserverProducer(
                                     fnr = vedtakBarn.fødselsnummer
                                     resultatKode = vedtakPeriode.resultatKode
                                     forskKode = Resultatkode.fraKode(vedtakPeriode.resultatKode)?.tilForskuddKode()
+                                    beløp = vedtakPeriode.beløp
                                     prosent = if (vedtakPeriode.resultatKode.isNumeric) vedtakPeriode.resultatKode.padStart(3, '0') else "000"
                                     maksInntekt = vedtakPeriode.maksInntekt
                                 }
@@ -364,7 +365,7 @@ class BrevserverProducer(
 
 fun Resultatkode.tilForskuddKode() =
     when (this) {
-//        Resultatkode.AVSLAG_OVER_18_ÅR -> "BOA"
-//        Resultatkode.AVSLAG_IKKE_REGISTRERT_PÅ_ADRESSE -> "BAF"
+        Resultatkode.AVSLAG_OVER_18_ÅR -> "BOA"
+        Resultatkode.AVSLAG_IKKE_REGISTRERT_PÅ_ADRESSE -> "BAF"
         else -> null
     }
