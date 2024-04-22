@@ -194,3 +194,5 @@ fun List<GrunnlagDto>.hentTotalInntektForPeriode(vedtakPeriode: VedtakPeriodeDto
 }
 
 fun <T> T?.toList() = this?.let { listOf(it) } ?: emptyList()
+
+fun <T> T?.toSet() = this?.let { setOf(it) } ?: emptySet()

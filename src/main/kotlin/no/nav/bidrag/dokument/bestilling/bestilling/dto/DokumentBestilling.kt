@@ -142,9 +142,9 @@ data class VedtakPeriode(
 )
 
 data class InntektPeriode(
-    val inntektPeriode: ÅrMånedsperiode? = null,
+    val inntektPerioder: Set<ÅrMånedsperiode> = emptySet(),
     val periode: ÅrMånedsperiode,
-    val type: Inntektsrapportering? = null,
+    val typer: Set<Inntektsrapportering> = emptySet(),
     val periodeTotalinntekt: Boolean? = false,
     val nettoKapitalInntekt: Boolean? = false,
     val beløpÅr: Int? = null,
@@ -152,10 +152,12 @@ data class InntektPeriode(
     val beløp: BigDecimal,
     val rolle: Rolletype,
 ) {
+    val type get() = typer.firstOrNull()
+    val inntektPeriode get() = inntektPerioder.minByOrNull { it.fom }
     val beskrivelse
         get() =
             when {
-                type != null -> type.visningsnavnBruker(Språk.NB, beløpÅr ?: inntektPeriode?.fom?.year)
+                typer.isNotEmpty() -> typer.first().visningsnavnBruker(Språk.NB, beløpÅr ?: inntektPeriode?.fom?.year)
                 periodeTotalinntekt == true -> "Personens beregningsgrunnlag i perioden"
                 nettoKapitalInntekt == true -> "Netto positive kapitalinntekter"
                 else -> ""
@@ -163,7 +165,7 @@ data class InntektPeriode(
     val beløpKode
         get() =
             when {
-                type != null -> type.tilLegacyKode()
+                typer.isNotEmpty() -> typer.first().tilLegacyKode()
                 periodeTotalinntekt == true -> "XINN"
                 nettoKapitalInntekt == true -> "XKAP"
                 else -> ""

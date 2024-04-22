@@ -21,6 +21,7 @@ import no.nav.bidrag.dokument.bestilling.model.mapSivilstand
 import no.nav.bidrag.dokument.bestilling.model.tilRolletype
 import no.nav.bidrag.dokument.bestilling.model.tilSaksbehandler
 import no.nav.bidrag.dokument.bestilling.model.toList
+import no.nav.bidrag.dokument.bestilling.model.toSet
 import no.nav.bidrag.domene.enums.beregning.Resultatkode
 import no.nav.bidrag.domene.enums.vedtak.Innkrevingstype
 import no.nav.bidrag.domene.enums.vedtak.Stønadstype
@@ -115,15 +116,15 @@ class VedtakService(private val bidragVedtakConsumer: BidragVedtakConsumer, priv
                             val gjelderPersonGrunnlag = grunnlagListe.hentPersonMedReferanse(inntektGrunnlag.gjelderReferanse)!!
                             val gjelderPerson = gjelderPersonGrunnlag.personObjekt
                             InntektPeriode(
-                                inntektPeriode = inntekt.periode,
+                                inntektPerioder = inntekt.periode.toSet(),
                                 periode = vedtakPeriode.periode,
-                                type = inntekt.inntektsrapportering,
+                                typer = inntekt.inntektsrapportering.toSet(),
                                 beløpÅr = inntekt.periode.fom.year,
                                 rolle = gjelderPersonGrunnlag.type.tilRolletype(),
                                 fødselsnummer = gjelderPerson.ident!!.verdi,
                                 beløp = inntekt.beløp,
                             )
-                        }.filterNotNull() + nettoKapitalInntekt.toList()
+                        }.filterNotNull().sammenstillDeMedSammeBeskrivelse() + nettoKapitalInntekt.toList()
 
                     VedtakPeriode(
                         fomDato = vedtakPeriode.periode.fom.atDay(1),
@@ -145,3 +146,20 @@ class VedtakService(private val bidragVedtakConsumer: BidragVedtakConsumer, priv
         }
     }
 }
+
+fun List<InntektPeriode>.sammenstillDeMedSammeBeskrivelse() =
+    groupBy { it.beskrivelse }.map { (beskrivelse, inntekter) ->
+        inntekter.reduce { acc, inntekt ->
+            InntektPeriode(
+                inntektPerioder = acc.inntektPerioder + inntekt.inntektPerioder,
+                periode = acc.periode,
+                typer = acc.typer + inntekt.typer,
+                periodeTotalinntekt = acc.periodeTotalinntekt,
+                nettoKapitalInntekt = acc.nettoKapitalInntekt,
+                beløpÅr = acc.beløpÅr,
+                fødselsnummer = acc.fødselsnummer,
+                beløp = acc.beløp + inntekt.beløp,
+                rolle = acc.rolle,
+            )
+        }
+    }
