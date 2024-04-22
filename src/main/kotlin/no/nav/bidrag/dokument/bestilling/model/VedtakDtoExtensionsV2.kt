@@ -152,6 +152,7 @@ fun List<GrunnlagDto>.hentDelberegningBarnIHusstand(periode: VedtakPeriodeDto): 
 fun List<GrunnlagDto>.hentDelberegningBarnIHusstandInnhold(periode: VedtakPeriodeDto): DelberegningBarnIHusstand? {
     return hentDelberegningBarnIHusstand(periode)?.innholdTilObjekt<DelberegningBarnIHusstand>()
 }
+
 fun List<GrunnlagDto>.hentDelberegningInntektForPeriode(periode: VedtakPeriodeDto): BaseGrunnlag? {
     val sluttberegning = filtrerBasertPåEgenReferanser(Grunnlagstype.SLUTTBEREGNING_FORSKUDD, periode.grunnlagReferanseListe).firstOrNull() ?: return null
     return filtrerBasertPåEgenReferanser(Grunnlagstype.DELBEREGNING_SUM_INNTEKT, sluttberegning.grunnlagsreferanseListe).firstOrNull()
