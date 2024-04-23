@@ -56,7 +56,7 @@ class DokumentMetadataCollector(
     val sjablongService: SjablongService,
     val saksbehandlerInfoManager: SaksbehandlerInfoManager,
     val organisasjonService: OrganisasjonService,
-    @Value("\${ENABLE_HENT_VEDTAK:true}") val enableHentVedtak: Boolean,
+    @Value("\${ENABLE_HENT_VEDTAK:false}") val enableHentVedtak: Boolean,
 ) {
     private lateinit var enhet: String
     private lateinit var sak: BidragssakDto
