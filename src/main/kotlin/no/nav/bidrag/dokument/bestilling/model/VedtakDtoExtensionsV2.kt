@@ -109,8 +109,8 @@ fun List<BarnIHusstandPeriode>.sammenstillBarnIHusstandPerioder(): List<BarnIHus
             result
         }
 
-fun List<GrunnlagDto>.hentBarnIHusstandPerioderForBarn(ident: String): Husstandsbarn {
-    return mapHusstandsbarn().find { it.gjelderBarn.ident?.verdi == ident }!!
+fun List<GrunnlagDto>.hentBarnIHusstandPerioderForBarn(ident: String): Husstandsbarn? {
+    return mapHusstandsbarn().find { it.gjelderBarn.ident?.verdi == ident }
 }
 
 // fun List<GrunnlagDto>.hentBosstatusForPeriode(ident: String, vedtakPeriode: VedtakPeriodeDto): Bostatuskode {

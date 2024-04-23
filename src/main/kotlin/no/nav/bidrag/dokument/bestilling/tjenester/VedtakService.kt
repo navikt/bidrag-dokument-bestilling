@@ -93,7 +93,7 @@ class VedtakService(private val bidragVedtakConsumer: BidragVedtakConsumer, priv
         return VedtakBarn(
             fødselsnummer = barnIdent,
             navn = personInfo.visningsnavn,
-            bostatusPerioder = bostatusSøknadsbarn.bostatus,
+            bostatusPerioder = bostatusSøknadsbarn?.bostatus ?: emptyList(),
             stønadsendringer = hentStønadsendringerForBarn(barnIdent, vedtak),
         )
     }
