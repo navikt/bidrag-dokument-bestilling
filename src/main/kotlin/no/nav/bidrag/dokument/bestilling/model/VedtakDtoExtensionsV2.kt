@@ -76,66 +76,38 @@ fun List<GrunnlagDto>.mapBarnIHusstandPerioder(): List<BarnIHusstandPeriode> {
     }.sammenstillBarnIHusstandPerioder()
 }
 
-fun List<SivilstandPeriode>.sammenstillSivilstand(): List<SivilstandPeriode> {
-    val sortedList = this.sortedBy { it.periode.fom }
-    val resulterendePeriode = mutableListOf<SivilstandPeriode>()
-
-    var nåværendePeriode = sortedList.firstOrNull()
-    for (nestePeriode in sortedList.drop(1)) {
-        if (nåværendePeriode != null && nåværendePeriode.sivilstand == nestePeriode.sivilstand) {
-            // Extend the current period to include the next period
-            nåværendePeriode =
-                SivilstandPeriode(
-                    ÅrMånedsperiode(nåværendePeriode.periode.fom, maxOfNullable(nestePeriode.periode.til, nåværendePeriode.periode.til)),
-                    nåværendePeriode.sivilstand,
-                    nåværendePeriode.manueltRegistrert,
-                )
-        } else {
-            // Add the current period to the result list and start a new current period
-            if (nåværendePeriode != null) {
-                resulterendePeriode.add(nåværendePeriode)
+fun List<SivilstandPeriode>.sammenstillSivilstand(): List<SivilstandPeriode> =
+    sortedBy { it.periode.fom }
+        .fold(mutableListOf()) { result, next ->
+            val current = result.lastOrNull()
+            if (current != null && current.sivilstand == next.sivilstand) {
+                result[result.lastIndex] =
+                    SivilstandPeriode(
+                        ÅrMånedsperiode(current.periode.fom, maxOfNullable(current.periode.til, next.periode.til)),
+                        current.sivilstand,
+                        current.manueltRegistrert,
+                    )
+            } else {
+                result.add(next)
             }
-            nåværendePeriode = nestePeriode
+            result
         }
-    }
 
-    // Add the last period to the result list
-    if (nåværendePeriode != null) {
-        resulterendePeriode.add(nåværendePeriode)
-    }
-
-    return resulterendePeriode
-}
-
-fun List<BarnIHusstandPeriode>.sammenstillBarnIHusstandPerioder(): List<BarnIHusstandPeriode> {
-    val sortedList = this.sortedBy { it.periode.fom }
-    val resulterendePeriode = mutableListOf<BarnIHusstandPeriode>()
-
-    var nåværendePeriode = sortedList.firstOrNull()
-    for (nestePeriode in sortedList.drop(1)) {
-        if (nåværendePeriode != null && nåværendePeriode.antall == nestePeriode.antall) {
-            // Extend the current period to include the next period
-            nåværendePeriode =
-                BarnIHusstandPeriode(
-                    ÅrMånedsperiode(nåværendePeriode.periode.fom, maxOfNullable(nestePeriode.periode.til, nåværendePeriode.periode.til)),
-                    nåværendePeriode.antall,
-                )
-        } else {
-            // Add the current period to the result list and start a new current period
-            if (nåværendePeriode != null) {
-                resulterendePeriode.add(nåværendePeriode)
+fun List<BarnIHusstandPeriode>.sammenstillBarnIHusstandPerioder(): List<BarnIHusstandPeriode> =
+    sortedBy { it.periode.fom }
+        .fold(mutableListOf()) { result, next ->
+            val current = result.lastOrNull()
+            if (current != null && current.antall == next.antall) {
+                result[result.lastIndex] =
+                    BarnIHusstandPeriode(
+                        ÅrMånedsperiode(current.periode.fom, maxOfNullable(next.periode.til, current.periode.til)),
+                        current.antall,
+                    )
+            } else {
+                result.add(next)
             }
-            nåværendePeriode = nestePeriode
+            result
         }
-    }
-
-    // Add the last period to the result list
-    if (nåværendePeriode != null) {
-        resulterendePeriode.add(nåværendePeriode)
-    }
-
-    return resulterendePeriode
-}
 
 fun List<GrunnlagDto>.hentBarnIHusstandPerioderForBarn(ident: String): Husstandsbarn {
     return mapHusstandsbarn().find { it.gjelderBarn.ident?.verdi == ident }!!

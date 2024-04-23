@@ -1,5 +1,6 @@
 package no.nav.bidrag.dokument.bestilling.bestilling
 
+import no.nav.bidrag.commons.util.secureLogger
 import no.nav.bidrag.dokument.bestilling.api.dto.DokumentBestillingForespørsel
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.Adresse
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.Barn
@@ -67,6 +68,7 @@ class DokumentMetadataCollector(
         val kreverDataGrunnlag = dokumentMal.kreverDataGrunnlag!!
         this.sak = sakService.hentSak(forespørsel.saksnummer) ?: fantIkkeSak(forespørsel.saksnummer)
         this.enhet = forespørsel.enhet ?: sak.eierfogd?.verdi ?: "9999"
+        logIdenter(forespørsel)
         return DokumentBestilling(
             dokumentreferanse = forespørsel.dokumentreferanse ?: forespørsel.dokumentReferanse,
             tittel = forespørsel.tittel,
@@ -192,6 +194,17 @@ class DokumentMetadataCollector(
             }
 
         return roller
+    }
+
+    private fun logIdenter(forespørsel: DokumentBestillingForespørsel) {
+        try {
+            if (!forespørsel.vedtakId.isNullOrEmpty()) {
+                val søknadsbarnFraVedtak = vedtakService.hentIdentSøknadsbarn(forespørsel.vedtakId)
+                secureLogger.info { "Søknadsbarn fra vedtak: ${søknadsbarnFraVedtak.joinToString(",")} og fra forespørsel ${forespørsel.barnIBehandling.joinToString(",")}" }
+            }
+        } catch (e: Exception) {
+            secureLogger.error(e) { "Det skjedde en feil ved henting av vedtak ${forespørsel.vedtakId}" }
+        }
     }
 
     private fun hentGjelderData(forespørsel: DokumentBestillingForespørsel): Gjelder {
