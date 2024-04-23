@@ -23,8 +23,6 @@
         <springdoc.version>2.2.0</springdoc.version>
         <ibmmq.version>9.3.0.1</ibmmq.version>
         <kotlin-logging-jvm.version>3.0.5</kotlin-logging-jvm.version>
-        <bidrag-behandling-felles-dto.version>0.0.87</bidrag-behandling-felles-dto.version>
-        <bidrag-behandling-felles.version>0.0.84</bidrag-behandling-felles.version>
         <google-api-extention.version>2.47.0</google-api-extention.version>
     </properties>
 
@@ -89,44 +87,6 @@
             <version>${google-api-extention.version}</version>
         </dependency>
 
-        <dependency>
-            <groupId>no.nav.bidrag</groupId>
-            <artifactId>bidrag-behandling-felles-dto</artifactId>
-            <version>${bidrag-behandling-felles-dto.version}</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>no.nav.bidrag</groupId>
-                    <artifactId>bidrag-behandling-felles</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.springdoc</groupId>
-                    <artifactId>springdoc-openapi-ui</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.springdoc</groupId>
-                    <artifactId>springdoc-openapi-kotlin</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>no.nav.bidrag</groupId>
-            <artifactId>bidrag-behandling-felles</artifactId>
-            <version>${bidrag-behandling-felles.version}</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>no.nav.bidrag</groupId>
-                    <artifactId>bidrag-behandling-felles</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.springdoc</groupId>
-                    <artifactId>springdoc-openapi-ui</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.springdoc</groupId>
-                    <artifactId>springdoc-openapi-kotlin</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
         <!--Spring-->
         <dependency>
             <groupId>org.springframework.boot</groupId>

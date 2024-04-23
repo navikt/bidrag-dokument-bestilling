@@ -9,7 +9,6 @@ import io.mockk.every
 import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
 import io.mockk.junit5.MockKExtension
-import no.nav.bidrag.behandling.felles.enums.SivilstandKode
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.InntektPeriode
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.PeriodeFraTom
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.VedtakBarnStonad
@@ -115,7 +114,7 @@ class VedtakServiceTest {
             val sivilstandPeriode = vedtakDetaljer.hentSivilstandPeriodeForDato(PeriodeFraTom(virkningDato))!!
             sivilstandPeriode.periode.tilLocalDateFom() shouldBe LocalDate.parse("2023-04-01")
             sivilstandPeriode.periode.til shouldBe null
-            sivilstandPeriode.sivilstand shouldBe SivilstandKode.ENSLIG
+            sivilstandPeriode.sivilstand shouldBe Sivilstandskode.ENSLIG
 
             // Bostatus perioder
             vedtakDetaljer.barnIHusstandPerioder shouldHaveSize 1

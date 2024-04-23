@@ -133,13 +133,7 @@ class VedtakService(private val bidragVedtakConsumer: BidragVedtakConsumer, priv
                         // TODO: Er dette riktig??
                         tomDato = vedtakPeriode.periode.til?.atEndOfMonth(),
                         beløp = vedtakPeriode.beløp ?: BigDecimal.ZERO,
-                        resultatKode =
-                            when (resultatKode) {
-                                Resultatkode.AVSLAG_OVER_18_ÅR -> "OHS"
-                                Resultatkode.AVSLAG_HØY_INNTEKT -> "OHI"
-                                Resultatkode.AVSLAG_IKKE_REGISTRERT_PÅ_ADRESSE -> "OIO"
-                                else -> resultatKode?.legacyKode ?: vedtakPeriode.resultatkode
-                            },
+                        resultatKode = resultatKode?.legacyKode ?: vedtakPeriode.resultatkode,
                         inntekter = inntekter + grunnlagListe.hentTotalInntektForPeriode(vedtakPeriode),
                         inntektGrense = sjablongService.hentInntektGrenseForPeriode(getLastDayOfPreviousMonth(vedtakPeriode.periode.til?.atEndOfMonth())),
                         maksInntekt = sjablongService.hentMaksInntektForPeriode(getLastDayOfPreviousMonth(vedtakPeriode.periode.til?.atEndOfMonth())),
@@ -171,4 +165,12 @@ fun List<InntektPeriode>.sammenstillDeMedSammeBeskrivelse() =
                 rolle = acc.rolle,
             )
         }
+    }
+
+fun Resultatkode.tilLegacy() =
+    when (this) {
+        Resultatkode.AVSLAG_OVER_18_ÅR -> "OHS"
+        Resultatkode.AVSLAG_HØY_INNTEKT -> "OHI"
+        Resultatkode.AVSLAG_IKKE_REGISTRERT_PÅ_ADRESSE -> "OIO"
+        else -> this?.legacyKode
     }
