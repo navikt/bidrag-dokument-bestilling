@@ -1,0 +1,36 @@
+package no.nav.bidrag.dokument.bestilling.model
+
+import no.nav.bidrag.domene.enums.diverse.Språk
+import no.nav.bidrag.domene.enums.inntekt.Inntektsrapportering
+import no.nav.bidrag.domene.util.visningsnavn
+import no.nav.bidrag.domene.util.visningsnavnSomKreverÅrstall
+
+fun Inntektsrapportering.tilLegacyKode() =
+    when (this) {
+        Inntektsrapportering.KONTANTSTØTTE -> "KONT"
+        Inntektsrapportering.LIGNINGSINNTEKT -> "LIGS"
+        Inntektsrapportering.KAPITALINNTEKT -> "KAPS"
+        Inntektsrapportering.KAPITALINNTEKT_EGNE_OPPLYSNINGER -> "KIEO"
+        Inntektsrapportering.DOKUMENTASJON_MANGLER_SKJØNN -> "MDOK"
+        Inntektsrapportering.MANGLENDE_BRUK_EVNE_SKJØNN -> "EVNE"
+        Inntektsrapportering.SYKEPENGER -> "SP"
+        Inntektsrapportering.PENSJON -> "PE"
+        Inntektsrapportering.INNTEKTSOPPLYSNINGER_ARBEIDSGIVER -> "AG"
+        Inntektsrapportering.SMÅBARNSTILLEGG -> "ESBT"
+        Inntektsrapportering.PERSONINNTEKT_EGNE_OPPLYSNINGER -> "PIEO"
+        Inntektsrapportering.SAKSBEHANDLER_BEREGNET_INNTEKT -> "SAK"
+        Inntektsrapportering.UTVIDET_BARNETRYGD -> "UBAT"
+        Inntektsrapportering.OVERGANGSSTØNAD -> "EFOS"
+        else -> name
+    }
+
+val visningsnavnSomKreverÅrstall = listOf(Inntektsrapportering.LIGNINGSINNTEKT)
+
+fun Inntektsrapportering.visningsnavnBruker(
+    språk: Språk,
+    årstall: Int?,
+) = if (visningsnavnSomKreverÅrstall.contains(this)) {
+    "${visningsnavn.bruker[språk]} ${årstall ?: ""}".trim()
+} else {
+    visningsnavn.bruker[språk] ?: ""
+}

@@ -1,11 +1,11 @@
 package no.nav.bidrag.dokument.bestilling.consumer
 
 import mu.KotlinLogging
-import no.nav.bidrag.behandling.felles.dto.vedtak.VedtakDto
 import no.nav.bidrag.commons.cache.BrukerCacheable
 import no.nav.bidrag.commons.web.client.AbstractRestClient
 import no.nav.bidrag.dokument.bestilling.config.CacheConfig
 import no.nav.bidrag.dokument.bestilling.model.HentVedtakFeiletException
+import no.nav.bidrag.transport.behandling.vedtak.response.VedtakDto
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.HttpStatus

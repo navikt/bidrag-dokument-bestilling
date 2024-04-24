@@ -12,13 +12,13 @@ import io.mockk.impl.annotations.MockK
 import io.mockk.junit5.MockKExtension
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.BeløpFraTil
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.ForskuddInntektgrensePeriode
-import no.nav.bidrag.dokument.bestilling.bestilling.dto.ForsorgerType
 import no.nav.bidrag.dokument.bestilling.consumer.SjablonConsumer
 import no.nav.bidrag.dokument.bestilling.consumer.dto.SjablongerDto
 import no.nav.bidrag.dokument.bestilling.model.MAX_DATE
 import no.nav.bidrag.dokument.bestilling.model.typeRef
 import no.nav.bidrag.dokument.bestilling.tjenester.SjablongService
 import no.nav.bidrag.dokument.bestilling.utils.readFile
+import no.nav.bidrag.domene.enums.person.Sivilstandskode
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -62,7 +62,7 @@ class SjablonServiceTest {
             inntektgrenser shouldHaveSize 8
             inntektgrenser.filter { it.fomDato == fraDato } shouldHaveSize 8
             inntektgrenser.filter { it.tomDato == MAX_DATE } shouldHaveSize 8
-            val ensligGrenser = inntektgrenser.filter { it.forsorgerType == ForsorgerType.ENSLIG }
+            val ensligGrenser = inntektgrenser.filter { it.forsorgerType == Sivilstandskode.ENSLIG }
             ensligGrenser shouldHaveSize 4
             ensligGrenser[0].antallBarn shouldBe 1
             ensligGrenser[1].antallBarn shouldBe 2
@@ -89,7 +89,7 @@ class SjablonServiceTest {
                 .validerBelop50Prosent(BeløpFraTil(BigDecimal(563200), BigDecimal(563200)))
 
             val giftSamboerGrenser =
-                inntektgrenser.filter { it.forsorgerType == ForsorgerType.GIFT_SAMBOER }
+                inntektgrenser.filter { it.forsorgerType == Sivilstandskode.GIFT_SAMBOER }
             giftSamboerGrenser shouldHaveSize 4
             giftSamboerGrenser[0].antallBarn shouldBe 1
             giftSamboerGrenser[1].antallBarn shouldBe 2
@@ -126,7 +126,7 @@ class SjablonServiceTest {
             inntektgrenser shouldHaveSize 8
             inntektgrenser.filter { it.fomDato == fraDato } shouldHaveSize 8
             inntektgrenser.filter { it.tomDato == tomDato } shouldHaveSize 8
-            val ensligGrenser = inntektgrenser.filter { it.forsorgerType == ForsorgerType.ENSLIG }
+            val ensligGrenser = inntektgrenser.filter { it.forsorgerType == Sivilstandskode.ENSLIG }
             ensligGrenser shouldHaveSize 4
             ensligGrenser[0].antallBarn shouldBe 1
             ensligGrenser[1].antallBarn shouldBe 2
@@ -153,7 +153,7 @@ class SjablonServiceTest {
                 .validerBelop50Prosent(BeløpFraTil(BigDecimal(534400), BigDecimal(534400)))
 
             val giftSamboerGrenser =
-                inntektgrenser.filter { it.forsorgerType == ForsorgerType.GIFT_SAMBOER }
+                inntektgrenser.filter { it.forsorgerType == Sivilstandskode.GIFT_SAMBOER }
             giftSamboerGrenser shouldHaveSize 4
             giftSamboerGrenser[0].antallBarn shouldBe 1
             giftSamboerGrenser[1].antallBarn shouldBe 2
@@ -203,7 +203,7 @@ class SjablonServiceTest {
             inntekgrenser2023[0].fomDato shouldBe LocalDate.parse("2022-07-01")
             inntekgrenser2023[0].tomDato!! shouldBe MAX_DATE
 
-            val ensligGrenser = inntektgrenser.filter { it.forsorgerType == ForsorgerType.ENSLIG }
+            val ensligGrenser = inntektgrenser.filter { it.forsorgerType == Sivilstandskode.ENSLIG }
             ensligGrenser shouldHaveSize 4 * 3
 
             // Valider beregning av inntektgrenser for 2022 basert på reele sjablonverdier
@@ -227,7 +227,7 @@ class SjablonServiceTest {
                 .validerBelop50Prosent(BeløpFraTil(BigDecimal(547200), BigDecimal(547200)))
 
             val giftSamboerGrenser =
-                inntektgrenser.filter { it.forsorgerType == ForsorgerType.GIFT_SAMBOER }
+                inntektgrenser.filter { it.forsorgerType == Sivilstandskode.GIFT_SAMBOER }
             giftSamboerGrenser shouldHaveSize 4 * 3
             val giftSamboerPeriode2022 =
                 giftSamboerGrenser.hentForPeriodeHvorDatoErInkludert(LocalDate.parse("2022-04-01"))

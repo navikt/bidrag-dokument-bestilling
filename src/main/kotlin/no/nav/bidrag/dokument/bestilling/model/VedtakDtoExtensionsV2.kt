@@ -1,0 +1,258 @@
+package no.nav.bidrag.dokument.bestilling.model
+
+import no.nav.bidrag.dokument.bestilling.bestilling.dto.BarnIHusstandPeriode
+import no.nav.bidrag.dokument.bestilling.bestilling.dto.InntektPeriode
+import no.nav.bidrag.dokument.bestilling.bestilling.dto.VedtakSaksbehandlerInfo
+import no.nav.bidrag.dokument.bestilling.tjenester.hentInnslagKapitalinntekt
+import no.nav.bidrag.domene.enums.grunnlag.Grunnlagstype
+import no.nav.bidrag.domene.enums.inntekt.Inntektsrapportering
+import no.nav.bidrag.domene.enums.rolle.Rolletype
+import no.nav.bidrag.domene.enums.sjablon.SjablonTallNavn
+import no.nav.bidrag.domene.tid.ÅrMånedsperiode
+import no.nav.bidrag.transport.behandling.felles.grunnlag.BaseGrunnlag
+import no.nav.bidrag.transport.behandling.felles.grunnlag.BostatusPeriode
+import no.nav.bidrag.transport.behandling.felles.grunnlag.DelberegningBarnIHusstand
+import no.nav.bidrag.transport.behandling.felles.grunnlag.DelberegningSumInntekt
+import no.nav.bidrag.transport.behandling.felles.grunnlag.GrunnlagDto
+import no.nav.bidrag.transport.behandling.felles.grunnlag.Grunnlagsreferanse
+import no.nav.bidrag.transport.behandling.felles.grunnlag.InntektsrapporteringPeriode
+import no.nav.bidrag.transport.behandling.felles.grunnlag.Person
+import no.nav.bidrag.transport.behandling.felles.grunnlag.SivilstandPeriode
+import no.nav.bidrag.transport.behandling.felles.grunnlag.SjablonGrunnlag
+import no.nav.bidrag.transport.behandling.felles.grunnlag.SøknadGrunnlag
+import no.nav.bidrag.transport.behandling.felles.grunnlag.VirkningstidspunktGrunnlag
+import no.nav.bidrag.transport.behandling.felles.grunnlag.bidragsmottaker
+import no.nav.bidrag.transport.behandling.felles.grunnlag.filtrerBasertPåEgenReferanse
+import no.nav.bidrag.transport.behandling.felles.grunnlag.hentPersonMedReferanse
+import no.nav.bidrag.transport.behandling.felles.grunnlag.innholdTilObjekt
+import no.nav.bidrag.transport.behandling.felles.grunnlag.personIdent
+import no.nav.bidrag.transport.behandling.felles.grunnlag.personObjekt
+import no.nav.bidrag.transport.behandling.vedtak.response.VedtakDto
+import no.nav.bidrag.transport.behandling.vedtak.response.VedtakPeriodeDto
+import java.math.BigDecimal
+
+val kapitalinntektTyper = listOf(Inntektsrapportering.KAPITALINNTEKT, Inntektsrapportering.KAPITALINNTEKT_EGNE_OPPLYSNINGER)
+
+fun VedtakDto.tilSaksbehandler() =
+    VedtakSaksbehandlerInfo(
+        navn = opprettetAvNavn ?: "",
+        ident = opprettetAv,
+    )
+
+fun VedtakDto.hentVirkningstidspunkt(): VirkningstidspunktGrunnlag? {
+    return grunnlagListe.filtrerBasertPåEgenReferanse(Grunnlagstype.VIRKNINGSTIDSPUNKT)
+        .firstOrNull()?.innholdTilObjekt<VirkningstidspunktGrunnlag>()
+}
+
+fun VedtakDto.hentSøknad(): SøknadGrunnlag {
+    return grunnlagListe.filtrerBasertPåEgenReferanse(Grunnlagstype.SØKNAD).first()
+        .innholdTilObjekt<SøknadGrunnlag>()
+}
+
+fun List<GrunnlagDto>.mapSivilstand(): List<SivilstandPeriode> =
+    filtrerBasertPåEgenReferanse(Grunnlagstype.SIVILSTAND_PERIODE)
+        .map { it.innholdTilObjekt<SivilstandPeriode>() }.sammenstillSivilstand()
+
+fun List<GrunnlagDto>.mapHusstandsbarn(): List<Husstandsbarn> =
+    filtrerBasertPåEgenReferanse(Grunnlagstype.BOSTATUS_PERIODE)
+        .groupBy { it.gjelderReferanse }.map { (gjelderPersonReferanse, grunnlag) ->
+            val person = hentPersonMedReferanse(gjelderPersonReferanse) ?: throw RuntimeException("Mangler person grunnlag for referanse $gjelderPersonReferanse")
+            Husstandsbarn(
+                person.personObjekt,
+                grunnlag.innholdTilObjekt<BostatusPeriode>(),
+            )
+        }
+
+fun List<GrunnlagDto>.mapBarnIHusstandPerioder(): List<BarnIHusstandPeriode> {
+    val barnIHusstand =
+        filtrerBasertPåEgenReferanse(Grunnlagstype.DELBEREGNING_BARN_I_HUSSTAND)
+            .map { it.innholdTilObjekt<DelberegningBarnIHusstand>() }
+
+    return barnIHusstand.sortedBy { it.periode.fom }.map {
+        BarnIHusstandPeriode(
+            it.periode,
+            it.antallBarn,
+        )
+    }.sammenstillBarnIHusstandPerioder()
+}
+
+fun List<SivilstandPeriode>.sammenstillSivilstand(): List<SivilstandPeriode> =
+    sortedBy { it.periode.fom }
+        .fold(mutableListOf()) { result, next ->
+            val current = result.lastOrNull()
+            if (current != null && current.sivilstand == next.sivilstand) {
+                result[result.lastIndex] =
+                    SivilstandPeriode(
+                        ÅrMånedsperiode(current.periode.fom, maxOfNullable(current.periode.til, next.periode.til)),
+                        current.sivilstand,
+                        current.manueltRegistrert,
+                    )
+            } else {
+                result.add(next)
+            }
+            result
+        }
+
+fun List<BarnIHusstandPeriode>.sammenstillBarnIHusstandPerioder(): List<BarnIHusstandPeriode> =
+    sortedBy { it.periode.fom }
+        .fold(mutableListOf()) { result, next ->
+            val current = result.lastOrNull()
+            if (current != null && current.antall == next.antall) {
+                result[result.lastIndex] =
+                    BarnIHusstandPeriode(
+                        ÅrMånedsperiode(current.periode.fom, maxOfNullable(next.periode.til, current.periode.til)),
+                        current.antall,
+                    )
+            } else {
+                result.add(next)
+            }
+            result
+        }
+
+fun List<GrunnlagDto>.hentBarnIHusstandPerioderForBarn(ident: String): Husstandsbarn? {
+    return mapHusstandsbarn().find { it.gjelderBarn.ident?.verdi == ident }
+}
+
+// fun List<GrunnlagDto>.hentBosstatusForPeriode(ident: String, vedtakPeriode: VedtakPeriodeDto): Bostatuskode {
+//    return mapHusstandsbarn().find { it.gjelderBarn.ident?.verdi == ident && it. }!!
+// }
+fun List<GrunnlagDto>.hentDelberegningBarnIHusstand(periode: VedtakPeriodeDto): BaseGrunnlag? {
+    val sluttberegning = filtrerBasertPåEgenReferanser(Grunnlagstype.SLUTTBEREGNING_FORSKUDD, periode.grunnlagReferanseListe).firstOrNull() ?: return null
+    return filtrerBasertPåEgenReferanser(Grunnlagstype.DELBEREGNING_BARN_I_HUSSTAND, sluttberegning.grunnlagsreferanseListe).firstOrNull()
+}
+
+fun List<GrunnlagDto>.hentDelberegningBarnIHusstandInnhold(periode: VedtakPeriodeDto): DelberegningBarnIHusstand? {
+    return hentDelberegningBarnIHusstand(periode)?.innholdTilObjekt<DelberegningBarnIHusstand>()
+}
+
+fun List<GrunnlagDto>.hentDelberegningInntektForPeriode(periode: VedtakPeriodeDto): BaseGrunnlag? {
+    val sluttberegning = filtrerBasertPåEgenReferanser(Grunnlagstype.SLUTTBEREGNING_FORSKUDD, periode.grunnlagReferanseListe).firstOrNull() ?: return null
+    return filtrerBasertPåEgenReferanser(Grunnlagstype.DELBEREGNING_SUM_INNTEKT, sluttberegning.grunnlagsreferanseListe).firstOrNull()
+}
+
+fun List<GrunnlagDto>.hentInntekterForPeriode(
+    periode: VedtakPeriodeDto,
+    person: BaseGrunnlag? = null,
+): List<BaseGrunnlag> {
+    val delberegningInntekt = hentDelberegningInntektForPeriode(periode) ?: return emptyList()
+    return filtrerBasertPåEgenReferanse(Grunnlagstype.INNTEKT_RAPPORTERING_PERIODE).filter { inntekt ->
+        delberegningInntekt.grunnlagsreferanseListe.contains(inntekt.referanse) && (person == null || inntekt.gjelderReferanse == person.referanse)
+    }
+}
+
+fun List<GrunnlagDto>.hentKapitalinntekterForPeriode(
+    periode: VedtakPeriodeDto,
+    rolle: BaseGrunnlag? = null,
+): List<InntektsrapporteringPeriode> {
+    return hentInntekterForPeriode(periode, rolle)
+        .map { it.innholdTilObjekt<InntektsrapporteringPeriode>() }
+        .filter { kapitalinntektTyper.contains(it.inntektsrapportering) }
+}
+
+fun List<InntektsrapporteringPeriode>.totalKapitalinntekt(): BigDecimal =
+    filter { kapitalinntektTyper.contains(it.inntektsrapportering) }.map { it.beløp }
+        .reduceOrNull { acc, num -> acc + num } ?: BigDecimal.ZERO
+
+fun List<GrunnlagDto>.hentNettoKapitalinntektForRolle(
+    vedtakPeriodeDto: VedtakPeriodeDto,
+    rolle: BaseGrunnlag,
+): InntektPeriode? =
+    hentKapitalinntekterForPeriode(vedtakPeriodeDto, rolle).totalKapitalinntekt()
+        .takeIf { it > BigDecimal.ZERO }
+        ?.let { totalBelop ->
+            val rollePersonInfo = rolle.personObjekt
+            val innslagKapitalInntektSjablonVerdi =
+                finnSjablonMedType(SjablonTallNavn.INNSLAG_KAPITALINNTEKT_BELØP)?.verdi ?: hentInnslagKapitalinntekt(vedtakPeriodeDto.periode.tilLocalDateTil())
+            val nettoKapitalinntekt = totalBelop - innslagKapitalInntektSjablonVerdi
+            nettoKapitalinntekt.takeIf { it > BigDecimal.ZERO }?.let {
+                InntektPeriode(
+                    periode = vedtakPeriodeDto.periode,
+                    nettoKapitalInntekt = true,
+                    rolle = rolle.type.tilRolletype(),
+                    fødselsnummer = rollePersonInfo.ident!!.verdi,
+                    beløp = it,
+                )
+            }
+        }
+
+data class Husstandsbarn(
+    val gjelderBarn: Person,
+    val bostatus: List<BostatusPeriode>,
+)
+
+fun List<BaseGrunnlag>.finnGrunnlagMedType(
+    type: Grunnlagstype,
+    fraGrunnlag: BaseGrunnlag,
+): BaseGrunnlag? {
+    val grunnlag = filtrerBasertPåEgenReferanser(type, fraGrunnlag.grunnlagsreferanseListe)
+    if (grunnlag.isEmpty()) {
+        fraGrunnlag.grunnlagsreferanseListe.filter {
+            val nesteGrunnlag = filtrerBasertPåEgenReferanse(null, it)
+            return finnGrunnlagMedType(type, nesteGrunnlag.first())
+        }
+    }
+    return null
+}
+
+fun List<BaseGrunnlag>.finnSjablonMedType(type: SjablonTallNavn) =
+    filtrerBasertPåEgenReferanse(Grunnlagstype.SJABLON)
+        .map { it.innholdTilObjekt<SjablonGrunnlag>() }.find { it.sjablon == type }
+
+fun List<BaseGrunnlag>.filtrerBasertPåEgenReferanser(
+    type: Grunnlagstype,
+    referanser: List<Grunnlagsreferanse>,
+): List<BaseGrunnlag> {
+    return filtrerBasertPåEgenReferanse(type)
+        .filter { referanser.contains(it.referanse) }
+}
+
+fun Grunnlagstype.tilRolletype() =
+    when (this) {
+        Grunnlagstype.PERSON_BIDRAGSPLIKTIG -> Rolletype.BIDRAGSPLIKTIG
+        Grunnlagstype.PERSON_SØKNADSBARN -> Rolletype.BARN
+        Grunnlagstype.PERSON_BIDRAGSMOTTAKER -> Rolletype.BIDRAGSMOTTAKER
+        Grunnlagstype.PERSON_REELL_MOTTAKER -> Rolletype.REELMOTTAKER
+        else -> throw RuntimeException("Mangler grunnlagsmapping for rolletype $this")
+    }
+
+fun ÅrMånedsperiode.tilLocalDateFom() = fom.atDay(1)
+
+fun ÅrMånedsperiode?.tilLocalDateTil() = this?.til?.atEndOfMonth()
+
+fun List<GrunnlagDto>.hentTotalInntektForPeriode(vedtakPeriode: VedtakPeriodeDto): List<InntektPeriode> {
+    return hentDelberegningInntektForPeriode(vedtakPeriode)?.let { inntektPeriode ->
+//        val førsteInntekt = filtrerBasertPåFremmedReferanse(Grunnlagstype.INNTEKT_RAPPORTERING_PERIODE, inntektPeriode.grunnlagsreferanseListe).firstOrNull()
+        val delberegningInntekt = inntektPeriode.innholdTilObjekt<DelberegningSumInntekt>()
+        val gjelderPersonGrunnlag = bidragsmottaker!!
+        listOf(
+            InntektPeriode(
+                periode = vedtakPeriode.periode,
+                beløp = delberegningInntekt.totalinntekt,
+                periodeTotalinntekt = true,
+                beløpÅr = vedtakPeriode.periode.fom.year,
+                // TODO Hvordan skal dette settes for særlige utgifter og bidrag?
+                rolle = Rolletype.BIDRAGSMOTTAKER,
+                fødselsnummer = gjelderPersonGrunnlag.personIdent,
+            ),
+        )
+    } ?: emptyList()
+}
+
+fun <T> T?.toList() = this?.let { listOf(it) } ?: emptyList()
+
+fun <T> T?.toSet() = this?.let { setOf(it) } ?: emptySet()
+
+fun <T : Comparable<T>> maxOfNullable(
+    a: T?,
+    b: T?,
+): T? {
+    return if (a == null && b == null) {
+        null
+    } else if (a == null) {
+        b
+    } else if (b == null) {
+        a
+    } else {
+        maxOf(a, b)
+    }
+}

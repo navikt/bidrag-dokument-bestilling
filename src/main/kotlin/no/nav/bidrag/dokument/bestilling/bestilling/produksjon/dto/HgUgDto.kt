@@ -2,8 +2,8 @@ package no.nav.bidrag.dokument.bestilling.bestilling.produksjon.dto
 
 import com.fasterxml.jackson.annotation.JsonProperty
 import no.nav.bidrag.dokument.bestilling.model.BehandlingType
-import no.nav.bidrag.dokument.bestilling.model.SoknadFra
 import no.nav.bidrag.dokument.bestilling.model.SoknadType
+import no.nav.bidrag.domene.enums.rolle.SøktAvType
 
 data class HgUgDtoFromJson(
     @JsonProperty("SOKN_TYPE")
@@ -20,7 +20,7 @@ data class HgUgDtoFromJson(
 
 data class HgUgDto(
     val soknadType: SoknadType?,
-    val soknadFra: SoknadFra?,
+    val soknadFra: SøktAvType?,
     val behandlingType: BehandlingType?,
     val hg: String?,
     val ug: String?,

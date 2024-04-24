@@ -6,7 +6,6 @@ import no.nav.bidrag.dokument.bestilling.bestilling.dto.DokumentBestillingResult
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.DokumentMal
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.DokumentType
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.EnhetKontaktInfo
-import no.nav.bidrag.dokument.bestilling.bestilling.dto.ForsorgerType
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.Mottaker
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.fraVerdi
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.tilVerdi
@@ -22,14 +21,20 @@ import no.nav.bidrag.dokument.bestilling.consumer.BidragDokumentConsumer
 import no.nav.bidrag.dokument.bestilling.model.BehandlingType
 import no.nav.bidrag.dokument.bestilling.model.MAX_DATE
 import no.nav.bidrag.dokument.bestilling.model.ResultatKoder
+import no.nav.bidrag.dokument.bestilling.model.tilLocalDateFom
+import no.nav.bidrag.dokument.bestilling.model.tilLocalDateTil
+import no.nav.bidrag.domene.enums.beregning.Resultatkode
+import no.nav.bidrag.domene.enums.diverse.Språk
+import no.nav.bidrag.domene.enums.person.Sivilstandskode
+import no.nav.bidrag.domene.util.visningsnavn
 import no.nav.bidrag.transport.dokument.AvsenderMottakerDto
 import no.nav.bidrag.transport.dokument.JournalpostType
 import no.nav.bidrag.transport.dokument.OpprettDokumentDto
 import no.nav.bidrag.transport.dokument.OpprettJournalpostRequest
+import no.nav.bidrag.transport.dokument.isNumeric
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.jms.core.JmsTemplate
 import org.springframework.stereotype.Component
-import java.util.*
 
 @Component(BestillingSystem.BREVSERVER)
 class BrevserverProducer(
@@ -145,13 +150,13 @@ class BrevserverProducer(
                         soknGrKode = it.behandlingType?.kode
                         soknFraKode = it.søknadFra?.kode
                         soknType = it.soknadType?.kode
-                        virkningsDato = it.virkningDato
-                        mottatDato = it.soknadDato
+                        virkningsDato = it.virkningstidspunkt
+                        mottatDato = it.mottattDato
                     }
                     forskUtBet = vedtakInfo != null
                     // Kode fra beslutningårsak i Bisys.
                     val vedtakPerioder =
-                        vedtakInfo?.vedtakBarn?.flatMap { it.stonader }
+                        vedtakInfo?.vedtakBarn?.flatMap { it.stønadsendringer }
                             ?.flatMap { it.vedtakPerioder } ?: emptyList()
                     val antallVedtakPerioder = vedtakPerioder.size
                     resKode =
@@ -188,13 +193,13 @@ class BrevserverProducer(
                 }
                 vedtakInfo?.let {
                     soknad {
-                        aarsakKd = it.virkningÅrsakKode
+                        aarsakKd = it.årsakKode?.legacyKode ?: it.avslagsKode?.legacyKode // TODO: Oversett til riktig kode
                         undergrp = hgUgDto?.ug
                         type = it.stønadType?.let { BehandlingType.valueOf(it.name).kode }
 
                         vedtattDato = it.vedtattDato
-                        virkningDato = it.virkningDato
-                        soknDato = it.soknadDato
+                        virkningDato = it.virkningstidspunkt
+                        soknDato = it.mottattDato
                         sendtDato = it.vedtattDato // TODO: Er dette riktig?
                         saksnr = dokumentBestilling.saksnummer
                     }
@@ -205,27 +210,27 @@ class BrevserverProducer(
                     bidragBarn {
                         barn {
                             navn = vedtakBarn.navn
-                            fnr = vedtakBarn.fodselsnummer
+                            fnr = vedtakBarn.fødselsnummer
                             saksnr = dokumentBestilling.saksnummer
                         }
 
-                        vedtakInfo.barnIHustandPerioder.forEach {
+                        vedtakInfo.barnIHusstandPerioder.forEach {
                             forskuddBarnPeriode {
-                                fomDato = it.fomDato
-                                tomDato = it.tomDato ?: MAX_DATE
+                                fomDato = it.periode.tilLocalDateFom()
+                                tomDato = it.periode.tilLocalDateTil() ?: MAX_DATE
                                 antallBarn = it.antall
                             }
                         }
 
                         vedtakInfo.sivilstandPerioder.forEach { sivilstand ->
                             forskuddSivilstandPeriode {
-                                fomDato = sivilstand.fomDato
-                                tomDato = sivilstand.tomDato ?: MAX_DATE
-                                kode = sivilstand.sivilstandKode.toKode()
-                                beskrivelse = sivilstand.sivilstandBeskrivelse
+                                fomDato = sivilstand.periode.tilLocalDateFom()
+                                tomDato = sivilstand.periode.tilLocalDateTil() ?: MAX_DATE
+                                kode = sivilstand.sivilstand.toKode()
+                                beskrivelse = sivilstand.sivilstand.visningsnavn.bruker[Språk.NB]
                             }
                         }
-                        vedtakBarn.stonader.forEach { detaljer ->
+                        vedtakBarn.stønadsendringer.forEach { detaljer ->
                             detaljer.forskuddInntektgrensePerioder.forEach {
                                 inntektGrunnlagForskuddPeriode {
                                     fomDato = it.fomDato
@@ -233,8 +238,9 @@ class BrevserverProducer(
                                     antallBarn = it.antallBarn
                                     forsorgerKode =
                                         when (it.forsorgerType) {
-                                            ForsorgerType.ENSLIG -> "EN"
-                                            ForsorgerType.GIFT_SAMBOER -> "GS"
+                                            Sivilstandskode.ENSLIG -> "EN"
+                                            Sivilstandskode.GIFT_SAMBOER -> "GS"
+                                            else -> ""
                                         }
                                     belop50fra = it.beløp50Prosent.fraVerdi()
                                     belop50til = it.beløp50Prosent.tilVerdi()
@@ -247,44 +253,46 @@ class BrevserverProducer(
                                 forskuddVedtakPeriode {
                                     fomDato = vedtakPeriode.fomDato
                                     tomDato = vedtakPeriode.tomDato ?: MAX_DATE
-                                    fnr = vedtakBarn.fodselsnummer
+                                    fnr = vedtakBarn.fødselsnummer
                                     resultatKode = vedtakPeriode.resultatKode
+                                    forskKode = Resultatkode.fraKode(vedtakPeriode.resultatKode)?.tilForskuddKode()
                                     beløp = vedtakPeriode.beløp
-                                    prosent = vedtakPeriode.resultatKode.padStart(3, '0')
+                                    prosent = if (vedtakPeriode.resultatKode.isNumeric) vedtakPeriode.resultatKode.padStart(3, '0') else "000"
                                     maksInntekt = vedtakPeriode.maksInntekt
                                 }
 
                                 vedtakPeriode.inntekter.forEach {
                                     inntektPeriode {
-                                        fomDato = it.periodeFomDato
-                                        tomDato = it.periodeTomDato ?: MAX_DATE
-                                        belopType = it.beløpType.belopstype
+                                        fomDato = it.periode?.tilLocalDateFom()
+                                        tomDato = it.periode.tilLocalDateTil() ?: MAX_DATE
+                                        belopType = it.beløpKode
                                         belopÅrsinntekt = it.beløp
-                                        beskrivelse = it.beløpType.beskrivelse
+                                        beskrivelse = it.beskrivelse
                                         rolle = it.rolle.toKode()
-                                        fnr = it.fodselsnummer
+                                        fnr = it.fødselsnummer
                                         inntektGrense = vedtakPeriode.inntektGrense
                                     }
                                 }
                             }
                         }
                     }
-                    vedtakBarn.stonader.forEach { detaljer ->
+                    vedtakBarn.stønadsendringer.forEach { detaljer ->
                         detaljer.vedtakPerioder.forEach {
                             vedtak {
                                 fomDato = it.fomDato
                                 tomDato = it.tomDato ?: MAX_DATE
-                                fnr = vedtakBarn.fodselsnummer
+                                fnr = vedtakBarn.fødselsnummer
                                 belopBidrag = it.beløp
                                 resultatKode = it.resultatKode
                             }
                             forskuddVedtak {
                                 fomDato = it.fomDato
                                 tomDato = it.tomDato ?: MAX_DATE
-                                fnr = vedtakBarn.fodselsnummer
+                                fnr = vedtakBarn.fødselsnummer
                                 resultatKode = it.resultatKode
+                                forskKode = Resultatkode.fraKode(it.resultatKode)?.tilForskuddKode()
                                 beløp = it.beløp
-                                prosent = it.resultatKode.padStart(3, '0')
+                                prosent = if (it.resultatKode.isNumeric) it.resultatKode.padStart(3, '0') else "000"
                                 maksInntekt = it.maksInntekt
                             }
                         }
@@ -354,3 +362,10 @@ class BrevserverProducer(
         }
     }
 }
+
+fun Resultatkode.tilForskuddKode() =
+    when (this) {
+        Resultatkode.AVSLAG_OVER_18_ÅR -> "BOA"
+        Resultatkode.AVSLAG_IKKE_REGISTRERT_PÅ_ADRESSE -> "BAF"
+        else -> null
+    }

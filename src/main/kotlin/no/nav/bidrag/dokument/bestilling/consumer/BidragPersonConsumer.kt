@@ -12,7 +12,9 @@ import no.nav.bidrag.transport.person.PersonDto
 import no.nav.bidrag.transport.person.PersonRequest
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.beans.factory.annotation.Value
+import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
+import org.springframework.http.MediaType
 import org.springframework.retry.annotation.Backoff
 import org.springframework.retry.annotation.Retryable
 import org.springframework.stereotype.Service
@@ -52,6 +54,8 @@ class BidragPersonConsumer(
     @Retryable(maxAttempts = 3, backoff = Backoff(delay = 500, maxDelay = 1500, multiplier = 2.0))
     @BrukerCacheable(PERSON_SPRAAK_CACHE)
     fun hentSpraak(id: String): String? {
-        return postForEntity(createUri("/spraak"), PersonRequest(Personident(id)))
+        val headers = HttpHeaders()
+        headers.accept = listOf(MediaType.TEXT_PLAIN)
+        return postForEntity(createUri("/spraak"), PersonRequest(Personident(id)), headers)
     }
 }
