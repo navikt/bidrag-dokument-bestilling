@@ -193,7 +193,7 @@ class BrevserverProducer(
                 }
                 vedtakInfo?.let {
                     soknad {
-                        aarsakKd = it.årsakKode?.legacyKode ?: "SF" // TODO: Oversett til riktig kode
+                        aarsakKd = it.årsakKode?.legacyKode ?: it.avslagsKode?.legacyKode // TODO: Oversett til riktig kode
                         undergrp = hgUgDto?.ug
                         type = it.stønadType?.let { BehandlingType.valueOf(it.name).kode }
 
