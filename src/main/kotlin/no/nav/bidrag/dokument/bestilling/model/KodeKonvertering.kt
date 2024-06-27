@@ -3,7 +3,6 @@ package no.nav.bidrag.dokument.bestilling.model
 import no.nav.bidrag.domene.enums.diverse.Språk
 import no.nav.bidrag.domene.enums.inntekt.Inntektsrapportering
 import no.nav.bidrag.domene.util.visningsnavn
-import no.nav.bidrag.domene.util.visningsnavnSomKreverÅrstall
 
 fun Inntektsrapportering.tilLegacyKode() =
     when (this) {
@@ -12,10 +11,10 @@ fun Inntektsrapportering.tilLegacyKode() =
         Inntektsrapportering.KAPITALINNTEKT -> "KAPS"
         Inntektsrapportering.KAPITALINNTEKT_EGNE_OPPLYSNINGER -> "KIEO"
         Inntektsrapportering.DOKUMENTASJON_MANGLER_SKJØNN -> "MDOK"
-        Inntektsrapportering.MANGLENDE_BRUK_EVNE_SKJØNN -> "EVNE"
+        Inntektsrapportering.MANGLENDE_BRUK_AV_EVNE_SKJØNN -> "EVNE"
         Inntektsrapportering.SYKEPENGER -> "SP"
         Inntektsrapportering.PENSJON -> "PE"
-        Inntektsrapportering.INNTEKTSOPPLYSNINGER_ARBEIDSGIVER -> "AG"
+        Inntektsrapportering.INNTEKTSOPPLYSNINGER_FRA_ARBEIDSGIVER -> "AG"
         Inntektsrapportering.SMÅBARNSTILLEGG -> "ESBT"
         Inntektsrapportering.PERSONINNTEKT_EGNE_OPPLYSNINGER -> "PIEO"
         Inntektsrapportering.SAKSBEHANDLER_BEREGNET_INNTEKT -> "SAK"
