@@ -4,7 +4,9 @@ import no.nav.bidrag.domene.enums.vedtak.Engangsbeløptype
 import no.nav.bidrag.domene.enums.vedtak.Stønadstype
 import no.nav.bidrag.domene.enums.vedtak.Vedtakstype
 
-enum class SoknadType(val kode: String) {
+enum class SoknadType(
+    val kode: String,
+) {
     ENDRING("EN"),
     ENDRING_MOTTAKER("EN"),
     EGET_TILTAK("ET"),
@@ -27,12 +29,10 @@ enum class SoknadType(val kode: String) {
     ;
 
     companion object {
-        fun fromKode(kode: String): SoknadType? {
-            return entries.find { it.kode == kode }
-        }
+        fun fromKode(kode: String): SoknadType? = entries.find { it.kode == kode }
 
-        fun fromVedtakType(vedtakType: Vedtakstype): SoknadType {
-            return when (vedtakType) {
+        fun fromVedtakType(vedtakType: Vedtakstype): SoknadType =
+            when (vedtakType) {
                 Vedtakstype.INDEKSREGULERING -> INDEKSREGULERING
                 Vedtakstype.FASTSETTELSE -> SOKNAD
                 Vedtakstype.ENDRING, Vedtakstype.ENDRING_MOTTAKER -> ENDRING
@@ -43,11 +43,12 @@ enum class SoknadType(val kode: String) {
                 Vedtakstype.ALDERSJUSTERING -> OPPJUST_FORSK // Kan være EGET_TILTAK, OPPJUST_FORSK
                 else -> ENDRING
             }
-        }
     }
 }
 
-enum class BehandlingType(val kode: String) {
+enum class BehandlingType(
+    val kode: String,
+) {
     AVSKRIVNING("AV"),
     EKTEFELLEBIDRAG("EB"),
     BIDRAG_18_AR("18"),
@@ -78,15 +79,13 @@ enum class BehandlingType(val kode: String) {
     ;
 
     companion object {
-        fun fromKode(kode: String): BehandlingType? {
-            return BehandlingType.values().find { it.kode == kode }
-        }
+        fun fromKode(kode: String): BehandlingType? = BehandlingType.values().find { it.kode == kode }
 
         fun from(
             stonadType: Stønadstype,
             engangsbelopType: Engangsbeløptype?,
-        ): BehandlingType? {
-            return when (stonadType) {
+        ): BehandlingType? =
+            when (stonadType) {
                 Stønadstype.FORSKUDD -> FORSKUDD
                 Stønadstype.BIDRAG -> BIDRAG // Inneholder BIDRAG, BIDRAG_TILLEGGSBIDRAG, TILLEGGSBIDRAG
                 Stønadstype.BIDRAG18AAR -> BIDRAG_18_AR // Inneholder BIDRAG_18_AR_TILLEGGSBBI, BIDRAG_18_AR
@@ -95,7 +94,7 @@ enum class BehandlingType(val kode: String) {
                 Stønadstype.OPPFOSTRINGSBIDRAG -> OPPFOSTRINGSBIDRAG
                 else ->
                     when (engangsbelopType) {
-                        Engangsbeløptype.SAERTILSKUDD, Engangsbeløptype.SÆRTILSKUDD -> SARTILSKUDD
+                        Engangsbeløptype.SAERTILSKUDD, Engangsbeløptype.SÆRTILSKUDD, Engangsbeløptype.SÆRBIDRAG -> SARTILSKUDD
                         Engangsbeløptype.GEBYR_SKYLDNER, Engangsbeløptype.GEBYR_MOTTAKER -> GEBYR
                         Engangsbeløptype.ETTERGIVELSE -> ETTERGIVELSE
                         Engangsbeløptype.TILBAKEKREVING -> TILBAKEKREVING
@@ -103,6 +102,5 @@ enum class BehandlingType(val kode: String) {
                         else -> null
                     }
             }
-        }
     }
 }
