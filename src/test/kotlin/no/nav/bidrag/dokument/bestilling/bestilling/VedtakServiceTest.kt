@@ -144,7 +144,7 @@ class VedtakServiceTest {
             val barn1InntektPeriode1 = barnVedtakPeriode.inntekter[0]
             val barn1InntektBeregningsgrunnlag = barnVedtakPeriode.inntekter[1]
 
-            barn1InntektPeriode1.type shouldBe Inntektsrapportering.INNTEKTSOPPLYSNINGER_ARBEIDSGIVER
+            barn1InntektPeriode1.type shouldBe Inntektsrapportering.INNTEKTSOPPLYSNINGER_FRA_ARBEIDSGIVER
             barn1InntektBeregningsgrunnlag.periodeTotalinntekt shouldBe true
 
             barn1InntektPeriode1.inntektPeriode?.tilLocalDateFom() shouldBe LocalDate.parse("2023-04-01")
@@ -361,7 +361,7 @@ class VedtakServiceTest {
             val vedtakPeriode4Inntekter = vedtakPeriode6.inntekter
             vedtakPeriode4Inntekter shouldHaveSize 5
 
-            vedtakPeriode4Inntekter[0].type shouldBe Inntektsrapportering.INNTEKTSOPPLYSNINGER_ARBEIDSGIVER
+            vedtakPeriode4Inntekter[0].type shouldBe Inntektsrapportering.INNTEKTSOPPLYSNINGER_FRA_ARBEIDSGIVER
             vedtakPeriode4Inntekter.hentGrunnlag()!!.beløp shouldBe BigDecimal(438000)
             vedtakPeriode4Inntekter.hentNettoKapital()!!.beløp shouldBe BigDecimal(28000)
 
@@ -400,7 +400,7 @@ class VedtakServiceTest {
             val vedtakPeriode4InntekterBarn2 = vedtakPeriode6barn2.inntekter
             vedtakPeriode4InntekterBarn2 shouldHaveSize 5
 
-            vedtakPeriode4InntekterBarn2[0].type shouldBe Inntektsrapportering.INNTEKTSOPPLYSNINGER_ARBEIDSGIVER
+            vedtakPeriode4InntekterBarn2[0].type shouldBe Inntektsrapportering.INNTEKTSOPPLYSNINGER_FRA_ARBEIDSGIVER
             vedtakPeriode4InntekterBarn2.hentGrunnlag()!!.beløp shouldBe BigDecimal(438000)
             vedtakPeriode4InntekterBarn2.hentNettoKapital()!!.beløp shouldBe BigDecimal(28000)
         }
