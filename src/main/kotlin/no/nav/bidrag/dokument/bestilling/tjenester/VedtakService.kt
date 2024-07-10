@@ -16,6 +16,7 @@ import no.nav.bidrag.dokument.bestilling.model.hentSøknad
 import no.nav.bidrag.dokument.bestilling.model.hentTotalInntektForPeriode
 import no.nav.bidrag.dokument.bestilling.model.hentVirkningstidspunkt
 import no.nav.bidrag.dokument.bestilling.model.kapitalinntektTyper
+import no.nav.bidrag.dokument.bestilling.model.legacyKodeBrev
 import no.nav.bidrag.dokument.bestilling.model.mapBarnIHusstandPerioder
 import no.nav.bidrag.dokument.bestilling.model.mapSivilstand
 import no.nav.bidrag.dokument.bestilling.model.tilRolletype
@@ -39,10 +40,12 @@ import org.springframework.stereotype.Service
 import java.math.BigDecimal
 
 @Service
-class VedtakService(private val bidragVedtakConsumer: BidragVedtakConsumer, private val sjablongService: SjablongService, private val personService: PersonService) {
-    fun hentVedtak(vedtakId: String): VedtakDto {
-        return bidragVedtakConsumer.hentVedtak(vedtakId) ?: fantIkkeVedtak(vedtakId)
-    }
+class VedtakService(
+    private val bidragVedtakConsumer: BidragVedtakConsumer,
+    private val sjablongService: SjablongService,
+    private val personService: PersonService,
+) {
+    fun hentVedtak(vedtakId: String): VedtakDto = bidragVedtakConsumer.hentVedtak(vedtakId) ?: fantIkkeVedtak(vedtakId)
 
     fun hentIdentSøknadsbarn(vedtakId: String): List<String> {
         val vedtakDto = hentVedtak(vedtakId)
@@ -79,7 +82,11 @@ class VedtakService(private val bidragVedtakConsumer: BidragVedtakConsumer, priv
         if (!erForskudd) return emptyList()
         val perioder = stonadsendringListe.flatMap { it.periodeListe }
         val fraDato = perioder.minByOrNull { it.periode.fom }!!.periode.fom
-        val tomDato = perioder.sortedByDescending { it.periode.til }.first().periode.til
+        val tomDato =
+            perioder
+                .sortedByDescending { it.periode.til }
+                .first()
+                .periode.til
         return sjablongService.hentForskuddInntektgrensePerioder(fraDato.atDay(1), tomDato?.atEndOfMonth())
     }
 
@@ -110,22 +117,25 @@ class VedtakService(private val bidragVedtakConsumer: BidragVedtakConsumer, priv
                     val nettoKapitalInntekt = grunnlagListe.hentNettoKapitalinntektForRolle(vedtakPeriode, grunnlagListe.bidragsmottaker!!)
 
                     val inntekter =
-                        grunnlagListe.hentInntekterForPeriode(vedtakPeriode).map { inntektGrunnlag ->
-                            val inntekt = inntektGrunnlag.innholdTilObjekt<InntektsrapporteringPeriode>()
-                            if (kapitalinntektTyper.contains(inntekt.inntektsrapportering)) return@map null
-                            val gjelderPersonGrunnlag = grunnlagListe.hentPersonMedReferanse(inntektGrunnlag.gjelderReferanse)!!
-                            val gjelderPerson = gjelderPersonGrunnlag.personObjekt
-                            InntektPeriode(
-                                inntektPerioder = inntekt.periode.toSet(),
-                                inntektOpprinneligPerioder = inntekt.opprinneligPeriode.toSet(),
-                                periode = vedtakPeriode.periode,
-                                typer = inntekt.inntektsrapportering.toSet(),
-                                beløpÅr = inntekt.opprinneligPeriode?.fom?.year ?: inntekt.periode.fom.year,
-                                rolle = gjelderPersonGrunnlag.type.tilRolletype(),
-                                fødselsnummer = gjelderPerson.ident!!.verdi,
-                                beløp = inntekt.beløp,
-                            )
-                        }.filterNotNull().sammenstillDeMedSammeBeskrivelse() + nettoKapitalInntekt.toList()
+                        grunnlagListe
+                            .hentInntekterForPeriode(vedtakPeriode)
+                            .map { inntektGrunnlag ->
+                                val inntekt = inntektGrunnlag.innholdTilObjekt<InntektsrapporteringPeriode>()
+                                if (kapitalinntektTyper.contains(inntekt.inntektsrapportering)) return@map null
+                                val gjelderPersonGrunnlag = grunnlagListe.hentPersonMedReferanse(inntektGrunnlag.gjelderReferanse)!!
+                                val gjelderPerson = gjelderPersonGrunnlag.personObjekt
+                                InntektPeriode(
+                                    inntektPerioder = inntekt.periode.toSet(),
+                                    inntektOpprinneligPerioder = inntekt.opprinneligPeriode.toSet(),
+                                    periode = vedtakPeriode.periode,
+                                    typer = inntekt.inntektsrapportering.toSet(),
+                                    beløpÅr = inntekt.opprinneligPeriode?.fom?.year ?: inntekt.periode.fom.year,
+                                    rolle = gjelderPersonGrunnlag.type.tilRolletype(),
+                                    fødselsnummer = gjelderPerson.ident!!.verdi,
+                                    beløp = inntekt.beløp,
+                                )
+                            }.filterNotNull()
+                            .sammenstillDeMedSammeBeskrivelse() + nettoKapitalInntekt.toList()
 
                     val resultatKode = Resultatkode.fraKode(vedtakPeriode.resultatkode)
                     VedtakPeriode(
@@ -133,7 +143,7 @@ class VedtakService(private val bidragVedtakConsumer: BidragVedtakConsumer, priv
                         // TODO: Er dette riktig??
                         tomDato = vedtakPeriode.periode.til?.atEndOfMonth(),
                         beløp = vedtakPeriode.beløp ?: BigDecimal.ZERO,
-                        resultatKode = resultatKode?.legacyKode ?: vedtakPeriode.resultatkode,
+                        resultatKode = resultatKode?.legacyKodeBrev ?: vedtakPeriode.resultatkode,
                         inntekter = inntekter + grunnlagListe.hentTotalInntektForPeriode(vedtakPeriode),
                         inntektGrense = sjablongService.hentInntektGrenseForPeriode(getLastDayOfPreviousMonth(vedtakPeriode.periode.til?.atEndOfMonth())),
                         maksInntekt = sjablongService.hentMaksInntektForPeriode(getLastDayOfPreviousMonth(vedtakPeriode.periode.til?.atEndOfMonth())),
@@ -172,5 +182,5 @@ fun Resultatkode.tilLegacy() =
         Resultatkode.AVSLAG_OVER_18_ÅR -> "OHS"
         Resultatkode.AVSLAG_HØY_INNTEKT -> "OHI"
         Resultatkode.AVSLAG_IKKE_REGISTRERT_PÅ_ADRESSE -> "OIO"
-        else -> this?.legacyKode
+        else -> this?.legacyKodeBrev
     }

@@ -21,6 +21,7 @@ import no.nav.bidrag.dokument.bestilling.consumer.BidragDokumentConsumer
 import no.nav.bidrag.dokument.bestilling.model.BehandlingType
 import no.nav.bidrag.dokument.bestilling.model.MAX_DATE
 import no.nav.bidrag.dokument.bestilling.model.ResultatKoder
+import no.nav.bidrag.dokument.bestilling.model.legacyKodeBrev
 import no.nav.bidrag.dokument.bestilling.model.tilLocalDateFom
 import no.nav.bidrag.dokument.bestilling.model.tilLocalDateTil
 import no.nav.bidrag.domene.enums.beregning.Resultatkode
@@ -156,7 +157,9 @@ class BrevserverProducer(
                     forskUtBet = vedtakInfo != null
                     // Kode fra beslutningårsak i Bisys.
                     val vedtakPerioder =
-                        vedtakInfo?.vedtakBarn?.flatMap { it.stønadsendringer }
+                        vedtakInfo
+                            ?.vedtakBarn
+                            ?.flatMap { it.stønadsendringer }
                             ?.flatMap { it.vedtakPerioder } ?: emptyList()
                     val antallVedtakPerioder = vedtakPerioder.size
                     resKode =
@@ -193,7 +196,7 @@ class BrevserverProducer(
                 }
                 vedtakInfo?.let {
                     soknad {
-                        aarsakKd = it.årsakKode?.legacyKode ?: it.avslagsKode?.legacyKode // TODO: Oversett til riktig kode
+                        aarsakKd = it.årsakKode?.legacyKode ?: it.avslagsKode?.legacyKodeBrev // TODO: Oversett til riktig kode
                         undergrp = hgUgDto?.ug
                         type = it.stønadType?.let { BehandlingType.valueOf(it.name).kode }
 
@@ -341,8 +344,8 @@ class BrevserverProducer(
     fun mapBrevmottaker(
         brev: Brev,
         mottaker: Mottaker,
-    ): BrevMottaker {
-        return brev.brevmottaker {
+    ): BrevMottaker =
+        brev.brevmottaker {
             navn = mottaker.navn
             spraak = mottaker.spraak
             fodselsnummer = mottaker.fodselsnummer
@@ -360,7 +363,6 @@ class BrevserverProducer(
 //            landkode = adresse.landkode3
             }
         }
-    }
 }
 
 fun Resultatkode.tilForskuddKode() =
