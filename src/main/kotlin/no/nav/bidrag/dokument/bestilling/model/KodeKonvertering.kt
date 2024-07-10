@@ -1,5 +1,6 @@
 package no.nav.bidrag.dokument.bestilling.model
 
+import no.nav.bidrag.domene.enums.beregning.Resultatkode
 import no.nav.bidrag.domene.enums.diverse.Språk
 import no.nav.bidrag.domene.enums.inntekt.Inntektsrapportering
 import no.nav.bidrag.domene.util.visningsnavn
@@ -33,3 +34,15 @@ fun Inntektsrapportering.visningsnavnBruker(
 } else {
     visningsnavn.bruker[språk] ?: ""
 }
+
+val Resultatkode.legacyKodeBrev
+    get() =
+        run {
+            legacyKode.ifEmpty {
+                when (type.first()) {
+                    Resultatkode.ResultatkodeType.AVSLAG -> "A"
+                    Resultatkode.ResultatkodeType.OPPHØR -> "OH"
+                    else -> ""
+                }
+            }
+        }
