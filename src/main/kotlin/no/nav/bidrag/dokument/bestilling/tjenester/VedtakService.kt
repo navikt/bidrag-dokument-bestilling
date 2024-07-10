@@ -113,12 +113,12 @@ class VedtakService(
         val stønadsendringerBarn = vedtakDto.stønadsendringListe.filter { it.kravhaver.verdi == barnIdent }
         return stønadsendringerBarn.map { stønadsendring ->
             val vedtakPerioder =
-                stønadsendring.periodeListe.map { vedtakPeriode ->
-                    val nettoKapitalInntekt = grunnlagListe.hentNettoKapitalinntektForRolle(vedtakPeriode, grunnlagListe.bidragsmottaker!!)
+                stønadsendring.periodeListe.map { stønadperiode ->
+                    val nettoKapitalInntekt = grunnlagListe.hentNettoKapitalinntektForRolle(stønadperiode, grunnlagListe.bidragsmottaker!!)
 
                     val inntekter =
                         grunnlagListe
-                            .hentInntekterForPeriode(vedtakPeriode)
+                            .hentInntekterForPeriode(stønadperiode)
                             .map { inntektGrunnlag ->
                                 val inntekt = inntektGrunnlag.innholdTilObjekt<InntektsrapporteringPeriode>()
                                 if (kapitalinntektTyper.contains(inntekt.inntektsrapportering)) return@map null
@@ -127,7 +127,7 @@ class VedtakService(
                                 InntektPeriode(
                                     inntektPerioder = inntekt.periode.toSet(),
                                     inntektOpprinneligPerioder = inntekt.opprinneligPeriode.toSet(),
-                                    periode = vedtakPeriode.periode,
+                                    periode = stønadperiode.periode,
                                     typer = inntekt.inntektsrapportering.toSet(),
                                     beløpÅr = inntekt.opprinneligPeriode?.fom?.year ?: inntekt.periode.fom.year,
                                     rolle = gjelderPersonGrunnlag.type.tilRolletype(),
@@ -137,16 +137,16 @@ class VedtakService(
                             }.filterNotNull()
                             .sammenstillDeMedSammeBeskrivelse() + nettoKapitalInntekt.toList()
 
-                    val resultatKode = Resultatkode.fraKode(vedtakPeriode.resultatkode)
+                    val resultatKode = Resultatkode.fraKode(stønadperiode.resultatkode)
                     VedtakPeriode(
-                        fomDato = vedtakPeriode.periode.fom.atDay(1),
+                        fomDato = stønadperiode.periode.fom.atDay(1),
                         // TODO: Er dette riktig??
-                        tomDato = vedtakPeriode.periode.til?.atEndOfMonth(),
-                        beløp = vedtakPeriode.beløp ?: BigDecimal.ZERO,
-                        resultatKode = resultatKode?.legacyKodeBrev ?: vedtakPeriode.resultatkode,
-                        inntekter = inntekter + grunnlagListe.hentTotalInntektForPeriode(vedtakPeriode),
-                        inntektGrense = sjablongService.hentInntektGrenseForPeriode(getLastDayOfPreviousMonth(vedtakPeriode.periode.til?.atEndOfMonth())),
-                        maksInntekt = sjablongService.hentMaksInntektForPeriode(getLastDayOfPreviousMonth(vedtakPeriode.periode.til?.atEndOfMonth())),
+                        tomDato = stønadperiode.periode.til?.atEndOfMonth(),
+                        beløp = stønadperiode.beløp ?: BigDecimal.ZERO,
+                        resultatKode = resultatKode?.legacyKodeBrev ?: stønadperiode.resultatkode,
+                        inntekter = inntekter + grunnlagListe.hentTotalInntektForPeriode(stønadperiode),
+                        inntektGrense = sjablongService.hentInntektGrenseForPeriode(getLastDayOfPreviousMonth(stønadperiode.periode.til?.atEndOfMonth())),
+                        maksInntekt = sjablongService.hentMaksInntektForPeriode(getLastDayOfPreviousMonth(stønadperiode.periode.til?.atEndOfMonth())),
                     )
                 }
             VedtakBarnStonad(
