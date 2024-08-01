@@ -27,6 +27,7 @@ import no.nav.bidrag.dokument.bestilling.model.tilLocalDateTil
 import no.nav.bidrag.domene.enums.beregning.Resultatkode
 import no.nav.bidrag.domene.enums.diverse.Språk
 import no.nav.bidrag.domene.enums.person.Sivilstandskode
+import no.nav.bidrag.domene.enums.vedtak.Engangsbeløptype
 import no.nav.bidrag.domene.util.visningsnavn
 import no.nav.bidrag.transport.dokument.AvsenderMottakerDto
 import no.nav.bidrag.transport.dokument.JournalpostType
@@ -215,6 +216,34 @@ class BrevserverProducer(
                             navn = vedtakBarn.navn
                             fnr = vedtakBarn.fødselsnummer
                             saksnr = dokumentBestilling.saksnummer
+                        }
+                        vedtakBarn.engangsbeløper.map {
+                            if (it.type == Engangsbeløptype.SÆRBIDRAG) {
+                                val beregning = it.særbidragBeregning!!
+                                særbidrag {
+                                    antTermin = 1
+                                    bidrEvneSiVt = true
+                                    beløpSøkt = beregning.kravbeløp
+                                    beløpGodkjent = beregning.godkjentbeløp
+                                    fratrekk = beregning.beløpDirekteBetaltAvBp
+                                    beløpSærbidrag = beregning.resultat
+                                    beløpForskudd = it.sjablon.forskuddSats
+                                    beløpInntektsgrense = it.sjablon.inntektsgrense
+                                    fordNokkel = beregning.andelProsent
+
+                                    val inntekt = beregning.inntekt
+                                    bmInntekt = inntekt.bmInntekt
+                                    bpInntekt = inntekt.bpInntekt
+                                    bbInntekt = inntekt.barnInntekt
+                                    sumInntekt = inntekt.totalInntekt
+                                }
+
+                                særbidragPeriode {
+                                    fomDato = beregning.periode.fom
+                                    tomDato = beregning.periode.til!!
+                                    beløp = beregning.resultat
+                                }
+                            }
                         }
 
                         vedtakInfo.barnIHusstandPerioder.forEach {

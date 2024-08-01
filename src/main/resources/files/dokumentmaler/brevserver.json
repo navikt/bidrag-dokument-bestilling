@@ -1041,7 +1041,7 @@
     "kode": "BI01E01",
     "tittel": "Vedtak bidrag til særlige utgifter",
     "kreverDataGrunnlag": {
-      "vedtak": false,
+      "vedtak": true,
       "behandling": false,
       "roller": true,
       "enhetKontaktInfo": true

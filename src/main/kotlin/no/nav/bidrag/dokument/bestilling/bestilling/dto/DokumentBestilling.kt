@@ -14,6 +14,7 @@ import no.nav.bidrag.domene.enums.vedtak.Stønadstype
 import no.nav.bidrag.domene.enums.vedtak.Vedtakskilde
 import no.nav.bidrag.domene.enums.vedtak.Vedtakstype
 import no.nav.bidrag.domene.enums.vedtak.VirkningstidspunktÅrsakstype
+import no.nav.bidrag.domene.tid.Datoperiode
 import no.nav.bidrag.domene.tid.ÅrMånedsperiode
 import no.nav.bidrag.transport.behandling.felles.grunnlag.BostatusPeriode
 import no.nav.bidrag.transport.behandling.felles.grunnlag.SivilstandPeriode
@@ -223,7 +224,36 @@ data class VedtakBarn(
     val navn: String?,
     val bostatusPerioder: List<BostatusPeriode>,
     val stønadsendringer: List<VedtakBarnStonad> = emptyList(),
+    val engangsbeløper: List<VedtakBarnEngangsbeløp> = emptyList(),
 )
+
+data class VedtakBarnEngangsbeløp(
+    val type: Engangsbeløptype,
+    val sjablon: BrevSjablonVerdier,
+    val særbidragBeregning: SærbidragBeregning? = null,
+)
+
+data class BrevSjablonVerdier(
+    val forskuddSats: BigDecimal,
+    val inntektsgrense: BigDecimal,
+)
+
+data class SærbidragBeregning(
+    val kravbeløp: BigDecimal,
+    val godkjentbeløp: BigDecimal,
+    val resultat: BigDecimal,
+    val beløpDirekteBetaltAvBp: BigDecimal,
+    val andelProsent: BigDecimal,
+    val inntekt: Inntekt,
+    val periode: Datoperiode,
+) {
+    data class Inntekt(
+        val bmInntekt: BigDecimal,
+        val bpInntekt: BigDecimal,
+        val barnInntekt: BigDecimal,
+        val totalInntekt: BigDecimal = barnInntekt + bmInntekt + bpInntekt,
+    )
+}
 
 data class VedtakBarnStonad(
     val type: Stønadstype,

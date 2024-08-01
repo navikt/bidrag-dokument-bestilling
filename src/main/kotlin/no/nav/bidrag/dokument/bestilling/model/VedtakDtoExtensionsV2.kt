@@ -8,6 +8,7 @@ import no.nav.bidrag.domene.enums.grunnlag.Grunnlagstype
 import no.nav.bidrag.domene.enums.inntekt.Inntektsrapportering
 import no.nav.bidrag.domene.enums.rolle.Rolletype
 import no.nav.bidrag.domene.enums.sjablon.SjablonTallNavn
+import no.nav.bidrag.domene.ident.Personident
 import no.nav.bidrag.domene.tid.ÅrMånedsperiode
 import no.nav.bidrag.transport.behandling.felles.grunnlag.BaseGrunnlag
 import no.nav.bidrag.transport.behandling.felles.grunnlag.BostatusPeriode
@@ -32,6 +33,8 @@ import no.nav.bidrag.transport.behandling.vedtak.response.VedtakPeriodeDto
 import java.math.BigDecimal
 
 val kapitalinntektTyper = listOf(Inntektsrapportering.KAPITALINNTEKT, Inntektsrapportering.KAPITALINNTEKT_EGNE_OPPLYSNINGER)
+
+fun List<Person>.inneholder(ident: Personident) = any { it.ident == ident }
 
 fun VedtakDto.tilSaksbehandler() =
     VedtakSaksbehandlerInfo(

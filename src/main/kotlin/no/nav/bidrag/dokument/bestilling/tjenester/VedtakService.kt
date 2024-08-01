@@ -1,8 +1,11 @@
 package no.nav.bidrag.dokument.bestilling.tjenester
 
+import no.nav.bidrag.dokument.bestilling.bestilling.dto.BrevSjablonVerdier
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.ForskuddInntektgrensePeriode
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.InntektPeriode
+import no.nav.bidrag.dokument.bestilling.bestilling.dto.SærbidragBeregning
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.VedtakBarn
+import no.nav.bidrag.dokument.bestilling.bestilling.dto.VedtakBarnEngangsbeløp
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.VedtakBarnStonad
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.VedtakDetaljer
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.VedtakPeriode
@@ -24,18 +27,32 @@ import no.nav.bidrag.dokument.bestilling.model.tilSaksbehandler
 import no.nav.bidrag.dokument.bestilling.model.toList
 import no.nav.bidrag.dokument.bestilling.model.toSet
 import no.nav.bidrag.domene.enums.beregning.Resultatkode
+import no.nav.bidrag.domene.enums.grunnlag.Grunnlagstype
+import no.nav.bidrag.domene.enums.rolle.Rolletype
+import no.nav.bidrag.domene.enums.sjablon.SjablonTallNavn
+import no.nav.bidrag.domene.enums.vedtak.Engangsbeløptype
 import no.nav.bidrag.domene.enums.vedtak.Innkrevingstype
 import no.nav.bidrag.domene.enums.vedtak.Stønadstype
 import no.nav.bidrag.transport.behandling.felles.grunnlag.BaseGrunnlag
+import no.nav.bidrag.transport.behandling.felles.grunnlag.DelberegningUtgift
 import no.nav.bidrag.transport.behandling.felles.grunnlag.InntektsrapporteringPeriode
+import no.nav.bidrag.transport.behandling.felles.grunnlag.Person
+import no.nav.bidrag.transport.behandling.felles.grunnlag.SjablonSjablontallPeriode
+import no.nav.bidrag.transport.behandling.felles.grunnlag.SluttberegningSærbidrag
 import no.nav.bidrag.transport.behandling.felles.grunnlag.bidragsmottaker
+import no.nav.bidrag.transport.behandling.felles.grunnlag.filtrerBasertPåEgenReferanse
+import no.nav.bidrag.transport.behandling.felles.grunnlag.finnDelberegningBidragspliktigesAndelSærbidrag
+import no.nav.bidrag.transport.behandling.felles.grunnlag.finnTotalInntektForRolleEllerIdent
+import no.nav.bidrag.transport.behandling.felles.grunnlag.hentAllePersoner
 import no.nav.bidrag.transport.behandling.felles.grunnlag.hentPersonMedReferanse
 import no.nav.bidrag.transport.behandling.felles.grunnlag.innholdTilObjekt
 import no.nav.bidrag.transport.behandling.felles.grunnlag.personIdent
 import no.nav.bidrag.transport.behandling.felles.grunnlag.personObjekt
 import no.nav.bidrag.transport.behandling.felles.grunnlag.søknadsbarn
+import no.nav.bidrag.transport.behandling.felles.grunnlag.utgiftsposter
 import no.nav.bidrag.transport.behandling.vedtak.response.StønadsendringDto
 import no.nav.bidrag.transport.behandling.vedtak.response.VedtakDto
+import no.nav.bidrag.transport.behandling.vedtak.response.særbidragsperiode
 import org.springframework.stereotype.Service
 import java.math.BigDecimal
 
@@ -51,6 +68,14 @@ class VedtakService(
         val vedtakDto = hentVedtak(vedtakId)
         val vedtakBarnInfo = vedtakDto.grunnlagListe.søknadsbarn
         return vedtakBarnInfo.map { it.personIdent!! }
+    }
+
+    fun hentVedtakRoller(vedtakId: String): List<Person> {
+        val vedtakDto = hentVedtak(vedtakId)
+        return vedtakDto.grunnlagListe
+            .hentAllePersoner()
+            .filter { listOf(Grunnlagstype.PERSON_SØKNADSBARN, Grunnlagstype.PERSON_BIDRAGSPLIKTIG, Grunnlagstype.PERSON_SØKNADSBARN).contains(it.type) }
+            .map { it.innholdTilObjekt<Person>() }
     }
 
     fun hentVedtakDetaljer(vedtakId: String): VedtakDetaljer {
@@ -102,7 +127,56 @@ class VedtakService(
             navn = personInfo.visningsnavn,
             bostatusPerioder = bostatusSøknadsbarn?.bostatus ?: emptyList(),
             stønadsendringer = hentStønadsendringerForBarn(barnIdent, vedtak),
+            engangsbeløper = hentEngagsbeløpForBarn(barnIdent, vedtak),
         )
+    }
+
+    fun hentEngagsbeløpForBarn(
+        barnIdent: String,
+        vedtakDto: VedtakDto,
+    ): List<VedtakBarnEngangsbeløp> {
+        val grunnlagListe = vedtakDto.grunnlagListe
+        val engangsbeløpBarn = vedtakDto.engangsbeløpListe.filter { it.kravhaver.verdi == barnIdent }
+        return engangsbeløpBarn.map { engangsbeløp ->
+            val periode = vedtakDto.særbidragsperiode!!
+            val sjablonForskudd =
+                grunnlagListe
+                    .filtrerBasertPåEgenReferanse(Grunnlagstype.SJABLON)
+                    .map { it.innholdTilObjekt<SjablonSjablontallPeriode>() }
+                    .find { it.sjablon == SjablonTallNavn.FORSKUDDSSATS_BELØP }!!
+            val inntektsgrense = sjablongService.hentInntektGrenseForPeriode(periode.til)
+            VedtakBarnEngangsbeløp(
+                type = engangsbeløp.type,
+                sjablon =
+                    BrevSjablonVerdier(
+                        forskuddSats = sjablonForskudd.verdi,
+                        inntektsgrense = inntektsgrense,
+                    ),
+                særbidragBeregning =
+                    if (engangsbeløp.type == Engangsbeløptype.SÆRBIDRAG) {
+                        val utgiftsposter = grunnlagListe.utgiftsposter
+                        val sluttberegning = grunnlagListe.filtrerBasertPåEgenReferanse(Grunnlagstype.SLUTTBEREGNING_SÆRBIDRAG).first().innholdTilObjekt<SluttberegningSærbidrag>()
+                        val delberegningUtgift = grunnlagListe.filtrerBasertPåEgenReferanse(Grunnlagstype.DELBEREGNING_UTGIFT).first().innholdTilObjekt<DelberegningUtgift>()
+                        val delberegning = grunnlagListe.finnDelberegningBidragspliktigesAndelSærbidrag(engangsbeløp.grunnlagReferanseListe)!!
+                        SærbidragBeregning(
+                            periode = periode,
+                            kravbeløp = utgiftsposter.sumOf { it.kravbeløp },
+                            godkjentbeløp = delberegningUtgift.sumGodkjent,
+                            andelProsent = delberegning.andelProsent,
+                            resultat = sluttberegning.resultatBeløp,
+                            beløpDirekteBetaltAvBp = delberegningUtgift.sumBetaltAvBp,
+                            inntekt =
+                                SærbidragBeregning.Inntekt(
+                                    bmInntekt = grunnlagListe.finnTotalInntektForRolleEllerIdent(engangsbeløp.grunnlagReferanseListe, Rolletype.BIDRAGSMOTTAKER),
+                                    bpInntekt = grunnlagListe.finnTotalInntektForRolleEllerIdent(engangsbeløp.grunnlagReferanseListe, Rolletype.BIDRAGSPLIKTIG),
+                                    barnInntekt = grunnlagListe.finnTotalInntektForRolleEllerIdent(engangsbeløp.grunnlagReferanseListe, Rolletype.BARN),
+                                ),
+                        )
+                    } else {
+                        null
+                    },
+            )
+        }
     }
 
     fun hentStønadsendringerForBarn(

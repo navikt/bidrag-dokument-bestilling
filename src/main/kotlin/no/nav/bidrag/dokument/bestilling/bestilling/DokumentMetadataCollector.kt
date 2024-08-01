@@ -107,6 +107,7 @@ class DokumentMetadataCollector(
 
     private fun hentRolleData(forespørsel: DokumentBestillingForespørsel): Roller {
         val roller = Roller()
+
         val bidragspliktig = hentBidragspliktig()
         val bidragsmottaker = hentBidragsmottaker()
 
@@ -142,7 +143,7 @@ class DokumentMetadataCollector(
         }
 
         val soknadsbarn = mutableListOf<String>()
-        if (!forespørsel.vedtakId.isNullOrEmpty() && enableHentVedtak) {
+        if (!forespørsel.vedtakId.isNullOrEmpty()) {
             soknadsbarn.addAll(
                 vedtakService.hentIdentSøknadsbarn(forespørsel.vedtakId),
             )
