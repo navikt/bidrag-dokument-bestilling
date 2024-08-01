@@ -62,8 +62,7 @@ class DefaultRestControllerAdvice {
             .header(
                 HttpHeaders.WARNING,
                 "Forespørselen inneholder ugyldig verdi: ${valideringsFeil ?: exception.message}",
-            )
-            .build<Any>()
+            ).build<Any>()
     }
 
     @ResponseBody
@@ -90,7 +89,8 @@ class DefaultRestControllerAdvice {
     private fun getErrorMessage(exception: HttpStatusCodeException): String {
         val errorMessage = StringBuilder()
         errorMessage.append("Det skjedde en feil: ")
-        exception.responseHeaders?.get("Warning")
+        exception.responseHeaders
+            ?.get("Warning")
             ?.let { if (it.size > 0) errorMessage.append(it[0]) }
         if (exception.statusText.isNotEmpty()) {
             errorMessage.append(" - ")

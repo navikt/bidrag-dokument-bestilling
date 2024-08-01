@@ -28,7 +28,9 @@ import java.util.Locale
 @Configuration
 @EnableJms
 @ConfigurationPropertiesScan
-class JMSConfig(private val mqProperties: MQProperties) {
+class JMSConfig(
+    private val mqProperties: MQProperties,
+) {
     fun createCachingConnectionFactory(mqQueueConnectionFactory: ConnectionFactory): CachingConnectionFactory {
         val cachingConnectionFactory = CachingConnectionFactory()
         cachingConnectionFactory.sessionCacheSize = 1

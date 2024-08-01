@@ -29,9 +29,7 @@ class JmsTestConfig {
 
     @Bean
     @Profile("!nais")
-    fun jmsConnectionFactory(): ConnectionFactory {
-        return ActiveMQConnectionFactory("vm://0")
-    }
+    fun jmsConnectionFactory(): ConnectionFactory = ActiveMQConnectionFactory("vm://0")
 
     @Bean
     @Profile("!nais")
@@ -42,13 +40,9 @@ class JmsTestConfig {
     @Bean
     fun onlineBrevQueue(
         @Value("\${BREVSERVER_ONLINEBREV_QUEUE}") queuename: String,
-    ): Queue {
-        return ActiveMQQueue(queuename)
-    }
+    ): Queue = ActiveMQQueue(queuename)
 
     @Bean
     @Profile("test")
-    fun cacheManager(): CacheManager {
-        return NoOpCacheManager()
-    }
+    fun cacheManager(): CacheManager = NoOpCacheManager()
 }

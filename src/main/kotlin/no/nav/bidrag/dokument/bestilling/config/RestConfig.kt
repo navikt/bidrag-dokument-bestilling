@@ -19,7 +19,5 @@ class RestConfig {
     fun clientRequestObservationConvention() = DefaultClientRequestObservationConvention()
 
     @Bean
-    fun jackson2ObjectMapperBuilder(): Jackson2ObjectMapperBuilder {
-        return Jackson2ObjectMapperBuilder().serializationInclusion(JsonInclude.Include.NON_NULL)
-    }
+    fun jackson2ObjectMapperBuilder(): Jackson2ObjectMapperBuilder = Jackson2ObjectMapperBuilder().serializationInclusion(JsonInclude.Include.NON_NULL)
 }

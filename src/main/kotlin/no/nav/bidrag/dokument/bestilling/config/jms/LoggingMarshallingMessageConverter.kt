@@ -13,7 +13,10 @@ import org.springframework.oxm.jaxb.Jaxb2Marshaller
 import java.io.StringWriter
 import javax.xml.transform.stream.StreamResult
 
-class LoggingMarshallingMessageConverter(jaxb2Marshaller: Jaxb2Marshaller, private val replyDestinationQueue: Destination) : MarshallingMessageConverter(jaxb2Marshaller) {
+class LoggingMarshallingMessageConverter(
+    jaxb2Marshaller: Jaxb2Marshaller,
+    private val replyDestinationQueue: Destination,
+) : MarshallingMessageConverter(jaxb2Marshaller) {
     init {
         setTargetType(MessageType.TEXT)
     }

@@ -22,7 +22,9 @@ import javax.xml.parsers.DocumentBuilderFactory
 @RestController
 @Protected
 @Timed
-class AdminKontroller(private val onlinebrevTemplate: JmsTemplate) {
+class AdminKontroller(
+    private val onlinebrevTemplate: JmsTemplate,
+) {
     companion object {
         private val LOGGER = LoggerFactory.getLogger(AdminKontroller::class.java)
     }
@@ -59,12 +61,11 @@ class AdminKontroller(private val onlinebrevTemplate: JmsTemplate) {
         }
     }
 
-    private fun isValidXml(xml: String): Boolean {
-        return try {
+    private fun isValidXml(xml: String): Boolean =
+        try {
             DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(java.io.ByteArrayInputStream(xml.toByteArray()))
             true
         } catch (e: Exception) {
             false
         }
-    }
 }

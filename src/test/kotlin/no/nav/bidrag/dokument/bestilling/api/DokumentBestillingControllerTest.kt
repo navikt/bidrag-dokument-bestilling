@@ -79,7 +79,8 @@ class DokumentBestillingControllerTest : AbstractControllerTest() {
         response.body?.forEach {
             it shouldBeIn alleDokumentmaler.map { bk -> bk.kode }
             it shouldNotBeIn
-                alleDokumentmaler.filter { bk -> !bk.enabled }
+                alleDokumentmaler
+                    .filter { bk -> !bk.enabled }
                     .map { bk -> bk.kode }
         }
 
@@ -618,21 +619,63 @@ class DokumentBestillingControllerTest : AbstractControllerTest() {
                 message.brev?.parter?.bpdatodod shouldBe null
 
                 message.brev?.barnISak?.shouldHaveAtLeastSize(2)
-                message.brev?.barnISak?.get(0)?.fnr shouldBe BARN2.ident.verdi
-                message.brev?.barnISak?.get(0)?.navn shouldBe BARN2.fornavnEtternavn()
-                message.brev?.barnISak?.get(0)?.fDato shouldBe BARN2.fødselsdato
-                message.brev?.barnISak?.get(0)?.personIdRm shouldBe ""
-                message.brev?.barnISak?.get(0)?.belopGebyrRm shouldBe ""
-                message.brev?.barnISak?.get(0)?.belForskudd shouldBe null
-                message.brev?.barnISak?.get(0)?.belBidrag shouldBe null
+                message.brev
+                    ?.barnISak
+                    ?.get(0)
+                    ?.fnr shouldBe BARN2.ident.verdi
+                message.brev
+                    ?.barnISak
+                    ?.get(0)
+                    ?.navn shouldBe BARN2.fornavnEtternavn()
+                message.brev
+                    ?.barnISak
+                    ?.get(0)
+                    ?.fDato shouldBe BARN2.fødselsdato
+                message.brev
+                    ?.barnISak
+                    ?.get(0)
+                    ?.personIdRm shouldBe ""
+                message.brev
+                    ?.barnISak
+                    ?.get(0)
+                    ?.belopGebyrRm shouldBe ""
+                message.brev
+                    ?.barnISak
+                    ?.get(0)
+                    ?.belForskudd shouldBe null
+                message.brev
+                    ?.barnISak
+                    ?.get(0)
+                    ?.belBidrag shouldBe null
 
-                message.brev?.barnISak?.get(1)?.fDato shouldBe BARN1.fødselsdato
-                message.brev?.barnISak?.get(1)?.fnr shouldBe BARN1.ident!!.verdi
-                message.brev?.barnISak?.get(1)?.navn shouldBe BARN1.fornavnEtternavn()
-                message.brev?.barnISak?.get(1)?.personIdRm shouldBe ""
-                message.brev?.barnISak?.get(1)?.belopGebyrRm shouldBe ""
-                message.brev?.barnISak?.get(1)?.belForskudd shouldBe null
-                message.brev?.barnISak?.get(1)?.belBidrag shouldBe null
+                message.brev
+                    ?.barnISak
+                    ?.get(1)
+                    ?.fDato shouldBe BARN1.fødselsdato
+                message.brev
+                    ?.barnISak
+                    ?.get(1)
+                    ?.fnr shouldBe BARN1.ident!!.verdi
+                message.brev
+                    ?.barnISak
+                    ?.get(1)
+                    ?.navn shouldBe BARN1.fornavnEtternavn()
+                message.brev
+                    ?.barnISak
+                    ?.get(1)
+                    ?.personIdRm shouldBe ""
+                message.brev
+                    ?.barnISak
+                    ?.get(1)
+                    ?.belopGebyrRm shouldBe ""
+                message.brev
+                    ?.barnISak
+                    ?.get(1)
+                    ?.belForskudd shouldBe null
+                message.brev
+                    ?.barnISak
+                    ?.get(1)
+                    ?.belBidrag shouldBe null
 
                 message.brev?.soknadBost?.saksnr shouldBe saksnummer
                 message.brev?.soknadBost?.sakstype shouldBe "E"
@@ -705,8 +748,14 @@ class DokumentBestillingControllerTest : AbstractControllerTest() {
             assertSoftly {
                 message.brev?.barnISak?.shouldHaveSize(1)
 
-                message.brev?.barnISak?.get(0)?.fDato shouldBe BARN1.fødselsdato
-                message.brev?.barnISak?.get(0)?.fnr shouldBe BARN1.ident!!.verdi
+                message.brev
+                    ?.barnISak
+                    ?.get(0)
+                    ?.fDato shouldBe BARN1.fødselsdato
+                message.brev
+                    ?.barnISak
+                    ?.get(0)
+                    ?.fnr shouldBe BARN1.ident!!.verdi
             }
         }
     }
@@ -759,7 +808,10 @@ class DokumentBestillingControllerTest : AbstractControllerTest() {
                 message.brev?.mottaker?.fodselsnummer shouldBe BM1.ident.verdi
                 message.brev?.mottaker?.fodselsdato shouldBe BM1.fødselsdato
 
-                message.brev?.kontaktInfo?.returAdresse?.land shouldBe "USA"
+                message.brev
+                    ?.kontaktInfo
+                    ?.returAdresse
+                    ?.land shouldBe "USA"
 
                 stubUtils.Verify().verifyHentEnhetKontaktInfoCalledWith("EN")
             }
@@ -795,7 +847,8 @@ class DokumentBestillingControllerTest : AbstractControllerTest() {
             response.statusCode shouldBe HttpStatus.OK
 
             this.getMessageAsObject(BrevBestilling::class.java)!!
-            stubUtils.Verify()
+            stubUtils
+                .Verify()
                 .verifyOpprettJournalpostCalledWith("\"tittel\":\"${dokumentMal.beskrivelse}\"")
         }
     }
@@ -829,7 +882,8 @@ class DokumentBestillingControllerTest : AbstractControllerTest() {
             message.malpakke shouldContain dokumentMal.kode
 
             stubUtils.Verify().verifyOpprettJournalpostCalledWith("\"journalposttype\":\"NOTAT\"")
-            stubUtils.Verify()
+            stubUtils
+                .Verify()
                 .verifyOpprettJournalpostCalledWith("\"tittel\":\"${dokumentMal.beskrivelse}\"")
         }
     }

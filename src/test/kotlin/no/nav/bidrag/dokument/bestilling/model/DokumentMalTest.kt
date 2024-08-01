@@ -39,7 +39,8 @@ class DokumentMalTest {
                 )
 
         LOGGER.info {
-            ObjectMapper().findAndRegisterModules()
+            ObjectMapper()
+                .findAndRegisterModules()
                 .writer(filter)
                 .writeValueAsString(dokumentmalerBrevserver.filter { it is DokumentMalBrevserver })
         }
@@ -64,7 +65,8 @@ class DokumentMalTest {
                 )
 
         LOGGER.info {
-            ObjectMapper().findAndRegisterModules()
+            ObjectMapper()
+                .findAndRegisterModules()
                 .writer(filter2)
                 .writeValueAsString(dokumentmalerUtland)
         }

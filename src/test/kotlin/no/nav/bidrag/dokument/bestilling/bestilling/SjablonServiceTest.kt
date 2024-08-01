@@ -36,7 +36,8 @@ class SjablonServiceTest {
     @BeforeEach
     fun initMocks() {
         val sjablonResponse =
-            ObjectMapper().findAndRegisterModules()
+            ObjectMapper()
+                .findAndRegisterModules()
                 .readValue(readFile("api/sjablon_all.json"), typeRef<SjablongerDto>())
         every { sjablonConsumer.hentSjablonger() } returns sjablonResponse
     }
@@ -70,22 +71,30 @@ class SjablonServiceTest {
             ensligGrenser[3].antallBarn shouldBe 4
 
             // Valider beregning av inntektgrenser for 2023 basert på reele sjablonverdier
-            ensligGrenser.hentForAntallBarn(1)!!
+            ensligGrenser
+                .hentForAntallBarn(1)!!
                 .validerBelop75Prosent(BeløpFraTil(BigDecimal(312701), BigDecimal(488300)))
-            ensligGrenser.hentForAntallBarn(2)!!
+            ensligGrenser
+                .hentForAntallBarn(2)!!
                 .validerBelop75Prosent(BeløpFraTil(BigDecimal(312701), BigDecimal(557200)))
-            ensligGrenser.hentForAntallBarn(3)!!
+            ensligGrenser
+                .hentForAntallBarn(3)!!
                 .validerBelop75Prosent(BeløpFraTil(BigDecimal(312701), BigDecimal(563200)))
-            ensligGrenser.hentForAntallBarn(4)!!
+            ensligGrenser
+                .hentForAntallBarn(4)!!
                 .validerBelop75Prosent(BeløpFraTil(BigDecimal(312701), BigDecimal(563200)))
 
-            ensligGrenser.hentForAntallBarn(1)!!
+            ensligGrenser
+                .hentForAntallBarn(1)!!
                 .validerBelop50Prosent(BeløpFraTil(BigDecimal(488301), BigDecimal(563200)))
-            ensligGrenser.hentForAntallBarn(2)!!
+            ensligGrenser
+                .hentForAntallBarn(2)!!
                 .validerBelop50Prosent(BeløpFraTil(BigDecimal(557201), BigDecimal(563200)))
-            ensligGrenser.hentForAntallBarn(3)!!
+            ensligGrenser
+                .hentForAntallBarn(3)!!
                 .validerBelop50Prosent(BeløpFraTil(BigDecimal(563200), BigDecimal(563200)))
-            ensligGrenser.hentForAntallBarn(3)!!
+            ensligGrenser
+                .hentForAntallBarn(3)!!
                 .validerBelop50Prosent(BeløpFraTil(BigDecimal(563200), BigDecimal(563200)))
 
             val giftSamboerGrenser =
@@ -96,22 +105,30 @@ class SjablonServiceTest {
             giftSamboerGrenser[2].antallBarn shouldBe 3
             giftSamboerGrenser[3].antallBarn shouldBe 4
 
-            giftSamboerGrenser.hentForAntallBarn(1)!!
+            giftSamboerGrenser
+                .hentForAntallBarn(1)!!
                 .validerBelop75Prosent(BeløpFraTil(BigDecimal(312701), BigDecimal(375700)))
-            giftSamboerGrenser.hentForAntallBarn(2)!!
+            giftSamboerGrenser
+                .hentForAntallBarn(2)!!
                 .validerBelop75Prosent(BeløpFraTil(BigDecimal(312701), BigDecimal(444600)))
-            giftSamboerGrenser.hentForAntallBarn(3)!!
+            giftSamboerGrenser
+                .hentForAntallBarn(3)!!
                 .validerBelop75Prosent(BeløpFraTil(BigDecimal(312701), BigDecimal(513500)))
-            giftSamboerGrenser.hentForAntallBarn(4)!!
+            giftSamboerGrenser
+                .hentForAntallBarn(4)!!
                 .validerBelop75Prosent(BeløpFraTil(BigDecimal(312701), BigDecimal(563200)))
 
-            giftSamboerGrenser.hentForAntallBarn(1)!!
+            giftSamboerGrenser
+                .hentForAntallBarn(1)!!
                 .validerBelop50Prosent(BeløpFraTil(BigDecimal(375701), BigDecimal(563200)))
-            giftSamboerGrenser.hentForAntallBarn(2)!!
+            giftSamboerGrenser
+                .hentForAntallBarn(2)!!
                 .validerBelop50Prosent(BeløpFraTil(BigDecimal(444601), BigDecimal(563200)))
-            giftSamboerGrenser.hentForAntallBarn(3)!!
+            giftSamboerGrenser
+                .hentForAntallBarn(3)!!
                 .validerBelop50Prosent(BeløpFraTil(BigDecimal(513501), BigDecimal(563200)))
-            giftSamboerGrenser.hentForAntallBarn(4)!!
+            giftSamboerGrenser
+                .hentForAntallBarn(4)!!
                 .validerBelop50Prosent(BeløpFraTil(BigDecimal(563200), BigDecimal(563200)))
         }
     }
@@ -134,22 +151,30 @@ class SjablonServiceTest {
             ensligGrenser[3].antallBarn shouldBe 4
 
             // Valider beregning av inntektgrenser for 2023 basert på reele sjablonverdier
-            ensligGrenser.hentForAntallBarn(1)!!
+            ensligGrenser
+                .hentForAntallBarn(1)!!
                 .validerBelop75Prosent(BeløpFraTil(BigDecimal(297501), BigDecimal(468500)))
-            ensligGrenser.hentForAntallBarn(2)!!
+            ensligGrenser
+                .hentForAntallBarn(2)!!
                 .validerBelop75Prosent(BeløpFraTil(BigDecimal(297501), BigDecimal(534400)))
-            ensligGrenser.hentForAntallBarn(3)!!
+            ensligGrenser
+                .hentForAntallBarn(3)!!
                 .validerBelop75Prosent(BeløpFraTil(BigDecimal(297501), BigDecimal(534400)))
-            ensligGrenser.hentForAntallBarn(4)!!
+            ensligGrenser
+                .hentForAntallBarn(4)!!
                 .validerBelop75Prosent(BeløpFraTil(BigDecimal(297501), BigDecimal(534400)))
 
-            ensligGrenser.hentForAntallBarn(1)!!
+            ensligGrenser
+                .hentForAntallBarn(1)!!
                 .validerBelop50Prosent(BeløpFraTil(BigDecimal(468501), BigDecimal(534400)))
-            ensligGrenser.hentForAntallBarn(2)!!
+            ensligGrenser
+                .hentForAntallBarn(2)!!
                 .validerBelop50Prosent(BeløpFraTil(BigDecimal(534400), BigDecimal(534400)))
-            ensligGrenser.hentForAntallBarn(3)!!
+            ensligGrenser
+                .hentForAntallBarn(3)!!
                 .validerBelop50Prosent(BeløpFraTil(BigDecimal(534400), BigDecimal(534400)))
-            ensligGrenser.hentForAntallBarn(3)!!
+            ensligGrenser
+                .hentForAntallBarn(3)!!
                 .validerBelop50Prosent(BeløpFraTil(BigDecimal(534400), BigDecimal(534400)))
 
             val giftSamboerGrenser =
@@ -160,22 +185,30 @@ class SjablonServiceTest {
             giftSamboerGrenser[2].antallBarn shouldBe 3
             giftSamboerGrenser[3].antallBarn shouldBe 4
 
-            giftSamboerGrenser.hentForAntallBarn(1)!!
+            giftSamboerGrenser
+                .hentForAntallBarn(1)!!
                 .validerBelop75Prosent(BeløpFraTil(BigDecimal(297501), BigDecimal(360800)))
-            giftSamboerGrenser.hentForAntallBarn(2)!!
+            giftSamboerGrenser
+                .hentForAntallBarn(2)!!
                 .validerBelop75Prosent(BeløpFraTil(BigDecimal(297501), BigDecimal(429900)))
-            giftSamboerGrenser.hentForAntallBarn(3)!!
+            giftSamboerGrenser
+                .hentForAntallBarn(3)!!
                 .validerBelop75Prosent(BeløpFraTil(BigDecimal(297501), BigDecimal(499000)))
-            giftSamboerGrenser.hentForAntallBarn(4)!!
+            giftSamboerGrenser
+                .hentForAntallBarn(4)!!
                 .validerBelop75Prosent(BeløpFraTil(BigDecimal(297501), BigDecimal(534400)))
 
-            giftSamboerGrenser.hentForAntallBarn(1)!!
+            giftSamboerGrenser
+                .hentForAntallBarn(1)!!
                 .validerBelop50Prosent(BeløpFraTil(BigDecimal(360801), BigDecimal(534400)))
-            giftSamboerGrenser.hentForAntallBarn(2)!!
+            giftSamboerGrenser
+                .hentForAntallBarn(2)!!
                 .validerBelop50Prosent(BeløpFraTil(BigDecimal(429901), BigDecimal(534400)))
-            giftSamboerGrenser.hentForAntallBarn(3)!!
+            giftSamboerGrenser
+                .hentForAntallBarn(3)!!
                 .validerBelop50Prosent(BeløpFraTil(BigDecimal(499001), BigDecimal(534400)))
-            giftSamboerGrenser.hentForAntallBarn(4)!!
+            giftSamboerGrenser
+                .hentForAntallBarn(4)!!
                 .validerBelop50Prosent(BeløpFraTil(BigDecimal(534400), BigDecimal(534400)))
         }
     }
@@ -208,22 +241,30 @@ class SjablonServiceTest {
 
             // Valider beregning av inntektgrenser for 2022 basert på reele sjablonverdier
             val ensligPeriode2022 = ensligGrenser.hentForPeriodeHvorDatoErInkludert(LocalDate.parse("2022-04-01"))
-            ensligPeriode2022.hentForAntallBarn(1)!!
+            ensligPeriode2022
+                .hentForAntallBarn(1)!!
                 .validerBelop75Prosent(BeløpFraTil(BigDecimal(305001), BigDecimal(476600)))
-            ensligPeriode2022.hentForAntallBarn(2)!!
+            ensligPeriode2022
+                .hentForAntallBarn(2)!!
                 .validerBelop75Prosent(BeløpFraTil(BigDecimal(305001), BigDecimal(545000)))
-            ensligPeriode2022.hentForAntallBarn(3)!!
+            ensligPeriode2022
+                .hentForAntallBarn(3)!!
                 .validerBelop75Prosent(BeløpFraTil(BigDecimal(305001), BigDecimal(547200)))
-            ensligPeriode2022.hentForAntallBarn(4)!!
+            ensligPeriode2022
+                .hentForAntallBarn(4)!!
                 .validerBelop75Prosent(BeløpFraTil(BigDecimal(305001), BigDecimal(547200)))
 
-            ensligPeriode2022.hentForAntallBarn(1)!!
+            ensligPeriode2022
+                .hentForAntallBarn(1)!!
                 .validerBelop50Prosent(BeløpFraTil(BigDecimal(476601), BigDecimal(547200)))
-            ensligPeriode2022.hentForAntallBarn(2)!!
+            ensligPeriode2022
+                .hentForAntallBarn(2)!!
                 .validerBelop50Prosent(BeløpFraTil(BigDecimal(545001), BigDecimal(547200)))
-            ensligPeriode2022.hentForAntallBarn(3)!!
+            ensligPeriode2022
+                .hentForAntallBarn(3)!!
                 .validerBelop50Prosent(BeløpFraTil(BigDecimal(547200), BigDecimal(547200)))
-            ensligPeriode2022.hentForAntallBarn(3)!!
+            ensligPeriode2022
+                .hentForAntallBarn(3)!!
                 .validerBelop50Prosent(BeløpFraTil(BigDecimal(547200), BigDecimal(547200)))
 
             val giftSamboerGrenser =
@@ -232,22 +273,30 @@ class SjablonServiceTest {
             val giftSamboerPeriode2022 =
                 giftSamboerGrenser.hentForPeriodeHvorDatoErInkludert(LocalDate.parse("2022-04-01"))
 
-            giftSamboerPeriode2022.hentForAntallBarn(1)!!
+            giftSamboerPeriode2022
+                .hentForAntallBarn(1)!!
                 .validerBelop75Prosent(BeløpFraTil(BigDecimal(305001), BigDecimal(366900)))
-            giftSamboerPeriode2022.hentForAntallBarn(2)!!
+            giftSamboerPeriode2022
+                .hentForAntallBarn(2)!!
                 .validerBelop75Prosent(BeløpFraTil(BigDecimal(305001), BigDecimal(435300)))
-            giftSamboerPeriode2022.hentForAntallBarn(3)!!
+            giftSamboerPeriode2022
+                .hentForAntallBarn(3)!!
                 .validerBelop75Prosent(BeløpFraTil(BigDecimal(305001), BigDecimal(503700)))
-            giftSamboerPeriode2022.hentForAntallBarn(4)!!
+            giftSamboerPeriode2022
+                .hentForAntallBarn(4)!!
                 .validerBelop75Prosent(BeløpFraTil(BigDecimal(305001), BigDecimal(547200)))
 
-            giftSamboerPeriode2022.hentForAntallBarn(1)!!
+            giftSamboerPeriode2022
+                .hentForAntallBarn(1)!!
                 .validerBelop50Prosent(BeløpFraTil(BigDecimal(366901), BigDecimal(547200)))
-            giftSamboerPeriode2022.hentForAntallBarn(2)!!
+            giftSamboerPeriode2022
+                .hentForAntallBarn(2)!!
                 .validerBelop50Prosent(BeløpFraTil(BigDecimal(435301), BigDecimal(547200)))
-            giftSamboerPeriode2022.hentForAntallBarn(3)!!
+            giftSamboerPeriode2022
+                .hentForAntallBarn(3)!!
                 .validerBelop50Prosent(BeløpFraTil(BigDecimal(503701), BigDecimal(547200)))
-            giftSamboerPeriode2022.hentForAntallBarn(4)!!
+            giftSamboerPeriode2022
+                .hentForAntallBarn(4)!!
                 .validerBelop50Prosent(BeløpFraTil(BigDecimal(547200), BigDecimal(547200)))
         }
     }

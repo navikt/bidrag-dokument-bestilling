@@ -42,9 +42,7 @@ class SjablonConsumer(
         cacheManager.getCache(SJABLONGER_CACHE)?.put(DEFAULT_CACHE, response.body)
     }
 
-    fun hentSjablonger(): SjablongerDto? {
-        return cacheManager.getCache(SJABLONGER_CACHE)?.get(DEFAULT_CACHE, List::class.java) as SjablongerDto
-    }
+    fun hentSjablonger(): SjablongerDto? = cacheManager.getCache(SJABLONGER_CACHE)?.get(DEFAULT_CACHE, List::class.java) as SjablongerDto
 
     companion object {
         private const val DEFAULT_CACHE = "DEFAULT"

@@ -31,7 +31,9 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 @Protected
 @Timed
-class DokumentBestillingKontroller(private val dokumentBestillingService: DokumentBestillingService) {
+class DokumentBestillingKontroller(
+    private val dokumentBestillingService: DokumentBestillingService,
+) {
     companion object {
         private val LOGGER = LoggerFactory.getLogger(DokumentBestillingKontroller::class.java)
     }
@@ -86,7 +88,8 @@ class DokumentBestillingKontroller(private val dokumentBestillingService: Dokume
         SIKKER_LOGG.info("Henter dokument for dokumentmal $dokumentMal med data $bestillingRequest og enhet ${bestillingRequest?.enhet}")
         val result = dokumentBestillingService.hentDokument(bestillingRequest, dokumentMal)
         LOGGER.info("Hentet dokument for dokumentmal $dokumentMal og enhet ${bestillingRequest?.enhet} med respons $result")
-        return ResponseEntity.ok()
+        return ResponseEntity
+            .ok()
             .contentType(MediaType.APPLICATION_PDF)
             .header(HttpHeaders.CONTENT_DISPOSITION, dokumentMal.tittel)
             .body(result)
@@ -97,21 +100,22 @@ class DokumentBestillingKontroller(private val dokumentBestillingService: Dokume
         description = "Henter brevkoder som er støttet av applikasjonen",
         security = [SecurityRequirement(name = "bearer-key")],
     )
-    fun hentStottedeBrevkoder(): List<String> {
-        return alleDokumentmaler.filter { it.enabled && it !is DokumentMalBucket }.map { it.kode }
+    fun hentStottedeBrevkoder(): List<String> =
+        alleDokumentmaler
+            .filter { it.enabled && it !is DokumentMalBucket }
+            .map { it.kode }
             .let {
                 LOGGER.info("Hentet støttede brevkoder $it")
                 it
             }
-    }
 
     @GetMapping("/dokumentmal/detaljer")
     @Operation(
         description = "Henter detaljer om alle støttede dokumentmaler",
         security = [SecurityRequirement(name = "bearer-key")],
     )
-    fun hentDokumentmalDetaljer(): Map<String, DokumentMalDetaljer> {
-        return alleDokumentmaler
+    fun hentDokumentmalDetaljer(): Map<String, DokumentMalDetaljer> =
+        alleDokumentmaler
             .associate {
                 it.kode to
                     DokumentMalDetaljer(
@@ -134,5 +138,4 @@ class DokumentBestillingKontroller(private val dokumentBestillingService: Dokume
                         tilhorerEnheter = if (it is DokumentMalBucket) it.tilhørerEnheter else emptyList(),
                     )
             }
-    }
 }

@@ -24,14 +24,19 @@ class GcpCloudStorage(
     @Value("\${GCP_HOST:#{null}}") private val host: String? = null,
 ) {
     private val retrySetting =
-        RetrySettings.newBuilder()
+        RetrySettings
+            .newBuilder()
             .setMaxAttempts(3)
-            .setTotalTimeout(Duration.ofMillis(3000)).build()
+            .setTotalTimeout(Duration.ofMillis(3000))
+            .build()
     private val storage =
-        StorageOptions.newBuilder()
+        StorageOptions
+            .newBuilder()
             .setHost(host)
             .setCredentials(if (host != null) NoCredentials.getInstance() else GoogleCredentials.getApplicationDefault())
-            .setRetrySettings(retrySetting).build().service
+            .setRetrySettings(retrySetting)
+            .build()
+            .service
 
     fun hentFil(filnavn: String): ByteArray {
         LOGGER.info("Henter fil ${lagBlobinfo(filnavn).blobId} fra bucket $bucketNavn")
@@ -46,9 +51,9 @@ class GcpCloudStorage(
         }
     }
 
-    private fun lagBlobinfo(filnavn: String): BlobInfo {
-        return BlobInfo.newBuilder(bucketNavn, filnavn)
+    private fun lagBlobinfo(filnavn: String): BlobInfo =
+        BlobInfo
+            .newBuilder(bucketNavn, filnavn)
             .setContentType("application/pdf")
             .build()
-    }
 }

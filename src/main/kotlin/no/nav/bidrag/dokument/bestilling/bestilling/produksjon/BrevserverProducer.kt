@@ -221,7 +221,7 @@ class BrevserverProducer(
                             forskuddBarnPeriode {
                                 fomDato = it.periode.tilLocalDateFom()
                                 tomDato = it.periode.tilLocalDateTil() ?: MAX_DATE
-                                antallBarn = it.antall
+                                antallBarn = it.antall.toInt()
                             }
                         }
 

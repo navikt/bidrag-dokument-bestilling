@@ -4,28 +4,46 @@ import no.nav.bidrag.dokument.bestilling.bestilling.dto.DokumentMal
 import org.springframework.http.HttpStatus
 import org.springframework.web.client.HttpClientErrorException
 
-class ProduksjonAvDokumentStottesIkke(dokumentMal: DokumentMal) :
-    RuntimeException("Produksjon av dokument med brevkode=${dokumentMal.kode} støttes ikke")
+class ProduksjonAvDokumentStottesIkke(
+    dokumentMal: DokumentMal,
+) : RuntimeException("Produksjon av dokument med brevkode=${dokumentMal.kode} støttes ikke")
 
-class FantIkkePersonException(msg: String) : RuntimeException(msg)
+class FantIkkePersonException(
+    msg: String,
+) : RuntimeException(msg)
 
-class FantIkkeEnhetException(msg: String) : RuntimeException(msg)
+class FantIkkeEnhetException(
+    msg: String,
+) : RuntimeException(msg)
 
-class FantIkkeSakException(msg: String) : RuntimeException(msg)
+class FantIkkeSakException(
+    msg: String,
+) : RuntimeException(msg)
 
-class HentSakFeiletException(msg: String, throwable: Throwable) : RuntimeException(msg, throwable)
+class HentSakFeiletException(
+    msg: String,
+    throwable: Throwable,
+) : RuntimeException(msg, throwable)
 
-class HentVedtakFeiletException(msg: String, throwable: Throwable) :
-    RuntimeException(msg, throwable)
+class HentVedtakFeiletException(
+    msg: String,
+    throwable: Throwable,
+) : RuntimeException(msg, throwable)
 
-class HentPersonFeiletException(msg: String, throwable: Throwable) :
-    RuntimeException(msg, throwable)
+class HentPersonFeiletException(
+    msg: String,
+    throwable: Throwable,
+) : RuntimeException(msg, throwable)
 
-class SamhandlerManglerKontaktinformasjon(msg: String) : RuntimeException(msg)
+class SamhandlerManglerKontaktinformasjon(
+    msg: String,
+) : RuntimeException(msg)
 
-class ManglerGjelderException(msg: String) : RuntimeException(msg)
+class ManglerGjelderException(
+    msg: String,
+) : RuntimeException(msg)
 
-class BestillingManglerMottaker() : RuntimeException("Bestilling mangler mottaker")
+class BestillingManglerMottaker : RuntimeException("Bestilling mangler mottaker")
 
 fun fantIkkeVedtak(vedtakId: String): Nothing =
     throw HttpClientErrorException(HttpStatus.BAD_REQUEST, "Fant ikke vedtak med id $vedtakId")

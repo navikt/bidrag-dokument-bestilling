@@ -15,9 +15,7 @@ data class SjablonData(
 
 typealias SjablongerDto = List<SjablonData>
 
-fun SjablongerDto.hentSisteSjablong(type: SjablongType): SjablonData? {
-    return find { it.typeSjablon == type.kode && it.datoTom.isAfter(LocalDate.now()) }
-}
+fun SjablongerDto.hentSisteSjablong(type: SjablongType): SjablonData? = find { it.typeSjablon == type.kode && it.datoTom.isAfter(LocalDate.now()) }
 
 fun SjablongerDto.hentSjablongForTomDato(
     type: SjablongType,
@@ -54,7 +52,9 @@ fun SjablongerDto.hentPerioderForSjabloner(
     return perioder
 }
 
-enum class SjablongType(val kode: String) {
+enum class SjablongType(
+    val kode: String,
+) {
     BELØP_ORDINÆR_BARNETRYGD("0001"),
     BELØP_ORDINÆRT_SMÅBARNSTILLEGG("0002"),
     BOUTGIFTER_BIDRAGSBARN("0003"),

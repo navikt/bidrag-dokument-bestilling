@@ -171,11 +171,12 @@ private inline fun <reified T : DokumentMal> lastDokumentMalerFraFil(
     prefiks: String? = null,
     type: FilType = FilType.JSON,
     withGroupname: Boolean = false,
-): List<T> {
-    return try {
+): List<T> =
+    try {
         val fileending = if (type == FilType.JSON) "json" else "yaml"
         val objectMapper = ObjectMapper(YAMLFactory())
-        objectMapper.findAndRegisterModules()
+        objectMapper
+            .findAndRegisterModules()
             .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
         val inputstream = ClassPathResource("files/dokumentmaler/$filnavn.$fileending").inputStream
         val text = String(inputstream.readAllBytes(), StandardCharsets.UTF_8)
@@ -208,15 +209,15 @@ private inline fun <reified T : DokumentMal> lastDokumentMalerFraFil(
     } catch (e: IOException) {
         throw RuntimeException("Kunne ikke laste fil", e)
     }
-}
 
 private fun konverterGruppeNavnTilParameter(
     payload: String,
     parameterName: String,
-): String {
-    return try {
+): String =
+    try {
         val objectMapper = ObjectMapper(YAMLFactory())
-        objectMapper.findAndRegisterModules()
+        objectMapper
+            .findAndRegisterModules()
             .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
             .configure(SerializationFeature.ORDER_MAP_ENTRIES_BY_KEYS, true)
         val mapType: JavaType =
@@ -241,7 +242,6 @@ private fun konverterGruppeNavnTilParameter(
     } catch (e: IOException) {
         throw RuntimeException("Kunne ikke laste fil", e)
     }
-}
 
 val dokumentmalerBrevserver: List<DokumentMalBrevserver> = lastDokumentMalerFraFil("brevserver")
 val dokumentmalerUtland: List<DokumentMalBucketUtland> =

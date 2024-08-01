@@ -8,11 +8,11 @@ import no.nav.bidrag.dokument.bestilling.config.CacheConfig.Companion.LANDKODER_
 import no.nav.bidrag.dokument.bestilling.consumer.dto.KodeverkResponse
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
-import org.springframework.boot.web.client.RootUriTemplateHandler
 import org.springframework.cache.CacheManager
 import org.springframework.http.HttpMethod
 import org.springframework.stereotype.Service
 import org.springframework.web.client.RestTemplate
+import org.springframework.web.util.DefaultUriBuilderFactory
 
 @Service
 class KodeverkConsumer(
@@ -23,7 +23,7 @@ class KodeverkConsumer(
 
     init {
         val restTemplate = HttpHeaderRestTemplate()
-        restTemplate.uriTemplateHandler = RootUriTemplateHandler("$kodeverkUrl/api/v1/kodeverk")
+        restTemplate.uriTemplateHandler = DefaultUriBuilderFactory("$kodeverkUrl/api/v1/kodeverk")
         restTemplate.addHeaderGenerator("Nav-Call-Id") {
             CorrelationId.generateTimestamped("bidrag-dokument-bestilling").get()
         }
@@ -50,10 +50,10 @@ class KodeverkConsumer(
         cacheManager.getCache(LANDKODER_CACHE)?.put(DEFAULT_CACHE, kommuner)
     }
 
-    fun hentLandkoder(): KodeverkResponse? {
-        return cacheManager.getCache(LANDKODER_CACHE)
+    fun hentLandkoder(): KodeverkResponse? =
+        cacheManager
+            .getCache(LANDKODER_CACHE)
             ?.get(DEFAULT_CACHE, KodeverkResponse::class.java)
-    }
 
     private fun loadLandkoderISO2() {
         LOGGER.info("Henter Landkoder fra kodeverk")
@@ -68,10 +68,10 @@ class KodeverkConsumer(
         cacheManager.getCache(LANDKODER_ISO2_CACHE)?.put(DEFAULT_CACHE, landkoder)
     }
 
-    fun hentLandkoderISO2(): KodeverkResponse? {
-        return cacheManager.getCache(LANDKODER_ISO2_CACHE)
+    fun hentLandkoderISO2(): KodeverkResponse? =
+        cacheManager
+            .getCache(LANDKODER_ISO2_CACHE)
             ?.get(DEFAULT_CACHE, KodeverkResponse::class.java)
-    }
 
     companion object {
         private val LOGGER = LoggerFactory.getLogger(KodeverkConsumer::class.java)

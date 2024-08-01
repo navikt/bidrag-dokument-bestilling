@@ -5,8 +5,8 @@ import no.nav.bidrag.transport.sak.BidragssakDto
 import org.springframework.stereotype.Service
 
 @Service
-class SakService(private val bidragSakConsumer: BidragSakConsumer) {
-    fun hentSak(saksnr: String): BidragssakDto? {
-        return bidragSakConsumer.hentSak(saksnr)
-    }
+class SakService(
+    private val bidragSakConsumer: BidragSakConsumer,
+) {
+    fun hentSak(saksnr: String): BidragssakDto? = bidragSakConsumer.hentSak(saksnr)
 }

@@ -102,13 +102,16 @@ internal class DokumentMetadataCollectorTest {
     @BeforeEach
     fun initMocks() {
         val kodeverkResponse =
-            ObjectMapper().findAndRegisterModules()
+            ObjectMapper()
+                .findAndRegisterModules()
                 .readValue(readFile("api/landkoder.json"), KodeverkResponse::class.java)
         val kodeverkISO2Response =
-            ObjectMapper().findAndRegisterModules()
+            ObjectMapper()
+                .findAndRegisterModules()
                 .readValue(readFile("api/landkoderISO2.json"), KodeverkResponse::class.java)
         val sjablonResponse =
-            ObjectMapper().findAndRegisterModules()
+            ObjectMapper()
+                .findAndRegisterModules()
                 .readValue(readFile("api/sjablon_all.json"), typeRef<SjablongerDto>())
         every { kodeverkConsumer.hentLandkoder() } returns kodeverkResponse
         every { kodeverkConsumer.hentLandkoderISO2() } returns kodeverkISO2Response
@@ -1229,7 +1232,5 @@ internal class DokumentMetadataCollectorTest {
     private fun mapToBestillingsdata(
         request: DokumentBestillingForespørsel,
         dokumentMal: DokumentMal = hentDokumentMal("BI01S02")!!,
-    ): DokumentBestilling {
-        return metadataCollector.collect(request, dokumentMal)
-    }
+    ): DokumentBestilling = metadataCollector.collect(request, dokumentMal)
 }

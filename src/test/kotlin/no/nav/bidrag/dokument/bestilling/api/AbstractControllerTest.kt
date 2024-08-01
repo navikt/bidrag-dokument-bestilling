@@ -82,10 +82,12 @@ abstract class AbstractControllerTest {
         stubUtils.stubHentSaksbehandlerInfo()
         stubUtils.stubHentPersonSpraak()
         val kodeverkResponse =
-            ObjectMapper().findAndRegisterModules()
+            ObjectMapper()
+                .findAndRegisterModules()
                 .readValue(readFile("api/landkoder.json"), KodeverkResponse::class.java)
         val sjablonResponse =
-            ObjectMapper().findAndRegisterModules()
+            ObjectMapper()
+                .findAndRegisterModules()
                 .readValue(readFile("api/sjablon_all.json"), typeRef<SjablongerDto>())
         every { kodeverkConsumer.hentLandkoder() } returns kodeverkResponse
         every { sjablonConsumer.hentSjablonger() } returns sjablonResponse
@@ -98,13 +100,9 @@ abstract class AbstractControllerTest {
         clearAllMocks()
     }
 
-    fun rootUri(): String {
-        return "http://localhost:$port"
-    }
+    fun rootUri(): String = "http://localhost:$port"
 
-    fun readFile(filePath: String): String {
-        return String(ClassPathResource("__files/$filePath").inputStream.readAllBytes())
-    }
+    fun readFile(filePath: String): String = String(ClassPathResource("__files/$filePath").inputStream.readAllBytes())
 
     fun stubDefaultValues() {
         stubUtils.stubHentPerson(BP1.ident.verdi, BP1)

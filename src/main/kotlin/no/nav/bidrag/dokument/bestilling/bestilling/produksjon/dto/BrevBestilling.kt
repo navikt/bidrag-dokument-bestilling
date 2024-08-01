@@ -536,25 +536,17 @@ fun brevbestilling(init: BrevBestilling.() -> Unit): BrevBestilling {
 }
 
 class BirthDateAdapter : XmlAdapter<String, LocalDate?>() {
-    override fun marshal(date: LocalDate?): String? {
-        return date?.format(BREV_DATETIME_FORMAT)
-    }
+    override fun marshal(date: LocalDate?): String? = date?.format(BREV_DATETIME_FORMAT)
 
     @Throws(ParseException::class)
-    override fun unmarshal(v: String): LocalDate {
-        return LocalDate.parse(v, BREV_DATETIME_FORMAT)
-    }
+    override fun unmarshal(v: String): LocalDate = LocalDate.parse(v, BREV_DATETIME_FORMAT)
 }
 
 class DateAdapter : XmlAdapter<String, LocalDate?>() {
-    override fun marshal(date: LocalDate?): String? {
-        return date?.format(BREV_SOKNAD_DATETIME_FORMAT)
-    }
+    override fun marshal(date: LocalDate?): String? = date?.format(BREV_SOKNAD_DATETIME_FORMAT)
 
     @Throws(ParseException::class)
-    override fun unmarshal(v: String): LocalDate {
-        return LocalDate.parse(v, BREV_SOKNAD_DATETIME_FORMAT)
-    }
+    override fun unmarshal(v: String): LocalDate = LocalDate.parse(v, BREV_SOKNAD_DATETIME_FORMAT)
 }
 
 class PeriodDateAdapter : XmlAdapter<String, LocalDate?>() {
@@ -574,73 +566,47 @@ class PeriodDateAdapter : XmlAdapter<String, LocalDate?>() {
     }
 
     @Throws(ParseException::class)
-    override fun unmarshal(v: String): LocalDate {
-        return LocalDate.parse(v, BREV_SOKNAD_DATETIME_FORMAT)
-    }
+    override fun unmarshal(v: String): LocalDate = LocalDate.parse(v, BREV_SOKNAD_DATETIME_FORMAT)
 }
 
 class BelopAdapter : XmlAdapter<String, BigDecimal?>() {
-    override fun marshal(value: BigDecimal?): String? {
-        return value?.toBigInteger()?.toString()?.padStart(11, '0')
-    }
+    override fun marshal(value: BigDecimal?): String? = value?.toBigInteger()?.toString()?.padStart(11, '0')
 
     @Throws(ParseException::class)
-    override fun unmarshal(value: String?): BigDecimal? {
-        return value?.toBigDecimal()
-    }
+    override fun unmarshal(value: String?): BigDecimal? = value?.toBigDecimal()
 }
 
 class BelopDecimalSatsAdapter : XmlAdapter<String, BigDecimal?>() {
-    override fun marshal(value: BigDecimal?): String? {
-        return value?.setScale(1, RoundingMode.FLOOR).toString()?.padStart(7, '0')
-    }
+    override fun marshal(value: BigDecimal?): String? = value?.setScale(1, RoundingMode.FLOOR).toString()?.padStart(7, '0')
 
     @Throws(ParseException::class)
-    override fun unmarshal(value: String?): BigDecimal? {
-        return value?.toBigDecimal()
-    }
+    override fun unmarshal(value: String?): BigDecimal? = value?.toBigDecimal()
 }
 
 class BelopDecimalAdapter : XmlAdapter<String, BigDecimal?>() {
-    override fun marshal(value: BigDecimal?): String? {
-        return value?.setScale(2, RoundingMode.FLOOR).toString()?.padStart(11, '0')
-    }
+    override fun marshal(value: BigDecimal?): String? = value?.setScale(2, RoundingMode.FLOOR).toString()?.padStart(11, '0')
 
     @Throws(ParseException::class)
-    override fun unmarshal(value: String?): BigDecimal? {
-        return value?.toBigDecimal()
-    }
+    override fun unmarshal(value: String?): BigDecimal? = value?.toBigDecimal()
 }
 
 class NumberAdapter : XmlAdapter<String, Int?>() {
-    override fun marshal(value: Int?): String {
-        return value?.toString()?.padStart(2, '0') ?: "00"
-    }
+    override fun marshal(value: Int?): String = value?.toString()?.padStart(2, '0') ?: "00"
 
     @Throws(ParseException::class)
-    override fun unmarshal(value: String?): Int? {
-        return value?.toInt()
-    }
+    override fun unmarshal(value: String?): Int? = value?.toInt()
 }
 
 class LandkodeAdapter : XmlAdapter<String, String?>() {
-    override fun marshal(landkode: String?): String? {
-        return if (landkode.isNullOrEmpty() || landkode == LANDKODE3_NORGE) null else landkode
-    }
+    override fun marshal(landkode: String?): String? = if (landkode.isNullOrEmpty() || landkode == LANDKODE3_NORGE) null else landkode
 
     @Throws(ParseException::class)
-    override fun unmarshal(landkode: String): String {
-        return landkode
-    }
+    override fun unmarshal(landkode: String): String = landkode
 }
 
 class BooleanAdapter : XmlAdapter<String, Boolean?>() {
-    override fun marshal(v: Boolean?): String {
-        return if (v == true) "J" else "N"
-    }
+    override fun marshal(v: Boolean?): String = if (v == true) "J" else "N"
 
     @Throws(ParseException::class)
-    override fun unmarshal(v: String): Boolean {
-        return v == "J"
-    }
+    override fun unmarshal(v: String): Boolean = v == "J"
 }

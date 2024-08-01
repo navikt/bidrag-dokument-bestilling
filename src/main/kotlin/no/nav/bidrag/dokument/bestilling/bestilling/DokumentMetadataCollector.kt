@@ -87,13 +87,15 @@ class DokumentMetadataCollector(
             mottaker = hentMottakerData(forespørsel),
             gjelder = hentGjelderData(forespørsel),
             kontaktInfo =
-                kreverDataGrunnlag.takeIf { it.enhetKontaktInfo }
+                kreverDataGrunnlag
+                    .takeIf { it.enhetKontaktInfo }
                     ?.let { hentEnhetKontakInfo(forespørsel) },
             roller =
                 kreverDataGrunnlag.takeIf { it.roller }?.let { hentRolleData(forespørsel) }
                     ?: Roller(),
             vedtakDetaljer =
-                kreverDataGrunnlag.takeIf { it.vedtak }
+                kreverDataGrunnlag
+                    .takeIf { it.vedtak }
                     ?.let { hentVedtakData(forespørsel.vedtakId) },
         )
     }
@@ -149,7 +151,8 @@ class DokumentMetadataCollector(
         }
 
         val barn = sak.roller.filter { it.type == Rolletype.BARN }
-        barn.filter { it.fødselsnummer != null && (soknadsbarn.isEmpty() || soknadsbarn.contains(it.fødselsnummer?.verdi)) }
+        barn
+            .filter { it.fødselsnummer != null && (soknadsbarn.isEmpty() || soknadsbarn.contains(it.fødselsnummer?.verdi)) }
             .forEach {
                 val barnInfo =
                     if (it.fødselsnummer!!.verdi.erDødfødt) {
@@ -207,12 +210,11 @@ class DokumentMetadataCollector(
         }
     }
 
-    private fun hentGjelderData(forespørsel: DokumentBestillingForespørsel): Gjelder {
-        return Gjelder(
+    private fun hentGjelderData(forespørsel: DokumentBestillingForespørsel): Gjelder =
+        Gjelder(
             fodselsnummer = forespørsel.actualGjelderId,
             rolle = hentRolle(forespørsel.actualGjelderId),
         )
-    }
 
     private fun hentMottakerData(forespørsel: DokumentBestillingForespørsel): Mottaker {
         if (forespørsel.erMottakerSamhandler() && !forespørsel.harMottakerKontaktinformasjon() && forespørsel.samhandlerInformasjon != null) {
@@ -319,9 +321,7 @@ class DokumentMetadataCollector(
             (if (hentRolle(this.gjelderId) != null) this.gjelderId else hentGjelderFraRoller())
                 ?: throw ManglerGjelderException("Fant ingen gjelder")
 
-    private fun hentFodselsdato(person: PersonDto): LocalDate? {
-        return if (person.isKode6()) null else person.fødselsdato
-    }
+    private fun hentFodselsdato(person: PersonDto): LocalDate? = if (person.isKode6()) null else person.fødselsdato
 
     private fun hentKode6NavnBarn(
         person: PersonDto,
@@ -335,13 +335,13 @@ class DokumentMetadataCollector(
         }
     }
 
-    private fun hentRolle(ident: String?): Rolletype? {
-        return sak.roller.find { it.fødselsnummer?.verdi == ident }?.type
-    }
+    private fun hentRolle(ident: String?): Rolletype? = sak.roller.find { it.fødselsnummer?.verdi == ident }?.type
 
-    private fun hentIdentForRolle(rolle: Rolletype): String? {
-        return sak.roller.find { it.type == rolle }?.fødselsnummer?.verdi
-    }
+    private fun hentIdentForRolle(rolle: Rolletype): String? =
+        sak.roller
+            .find { it.type == rolle }
+            ?.fødselsnummer
+            ?.verdi
 
     private fun hentBidragsmottaker(): PersonDto? {
         val bmFnr = hentIdentForRolle(Rolletype.BIDRAGSMOTTAKER)
@@ -418,11 +418,10 @@ class DokumentMetadataCollector(
         }
     }
 
-    private fun hentGjelderFraRoller(): Ident? {
-        return hentIdentForRolle(Rolletype.BIDRAGSMOTTAKER)
+    private fun hentGjelderFraRoller(): Ident? =
+        hentIdentForRolle(Rolletype.BIDRAGSMOTTAKER)
             ?: hentIdentForRolle(Rolletype.BIDRAGSPLIKTIG)
             ?: hentIdentForRolle(Rolletype.BARN)
-    }
 
     private fun hentSaksbehandler(request: DokumentBestillingForespørsel): Saksbehandler {
         if (request.saksbehandler != null && !request.saksbehandler.ident.isNullOrEmpty()) {

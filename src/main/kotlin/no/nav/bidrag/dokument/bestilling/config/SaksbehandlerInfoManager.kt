@@ -9,13 +9,12 @@ import org.springframework.stereotype.Service
 class SaksbehandlerInfoManager(
     private val bidragOrganisasjonConsumer: BidragOrganisasjonConsumer,
 ) {
-    fun hentSaksbehandlerBrukerId(): String? {
-        return try {
+    fun hentSaksbehandlerBrukerId(): String? =
+        try {
             TokenUtils.hentSaksbehandlerIdent()
         } catch (e: Exception) {
             null
         }
-    }
 
     fun hentSaksbehandler(ident: String? = null): Saksbehandler? {
         return try {
@@ -27,11 +26,10 @@ class SaksbehandlerInfoManager(
         }
     }
 
-    fun erSystembruker(): Boolean {
-        return try {
+    fun erSystembruker(): Boolean =
+        try {
             TokenUtils.erApplikasjonsbruker()
         } catch (e: Exception) {
             false
         }
-    }
 }
