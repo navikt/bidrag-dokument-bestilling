@@ -4,10 +4,10 @@ import no.nav.bidrag.dokument.bestilling.consumer.KodeverkConsumer
 import org.springframework.stereotype.Service
 
 @Service
-class KodeverkService(val kodeverkConsumer: KodeverkConsumer) {
-    fun hentLandFullnavnForKode(landkode: String): String? {
-        return hentLandFullnavnForKodeISO3(landkode) ?: hentLandFullnavnForKodeISO2(landkode)
-    }
+class KodeverkService(
+    val kodeverkConsumer: KodeverkConsumer,
+) {
+    fun hentLandFullnavnForKode(landkode: String): String? = hentLandFullnavnForKodeISO3(landkode) ?: hentLandFullnavnForKodeISO2(landkode)
 
     fun hentLandFullnavnForKodeISO3(landkode: String): String? {
         val landkoder = kodeverkConsumer.hentLandkoder()

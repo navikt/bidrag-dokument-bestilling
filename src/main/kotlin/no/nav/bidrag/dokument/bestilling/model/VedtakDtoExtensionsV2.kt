@@ -18,7 +18,7 @@ import no.nav.bidrag.transport.behandling.felles.grunnlag.Grunnlagsreferanse
 import no.nav.bidrag.transport.behandling.felles.grunnlag.InntektsrapporteringPeriode
 import no.nav.bidrag.transport.behandling.felles.grunnlag.Person
 import no.nav.bidrag.transport.behandling.felles.grunnlag.SivilstandPeriode
-import no.nav.bidrag.transport.behandling.felles.grunnlag.SjablonGrunnlag
+import no.nav.bidrag.transport.behandling.felles.grunnlag.SjablonSjablontallPeriode
 import no.nav.bidrag.transport.behandling.felles.grunnlag.SøknadGrunnlag
 import no.nav.bidrag.transport.behandling.felles.grunnlag.VirkningstidspunktGrunnlag
 import no.nav.bidrag.transport.behandling.felles.grunnlag.bidragsmottaker
@@ -39,23 +39,27 @@ fun VedtakDto.tilSaksbehandler() =
         ident = opprettetAv,
     )
 
-fun VedtakDto.hentVirkningstidspunkt(): VirkningstidspunktGrunnlag? {
-    return grunnlagListe.filtrerBasertPåEgenReferanse(Grunnlagstype.VIRKNINGSTIDSPUNKT)
-        .firstOrNull()?.innholdTilObjekt<VirkningstidspunktGrunnlag>()
-}
+fun VedtakDto.hentVirkningstidspunkt(): VirkningstidspunktGrunnlag? =
+    grunnlagListe
+        .filtrerBasertPåEgenReferanse(Grunnlagstype.VIRKNINGSTIDSPUNKT)
+        .firstOrNull()
+        ?.innholdTilObjekt<VirkningstidspunktGrunnlag>()
 
-fun VedtakDto.hentSøknad(): SøknadGrunnlag {
-    return grunnlagListe.filtrerBasertPåEgenReferanse(Grunnlagstype.SØKNAD).first()
+fun VedtakDto.hentSøknad(): SøknadGrunnlag =
+    grunnlagListe
+        .filtrerBasertPåEgenReferanse(Grunnlagstype.SØKNAD)
+        .first()
         .innholdTilObjekt<SøknadGrunnlag>()
-}
 
 fun List<GrunnlagDto>.mapSivilstand(): List<SivilstandPeriode> =
     filtrerBasertPåEgenReferanse(Grunnlagstype.SIVILSTAND_PERIODE)
-        .map { it.innholdTilObjekt<SivilstandPeriode>() }.sammenstillSivilstand()
+        .map { it.innholdTilObjekt<SivilstandPeriode>() }
+        .sammenstillSivilstand()
 
 fun List<GrunnlagDto>.mapHusstandsbarn(): List<Husstandsbarn> =
     filtrerBasertPåEgenReferanse(Grunnlagstype.BOSTATUS_PERIODE)
-        .groupBy { it.gjelderReferanse }.map { (gjelderPersonReferanse, grunnlag) ->
+        .groupBy { it.gjelderReferanse }
+        .map { (gjelderPersonReferanse, grunnlag) ->
             val person = hentPersonMedReferanse(gjelderPersonReferanse) ?: throw RuntimeException("Mangler person grunnlag for referanse $gjelderPersonReferanse")
             Husstandsbarn(
                 person.personObjekt,
@@ -68,12 +72,14 @@ fun List<GrunnlagDto>.mapBarnIHusstandPerioder(): List<BarnIHusstandPeriode> {
         filtrerBasertPåEgenReferanse(Grunnlagstype.DELBEREGNING_BARN_I_HUSSTAND)
             .map { it.innholdTilObjekt<DelberegningBarnIHusstand>() }
 
-    return barnIHusstand.sortedBy { it.periode.fom }.map {
-        BarnIHusstandPeriode(
-            it.periode,
-            it.antallBarn,
-        )
-    }.sammenstillBarnIHusstandPerioder()
+    return barnIHusstand
+        .sortedBy { it.periode.fom }
+        .map {
+            BarnIHusstandPeriode(
+                it.periode,
+                it.antallBarn,
+            )
+        }.sammenstillBarnIHusstandPerioder()
 }
 
 fun List<SivilstandPeriode>.sammenstillSivilstand(): List<SivilstandPeriode> =
@@ -109,9 +115,7 @@ fun List<BarnIHusstandPeriode>.sammenstillBarnIHusstandPerioder(): List<BarnIHus
             result
         }
 
-fun List<GrunnlagDto>.hentBarnIHusstandPerioderForBarn(ident: String): Husstandsbarn? {
-    return mapHusstandsbarn().find { it.gjelderBarn.ident?.verdi == ident }
-}
+fun List<GrunnlagDto>.hentBarnIHusstandPerioderForBarn(ident: String): Husstandsbarn? = mapHusstandsbarn().find { it.gjelderBarn.ident?.verdi == ident }
 
 // fun List<GrunnlagDto>.hentBosstatusForPeriode(ident: String, vedtakPeriode: VedtakPeriodeDto): Bostatuskode {
 //    return mapHusstandsbarn().find { it.gjelderBarn.ident?.verdi == ident && it. }!!
@@ -121,9 +125,7 @@ fun List<GrunnlagDto>.hentDelberegningBarnIHusstand(periode: VedtakPeriodeDto): 
     return filtrerBasertPåEgenReferanser(Grunnlagstype.DELBEREGNING_BARN_I_HUSSTAND, sluttberegning.grunnlagsreferanseListe).firstOrNull()
 }
 
-fun List<GrunnlagDto>.hentDelberegningBarnIHusstandInnhold(periode: VedtakPeriodeDto): DelberegningBarnIHusstand? {
-    return hentDelberegningBarnIHusstand(periode)?.innholdTilObjekt<DelberegningBarnIHusstand>()
-}
+fun List<GrunnlagDto>.hentDelberegningBarnIHusstandInnhold(periode: VedtakPeriodeDto): DelberegningBarnIHusstand? = hentDelberegningBarnIHusstand(periode)?.innholdTilObjekt<DelberegningBarnIHusstand>()
 
 fun List<GrunnlagDto>.hentDelberegningInntektForPeriode(periode: VedtakPeriodeDto): BaseGrunnlag? {
     val sluttberegning = filtrerBasertPåEgenReferanser(Grunnlagstype.SLUTTBEREGNING_FORSKUDD, periode.grunnlagReferanseListe).firstOrNull() ?: return null
@@ -143,21 +145,22 @@ fun List<GrunnlagDto>.hentInntekterForPeriode(
 fun List<GrunnlagDto>.hentKapitalinntekterForPeriode(
     periode: VedtakPeriodeDto,
     rolle: BaseGrunnlag? = null,
-): List<InntektsrapporteringPeriode> {
-    return hentInntekterForPeriode(periode, rolle)
+): List<InntektsrapporteringPeriode> =
+    hentInntekterForPeriode(periode, rolle)
         .map { it.innholdTilObjekt<InntektsrapporteringPeriode>() }
         .filter { kapitalinntektTyper.contains(it.inntektsrapportering) }
-}
 
 fun List<InntektsrapporteringPeriode>.totalKapitalinntekt(): BigDecimal =
-    filter { kapitalinntektTyper.contains(it.inntektsrapportering) }.map { it.beløp }
+    filter { kapitalinntektTyper.contains(it.inntektsrapportering) }
+        .map { it.beløp }
         .reduceOrNull { acc, num -> acc + num } ?: BigDecimal.ZERO
 
 fun List<GrunnlagDto>.hentNettoKapitalinntektForRolle(
     vedtakPeriodeDto: VedtakPeriodeDto,
     rolle: BaseGrunnlag,
 ): InntektPeriode? =
-    hentKapitalinntekterForPeriode(vedtakPeriodeDto, rolle).totalKapitalinntekt()
+    hentKapitalinntekterForPeriode(vedtakPeriodeDto, rolle)
+        .totalKapitalinntekt()
         .takeIf { it > BigDecimal.ZERO }
         ?.let { totalBelop ->
             val rollePersonInfo = rolle.personObjekt
@@ -196,15 +199,15 @@ fun List<BaseGrunnlag>.finnGrunnlagMedType(
 
 fun List<BaseGrunnlag>.finnSjablonMedType(type: SjablonTallNavn) =
     filtrerBasertPåEgenReferanse(Grunnlagstype.SJABLON)
-        .map { it.innholdTilObjekt<SjablonGrunnlag>() }.find { it.sjablon == type }
+        .map { it.innholdTilObjekt<SjablonSjablontallPeriode>() }
+        .find { it.sjablon == type }
 
 fun List<BaseGrunnlag>.filtrerBasertPåEgenReferanser(
     type: Grunnlagstype,
     referanser: List<Grunnlagsreferanse>,
-): List<BaseGrunnlag> {
-    return filtrerBasertPåEgenReferanse(type)
+): List<BaseGrunnlag> =
+    filtrerBasertPåEgenReferanse(type)
         .filter { referanser.contains(it.referanse) }
-}
 
 fun Grunnlagstype.tilRolletype() =
     when (this) {
@@ -219,8 +222,8 @@ fun ÅrMånedsperiode.tilLocalDateFom() = fom.atDay(1)
 
 fun ÅrMånedsperiode?.tilLocalDateTil() = this?.til?.atEndOfMonth()
 
-fun List<GrunnlagDto>.hentTotalInntektForPeriode(vedtakPeriode: VedtakPeriodeDto): List<InntektPeriode> {
-    return hentDelberegningInntektForPeriode(vedtakPeriode)?.let { inntektPeriode ->
+fun List<GrunnlagDto>.hentTotalInntektForPeriode(vedtakPeriode: VedtakPeriodeDto): List<InntektPeriode> =
+    hentDelberegningInntektForPeriode(vedtakPeriode)?.let { inntektPeriode ->
 //        val førsteInntekt = filtrerBasertPåFremmedReferanse(Grunnlagstype.INNTEKT_RAPPORTERING_PERIODE, inntektPeriode.grunnlagsreferanseListe).firstOrNull()
         val delberegningInntekt = inntektPeriode.innholdTilObjekt<DelberegningSumInntekt>()
         val gjelderPersonGrunnlag = bidragsmottaker!!
@@ -236,7 +239,6 @@ fun List<GrunnlagDto>.hentTotalInntektForPeriode(vedtakPeriode: VedtakPeriodeDto
             ),
         )
     } ?: emptyList()
-}
 
 fun <T> T?.toList() = this?.let { listOf(it) } ?: emptyList()
 
@@ -245,8 +247,8 @@ fun <T> T?.toSet() = this?.let { setOf(it) } ?: emptySet()
 fun <T : Comparable<T>> maxOfNullable(
     a: T?,
     b: T?,
-): T? {
-    return if (a == null && b == null) {
+): T? =
+    if (a == null && b == null) {
         null
     } else if (a == null) {
         b
@@ -255,4 +257,3 @@ fun <T : Comparable<T>> maxOfNullable(
     } else {
         maxOf(a, b)
     }
-}

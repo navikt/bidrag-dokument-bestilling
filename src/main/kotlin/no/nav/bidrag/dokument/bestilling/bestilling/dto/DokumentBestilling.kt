@@ -123,7 +123,10 @@ data class Adresse(
     val land: String? = null,
 )
 
-data class PeriodeFraTom(val fraDato: LocalDate, val tomDato: LocalDate? = null)
+data class PeriodeFraTom(
+    val fraDato: LocalDate,
+    val tomDato: LocalDate? = null,
+)
 typealias BeløpFraTil = Pair<BigDecimal, BigDecimal>
 
 fun BeløpFraTil.fraVerdi() = this.first
@@ -205,13 +208,14 @@ data class VedtakDetaljer(
             .find { it.fødselsnummer == fodselsnummer }
             ?.stønadsendringer
             ?.find { it.type == Stønadstype.FORSKUDD }
-            ?.vedtakPerioder?.find { it.tomDato == null }
+            ?.vedtakPerioder
+            ?.find { it.tomDato == null }
             ?.beløp
 }
 
 data class BarnIHusstandPeriode(
     val periode: ÅrMånedsperiode,
-    val antall: Int,
+    val antall: Double,
 )
 
 data class VedtakBarn(

@@ -7,7 +7,9 @@ import no.nav.bidrag.dokument.bestilling.persistence.bucket.GcpCloudStorage
 import org.springframework.stereotype.Component
 
 @Component(BestillingSystem.BUCKET)
-class StaticFileFetcher(private val gcpCloudStorage: GcpCloudStorage) : DocumentFetcher {
+class StaticFileFetcher(
+    private val gcpCloudStorage: GcpCloudStorage,
+) : DocumentFetcher {
     override fun fetch(dokumentMalEnum: DokumentMal): ByteArray {
         if (dokumentMalEnum !is DokumentMalBucket) throw RuntimeException("Kan ikke hente dokumentmal ${dokumentMalEnum.kode} fra bucket")
         return gcpCloudStorage.hentFil(dokumentMalEnum.filePath)

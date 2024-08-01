@@ -29,8 +29,11 @@ class BidragPersonConsumer(
     @Qualifier("azure") private val restTemplate: RestOperations,
 ) : AbstractRestClient(restTemplate, "bidrag-person") {
     private fun createUri(path: String?) =
-        UriComponentsBuilder.fromUri(url)
-            .path(path ?: "").build().toUri()
+        UriComponentsBuilder
+            .fromUri(url)
+            .path(path ?: "")
+            .build()
+            .toUri()
 
     @Retryable(maxAttempts = 3, backoff = Backoff(delay = 500, maxDelay = 1500, multiplier = 2.0))
     @BrukerCacheable(PERSON_CACHE)
@@ -47,9 +50,7 @@ class BidragPersonConsumer(
 
     @Retryable(maxAttempts = 3, backoff = Backoff(delay = 500, maxDelay = 1500, multiplier = 2.0))
     @BrukerCacheable(PERSON_ADRESSE_CACHE)
-    fun hentAdresse(id: String): PersonAdresseDto? {
-        return postForEntity(createUri("/adresse/post"), PersonRequest(Personident(id)))
-    }
+    fun hentAdresse(id: String): PersonAdresseDto? = postForEntity(createUri("/adresse/post"), PersonRequest(Personident(id)))
 
     @Retryable(maxAttempts = 3, backoff = Backoff(delay = 500, maxDelay = 1500, multiplier = 2.0))
     @BrukerCacheable(PERSON_SPRAAK_CACHE)

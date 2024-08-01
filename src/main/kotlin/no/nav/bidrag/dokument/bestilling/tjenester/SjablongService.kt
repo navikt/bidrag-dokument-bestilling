@@ -18,7 +18,9 @@ import java.math.BigDecimal
 import java.time.LocalDate
 
 @Service
-class SjablongService(val sjablonConsumer: SjablonConsumer) {
+class SjablongService(
+    val sjablonConsumer: SjablonConsumer,
+) {
     fun hentSjablonDetaljer(): SjablonDetaljer {
         val sjablonger = sjablonConsumer.hentSjablonger()!!
         return SjablonDetaljer(

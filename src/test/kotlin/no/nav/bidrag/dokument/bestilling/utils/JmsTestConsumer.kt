@@ -32,7 +32,10 @@ class JmsTestConsumer {
         }
     }
 
-    class JmsConnection(jmsTemplate: JmsTemplate, queue: Queue) {
+    class JmsConnection(
+        jmsTemplate: JmsTemplate,
+        queue: Queue,
+    ) {
         var connection: Connection? = null
         var session: Session? = null
         var consumer: MessageConsumer? = null
@@ -70,8 +73,6 @@ class JmsTestConsumer {
             return JAXB.unmarshal(message.text.byteInputStream(), o)
         }
 
-        fun hasNoMessage(): Boolean {
-            return consumer?.receive(1000) == null
-        }
+        fun hasNoMessage(): Boolean = consumer?.receive(1000) == null
     }
 }

@@ -6,7 +6,9 @@ import org.springframework.context.ApplicationContext
 import org.springframework.stereotype.Component
 
 @Component
-class DokumentFetchingManager(val applicationContext: ApplicationContext) {
+class DokumentFetchingManager(
+    val applicationContext: ApplicationContext,
+) {
     fun fetchDocumentByte(
         dokumentMal: DokumentMal,
         dokumentReferanse: String? = null,
@@ -15,10 +17,9 @@ class DokumentFetchingManager(val applicationContext: ApplicationContext) {
         return dokumentProducer.fetch(dokumentMal)
     }
 
-    private fun getFetcher(dokumentMal: DokumentMal): DocumentFetcher {
-        return applicationContext.getBean(
+    private fun getFetcher(dokumentMal: DokumentMal): DocumentFetcher =
+        applicationContext.getBean(
             dokumentMal.bestillingSystem,
             DocumentFetcher::class.java,
         )
-    }
 }

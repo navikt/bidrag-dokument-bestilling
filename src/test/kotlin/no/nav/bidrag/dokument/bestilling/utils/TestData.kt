@@ -101,8 +101,8 @@ val BARN3 =
         fodselsdato = LocalDate.parse("2014-03-20"),
     )
 
-fun createSakResponse(): BidragssakDto {
-    return BidragssakDto(
+fun createSakResponse(): BidragssakDto =
+    BidragssakDto(
         saksnummer = Saksnummer(DEFAULT_SAKSNUMMER),
         eierfogd = Enhetsnummer("4806"),
         roller =
@@ -130,7 +130,6 @@ fun createSakResponse(): BidragssakDto {
         levdeAdskilt = false,
         ukjentPart = false,
     )
-}
 
 fun createPersonResponse(
     ident: String,
@@ -140,8 +139,8 @@ fun createPersonResponse(
     dodsdato: LocalDate? = null,
     aktorId: String? = "313213",
     diskresjonskode: Diskresjonskode? = null,
-): PersonDto {
-    return PersonDto(
+): PersonDto =
+    PersonDto(
         ident = Personident(ident),
         navn = navn,
         kortnavn = kortNavn,
@@ -151,10 +150,9 @@ fun createPersonResponse(
         aktørId = aktorId,
         diskresjonskode = diskresjonskode,
     )
-}
 
-fun createPostAdresseResponse(): PersonAdresseDto {
-    return PersonAdresseDto(
+fun createPostAdresseResponse(): PersonAdresseDto =
+    PersonAdresseDto(
         adresselinje1 = "Adresselinje1",
         adresselinje2 = "Adresselinje2",
         postnummer = "3030",
@@ -164,10 +162,9 @@ fun createPostAdresseResponse(): PersonAdresseDto {
         bruksenhetsnummer = "H0201",
         adressetype = Adressetype.BOSTEDSADRESSE,
     )
-}
 
-fun createPostAdresseResponseUtenlandsk(): PersonAdresseDto {
-    return PersonAdresseDto(
+fun createPostAdresseResponseUtenlandsk(): PersonAdresseDto =
+    PersonAdresseDto(
         adresselinje1 = "Utenlandsk Adresselinje1",
         adresselinje2 = "Utenlandsk Adresselinje2",
         adresselinje3 = "United states of America",
@@ -175,14 +172,13 @@ fun createPostAdresseResponseUtenlandsk(): PersonAdresseDto {
         land3 = Landkode3("USA"),
         adressetype = Adressetype.BOSTEDSADRESSE,
     )
-}
 
 fun createOpprettJournalpostResponse(
     tittel: String = "Tittel på dokument",
     journalpostId: String = "123123",
     dokumentReferanse: String = "dokref1",
-): OpprettJournalpostResponse {
-    return OpprettJournalpostResponse(
+): OpprettJournalpostResponse =
+    OpprettJournalpostResponse(
         dokumenter =
             listOf(
                 OpprettDokumentDto(
@@ -192,10 +188,9 @@ fun createOpprettJournalpostResponse(
             ),
         journalpostId = journalpostId,
     )
-}
 
-fun createEnhetKontaktInformasjon(land: String = "Norge"): EnhetKontaktInfoDto {
-    return EnhetKontaktInfoDto(
+fun createEnhetKontaktInformasjon(land: String = "Norge"): EnhetKontaktInfoDto =
+    EnhetKontaktInfoDto(
         enhetIdent = "4806",
         enhetNavn = "NAV Familie- og pensjonsytelser Drammen",
         telefonnummer = "55553333",
@@ -208,4 +203,3 @@ fun createEnhetKontaktInformasjon(land: String = "Norge"): EnhetKontaktInfoDto {
                 land = land,
             ),
     )
-}

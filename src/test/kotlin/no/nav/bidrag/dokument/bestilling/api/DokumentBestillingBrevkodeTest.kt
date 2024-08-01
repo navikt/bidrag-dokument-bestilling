@@ -46,7 +46,8 @@ class DokumentBestillingBrevkodeTest : AbstractControllerTest() {
 
         @JvmStatic
         fun brevkoderEnhetKontaktinfo() =
-            brevkoderUtgaaende().filter { it !is DokumentMalBucket }
+            brevkoderUtgaaende()
+                .filter { it !is DokumentMalBucket }
                 .filter { it.kreverDataGrunnlag!!.enhetKontaktInfo }
 
         @JvmStatic

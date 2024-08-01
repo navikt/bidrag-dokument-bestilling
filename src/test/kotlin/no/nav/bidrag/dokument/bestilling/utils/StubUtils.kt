@@ -32,11 +32,10 @@ class StubUtils {
     lateinit var objectMapper: ObjectMapper
 
     companion object {
-        fun aClosedJsonResponse(): ResponseDefinitionBuilder {
-            return aResponse()
+        fun aClosedJsonResponse(): ResponseDefinitionBuilder =
+            aResponse()
                 .withHeader(HttpHeaders.CONNECTION, "close")
                 .withHeader(HttpHeaders.CONTENT_TYPE, "application/json")
-        }
     }
 
     fun stubHentPerson(
@@ -44,7 +43,8 @@ class StubUtils {
         personResponse: PersonDto,
     ) {
         WireMock.stubFor(
-            WireMock.post(WireMock.urlMatching("/person/informasjon"))
+            WireMock
+                .post(WireMock.urlMatching("/person/informasjon"))
                 .withRequestBody(if (fnr.isNullOrEmpty()) AnythingPattern() else ContainsPattern(fnr))
                 .willReturn(
                     aClosedJsonResponse()
@@ -81,13 +81,15 @@ class StubUtils {
         status: HttpStatus = HttpStatus.OK,
     ) {
         WireMock.stubFor(
-            WireMock.post(WireMock.urlMatching("/person/adresse/post")).withRequestBody(
-                if (ident.isNullOrEmpty()) AnythingPattern() else ContainsPattern(ident),
-            ).willReturn(
-                aClosedJsonResponse()
-                    .withStatus(status.value())
-                    .withBody(convertObjectToString(postAdresse)),
-            ),
+            WireMock
+                .post(WireMock.urlMatching("/person/adresse/post"))
+                .withRequestBody(
+                    if (ident.isNullOrEmpty()) AnythingPattern() else ContainsPattern(ident),
+                ).willReturn(
+                    aClosedJsonResponse()
+                        .withStatus(status.value())
+                        .withBody(convertObjectToString(postAdresse)),
+                ),
         )
     }
 
@@ -163,9 +165,10 @@ class StubUtils {
     inner class Verify {
         fun verifyHentPersonCalled(fnr: String?) {
             val verify =
-                WireMock.postRequestedFor(
-                    WireMock.urlMatching("/person/informasjon"),
-                ).withRequestBody(ContainsPattern(fnr))
+                WireMock
+                    .postRequestedFor(
+                        WireMock.urlMatching("/person/informasjon"),
+                    ).withRequestBody(ContainsPattern(fnr))
             WireMock.verify(verify)
         }
 
@@ -197,12 +200,11 @@ class StubUtils {
         }
     }
 
-    fun <T> convertObjectToString(o: T): String {
-        return try {
+    fun <T> convertObjectToString(o: T): String =
+        try {
             objectMapper.writeValueAsString(o)
         } catch (e: JsonProcessingException) {
             Assert.fail(e.message)
             ""
         }
-    }
 }

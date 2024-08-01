@@ -21,24 +21,21 @@ class BidragOrganisasjonConsumer(
     @Qualifier("azure") private val restTemplate: RestOperations,
 ) : AbstractRestClient(restTemplate, "bidrag-organisasjon") {
     private fun createUri(path: String?) =
-        UriComponentsBuilder.fromUri(url)
-            .path(path ?: "").build().toUri()
+        UriComponentsBuilder
+            .fromUri(url)
+            .path(path ?: "")
+            .build()
+            .toUri()
 
     @Cacheable(SAKSBEHANDLERINFO_CACHE)
-    fun hentSaksbehandlerInfo(saksbehandlerIdent: String): SaksbehandlerInfoResponse? {
-        return getForEntity(createUri("/saksbehandler/info/$saksbehandlerIdent"))
-    }
+    fun hentSaksbehandlerInfo(saksbehandlerIdent: String): SaksbehandlerInfoResponse? = getForEntity(createUri("/saksbehandler/info/$saksbehandlerIdent"))
 
     @Cacheable(ENHETINFO_CACHE)
-    fun hentEnhetInfo(enhetId: String): EnhetInfo? {
-        return getForEntity(createUri("/enhet/info/$enhetId"))
-    }
+    fun hentEnhetInfo(enhetId: String): EnhetInfo? = getForEntity(createUri("/enhet/info/$enhetId"))
 
     @Cacheable(ENHETKONTAKTINFO_CACHE)
     fun hentEnhetKontaktinfo(
         enhetId: String,
         spraak: String,
-    ): EnhetKontaktInfoDto? {
-        return getForEntity(createUri("/enhet/kontaktinfo/$enhetId/$spraak"))
-    }
+    ): EnhetKontaktInfoDto? = getForEntity(createUri("/enhet/kontaktinfo/$enhetId/$spraak"))
 }
