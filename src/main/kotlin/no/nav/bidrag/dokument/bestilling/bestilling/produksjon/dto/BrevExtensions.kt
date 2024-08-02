@@ -11,6 +11,7 @@ fun Rolletype.toKode() =
     when (this) {
         Rolletype.BIDRAGSMOTTAKER -> "02"
         Rolletype.BIDRAGSPLIKTIG -> "01"
+        Rolletype.BARN -> "04"
         else -> "00"
     }
 
