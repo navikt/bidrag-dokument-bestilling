@@ -27,6 +27,7 @@ import no.nav.bidrag.dokument.bestilling.model.tilRolletype
 import no.nav.bidrag.dokument.bestilling.model.tilSaksbehandler
 import no.nav.bidrag.dokument.bestilling.model.toSet
 import no.nav.bidrag.domene.enums.beregning.Resultatkode
+import no.nav.bidrag.domene.enums.beregning.Resultatkode.Companion.erAvslagEllerOpphør
 import no.nav.bidrag.domene.enums.grunnlag.Grunnlagstype
 import no.nav.bidrag.domene.enums.rolle.Rolletype
 import no.nav.bidrag.domene.enums.sjablon.SjablonTallNavn
@@ -166,7 +167,7 @@ class VedtakService(
                         SærbidragBeregning(
                             kravbeløp = utgiftsposter.sumOf { it.kravbeløp },
                             godkjentbeløp = delberegningUtgift.sumGodkjent,
-                            andelProsent = delberegning.andelProsent,
+                            andelProsent = if (sluttberegning.resultatKode.erAvslagEllerOpphør()) BigDecimal.ZERO else delberegning.andelProsent,
                             resultat = sluttberegning.resultatBeløp,
                             resultatKode = sluttberegning.resultatKode.legacyKodeBrev,
                             beløpDirekteBetaltAvBp = delberegningUtgift.sumBetaltAvBp,
