@@ -5,6 +5,7 @@ import no.nav.bidrag.dokument.bestilling.bestilling.dto.InntektPeriode
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.VedtakPeriodeReferanse
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.VedtakSaksbehandlerInfo
 import no.nav.bidrag.dokument.bestilling.tjenester.hentInnslagKapitalinntekt
+import no.nav.bidrag.domene.enums.behandling.TypeBehandling
 import no.nav.bidrag.domene.enums.grunnlag.Grunnlagstype
 import no.nav.bidrag.domene.enums.inntekt.Inntektsrapportering
 import no.nav.bidrag.domene.enums.rolle.Rolletype
@@ -23,6 +24,7 @@ import no.nav.bidrag.transport.behandling.felles.grunnlag.SivilstandPeriode
 import no.nav.bidrag.transport.behandling.felles.grunnlag.SjablonSjablontallPeriode
 import no.nav.bidrag.transport.behandling.felles.grunnlag.SøknadGrunnlag
 import no.nav.bidrag.transport.behandling.felles.grunnlag.VirkningstidspunktGrunnlag
+import no.nav.bidrag.transport.behandling.felles.grunnlag.bidragsmottaker
 import no.nav.bidrag.transport.behandling.felles.grunnlag.filtrerBasertPåEgenReferanse
 import no.nav.bidrag.transport.behandling.felles.grunnlag.finnGrunnlagSomErReferertFraGrunnlagsreferanseListe
 import no.nav.bidrag.transport.behandling.felles.grunnlag.hentPersonMedReferanse
@@ -241,7 +243,7 @@ fun List<GrunnlagDto>.hentTotalInntektForPeriode(
     hentDelberegningInntektForPeriode(vedtakPeriode).groupBy { it.gjelderReferanse }.flatMap { (gjelderReferanse, inntektPeriode) ->
 //        val førsteInntekt = filtrerBasertPåFremmedReferanse(Grunnlagstype.INNTEKT_RAPPORTERING_PERIODE, inntektPeriode.grunnlagsreferanseListe).firstOrNull()
         val delberegningInntekt = inntektPeriode.first().innholdTilObjekt<DelberegningSumInntekt>()
-        val gjelderPersonGrunnlag = hentPersonMedReferanse(gjelderReferanse)!!
+        val gjelderPersonGrunnlag = if (vedtakPeriode.typeBehandling == TypeBehandling.FORSKUDD) bidragsmottaker!! else hentPersonMedReferanse(gjelderReferanse)!!
         listOf(
             InntektPeriode(
                 periode = vedtakPeriode.periode,

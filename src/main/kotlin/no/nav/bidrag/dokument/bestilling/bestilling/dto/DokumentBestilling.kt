@@ -241,9 +241,10 @@ data class VedtakBarnEngangsbeløp(
 
 data class VedtakPeriodeReferanse(
     val periode: ÅrMånedsperiode,
+    val typeBehandling: TypeBehandling,
     val grunnlagReferanseListe: List<Grunnlagsreferanse> = emptyList(),
 ) {
-    constructor(periode: Datoperiode, grunnlagReferanseListe: List<Grunnlagsreferanse>) : this(ÅrMånedsperiode(periode.fom, periode.til), grunnlagReferanseListe)
+    constructor(periode: Datoperiode, type: TypeBehandling, grunnlagReferanseListe: List<Grunnlagsreferanse>) : this(ÅrMånedsperiode(periode.fom, periode.til), type, grunnlagReferanseListe)
 }
 
 data class BrevSjablonVerdier(

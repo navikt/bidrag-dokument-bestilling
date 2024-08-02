@@ -156,7 +156,7 @@ class VedtakService(
                     ),
                 periode = periode,
                 medInnkreving = engangsbeløp.innkreving == Innkrevingstype.MED_INNKREVING,
-                inntekter = grunnlagListe.mapInntekter(VedtakPeriodeReferanse(periode, engangsbeløp.grunnlagReferanseListe)),
+                inntekter = grunnlagListe.mapInntekter(VedtakPeriodeReferanse(periode, vedtakDto.typeBehandling, engangsbeløp.grunnlagReferanseListe)),
                 særbidragBeregning =
                     if (engangsbeløp.type == Engangsbeløptype.SÆRBIDRAG) {
                         val utgiftsposter = grunnlagListe.utgiftsposter
@@ -201,7 +201,7 @@ class VedtakService(
                         tomDato = stønadperiode.periode.til?.atEndOfMonth(),
                         beløp = stønadperiode.beløp ?: BigDecimal.ZERO,
                         resultatKode = resultatKode?.legacyKodeBrev ?: stønadperiode.resultatkode,
-                        inntekter = grunnlagListe.mapInntekter(VedtakPeriodeReferanse(stønadperiode.periode, stønadperiode.grunnlagReferanseListe)),
+                        inntekter = grunnlagListe.mapInntekter(VedtakPeriodeReferanse(stønadperiode.periode, vedtakDto.typeBehandling, stønadperiode.grunnlagReferanseListe)),
                         inntektGrense = sjablongService.hentInntektGrenseForPeriode(getLastDayOfPreviousMonth(stønadperiode.periode.til?.atEndOfMonth())),
                         maksInntekt = sjablongService.hentMaksInntektForPeriode(getLastDayOfPreviousMonth(stønadperiode.periode.til?.atEndOfMonth())),
                     )
