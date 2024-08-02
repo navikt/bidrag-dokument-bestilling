@@ -2,6 +2,7 @@ package no.nav.bidrag.dokument.bestilling.model
 
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.BarnIHusstandPeriode
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.InntektPeriode
+import no.nav.bidrag.dokument.bestilling.bestilling.dto.VedtakPeriodeReferanse
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.VedtakSaksbehandlerInfo
 import no.nav.bidrag.dokument.bestilling.tjenester.hentInnslagKapitalinntekt
 import no.nav.bidrag.domene.enums.grunnlag.Grunnlagstype
@@ -22,8 +23,8 @@ import no.nav.bidrag.transport.behandling.felles.grunnlag.SivilstandPeriode
 import no.nav.bidrag.transport.behandling.felles.grunnlag.SjablonSjablontallPeriode
 import no.nav.bidrag.transport.behandling.felles.grunnlag.SøknadGrunnlag
 import no.nav.bidrag.transport.behandling.felles.grunnlag.VirkningstidspunktGrunnlag
-import no.nav.bidrag.transport.behandling.felles.grunnlag.bidragsmottaker
 import no.nav.bidrag.transport.behandling.felles.grunnlag.filtrerBasertPåEgenReferanse
+import no.nav.bidrag.transport.behandling.felles.grunnlag.finnGrunnlagSomErReferertFraGrunnlagsreferanseListe
 import no.nav.bidrag.transport.behandling.felles.grunnlag.hentPersonMedReferanse
 import no.nav.bidrag.transport.behandling.felles.grunnlag.innholdTilObjekt
 import no.nav.bidrag.transport.behandling.felles.grunnlag.personIdent
@@ -130,28 +131,34 @@ fun List<GrunnlagDto>.hentDelberegningBarnIHusstand(periode: VedtakPeriodeDto): 
 
 fun List<GrunnlagDto>.hentDelberegningBarnIHusstandInnhold(periode: VedtakPeriodeDto): DelberegningBarnIHusstand? = hentDelberegningBarnIHusstand(periode)?.innholdTilObjekt<DelberegningBarnIHusstand>()
 
-fun List<GrunnlagDto>.hentDelberegningInntektForPeriode(periode: VedtakPeriodeDto): BaseGrunnlag? {
-    val sluttberegning = filtrerBasertPåEgenReferanser(Grunnlagstype.SLUTTBEREGNING_FORSKUDD, periode.grunnlagReferanseListe).firstOrNull() ?: return null
-    return filtrerBasertPåEgenReferanser(Grunnlagstype.DELBEREGNING_SUM_INNTEKT, sluttberegning.grunnlagsreferanseListe).firstOrNull()
+fun List<GrunnlagDto>.hentDelberegningInntektForPeriode(
+    periode: VedtakPeriodeReferanse,
+    gjelderReferanse: Grunnlagsreferanse? = null,
+): Set<BaseGrunnlag> {
+    val sluttberegning =
+        finnGrunnlagSomErReferertFraGrunnlagsreferanseListe(Grunnlagstype.SLUTTBEREGNING_FORSKUDD, periode.grunnlagReferanseListe).firstOrNull()
+            ?: finnGrunnlagSomErReferertFraGrunnlagsreferanseListe(Grunnlagstype.SLUTTBEREGNING_SÆRBIDRAG, periode.grunnlagReferanseListe).firstOrNull() ?: return emptySet()
+    return finnGrunnlagSomErReferertFraGrunnlagsreferanseListe(Grunnlagstype.DELBEREGNING_SUM_INNTEKT, sluttberegning.grunnlagsreferanseListe)
 }
 
 fun List<GrunnlagDto>.hentInntekterForPeriode(
-    periode: VedtakPeriodeDto,
+    periode: VedtakPeriodeReferanse,
     person: BaseGrunnlag? = null,
 ): List<BaseGrunnlag> {
-    val delberegningInntekt = hentDelberegningInntektForPeriode(periode) ?: return emptyList()
+    val delberegningInntekt = hentDelberegningInntektForPeriode(periode)
     return filtrerBasertPåEgenReferanse(Grunnlagstype.INNTEKT_RAPPORTERING_PERIODE).filter { inntekt ->
-        delberegningInntekt.grunnlagsreferanseListe.contains(inntekt.referanse) && (person == null || inntekt.gjelderReferanse == person.referanse)
+        delberegningInntekt.any { it.grunnlagsreferanseListe.contains(inntekt.referanse) } && (person == null || inntekt.gjelderReferanse == person.referanse)
     }
 }
 
 fun List<GrunnlagDto>.hentKapitalinntekterForPeriode(
-    periode: VedtakPeriodeDto,
+    periode: VedtakPeriodeReferanse,
     rolle: BaseGrunnlag? = null,
-): List<InntektsrapporteringPeriode> =
+): Map<Grunnlagsreferanse, List<InntektsrapporteringPeriode>> =
     hentInntekterForPeriode(periode, rolle)
-        .map { it.innholdTilObjekt<InntektsrapporteringPeriode>() }
-        .filter { kapitalinntektTyper.contains(it.inntektsrapportering) }
+        .groupBy { it.gjelderReferanse }
+        .map { (gjelderReferanse, grunnlag) -> gjelderReferanse to grunnlag.innholdTilObjekt<InntektsrapporteringPeriode>().filter { kapitalinntektTyper.contains(it.inntektsrapportering) } }
+        .associate { it.first!! to it.second }
 
 fun List<InntektsrapporteringPeriode>.totalKapitalinntekt(): BigDecimal =
     filter { kapitalinntektTyper.contains(it.inntektsrapportering) }
@@ -159,26 +166,29 @@ fun List<InntektsrapporteringPeriode>.totalKapitalinntekt(): BigDecimal =
         .reduceOrNull { acc, num -> acc + num } ?: BigDecimal.ZERO
 
 fun List<GrunnlagDto>.hentNettoKapitalinntektForRolle(
-    vedtakPeriodeDto: VedtakPeriodeDto,
-    rolle: BaseGrunnlag,
-): InntektPeriode? =
-    hentKapitalinntekterForPeriode(vedtakPeriodeDto, rolle)
-        .totalKapitalinntekt()
-        .takeIf { it > BigDecimal.ZERO }
-        ?.let { totalBelop ->
-            val rollePersonInfo = rolle.personObjekt
-            val innslagKapitalInntektSjablonVerdi =
-                finnSjablonMedType(SjablonTallNavn.INNSLAG_KAPITALINNTEKT_BELØP)?.verdi ?: hentInnslagKapitalinntekt(vedtakPeriodeDto.periode.tilLocalDateTil())
-            val nettoKapitalinntekt = totalBelop - innslagKapitalInntektSjablonVerdi
-            nettoKapitalinntekt.takeIf { it > BigDecimal.ZERO }?.let {
-                InntektPeriode(
-                    periode = vedtakPeriodeDto.periode,
-                    nettoKapitalInntekt = true,
-                    rolle = rolle.type.tilRolletype(),
-                    fødselsnummer = rollePersonInfo.ident!!.verdi,
-                    beløp = it,
-                )
-            }
+    vedtakPeriodeDto: VedtakPeriodeReferanse,
+): List<InntektPeriode> =
+    hentKapitalinntekterForPeriode(vedtakPeriodeDto)
+        .mapNotNull { (gjelderReferanse, grunnlag) ->
+            grunnlag
+                .totalKapitalinntekt()
+                .takeIf { it > BigDecimal.ZERO }
+                ?.let { totalBelop ->
+                    val gjelderGrunnlag = hentPersonMedReferanse(gjelderReferanse)!!
+                    val rollePersonInfo = gjelderGrunnlag.personObjekt
+                    val innslagKapitalInntektSjablonVerdi =
+                        finnSjablonMedType(SjablonTallNavn.INNSLAG_KAPITALINNTEKT_BELØP)?.verdi ?: hentInnslagKapitalinntekt(vedtakPeriodeDto.periode.tilLocalDateTil())
+                    val nettoKapitalinntekt = totalBelop - innslagKapitalInntektSjablonVerdi
+                    nettoKapitalinntekt.takeIf { it > BigDecimal.ZERO }?.let {
+                        InntektPeriode(
+                            periode = vedtakPeriodeDto.periode,
+                            nettoKapitalInntekt = true,
+                            rolle = gjelderGrunnlag.type.tilRolletype(),
+                            fødselsnummer = rollePersonInfo.ident!!.verdi,
+                            beløp = it,
+                        )
+                    }
+                }
         }
 
 data class Husstandsbarn(
@@ -225,11 +235,13 @@ fun ÅrMånedsperiode.tilLocalDateFom() = fom.atDay(1)
 
 fun ÅrMånedsperiode?.tilLocalDateTil() = this?.til?.atEndOfMonth()
 
-fun List<GrunnlagDto>.hentTotalInntektForPeriode(vedtakPeriode: VedtakPeriodeDto): List<InntektPeriode> =
-    hentDelberegningInntektForPeriode(vedtakPeriode)?.let { inntektPeriode ->
+fun List<GrunnlagDto>.hentTotalInntektForPeriode(
+    vedtakPeriode: VedtakPeriodeReferanse,
+): List<InntektPeriode> =
+    hentDelberegningInntektForPeriode(vedtakPeriode).groupBy { it.gjelderReferanse }.flatMap { (gjelderReferanse, inntektPeriode) ->
 //        val førsteInntekt = filtrerBasertPåFremmedReferanse(Grunnlagstype.INNTEKT_RAPPORTERING_PERIODE, inntektPeriode.grunnlagsreferanseListe).firstOrNull()
-        val delberegningInntekt = inntektPeriode.innholdTilObjekt<DelberegningSumInntekt>()
-        val gjelderPersonGrunnlag = bidragsmottaker!!
+        val delberegningInntekt = inntektPeriode.first().innholdTilObjekt<DelberegningSumInntekt>()
+        val gjelderPersonGrunnlag = hentPersonMedReferanse(gjelderReferanse)!!
         listOf(
             InntektPeriode(
                 periode = vedtakPeriode.periode,
@@ -237,11 +249,11 @@ fun List<GrunnlagDto>.hentTotalInntektForPeriode(vedtakPeriode: VedtakPeriodeDto
                 periodeTotalinntekt = true,
                 beløpÅr = vedtakPeriode.periode.fom.year,
                 // TODO Hvordan skal dette settes for særlige utgifter og bidrag?
-                rolle = Rolletype.BIDRAGSMOTTAKER,
+                rolle = gjelderPersonGrunnlag.type.tilRolletype(),
                 fødselsnummer = gjelderPersonGrunnlag.personIdent,
             ),
         )
-    } ?: emptyList()
+    }
 
 fun <T> T?.toList() = this?.let { listOf(it) } ?: emptyList()
 

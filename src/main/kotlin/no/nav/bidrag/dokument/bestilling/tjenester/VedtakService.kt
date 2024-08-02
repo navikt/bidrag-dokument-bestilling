@@ -9,6 +9,7 @@ import no.nav.bidrag.dokument.bestilling.bestilling.dto.VedtakBarnEngangsbeløp
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.VedtakBarnStonad
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.VedtakDetaljer
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.VedtakPeriode
+import no.nav.bidrag.dokument.bestilling.bestilling.dto.VedtakPeriodeReferanse
 import no.nav.bidrag.dokument.bestilling.consumer.BidragVedtakConsumer
 import no.nav.bidrag.dokument.bestilling.model.fantIkkeVedtak
 import no.nav.bidrag.dokument.bestilling.model.getLastDayOfPreviousMonth
@@ -24,7 +25,6 @@ import no.nav.bidrag.dokument.bestilling.model.mapBarnIHusstandPerioder
 import no.nav.bidrag.dokument.bestilling.model.mapSivilstand
 import no.nav.bidrag.dokument.bestilling.model.tilRolletype
 import no.nav.bidrag.dokument.bestilling.model.tilSaksbehandler
-import no.nav.bidrag.dokument.bestilling.model.toList
 import no.nav.bidrag.dokument.bestilling.model.toSet
 import no.nav.bidrag.domene.enums.beregning.Resultatkode
 import no.nav.bidrag.domene.enums.grunnlag.Grunnlagstype
@@ -35,11 +35,11 @@ import no.nav.bidrag.domene.enums.vedtak.Innkrevingstype
 import no.nav.bidrag.domene.enums.vedtak.Stønadstype
 import no.nav.bidrag.transport.behandling.felles.grunnlag.BaseGrunnlag
 import no.nav.bidrag.transport.behandling.felles.grunnlag.DelberegningUtgift
+import no.nav.bidrag.transport.behandling.felles.grunnlag.GrunnlagDto
 import no.nav.bidrag.transport.behandling.felles.grunnlag.InntektsrapporteringPeriode
 import no.nav.bidrag.transport.behandling.felles.grunnlag.Person
 import no.nav.bidrag.transport.behandling.felles.grunnlag.SjablonSjablontallPeriode
 import no.nav.bidrag.transport.behandling.felles.grunnlag.SluttberegningSærbidrag
-import no.nav.bidrag.transport.behandling.felles.grunnlag.bidragsmottaker
 import no.nav.bidrag.transport.behandling.felles.grunnlag.filtrerBasertPåEgenReferanse
 import no.nav.bidrag.transport.behandling.felles.grunnlag.finnDelberegningBidragspliktigesAndelSærbidrag
 import no.nav.bidrag.transport.behandling.felles.grunnlag.finnTotalInntektForRolleEllerIdent
@@ -53,6 +53,7 @@ import no.nav.bidrag.transport.behandling.felles.grunnlag.utgiftsposter
 import no.nav.bidrag.transport.behandling.vedtak.response.StønadsendringDto
 import no.nav.bidrag.transport.behandling.vedtak.response.VedtakDto
 import no.nav.bidrag.transport.behandling.vedtak.response.særbidragsperiode
+import no.nav.bidrag.transport.behandling.vedtak.response.typeBehandling
 import org.springframework.stereotype.Service
 import java.math.BigDecimal
 
@@ -92,6 +93,7 @@ class VedtakService(
             vedtattDato = vedtakDto.opprettetTidspunkt.toLocalDate(),
             kilde = vedtakDto.kilde,
             vedtakType = vedtakDto.type,
+            type = vedtakDto.typeBehandling,
             saksbehandlerInfo = vedtakDto.tilSaksbehandler(),
             engangsbelopType = vedtakDto.engangsbeløpListe.firstOrNull()?.type,
             stønadType = vedtakDto.stønadsendringListe.firstOrNull()?.type,
@@ -152,6 +154,9 @@ class VedtakService(
                         forskuddSats = sjablonForskudd.verdi,
                         inntektsgrense = inntektsgrense,
                     ),
+                periode = periode,
+                medInnkreving = engangsbeløp.innkreving == Innkrevingstype.MED_INNKREVING,
+                inntekter = grunnlagListe.mapInntekter(VedtakPeriodeReferanse(periode, engangsbeløp.grunnlagReferanseListe)),
                 særbidragBeregning =
                     if (engangsbeløp.type == Engangsbeløptype.SÆRBIDRAG) {
                         val utgiftsposter = grunnlagListe.utgiftsposter
@@ -159,11 +164,11 @@ class VedtakService(
                         val delberegningUtgift = grunnlagListe.filtrerBasertPåEgenReferanse(Grunnlagstype.DELBEREGNING_UTGIFT).first().innholdTilObjekt<DelberegningUtgift>()
                         val delberegning = grunnlagListe.finnDelberegningBidragspliktigesAndelSærbidrag(engangsbeløp.grunnlagReferanseListe)!!
                         SærbidragBeregning(
-                            periode = periode,
                             kravbeløp = utgiftsposter.sumOf { it.kravbeløp },
                             godkjentbeløp = delberegningUtgift.sumGodkjent,
                             andelProsent = delberegning.andelProsent,
                             resultat = sluttberegning.resultatBeløp,
+                            resultatKode = sluttberegning.resultatKode.legacyKodeBrev,
                             beløpDirekteBetaltAvBp = delberegningUtgift.sumBetaltAvBp,
                             inntekt =
                                 SærbidragBeregning.Inntekt(
@@ -188,28 +193,6 @@ class VedtakService(
         return stønadsendringerBarn.map { stønadsendring ->
             val vedtakPerioder =
                 stønadsendring.periodeListe.map { stønadperiode ->
-                    val nettoKapitalInntekt = grunnlagListe.hentNettoKapitalinntektForRolle(stønadperiode, grunnlagListe.bidragsmottaker!!)
-
-                    val inntekter =
-                        grunnlagListe
-                            .hentInntekterForPeriode(stønadperiode)
-                            .map { inntektGrunnlag ->
-                                val inntekt = inntektGrunnlag.innholdTilObjekt<InntektsrapporteringPeriode>()
-                                if (kapitalinntektTyper.contains(inntekt.inntektsrapportering)) return@map null
-                                val gjelderPersonGrunnlag = grunnlagListe.hentPersonMedReferanse(inntektGrunnlag.gjelderReferanse)!!
-                                val gjelderPerson = gjelderPersonGrunnlag.personObjekt
-                                InntektPeriode(
-                                    inntektPerioder = inntekt.periode.toSet(),
-                                    inntektOpprinneligPerioder = inntekt.opprinneligPeriode.toSet(),
-                                    periode = stønadperiode.periode,
-                                    typer = inntekt.inntektsrapportering.toSet(),
-                                    beløpÅr = inntekt.opprinneligPeriode?.fom?.year ?: inntekt.periode.fom.year,
-                                    rolle = gjelderPersonGrunnlag.type.tilRolletype(),
-                                    fødselsnummer = gjelderPerson.ident!!.verdi,
-                                    beløp = inntekt.beløp,
-                                )
-                            }.filterNotNull()
-                            .sammenstillDeMedSammeBeskrivelse() + nettoKapitalInntekt.toList()
 
                     val resultatKode = Resultatkode.fraKode(stønadperiode.resultatkode)
                     VedtakPeriode(
@@ -218,7 +201,7 @@ class VedtakService(
                         tomDato = stønadperiode.periode.til?.atEndOfMonth(),
                         beløp = stønadperiode.beløp ?: BigDecimal.ZERO,
                         resultatKode = resultatKode?.legacyKodeBrev ?: stønadperiode.resultatkode,
-                        inntekter = inntekter + grunnlagListe.hentTotalInntektForPeriode(stønadperiode),
+                        inntekter = grunnlagListe.mapInntekter(VedtakPeriodeReferanse(stønadperiode.periode, stønadperiode.grunnlagReferanseListe)),
                         inntektGrense = sjablongService.hentInntektGrenseForPeriode(getLastDayOfPreviousMonth(stønadperiode.periode.til?.atEndOfMonth())),
                         maksInntekt = sjablongService.hentMaksInntektForPeriode(getLastDayOfPreviousMonth(stønadperiode.periode.til?.atEndOfMonth())),
                     )
@@ -231,6 +214,32 @@ class VedtakService(
             )
         }
     }
+}
+
+fun List<GrunnlagDto>.mapInntekter(periode: VedtakPeriodeReferanse): List<InntektPeriode> {
+    val nettoKapitalInntekt = hentNettoKapitalinntektForRolle(periode)
+
+    val inntekter =
+        hentInntekterForPeriode(periode)
+            .map { inntektGrunnlag ->
+                val inntekt = inntektGrunnlag.innholdTilObjekt<InntektsrapporteringPeriode>()
+                if (kapitalinntektTyper.contains(inntekt.inntektsrapportering)) return@map null
+                val gjelderPersonGrunnlag = hentPersonMedReferanse(inntektGrunnlag.gjelderReferanse)!!
+                val gjelderPerson = gjelderPersonGrunnlag.personObjekt
+                InntektPeriode(
+                    inntektPerioder = inntekt.periode.toSet(),
+                    inntektOpprinneligPerioder = inntekt.opprinneligPeriode.toSet(),
+                    periode = periode.periode,
+                    typer = inntekt.inntektsrapportering.toSet(),
+                    beløpÅr = inntekt.opprinneligPeriode?.fom?.year ?: inntekt.periode.fom.year,
+                    rolle = gjelderPersonGrunnlag.type.tilRolletype(),
+                    fødselsnummer = gjelderPerson.ident!!.verdi,
+                    beløp = inntekt.beløp,
+                )
+            }.filterNotNull()
+            .sammenstillDeMedSammeBeskrivelse() + nettoKapitalInntekt
+
+    return inntekter + hentTotalInntektForPeriode(periode)
 }
 
 fun List<InntektPeriode>.sammenstillDeMedSammeBeskrivelse() =

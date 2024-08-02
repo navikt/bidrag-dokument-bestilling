@@ -3,6 +3,7 @@ package no.nav.bidrag.dokument.bestilling.bestilling.dto
 import no.nav.bidrag.dokument.bestilling.model.Saksbehandler
 import no.nav.bidrag.dokument.bestilling.model.tilLegacyKode
 import no.nav.bidrag.dokument.bestilling.model.visningsnavnBruker
+import no.nav.bidrag.domene.enums.behandling.TypeBehandling
 import no.nav.bidrag.domene.enums.beregning.Resultatkode
 import no.nav.bidrag.domene.enums.diverse.Språk
 import no.nav.bidrag.domene.enums.inntekt.Inntektsrapportering
@@ -17,6 +18,7 @@ import no.nav.bidrag.domene.enums.vedtak.VirkningstidspunktÅrsakstype
 import no.nav.bidrag.domene.tid.Datoperiode
 import no.nav.bidrag.domene.tid.ÅrMånedsperiode
 import no.nav.bidrag.transport.behandling.felles.grunnlag.BostatusPeriode
+import no.nav.bidrag.transport.behandling.felles.grunnlag.Grunnlagsreferanse
 import no.nav.bidrag.transport.behandling.felles.grunnlag.SivilstandPeriode
 import java.math.BigDecimal
 import java.time.LocalDate
@@ -190,6 +192,7 @@ data class ForskuddInntektgrensePeriode(
 data class VedtakDetaljer(
     val årsakKode: VirkningstidspunktÅrsakstype?,
     val avslagsKode: Resultatkode?,
+    val type: TypeBehandling,
     val virkningstidspunkt: LocalDate?,
     val mottattDato: LocalDate?,
     val soktFraDato: LocalDate?,
@@ -230,8 +233,18 @@ data class VedtakBarn(
 data class VedtakBarnEngangsbeløp(
     val type: Engangsbeløptype,
     val sjablon: BrevSjablonVerdier,
+    val periode: Datoperiode,
+    val medInnkreving: Boolean,
     val særbidragBeregning: SærbidragBeregning? = null,
+    val inntekter: List<InntektPeriode> = emptyList(),
 )
+
+data class VedtakPeriodeReferanse(
+    val periode: ÅrMånedsperiode,
+    val grunnlagReferanseListe: List<Grunnlagsreferanse> = emptyList(),
+) {
+    constructor(periode: Datoperiode, grunnlagReferanseListe: List<Grunnlagsreferanse>) : this(ÅrMånedsperiode(periode.fom, periode.til), grunnlagReferanseListe)
+}
 
 data class BrevSjablonVerdier(
     val forskuddSats: BigDecimal,
@@ -242,10 +255,10 @@ data class SærbidragBeregning(
     val kravbeløp: BigDecimal,
     val godkjentbeløp: BigDecimal,
     val resultat: BigDecimal,
+    val resultatKode: String,
     val beløpDirekteBetaltAvBp: BigDecimal,
     val andelProsent: BigDecimal,
     val inntekt: Inntekt,
-    val periode: Datoperiode,
 ) {
     data class Inntekt(
         val bmInntekt: BigDecimal,
