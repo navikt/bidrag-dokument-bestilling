@@ -135,7 +135,6 @@ fun List<GrunnlagDto>.hentDelberegningBarnIHusstandInnhold(periode: VedtakPeriod
 
 fun List<GrunnlagDto>.hentDelberegningInntektForPeriode(
     periode: VedtakPeriodeReferanse,
-    gjelderReferanse: Grunnlagsreferanse? = null,
 ): Set<BaseGrunnlag> {
     val sluttberegning =
         finnGrunnlagSomErReferertFraGrunnlagsreferanseListe(Grunnlagstype.SLUTTBEREGNING_FORSKUDD, periode.grunnlagReferanseListe).firstOrNull()
@@ -243,14 +242,13 @@ fun List<GrunnlagDto>.hentTotalInntektForPeriode(
     hentDelberegningInntektForPeriode(vedtakPeriode).groupBy { it.gjelderReferanse }.flatMap { (gjelderReferanse, inntektPeriode) ->
 //        val førsteInntekt = filtrerBasertPåFremmedReferanse(Grunnlagstype.INNTEKT_RAPPORTERING_PERIODE, inntektPeriode.grunnlagsreferanseListe).firstOrNull()
         val delberegningInntekt = inntektPeriode.first().innholdTilObjekt<DelberegningSumInntekt>()
-        val gjelderPersonGrunnlag = if (vedtakPeriode.typeBehandling == TypeBehandling.FORSKUDD) bidragsmottaker!! else hentPersonMedReferanse(gjelderReferanse)!!
+        val gjelderPersonGrunnlag = if (gjelderReferanse == null && vedtakPeriode.typeBehandling == TypeBehandling.FORSKUDD) bidragsmottaker!! else hentPersonMedReferanse(gjelderReferanse)!!
         listOf(
             InntektPeriode(
                 periode = vedtakPeriode.periode,
                 beløp = delberegningInntekt.totalinntekt,
                 periodeTotalinntekt = true,
                 beløpÅr = vedtakPeriode.periode.fom.year,
-                // TODO Hvordan skal dette settes for særlige utgifter og bidrag?
                 rolle = gjelderPersonGrunnlag.type.tilRolletype(),
                 fødselsnummer = gjelderPersonGrunnlag.personIdent,
             ),
