@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-1" standalone="yes"?>
-<rtv-brev sysid="BI12" arkiver="JA" direkteutskrift="NEI" format="ENSIDIG" skriver=""
-  skrivertype="LOKAL" skuff="" malpakke="BI01.BI01A01" passord="pass" saksbehandler="Z99999">
+<rtv-brev sysid="BI12" arkiver="JA" direkteutskrift="NEI" format="ENSIDIG" skriver="" skrivertype="LOKAL" skuff="" malpakke="BI01.BI01A01"
+  passord="pass" saksbehandler="Z99999">
   <brev tknr="4806" spraak="NB" brevref="BIF12321321321">
     <brevMottaker>
       <navn>Etternavn, BMFornavn Bidragsmottaker</navn>
@@ -9,7 +9,7 @@
       <adr3>3030 Drammen</adr3>
       <adr4/>
       <boligNr>H0201</boligNr>
-      <bidrRolle>01</bidrRolle>
+      <bidrRolle>02</bidrRolle>
       <fnr>26417806511</fnr>
       <fdato>060300</fdato>
       <postnr>3030</postnr>
@@ -18,14 +18,14 @@
     </brevMottaker>
     <parter>
       <bpfnr>444213123123</bpfnr>
-      <bpNavn></bpNavn>
+      <bpNavn>Etternavn, BPFornavn Bidragspliktig</bpNavn>
       <bpfDato>060501</bpfDato>
       <bpKravFremAv/>
       <bpbelopGebyr/>
       <bpLandKd/>
       <bpDatoDod/>
       <bmfnr>26417806511</bmfnr>
-      <bmNavn></bmNavn>
+      <bmNavn>Etternavn, BMFornavn Bidragsmottaker</bmNavn>
       <bmfDato>060300</bmfDato>
       <bmKravFremAv/>
       <bmbelopGebyr/>
@@ -36,73 +36,203 @@
       <fnr>02461662466</fnr>
       <fornavn/>
       <fDato>200318</fDato>
-      <navn></navn>
+      <navn>Etternavn, Barn2 Mellomnavn</navn>
       <personIdRm/>
       <belopGebyrRm/>
-      <belForskudd/>
+      <belForskudd>00001480.00</belForskudd>
       <belBidrag/>
     </barniSak>
     <barniSak>
       <fnr>12461690252</fnr>
       <fornavn/>
       <fDato>060520</fDato>
-      <navn></navn>
+      <navn>Etternavn, Barn1 Mellomnavn</navn>
       <personIdRm/>
       <belopGebyrRm/>
-      <belForskudd>00001320.00</belForskudd>
+      <belForskudd>00000000.00</belForskudd>
       <belBidrag/>
     </barniSak>
     <soknad>
-      <soknDato>20230111</soknDato>
+      <soknDato>20240715</soknDato>
       <type>FO</type>
-      <vedtDato>20230515</vedtDato>
-      <virknDato>20200101</virknDato>
-      <aarsakKd>H</aarsakKd>
+      <vedtDato>20240804</vedtDato>
+      <virknDato>20230101</virknDato>
+      <aarsakKd>HF</aarsakKd>
       <undergrp>S</undergrp>
       <saksnr>123213</saksnr>
       <svarfrDato/>
-      <sendtDato>20230515</sendtDato>
+      <sendtDato>20240804</sendtDato>
       <saksTypeOmr/>
     </soknad>
     <bidrVtak>
-      <fomDato>20200101</fomDato>
-      <tomDato>20200630</tomDato>
-      <fnr>12461690252</fnr>
-      <belopBidr>00000000820</belopBidr>
+      <fomDato>20230101</fomDato>
+      <tomDato>20230228</tomDato>
+      <fnr>02461662466</fnr>
+      <belopBidr>00000001760</belopBidr>
       <belopTlg/>
       <innkr/>
       <soktTlgBidJN/>
-      <resKd>50</resKd>
+      <resKd>100</resKd>
     </bidrVtak>
     <bidrVtak>
-      <fomDato>20200701</fomDato>
-      <tomDato>20210630</tomDato>
-      <fnr>12461690252</fnr>
-      <belopBidr>00000001250</belopBidr>
+      <fomDato>20230301</fomDato>
+      <tomDato>20230630</tomDato>
+      <fnr>02461662466</fnr>
+      <belopBidr>00000001760</belopBidr>
+      <belopTlg/>
+      <innkr/>
+      <soktTlgBidJN/>
+      <resKd>100</resKd>
+    </bidrVtak>
+    <bidrVtak>
+      <fomDato>20230701</fomDato>
+      <tomDato>20230731</tomDato>
+      <fnr>02461662466</fnr>
+      <belopBidr>00000001880</belopBidr>
+      <belopTlg/>
+      <innkr/>
+      <soktTlgBidJN/>
+      <resKd>100</resKd>
+    </bidrVtak>
+    <bidrVtak>
+      <fomDato>20230801</fomDato>
+      <tomDato>20230930</tomDato>
+      <fnr>02461662466</fnr>
+      <belopBidr>00000001880</belopBidr>
+      <belopTlg/>
+      <innkr/>
+      <soktTlgBidJN/>
+      <resKd>100</resKd>
+    </bidrVtak>
+    <bidrVtak>
+      <fomDato>20231001</fomDato>
+      <tomDato>20231231</tomDato>
+      <fnr>02461662466</fnr>
+      <belopBidr>00000001880</belopBidr>
+      <belopTlg/>
+      <innkr/>
+      <soktTlgBidJN/>
+      <resKd>100</resKd>
+    </bidrVtak>
+    <bidrVtak>
+      <fomDato>20240101</fomDato>
+      <tomDato>20240131</tomDato>
+      <fnr>02461662466</fnr>
+      <belopBidr>00000001880</belopBidr>
+      <belopTlg/>
+      <innkr/>
+      <soktTlgBidJN/>
+      <resKd>100</resKd>
+    </bidrVtak>
+    <bidrVtak>
+      <fomDato>20240201</fomDato>
+      <tomDato>20240331</tomDato>
+      <fnr>02461662466</fnr>
+      <belopBidr>00000001410</belopBidr>
       <belopTlg/>
       <innkr/>
       <soktTlgBidJN/>
       <resKd>75</resKd>
     </bidrVtak>
     <bidrVtak>
-      <fomDato>20210701</fomDato>
-      <tomDato>20220630</tomDato>
-      <fnr>12461690252</fnr>
-      <belopBidr>00000001280</belopBidr>
+      <fomDato>20240401</fomDato>
+      <tomDato>20240630</tomDato>
+      <fnr>02461662466</fnr>
+      <belopBidr>00000001410</belopBidr>
       <belopTlg/>
       <innkr/>
       <soktTlgBidJN/>
       <resKd>75</resKd>
     </bidrVtak>
     <bidrVtak>
-      <fomDato>20220701</fomDato>
+      <fomDato>20240701</fomDato>
+      <tomDato>99991231</tomDato>
+      <fnr>02461662466</fnr>
+      <belopBidr>00000001480</belopBidr>
+      <belopTlg/>
+      <innkr/>
+      <soktTlgBidJN/>
+      <resKd>75</resKd>
+    </bidrVtak>
+    <bidrVtak>
+      <fomDato>20230101</fomDato>
+      <tomDato>20230228</tomDato>
+      <fnr>12461690252</fnr>
+      <belopBidr>00000002200</belopBidr>
+      <belopTlg/>
+      <innkr/>
+      <soktTlgBidJN/>
+      <resKd>125</resKd>
+    </bidrVtak>
+    <bidrVtak>
+      <fomDato>20230301</fomDato>
+      <tomDato>20230630</tomDato>
+      <fnr>12461690252</fnr>
+      <belopBidr>00000002200</belopBidr>
+      <belopTlg/>
+      <innkr/>
+      <soktTlgBidJN/>
+      <resKd>125</resKd>
+    </bidrVtak>
+    <bidrVtak>
+      <fomDato>20230701</fomDato>
+      <tomDato>20230930</tomDato>
+      <fnr>12461690252</fnr>
+      <belopBidr>00000002350</belopBidr>
+      <belopTlg/>
+      <innkr/>
+      <soktTlgBidJN/>
+      <resKd>125</resKd>
+    </bidrVtak>
+    <bidrVtak>
+      <fomDato>20231001</fomDato>
+      <tomDato>20231231</tomDato>
+      <fnr>12461690252</fnr>
+      <belopBidr>00000000000</belopBidr>
+      <belopTlg/>
+      <innkr/>
+      <soktTlgBidJN/>
+      <resKd>A18</resKd>
+    </bidrVtak>
+    <bidrVtak>
+      <fomDato>20240101</fomDato>
+      <tomDato>20240131</tomDato>
+      <fnr>12461690252</fnr>
+      <belopBidr>00000000000</belopBidr>
+      <belopTlg/>
+      <innkr/>
+      <soktTlgBidJN/>
+      <resKd>A18</resKd>
+    </bidrVtak>
+    <bidrVtak>
+      <fomDato>20240201</fomDato>
+      <tomDato>20240331</tomDato>
+      <fnr>12461690252</fnr>
+      <belopBidr>00000000000</belopBidr>
+      <belopTlg/>
+      <innkr/>
+      <soktTlgBidJN/>
+      <resKd>A18</resKd>
+    </bidrVtak>
+    <bidrVtak>
+      <fomDato>20240401</fomDato>
+      <tomDato>20240630</tomDato>
+      <fnr>12461690252</fnr>
+      <belopBidr>00000000000</belopBidr>
+      <belopTlg/>
+      <innkr/>
+      <soktTlgBidJN/>
+      <resKd>A18</resKd>
+    </bidrVtak>
+    <bidrVtak>
+      <fomDato>20240701</fomDato>
       <tomDato>99991231</tomDato>
       <fnr>12461690252</fnr>
-      <belopBidr>00000001320</belopBidr>
+      <belopBidr>00000000000</belopBidr>
       <belopTlg/>
       <innkr/>
       <soktTlgBidJN/>
-      <resKd>75</resKd>
+      <resKd>A18</resKd>
     </bidrVtak>
     <soknBost>
       <saksnr>123213</saksnr>
@@ -115,15 +245,15 @@
       <hgKode>FO</hgKode>
       <ugKode>S</ugKode>
       <datoSakReg>20230202</datoSakReg>
-      <resKode/>
+      <resKode>FB</resKode>
       <datoVtak/>
       <rmISak>N</rmISak>
       <forskUtBet>J</forskUtBet>
-      <sendtDato>20230515</sendtDato>
-      <gebyrsats>01243.0</gebyrsats>
+      <sendtDato>20240805</sendtDato>
+      <gebyrsats>01277.0</gebyrsats>
       <innkrSamtid>N</innkrSamtid>
-      <mottDato>20230111</mottDato>
-      <virknDato>20200101</virknDato>
+      <mottDato>20240715</mottDato>
+      <virknDato>20230101</virknDato>
       <myndighet/>
       <ffuRefNr/>
       <konv/>
@@ -134,43 +264,173 @@
       <b4Belop/>
     </soknBost>
     <perForskVtak>
-      <fomDato>20200101</fomDato>
-      <tomDato>20200630</tomDato>
-      <maksInnt>00000524800</maksInnt>
-      <resKd>50</resKd>
-      <forskKd/>
-      <forskBelop>00000000820</forskBelop>
-      <forskPst>050</forskPst>
-      <fnr>12461690252</fnr>
-    </perForskVtak>
-    <perForskVtak>
-      <fomDato>20200701</fomDato>
-      <tomDato>20210630</tomDato>
-      <maksInnt>00000534400</maksInnt>
-      <resKd>75</resKd>
-      <forskKd/>
-      <forskBelop>00000001250</forskBelop>
-      <forskPst>075</forskPst>
-      <fnr>12461690252</fnr>
-    </perForskVtak>
-    <perForskVtak>
-      <fomDato>20210701</fomDato>
-      <tomDato>20220630</tomDato>
-      <maksInnt>00000547200</maksInnt>
-      <resKd>75</resKd>
-      <forskKd/>
-      <forskBelop>00000001280</forskBelop>
-      <forskPst>075</forskPst>
-      <fnr>12461690252</fnr>
-    </perForskVtak>
-    <perForskVtak>
-      <fomDato>20220701</fomDato>
-      <tomDato>99991231</tomDato>
+      <fomDato>20230101</fomDato>
+      <tomDato>20230228</tomDato>
       <maksInnt>00000563200</maksInnt>
+      <resKd>100</resKd>
+      <forskKd/>
+      <forskBelop>00000001760</forskBelop>
+      <forskPst>100</forskPst>
+      <fnr>02461662466</fnr>
+    </perForskVtak>
+    <perForskVtak>
+      <fomDato>20230301</fomDato>
+      <tomDato>20230630</tomDato>
+      <maksInnt>00000563200</maksInnt>
+      <resKd>100</resKd>
+      <forskKd/>
+      <forskBelop>00000001760</forskBelop>
+      <forskPst>100</forskPst>
+      <fnr>02461662466</fnr>
+    </perForskVtak>
+    <perForskVtak>
+      <fomDato>20230701</fomDato>
+      <tomDato>20230731</tomDato>
+      <maksInnt>00000620400</maksInnt>
+      <resKd>100</resKd>
+      <forskKd/>
+      <forskBelop>00000001880</forskBelop>
+      <forskPst>100</forskPst>
+      <fnr>02461662466</fnr>
+    </perForskVtak>
+    <perForskVtak>
+      <fomDato>20230801</fomDato>
+      <tomDato>20230930</tomDato>
+      <maksInnt>00000620400</maksInnt>
+      <resKd>100</resKd>
+      <forskKd/>
+      <forskBelop>00000001880</forskBelop>
+      <forskPst>100</forskPst>
+      <fnr>02461662466</fnr>
+    </perForskVtak>
+    <perForskVtak>
+      <fomDato>20231001</fomDato>
+      <tomDato>20231231</tomDato>
+      <maksInnt>00000620400</maksInnt>
+      <resKd>100</resKd>
+      <forskKd/>
+      <forskBelop>00000001880</forskBelop>
+      <forskPst>100</forskPst>
+      <fnr>02461662466</fnr>
+    </perForskVtak>
+    <perForskVtak>
+      <fomDato>20240101</fomDato>
+      <tomDato>20240131</tomDato>
+      <maksInnt>00000620400</maksInnt>
+      <resKd>100</resKd>
+      <forskKd/>
+      <forskBelop>00000001880</forskBelop>
+      <forskPst>100</forskPst>
+      <fnr>02461662466</fnr>
+    </perForskVtak>
+    <perForskVtak>
+      <fomDato>20240201</fomDato>
+      <tomDato>20240331</tomDato>
+      <maksInnt>00000620400</maksInnt>
       <resKd>75</resKd>
       <forskKd/>
-      <forskBelop>00000001320</forskBelop>
+      <forskBelop>00000001410</forskBelop>
       <forskPst>075</forskPst>
+      <fnr>02461662466</fnr>
+    </perForskVtak>
+    <perForskVtak>
+      <fomDato>20240401</fomDato>
+      <tomDato>20240630</tomDato>
+      <maksInnt>00000620400</maksInnt>
+      <resKd>75</resKd>
+      <forskKd/>
+      <forskBelop>00000001410</forskBelop>
+      <forskPst>075</forskPst>
+      <fnr>02461662466</fnr>
+    </perForskVtak>
+    <perForskVtak>
+      <fomDato>20240701</fomDato>
+      <tomDato>99991231</tomDato>
+      <maksInnt>00000650100</maksInnt>
+      <resKd>75</resKd>
+      <forskKd/>
+      <forskBelop>00000001480</forskBelop>
+      <forskPst>075</forskPst>
+      <fnr>02461662466</fnr>
+    </perForskVtak>
+    <perForskVtak>
+      <fomDato>20230101</fomDato>
+      <tomDato>20230228</tomDato>
+      <maksInnt>00000563200</maksInnt>
+      <resKd>125</resKd>
+      <forskKd/>
+      <forskBelop>00000002200</forskBelop>
+      <forskPst>125</forskPst>
+      <fnr>12461690252</fnr>
+    </perForskVtak>
+    <perForskVtak>
+      <fomDato>20230301</fomDato>
+      <tomDato>20230630</tomDato>
+      <maksInnt>00000563200</maksInnt>
+      <resKd>125</resKd>
+      <forskKd/>
+      <forskBelop>00000002200</forskBelop>
+      <forskPst>125</forskPst>
+      <fnr>12461690252</fnr>
+    </perForskVtak>
+    <perForskVtak>
+      <fomDato>20230701</fomDato>
+      <tomDato>20230930</tomDato>
+      <maksInnt>00000620400</maksInnt>
+      <resKd>125</resKd>
+      <forskKd/>
+      <forskBelop>00000002350</forskBelop>
+      <forskPst>125</forskPst>
+      <fnr>12461690252</fnr>
+    </perForskVtak>
+    <perForskVtak>
+      <fomDato>20231001</fomDato>
+      <tomDato>20231231</tomDato>
+      <maksInnt>00000620400</maksInnt>
+      <resKd>A18</resKd>
+      <forskKd>BOA</forskKd>
+      <forskBelop>00000000000</forskBelop>
+      <forskPst>000</forskPst>
+      <fnr>12461690252</fnr>
+    </perForskVtak>
+    <perForskVtak>
+      <fomDato>20240101</fomDato>
+      <tomDato>20240131</tomDato>
+      <maksInnt>00000620400</maksInnt>
+      <resKd>A18</resKd>
+      <forskKd>BOA</forskKd>
+      <forskBelop>00000000000</forskBelop>
+      <forskPst>000</forskPst>
+      <fnr>12461690252</fnr>
+    </perForskVtak>
+    <perForskVtak>
+      <fomDato>20240201</fomDato>
+      <tomDato>20240331</tomDato>
+      <maksInnt>00000620400</maksInnt>
+      <resKd>A18</resKd>
+      <forskKd>BOA</forskKd>
+      <forskBelop>00000000000</forskBelop>
+      <forskPst>000</forskPst>
+      <fnr>12461690252</fnr>
+    </perForskVtak>
+    <perForskVtak>
+      <fomDato>20240401</fomDato>
+      <tomDato>20240630</tomDato>
+      <maksInnt>00000620400</maksInnt>
+      <resKd>A18</resKd>
+      <forskKd>BOA</forskKd>
+      <forskBelop>00000000000</forskBelop>
+      <forskPst>000</forskPst>
+      <fnr>12461690252</fnr>
+    </perForskVtak>
+    <perForskVtak>
+      <fomDato>20240701</fomDato>
+      <tomDato>99991231</tomDato>
+      <maksInnt>00000650100</maksInnt>
+      <resKd>A18</resKd>
+      <forskKd>BOA</forskKd>
+      <forskBelop>00000000000</forskBelop>
+      <forskPst>000</forskPst>
       <fnr>12461690252</fnr>
     </perForskVtak>
     <Kontaktinfo>
@@ -188,7 +448,7 @@
         <AdrLinje2>Linje2</AdrLinje2>
         <PostNr>3040</PostNr>
         <PostSted>Drammen</PostSted>
-        <Land>Norge</Land>
+        <Land/>
       </Returadr>
       <Postadr>
         <NavEnhId>4806</NavEnhId>
@@ -198,7 +458,7 @@
         <AdrLinje2>Linje2</AdrLinje2>
         <PostNr>3040</PostNr>
         <PostSted>Drammen</PostSted>
-        <Land>Norge</Land>
+        <Land/>
       </Postadr>
     </Kontaktinfo>
     <Saksbehandl>
@@ -206,472 +466,501 @@
     </Saksbehandl>
     <bidrBarn>
       <barn>
-        <navn/>
-        <fnr>12461690252</fnr>
+        <navn>Etternavn, Barn2 Mellomnavn</navn>
+        <fnr>02461662466</fnr>
         <fDato/>
         <saksnr>123213</saksnr>
       </barn>
       <perInntekt>
-        <fomDato>20200101</fomDato>
-        <tomDato>20200630</tomDato>
-        <belopTyp>ESBT</belopTyp>
-        <belopAar>00000005000</belopAar>
-        <fnr>26417806511</fnr>
-        <bidrRolle>02</bidrRolle>
-        <belopBeskr>Ekstra småbarnstillegg</belopBeskr>
-        <inntGrense>00000049200</inntGrense>
-      </perInntekt>
-      <perInntekt>
-        <fomDato>20200101</fomDato>
-        <tomDato>20200630</tomDato>
-        <belopTyp>MDOK</belopTyp>
-        <belopAar>00000350000</belopAar>
-        <fnr>26417806511</fnr>
-        <bidrRolle>02</bidrRolle>
-        <belopBeskr>Dokumentasjon mangler (skjønn)</belopBeskr>
-        <inntGrense>00000049200</inntGrense>
-      </perInntekt>
-      <perInntekt>
-        <fomDato>20200101</fomDato>
-        <tomDato>20200630</tomDato>
-        <belopTyp>XINN</belopTyp>
-        <belopAar>00000355000</belopAar>
-        <fnr>26417806511</fnr>
-        <bidrRolle>02</bidrRolle>
-        <belopBeskr>Personens beregningsgrunnlag i perioden</belopBeskr>
-        <inntGrense>00000049200</inntGrense>
-      </perInntekt>
-      <perInntekt>
-        <fomDato>20200701</fomDato>
-        <tomDato>20210630</tomDato>
-        <belopTyp>ESBT</belopTyp>
-        <belopAar>00000005000</belopAar>
-        <fnr>26417806511</fnr>
-        <bidrRolle>02</bidrRolle>
-        <belopBeskr>Ekstra småbarnstillegg</belopBeskr>
-        <inntGrense>00000050100</inntGrense>
-      </perInntekt>
-      <perInntekt>
-        <fomDato>20200701</fomDato>
-        <tomDato>20210630</tomDato>
-        <belopTyp>PIEO</belopTyp>
-        <belopAar>00000360000</belopAar>
-        <fnr>26417806511</fnr>
-        <bidrRolle>02</bidrRolle>
-        <belopBeskr>Personinntekt egne opplysninger</belopBeskr>
-        <inntGrense>00000050100</inntGrense>
-      </perInntekt>
-      <perInntekt>
-        <fomDato>20200701</fomDato>
-        <tomDato>20210630</tomDato>
-        <belopTyp>XINN</belopTyp>
-        <belopAar>00000365000</belopAar>
-        <fnr>26417806511</fnr>
-        <bidrRolle>02</bidrRolle>
-        <belopBeskr>Personens beregningsgrunnlag i perioden</belopBeskr>
-        <inntGrense>00000050100</inntGrense>
-      </perInntekt>
-      <perInntekt>
-        <fomDato>20210701</fomDato>
-        <tomDato>20220630</tomDato>
-        <belopTyp>AG</belopTyp>
-        <belopAar>00000400000</belopAar>
-        <fnr>26417806511</fnr>
-        <bidrRolle>02</bidrRolle>
-        <belopBeskr>Inntektsopplysninger fra arbeidsgiver</belopBeskr>
-        <inntGrense>00000051300</inntGrense>
-      </perInntekt>
-      <perInntekt>
-        <fomDato>20210701</fomDato>
-        <tomDato>20220630</tomDato>
-        <belopTyp>ESBT</belopTyp>
-        <belopAar>00000005000</belopAar>
-        <fnr>26417806511</fnr>
-        <bidrRolle>02</bidrRolle>
-        <belopBeskr>Ekstra småbarnstillegg</belopBeskr>
-        <inntGrense>00000051300</inntGrense>
-      </perInntekt>
-      <perInntekt>
-        <fomDato>20210701</fomDato>
-        <tomDato>20220630</tomDato>
+        <fomDato>20230101</fomDato>
+        <tomDato>20230228</tomDato>
         <belopTyp>UBAT</belopTyp>
-        <belopAar>00000008000</belopAar>
-        <fnr>26417806511</fnr>
-        <bidrRolle>02</bidrRolle>
-        <belopBeskr>Utvidet barnetrygd</belopBeskr>
-        <inntGrense>00000051300</inntGrense>
-      </perInntekt>
-      <perInntekt>
-        <fomDato>20210701</fomDato>
-        <tomDato>20220630</tomDato>
-        <belopTyp>XINN</belopTyp>
-        <belopAar>00000413000</belopAar>
-        <fnr>26417806511</fnr>
-        <bidrRolle>02</bidrRolle>
-        <belopBeskr>Personens beregningsgrunnlag i perioden</belopBeskr>
-        <inntGrense>00000051300</inntGrense>
-      </perInntekt>
-      <perInntekt>
-        <fomDato>20220701</fomDato>
-        <tomDato>99991231</tomDato>
-        <belopTyp>ESBT</belopTyp>
-        <belopAar>00000002000</belopAar>
-        <fnr>26417806511</fnr>
-        <bidrRolle>02</bidrRolle>
-        <belopBeskr>Ekstra småbarnstillegg</belopBeskr>
-        <inntGrense>00000052800</inntGrense>
-      </perInntekt>
-      <perInntekt>
-        <fomDato>20220701</fomDato>
-        <tomDato>99991231</tomDato>
-        <belopTyp>KIEO</belopTyp>
-        <belopAar>00000019000</belopAar>
-        <fnr>26417806511</fnr>
-        <bidrRolle>02</bidrRolle>
-        <belopBeskr>Kapitalinntekt egne opplysninger</belopBeskr>
-        <inntGrense>00000052800</inntGrense>
-      </perInntekt>
-      <perInntekt>
-        <fomDato>20220701</fomDato>
-        <tomDato>99991231</tomDato>
-        <belopTyp>PIEO</belopTyp>
-        <belopAar>00000410000</belopAar>
-        <fnr>26417806511</fnr>
-        <bidrRolle>02</bidrRolle>
-        <belopBeskr>Personinntekt egne opplysninger</belopBeskr>
-        <inntGrense>00000052800</inntGrense>
-      </perInntekt>
-      <perInntekt>
-        <fomDato>20220701</fomDato>
-        <tomDato>99991231</tomDato>
-        <belopTyp>UBAT</belopTyp>
-        <belopAar>00000001000</belopAar>
+        <belopAar>00000012648</belopAar>
         <fnr>26417806511</fnr>
         <bidrRolle>02</bidrRolle>
         <belopBeskr>Utvidet barnetrygd</belopBeskr>
         <inntGrense>00000052800</inntGrense>
       </perInntekt>
       <perInntekt>
-        <fomDato>20220701</fomDato>
-        <tomDato>99991231</tomDato>
+        <fomDato>20230101</fomDato>
+        <tomDato>20230228</tomDato>
+        <belopTyp>XKAP</belopTyp>
+        <belopAar>00000145000</belopAar>
+        <fnr>26417806511</fnr>
+        <bidrRolle>02</bidrRolle>
+        <belopBeskr>Netto positive kapitalinntekter</belopBeskr>
+        <inntGrense>00000052800</inntGrense>
+      </perInntekt>
+      <perInntekt>
+        <fomDato>20230101</fomDato>
+        <tomDato>20230228</tomDato>
         <belopTyp>XINN</belopTyp>
-        <belopAar>00000432000</belopAar>
+        <belopAar>00000157648</belopAar>
         <fnr>26417806511</fnr>
         <bidrRolle>02</bidrRolle>
         <belopBeskr>Personens beregningsgrunnlag i perioden</belopBeskr>
         <inntGrense>00000052800</inntGrense>
+      </perInntekt>
+      <perInntekt>
+        <fomDato>20230301</fomDato>
+        <tomDato>20230630</tomDato>
+        <belopTyp>UBAT</belopTyp>
+        <belopAar>00000029868</belopAar>
+        <fnr>26417806511</fnr>
+        <bidrRolle>02</bidrRolle>
+        <belopBeskr>Utvidet barnetrygd</belopBeskr>
+        <inntGrense>00000052800</inntGrense>
+      </perInntekt>
+      <perInntekt>
+        <fomDato>20230301</fomDato>
+        <tomDato>20230630</tomDato>
+        <belopTyp>XKAP</belopTyp>
+        <belopAar>00000145000</belopAar>
+        <fnr>26417806511</fnr>
+        <bidrRolle>02</bidrRolle>
+        <belopBeskr>Netto positive kapitalinntekter</belopBeskr>
+        <inntGrense>00000052800</inntGrense>
+      </perInntekt>
+      <perInntekt>
+        <fomDato>20230301</fomDato>
+        <tomDato>20230630</tomDato>
+        <belopTyp>XINN</belopTyp>
+        <belopAar>00000174868</belopAar>
+        <fnr>26417806511</fnr>
+        <bidrRolle>02</bidrRolle>
+        <belopBeskr>Personens beregningsgrunnlag i perioden</belopBeskr>
+        <inntGrense>00000052800</inntGrense>
+      </perInntekt>
+      <perInntekt>
+        <fomDato>20230701</fomDato>
+        <tomDato>20230731</tomDato>
+        <belopTyp>UBAT</belopTyp>
+        <belopAar>00000030192</belopAar>
+        <fnr>26417806511</fnr>
+        <bidrRolle>02</bidrRolle>
+        <belopBeskr>Utvidet barnetrygd</belopBeskr>
+        <inntGrense>00000056400</inntGrense>
+      </perInntekt>
+      <perInntekt>
+        <fomDato>20230701</fomDato>
+        <tomDato>20230731</tomDato>
+        <belopTyp>XKAP</belopTyp>
+        <belopAar>00000145000</belopAar>
+        <fnr>26417806511</fnr>
+        <bidrRolle>02</bidrRolle>
+        <belopBeskr>Netto positive kapitalinntekter</belopBeskr>
+        <inntGrense>00000056400</inntGrense>
+      </perInntekt>
+      <perInntekt>
+        <fomDato>20230701</fomDato>
+        <tomDato>20230731</tomDato>
+        <belopTyp>XINN</belopTyp>
+        <belopAar>00000175192</belopAar>
+        <fnr>26417806511</fnr>
+        <bidrRolle>02</bidrRolle>
+        <belopBeskr>Personens beregningsgrunnlag i perioden</belopBeskr>
+        <inntGrense>00000056400</inntGrense>
+      </perInntekt>
+      <perInntekt>
+        <fomDato>20230801</fomDato>
+        <tomDato>20230930</tomDato>
+        <belopTyp>UBAT</belopTyp>
+        <belopAar>00000030192</belopAar>
+        <fnr>26417806511</fnr>
+        <bidrRolle>02</bidrRolle>
+        <belopBeskr>Utvidet barnetrygd</belopBeskr>
+        <inntGrense>00000056400</inntGrense>
+      </perInntekt>
+      <perInntekt>
+        <fomDato>20230801</fomDato>
+        <tomDato>20230930</tomDato>
+        <belopTyp>KONT</belopTyp>
+        <belopAar>00000090000</belopAar>
+        <fnr>26417806511</fnr>
+        <bidrRolle>02</bidrRolle>
+        <belopBeskr>Kontantstøtte</belopBeskr>
+        <inntGrense>00000056400</inntGrense>
+      </perInntekt>
+      <perInntekt>
+        <fomDato>20230801</fomDato>
+        <tomDato>20230930</tomDato>
+        <belopTyp>XKAP</belopTyp>
+        <belopAar>00000145000</belopAar>
+        <fnr>26417806511</fnr>
+        <bidrRolle>02</bidrRolle>
+        <belopBeskr>Netto positive kapitalinntekter</belopBeskr>
+        <inntGrense>00000056400</inntGrense>
+      </perInntekt>
+      <perInntekt>
+        <fomDato>20230801</fomDato>
+        <tomDato>20230930</tomDato>
+        <belopTyp>XINN</belopTyp>
+        <belopAar>00000265192</belopAar>
+        <fnr>26417806511</fnr>
+        <bidrRolle>02</bidrRolle>
+        <belopBeskr>Personens beregningsgrunnlag i perioden</belopBeskr>
+        <inntGrense>00000056400</inntGrense>
+      </perInntekt>
+      <perInntekt>
+        <fomDato>20231001</fomDato>
+        <tomDato>20231231</tomDato>
+        <belopTyp>UBAT</belopTyp>
+        <belopAar>00000030192</belopAar>
+        <fnr>26417806511</fnr>
+        <bidrRolle>02</bidrRolle>
+        <belopBeskr>Utvidet barnetrygd</belopBeskr>
+        <inntGrense>00000056400</inntGrense>
+      </perInntekt>
+      <perInntekt>
+        <fomDato>20231001</fomDato>
+        <tomDato>20231231</tomDato>
+        <belopTyp>KONT</belopTyp>
+        <belopAar>00000090000</belopAar>
+        <fnr>26417806511</fnr>
+        <bidrRolle>02</bidrRolle>
+        <belopBeskr>Kontantstøtte</belopBeskr>
+        <inntGrense>00000056400</inntGrense>
+      </perInntekt>
+      <perInntekt>
+        <fomDato>20231001</fomDato>
+        <tomDato>20231231</tomDato>
+        <belopTyp>XKAP</belopTyp>
+        <belopAar>00000145000</belopAar>
+        <fnr>26417806511</fnr>
+        <bidrRolle>02</bidrRolle>
+        <belopBeskr>Netto positive kapitalinntekter</belopBeskr>
+        <inntGrense>00000056400</inntGrense>
+      </perInntekt>
+      <perInntekt>
+        <fomDato>20231001</fomDato>
+        <tomDato>20231231</tomDato>
+        <belopTyp>XINN</belopTyp>
+        <belopAar>00000265192</belopAar>
+        <fnr>26417806511</fnr>
+        <bidrRolle>02</bidrRolle>
+        <belopBeskr>Personens beregningsgrunnlag i perioden</belopBeskr>
+        <inntGrense>00000056400</inntGrense>
+      </perInntekt>
+      <perInntekt>
+        <fomDato>20240101</fomDato>
+        <tomDato>20240131</tomDato>
+        <belopTyp>UBAT</belopTyp>
+        <belopAar>00000030192</belopAar>
+        <fnr>26417806511</fnr>
+        <bidrRolle>02</bidrRolle>
+        <belopBeskr>Utvidet barnetrygd</belopBeskr>
+        <inntGrense>00000056400</inntGrense>
+      </perInntekt>
+      <perInntekt>
+        <fomDato>20240101</fomDato>
+        <tomDato>20240131</tomDato>
+        <belopTyp>KONT</belopTyp>
+        <belopAar>00000090000</belopAar>
+        <fnr>26417806511</fnr>
+        <bidrRolle>02</bidrRolle>
+        <belopBeskr>Kontantstøtte</belopBeskr>
+        <inntGrense>00000056400</inntGrense>
+      </perInntekt>
+      <perInntekt>
+        <fomDato>20240101</fomDato>
+        <tomDato>20240131</tomDato>
+        <belopTyp>XKAP</belopTyp>
+        <belopAar>00000145000</belopAar>
+        <fnr>26417806511</fnr>
+        <bidrRolle>02</bidrRolle>
+        <belopBeskr>Netto positive kapitalinntekter</belopBeskr>
+        <inntGrense>00000056400</inntGrense>
+      </perInntekt>
+      <perInntekt>
+        <fomDato>20240101</fomDato>
+        <tomDato>20240131</tomDato>
+        <belopTyp>XINN</belopTyp>
+        <belopAar>00000265192</belopAar>
+        <fnr>26417806511</fnr>
+        <bidrRolle>02</bidrRolle>
+        <belopBeskr>Personens beregningsgrunnlag i perioden</belopBeskr>
+        <inntGrense>00000056400</inntGrense>
+      </perInntekt>
+      <perInntekt>
+        <fomDato>20240201</fomDato>
+        <tomDato>20240331</tomDato>
+        <belopTyp>UBAT</belopTyp>
+        <belopAar>00000030192</belopAar>
+        <fnr>26417806511</fnr>
+        <bidrRolle>02</bidrRolle>
+        <belopBeskr>Utvidet barnetrygd</belopBeskr>
+        <inntGrense>00000056400</inntGrense>
+      </perInntekt>
+      <perInntekt>
+        <fomDato>20240201</fomDato>
+        <tomDato>20240331</tomDato>
+        <belopTyp>LIGS</belopTyp>
+        <belopAar>00000412000</belopAar>
+        <fnr>26417806511</fnr>
+        <bidrRolle>02</bidrRolle>
+        <belopBeskr>Skattemelding 2023</belopBeskr>
+        <inntGrense>00000056400</inntGrense>
+      </perInntekt>
+      <perInntekt>
+        <fomDato>20240201</fomDato>
+        <tomDato>20240331</tomDato>
+        <belopTyp>KONT</belopTyp>
+        <belopAar>00000090000</belopAar>
+        <fnr>26417806511</fnr>
+        <bidrRolle>02</bidrRolle>
+        <belopBeskr>Kontantstøtte</belopBeskr>
+        <inntGrense>00000056400</inntGrense>
+      </perInntekt>
+      <perInntekt>
+        <fomDato>20240201</fomDato>
+        <tomDato>20240331</tomDato>
+        <belopTyp>XKAP</belopTyp>
+        <belopAar>00000020000</belopAar>
+        <fnr>26417806511</fnr>
+        <bidrRolle>02</bidrRolle>
+        <belopBeskr>Netto positive kapitalinntekter</belopBeskr>
+        <inntGrense>00000056400</inntGrense>
+      </perInntekt>
+      <perInntekt>
+        <fomDato>20240201</fomDato>
+        <tomDato>20240331</tomDato>
+        <belopTyp>XINN</belopTyp>
+        <belopAar>00000552192</belopAar>
+        <fnr>26417806511</fnr>
+        <bidrRolle>02</bidrRolle>
+        <belopBeskr>Personens beregningsgrunnlag i perioden</belopBeskr>
+        <inntGrense>00000056400</inntGrense>
+      </perInntekt>
+      <perInntekt>
+        <fomDato>20240401</fomDato>
+        <tomDato>20240630</tomDato>
+        <belopTyp>UBAT</belopTyp>
+        <belopAar>00000030192</belopAar>
+        <fnr>26417806511</fnr>
+        <bidrRolle>02</bidrRolle>
+        <belopBeskr>Utvidet barnetrygd</belopBeskr>
+        <inntGrense>00000056400</inntGrense>
+      </perInntekt>
+      <perInntekt>
+        <fomDato>20240401</fomDato>
+        <tomDato>20240630</tomDato>
+        <belopTyp>LIGS</belopTyp>
+        <belopAar>00000412000</belopAar>
+        <fnr>26417806511</fnr>
+        <bidrRolle>02</bidrRolle>
+        <belopBeskr>Skattemelding 2023</belopBeskr>
+        <inntGrense>00000056400</inntGrense>
+      </perInntekt>
+      <perInntekt>
+        <fomDato>20240401</fomDato>
+        <tomDato>20240630</tomDato>
+        <belopTyp>ESBT</belopTyp>
+        <belopAar>00000008352</belopAar>
+        <fnr>26417806511</fnr>
+        <bidrRolle>02</bidrRolle>
+        <belopBeskr>Småbarnstillegg</belopBeskr>
+        <inntGrense>00000056400</inntGrense>
+      </perInntekt>
+      <perInntekt>
+        <fomDato>20240401</fomDato>
+        <tomDato>20240630</tomDato>
+        <belopTyp>KONT</belopTyp>
+        <belopAar>00000090000</belopAar>
+        <fnr>26417806511</fnr>
+        <bidrRolle>02</bidrRolle>
+        <belopBeskr>Kontantstøtte</belopBeskr>
+        <inntGrense>00000056400</inntGrense>
+      </perInntekt>
+      <perInntekt>
+        <fomDato>20240401</fomDato>
+        <tomDato>20240630</tomDato>
+        <belopTyp>XKAP</belopTyp>
+        <belopAar>00000020000</belopAar>
+        <fnr>26417806511</fnr>
+        <bidrRolle>02</bidrRolle>
+        <belopBeskr>Netto positive kapitalinntekter</belopBeskr>
+        <inntGrense>00000056400</inntGrense>
+      </perInntekt>
+      <perInntekt>
+        <fomDato>20240401</fomDato>
+        <tomDato>20240630</tomDato>
+        <belopTyp>XINN</belopTyp>
+        <belopAar>00000560544</belopAar>
+        <fnr>26417806511</fnr>
+        <bidrRolle>02</bidrRolle>
+        <belopBeskr>Personens beregningsgrunnlag i perioden</belopBeskr>
+        <inntGrense>00000056400</inntGrense>
+      </perInntekt>
+      <perInntekt>
+        <fomDato>20240701</fomDato>
+        <tomDato>99991231</tomDato>
+        <belopTyp>UBAT</belopTyp>
+        <belopAar>00000030192</belopAar>
+        <fnr>26417806511</fnr>
+        <bidrRolle>02</bidrRolle>
+        <belopBeskr>Utvidet barnetrygd</belopBeskr>
+        <inntGrense>00000059100</inntGrense>
+      </perInntekt>
+      <perInntekt>
+        <fomDato>20240701</fomDato>
+        <tomDato>99991231</tomDato>
+        <belopTyp>LIGS</belopTyp>
+        <belopAar>00000412000</belopAar>
+        <fnr>26417806511</fnr>
+        <bidrRolle>02</bidrRolle>
+        <belopBeskr>Skattemelding 2023</belopBeskr>
+        <inntGrense>00000059100</inntGrense>
+      </perInntekt>
+      <perInntekt>
+        <fomDato>20240701</fomDato>
+        <tomDato>99991231</tomDato>
+        <belopTyp>ESBT</belopTyp>
+        <belopAar>00000008352</belopAar>
+        <fnr>26417806511</fnr>
+        <bidrRolle>02</bidrRolle>
+        <belopBeskr>Småbarnstillegg</belopBeskr>
+        <inntGrense>00000059100</inntGrense>
+      </perInntekt>
+      <perInntekt>
+        <fomDato>20240701</fomDato>
+        <tomDato>99991231</tomDato>
+        <belopTyp>XKAP</belopTyp>
+        <belopAar>00000020000</belopAar>
+        <fnr>26417806511</fnr>
+        <bidrRolle>02</bidrRolle>
+        <belopBeskr>Netto positive kapitalinntekter</belopBeskr>
+        <inntGrense>00000059100</inntGrense>
+      </perInntekt>
+      <perInntekt>
+        <fomDato>20240701</fomDato>
+        <tomDato>99991231</tomDato>
+        <belopTyp>XINN</belopTyp>
+        <belopAar>00000470544</belopAar>
+        <fnr>26417806511</fnr>
+        <bidrRolle>02</bidrRolle>
+        <belopBeskr>Personens beregningsgrunnlag i perioden</belopBeskr>
+        <inntGrense>00000059100</inntGrense>
       </perInntekt>
       <perForskBarn>
-        <antBarn>01</antBarn>
-        <fomDato>20200101</fomDato>
-        <tomDato>20220630</tomDato>
+        <fomDato>20230101</fomDato>
+        <tomDato>20230930</tomDato>
+        <antBarn>04</antBarn>
       </perForskBarn>
       <perForskBarn>
+        <fomDato>20231001</fomDato>
+        <tomDato>20240630</tomDato>
         <antBarn>03</antBarn>
-        <fomDato>20220701</fomDato>
+      </perForskBarn>
+      <perForskBarn>
+        <fomDato>20240701</fomDato>
         <tomDato>99991231</tomDato>
+        <antBarn>02</antBarn>
       </perForskBarn>
       <perForskSiv>
+        <fomDato>20230101</fomDato>
+        <tomDato>20231231</tomDato>
+        <forsorgKd>SEPA</forsorgKd>
+        <forsorgBesk>Enslig</forsorgBesk>
+      </perForskSiv>
+      <perForskSiv>
+        <fomDato>20240101</fomDato>
+        <tomDato>99991231</tomDato>
         <forsorgKd>GIFT</forsorgKd>
-        <forsorgBesk>Gift</forsorgBesk>
-        <fomDato>20200101</fomDato>
-        <tomDato>20200630</tomDato>
-      </perForskSiv>
-      <perForskSiv>
-        <forsorgKd>SKIL</forsorgKd>
-        <forsorgBesk>Skilt</forsorgBesk>
-        <fomDato>20200701</fomDato>
-        <tomDato>20220630</tomDato>
-      </perForskSiv>
-      <perForskSiv>
-        <forsorgKd>SKIL</forsorgKd>
-        <forsorgBesk>Enke</forsorgBesk>
-        <fomDato>20220701</fomDato>
-        <tomDato>99991231</tomDato>
+        <forsorgBesk>Gift/samboer</forsorgBesk>
       </perForskSiv>
       <perForskVtak>
-        <fomDato>20200101</fomDato>
-        <tomDato>20200630</tomDato>
-        <maksInnt>00000524800</maksInnt>
-        <resKd>50</resKd>
-        <forskKd/>
-        <forskBelop>00000000820</forskBelop>
-        <forskPst>050</forskPst>
-        <fnr>12461690252</fnr>
-      </perForskVtak>
-      <perForskVtak>
-        <fomDato>20200701</fomDato>
-        <tomDato>20210630</tomDato>
-        <maksInnt>00000534400</maksInnt>
-        <resKd>75</resKd>
-        <forskKd/>
-        <forskBelop>00000001250</forskBelop>
-        <forskPst>075</forskPst>
-        <fnr>12461690252</fnr>
-      </perForskVtak>
-      <perForskVtak>
-        <fomDato>20210701</fomDato>
-        <tomDato>20220630</tomDato>
-        <maksInnt>00000547200</maksInnt>
-        <resKd>75</resKd>
-        <forskKd/>
-        <forskBelop>00000001280</forskBelop>
-        <forskPst>075</forskPst>
-        <fnr>12461690252</fnr>
-      </perForskVtak>
-      <perForskVtak>
-        <fomDato>20220701</fomDato>
-        <tomDato>99991231</tomDato>
+        <fomDato>20230101</fomDato>
+        <tomDato>20230228</tomDato>
         <maksInnt>00000563200</maksInnt>
+        <resKd>100</resKd>
+        <forskKd/>
+        <forskBelop>00000001760</forskBelop>
+        <forskPst>100</forskPst>
+        <fnr>02461662466</fnr>
+      </perForskVtak>
+      <perForskVtak>
+        <fomDato>20230301</fomDato>
+        <tomDato>20230630</tomDato>
+        <maksInnt>00000563200</maksInnt>
+        <resKd>100</resKd>
+        <forskKd/>
+        <forskBelop>00000001760</forskBelop>
+        <forskPst>100</forskPst>
+        <fnr>02461662466</fnr>
+      </perForskVtak>
+      <perForskVtak>
+        <fomDato>20230701</fomDato>
+        <tomDato>20230731</tomDato>
+        <maksInnt>00000620400</maksInnt>
+        <resKd>100</resKd>
+        <forskKd/>
+        <forskBelop>00000001880</forskBelop>
+        <forskPst>100</forskPst>
+        <fnr>02461662466</fnr>
+      </perForskVtak>
+      <perForskVtak>
+        <fomDato>20230801</fomDato>
+        <tomDato>20230930</tomDato>
+        <maksInnt>00000620400</maksInnt>
+        <resKd>100</resKd>
+        <forskKd/>
+        <forskBelop>00000001880</forskBelop>
+        <forskPst>100</forskPst>
+        <fnr>02461662466</fnr>
+      </perForskVtak>
+      <perForskVtak>
+        <fomDato>20231001</fomDato>
+        <tomDato>20231231</tomDato>
+        <maksInnt>00000620400</maksInnt>
+        <resKd>100</resKd>
+        <forskKd/>
+        <forskBelop>00000001880</forskBelop>
+        <forskPst>100</forskPst>
+        <fnr>02461662466</fnr>
+      </perForskVtak>
+      <perForskVtak>
+        <fomDato>20240101</fomDato>
+        <tomDato>20240131</tomDato>
+        <maksInnt>00000620400</maksInnt>
+        <resKd>100</resKd>
+        <forskKd/>
+        <forskBelop>00000001880</forskBelop>
+        <forskPst>100</forskPst>
+        <fnr>02461662466</fnr>
+      </perForskVtak>
+      <perForskVtak>
+        <fomDato>20240201</fomDato>
+        <tomDato>20240331</tomDato>
+        <maksInnt>00000620400</maksInnt>
         <resKd>75</resKd>
         <forskKd/>
-        <forskBelop>00000001320</forskBelop>
+        <forskBelop>00000001410</forskBelop>
         <forskPst>075</forskPst>
-        <fnr>12461690252</fnr>
+        <fnr>02461662466</fnr>
+      </perForskVtak>
+      <perForskVtak>
+        <fomDato>20240401</fomDato>
+        <tomDato>20240630</tomDato>
+        <maksInnt>00000620400</maksInnt>
+        <resKd>75</resKd>
+        <forskKd/>
+        <forskBelop>00000001410</forskBelop>
+        <forskPst>075</forskPst>
+        <fnr>02461662466</fnr>
+      </perForskVtak>
+      <perForskVtak>
+        <fomDato>20240701</fomDato>
+        <tomDato>99991231</tomDato>
+        <maksInnt>00000650100</maksInnt>
+        <resKd>75</resKd>
+        <forskKd/>
+        <forskBelop>00000001480</forskBelop>
+        <forskPst>075</forskPst>
+        <fnr>02461662466</fnr>
       </perForskVtak>
       <perInGrForsk>
-        <fomDato>20200101</fomDato>
-        <tomDato>20200630</tomDato>
-        <forsorgKd>EN</forsorgKd>
-        <antBarn>01</antBarn>
-        <belop75fra>00000277601</belop75fra>
-        <belop75til>00000430000</belop75til>
-        <belop50fra>00000430001</belop50fra>
-        <belop50til>00000524800</belop50til>
-      </perInGrForsk>
-      <perInGrForsk>
-        <fomDato>20200101</fomDato>
-        <tomDato>20200630</tomDato>
-        <forsorgKd>EN</forsorgKd>
-        <antBarn>02</antBarn>
-        <belop75fra>00000277601</belop75fra>
-        <belop75til>00000492700</belop75til>
-        <belop50fra>00000492701</belop50fra>
-        <belop50til>00000524800</belop50til>
-      </perInGrForsk>
-      <perInGrForsk>
-        <fomDato>20200101</fomDato>
-        <tomDato>20200630</tomDato>
-        <forsorgKd>EN</forsorgKd>
-        <antBarn>03</antBarn>
-        <belop75fra>00000277601</belop75fra>
-        <belop75til>00000524800</belop75til>
-        <belop50fra>00000524800</belop50fra>
-        <belop50til>00000524800</belop50til>
-      </perInGrForsk>
-      <perInGrForsk>
-        <fomDato>20200101</fomDato>
-        <tomDato>20200630</tomDato>
-        <forsorgKd>EN</forsorgKd>
-        <antBarn>04</antBarn>
-        <belop75fra>00000277601</belop75fra>
-        <belop75til>00000524800</belop75til>
-        <belop50fra>00000524800</belop50fra>
-        <belop50til>00000524800</belop50til>
-      </perInGrForsk>
-      <perInGrForsk>
-        <fomDato>20200101</fomDato>
-        <tomDato>20200630</tomDato>
-        <forsorgKd>GS</forsorgKd>
-        <antBarn>01</antBarn>
-        <belop75fra>00000277601</belop75fra>
-        <belop75til>00000344900</belop75til>
-        <belop50fra>00000344901</belop50fra>
-        <belop50til>00000524800</belop50til>
-      </perInGrForsk>
-      <perInGrForsk>
-        <fomDato>20200101</fomDato>
-        <tomDato>20200630</tomDato>
-        <forsorgKd>GS</forsorgKd>
-        <antBarn>02</antBarn>
-        <belop75fra>00000277601</belop75fra>
-        <belop75til>00000407600</belop75til>
-        <belop50fra>00000407601</belop50fra>
-        <belop50til>00000524800</belop50til>
-      </perInGrForsk>
-      <perInGrForsk>
-        <fomDato>20200101</fomDato>
-        <tomDato>20200630</tomDato>
-        <forsorgKd>GS</forsorgKd>
-        <antBarn>03</antBarn>
-        <belop75fra>00000277601</belop75fra>
-        <belop75til>00000470300</belop75til>
-        <belop50fra>00000470301</belop50fra>
-        <belop50til>00000524800</belop50til>
-      </perInGrForsk>
-      <perInGrForsk>
-        <fomDato>20200101</fomDato>
-        <tomDato>20200630</tomDato>
-        <forsorgKd>GS</forsorgKd>
-        <antBarn>04</antBarn>
-        <belop75fra>00000277601</belop75fra>
-        <belop75til>00000524800</belop75til>
-        <belop50fra>00000524800</belop50fra>
-        <belop50til>00000524800</belop50til>
-      </perInGrForsk>
-      <perInGrForsk>
-        <fomDato>20200701</fomDato>
-        <tomDato>20210630</tomDato>
-        <forsorgKd>EN</forsorgKd>
-        <antBarn>01</antBarn>
-        <belop75fra>00000297501</belop75fra>
-        <belop75til>00000468500</belop75til>
-        <belop50fra>00000468501</belop50fra>
-        <belop50til>00000534400</belop50til>
-      </perInGrForsk>
-      <perInGrForsk>
-        <fomDato>20200701</fomDato>
-        <tomDato>20210630</tomDato>
-        <forsorgKd>EN</forsorgKd>
-        <antBarn>02</antBarn>
-        <belop75fra>00000297501</belop75fra>
-        <belop75til>00000537600</belop75til>
-        <belop50fra>00000537601</belop50fra>
-        <belop50til>00000534400</belop50til>
-      </perInGrForsk>
-      <perInGrForsk>
-        <fomDato>20200701</fomDato>
-        <tomDato>20210630</tomDato>
-        <forsorgKd>EN</forsorgKd>
-        <antBarn>03</antBarn>
-        <belop75fra>00000297501</belop75fra>
-        <belop75til>00000534400</belop75til>
-        <belop50fra>00000534400</belop50fra>
-        <belop50til>00000534400</belop50til>
-      </perInGrForsk>
-      <perInGrForsk>
-        <fomDato>20200701</fomDato>
-        <tomDato>20210630</tomDato>
-        <forsorgKd>EN</forsorgKd>
-        <antBarn>04</antBarn>
-        <belop75fra>00000297501</belop75fra>
-        <belop75til>00000534400</belop75til>
-        <belop50fra>00000534400</belop50fra>
-        <belop50til>00000534400</belop50til>
-      </perInGrForsk>
-      <perInGrForsk>
-        <fomDato>20200701</fomDato>
-        <tomDato>20210630</tomDato>
-        <forsorgKd>GS</forsorgKd>
-        <antBarn>01</antBarn>
-        <belop75fra>00000297501</belop75fra>
-        <belop75til>00000360800</belop75til>
-        <belop50fra>00000360801</belop50fra>
-        <belop50til>00000534400</belop50til>
-      </perInGrForsk>
-      <perInGrForsk>
-        <fomDato>20200701</fomDato>
-        <tomDato>20210630</tomDato>
-        <forsorgKd>GS</forsorgKd>
-        <antBarn>02</antBarn>
-        <belop75fra>00000297501</belop75fra>
-        <belop75til>00000429900</belop75til>
-        <belop50fra>00000429901</belop50fra>
-        <belop50til>00000534400</belop50til>
-      </perInGrForsk>
-      <perInGrForsk>
-        <fomDato>20200701</fomDato>
-        <tomDato>20210630</tomDato>
-        <forsorgKd>GS</forsorgKd>
-        <antBarn>03</antBarn>
-        <belop75fra>00000297501</belop75fra>
-        <belop75til>00000499000</belop75til>
-        <belop50fra>00000499001</belop50fra>
-        <belop50til>00000534400</belop50til>
-      </perInGrForsk>
-      <perInGrForsk>
-        <fomDato>20200701</fomDato>
-        <tomDato>20210630</tomDato>
-        <forsorgKd>GS</forsorgKd>
-        <antBarn>04</antBarn>
-        <belop75fra>00000297501</belop75fra>
-        <belop75til>00000534400</belop75til>
-        <belop50fra>00000534400</belop50fra>
-        <belop50til>00000534400</belop50til>
-      </perInGrForsk>
-      <perInGrForsk>
-        <fomDato>20210701</fomDato>
-        <tomDato>20220630</tomDato>
-        <forsorgKd>EN</forsorgKd>
-        <antBarn>01</antBarn>
-        <belop75fra>00000305001</belop75fra>
-        <belop75til>00000476600</belop75til>
-        <belop50fra>00000476601</belop50fra>
-        <belop50til>00000547200</belop50til>
-      </perInGrForsk>
-      <perInGrForsk>
-        <fomDato>20210701</fomDato>
-        <tomDato>20220630</tomDato>
-        <forsorgKd>EN</forsorgKd>
-        <antBarn>02</antBarn>
-        <belop75fra>00000305001</belop75fra>
-        <belop75til>00000545000</belop75til>
-        <belop50fra>00000545001</belop50fra>
-        <belop50til>00000547200</belop50til>
-      </perInGrForsk>
-      <perInGrForsk>
-        <fomDato>20210701</fomDato>
-        <tomDato>20220630</tomDato>
-        <forsorgKd>EN</forsorgKd>
-        <antBarn>03</antBarn>
-        <belop75fra>00000305001</belop75fra>
-        <belop75til>00000547200</belop75til>
-        <belop50fra>00000547200</belop50fra>
-        <belop50til>00000547200</belop50til>
-      </perInGrForsk>
-      <perInGrForsk>
-        <fomDato>20210701</fomDato>
-        <tomDato>20220630</tomDato>
-        <forsorgKd>EN</forsorgKd>
-        <antBarn>04</antBarn>
-        <belop75fra>00000305001</belop75fra>
-        <belop75til>00000547200</belop75til>
-        <belop50fra>00000547200</belop50fra>
-        <belop50til>00000547200</belop50til>
-      </perInGrForsk>
-      <perInGrForsk>
-        <fomDato>20210701</fomDato>
-        <tomDato>20220630</tomDato>
-        <forsorgKd>GS</forsorgKd>
-        <antBarn>01</antBarn>
-        <belop75fra>00000305001</belop75fra>
-        <belop75til>00000366900</belop75til>
-        <belop50fra>00000366901</belop50fra>
-        <belop50til>00000547200</belop50til>
-      </perInGrForsk>
-      <perInGrForsk>
-        <fomDato>20210701</fomDato>
-        <tomDato>20220630</tomDato>
-        <forsorgKd>GS</forsorgKd>
-        <antBarn>02</antBarn>
-        <belop75fra>00000305001</belop75fra>
-        <belop75til>00000435300</belop75til>
-        <belop50fra>00000435301</belop50fra>
-        <belop50til>00000547200</belop50til>
-      </perInGrForsk>
-      <perInGrForsk>
-        <fomDato>20210701</fomDato>
-        <tomDato>20220630</tomDato>
-        <forsorgKd>GS</forsorgKd>
-        <antBarn>03</antBarn>
-        <belop75fra>00000305001</belop75fra>
-        <belop75til>00000503700</belop75til>
-        <belop50fra>00000503701</belop50fra>
-        <belop50til>00000547200</belop50til>
-      </perInGrForsk>
-      <perInGrForsk>
-        <fomDato>20210701</fomDato>
-        <tomDato>20220630</tomDato>
-        <forsorgKd>GS</forsorgKd>
-        <antBarn>04</antBarn>
-        <belop75fra>00000305001</belop75fra>
-        <belop75til>00000547200</belop75til>
-        <belop50fra>00000547200</belop50fra>
-        <belop50til>00000547200</belop50til>
-      </perInGrForsk>
-      <perInGrForsk>
-        <fomDato>20220701</fomDato>
-        <tomDato>99991231</tomDato>
+        <fomDato>20230101</fomDato>
+        <tomDato>20230630</tomDato>
         <forsorgKd>EN</forsorgKd>
         <antBarn>01</antBarn>
         <belop75fra>00000312701</belop75fra>
@@ -680,8 +969,8 @@
         <belop50til>00000563200</belop50til>
       </perInGrForsk>
       <perInGrForsk>
-        <fomDato>20220701</fomDato>
-        <tomDato>99991231</tomDato>
+        <fomDato>20230101</fomDato>
+        <tomDato>20230630</tomDato>
         <forsorgKd>EN</forsorgKd>
         <antBarn>02</antBarn>
         <belop75fra>00000312701</belop75fra>
@@ -690,8 +979,8 @@
         <belop50til>00000563200</belop50til>
       </perInGrForsk>
       <perInGrForsk>
-        <fomDato>20220701</fomDato>
-        <tomDato>99991231</tomDato>
+        <fomDato>20230101</fomDato>
+        <tomDato>20230630</tomDato>
         <forsorgKd>EN</forsorgKd>
         <antBarn>03</antBarn>
         <belop75fra>00000312701</belop75fra>
@@ -700,8 +989,8 @@
         <belop50til>00000563200</belop50til>
       </perInGrForsk>
       <perInGrForsk>
-        <fomDato>20220701</fomDato>
-        <tomDato>99991231</tomDato>
+        <fomDato>20230101</fomDato>
+        <tomDato>20230630</tomDato>
         <forsorgKd>EN</forsorgKd>
         <antBarn>04</antBarn>
         <belop75fra>00000312701</belop75fra>
@@ -710,8 +999,8 @@
         <belop50til>00000563200</belop50til>
       </perInGrForsk>
       <perInGrForsk>
-        <fomDato>20220701</fomDato>
-        <tomDato>99991231</tomDato>
+        <fomDato>20230101</fomDato>
+        <tomDato>20230630</tomDato>
         <forsorgKd>GS</forsorgKd>
         <antBarn>01</antBarn>
         <belop75fra>00000312701</belop75fra>
@@ -720,8 +1009,8 @@
         <belop50til>00000563200</belop50til>
       </perInGrForsk>
       <perInGrForsk>
-        <fomDato>20220701</fomDato>
-        <tomDato>99991231</tomDato>
+        <fomDato>20230101</fomDato>
+        <tomDato>20230630</tomDato>
         <forsorgKd>GS</forsorgKd>
         <antBarn>02</antBarn>
         <belop75fra>00000312701</belop75fra>
@@ -730,8 +1019,8 @@
         <belop50til>00000563200</belop50til>
       </perInGrForsk>
       <perInGrForsk>
-        <fomDato>20220701</fomDato>
-        <tomDato>99991231</tomDato>
+        <fomDato>20230101</fomDato>
+        <tomDato>20230630</tomDato>
         <forsorgKd>GS</forsorgKd>
         <antBarn>03</antBarn>
         <belop75fra>00000312701</belop75fra>
@@ -740,8 +1029,8 @@
         <belop50til>00000563200</belop50til>
       </perInGrForsk>
       <perInGrForsk>
-        <fomDato>20220701</fomDato>
-        <tomDato>99991231</tomDato>
+        <fomDato>20230101</fomDato>
+        <tomDato>20230630</tomDato>
         <forsorgKd>GS</forsorgKd>
         <antBarn>04</antBarn>
         <belop75fra>00000312701</belop75fra>
@@ -749,6 +1038,863 @@
         <belop50fra>00000563200</belop50fra>
         <belop50til>00000563200</belop50til>
       </perInGrForsk>
+      <perInGrForsk>
+        <fomDato>20230701</fomDato>
+        <tomDato>20240630</tomDato>
+        <forsorgKd>EN</forsorgKd>
+        <antBarn>01</antBarn>
+        <belop75fra>00000346201</belop75fra>
+        <belop75til>00000532400</belop75til>
+        <belop50fra>00000532401</belop50fra>
+        <belop50til>00000620400</belop50til>
+      </perInGrForsk>
+      <perInGrForsk>
+        <fomDato>20230701</fomDato>
+        <tomDato>20240630</tomDato>
+        <forsorgKd>EN</forsorgKd>
+        <antBarn>02</antBarn>
+        <belop75fra>00000346201</belop75fra>
+        <belop75til>00000607000</belop75til>
+        <belop50fra>00000607001</belop50fra>
+        <belop50til>00000620400</belop50til>
+      </perInGrForsk>
+      <perInGrForsk>
+        <fomDato>20230701</fomDato>
+        <tomDato>20240630</tomDato>
+        <forsorgKd>EN</forsorgKd>
+        <antBarn>03</antBarn>
+        <belop75fra>00000346201</belop75fra>
+        <belop75til>00000620400</belop75til>
+        <belop50fra>00000620400</belop50fra>
+        <belop50til>00000620400</belop50til>
+      </perInGrForsk>
+      <perInGrForsk>
+        <fomDato>20230701</fomDato>
+        <tomDato>20240630</tomDato>
+        <forsorgKd>EN</forsorgKd>
+        <antBarn>04</antBarn>
+        <belop75fra>00000346201</belop75fra>
+        <belop75til>00000620400</belop75til>
+        <belop50fra>00000620400</belop50fra>
+        <belop50til>00000620400</belop50til>
+      </perInGrForsk>
+      <perInGrForsk>
+        <fomDato>20230701</fomDato>
+        <tomDato>20240630</tomDato>
+        <forsorgKd>GS</forsorgKd>
+        <antBarn>01</antBarn>
+        <belop75fra>00000346201</belop75fra>
+        <belop75til>00000420600</belop75til>
+        <belop50fra>00000420601</belop50fra>
+        <belop50til>00000620400</belop50til>
+      </perInGrForsk>
+      <perInGrForsk>
+        <fomDato>20230701</fomDato>
+        <tomDato>20240630</tomDato>
+        <forsorgKd>GS</forsorgKd>
+        <antBarn>02</antBarn>
+        <belop75fra>00000346201</belop75fra>
+        <belop75til>00000495200</belop75til>
+        <belop50fra>00000495201</belop50fra>
+        <belop50til>00000620400</belop50til>
+      </perInGrForsk>
+      <perInGrForsk>
+        <fomDato>20230701</fomDato>
+        <tomDato>20240630</tomDato>
+        <forsorgKd>GS</forsorgKd>
+        <antBarn>03</antBarn>
+        <belop75fra>00000346201</belop75fra>
+        <belop75til>00000569800</belop75til>
+        <belop50fra>00000569801</belop50fra>
+        <belop50til>00000620400</belop50til>
+      </perInGrForsk>
+      <perInGrForsk>
+        <fomDato>20230701</fomDato>
+        <tomDato>20240630</tomDato>
+        <forsorgKd>GS</forsorgKd>
+        <antBarn>04</antBarn>
+        <belop75fra>00000346201</belop75fra>
+        <belop75til>00000620400</belop75til>
+        <belop50fra>00000620400</belop50fra>
+        <belop50til>00000620400</belop50til>
+      </perInGrForsk>
+      <perInGrForsk>
+        <fomDato>20240701</fomDato>
+        <tomDato>99991231</tomDato>
+        <forsorgKd>EN</forsorgKd>
+        <antBarn>01</antBarn>
+        <belop75fra>00000369301</belop75fra>
+        <belop75til>00000547500</belop75til>
+        <belop50fra>00000547501</belop50fra>
+        <belop50til>00000650100</belop50til>
+      </perInGrForsk>
+      <perInGrForsk>
+        <fomDato>20240701</fomDato>
+        <tomDato>99991231</tomDato>
+        <forsorgKd>EN</forsorgKd>
+        <antBarn>02</antBarn>
+        <belop75fra>00000369301</belop75fra>
+        <belop75til>00000623300</belop75til>
+        <belop50fra>00000623301</belop50fra>
+        <belop50til>00000650100</belop50til>
+      </perInGrForsk>
+      <perInGrForsk>
+        <fomDato>20240701</fomDato>
+        <tomDato>99991231</tomDato>
+        <forsorgKd>EN</forsorgKd>
+        <antBarn>03</antBarn>
+        <belop75fra>00000369301</belop75fra>
+        <belop75til>00000650100</belop75til>
+        <belop50fra>00000650100</belop50fra>
+        <belop50til>00000650100</belop50til>
+      </perInGrForsk>
+      <perInGrForsk>
+        <fomDato>20240701</fomDato>
+        <tomDato>99991231</tomDato>
+        <forsorgKd>EN</forsorgKd>
+        <antBarn>04</antBarn>
+        <belop75fra>00000369301</belop75fra>
+        <belop75til>00000650100</belop75til>
+        <belop50fra>00000650100</belop50fra>
+        <belop50til>00000650100</belop50til>
+      </perInGrForsk>
+      <perInGrForsk>
+        <fomDato>20240701</fomDato>
+        <tomDato>99991231</tomDato>
+        <forsorgKd>GS</forsorgKd>
+        <antBarn>01</antBarn>
+        <belop75fra>00000369301</belop75fra>
+        <belop75til>00000453500</belop75til>
+        <belop50fra>00000453501</belop50fra>
+        <belop50til>00000650100</belop50til>
+      </perInGrForsk>
+      <perInGrForsk>
+        <fomDato>20240701</fomDato>
+        <tomDato>99991231</tomDato>
+        <forsorgKd>GS</forsorgKd>
+        <antBarn>02</antBarn>
+        <belop75fra>00000369301</belop75fra>
+        <belop75til>00000529300</belop75til>
+        <belop50fra>00000529301</belop50fra>
+        <belop50til>00000650100</belop50til>
+      </perInGrForsk>
+      <perInGrForsk>
+        <fomDato>20240701</fomDato>
+        <tomDato>99991231</tomDato>
+        <forsorgKd>GS</forsorgKd>
+        <antBarn>03</antBarn>
+        <belop75fra>00000369301</belop75fra>
+        <belop75til>00000605100</belop75til>
+        <belop50fra>00000605101</belop50fra>
+        <belop50til>00000650100</belop50til>
+      </perInGrForsk>
+      <perInGrForsk>
+        <fomDato>20240701</fomDato>
+        <tomDato>99991231</tomDato>
+        <forsorgKd>GS</forsorgKd>
+        <antBarn>04</antBarn>
+        <belop75fra>00000369301</belop75fra>
+        <belop75til>00000650100</belop75til>
+        <belop50fra>00000650100</belop50fra>
+        <belop50til>00000650100</belop50til>
+      </perInGrForsk>
+      <sertilsk/>
+    </bidrBarn>
+    <bidrBarn>
+      <barn>
+        <navn>Etternavn, Barn1 Mellomnavn</navn>
+        <fnr>12461690252</fnr>
+        <fDato/>
+        <saksnr>123213</saksnr>
+      </barn>
+      <perInntekt>
+        <fomDato>20230101</fomDato>
+        <tomDato>20230228</tomDato>
+        <belopTyp>UBAT</belopTyp>
+        <belopAar>00000012648</belopAar>
+        <fnr>26417806511</fnr>
+        <bidrRolle>02</bidrRolle>
+        <belopBeskr>Utvidet barnetrygd</belopBeskr>
+        <inntGrense>00000052800</inntGrense>
+      </perInntekt>
+      <perInntekt>
+        <fomDato>20230101</fomDato>
+        <tomDato>20230228</tomDato>
+        <belopTyp>XKAP</belopTyp>
+        <belopAar>00000145000</belopAar>
+        <fnr>26417806511</fnr>
+        <bidrRolle>02</bidrRolle>
+        <belopBeskr>Netto positive kapitalinntekter</belopBeskr>
+        <inntGrense>00000052800</inntGrense>
+      </perInntekt>
+      <perInntekt>
+        <fomDato>20230101</fomDato>
+        <tomDato>20230228</tomDato>
+        <belopTyp>XINN</belopTyp>
+        <belopAar>00000157648</belopAar>
+        <fnr>26417806511</fnr>
+        <bidrRolle>02</bidrRolle>
+        <belopBeskr>Personens beregningsgrunnlag i perioden</belopBeskr>
+        <inntGrense>00000052800</inntGrense>
+      </perInntekt>
+      <perInntekt>
+        <fomDato>20230301</fomDato>
+        <tomDato>20230630</tomDato>
+        <belopTyp>UBAT</belopTyp>
+        <belopAar>00000029868</belopAar>
+        <fnr>26417806511</fnr>
+        <bidrRolle>02</bidrRolle>
+        <belopBeskr>Utvidet barnetrygd</belopBeskr>
+        <inntGrense>00000052800</inntGrense>
+      </perInntekt>
+      <perInntekt>
+        <fomDato>20230301</fomDato>
+        <tomDato>20230630</tomDato>
+        <belopTyp>XKAP</belopTyp>
+        <belopAar>00000145000</belopAar>
+        <fnr>26417806511</fnr>
+        <bidrRolle>02</bidrRolle>
+        <belopBeskr>Netto positive kapitalinntekter</belopBeskr>
+        <inntGrense>00000052800</inntGrense>
+      </perInntekt>
+      <perInntekt>
+        <fomDato>20230301</fomDato>
+        <tomDato>20230630</tomDato>
+        <belopTyp>XINN</belopTyp>
+        <belopAar>00000174868</belopAar>
+        <fnr>26417806511</fnr>
+        <bidrRolle>02</bidrRolle>
+        <belopBeskr>Personens beregningsgrunnlag i perioden</belopBeskr>
+        <inntGrense>00000052800</inntGrense>
+      </perInntekt>
+      <perInntekt>
+        <fomDato>20230701</fomDato>
+        <tomDato>20230930</tomDato>
+        <belopTyp>UBAT</belopTyp>
+        <belopAar>00000030192</belopAar>
+        <fnr>26417806511</fnr>
+        <bidrRolle>02</bidrRolle>
+        <belopBeskr>Utvidet barnetrygd</belopBeskr>
+        <inntGrense>00000056400</inntGrense>
+      </perInntekt>
+      <perInntekt>
+        <fomDato>20230701</fomDato>
+        <tomDato>20230930</tomDato>
+        <belopTyp>XKAP</belopTyp>
+        <belopAar>00000145000</belopAar>
+        <fnr>26417806511</fnr>
+        <bidrRolle>02</bidrRolle>
+        <belopBeskr>Netto positive kapitalinntekter</belopBeskr>
+        <inntGrense>00000056400</inntGrense>
+      </perInntekt>
+      <perInntekt>
+        <fomDato>20230701</fomDato>
+        <tomDato>20230930</tomDato>
+        <belopTyp>XINN</belopTyp>
+        <belopAar>00000175192</belopAar>
+        <fnr>26417806511</fnr>
+        <bidrRolle>02</bidrRolle>
+        <belopBeskr>Personens beregningsgrunnlag i perioden</belopBeskr>
+        <inntGrense>00000056400</inntGrense>
+      </perInntekt>
+      <perInntekt>
+        <fomDato>20231001</fomDato>
+        <tomDato>20231231</tomDato>
+        <belopTyp>UBAT</belopTyp>
+        <belopAar>00000030192</belopAar>
+        <fnr>26417806511</fnr>
+        <bidrRolle>02</bidrRolle>
+        <belopBeskr>Utvidet barnetrygd</belopBeskr>
+        <inntGrense>00000056400</inntGrense>
+      </perInntekt>
+      <perInntekt>
+        <fomDato>20231001</fomDato>
+        <tomDato>20231231</tomDato>
+        <belopTyp>XKAP</belopTyp>
+        <belopAar>00000145000</belopAar>
+        <fnr>26417806511</fnr>
+        <bidrRolle>02</bidrRolle>
+        <belopBeskr>Netto positive kapitalinntekter</belopBeskr>
+        <inntGrense>00000056400</inntGrense>
+      </perInntekt>
+      <perInntekt>
+        <fomDato>20231001</fomDato>
+        <tomDato>20231231</tomDato>
+        <belopTyp>XINN</belopTyp>
+        <belopAar>00000175192</belopAar>
+        <fnr>26417806511</fnr>
+        <bidrRolle>02</bidrRolle>
+        <belopBeskr>Personens beregningsgrunnlag i perioden</belopBeskr>
+        <inntGrense>00000056400</inntGrense>
+      </perInntekt>
+      <perInntekt>
+        <fomDato>20240101</fomDato>
+        <tomDato>20240131</tomDato>
+        <belopTyp>UBAT</belopTyp>
+        <belopAar>00000030192</belopAar>
+        <fnr>26417806511</fnr>
+        <bidrRolle>02</bidrRolle>
+        <belopBeskr>Utvidet barnetrygd</belopBeskr>
+        <inntGrense>00000056400</inntGrense>
+      </perInntekt>
+      <perInntekt>
+        <fomDato>20240101</fomDato>
+        <tomDato>20240131</tomDato>
+        <belopTyp>BARNETILLEGG</belopTyp>
+        <belopAar>00000049611</belopAar>
+        <fnr>26417806511</fnr>
+        <bidrRolle>02</bidrRolle>
+        <belopBeskr>Barnetillegg</belopBeskr>
+        <inntGrense>00000056400</inntGrense>
+      </perInntekt>
+      <perInntekt>
+        <fomDato>20240101</fomDato>
+        <tomDato>20240131</tomDato>
+        <belopTyp>XKAP</belopTyp>
+        <belopAar>00000145000</belopAar>
+        <fnr>26417806511</fnr>
+        <bidrRolle>02</bidrRolle>
+        <belopBeskr>Netto positive kapitalinntekter</belopBeskr>
+        <inntGrense>00000056400</inntGrense>
+      </perInntekt>
+      <perInntekt>
+        <fomDato>20240101</fomDato>
+        <tomDato>20240131</tomDato>
+        <belopTyp>XINN</belopTyp>
+        <belopAar>00000224803</belopAar>
+        <fnr>26417806511</fnr>
+        <bidrRolle>02</bidrRolle>
+        <belopBeskr>Personens beregningsgrunnlag i perioden</belopBeskr>
+        <inntGrense>00000056400</inntGrense>
+      </perInntekt>
+      <perInntekt>
+        <fomDato>20240201</fomDato>
+        <tomDato>20240331</tomDato>
+        <belopTyp>UBAT</belopTyp>
+        <belopAar>00000030192</belopAar>
+        <fnr>26417806511</fnr>
+        <bidrRolle>02</bidrRolle>
+        <belopBeskr>Utvidet barnetrygd</belopBeskr>
+        <inntGrense>00000056400</inntGrense>
+      </perInntekt>
+      <perInntekt>
+        <fomDato>20240201</fomDato>
+        <tomDato>20240331</tomDato>
+        <belopTyp>LIGS</belopTyp>
+        <belopAar>00000412000</belopAar>
+        <fnr>26417806511</fnr>
+        <bidrRolle>02</bidrRolle>
+        <belopBeskr>Skattemelding 2023</belopBeskr>
+        <inntGrense>00000056400</inntGrense>
+      </perInntekt>
+      <perInntekt>
+        <fomDato>20240201</fomDato>
+        <tomDato>20240331</tomDato>
+        <belopTyp>BARNETILLEGG</belopTyp>
+        <belopAar>00000049611</belopAar>
+        <fnr>26417806511</fnr>
+        <bidrRolle>02</bidrRolle>
+        <belopBeskr>Barnetillegg</belopBeskr>
+        <inntGrense>00000056400</inntGrense>
+      </perInntekt>
+      <perInntekt>
+        <fomDato>20240201</fomDato>
+        <tomDato>20240331</tomDato>
+        <belopTyp>XKAP</belopTyp>
+        <belopAar>00000020000</belopAar>
+        <fnr>26417806511</fnr>
+        <bidrRolle>02</bidrRolle>
+        <belopBeskr>Netto positive kapitalinntekter</belopBeskr>
+        <inntGrense>00000056400</inntGrense>
+      </perInntekt>
+      <perInntekt>
+        <fomDato>20240201</fomDato>
+        <tomDato>20240331</tomDato>
+        <belopTyp>XINN</belopTyp>
+        <belopAar>00000511803</belopAar>
+        <fnr>26417806511</fnr>
+        <bidrRolle>02</bidrRolle>
+        <belopBeskr>Personens beregningsgrunnlag i perioden</belopBeskr>
+        <inntGrense>00000056400</inntGrense>
+      </perInntekt>
+      <perInntekt>
+        <fomDato>20240401</fomDato>
+        <tomDato>20240630</tomDato>
+        <belopTyp>UBAT</belopTyp>
+        <belopAar>00000030192</belopAar>
+        <fnr>26417806511</fnr>
+        <bidrRolle>02</bidrRolle>
+        <belopBeskr>Utvidet barnetrygd</belopBeskr>
+        <inntGrense>00000056400</inntGrense>
+      </perInntekt>
+      <perInntekt>
+        <fomDato>20240401</fomDato>
+        <tomDato>20240630</tomDato>
+        <belopTyp>LIGS</belopTyp>
+        <belopAar>00000412000</belopAar>
+        <fnr>26417806511</fnr>
+        <bidrRolle>02</bidrRolle>
+        <belopBeskr>Skattemelding 2023</belopBeskr>
+        <inntGrense>00000056400</inntGrense>
+      </perInntekt>
+      <perInntekt>
+        <fomDato>20240401</fomDato>
+        <tomDato>20240630</tomDato>
+        <belopTyp>ESBT</belopTyp>
+        <belopAar>00000008352</belopAar>
+        <fnr>26417806511</fnr>
+        <bidrRolle>02</bidrRolle>
+        <belopBeskr>Småbarnstillegg</belopBeskr>
+        <inntGrense>00000056400</inntGrense>
+      </perInntekt>
+      <perInntekt>
+        <fomDato>20240401</fomDato>
+        <tomDato>20240630</tomDato>
+        <belopTyp>BARNETILLEGG</belopTyp>
+        <belopAar>00000049611</belopAar>
+        <fnr>26417806511</fnr>
+        <bidrRolle>02</bidrRolle>
+        <belopBeskr>Barnetillegg</belopBeskr>
+        <inntGrense>00000056400</inntGrense>
+      </perInntekt>
+      <perInntekt>
+        <fomDato>20240401</fomDato>
+        <tomDato>20240630</tomDato>
+        <belopTyp>XKAP</belopTyp>
+        <belopAar>00000020000</belopAar>
+        <fnr>26417806511</fnr>
+        <bidrRolle>02</bidrRolle>
+        <belopBeskr>Netto positive kapitalinntekter</belopBeskr>
+        <inntGrense>00000056400</inntGrense>
+      </perInntekt>
+      <perInntekt>
+        <fomDato>20240401</fomDato>
+        <tomDato>20240630</tomDato>
+        <belopTyp>XINN</belopTyp>
+        <belopAar>00000520155</belopAar>
+        <fnr>26417806511</fnr>
+        <bidrRolle>02</bidrRolle>
+        <belopBeskr>Personens beregningsgrunnlag i perioden</belopBeskr>
+        <inntGrense>00000056400</inntGrense>
+      </perInntekt>
+      <perInntekt>
+        <fomDato>20240701</fomDato>
+        <tomDato>99991231</tomDato>
+        <belopTyp>UBAT</belopTyp>
+        <belopAar>00000030192</belopAar>
+        <fnr>26417806511</fnr>
+        <bidrRolle>02</bidrRolle>
+        <belopBeskr>Utvidet barnetrygd</belopBeskr>
+        <inntGrense>00000059100</inntGrense>
+      </perInntekt>
+      <perInntekt>
+        <fomDato>20240701</fomDato>
+        <tomDato>99991231</tomDato>
+        <belopTyp>LIGS</belopTyp>
+        <belopAar>00000412000</belopAar>
+        <fnr>26417806511</fnr>
+        <bidrRolle>02</bidrRolle>
+        <belopBeskr>Skattemelding 2023</belopBeskr>
+        <inntGrense>00000059100</inntGrense>
+      </perInntekt>
+      <perInntekt>
+        <fomDato>20240701</fomDato>
+        <tomDato>99991231</tomDato>
+        <belopTyp>ESBT</belopTyp>
+        <belopAar>00000008352</belopAar>
+        <fnr>26417806511</fnr>
+        <bidrRolle>02</bidrRolle>
+        <belopBeskr>Småbarnstillegg</belopBeskr>
+        <inntGrense>00000059100</inntGrense>
+      </perInntekt>
+      <perInntekt>
+        <fomDato>20240701</fomDato>
+        <tomDato>99991231</tomDato>
+        <belopTyp>BARNETILLEGG</belopTyp>
+        <belopAar>00000054411</belopAar>
+        <fnr>26417806511</fnr>
+        <bidrRolle>02</bidrRolle>
+        <belopBeskr>Barnetillegg</belopBeskr>
+        <inntGrense>00000059100</inntGrense>
+      </perInntekt>
+      <perInntekt>
+        <fomDato>20240701</fomDato>
+        <tomDato>99991231</tomDato>
+        <belopTyp>KONT</belopTyp>
+        <belopAar>00000018000</belopAar>
+        <fnr>26417806511</fnr>
+        <bidrRolle>02</bidrRolle>
+        <belopBeskr>Kontantstøtte</belopBeskr>
+        <inntGrense>00000059100</inntGrense>
+      </perInntekt>
+      <perInntekt>
+        <fomDato>20240701</fomDato>
+        <tomDato>99991231</tomDato>
+        <belopTyp>XKAP</belopTyp>
+        <belopAar>00000020000</belopAar>
+        <fnr>26417806511</fnr>
+        <bidrRolle>02</bidrRolle>
+        <belopBeskr>Netto positive kapitalinntekter</belopBeskr>
+        <inntGrense>00000059100</inntGrense>
+      </perInntekt>
+      <perInntekt>
+        <fomDato>20240701</fomDato>
+        <tomDato>99991231</tomDato>
+        <belopTyp>XINN</belopTyp>
+        <belopAar>00000542955</belopAar>
+        <fnr>26417806511</fnr>
+        <bidrRolle>02</bidrRolle>
+        <belopBeskr>Personens beregningsgrunnlag i perioden</belopBeskr>
+        <inntGrense>00000059100</inntGrense>
+      </perInntekt>
+      <perForskBarn>
+        <fomDato>20230101</fomDato>
+        <tomDato>20230930</tomDato>
+        <antBarn>04</antBarn>
+      </perForskBarn>
+      <perForskBarn>
+        <fomDato>20231001</fomDato>
+        <tomDato>20240630</tomDato>
+        <antBarn>03</antBarn>
+      </perForskBarn>
+      <perForskBarn>
+        <fomDato>20240701</fomDato>
+        <tomDato>99991231</tomDato>
+        <antBarn>02</antBarn>
+      </perForskBarn>
+      <perForskSiv>
+        <fomDato>20230101</fomDato>
+        <tomDato>20231231</tomDato>
+        <forsorgKd>SEPA</forsorgKd>
+        <forsorgBesk>Enslig</forsorgBesk>
+      </perForskSiv>
+      <perForskSiv>
+        <fomDato>20240101</fomDato>
+        <tomDato>99991231</tomDato>
+        <forsorgKd>GIFT</forsorgKd>
+        <forsorgBesk>Gift/samboer</forsorgBesk>
+      </perForskSiv>
+      <perForskVtak>
+        <fomDato>20230101</fomDato>
+        <tomDato>20230228</tomDato>
+        <maksInnt>00000563200</maksInnt>
+        <resKd>125</resKd>
+        <forskKd/>
+        <forskBelop>00000002200</forskBelop>
+        <forskPst>125</forskPst>
+        <fnr>12461690252</fnr>
+      </perForskVtak>
+      <perForskVtak>
+        <fomDato>20230301</fomDato>
+        <tomDato>20230630</tomDato>
+        <maksInnt>00000563200</maksInnt>
+        <resKd>125</resKd>
+        <forskKd/>
+        <forskBelop>00000002200</forskBelop>
+        <forskPst>125</forskPst>
+        <fnr>12461690252</fnr>
+      </perForskVtak>
+      <perForskVtak>
+        <fomDato>20230701</fomDato>
+        <tomDato>20230930</tomDato>
+        <maksInnt>00000620400</maksInnt>
+        <resKd>125</resKd>
+        <forskKd/>
+        <forskBelop>00000002350</forskBelop>
+        <forskPst>125</forskPst>
+        <fnr>12461690252</fnr>
+      </perForskVtak>
+      <perForskVtak>
+        <fomDato>20231001</fomDato>
+        <tomDato>20231231</tomDato>
+        <maksInnt>00000620400</maksInnt>
+        <resKd>A18</resKd>
+        <forskKd>BOA</forskKd>
+        <forskBelop>00000000000</forskBelop>
+        <forskPst>000</forskPst>
+        <fnr>12461690252</fnr>
+      </perForskVtak>
+      <perForskVtak>
+        <fomDato>20240101</fomDato>
+        <tomDato>20240131</tomDato>
+        <maksInnt>00000620400</maksInnt>
+        <resKd>A18</resKd>
+        <forskKd>BOA</forskKd>
+        <forskBelop>00000000000</forskBelop>
+        <forskPst>000</forskPst>
+        <fnr>12461690252</fnr>
+      </perForskVtak>
+      <perForskVtak>
+        <fomDato>20240201</fomDato>
+        <tomDato>20240331</tomDato>
+        <maksInnt>00000620400</maksInnt>
+        <resKd>A18</resKd>
+        <forskKd>BOA</forskKd>
+        <forskBelop>00000000000</forskBelop>
+        <forskPst>000</forskPst>
+        <fnr>12461690252</fnr>
+      </perForskVtak>
+      <perForskVtak>
+        <fomDato>20240401</fomDato>
+        <tomDato>20240630</tomDato>
+        <maksInnt>00000620400</maksInnt>
+        <resKd>A18</resKd>
+        <forskKd>BOA</forskKd>
+        <forskBelop>00000000000</forskBelop>
+        <forskPst>000</forskPst>
+        <fnr>12461690252</fnr>
+      </perForskVtak>
+      <perForskVtak>
+        <fomDato>20240701</fomDato>
+        <tomDato>99991231</tomDato>
+        <maksInnt>00000650100</maksInnt>
+        <resKd>A18</resKd>
+        <forskKd>BOA</forskKd>
+        <forskBelop>00000000000</forskBelop>
+        <forskPst>000</forskPst>
+        <fnr>12461690252</fnr>
+      </perForskVtak>
+      <perInGrForsk>
+        <fomDato>20230101</fomDato>
+        <tomDato>20230630</tomDato>
+        <forsorgKd>EN</forsorgKd>
+        <antBarn>01</antBarn>
+        <belop75fra>00000312701</belop75fra>
+        <belop75til>00000488300</belop75til>
+        <belop50fra>00000488301</belop50fra>
+        <belop50til>00000563200</belop50til>
+      </perInGrForsk>
+      <perInGrForsk>
+        <fomDato>20230101</fomDato>
+        <tomDato>20230630</tomDato>
+        <forsorgKd>EN</forsorgKd>
+        <antBarn>02</antBarn>
+        <belop75fra>00000312701</belop75fra>
+        <belop75til>00000557200</belop75til>
+        <belop50fra>00000557201</belop50fra>
+        <belop50til>00000563200</belop50til>
+      </perInGrForsk>
+      <perInGrForsk>
+        <fomDato>20230101</fomDato>
+        <tomDato>20230630</tomDato>
+        <forsorgKd>EN</forsorgKd>
+        <antBarn>03</antBarn>
+        <belop75fra>00000312701</belop75fra>
+        <belop75til>00000563200</belop75til>
+        <belop50fra>00000563200</belop50fra>
+        <belop50til>00000563200</belop50til>
+      </perInGrForsk>
+      <perInGrForsk>
+        <fomDato>20230101</fomDato>
+        <tomDato>20230630</tomDato>
+        <forsorgKd>EN</forsorgKd>
+        <antBarn>04</antBarn>
+        <belop75fra>00000312701</belop75fra>
+        <belop75til>00000563200</belop75til>
+        <belop50fra>00000563200</belop50fra>
+        <belop50til>00000563200</belop50til>
+      </perInGrForsk>
+      <perInGrForsk>
+        <fomDato>20230101</fomDato>
+        <tomDato>20230630</tomDato>
+        <forsorgKd>GS</forsorgKd>
+        <antBarn>01</antBarn>
+        <belop75fra>00000312701</belop75fra>
+        <belop75til>00000375700</belop75til>
+        <belop50fra>00000375701</belop50fra>
+        <belop50til>00000563200</belop50til>
+      </perInGrForsk>
+      <perInGrForsk>
+        <fomDato>20230101</fomDato>
+        <tomDato>20230630</tomDato>
+        <forsorgKd>GS</forsorgKd>
+        <antBarn>02</antBarn>
+        <belop75fra>00000312701</belop75fra>
+        <belop75til>00000444600</belop75til>
+        <belop50fra>00000444601</belop50fra>
+        <belop50til>00000563200</belop50til>
+      </perInGrForsk>
+      <perInGrForsk>
+        <fomDato>20230101</fomDato>
+        <tomDato>20230630</tomDato>
+        <forsorgKd>GS</forsorgKd>
+        <antBarn>03</antBarn>
+        <belop75fra>00000312701</belop75fra>
+        <belop75til>00000513500</belop75til>
+        <belop50fra>00000513501</belop50fra>
+        <belop50til>00000563200</belop50til>
+      </perInGrForsk>
+      <perInGrForsk>
+        <fomDato>20230101</fomDato>
+        <tomDato>20230630</tomDato>
+        <forsorgKd>GS</forsorgKd>
+        <antBarn>04</antBarn>
+        <belop75fra>00000312701</belop75fra>
+        <belop75til>00000563200</belop75til>
+        <belop50fra>00000563200</belop50fra>
+        <belop50til>00000563200</belop50til>
+      </perInGrForsk>
+      <perInGrForsk>
+        <fomDato>20230701</fomDato>
+        <tomDato>20240630</tomDato>
+        <forsorgKd>EN</forsorgKd>
+        <antBarn>01</antBarn>
+        <belop75fra>00000346201</belop75fra>
+        <belop75til>00000532400</belop75til>
+        <belop50fra>00000532401</belop50fra>
+        <belop50til>00000620400</belop50til>
+      </perInGrForsk>
+      <perInGrForsk>
+        <fomDato>20230701</fomDato>
+        <tomDato>20240630</tomDato>
+        <forsorgKd>EN</forsorgKd>
+        <antBarn>02</antBarn>
+        <belop75fra>00000346201</belop75fra>
+        <belop75til>00000607000</belop75til>
+        <belop50fra>00000607001</belop50fra>
+        <belop50til>00000620400</belop50til>
+      </perInGrForsk>
+      <perInGrForsk>
+        <fomDato>20230701</fomDato>
+        <tomDato>20240630</tomDato>
+        <forsorgKd>EN</forsorgKd>
+        <antBarn>03</antBarn>
+        <belop75fra>00000346201</belop75fra>
+        <belop75til>00000620400</belop75til>
+        <belop50fra>00000620400</belop50fra>
+        <belop50til>00000620400</belop50til>
+      </perInGrForsk>
+      <perInGrForsk>
+        <fomDato>20230701</fomDato>
+        <tomDato>20240630</tomDato>
+        <forsorgKd>EN</forsorgKd>
+        <antBarn>04</antBarn>
+        <belop75fra>00000346201</belop75fra>
+        <belop75til>00000620400</belop75til>
+        <belop50fra>00000620400</belop50fra>
+        <belop50til>00000620400</belop50til>
+      </perInGrForsk>
+      <perInGrForsk>
+        <fomDato>20230701</fomDato>
+        <tomDato>20240630</tomDato>
+        <forsorgKd>GS</forsorgKd>
+        <antBarn>01</antBarn>
+        <belop75fra>00000346201</belop75fra>
+        <belop75til>00000420600</belop75til>
+        <belop50fra>00000420601</belop50fra>
+        <belop50til>00000620400</belop50til>
+      </perInGrForsk>
+      <perInGrForsk>
+        <fomDato>20230701</fomDato>
+        <tomDato>20240630</tomDato>
+        <forsorgKd>GS</forsorgKd>
+        <antBarn>02</antBarn>
+        <belop75fra>00000346201</belop75fra>
+        <belop75til>00000495200</belop75til>
+        <belop50fra>00000495201</belop50fra>
+        <belop50til>00000620400</belop50til>
+      </perInGrForsk>
+      <perInGrForsk>
+        <fomDato>20230701</fomDato>
+        <tomDato>20240630</tomDato>
+        <forsorgKd>GS</forsorgKd>
+        <antBarn>03</antBarn>
+        <belop75fra>00000346201</belop75fra>
+        <belop75til>00000569800</belop75til>
+        <belop50fra>00000569801</belop50fra>
+        <belop50til>00000620400</belop50til>
+      </perInGrForsk>
+      <perInGrForsk>
+        <fomDato>20230701</fomDato>
+        <tomDato>20240630</tomDato>
+        <forsorgKd>GS</forsorgKd>
+        <antBarn>04</antBarn>
+        <belop75fra>00000346201</belop75fra>
+        <belop75til>00000620400</belop75til>
+        <belop50fra>00000620400</belop50fra>
+        <belop50til>00000620400</belop50til>
+      </perInGrForsk>
+      <perInGrForsk>
+        <fomDato>20240701</fomDato>
+        <tomDato>99991231</tomDato>
+        <forsorgKd>EN</forsorgKd>
+        <antBarn>01</antBarn>
+        <belop75fra>00000369301</belop75fra>
+        <belop75til>00000547500</belop75til>
+        <belop50fra>00000547501</belop50fra>
+        <belop50til>00000650100</belop50til>
+      </perInGrForsk>
+      <perInGrForsk>
+        <fomDato>20240701</fomDato>
+        <tomDato>99991231</tomDato>
+        <forsorgKd>EN</forsorgKd>
+        <antBarn>02</antBarn>
+        <belop75fra>00000369301</belop75fra>
+        <belop75til>00000623300</belop75til>
+        <belop50fra>00000623301</belop50fra>
+        <belop50til>00000650100</belop50til>
+      </perInGrForsk>
+      <perInGrForsk>
+        <fomDato>20240701</fomDato>
+        <tomDato>99991231</tomDato>
+        <forsorgKd>EN</forsorgKd>
+        <antBarn>03</antBarn>
+        <belop75fra>00000369301</belop75fra>
+        <belop75til>00000650100</belop75til>
+        <belop50fra>00000650100</belop50fra>
+        <belop50til>00000650100</belop50til>
+      </perInGrForsk>
+      <perInGrForsk>
+        <fomDato>20240701</fomDato>
+        <tomDato>99991231</tomDato>
+        <forsorgKd>EN</forsorgKd>
+        <antBarn>04</antBarn>
+        <belop75fra>00000369301</belop75fra>
+        <belop75til>00000650100</belop75til>
+        <belop50fra>00000650100</belop50fra>
+        <belop50til>00000650100</belop50til>
+      </perInGrForsk>
+      <perInGrForsk>
+        <fomDato>20240701</fomDato>
+        <tomDato>99991231</tomDato>
+        <forsorgKd>GS</forsorgKd>
+        <antBarn>01</antBarn>
+        <belop75fra>00000369301</belop75fra>
+        <belop75til>00000453500</belop75til>
+        <belop50fra>00000453501</belop50fra>
+        <belop50til>00000650100</belop50til>
+      </perInGrForsk>
+      <perInGrForsk>
+        <fomDato>20240701</fomDato>
+        <tomDato>99991231</tomDato>
+        <forsorgKd>GS</forsorgKd>
+        <antBarn>02</antBarn>
+        <belop75fra>00000369301</belop75fra>
+        <belop75til>00000529300</belop75til>
+        <belop50fra>00000529301</belop50fra>
+        <belop50til>00000650100</belop50til>
+      </perInGrForsk>
+      <perInGrForsk>
+        <fomDato>20240701</fomDato>
+        <tomDato>99991231</tomDato>
+        <forsorgKd>GS</forsorgKd>
+        <antBarn>03</antBarn>
+        <belop75fra>00000369301</belop75fra>
+        <belop75til>00000605100</belop75til>
+        <belop50fra>00000605101</belop50fra>
+        <belop50til>00000650100</belop50til>
+      </perInGrForsk>
+      <perInGrForsk>
+        <fomDato>20240701</fomDato>
+        <tomDato>99991231</tomDato>
+        <forsorgKd>GS</forsorgKd>
+        <antBarn>04</antBarn>
+        <belop75fra>00000369301</belop75fra>
+        <belop75til>00000650100</belop75til>
+        <belop50fra>00000650100</belop50fra>
+        <belop50til>00000650100</belop50til>
+      </perInGrForsk>
+      <sertilsk/>
     </bidrBarn>
   </brev>
 </rtv-brev>

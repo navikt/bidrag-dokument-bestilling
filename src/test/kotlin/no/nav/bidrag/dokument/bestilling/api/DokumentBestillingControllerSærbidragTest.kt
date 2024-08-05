@@ -31,7 +31,7 @@ import org.springframework.http.HttpStatus
 import java.math.BigDecimal
 import java.time.LocalDate
 
-class DokumentBestillingControllerForskuddTest : AbstractControllerTest() {
+class DokumentBestillingControllerSærbidragTest : AbstractControllerTest() {
     @Test
     fun `skal validere XML for forskudd vedtakbrev med flere perioder`() {
         stubDefaultValues()
@@ -40,7 +40,7 @@ class DokumentBestillingControllerForskuddTest : AbstractControllerTest() {
         stubUtils.stubHentVedtak("vedtak_response_forskudd.json")
         val enhetKontaktInfo = createEnhetKontaktInformasjon()
         val bmAdresse = createPostAdresseResponse()
-        val dokumentMal = hentDokumentMal("BI01A01")!!
+        val dokumentMal = hentDokumentMal("BI01A01D")!!
         val tittel = "Tittel på dokument"
         val saksnummer = "123213"
         val mottakerId = BM1.ident

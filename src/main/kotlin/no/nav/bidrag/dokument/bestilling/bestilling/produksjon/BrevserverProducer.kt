@@ -7,6 +7,7 @@ import no.nav.bidrag.dokument.bestilling.bestilling.dto.DokumentMal
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.DokumentType
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.EnhetKontaktInfo
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.Mottaker
+import no.nav.bidrag.dokument.bestilling.bestilling.dto.VedtakDetaljer
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.fraVerdi
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.tilVerdi
 import no.nav.bidrag.dokument.bestilling.bestilling.produksjon.dto.Brev
@@ -365,6 +366,9 @@ class BrevserverProducer(
                 }
             }
         }
+    }
+
+    fun VedtakDetaljer.mapForForskudd() {
     }
 
     fun mapKontaktInfo(
