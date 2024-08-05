@@ -1,5 +1,7 @@
 package no.nav.bidrag.dokument.bestilling.utils
 
+import com.fasterxml.jackson.module.kotlin.readValue
+import no.nav.bidrag.commons.web.mock.hentFil
 import no.nav.bidrag.dokument.bestilling.api.dto.MottakerAdresseTo
 import no.nav.bidrag.dokument.bestilling.api.dto.SamhandlerAdresse
 import no.nav.bidrag.dokument.bestilling.api.dto.SamhandlerInformasjon
@@ -15,13 +17,16 @@ import no.nav.bidrag.domene.land.Landkode2
 import no.nav.bidrag.domene.land.Landkode3
 import no.nav.bidrag.domene.organisasjon.Enhetsnummer
 import no.nav.bidrag.domene.sak.Saksnummer
+import no.nav.bidrag.transport.behandling.vedtak.response.VedtakDto
 import no.nav.bidrag.transport.dokument.OpprettDokumentDto
 import no.nav.bidrag.transport.dokument.OpprettJournalpostResponse
+import no.nav.bidrag.transport.felles.commonObjectmapper
 import no.nav.bidrag.transport.person.PersonAdresseDto
 import no.nav.bidrag.transport.person.PersonDto
 import no.nav.bidrag.transport.sak.BidragssakDto
 import no.nav.bidrag.transport.sak.RolleDto
 import java.time.LocalDate
+import java.time.LocalDateTime
 
 val TEST_DOKUMENT = "Test dokument".toByteArray()
 val DEFAULT_TITLE_DOKUMENT = "Tittel på dokumentet"
@@ -203,3 +208,21 @@ fun createEnhetKontaktInformasjon(land: String = "Norge"): EnhetKontaktInfoDto =
                 land = land,
             ),
     )
+
+fun lagVedtaksdata(
+    filnavn: String,
+    gjelderIdent: PersonDto = BM1,
+    barnIdent: PersonDto = BARN1,
+    barnIdent2: PersonDto = BARN2,
+): VedtakDto {
+    val fil = hentFil("/__files/$filnavn")
+    var stringValue = fil.readText().replace("{bmIdent}", gjelderIdent.ident.verdi)
+    stringValue = stringValue.replace("{bmfDato}", gjelderIdent.fødselsdato.toString())
+    stringValue = stringValue.replace("{barnId}", barnIdent.ident.verdi)
+    stringValue = stringValue.replace("{barnfDato}", barnIdent.fødselsdato.toString())
+    stringValue = stringValue.replace("{barnId2}", barnIdent2.ident.verdi)
+    stringValue = stringValue.replace("{barn2fDato}", barnIdent2.fødselsdato.toString())
+    stringValue = stringValue.replace("{dagens_dato}", LocalDateTime.now().toString())
+    val grunnlag: VedtakDto = commonObjectmapper.readValue(stringValue)
+    return grunnlag
+}

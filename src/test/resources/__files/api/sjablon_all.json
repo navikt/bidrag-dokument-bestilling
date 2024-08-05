@@ -450,7 +450,7 @@
   {
     "typeSjablon": "0013",
     "datoFom": "2003-01-01",
-    "datoTom": "9999-12-31",
+    "datoTom": "2023-06-30",
     "verdi": 320,
     "brukerid": "MASTER  ",
     "tidspktEndret": "2003-09-25T08:29:56.176751"
@@ -2546,7 +2546,7 @@
   {
     "typeSjablon": "0001",
     "datoFom": "2019-07-01",
-    "datoTom": "9999-12-31",
+    "datoTom": "2023-06-30",
     "verdi": 1054,
     "brukerid": "A100364 ",
     "tidspktEndret": "2019-01-23T14:01:12.215"
@@ -2906,7 +2906,7 @@
   {
     "typeSjablon": "0041",
     "datoFom": "2022-07-01",
-    "datoTom": "9999-12-31",
+    "datoTom": "2023-06-30",
     "verdi": 1676,
     "brukerid": "A100364 ",
     "tidspktEndret": "2021-02-09T11:10:04.788"
@@ -3074,7 +3074,7 @@
   {
     "typeSjablon": "0038",
     "datoFom": "2022-07-01",
-    "datoTom": "9999-12-31",
+    "datoTom": "2023-06-30",
     "verdi": 1320,
     "brukerid": "H139831 ",
     "tidspktEndret": "2022-05-16T07:40:50.047"
@@ -3082,7 +3082,7 @@
   {
     "typeSjablon": "0005",
     "datoFom": "2022-07-01",
-    "datoTom": "9999-12-31",
+    "datoTom": "2023-06-30",
     "verdi": 1760,
     "brukerid": "H139831 ",
     "tidspktEndret": "2022-05-16T07:50:22.645"
@@ -3090,7 +3090,7 @@
   {
     "typeSjablon": "0003",
     "datoFom": "2022-07-01",
-    "datoTom": "9999-12-31",
+    "datoTom": "2023-06-30",
     "verdi": 2989,
     "brukerid": "R128631 ",
     "tidspktEndret": "2022-05-16T15:38:35.376"
@@ -3098,7 +3098,7 @@
   {
     "typeSjablon": "0014",
     "datoFom": "2022-07-01",
-    "datoTom": "9999-12-31",
+    "datoTom": "2023-06-30",
     "verdi": 312700,
     "brukerid": "R128631 ",
     "tidspktEndret": "2022-06-21T15:49:48.225"
@@ -3106,7 +3106,7 @@
   {
     "typeSjablon": "0019",
     "datoFom": "2022-07-01",
-    "datoTom": "9999-12-31",
+    "datoTom": "2023-06-30",
     "verdi": 3852,
     "brukerid": "R128631 ",
     "tidspktEndret": "2022-06-21T16:12:10.473"
@@ -3114,7 +3114,7 @@
   {
     "typeSjablon": "0027",
     "datoFom": "2022-07-01",
-    "datoTom": "9999-12-31",
+    "datoTom": "2023-06-30",
     "verdi": 58250,
     "brukerid": "R128631 ",
     "tidspktEndret": "2022-06-21T15:54:57.542"
@@ -3122,7 +3122,7 @@
   {
     "typeSjablon": "0028",
     "datoFom": "2022-07-01",
-    "datoTom": "9999-12-31",
+    "datoTom": "2023-06-30",
     "verdi": 58250,
     "brukerid": "R128631 ",
     "tidspktEndret": "2022-06-21T15:55:55.469"
@@ -3130,7 +3130,7 @@
   {
     "typeSjablon": "0033",
     "datoFom": "2022-07-01",
-    "datoTom": "9999-12-31",
+    "datoTom": "2023-06-30",
     "verdi": 312700,
     "brukerid": "R128631 ",
     "tidspktEndret": "2022-06-21T15:56:42.511"
@@ -3138,7 +3138,7 @@
   {
     "typeSjablon": "0034",
     "datoFom": "2022-07-01",
-    "datoTom": "9999-12-31",
+    "datoTom": "2023-06-30",
     "verdi": 488300,
     "brukerid": "R128631 ",
     "tidspktEndret": "2022-06-21T15:57:30.253"
@@ -3146,7 +3146,7 @@
   {
     "typeSjablon": "0035",
     "datoFom": "2022-07-01",
-    "datoTom": "9999-12-31",
+    "datoTom": "2023-06-30",
     "verdi": 375700,
     "brukerid": "R128631 ",
     "tidspktEndret": "2022-06-21T15:58:29.299"
@@ -3154,7 +3154,7 @@
   {
     "typeSjablon": "0036",
     "datoFom": "2022-07-01",
-    "datoTom": "9999-12-31",
+    "datoTom": "2023-06-30",
     "verdi": 68900,
     "brukerid": "R128631 ",
     "tidspktEndret": "2022-06-21T15:59:34.948"
@@ -3162,7 +3162,7 @@
   {
     "typeSjablon": "0023",
     "datoFom": "2022-07-01",
-    "datoTom": "9999-12-31",
+    "datoTom": "2023-06-30",
     "verdi": 90800,
     "brukerid": "R128631 ",
     "tidspktEndret": "2022-06-21T16:03:30.748"
@@ -3170,7 +3170,7 @@
   {
     "typeSjablon": "0017",
     "datoFom": "2023-01-01",
-    "datoTom": "9999-12-31",
+    "datoTom": "2023-12-31",
     "verdi": 7.9,
     "brukerid": "H139831 ",
     "tidspktEndret": "2022-12-28T22:30:00"
@@ -3178,7 +3178,7 @@
   {
     "typeSjablon": "0100",
     "datoFom": "2023-01-01",
-    "datoTom": "9999-12-31",
+    "datoTom": "2023-12-31",
     "verdi": 1243,
     "brukerid": "H139831 ",
     "tidspktEndret": "2022-12-28T22:30:00"
@@ -3210,15 +3210,15 @@
   {
     "typeSjablon": "0042",
     "datoFom": "2023-03-01",
-    "datoTom": "9999-12-31",
+    "datoTom": "2023-06-30",
     "verdi": 2489,
     "brukerid": "A144090 ",
-    "tidspktEndret": "2023-02-16T12:26:17.319443"
+    "tidspktEndret": "2023-11-02T11:07:33.80788"
   },
   {
     "typeSjablon": "0032",
     "datoFom": "2023-03-01",
-    "datoTom": "9999-12-31",
+    "datoTom": "2023-06-30",
     "verdi": 678,
     "brukerid": "A144090 ",
     "tidspktEndret": "2023-02-16T13:51:29.008069"
@@ -3230,5 +3230,269 @@
     "verdi": 0,
     "brukerid": "A144090 ",
     "tidspktEndret": "2023-02-16T14:26:47.763457"
+  },
+  {
+    "typeSjablon": "0003",
+    "datoFom": "2023-07-01",
+    "datoTom": "2024-06-30",
+    "verdi": 3198,
+    "brukerid": "H139831 ",
+    "tidspktEndret": "2023-05-12T14:59:15.724323"
+  },
+  {
+    "typeSjablon": "0041",
+    "datoFom": "2023-07-01",
+    "datoTom": "2024-06-30",
+    "verdi": 1766,
+    "brukerid": "H139831 ",
+    "tidspktEndret": "2023-05-12T15:28:16.941056"
+  },
+  {
+    "typeSjablon": "0001",
+    "datoFom": "2023-07-01",
+    "datoTom": "2024-06-30",
+    "verdi": 1310,
+    "brukerid": "H139831 ",
+    "tidspktEndret": "2023-06-29T13:10:43.300356"
+  },
+  {
+    "typeSjablon": "0005",
+    "datoFom": "2023-07-01",
+    "datoTom": "2024-06-30",
+    "verdi": 1880,
+    "brukerid": "H139831 ",
+    "tidspktEndret": "2023-05-30T13:40:36.992175"
+  },
+  {
+    "typeSjablon": "0038",
+    "datoFom": "2023-07-01",
+    "datoTom": "2024-06-30",
+    "verdi": 1410,
+    "brukerid": "H139831 ",
+    "tidspktEndret": "2023-05-30T13:40:38.862265"
+  },
+  {
+    "typeSjablon": "0027",
+    "datoFom": "2023-07-01",
+    "datoTom": "2024-06-30",
+    "verdi": 79600,
+    "brukerid": "H139831 ",
+    "tidspktEndret": "2023-06-29T13:10:23.181016"
+  },
+  {
+    "typeSjablon": "0028",
+    "datoFom": "2023-07-01",
+    "datoTom": "2024-06-30",
+    "verdi": 79600,
+    "brukerid": "H139831 ",
+    "tidspktEndret": "2023-06-29T13:10:23.197469"
+  },
+  {
+    "typeSjablon": "0023",
+    "datoFom": "2023-07-01",
+    "datoTom": "9999-12-31",
+    "verdi": 86250,
+    "brukerid": "H139831 ",
+    "tidspktEndret": "2023-06-29T13:10:25.434423"
+  },
+  {
+    "typeSjablon": "0019",
+    "datoFom": "2023-07-01",
+    "datoTom": "2024-06-30",
+    "verdi": 4177,
+    "brukerid": "H139831 ",
+    "tidspktEndret": "2023-06-29T13:10:29.138735"
+  },
+  {
+    "typeSjablon": "0013",
+    "datoFom": "2023-07-01",
+    "datoTom": "9999-12-31",
+    "verdi": 330,
+    "brukerid": "H139831 ",
+    "tidspktEndret": "2023-06-29T13:10:32.144438"
+  },
+  {
+    "typeSjablon": "0033",
+    "datoFom": "2023-07-01",
+    "datoTom": "2024-06-30",
+    "verdi": 346200,
+    "brukerid": "H139831 ",
+    "tidspktEndret": "2023-06-29T13:10:32.146489"
+  },
+  {
+    "typeSjablon": "0034",
+    "datoFom": "2023-07-01",
+    "datoTom": "2024-06-30",
+    "verdi": 532400,
+    "brukerid": "H139831 ",
+    "tidspktEndret": "2023-06-29T13:10:32.148334"
+  },
+  {
+    "typeSjablon": "0035",
+    "datoFom": "2023-07-01",
+    "datoTom": "2024-06-30",
+    "verdi": 420600,
+    "brukerid": "H139831 ",
+    "tidspktEndret": "2023-06-29T13:10:32.150304"
+  },
+  {
+    "typeSjablon": "0036",
+    "datoFom": "2023-07-01",
+    "datoTom": "2024-06-30",
+    "verdi": 74600,
+    "brukerid": "H139831 ",
+    "tidspktEndret": "2023-06-29T13:10:32.152186"
+  },
+  {
+    "typeSjablon": "0014",
+    "datoFom": "2023-07-01",
+    "datoTom": "2023-12-31",
+    "verdi": 327400,
+    "brukerid": "H139831 ",
+    "tidspktEndret": "2023-06-29T13:10:32.179461"
+  },
+  {
+    "typeSjablon": "0032",
+    "datoFom": "2023-07-01",
+    "datoTom": "9999-12-31",
+    "verdi": 696,
+    "brukerid": "H139831 ",
+    "tidspktEndret": "2023-06-29T13:10:39.678798"
+  },
+  {
+    "typeSjablon": "0042",
+    "datoFom": "2023-07-01",
+    "datoTom": "2024-06-30",
+    "verdi": 2516,
+    "brukerid": "A144090 ",
+    "tidspktEndret": "2023-11-02T11:08:08.922858"
+  },
+  {
+    "typeSjablon": "0017",
+    "datoFom": "2024-01-01",
+    "datoTom": "9999-12-31",
+    "verdi": 7.8,
+    "brukerid": "H139831 ",
+    "tidspktEndret": "2023-12-17T19:30:00"
+  },
+  {
+    "typeSjablon": "0100",
+    "datoFom": "2024-01-01",
+    "datoTom": "9999-12-31",
+    "verdi": 1277,
+    "brukerid": "H139831 ",
+    "tidspktEndret": "2023-12-17T17:30:00"
+  },
+  {
+    "typeSjablon": "0014",
+    "datoFom": "2024-01-01",
+    "datoTom": "9999-12-31",
+    "verdi": 331200,
+    "brukerid": "H139831 ",
+    "tidspktEndret": "2024-01-01T23:30:00"
+  },
+  {
+    "typeSjablon": "0033",
+    "datoFom": "2024-07-01",
+    "datoTom": "9999-12-31",
+    "verdi": 369300,
+    "brukerid": "H139831 ",
+    "tidspktEndret": "2024-06-05T21:45:00"
+  },
+  {
+    "typeSjablon": "0034",
+    "datoFom": "2024-07-01",
+    "datoTom": "9999-12-31",
+    "verdi": 547500,
+    "brukerid": "H139831 ",
+    "tidspktEndret": "2024-06-05T21:45:00"
+  },
+  {
+    "typeSjablon": "0035",
+    "datoFom": "2024-07-01",
+    "datoTom": "9999-12-31",
+    "verdi": 453500,
+    "brukerid": "H139831 ",
+    "tidspktEndret": "2024-06-05T21:45:00"
+  },
+  {
+    "typeSjablon": "0036",
+    "datoFom": "2024-07-01",
+    "datoTom": "9999-12-31",
+    "verdi": 75800,
+    "brukerid": "H139831 ",
+    "tidspktEndret": "2024-06-05T21:45:00"
+  },
+  {
+    "typeSjablon": "0038",
+    "datoFom": "2024-07-01",
+    "datoTom": "9999-12-31",
+    "verdi": 1480,
+    "brukerid": "H139831 ",
+    "tidspktEndret": "2024-06-05T21:45:00"
+  },
+  {
+    "typeSjablon": "0041",
+    "datoFom": "2024-07-01",
+    "datoTom": "9999-12-31",
+    "verdi": 1766,
+    "brukerid": "H139831 ",
+    "tidspktEndret": "2024-06-05T21:45:00"
+  },
+  {
+    "typeSjablon": "0005",
+    "datoFom": "2024-07-01",
+    "datoTom": "9999-12-31",
+    "verdi": 1970,
+    "brukerid": "H139831 ",
+    "tidspktEndret": "2024-06-05T21:45:00"
+  },
+  {
+    "typeSjablon": "0003",
+    "datoFom": "2024-07-01",
+    "datoTom": "9999-12-31",
+    "verdi": 3596,
+    "brukerid": "H139831 ",
+    "tidspktEndret": "2024-06-22T17:45:27.646997"
+  },
+  {
+    "typeSjablon": "0001",
+    "datoFom": "2024-07-01",
+    "datoTom": "9999-12-31",
+    "verdi": 1510,
+    "brukerid": "H139831 ",
+    "tidspktEndret": "2024-06-22T17:46:59.608656"
+  },
+  {
+    "typeSjablon": "0042",
+    "datoFom": "2024-07-01",
+    "datoTom": "9999-12-31",
+    "verdi": 30192,
+    "brukerid": "H139831 ",
+    "tidspktEndret": "2024-06-22T17:47:05.219159"
+  },
+  {
+    "typeSjablon": "0027",
+    "datoFom": "2024-07-01",
+    "datoTom": "9999-12-31",
+    "verdi": 88250,
+    "brukerid": "H139831 ",
+    "tidspktEndret": "2024-06-22T17:47:26.520724"
+  },
+  {
+    "typeSjablon": "0028",
+    "datoFom": "2024-07-01",
+    "datoTom": "9999-12-31",
+    "verdi": 88250,
+    "brukerid": "H139831 ",
+    "tidspktEndret": "2024-06-22T17:47:26.523461"
+  },
+  {
+    "typeSjablon": "0019",
+    "datoFom": "2024-07-01",
+    "datoTom": "9999-12-31",
+    "verdi": 4253,
+    "brukerid": "H139831 ",
+    "tidspktEndret": "2024-06-22T17:48:52.566635"
   }
 ]
