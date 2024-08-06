@@ -224,7 +224,7 @@ class BrevserverProducer(
                                 val beregning = engangsbeløp.særbidragBeregning!!
                                 vedtak {
                                     fomDato = engangsbeløp.periode.fom
-                                    tomDato = engangsbeløp.periode.til!!
+                                    tomDato = engangsbeløp.periode.til?.plusDays(1)
                                     fnr = vedtakBarn.fødselsnummer
                                     erInnkreving = engangsbeløp.medInnkreving
                                     belopBidrag = beregning.resultat
