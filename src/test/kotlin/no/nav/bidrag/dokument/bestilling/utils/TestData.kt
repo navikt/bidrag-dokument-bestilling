@@ -218,6 +218,8 @@ fun lagVedtaksdata(
     val fil = hentFil("/__files/$filnavn")
     var stringValue = fil.readText().replace("{bmIdent}", gjelderIdent.ident.verdi)
     stringValue = stringValue.replace("{bmfDato}", gjelderIdent.fødselsdato.toString())
+    stringValue = stringValue.replace("{bpIdent}", BP1.ident.verdi)
+    stringValue = stringValue.replace("{bpfDato}", BP1.fødselsdato.toString())
     stringValue = stringValue.replace("{barnId}", barnIdent.ident.verdi)
     stringValue = stringValue.replace("{barnfDato}", barnIdent.fødselsdato.toString())
     stringValue = stringValue.replace("{barnId2}", barnIdent2.ident.verdi)

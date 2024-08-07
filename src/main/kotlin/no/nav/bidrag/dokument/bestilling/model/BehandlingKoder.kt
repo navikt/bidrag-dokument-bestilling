@@ -66,6 +66,7 @@ enum class BehandlingType(
     REFUSJON_BIDRAG("RB"),
     SAKSOMKOSTNINGER("SO"),
     SARTILSKUDD("ST"),
+    SÆRBIDRAG("ST"),
     BIDRAG_18_AR_TILLEGGSBBI("T1"),
     TILLEGGSBIDRAG("TB"),
     TILBAKEKR_ETTERGIVELSE("TE"),
@@ -82,7 +83,7 @@ enum class BehandlingType(
         fun fromKode(kode: String): BehandlingType? = BehandlingType.values().find { it.kode == kode }
 
         fun from(
-            stonadType: Stønadstype,
+            stonadType: Stønadstype?,
             engangsbelopType: Engangsbeløptype?,
         ): BehandlingType? =
             when (stonadType) {

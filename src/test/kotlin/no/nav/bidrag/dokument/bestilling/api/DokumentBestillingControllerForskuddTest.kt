@@ -189,8 +189,8 @@ class DokumentBestillingControllerForskuddTest : AbstractControllerTest() {
                 barn1.barn!!.fnr shouldBe BARN2.ident.verdi
                 barn1.barn!!.saksnr shouldBe saksnummer
 
-                val barn2 = message?.brev?.bidragBarn!![0]
-                barn2.barn!!.fnr shouldBe BARN2.ident.verdi
+                val barn2 = message?.brev?.bidragBarn!![1]
+                barn2.barn!!.fnr shouldBe BARN1.ident.verdi
                 barn2.barn!!.saksnr shouldBe saksnummer
 
                 assertSoftly(message.brev!!.vedtak.filter { it.fnr == BARN1.ident.verdi }) {

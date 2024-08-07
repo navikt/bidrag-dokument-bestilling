@@ -178,6 +178,13 @@ class BrevserverProducer(
                                     ResultatKoder.UTENLANDSK_AVGJØRELSE,
                                 ).contains(resultatKode)
                             if (erInnkreving || erInnkrevingPrivatAvtale) ResultatKoder.VEDTAK_VANLIG_INNKREVING else resultatKode
+                        } else if (vedtakInfo?.type == TypeBehandling.SÆRBIDRAG) {
+                            vedtakInfo.vedtakBarn
+                                .first()
+                                .engangsbeløper
+                                .first()
+                                .særbidragBeregning
+                                ?.resultatKode
                         } else {
                             null
                         }
@@ -201,7 +208,7 @@ class BrevserverProducer(
                     soknad {
                         aarsakKd = it.årsakKode?.legacyKode ?: it.avslagsKode?.legacyKodeBrev // TODO: Oversett til riktig kode
                         undergrp = hgUgDto?.ug
-                        type = it.stønadType?.let { BehandlingType.valueOf(it.name).kode }
+                        type = it.stønadType?.let { BehandlingType.valueOf(it.name).kode } ?: hgUgDto?.hg
 
                         vedtattDato = it.vedtattDato
                         virkningDato = it.virkningstidspunkt
@@ -256,7 +263,7 @@ class BrevserverProducer(
                                 engangsbeløp.inntekter.forEach {
                                     inntektPeriode {
                                         fomDato = it.periode?.tilLocalDateFom()
-                                        tomDato = it.periode.tilLocalDateTil() ?: MAX_DATE
+                                        tomDato = it.periode.tilLocalDateTil()?.plusDays(1) ?: MAX_DATE
                                         belopType = it.beløpKode
                                         belopÅrsinntekt = it.beløp
                                         beskrivelse = it.beskrivelse

@@ -1,1067 +1,2953 @@
 {
   "kilde": "MANUELT",
-  "type": "ENDRING",
-  "opprettetAv": "Z994977",
-  "opprettetAvNavn": null,
-  "kildeapplikasjon": "bidrag-behandling",
-  "vedtakstidspunkt": "2024-07-22T15:46:25.19147",
+  "type": "FASTSETTELSE",
+  "opprettetAv": "",
+  "kildeapplikasjon": "behandling",
+  "vedtakstidspunkt": "2024-08-06T20:40:47.596115635",
   "enhetsnummer": "4806",
-  "innkrevingUtsattTilDato": null,
-  "fastsattILand": null,
-  "opprettetTidspunkt": "2024-07-22T15:46:27.913925",
+  "opprettetTidspunkt": "2024-08-06T20:40:47.628620715",
   "grunnlagListe": [
     {
-      "referanse": "person_PERSON_BIDRAGSMOTTAKER_19781115_41",
+      "referanse": "person_PERSON_BIDRAGSMOTTAKER_19890720_2109",
       "type": "PERSON_BIDRAGSMOTTAKER",
       "innhold": {
-        "navn": null,
-        "ident": "313213213",
-        "fødselsdato": "1978-08-25"
+        "ident": "{bmIdent}",
+        "fødselsdato": "{bmfDato}"
       },
-      "grunnlagsreferanseListe": [],
-      "gjelderReferanse": null
+      "grunnlagsreferanseListe": []
     },
     {
-      "referanse": "person_PERSON_BIDRAGSPLIKTIG_19720829_39",
+      "referanse": "person_PERSON_BIDRAGSPLIKTIG_19790213_2107",
       "type": "PERSON_BIDRAGSPLIKTIG",
       "innhold": {
-        "navn": null,
-        "ident": "213244124",
-        "fødselsdato": "2000-03-01"
+        "ident": "{bpIdent}",
+        "fødselsdato": "{bpfDato}"
       },
-      "grunnlagsreferanseListe": [],
-      "gjelderReferanse": null
+      "grunnlagsreferanseListe": []
     },
     {
-      "referanse": "person_PERSON_SØKNADSBARN_20220726_40",
+      "referanse": "person_PERSON_SØKNADSBARN_20051223_2108",
       "type": "PERSON_SØKNADSBARN",
       "innhold": {
-        "navn": null,
-        "ident": "1344124",
-        "fødselsdato": "2020-03-01"
+        "ident": "{barnId2}",
+        "fødselsdato": "{barn2fDato}"
       },
-      "grunnlagsreferanseListe": [],
-      "gjelderReferanse": null
+      "grunnlagsreferanseListe": []
     },
     {
-      "referanse": "bostatus_person_PERSON_HUSSTANDSMEDLEM_20050916_65_20240701",
+      "referanse": "bostatus_person_PERSON_SØKNADSBARN_20051223_2108_20240801",
       "type": "BOSTATUS_PERIODE",
       "innhold": {
         "periode": {
-          "fom": "2024-07",
-          "til": null
+          "fom": "2024-08"
         },
         "bostatus": "REGNES_IKKE_SOM_BARN",
-        "relatertTilPart": "person_PERSON_BIDRAGSPLIKTIG_19720829_39",
+        "relatertTilPart": "person_PERSON_BIDRAGSPLIKTIG_19790213_2107",
         "manueltRegistrert": false
       },
       "grunnlagsreferanseListe": [
-        "innhentet_husstandsmedlem_person_PERSON_BIDRAGSPLIKTIG_19720829_39_person_PERSON_HUSSTANDSMEDLEM_20050916_65"
+        "innhentet_husstandsmedlem_person_PERSON_BIDRAGSPLIKTIG_19790213_2107_person_PERSON_SØKNADSBARN_20051223_2108"
       ],
-      "gjelderReferanse": "person_PERSON_HUSSTANDSMEDLEM_20050916_65"
+      "gjelderReferanse": "person_PERSON_SØKNADSBARN_20051223_2108"
     },
     {
-      "referanse": "bostatus_person_PERSON_SØKNADSBARN_20220726_40_20240701",
+      "referanse": "bostatus_person_PERSON_BIDRAGSPLIKTIG_19790213_2107_20240801",
       "type": "BOSTATUS_PERIODE",
       "innhold": {
         "periode": {
-          "fom": "2024-07",
-          "til": null
-        },
-        "bostatus": "MED_FORELDER",
-        "relatertTilPart": "person_PERSON_BIDRAGSPLIKTIG_19720829_39",
-        "manueltRegistrert": false
-      },
-      "grunnlagsreferanseListe": [
-        "innhentet_husstandsmedlem_person_PERSON_BIDRAGSPLIKTIG_19720829_39_person_PERSON_SØKNADSBARN_20220726_40"
-      ],
-      "gjelderReferanse": "person_PERSON_SØKNADSBARN_20220726_40"
-    },
-    {
-      "referanse": "bostatus_person_PERSON_HUSSTANDSMEDLEM_20170707_63_20240701",
-      "type": "BOSTATUS_PERIODE",
-      "innhold": {
-        "periode": {
-          "fom": "2024-07",
-          "til": null
-        },
-        "bostatus": "MED_FORELDER",
-        "relatertTilPart": "person_PERSON_BIDRAGSPLIKTIG_19720829_39",
-        "manueltRegistrert": false
-      },
-      "grunnlagsreferanseListe": [
-        "innhentet_husstandsmedlem_person_PERSON_BIDRAGSPLIKTIG_19720829_39_person_PERSON_HUSSTANDSMEDLEM_20170707_63"
-      ],
-      "gjelderReferanse": "person_PERSON_HUSSTANDSMEDLEM_20170707_63"
-    },
-    {
-      "referanse": "bostatus_person_PERSON_HUSSTANDSMEDLEM_20150513_64_20240701",
-      "type": "BOSTATUS_PERIODE",
-      "innhold": {
-        "periode": {
-          "fom": "2024-07",
-          "til": null
-        },
-        "bostatus": "MED_FORELDER",
-        "relatertTilPart": "person_PERSON_BIDRAGSPLIKTIG_19720829_39",
-        "manueltRegistrert": false
-      },
-      "grunnlagsreferanseListe": [
-        "innhentet_husstandsmedlem_person_PERSON_BIDRAGSPLIKTIG_19720829_39_person_PERSON_HUSSTANDSMEDLEM_20150513_64"
-      ],
-      "gjelderReferanse": "person_PERSON_HUSSTANDSMEDLEM_20150513_64"
-    },
-    {
-      "referanse": "bostatus_person_PERSON_BIDRAGSPLIKTIG_19720829_39_20240701",
-      "type": "BOSTATUS_PERIODE",
-      "innhold": {
-        "periode": {
-          "fom": "2024-07",
-          "til": null
+          "fom": "2024-08"
         },
         "bostatus": "BOR_MED_ANDRE_VOKSNE",
-        "relatertTilPart": "person_PERSON_BIDRAGSPLIKTIG_19720829_39",
+        "relatertTilPart": "person_PERSON_BIDRAGSPLIKTIG_19790213_2107",
         "manueltRegistrert": false
       },
       "grunnlagsreferanseListe": [
-        "innhentet_husstandsmedlem_person_PERSON_BIDRAGSPLIKTIG_19720829_39_person_PERSON_BIDRAGSPLIKTIG_19720829_39"
+        "innhentet_husstandsmedlem_person_PERSON_BIDRAGSPLIKTIG_19790213_2107_person_PERSON_BIDRAGSPLIKTIG_19790213_2107"
       ],
-      "gjelderReferanse": "person_PERSON_BIDRAGSPLIKTIG_19720829_39"
+      "gjelderReferanse": "person_PERSON_BIDRAGSPLIKTIG_19790213_2107"
     },
     {
-      "referanse": "person_PERSON_HUSSTANDSMEDLEM_20050916_65",
+      "referanse": "bostatus_person_PERSON_HUSSTANDSMEDLEM_20150811_4604_20240801",
+      "type": "BOSTATUS_PERIODE",
+      "innhold": {
+        "periode": {
+          "fom": "2024-08"
+        },
+        "bostatus": "MED_FORELDER",
+        "relatertTilPart": "person_PERSON_BIDRAGSPLIKTIG_19790213_2107",
+        "manueltRegistrert": false
+      },
+      "grunnlagsreferanseListe": [
+        "innhentet_husstandsmedlem_person_PERSON_BIDRAGSPLIKTIG_19790213_2107_person_PERSON_HUSSTANDSMEDLEM_20150811_4604"
+      ],
+      "gjelderReferanse": "person_PERSON_HUSSTANDSMEDLEM_20150811_4604"
+    },
+    {
+      "referanse": "bostatus_person_PERSON_HUSSTANDSMEDLEM_20180224_4605_20240801",
+      "type": "BOSTATUS_PERIODE",
+      "innhold": {
+        "periode": {
+          "fom": "2024-08"
+        },
+        "bostatus": "MED_FORELDER",
+        "relatertTilPart": "person_PERSON_BIDRAGSPLIKTIG_19790213_2107",
+        "manueltRegistrert": false
+      },
+      "grunnlagsreferanseListe": [
+        "innhentet_husstandsmedlem_person_PERSON_BIDRAGSPLIKTIG_19790213_2107_person_PERSON_HUSSTANDSMEDLEM_20180224_4605"
+      ],
+      "gjelderReferanse": "person_PERSON_HUSSTANDSMEDLEM_20180224_4605"
+    },
+    {
+      "referanse": "person_PERSON_HUSSTANDSMEDLEM_20150811_4604",
       "type": "PERSON_HUSSTANDSMEDLEM",
       "innhold": {
-        "navn": null,
-        "ident": "16490550511",
-        "fødselsdato": "2005-09-16"
+        "ident": "11481598488",
+        "fødselsdato": "2015-08-11"
       },
-      "grunnlagsreferanseListe": [],
-      "gjelderReferanse": null
+      "grunnlagsreferanseListe": []
     },
     {
-      "referanse": "person_PERSON_HUSSTANDSMEDLEM_20170707_63",
+      "referanse": "person_PERSON_HUSSTANDSMEDLEM_20180224_4605",
       "type": "PERSON_HUSSTANDSMEDLEM",
       "innhold": {
-        "navn": null,
-        "ident": "07471780639",
-        "fødselsdato": "2017-07-07"
+        "ident": "24421897685",
+        "fødselsdato": "2018-02-24"
       },
-      "grunnlagsreferanseListe": [],
-      "gjelderReferanse": null
+      "grunnlagsreferanseListe": []
     },
     {
-      "referanse": "person_PERSON_HUSSTANDSMEDLEM_20150513_64",
-      "type": "PERSON_HUSSTANDSMEDLEM",
-      "innhold": {
-        "navn": null,
-        "ident": "13451585880",
-        "fødselsdato": "2015-05-13"
-      },
-      "grunnlagsreferanseListe": [],
-      "gjelderReferanse": null
-    },
-    {
-      "referanse": "inntekt_BARNETILLEGG_BARNETILLEGG_PENSJON_person_PERSON_BIDRAGSPLIKTIG_19720829_39_ba_person_PERSON_SØKNADSBARN_20220726_40_20240701_157",
+      "referanse": "inntekt_AINNTEKT_BEREGNET_12MND_FRA_OPPRINNELIG_VEDTAKSTIDSPUNKT_person_PERSON_BIDRAGSMOTTAKER_19890720_2109_20230801_20240731_8437",
       "type": "INNTEKT_RAPPORTERING_PERIODE",
       "innhold": {
-        "valgt": true,
-        "beløp": 1440,
         "periode": {
-          "fom": "2024-07",
-          "til": null
+          "fom": "2023-08"
         },
-        "versjon": null,
-        "gjelderBarn": "person_PERSON_SØKNADSBARN_20220726_40",
+        "manueltRegistrert": false,
+        "opprinneligPeriode": {
+          "fom": "2023-08",
+          "til": "2024-08"
+        },
+        "versjon": "2024.08.01.144303_14dcb50",
+        "inntektsrapportering": "AINNTEKT_BEREGNET_12MND_FRA_OPPRINNELIG_VEDTAKSTIDSPUNKT",
+        "beløp": 858000,
+        "valgt": false,
         "inntekstpostListe": [
           {
-            "kode": "BARNETILLEGG",
-            "beløp": 1440,
-            "inntekstype": "BARNETILLEGG_PENSJON"
-          }
-        ],
-        "manueltRegistrert": true,
-        "opprinneligPeriode": null,
-        "inntektsrapportering": "BARNETILLEGG"
-      },
-      "grunnlagsreferanseListe": [],
-      "gjelderReferanse": "person_PERSON_BIDRAGSPLIKTIG_19720829_39"
-    },
-    {
-      "referanse": "inntekt_LØNN_MANUELT_BEREGNET_person_PERSON_BIDRAGSPLIKTIG_19720829_39_20240701_156",
-      "type": "INNTEKT_RAPPORTERING_PERIODE",
-      "innhold": {
-        "valgt": true,
-        "beløp": 800000,
-        "periode": {
-          "fom": "2024-07",
-          "til": null
-        },
-        "versjon": null,
-        "gjelderBarn": null,
-        "inntekstpostListe": [],
-        "manueltRegistrert": true,
-        "opprinneligPeriode": null,
-        "inntektsrapportering": "LØNN_MANUELT_BEREGNET"
-      },
-      "grunnlagsreferanseListe": [],
-      "gjelderReferanse": "person_PERSON_BIDRAGSPLIKTIG_19720829_39"
-    },
-    {
-      "referanse": "inntekt_LIGNINGSINNTEKT_person_PERSON_BIDRAGSMOTTAKER_19781115_41_20230101_20231231_134",
-      "type": "INNTEKT_RAPPORTERING_PERIODE",
-      "innhold": {
-        "valgt": true,
-        "beløp": 412000,
-        "periode": {
-          "fom": "2024-07",
-          "til": null
-        },
-        "versjon": "2024.07.17.133247_d9a0155",
-        "gjelderBarn": null,
-        "inntekstpostListe": [
-          {
-            "kode": "samletLoennsinntektMedTrygdeavgiftspliktOgMedTrekkplikt",
-            "beløp": 400000,
-            "inntekstype": null
+            "kode": "fastloenn",
+            "beløp": 795000
           },
           {
-            "kode": "overgangsstoenadTilEnsligForelder",
-            "beløp": 12000,
-            "inntekstype": null
+            "kode": "foreldrepenger",
+            "beløp": 21000
+          },
+          {
+            "kode": "sykepenger",
+            "beløp": 42000
           }
-        ],
+        ]
+      },
+      "grunnlagsreferanseListe": [
+        "innhentet_ainntekt_person_PERSON_BIDRAGSMOTTAKER_19890720_2109"
+      ],
+      "gjelderReferanse": "person_PERSON_BIDRAGSMOTTAKER_19890720_2109"
+    },
+    {
+      "referanse": "inntekt_AINNTEKT_BEREGNET_3MND_FRA_OPPRINNELIG_VEDTAKSTIDSPUNKT_person_PERSON_BIDRAGSMOTTAKER_19890720_2109_20240501_20240731_8438",
+      "type": "INNTEKT_RAPPORTERING_PERIODE",
+      "innhold": {
+        "periode": {
+          "fom": "2024-05"
+        },
+        "manueltRegistrert": false,
+        "opprinneligPeriode": {
+          "fom": "2024-05",
+          "til": "2024-08"
+        },
+        "versjon": "2024.08.01.144303_14dcb50",
+        "inntektsrapportering": "AINNTEKT_BEREGNET_3MND_FRA_OPPRINNELIG_VEDTAKSTIDSPUNKT",
+        "beløp": 528000,
+        "valgt": false,
+        "inntekstpostListe": [
+          {
+            "kode": "fastloenn",
+            "beløp": 420000
+          },
+          {
+            "kode": "sykepenger",
+            "beløp": 72000
+          },
+          {
+            "kode": "foreldrepenger",
+            "beløp": 36000
+          }
+        ]
+      },
+      "grunnlagsreferanseListe": [
+        "innhentet_ainntekt_person_PERSON_BIDRAGSMOTTAKER_19890720_2109"
+      ],
+      "gjelderReferanse": "person_PERSON_BIDRAGSMOTTAKER_19890720_2109"
+    },
+    {
+      "referanse": "inntekt_AINNTEKT_person_PERSON_BIDRAGSMOTTAKER_19890720_2109_20230101_20231231_8432",
+      "type": "INNTEKT_RAPPORTERING_PERIODE",
+      "innhold": {
+        "periode": {
+          "fom": "2023-01"
+        },
         "manueltRegistrert": false,
         "opprinneligPeriode": {
           "fom": "2023-01",
           "til": "2024-01"
         },
-        "inntektsrapportering": "LIGNINGSINNTEKT"
+        "versjon": "2024.08.01.144303_14dcb50",
+        "inntektsrapportering": "AINNTEKT",
+        "beløp": 1210000,
+        "valgt": false,
+        "inntekstpostListe": [
+          {
+            "kode": "fastloenn",
+            "beløp": 1210000
+          }
+        ]
       },
       "grunnlagsreferanseListe": [
-        "innhentet_skattegrunnlag_person_PERSON_BIDRAGSMOTTAKER_19781115_41_2023"
+        "innhentet_ainntekt_person_PERSON_BIDRAGSMOTTAKER_19890720_2109"
       ],
-      "gjelderReferanse": "person_PERSON_BIDRAGSMOTTAKER_19781115_41"
+      "gjelderReferanse": "person_PERSON_BIDRAGSMOTTAKER_19890720_2109"
     },
     {
-      "referanse": "inntekt_KAPITALINNTEKT_person_PERSON_BIDRAGSMOTTAKER_19781115_41_20220101_20221231_135",
+      "referanse": "inntekt_AINNTEKT_BEREGNET_12MND_person_PERSON_BIDRAGSMOTTAKER_19890720_2109_20230801_20240731_8433",
       "type": "INNTEKT_RAPPORTERING_PERIODE",
       "innhold": {
-        "valgt": false,
-        "beløp": 25000,
         "periode": {
-          "fom": "2022-01",
-          "til": null
+          "fom": "2024-08"
         },
-        "versjon": "2024.07.17.133247_d9a0155",
-        "gjelderBarn": null,
+        "manueltRegistrert": false,
+        "opprinneligPeriode": {
+          "fom": "2023-08",
+          "til": "2024-08"
+        },
+        "versjon": "2024.08.01.144303_14dcb50",
+        "inntektsrapportering": "AINNTEKT_BEREGNET_12MND",
+        "beløp": 858000,
+        "valgt": true,
+        "inntekstpostListe": [
+          {
+            "kode": "fastloenn",
+            "beløp": 795000
+          },
+          {
+            "kode": "foreldrepenger",
+            "beløp": 21000
+          },
+          {
+            "kode": "sykepenger",
+            "beløp": 42000
+          }
+        ]
+      },
+      "grunnlagsreferanseListe": [
+        "innhentet_ainntekt_person_PERSON_BIDRAGSMOTTAKER_19890720_2109"
+      ],
+      "gjelderReferanse": "person_PERSON_BIDRAGSMOTTAKER_19890720_2109"
+    },
+    {
+      "referanse": "inntekt_LIGNINGSINNTEKT_person_PERSON_BIDRAGSMOTTAKER_19890720_2109_20230101_20231231_8430",
+      "type": "INNTEKT_RAPPORTERING_PERIODE",
+      "innhold": {
+        "periode": {
+          "fom": "2023-01"
+        },
+        "manueltRegistrert": false,
+        "opprinneligPeriode": {
+          "fom": "2023-01",
+          "til": "2024-01"
+        },
+        "versjon": "2024.08.01.144303_14dcb50",
+        "inntektsrapportering": "LIGNINGSINNTEKT",
+        "beløp": 450000,
+        "valgt": false,
+        "inntekstpostListe": [
+          {
+            "kode": "samletLoennsinntektMedTrygdeavgiftspliktOgMedTrekkplikt",
+            "beløp": 450000
+          }
+        ]
+      },
+      "grunnlagsreferanseListe": [
+        "innhentet_skattegrunnlag_person_PERSON_BIDRAGSMOTTAKER_19890720_2109_2023"
+      ],
+      "gjelderReferanse": "person_PERSON_BIDRAGSMOTTAKER_19890720_2109"
+    },
+    {
+      "referanse": "inntekt_KAPITALINNTEKT_person_PERSON_BIDRAGSMOTTAKER_19890720_2109_20230101_20231231_8431",
+      "type": "INNTEKT_RAPPORTERING_PERIODE",
+      "innhold": {
+        "periode": {
+          "fom": "2023-01"
+        },
+        "manueltRegistrert": false,
+        "opprinneligPeriode": {
+          "fom": "2023-01",
+          "til": "2024-01"
+        },
+        "versjon": "2024.08.01.144303_14dcb50",
+        "inntektsrapportering": "KAPITALINNTEKT",
+        "beløp": -5000,
+        "valgt": false,
+        "inntekstpostListe": [
+          {
+            "kode": "tapVedRealisasjonAvAksje",
+            "beløp": 5000
+          }
+        ]
+      },
+      "grunnlagsreferanseListe": [
+        "innhentet_skattegrunnlag_person_PERSON_BIDRAGSMOTTAKER_19890720_2109_2023"
+      ],
+      "gjelderReferanse": "person_PERSON_BIDRAGSMOTTAKER_19890720_2109"
+    },
+    {
+      "referanse": "inntekt_AINNTEKT_BEREGNET_3MND_person_PERSON_BIDRAGSMOTTAKER_19890720_2109_20240501_20240731_8429",
+      "type": "INNTEKT_RAPPORTERING_PERIODE",
+      "innhold": {
+        "periode": {
+          "fom": "2024-05"
+        },
+        "manueltRegistrert": false,
+        "opprinneligPeriode": {
+          "fom": "2024-05",
+          "til": "2024-08"
+        },
+        "versjon": "2024.08.01.144303_14dcb50",
+        "inntektsrapportering": "AINNTEKT_BEREGNET_3MND",
+        "beløp": 528000,
+        "valgt": false,
+        "inntekstpostListe": [
+          {
+            "kode": "foreldrepenger",
+            "beløp": 36000
+          },
+          {
+            "kode": "fastloenn",
+            "beløp": 420000
+          },
+          {
+            "kode": "sykepenger",
+            "beløp": 72000
+          }
+        ]
+      },
+      "grunnlagsreferanseListe": [
+        "innhentet_ainntekt_person_PERSON_BIDRAGSMOTTAKER_19890720_2109"
+      ],
+      "gjelderReferanse": "person_PERSON_BIDRAGSMOTTAKER_19890720_2109"
+    },
+    {
+      "referanse": "inntekt_AINNTEKT_BEREGNET_3MND_FRA_OPPRINNELIG_VEDTAKSTIDSPUNKT_person_PERSON_BIDRAGSPLIKTIG_19790213_2107_20240501_20240731_8435",
+      "type": "INNTEKT_RAPPORTERING_PERIODE",
+      "innhold": {
+        "periode": {
+          "fom": "2024-05"
+        },
+        "manueltRegistrert": false,
+        "opprinneligPeriode": {
+          "fom": "2024-05",
+          "til": "2024-08"
+        },
+        "versjon": "2024.08.01.144303_14dcb50",
+        "inntektsrapportering": "AINNTEKT_BEREGNET_3MND_FRA_OPPRINNELIG_VEDTAKSTIDSPUNKT",
+        "beløp": 516000,
+        "valgt": false,
+        "inntekstpostListe": [
+          {
+            "kode": "ufoeretrygd",
+            "beløp": 24000
+          },
+          {
+            "kode": "foreldrepenger",
+            "beløp": 36000
+          },
+          {
+            "kode": "fastloenn",
+            "beløp": 420000
+          },
+          {
+            "kode": "sykepenger",
+            "beløp": 36000
+          }
+        ]
+      },
+      "grunnlagsreferanseListe": [
+        "innhentet_ainntekt_person_PERSON_BIDRAGSPLIKTIG_19790213_2107"
+      ],
+      "gjelderReferanse": "person_PERSON_BIDRAGSPLIKTIG_19790213_2107"
+    },
+    {
+      "referanse": "inntekt_SYKEPENGER_person_PERSON_BIDRAGSPLIKTIG_19790213_2107_20230101_20231231_8423",
+      "type": "INNTEKT_RAPPORTERING_PERIODE",
+      "innhold": {
+        "periode": {
+          "fom": "2024-08"
+        },
+        "manueltRegistrert": false,
+        "opprinneligPeriode": {
+          "fom": "2023-01",
+          "til": "2024-01"
+        },
+        "versjon": "2024.08.01.144303_14dcb50",
+        "inntektsrapportering": "SYKEPENGER",
+        "beløp": 18000,
+        "valgt": true,
+        "inntekstpostListe": [
+          {
+            "kode": "sykepenger",
+            "beløp": 18000
+          }
+        ]
+      },
+      "grunnlagsreferanseListe": [
+        "innhentet_ainntekt_person_PERSON_BIDRAGSPLIKTIG_19790213_2107"
+      ],
+      "gjelderReferanse": "person_PERSON_BIDRAGSPLIKTIG_19790213_2107"
+    },
+    {
+      "referanse": "inntekt_LIGNINGSINNTEKT_person_PERSON_BIDRAGSPLIKTIG_19790213_2107_20230101_20231231_8427",
+      "type": "INNTEKT_RAPPORTERING_PERIODE",
+      "innhold": {
+        "periode": {
+          "fom": "2023-01"
+        },
+        "manueltRegistrert": false,
+        "opprinneligPeriode": {
+          "fom": "2023-01",
+          "til": "2024-01"
+        },
+        "versjon": "2024.08.01.144303_14dcb50",
+        "inntektsrapportering": "LIGNINGSINNTEKT",
+        "beløp": 550000,
+        "valgt": false,
+        "inntekstpostListe": [
+          {
+            "kode": "samletLoennsinntektMedTrygdeavgiftspliktOgMedTrekkplikt",
+            "beløp": 550000
+          }
+        ]
+      },
+      "grunnlagsreferanseListe": [
+        "innhentet_skattegrunnlag_person_PERSON_BIDRAGSPLIKTIG_19790213_2107_2023"
+      ],
+      "gjelderReferanse": "person_PERSON_BIDRAGSPLIKTIG_19790213_2107"
+    },
+    {
+      "referanse": "inntekt_LØNN_MANUELT_BEREGNET_person_PERSON_BIDRAGSPLIKTIG_19790213_2107_20240801_8428",
+      "type": "INNTEKT_RAPPORTERING_PERIODE",
+      "innhold": {
+        "periode": {
+          "fom": "2024-08"
+        },
+        "manueltRegistrert": true,
+        "inntektsrapportering": "LØNN_MANUELT_BEREGNET",
+        "beløp": 600000,
+        "valgt": true,
+        "inntekstpostListe": []
+      },
+      "grunnlagsreferanseListe": [],
+      "gjelderReferanse": "person_PERSON_BIDRAGSPLIKTIG_19790213_2107"
+    },
+    {
+      "referanse": "inntekt_AINNTEKT_person_PERSON_BIDRAGSPLIKTIG_19790213_2107_20230101_20231231_8425",
+      "type": "INNTEKT_RAPPORTERING_PERIODE",
+      "innhold": {
+        "periode": {
+          "fom": "2023-01"
+        },
+        "manueltRegistrert": false,
+        "opprinneligPeriode": {
+          "fom": "2023-01",
+          "til": "2024-01"
+        },
+        "versjon": "2024.08.01.144303_14dcb50",
+        "inntektsrapportering": "AINNTEKT",
+        "beløp": 732000,
+        "valgt": false,
+        "inntekstpostListe": [
+          {
+            "kode": "overgangsstoenadTilEnsligMorEllerFarSomBegynteAaLoepe1April2014EllerSenere",
+            "beløp": 9000
+          },
+          {
+            "kode": "foreldrepenger",
+            "beløp": 45000
+          },
+          {
+            "kode": "fastloenn",
+            "beløp": 660000
+          },
+          {
+            "kode": "sykepenger",
+            "beløp": 18000
+          }
+        ]
+      },
+      "grunnlagsreferanseListe": [
+        "innhentet_ainntekt_person_PERSON_BIDRAGSPLIKTIG_19790213_2107"
+      ],
+      "gjelderReferanse": "person_PERSON_BIDRAGSPLIKTIG_19790213_2107"
+    },
+    {
+      "referanse": "inntekt_AINNTEKT_BEREGNET_3MND_person_PERSON_BIDRAGSPLIKTIG_19790213_2107_20240501_20240731_8421",
+      "type": "INNTEKT_RAPPORTERING_PERIODE",
+      "innhold": {
+        "periode": {
+          "fom": "2024-05"
+        },
+        "manueltRegistrert": false,
+        "opprinneligPeriode": {
+          "fom": "2024-05",
+          "til": "2024-08"
+        },
+        "versjon": "2024.08.01.144303_14dcb50",
+        "inntektsrapportering": "AINNTEKT_BEREGNET_3MND",
+        "beløp": 516000,
+        "valgt": false,
+        "inntekstpostListe": [
+          {
+            "kode": "sykepenger",
+            "beløp": 36000
+          },
+          {
+            "kode": "ufoeretrygd",
+            "beløp": 24000
+          },
+          {
+            "kode": "foreldrepenger",
+            "beløp": 36000
+          },
+          {
+            "kode": "fastloenn",
+            "beløp": 420000
+          }
+        ]
+      },
+      "grunnlagsreferanseListe": [
+        "innhentet_ainntekt_person_PERSON_BIDRAGSPLIKTIG_19790213_2107"
+      ],
+      "gjelderReferanse": "person_PERSON_BIDRAGSPLIKTIG_19790213_2107"
+    },
+    {
+      "referanse": "inntekt_AINNTEKT_BEREGNET_12MND_person_PERSON_BIDRAGSPLIKTIG_19790213_2107_20230801_20240731_8420",
+      "type": "INNTEKT_RAPPORTERING_PERIODE",
+      "innhold": {
+        "periode": {
+          "fom": "2023-08"
+        },
+        "manueltRegistrert": false,
+        "opprinneligPeriode": {
+          "fom": "2023-08",
+          "til": "2024-08"
+        },
+        "versjon": "2024.08.01.144303_14dcb50",
+        "inntektsrapportering": "AINNTEKT_BEREGNET_12MND",
+        "beløp": 620111,
+        "valgt": false,
+        "inntekstpostListe": [
+          {
+            "kode": "foreldrepenger",
+            "beløp": 57000
+          },
+          {
+            "kode": "fastloenn",
+            "beløp": 510000
+          },
+          {
+            "kode": "sykepenger",
+            "beløp": 36000
+          },
+          {
+            "kode": "overgangsstoenadTilEnsligMorEllerFarSomBegynteAaLoepe1April2014EllerSenere",
+            "beløp": 9111
+          },
+          {
+            "kode": "ufoeretrygd",
+            "beløp": 8000
+          }
+        ]
+      },
+      "grunnlagsreferanseListe": [
+        "innhentet_ainntekt_person_PERSON_BIDRAGSPLIKTIG_19790213_2107"
+      ],
+      "gjelderReferanse": "person_PERSON_BIDRAGSPLIKTIG_19790213_2107"
+    },
+    {
+      "referanse": "inntekt_KAPITALINNTEKT_person_PERSON_BIDRAGSPLIKTIG_19790213_2107_20230101_20231231_8426",
+      "type": "INNTEKT_RAPPORTERING_PERIODE",
+      "innhold": {
+        "periode": {
+          "fom": "2024-08"
+        },
+        "manueltRegistrert": false,
+        "opprinneligPeriode": {
+          "fom": "2023-01",
+          "til": "2024-01"
+        },
+        "versjon": "2024.08.01.144303_14dcb50",
+        "inntektsrapportering": "KAPITALINNTEKT",
+        "beløp": 15000,
+        "valgt": true,
         "inntekstpostListe": [
           {
             "kode": "gevinstVedRealisasjonAvAksje",
-            "beløp": 10000,
-            "inntekstype": null
-          },
-          {
-            "kode": "tapVedRealisasjonAvAnnetFinansprodukt",
-            "beløp": 30000,
-            "inntekstype": null
-          },
-          {
-            "kode": "gevinstOgAnnenInntektFraVirtuellEiendel",
-            "beløp": 45000,
-            "inntekstype": null
+            "beløp": 15000
           }
-        ],
-        "manueltRegistrert": false,
-        "opprinneligPeriode": {
-          "fom": "2022-01",
-          "til": "2023-01"
-        },
-        "inntektsrapportering": "KAPITALINNTEKT"
+        ]
       },
       "grunnlagsreferanseListe": [
-        "innhentet_skattegrunnlag_person_PERSON_BIDRAGSMOTTAKER_19781115_41_2022"
+        "innhentet_skattegrunnlag_person_PERSON_BIDRAGSPLIKTIG_19790213_2107_2023"
       ],
-      "gjelderReferanse": "person_PERSON_BIDRAGSMOTTAKER_19781115_41"
+      "gjelderReferanse": "person_PERSON_BIDRAGSPLIKTIG_19790213_2107"
     },
     {
-      "referanse": "inntekt_KAPITALINNTEKT_person_PERSON_BIDRAGSMOTTAKER_19781115_41_20230101_20231231_136",
+      "referanse": "inntekt_FORELDREPENGER_person_PERSON_BIDRAGSPLIKTIG_19790213_2107_20230101_20231231_8424",
       "type": "INNTEKT_RAPPORTERING_PERIODE",
       "innhold": {
-        "valgt": false,
-        "beløp": 155000,
         "periode": {
-          "fom": "2023-01",
-          "til": null
+          "fom": "2024-08"
         },
-        "versjon": "2024.07.17.133247_d9a0155",
-        "gjelderBarn": null,
-        "inntekstpostListe": [
-          {
-            "kode": "naeringsinntektFraKompensasjonsytelseUtbetaltAvNavInnenAnnenNaering",
-            "beløp": 50000,
-            "inntekstype": null
-          },
-          {
-            "kode": "gevinstOgAnnenInntektFraVirtuellEiendel",
-            "beløp": 60000,
-            "inntekstype": null
-          },
-          {
-            "kode": "annenSkattepliktigKapitalinntektFraAnnetFinansprodukt",
-            "beløp": 15000,
-            "inntekstype": null
-          },
-          {
-            "kode": "dagpengerForNaeringsdrivende",
-            "beløp": 30000,
-            "inntekstype": null
-          }
-        ],
         "manueltRegistrert": false,
         "opprinneligPeriode": {
           "fom": "2023-01",
           "til": "2024-01"
         },
-        "inntektsrapportering": "KAPITALINNTEKT"
-      },
-      "grunnlagsreferanseListe": [
-        "innhentet_skattegrunnlag_person_PERSON_BIDRAGSMOTTAKER_19781115_41_2023"
-      ],
-      "gjelderReferanse": "person_PERSON_BIDRAGSMOTTAKER_19781115_41"
-    },
-    {
-      "referanse": "inntekt_UTVIDET_BARNETRYGD_person_PERSON_BIDRAGSMOTTAKER_19781115_41_20230701_20350630_137",
-      "type": "INNTEKT_RAPPORTERING_PERIODE",
-      "innhold": {
+        "versjon": "2024.08.01.144303_14dcb50",
+        "inntektsrapportering": "FORELDREPENGER",
+        "beløp": 45000,
         "valgt": true,
-        "beløp": 30192,
-        "periode": {
-          "fom": "2024-07",
-          "til": null
-        },
-        "versjon": "2024.07.17.133247_d9a0155",
-        "gjelderBarn": null,
-        "inntekstpostListe": [],
-        "manueltRegistrert": false,
-        "opprinneligPeriode": {
-          "fom": "2023-07",
-          "til": "2035-07"
-        },
-        "inntektsrapportering": "UTVIDET_BARNETRYGD"
-      },
-      "grunnlagsreferanseListe": [
-        "innhentet_utvidetbarnetrygd_person_PERSON_BIDRAGSMOTTAKER_19781115_41"
-      ],
-      "gjelderReferanse": "person_PERSON_BIDRAGSMOTTAKER_19781115_41"
-    },
-    {
-      "referanse": "inntekt_LIGNINGSINNTEKT_person_PERSON_BIDRAGSMOTTAKER_19781115_41_20220101_20221231_133",
-      "type": "INNTEKT_RAPPORTERING_PERIODE",
-      "innhold": {
-        "valgt": false,
-        "beløp": 850000,
-        "periode": {
-          "fom": "2022-01",
-          "til": null
-        },
-        "versjon": "2024.07.17.133247_d9a0155",
-        "gjelderBarn": null,
         "inntekstpostListe": [
           {
-            "kode": "samletLoennsinntektMedTrygdeavgiftspliktOgMedTrekkplikt",
-            "beløp": 850000,
-            "inntekstype": null
+            "kode": "foreldrepenger",
+            "beløp": 45000
           }
-        ],
-        "manueltRegistrert": false,
-        "opprinneligPeriode": {
-          "fom": "2022-01",
-          "til": "2023-01"
-        },
-        "inntektsrapportering": "LIGNINGSINNTEKT"
+        ]
       },
       "grunnlagsreferanseListe": [
-        "innhentet_skattegrunnlag_person_PERSON_BIDRAGSMOTTAKER_19781115_41_2022"
+        "innhentet_ainntekt_person_PERSON_BIDRAGSPLIKTIG_19790213_2107"
       ],
-      "gjelderReferanse": "person_PERSON_BIDRAGSMOTTAKER_19781115_41"
+      "gjelderReferanse": "person_PERSON_BIDRAGSPLIKTIG_19790213_2107"
     },
     {
-      "referanse": "inntekt_LØNN_MANUELT_BEREGNET_person_PERSON_SØKNADSBARN_20220726_40_20240701_158",
+      "referanse": "inntekt_OVERGANGSSTØNAD_person_PERSON_BIDRAGSPLIKTIG_19790213_2107_20230501_20240430_8422",
       "type": "INNTEKT_RAPPORTERING_PERIODE",
       "innhold": {
-        "valgt": true,
-        "beløp": 5000,
         "periode": {
-          "fom": "2024-07",
-          "til": null
+          "fom": "2024-08"
         },
-        "versjon": null,
-        "gjelderBarn": null,
-        "inntekstpostListe": [],
-        "manueltRegistrert": true,
-        "opprinneligPeriode": null,
-        "inntektsrapportering": "LØNN_MANUELT_BEREGNET"
+        "manueltRegistrert": false,
+        "opprinneligPeriode": {
+          "fom": "2023-05",
+          "til": "2024-05"
+        },
+        "versjon": "2024.08.01.144303_14dcb50",
+        "inntektsrapportering": "OVERGANGSSTØNAD",
+        "beløp": 31466,
+        "valgt": true,
+        "inntekstpostListe": [
+          {
+            "kode": "overgangsstoenadTilEnsligMorEllerFarSomBegynteAaLoepe1April2014EllerSenere",
+            "beløp": 31466
+          }
+        ]
       },
-      "grunnlagsreferanseListe": [],
-      "gjelderReferanse": "person_PERSON_SØKNADSBARN_20220726_40"
+      "grunnlagsreferanseListe": [
+        "innhentet_ainntekt_person_PERSON_BIDRAGSPLIKTIG_19790213_2107"
+      ],
+      "gjelderReferanse": "person_PERSON_BIDRAGSPLIKTIG_19790213_2107"
     },
     {
-      "referanse": "innhentet_skattegrunnlag_person_PERSON_BIDRAGSMOTTAKER_19781115_41_2021",
+      "referanse": "inntekt_AINNTEKT_BEREGNET_12MND_FRA_OPPRINNELIG_VEDTAKSTIDSPUNKT_person_PERSON_BIDRAGSPLIKTIG_19790213_2107_20230801_20240731_8434",
+      "type": "INNTEKT_RAPPORTERING_PERIODE",
+      "innhold": {
+        "periode": {
+          "fom": "2023-08"
+        },
+        "manueltRegistrert": false,
+        "opprinneligPeriode": {
+          "fom": "2023-08",
+          "til": "2024-08"
+        },
+        "versjon": "2024.08.01.144303_14dcb50",
+        "inntektsrapportering": "AINNTEKT_BEREGNET_12MND_FRA_OPPRINNELIG_VEDTAKSTIDSPUNKT",
+        "beløp": 620111,
+        "valgt": false,
+        "inntekstpostListe": [
+          {
+            "kode": "overgangsstoenadTilEnsligMorEllerFarSomBegynteAaLoepe1April2014EllerSenere",
+            "beløp": 9111
+          },
+          {
+            "kode": "foreldrepenger",
+            "beløp": 57000
+          },
+          {
+            "kode": "fastloenn",
+            "beløp": 510000
+          },
+          {
+            "kode": "sykepenger",
+            "beløp": 36000
+          },
+          {
+            "kode": "ufoeretrygd",
+            "beløp": 8000
+          }
+        ]
+      },
+      "grunnlagsreferanseListe": [
+        "innhentet_ainntekt_person_PERSON_BIDRAGSPLIKTIG_19790213_2107"
+      ],
+      "gjelderReferanse": "person_PERSON_BIDRAGSPLIKTIG_19790213_2107"
+    },
+    {
+      "referanse": "inntekt_SKJØNN_MANGLENDE_DOKUMENTASJON_person_PERSON_SØKNADSBARN_20051223_2108_20240801_8436",
+      "type": "INNTEKT_RAPPORTERING_PERIODE",
+      "innhold": {
+        "periode": {
+          "fom": "2024-08"
+        },
+        "manueltRegistrert": true,
+        "inntektsrapportering": "SKJØNN_MANGLENDE_DOKUMENTASJON",
+        "beløp": 30000,
+        "valgt": true,
+        "inntekstpostListe": []
+      },
+      "grunnlagsreferanseListe": [],
+      "gjelderReferanse": "person_PERSON_SØKNADSBARN_20051223_2108"
+    },
+    {
+      "referanse": "innhentet_skattegrunnlag_person_PERSON_BIDRAGSMOTTAKER_19890720_2109_2021",
       "type": "INNHENTET_INNTEKT_SKATTEGRUNNLAG_PERIODE",
       "innhold": {
-        "år": 2021,
         "periode": {
           "fom": "2021-01-01",
           "til": "2022-01-01"
         },
-        "grunnlag": [],
+        "år": 2021,
         "datakilde": "SIGRUN",
-        "hentetTidspunkt": "2024-07-22T12:17:46.355847"
+        "hentetTidspunkt": "2024-08-06T11:57:04.354118",
+        "grunnlag": []
       },
       "grunnlagsreferanseListe": [],
-      "gjelderReferanse": "person_PERSON_BIDRAGSMOTTAKER_19781115_41"
+      "gjelderReferanse": "person_PERSON_BIDRAGSMOTTAKER_19890720_2109"
     },
     {
-      "referanse": "innhentet_skattegrunnlag_person_PERSON_BIDRAGSMOTTAKER_19781115_41_2022",
+      "referanse": "innhentet_skattegrunnlag_person_PERSON_BIDRAGSMOTTAKER_19890720_2109_2022",
       "type": "INNHENTET_INNTEKT_SKATTEGRUNNLAG_PERIODE",
       "innhold": {
-        "år": 2022,
         "periode": {
           "fom": "2022-01-01",
           "til": "2023-01-01"
         },
-        "grunnlag": [
-          {
-            "kode": "gevinstOgAnnenInntektFraVirtuellEiendel",
-            "beløp": 45000,
-            "skattegrunnlagType": "ORDINÆR"
-          },
-          {
-            "kode": "gevinstVedRealisasjonAvAksje",
-            "beløp": 10000,
-            "skattegrunnlagType": "ORDINÆR"
-          },
-          {
-            "kode": "samletLoennsinntektMedTrygdeavgiftspliktOgMedTrekkplikt",
-            "beløp": 850000,
-            "skattegrunnlagType": "ORDINÆR"
-          },
-          {
-            "kode": "tapVedRealisasjonAvAnnetFinansprodukt",
-            "beløp": 30000,
-            "skattegrunnlagType": "ORDINÆR"
-          }
-        ],
+        "år": 2022,
         "datakilde": "SIGRUN",
-        "hentetTidspunkt": "2024-07-22T12:17:46.355847"
+        "hentetTidspunkt": "2024-08-06T11:57:04.354118",
+        "grunnlag": []
       },
       "grunnlagsreferanseListe": [],
-      "gjelderReferanse": "person_PERSON_BIDRAGSMOTTAKER_19781115_41"
+      "gjelderReferanse": "person_PERSON_BIDRAGSMOTTAKER_19890720_2109"
     },
     {
-      "referanse": "innhentet_skattegrunnlag_person_PERSON_BIDRAGSMOTTAKER_19781115_41_2023",
+      "referanse": "innhentet_skattegrunnlag_person_PERSON_BIDRAGSMOTTAKER_19890720_2109_2023",
       "type": "INNHENTET_INNTEKT_SKATTEGRUNNLAG_PERIODE",
       "innhold": {
-        "år": 2023,
         "periode": {
           "fom": "2023-01-01",
           "til": "2024-01-01"
         },
+        "år": 2023,
+        "datakilde": "SIGRUN",
+        "hentetTidspunkt": "2024-08-06T11:57:04.354118",
         "grunnlag": [
           {
-            "kode": "annenSkattepliktigKapitalinntektFraAnnetFinansprodukt",
-            "beløp": 15000,
-            "skattegrunnlagType": "ORDINÆR"
-          },
-          {
-            "kode": "dagpengerForNaeringsdrivende",
-            "beløp": 30000,
-            "skattegrunnlagType": "ORDINÆR"
-          },
-          {
-            "kode": "gevinstOgAnnenInntektFraVirtuellEiendel",
-            "beløp": 60000,
-            "skattegrunnlagType": "ORDINÆR"
-          },
-          {
-            "kode": "naeringsinntektFraKompensasjonsytelseUtbetaltAvNavInnenAnnenNaering",
-            "beløp": 50000,
-            "skattegrunnlagType": "ORDINÆR"
-          },
-          {
-            "kode": "overgangsstoenadTilEnsligForelder",
-            "beløp": 12000,
-            "skattegrunnlagType": "ORDINÆR"
-          },
-          {
+            "skattegrunnlagType": "ORDINÆR",
             "kode": "samletLoennsinntektMedTrygdeavgiftspliktOgMedTrekkplikt",
-            "beløp": 400000,
-            "skattegrunnlagType": "ORDINÆR"
+            "beløp": 450000
+          },
+          {
+            "skattegrunnlagType": "ORDINÆR",
+            "kode": "tapVedRealisasjonAvAksje",
+            "beløp": 5000
           }
-        ],
-        "datakilde": "SIGRUN",
-        "hentetTidspunkt": "2024-07-22T12:17:46.355847"
+        ]
       },
       "grunnlagsreferanseListe": [],
-      "gjelderReferanse": "person_PERSON_BIDRAGSMOTTAKER_19781115_41"
+      "gjelderReferanse": "person_PERSON_BIDRAGSMOTTAKER_19890720_2109"
     },
     {
-      "referanse": "innhentet_ainntekt_person_PERSON_BIDRAGSMOTTAKER_19781115_41",
+      "referanse": "innhentet_skattegrunnlag_person_PERSON_BIDRAGSPLIKTIG_19790213_2107_2021",
+      "type": "INNHENTET_INNTEKT_SKATTEGRUNNLAG_PERIODE",
+      "innhold": {
+        "periode": {
+          "fom": "2021-01-01",
+          "til": "2022-01-01"
+        },
+        "år": 2021,
+        "datakilde": "SIGRUN",
+        "hentetTidspunkt": "2024-08-06T11:57:04.354118",
+        "grunnlag": []
+      },
+      "grunnlagsreferanseListe": [],
+      "gjelderReferanse": "person_PERSON_BIDRAGSPLIKTIG_19790213_2107"
+    },
+    {
+      "referanse": "innhentet_skattegrunnlag_person_PERSON_BIDRAGSPLIKTIG_19790213_2107_2022",
+      "type": "INNHENTET_INNTEKT_SKATTEGRUNNLAG_PERIODE",
+      "innhold": {
+        "periode": {
+          "fom": "2022-01-01",
+          "til": "2023-01-01"
+        },
+        "år": 2022,
+        "datakilde": "SIGRUN",
+        "hentetTidspunkt": "2024-08-06T11:57:04.354118",
+        "grunnlag": []
+      },
+      "grunnlagsreferanseListe": [],
+      "gjelderReferanse": "person_PERSON_BIDRAGSPLIKTIG_19790213_2107"
+    },
+    {
+      "referanse": "innhentet_skattegrunnlag_person_PERSON_BIDRAGSPLIKTIG_19790213_2107_2023",
+      "type": "INNHENTET_INNTEKT_SKATTEGRUNNLAG_PERIODE",
+      "innhold": {
+        "periode": {
+          "fom": "2023-01-01",
+          "til": "2024-01-01"
+        },
+        "år": 2023,
+        "datakilde": "SIGRUN",
+        "hentetTidspunkt": "2024-08-06T11:57:04.354118",
+        "grunnlag": [
+          {
+            "skattegrunnlagType": "ORDINÆR",
+            "kode": "gevinstVedRealisasjonAvAksje",
+            "beløp": 15000
+          },
+          {
+            "skattegrunnlagType": "ORDINÆR",
+            "kode": "samletLoennsinntektMedTrygdeavgiftspliktOgMedTrekkplikt",
+            "beløp": 550000
+          }
+        ]
+      },
+      "grunnlagsreferanseListe": [],
+      "gjelderReferanse": "person_PERSON_BIDRAGSPLIKTIG_19790213_2107"
+    },
+    {
+      "referanse": "innhentet_ainntekt_person_PERSON_BIDRAGSMOTTAKER_19890720_2109",
       "type": "INNHENTET_INNTEKT_AINNTEKT",
       "innhold": {
-        "grunnlag": [],
         "datakilde": "INNTEKSKOMPONENTEN",
-        "hentetTidspunkt": "2024-07-22T12:17:46.355847"
-      },
-      "grunnlagsreferanseListe": [],
-      "gjelderReferanse": "person_PERSON_BIDRAGSMOTTAKER_19781115_41"
-    },
-    {
-      "referanse": "innhentet_barnetillegg_person_PERSON_BIDRAGSMOTTAKER_19781115_41_PENSJON",
-      "type": "INNHENTET_INNTEKT_BARNETILLEGG",
-      "innhold": {
+        "hentetTidspunkt": "2024-08-06T11:57:04.354118",
         "grunnlag": [
+          {
+            "periode": {
+              "fom": "2023-02-01",
+              "til": "2023-03-01"
+            },
+            "ainntektspostListe": [
+              {
+                "utbetalingsperiode": "2023-02",
+                "opptjeningsperiodeFra": "2023-07-01",
+                "opptjeningsperiodeTil": "2024-01-01",
+                "kategori": "LOENNSINNTEKT",
+                "opplysningspliktigId": "963743254",
+                "virksomhetId": "947064649",
+                "fordelType": "kontantytelse",
+                "beløp": 65000,
+                "beskrivelse": "fastloenn"
+              },
+              {
+                "utbetalingsperiode": "2023-02",
+                "opptjeningsperiodeFra": "2023-01-01",
+                "opptjeningsperiodeTil": "2023-07-01",
+                "kategori": "LOENNSINNTEKT",
+                "opplysningspliktigId": "963743254",
+                "virksomhetId": "947064649",
+                "fordelType": "kontantytelse",
+                "beløp": 45000,
+                "beskrivelse": "fastloenn"
+              }
+            ]
+          },
+          {
+            "periode": {
+              "fom": "2023-03-01",
+              "til": "2023-04-01"
+            },
+            "ainntektspostListe": [
+              {
+                "utbetalingsperiode": "2023-03",
+                "opptjeningsperiodeFra": "2023-07-01",
+                "opptjeningsperiodeTil": "2024-01-01",
+                "kategori": "LOENNSINNTEKT",
+                "opplysningspliktigId": "963743254",
+                "virksomhetId": "947064649",
+                "fordelType": "kontantytelse",
+                "beløp": 65000,
+                "beskrivelse": "fastloenn"
+              },
+              {
+                "utbetalingsperiode": "2023-03",
+                "opptjeningsperiodeFra": "2023-01-01",
+                "opptjeningsperiodeTil": "2023-07-01",
+                "kategori": "LOENNSINNTEKT",
+                "opplysningspliktigId": "963743254",
+                "virksomhetId": "947064649",
+                "fordelType": "kontantytelse",
+                "beløp": 45000,
+                "beskrivelse": "fastloenn"
+              }
+            ]
+          },
+          {
+            "periode": {
+              "fom": "2023-04-01",
+              "til": "2023-05-01"
+            },
+            "ainntektspostListe": [
+              {
+                "utbetalingsperiode": "2023-04",
+                "opptjeningsperiodeFra": "2023-07-01",
+                "opptjeningsperiodeTil": "2024-01-01",
+                "kategori": "LOENNSINNTEKT",
+                "opplysningspliktigId": "963743254",
+                "virksomhetId": "947064649",
+                "fordelType": "kontantytelse",
+                "beløp": 65000,
+                "beskrivelse": "fastloenn"
+              },
+              {
+                "utbetalingsperiode": "2023-04",
+                "opptjeningsperiodeFra": "2023-01-01",
+                "opptjeningsperiodeTil": "2023-07-01",
+                "kategori": "LOENNSINNTEKT",
+                "opplysningspliktigId": "963743254",
+                "virksomhetId": "947064649",
+                "fordelType": "kontantytelse",
+                "beløp": 45000,
+                "beskrivelse": "fastloenn"
+              }
+            ]
+          },
+          {
+            "periode": {
+              "fom": "2023-05-01",
+              "til": "2023-06-01"
+            },
+            "ainntektspostListe": [
+              {
+                "utbetalingsperiode": "2023-05",
+                "opptjeningsperiodeFra": "2023-07-01",
+                "opptjeningsperiodeTil": "2024-01-01",
+                "kategori": "LOENNSINNTEKT",
+                "opplysningspliktigId": "963743254",
+                "virksomhetId": "947064649",
+                "fordelType": "kontantytelse",
+                "beløp": 65000,
+                "beskrivelse": "fastloenn"
+              },
+              {
+                "utbetalingsperiode": "2023-05",
+                "opptjeningsperiodeFra": "2023-01-01",
+                "opptjeningsperiodeTil": "2023-07-01",
+                "kategori": "LOENNSINNTEKT",
+                "opplysningspliktigId": "963743254",
+                "virksomhetId": "947064649",
+                "fordelType": "kontantytelse",
+                "beløp": 45000,
+                "beskrivelse": "fastloenn"
+              }
+            ]
+          },
+          {
+            "periode": {
+              "fom": "2023-06-01",
+              "til": "2023-07-01"
+            },
+            "ainntektspostListe": [
+              {
+                "utbetalingsperiode": "2023-06",
+                "opptjeningsperiodeFra": "2023-07-01",
+                "opptjeningsperiodeTil": "2024-01-01",
+                "kategori": "LOENNSINNTEKT",
+                "opplysningspliktigId": "963743254",
+                "virksomhetId": "947064649",
+                "fordelType": "kontantytelse",
+                "beløp": 65000,
+                "beskrivelse": "fastloenn"
+              },
+              {
+                "utbetalingsperiode": "2023-06",
+                "opptjeningsperiodeFra": "2023-01-01",
+                "opptjeningsperiodeTil": "2023-07-01",
+                "kategori": "LOENNSINNTEKT",
+                "opplysningspliktigId": "963743254",
+                "virksomhetId": "947064649",
+                "fordelType": "kontantytelse",
+                "beløp": 45000,
+                "beskrivelse": "fastloenn"
+              }
+            ]
+          },
+          {
+            "periode": {
+              "fom": "2023-07-01",
+              "til": "2023-08-01"
+            },
+            "ainntektspostListe": [
+              {
+                "utbetalingsperiode": "2023-07",
+                "opptjeningsperiodeFra": "2023-07-01",
+                "opptjeningsperiodeTil": "2024-01-01",
+                "kategori": "LOENNSINNTEKT",
+                "opplysningspliktigId": "963743254",
+                "virksomhetId": "947064649",
+                "fordelType": "kontantytelse",
+                "beløp": 65000,
+                "beskrivelse": "fastloenn"
+              },
+              {
+                "utbetalingsperiode": "2023-07",
+                "opptjeningsperiodeFra": "2023-01-01",
+                "opptjeningsperiodeTil": "2023-07-01",
+                "kategori": "LOENNSINNTEKT",
+                "opplysningspliktigId": "963743254",
+                "virksomhetId": "947064649",
+                "fordelType": "kontantytelse",
+                "beløp": 45000,
+                "beskrivelse": "fastloenn"
+              }
+            ]
+          },
+          {
+            "periode": {
+              "fom": "2023-08-01",
+              "til": "2023-09-01"
+            },
+            "ainntektspostListe": [
+              {
+                "utbetalingsperiode": "2023-08",
+                "opptjeningsperiodeFra": "2023-07-01",
+                "opptjeningsperiodeTil": "2024-01-01",
+                "kategori": "LOENNSINNTEKT",
+                "opplysningspliktigId": "963743254",
+                "virksomhetId": "947064649",
+                "fordelType": "kontantytelse",
+                "beløp": 65000,
+                "beskrivelse": "fastloenn"
+              },
+              {
+                "utbetalingsperiode": "2023-08",
+                "opptjeningsperiodeFra": "2023-01-01",
+                "opptjeningsperiodeTil": "2023-07-01",
+                "kategori": "LOENNSINNTEKT",
+                "opplysningspliktigId": "963743254",
+                "virksomhetId": "947064649",
+                "fordelType": "kontantytelse",
+                "beløp": 45000,
+                "beskrivelse": "fastloenn"
+              }
+            ]
+          },
+          {
+            "periode": {
+              "fom": "2023-09-01",
+              "til": "2023-10-01"
+            },
+            "ainntektspostListe": [
+              {
+                "utbetalingsperiode": "2023-09",
+                "opptjeningsperiodeFra": "2023-07-01",
+                "opptjeningsperiodeTil": "2024-01-01",
+                "kategori": "LOENNSINNTEKT",
+                "opplysningspliktigId": "963743254",
+                "virksomhetId": "947064649",
+                "fordelType": "kontantytelse",
+                "beløp": 65000,
+                "beskrivelse": "fastloenn"
+              },
+              {
+                "utbetalingsperiode": "2023-09",
+                "opptjeningsperiodeFra": "2023-01-01",
+                "opptjeningsperiodeTil": "2023-07-01",
+                "kategori": "LOENNSINNTEKT",
+                "opplysningspliktigId": "963743254",
+                "virksomhetId": "947064649",
+                "fordelType": "kontantytelse",
+                "beløp": 45000,
+                "beskrivelse": "fastloenn"
+              }
+            ]
+          },
+          {
+            "periode": {
+              "fom": "2023-10-01",
+              "til": "2023-11-01"
+            },
+            "ainntektspostListe": [
+              {
+                "utbetalingsperiode": "2023-10",
+                "opptjeningsperiodeFra": "2023-07-01",
+                "opptjeningsperiodeTil": "2024-01-01",
+                "kategori": "LOENNSINNTEKT",
+                "opplysningspliktigId": "963743254",
+                "virksomhetId": "947064649",
+                "fordelType": "kontantytelse",
+                "beløp": 65000,
+                "beskrivelse": "fastloenn"
+              },
+              {
+                "utbetalingsperiode": "2023-10",
+                "opptjeningsperiodeFra": "2023-01-01",
+                "opptjeningsperiodeTil": "2023-07-01",
+                "kategori": "LOENNSINNTEKT",
+                "opplysningspliktigId": "963743254",
+                "virksomhetId": "947064649",
+                "fordelType": "kontantytelse",
+                "beløp": 45000,
+                "beskrivelse": "fastloenn"
+              }
+            ]
+          },
+          {
+            "periode": {
+              "fom": "2023-11-01",
+              "til": "2023-12-01"
+            },
+            "ainntektspostListe": [
+              {
+                "utbetalingsperiode": "2023-11",
+                "opptjeningsperiodeFra": "2023-07-01",
+                "opptjeningsperiodeTil": "2024-01-01",
+                "kategori": "LOENNSINNTEKT",
+                "opplysningspliktigId": "963743254",
+                "virksomhetId": "947064649",
+                "fordelType": "kontantytelse",
+                "beløp": 65000,
+                "beskrivelse": "fastloenn"
+              },
+              {
+                "utbetalingsperiode": "2023-11",
+                "opptjeningsperiodeFra": "2023-01-01",
+                "opptjeningsperiodeTil": "2023-07-01",
+                "kategori": "LOENNSINNTEKT",
+                "opplysningspliktigId": "963743254",
+                "virksomhetId": "947064649",
+                "fordelType": "kontantytelse",
+                "beløp": 45000,
+                "beskrivelse": "fastloenn"
+              }
+            ]
+          },
+          {
+            "periode": {
+              "fom": "2023-12-01",
+              "til": "2024-01-01"
+            },
+            "ainntektspostListe": [
+              {
+                "utbetalingsperiode": "2023-12",
+                "opptjeningsperiodeFra": "2023-07-01",
+                "opptjeningsperiodeTil": "2024-01-01",
+                "kategori": "LOENNSINNTEKT",
+                "opplysningspliktigId": "963743254",
+                "virksomhetId": "947064649",
+                "fordelType": "kontantytelse",
+                "beløp": 65000,
+                "beskrivelse": "fastloenn"
+              },
+              {
+                "utbetalingsperiode": "2023-12",
+                "opptjeningsperiodeFra": "2023-01-01",
+                "opptjeningsperiodeTil": "2023-07-01",
+                "kategori": "LOENNSINNTEKT",
+                "opplysningspliktigId": "963743254",
+                "virksomhetId": "947064649",
+                "fordelType": "kontantytelse",
+                "beløp": 45000,
+                "beskrivelse": "fastloenn"
+              }
+            ]
+          },
+          {
+            "periode": {
+              "fom": "2024-01-01",
+              "til": "2024-02-01"
+            },
+            "ainntektspostListe": [
+              {
+                "utbetalingsperiode": "2024-01",
+                "kategori": "LOENNSINNTEKT",
+                "opplysningspliktigId": "963743254",
+                "virksomhetId": "947064649",
+                "fordelType": "kontantytelse",
+                "beløp": 35000,
+                "beskrivelse": "fastloenn"
+              },
+              {
+                "utbetalingsperiode": "2024-01",
+                "opptjeningsperiodeFra": "2024-05-01",
+                "opptjeningsperiodeTil": "2024-07-01",
+                "kategori": "YTELSE_FRA_OFFENTLIGE",
+                "opplysningspliktigId": "963743254",
+                "virksomhetId": "947064649",
+                "fordelType": "kontantytelse",
+                "beløp": 3000,
+                "beskrivelse": "foreldrepenger"
+              },
+              {
+                "utbetalingsperiode": "2024-01",
+                "opptjeningsperiodeFra": "2024-06-01",
+                "opptjeningsperiodeTil": "2024-09-01",
+                "kategori": "YTELSE_FRA_OFFENTLIGE",
+                "opplysningspliktigId": "963743254",
+                "virksomhetId": "947064649",
+                "fordelType": "kontantytelse",
+                "beløp": 6000,
+                "beskrivelse": "sykepenger"
+              }
+            ]
+          },
+          {
+            "periode": {
+              "fom": "2024-02-01",
+              "til": "2024-03-01"
+            },
+            "ainntektspostListe": [
+              {
+                "utbetalingsperiode": "2024-02",
+                "kategori": "LOENNSINNTEKT",
+                "opplysningspliktigId": "963743254",
+                "virksomhetId": "947064649",
+                "fordelType": "kontantytelse",
+                "beløp": 35000,
+                "beskrivelse": "fastloenn"
+              },
+              {
+                "utbetalingsperiode": "2024-02",
+                "opptjeningsperiodeFra": "2024-05-01",
+                "opptjeningsperiodeTil": "2024-07-01",
+                "kategori": "YTELSE_FRA_OFFENTLIGE",
+                "opplysningspliktigId": "963743254",
+                "virksomhetId": "947064649",
+                "fordelType": "kontantytelse",
+                "beløp": 3000,
+                "beskrivelse": "foreldrepenger"
+              },
+              {
+                "utbetalingsperiode": "2024-02",
+                "opptjeningsperiodeFra": "2024-06-01",
+                "opptjeningsperiodeTil": "2024-09-01",
+                "kategori": "YTELSE_FRA_OFFENTLIGE",
+                "opplysningspliktigId": "963743254",
+                "virksomhetId": "947064649",
+                "fordelType": "kontantytelse",
+                "beløp": 6000,
+                "beskrivelse": "sykepenger"
+              }
+            ]
+          },
+          {
+            "periode": {
+              "fom": "2024-03-01",
+              "til": "2024-04-01"
+            },
+            "ainntektspostListe": [
+              {
+                "utbetalingsperiode": "2024-03",
+                "kategori": "LOENNSINNTEKT",
+                "opplysningspliktigId": "963743254",
+                "virksomhetId": "947064649",
+                "fordelType": "kontantytelse",
+                "beløp": 35000,
+                "beskrivelse": "fastloenn"
+              },
+              {
+                "utbetalingsperiode": "2024-03",
+                "opptjeningsperiodeFra": "2024-05-01",
+                "opptjeningsperiodeTil": "2024-07-01",
+                "kategori": "YTELSE_FRA_OFFENTLIGE",
+                "opplysningspliktigId": "963743254",
+                "virksomhetId": "947064649",
+                "fordelType": "kontantytelse",
+                "beløp": 3000,
+                "beskrivelse": "foreldrepenger"
+              },
+              {
+                "utbetalingsperiode": "2024-03",
+                "opptjeningsperiodeFra": "2024-06-01",
+                "opptjeningsperiodeTil": "2024-09-01",
+                "kategori": "YTELSE_FRA_OFFENTLIGE",
+                "opplysningspliktigId": "963743254",
+                "virksomhetId": "947064649",
+                "fordelType": "kontantytelse",
+                "beløp": 6000,
+                "beskrivelse": "sykepenger"
+              }
+            ]
+          },
+          {
+            "periode": {
+              "fom": "2024-04-01",
+              "til": "2024-05-01"
+            },
+            "ainntektspostListe": [
+              {
+                "utbetalingsperiode": "2024-04",
+                "kategori": "LOENNSINNTEKT",
+                "opplysningspliktigId": "963743254",
+                "virksomhetId": "947064649",
+                "fordelType": "kontantytelse",
+                "beløp": 35000,
+                "beskrivelse": "fastloenn"
+              },
+              {
+                "utbetalingsperiode": "2024-04",
+                "opptjeningsperiodeFra": "2024-05-01",
+                "opptjeningsperiodeTil": "2024-07-01",
+                "kategori": "YTELSE_FRA_OFFENTLIGE",
+                "opplysningspliktigId": "963743254",
+                "virksomhetId": "947064649",
+                "fordelType": "kontantytelse",
+                "beløp": 3000,
+                "beskrivelse": "foreldrepenger"
+              },
+              {
+                "utbetalingsperiode": "2024-04",
+                "opptjeningsperiodeFra": "2024-06-01",
+                "opptjeningsperiodeTil": "2024-09-01",
+                "kategori": "YTELSE_FRA_OFFENTLIGE",
+                "opplysningspliktigId": "963743254",
+                "virksomhetId": "947064649",
+                "fordelType": "kontantytelse",
+                "beløp": 6000,
+                "beskrivelse": "sykepenger"
+              }
+            ]
+          },
+          {
+            "periode": {
+              "fom": "2024-05-01",
+              "til": "2024-06-01"
+            },
+            "ainntektspostListe": [
+              {
+                "utbetalingsperiode": "2024-05",
+                "kategori": "LOENNSINNTEKT",
+                "opplysningspliktigId": "963743254",
+                "virksomhetId": "947064649",
+                "fordelType": "kontantytelse",
+                "beløp": 35000,
+                "beskrivelse": "fastloenn"
+              },
+              {
+                "utbetalingsperiode": "2024-05",
+                "opptjeningsperiodeFra": "2024-05-01",
+                "opptjeningsperiodeTil": "2024-07-01",
+                "kategori": "YTELSE_FRA_OFFENTLIGE",
+                "opplysningspliktigId": "963743254",
+                "virksomhetId": "947064649",
+                "fordelType": "kontantytelse",
+                "beløp": 3000,
+                "beskrivelse": "foreldrepenger"
+              },
+              {
+                "utbetalingsperiode": "2024-05",
+                "opptjeningsperiodeFra": "2024-06-01",
+                "opptjeningsperiodeTil": "2024-09-01",
+                "kategori": "YTELSE_FRA_OFFENTLIGE",
+                "opplysningspliktigId": "963743254",
+                "virksomhetId": "947064649",
+                "fordelType": "kontantytelse",
+                "beløp": 6000,
+                "beskrivelse": "sykepenger"
+              }
+            ]
+          },
+          {
+            "periode": {
+              "fom": "2024-06-01",
+              "til": "2024-07-01"
+            },
+            "ainntektspostListe": [
+              {
+                "utbetalingsperiode": "2024-06",
+                "kategori": "LOENNSINNTEKT",
+                "opplysningspliktigId": "963743254",
+                "virksomhetId": "947064649",
+                "fordelType": "kontantytelse",
+                "beløp": 35000,
+                "beskrivelse": "fastloenn"
+              },
+              {
+                "utbetalingsperiode": "2024-06",
+                "opptjeningsperiodeFra": "2024-05-01",
+                "opptjeningsperiodeTil": "2024-07-01",
+                "kategori": "YTELSE_FRA_OFFENTLIGE",
+                "opplysningspliktigId": "963743254",
+                "virksomhetId": "947064649",
+                "fordelType": "kontantytelse",
+                "beløp": 3000,
+                "beskrivelse": "foreldrepenger"
+              },
+              {
+                "utbetalingsperiode": "2024-06",
+                "opptjeningsperiodeFra": "2024-06-01",
+                "opptjeningsperiodeTil": "2024-09-01",
+                "kategori": "YTELSE_FRA_OFFENTLIGE",
+                "opplysningspliktigId": "963743254",
+                "virksomhetId": "947064649",
+                "fordelType": "kontantytelse",
+                "beløp": 6000,
+                "beskrivelse": "sykepenger"
+              }
+            ]
+          },
           {
             "periode": {
               "fom": "2024-07-01",
               "til": "2024-08-01"
             },
-            "barnType": "SÆRKULL",
-            "gjelderBarn": "person_PERSON_SØKNADSBARN_20220726_40",
-            "beløpBrutto": 4134.0,
-            "barnetilleggType": "PENSJON"
-          }
-        ],
-        "datakilde": "PENSJON",
-        "hentetTidspunkt": "2024-07-22T12:17:46.355847"
-      },
-      "grunnlagsreferanseListe": [],
-      "gjelderReferanse": "person_PERSON_BIDRAGSMOTTAKER_19781115_41"
-    },
-    {
-      "referanse": "innhentet_utvidetbarnetrygd_person_PERSON_BIDRAGSMOTTAKER_19781115_41",
-      "type": "INNHENTET_INNTEKT_UTVIDETBARNETRYGD",
-      "innhold": {
-        "grunnlag": [
-          {
-            "beløp": 2516.0,
-            "periode": {
-              "fom": "2023-07-01",
-              "til": "2035-07-01"
-            },
-            "manueltBeregnet": false
-          }
-        ],
-        "datakilde": "FAMILIE_BA_SAK",
-        "hentetTidspunkt": "2024-07-22T12:17:46.696469"
-      },
-      "grunnlagsreferanseListe": [],
-      "gjelderReferanse": "person_PERSON_BIDRAGSMOTTAKER_19781115_41"
-    },
-    {
-      "referanse": "innhentet_arbeidsforhold_person_PERSON_BIDRAGSMOTTAKER_19781115_41",
-      "type": "INNHENTET_ARBEIDSFORHOLD",
-      "innhold": {
-        "grunnlag": [
-          {
-            "sluttdato": null,
-            "startdato": "2022-12-07",
-            "permisjonListe": [],
-            "arbeidsgiverNavn": "SAUEFABRIKK",
-            "permitteringListe": [],
-            "arbeidsgiverOrgnummer": "896929119",
-            "ansettelsesdetaljerListe": [
+            "ainntektspostListe": [
               {
-                "periodeFra": "2024-07",
-                "periodeTil": null,
-                "yrkeBeskrivelse": "BYGNINGSSNEKKER",
-                "antallTimerPrUke": null,
-                "arbeidsforholdType": "Forenklet",
-                "avtaltStillingsprosent": null,
-                "sisteLønnsendringDato": null,
-                "ansettelsesformBeskrivelse": null,
-                "arbeidstidsordningBeskrivelse": null,
-                "sisteStillingsprosentendringDato": null
+                "utbetalingsperiode": "2024-07",
+                "kategori": "LOENNSINNTEKT",
+                "opplysningspliktigId": "963743254",
+                "virksomhetId": "947064649",
+                "fordelType": "kontantytelse",
+                "beløp": 35000,
+                "beskrivelse": "fastloenn"
+              },
+              {
+                "utbetalingsperiode": "2024-07",
+                "opptjeningsperiodeFra": "2024-05-01",
+                "opptjeningsperiodeTil": "2024-07-01",
+                "kategori": "YTELSE_FRA_OFFENTLIGE",
+                "opplysningspliktigId": "963743254",
+                "virksomhetId": "947064649",
+                "fordelType": "kontantytelse",
+                "beløp": 3000,
+                "beskrivelse": "foreldrepenger"
+              },
+              {
+                "utbetalingsperiode": "2024-07",
+                "opptjeningsperiodeFra": "2024-06-01",
+                "opptjeningsperiodeTil": "2024-09-01",
+                "kategori": "YTELSE_FRA_OFFENTLIGE",
+                "opplysningspliktigId": "963743254",
+                "virksomhetId": "947064649",
+                "fordelType": "kontantytelse",
+                "beløp": 6000,
+                "beskrivelse": "sykepenger"
+              }
+            ]
+          },
+          {
+            "periode": {
+              "fom": "2024-08-01",
+              "til": "2024-09-01"
+            },
+            "ainntektspostListe": [
+              {
+                "utbetalingsperiode": "2024-08",
+                "kategori": "LOENNSINNTEKT",
+                "opplysningspliktigId": "963743254",
+                "virksomhetId": "947064649",
+                "fordelType": "kontantytelse",
+                "beløp": 35000,
+                "beskrivelse": "fastloenn"
+              },
+              {
+                "utbetalingsperiode": "2024-08",
+                "opptjeningsperiodeFra": "2024-05-01",
+                "opptjeningsperiodeTil": "2024-07-01",
+                "kategori": "YTELSE_FRA_OFFENTLIGE",
+                "opplysningspliktigId": "963743254",
+                "virksomhetId": "947064649",
+                "fordelType": "kontantytelse",
+                "beløp": 3000,
+                "beskrivelse": "foreldrepenger"
+              },
+              {
+                "utbetalingsperiode": "2024-08",
+                "opptjeningsperiodeFra": "2024-06-01",
+                "opptjeningsperiodeTil": "2024-09-01",
+                "kategori": "YTELSE_FRA_OFFENTLIGE",
+                "opplysningspliktigId": "963743254",
+                "virksomhetId": "947064649",
+                "fordelType": "kontantytelse",
+                "beløp": 6000,
+                "beskrivelse": "sykepenger"
+              },
+              {
+                "utbetalingsperiode": "2024-08",
+                "kategori": "YTELSE_FRA_OFFENTLIGE",
+                "opplysningspliktigId": "963743254",
+                "virksomhetId": "967170232",
+                "fordelType": "kontantytelse",
+                "beløp": 3000,
+                "beskrivelse": "foreldrepenger"
               }
             ]
           }
-        ],
-        "datakilde": "AAREG",
-        "hentetTidspunkt": "2024-07-22T12:17:46.694097"
+        ]
       },
       "grunnlagsreferanseListe": [],
-      "gjelderReferanse": "person_PERSON_BIDRAGSMOTTAKER_19781115_41"
+      "gjelderReferanse": "person_PERSON_BIDRAGSMOTTAKER_19890720_2109"
     },
     {
-      "referanse": "innhentet_husstandsmedlem_person_PERSON_BIDRAGSPLIKTIG_19720829_39_person_PERSON_HUSSTANDSMEDLEM_20131102_innhentet_1195901752",
-      "type": "INNHENTET_HUSSTANDSMEDLEM",
+      "referanse": "innhentet_ainntekt_person_PERSON_BIDRAGSPLIKTIG_19790213_2107",
+      "type": "INNHENTET_INNTEKT_AINNTEKT",
       "innhold": {
-        "grunnlag": {
-          "navn": "AKTUELL MÅPENDE FUGLESKREMSEL",
-          "perioder": [
-            {
+        "datakilde": "INNTEKSKOMPONENTEN",
+        "hentetTidspunkt": "2024-08-06T11:57:04.354118",
+        "grunnlag": [
+          {
+            "periode": {
+              "fom": "2023-01-01",
+              "til": "2023-02-01"
+            },
+            "ainntektspostListe": [
+              {
+                "utbetalingsperiode": "2023-01",
+                "kategori": "LOENNSINNTEKT",
+                "opplysningspliktigId": "963743254",
+                "virksomhetId": "896929119",
+                "fordelType": "kontantytelse",
+                "beløp": 50000,
+                "beskrivelse": "fastloenn"
+              }
+            ]
+          },
+          {
+            "periode": {
+              "fom": "2023-02-01",
+              "til": "2023-03-01"
+            },
+            "ainntektspostListe": [
+              {
+                "utbetalingsperiode": "2023-02",
+                "kategori": "LOENNSINNTEKT",
+                "opplysningspliktigId": "963743254",
+                "virksomhetId": "896929119",
+                "fordelType": "kontantytelse",
+                "beløp": 50000,
+                "beskrivelse": "fastloenn"
+              }
+            ]
+          },
+          {
+            "periode": {
+              "fom": "2023-03-01",
+              "til": "2023-04-01"
+            },
+            "ainntektspostListe": [
+              {
+                "utbetalingsperiode": "2023-03",
+                "kategori": "LOENNSINNTEKT",
+                "opplysningspliktigId": "963743254",
+                "virksomhetId": "896929119",
+                "fordelType": "kontantytelse",
+                "beløp": 55000,
+                "beskrivelse": "fastloenn"
+              },
+              {
+                "utbetalingsperiode": "2023-03",
+                "kategori": "YTELSE_FRA_OFFENTLIGE",
+                "opplysningspliktigId": "963743254",
+                "virksomhetId": "896929119",
+                "fordelType": "kontantytelse",
+                "beløp": 5000,
+                "beskrivelse": "overgangsstoenadTilEnsligMorEllerFarSomBegynteAaLoepe1April2014EllerSenere"
+              }
+            ]
+          },
+          {
+            "periode": {
+              "fom": "2023-04-01",
+              "til": "2023-05-01"
+            },
+            "ainntektspostListe": [
+              {
+                "utbetalingsperiode": "2023-04",
+                "kategori": "LOENNSINNTEKT",
+                "opplysningspliktigId": "963743254",
+                "virksomhetId": "896929119",
+                "fordelType": "kontantytelse",
+                "beløp": 55000,
+                "beskrivelse": "fastloenn"
+              }
+            ]
+          },
+          {
+            "periode": {
+              "fom": "2023-05-01",
+              "til": "2023-06-01"
+            },
+            "ainntektspostListe": [
+              {
+                "utbetalingsperiode": "2023-05",
+                "kategori": "LOENNSINNTEKT",
+                "opplysningspliktigId": "963743254",
+                "virksomhetId": "896929119",
+                "fordelType": "kontantytelse",
+                "beløp": 80000,
+                "beskrivelse": "fastloenn"
+              }
+            ]
+          },
+          {
+            "periode": {
+              "fom": "2023-07-01",
+              "til": "2023-08-01"
+            },
+            "ainntektspostListe": [
+              {
+                "utbetalingsperiode": "2023-07",
+                "kategori": "LOENNSINNTEKT",
+                "opplysningspliktigId": "963743254",
+                "virksomhetId": "896929119",
+                "fordelType": "kontantytelse",
+                "beløp": 60000,
+                "beskrivelse": "fastloenn"
+              },
+              {
+                "utbetalingsperiode": "2023-07",
+                "kategori": "YTELSE_FRA_OFFENTLIGE",
+                "opplysningspliktigId": "963743254",
+                "virksomhetId": "896929119",
+                "fordelType": "kontantytelse",
+                "beløp": 4000,
+                "beskrivelse": "overgangsstoenadTilEnsligMorEllerFarSomBegynteAaLoepe1April2014EllerSenere"
+              }
+            ]
+          },
+          {
+            "periode": {
+              "fom": "2023-08-01",
+              "til": "2023-09-01"
+            },
+            "ainntektspostListe": [
+              {
+                "utbetalingsperiode": "2023-08",
+                "kategori": "LOENNSINNTEKT",
+                "opplysningspliktigId": "963743254",
+                "virksomhetId": "896929119",
+                "fordelType": "kontantytelse",
+                "beløp": 60000,
+                "beskrivelse": "fastloenn"
+              }
+            ]
+          },
+          {
+            "periode": {
+              "fom": "2023-09-01",
+              "til": "2023-10-01"
+            },
+            "ainntektspostListe": [
+              {
+                "utbetalingsperiode": "2023-09",
+                "kategori": "LOENNSINNTEKT",
+                "opplysningspliktigId": "963743254",
+                "virksomhetId": "896929119",
+                "fordelType": "kontantytelse",
+                "beløp": 60000,
+                "beskrivelse": "fastloenn"
+              }
+            ]
+          },
+          {
+            "periode": {
+              "fom": "2023-10-01",
+              "til": "2023-11-01"
+            },
+            "ainntektspostListe": [
+              {
+                "utbetalingsperiode": "2023-10",
+                "kategori": "LOENNSINNTEKT",
+                "opplysningspliktigId": "963743254",
+                "virksomhetId": "896929119",
+                "fordelType": "kontantytelse",
+                "beløp": 60000,
+                "beskrivelse": "fastloenn"
+              },
+              {
+                "utbetalingsperiode": "2023-10",
+                "kategori": "YTELSE_FRA_OFFENTLIGE",
+                "opplysningspliktigId": "963743254",
+                "virksomhetId": "896929119",
+                "fordelType": "kontantytelse",
+                "beløp": 5000,
+                "beskrivelse": "foreldrepenger"
+              },
+              {
+                "utbetalingsperiode": "2023-10",
+                "kategori": "YTELSE_FRA_OFFENTLIGE",
+                "opplysningspliktigId": "963743254",
+                "virksomhetId": "896929119",
+                "fordelType": "kontantytelse",
+                "beløp": 3000,
+                "beskrivelse": "sykepenger"
+              },
+              {
+                "utbetalingsperiode": "2023-10",
+                "kategori": "YTELSE_FRA_OFFENTLIGE",
+                "opplysningspliktigId": "963743254",
+                "virksomhetId": "896929119",
+                "fordelType": "kontantytelse",
+                "beløp": 5000,
+                "beskrivelse": "foreldrepenger"
+              },
+              {
+                "utbetalingsperiode": "2023-10",
+                "kategori": "YTELSE_FRA_OFFENTLIGE",
+                "opplysningspliktigId": "963743254",
+                "virksomhetId": "896929119",
+                "fordelType": "kontantytelse",
+                "beløp": 2000,
+                "beskrivelse": "sykepenger"
+              },
+              {
+                "utbetalingsperiode": "2023-10",
+                "kategori": "YTELSE_FRA_OFFENTLIGE",
+                "opplysningspliktigId": "963743254",
+                "virksomhetId": "907670201",
+                "fordelType": "kontantytelse",
+                "beløp": 5000,
+                "beskrivelse": "foreldrepenger"
+              }
+            ]
+          },
+          {
+            "periode": {
+              "fom": "2023-11-01",
+              "til": "2023-12-01"
+            },
+            "ainntektspostListe": [
+              {
+                "utbetalingsperiode": "2023-11",
+                "kategori": "LOENNSINNTEKT",
+                "opplysningspliktigId": "963743254",
+                "virksomhetId": "896929119",
+                "fordelType": "kontantytelse",
+                "beløp": 70000,
+                "beskrivelse": "fastloenn"
+              },
+              {
+                "utbetalingsperiode": "2023-11",
+                "kategori": "YTELSE_FRA_OFFENTLIGE",
+                "opplysningspliktigId": "963743254",
+                "virksomhetId": "896929119",
+                "fordelType": "kontantytelse",
+                "beløp": 5000,
+                "beskrivelse": "foreldrepenger"
+              },
+              {
+                "utbetalingsperiode": "2023-11",
+                "kategori": "YTELSE_FRA_OFFENTLIGE",
+                "opplysningspliktigId": "963743254",
+                "virksomhetId": "896929119",
+                "fordelType": "kontantytelse",
+                "beløp": 3000,
+                "beskrivelse": "sykepenger"
+              },
+              {
+                "utbetalingsperiode": "2023-11",
+                "kategori": "YTELSE_FRA_OFFENTLIGE",
+                "opplysningspliktigId": "963743254",
+                "virksomhetId": "896929119",
+                "fordelType": "kontantytelse",
+                "beløp": 5000,
+                "beskrivelse": "foreldrepenger"
+              },
+              {
+                "utbetalingsperiode": "2023-11",
+                "kategori": "YTELSE_FRA_OFFENTLIGE",
+                "opplysningspliktigId": "963743254",
+                "virksomhetId": "896929119",
+                "fordelType": "kontantytelse",
+                "beløp": 2000,
+                "beskrivelse": "sykepenger"
+              },
+              {
+                "utbetalingsperiode": "2023-11",
+                "kategori": "YTELSE_FRA_OFFENTLIGE",
+                "opplysningspliktigId": "963743254",
+                "virksomhetId": "907670201",
+                "fordelType": "kontantytelse",
+                "beløp": 5000,
+                "beskrivelse": "foreldrepenger"
+              }
+            ]
+          },
+          {
+            "periode": {
+              "fom": "2023-12-01",
+              "til": "2024-01-01"
+            },
+            "ainntektspostListe": [
+              {
+                "utbetalingsperiode": "2023-12",
+                "kategori": "LOENNSINNTEKT",
+                "opplysningspliktigId": "963743254",
+                "virksomhetId": "896929119",
+                "fordelType": "kontantytelse",
+                "beløp": 60000,
+                "beskrivelse": "fastloenn"
+              },
+              {
+                "utbetalingsperiode": "2023-12",
+                "kategori": "YTELSE_FRA_OFFENTLIGE",
+                "opplysningspliktigId": "963743254",
+                "virksomhetId": "896929119",
+                "fordelType": "kontantytelse",
+                "beløp": 5000,
+                "beskrivelse": "foreldrepenger"
+              },
+              {
+                "utbetalingsperiode": "2023-12",
+                "kategori": "YTELSE_FRA_OFFENTLIGE",
+                "opplysningspliktigId": "963743254",
+                "virksomhetId": "896929119",
+                "fordelType": "kontantytelse",
+                "beløp": 3000,
+                "beskrivelse": "sykepenger"
+              },
+              {
+                "utbetalingsperiode": "2023-12",
+                "kategori": "YTELSE_FRA_OFFENTLIGE",
+                "opplysningspliktigId": "963743254",
+                "virksomhetId": "896929119",
+                "fordelType": "kontantytelse",
+                "beløp": 5000,
+                "beskrivelse": "foreldrepenger"
+              },
+              {
+                "utbetalingsperiode": "2023-12",
+                "kategori": "YTELSE_FRA_OFFENTLIGE",
+                "opplysningspliktigId": "963743254",
+                "virksomhetId": "896929119",
+                "fordelType": "kontantytelse",
+                "beløp": 2000,
+                "beskrivelse": "sykepenger"
+              },
+              {
+                "utbetalingsperiode": "2023-12",
+                "kategori": "YTELSE_FRA_OFFENTLIGE",
+                "opplysningspliktigId": "963743254",
+                "virksomhetId": "972674818",
+                "fordelType": "kontantytelse",
+                "beløp": 3000,
+                "beskrivelse": "sykepenger"
+              },
+              {
+                "utbetalingsperiode": "2023-12",
+                "kategori": "YTELSE_FRA_OFFENTLIGE",
+                "opplysningspliktigId": "963743254",
+                "virksomhetId": "907670201",
+                "fordelType": "kontantytelse",
+                "beløp": 5000,
+                "beskrivelse": "foreldrepenger"
+              }
+            ]
+          },
+          {
+            "periode": {
+              "fom": "2024-01-01",
+              "til": "2024-02-01"
+            },
+            "ainntektspostListe": [
+              {
+                "utbetalingsperiode": "2024-01",
+                "kategori": "LOENNSINNTEKT",
+                "opplysningspliktigId": "963743254",
+                "virksomhetId": "896929119",
+                "fordelType": "kontantytelse",
+                "beløp": 60000,
+                "beskrivelse": "fastloenn"
+              },
+              {
+                "utbetalingsperiode": "2024-01",
+                "kategori": "YTELSE_FRA_OFFENTLIGE",
+                "opplysningspliktigId": "963743254",
+                "virksomhetId": "896929119",
+                "fordelType": "kontantytelse",
+                "beløp": 3111,
+                "beskrivelse": "overgangsstoenadTilEnsligMorEllerFarSomBegynteAaLoepe1April2014EllerSenere"
+              },
+              {
+                "utbetalingsperiode": "2024-01",
+                "kategori": "YTELSE_FRA_OFFENTLIGE",
+                "opplysningspliktigId": "963743254",
+                "virksomhetId": "972674818",
+                "fordelType": "kontantytelse",
+                "beløp": 3000,
+                "beskrivelse": "sykepenger"
+              }
+            ]
+          },
+          {
+            "periode": {
               "fom": "2024-02-01",
-              "til": "2024-07-21"
-            }
-          ],
-          "relasjon": "INGEN",
-          "fødselsdato": "2013-11-02",
-          "gjelderPerson": "person_PERSON_HUSSTANDSMEDLEM_20131102_innhentet_1195901752"
-        },
-        "datakilde": "PDL",
-        "hentetTidspunkt": "2024-07-22T12:17:48.29818"
-      },
-      "grunnlagsreferanseListe": [],
-      "gjelderReferanse": "person_PERSON_BIDRAGSPLIKTIG_19720829_39"
-    },
-    {
-      "referanse": "innhentet_husstandsmedlem_person_PERSON_BIDRAGSPLIKTIG_19720829_39_person_PERSON_HUSSTANDSMEDLEM_19631102_innhentet_1171330807",
-      "type": "INNHENTET_HUSSTANDSMEDLEM",
-      "innhold": {
-        "grunnlag": {
-          "navn": "SYMPATISK TOMMEL",
-          "perioder": [
-            {
-              "fom": "2024-02-01",
-              "til": null
-            }
-          ],
-          "relasjon": "INGEN",
-          "fødselsdato": "1963-11-02",
-          "gjelderPerson": "person_PERSON_HUSSTANDSMEDLEM_19631102_innhentet_1171330807"
-        },
-        "datakilde": "PDL",
-        "hentetTidspunkt": "2024-07-22T12:17:48.29818"
-      },
-      "grunnlagsreferanseListe": [],
-      "gjelderReferanse": "person_PERSON_BIDRAGSPLIKTIG_19720829_39"
-    },
-    {
-      "referanse": "innhentet_husstandsmedlem_person_PERSON_BIDRAGSPLIKTIG_19720829_39_person_PERSON_HUSSTANDSMEDLEM_20170707_63",
-      "type": "INNHENTET_HUSSTANDSMEDLEM",
-      "innhold": {
-        "grunnlag": {
-          "navn": "USENSUELL FALLENDE PYRAMIDE",
-          "perioder": [
-            {
-              "fom": "2024-02-01",
-              "til": null
-            }
-          ],
-          "relasjon": "BARN",
-          "fødselsdato": "2017-07-07",
-          "gjelderPerson": "person_PERSON_HUSSTANDSMEDLEM_20170707_63"
-        },
-        "datakilde": "PDL",
-        "hentetTidspunkt": "2024-07-22T12:17:48.29818"
-      },
-      "grunnlagsreferanseListe": [],
-      "gjelderReferanse": "person_PERSON_BIDRAGSPLIKTIG_19720829_39"
-    },
-    {
-      "referanse": "innhentet_husstandsmedlem_person_PERSON_BIDRAGSPLIKTIG_19720829_39_person_PERSON_HUSSTANDSMEDLEM_19530910_innhentet_1777934110",
-      "type": "INNHENTET_HUSSTANDSMEDLEM",
-      "innhold": {
-        "grunnlag": {
-          "navn": "STORARTET KILOMETER",
-          "perioder": [
-            {
-              "fom": "2024-02-01",
-              "til": null
-            }
-          ],
-          "relasjon": "INGEN",
-          "fødselsdato": "1953-09-10",
-          "gjelderPerson": "person_PERSON_HUSSTANDSMEDLEM_19530910_innhentet_1777934110"
-        },
-        "datakilde": "PDL",
-        "hentetTidspunkt": "2024-07-22T12:17:48.29818"
-      },
-      "grunnlagsreferanseListe": [],
-      "gjelderReferanse": "person_PERSON_BIDRAGSPLIKTIG_19720829_39"
-    },
-    {
-      "referanse": "innhentet_husstandsmedlem_person_PERSON_BIDRAGSPLIKTIG_19720829_39_person_PERSON_HUSSTANDSMEDLEM_20150513_64",
-      "type": "INNHENTET_HUSSTANDSMEDLEM",
-      "innhold": {
-        "grunnlag": {
-          "navn": "NORMAL UTNYTTENDE PAKKE",
-          "perioder": [
-            {
-              "fom": "2024-02-01",
-              "til": null
-            }
-          ],
-          "relasjon": "BARN",
-          "fødselsdato": "2015-05-13",
-          "gjelderPerson": "person_PERSON_HUSSTANDSMEDLEM_20150513_64"
-        },
-        "datakilde": "PDL",
-        "hentetTidspunkt": "2024-07-22T12:17:48.29818"
-      },
-      "grunnlagsreferanseListe": [],
-      "gjelderReferanse": "person_PERSON_BIDRAGSPLIKTIG_19720829_39"
-    },
-    {
-      "referanse": "innhentet_husstandsmedlem_person_PERSON_BIDRAGSPLIKTIG_19720829_39_person_PERSON_BIDRAGSMOTTAKER_19781115_41",
-      "type": "INNHENTET_HUSSTANDSMEDLEM",
-      "innhold": {
-        "grunnlag": {
-          "navn": "RAKRYGGET ETAT",
-          "perioder": [
-            {
-              "fom": "2024-02-01",
-              "til": null
-            }
-          ],
-          "relasjon": "MOTPART_TIL_FELLES_BARN",
-          "fødselsdato": "1978-11-15",
-          "gjelderPerson": "person_PERSON_BIDRAGSMOTTAKER_19781115_41"
-        },
-        "datakilde": "PDL",
-        "hentetTidspunkt": "2024-07-22T12:17:48.29818"
-      },
-      "grunnlagsreferanseListe": [],
-      "gjelderReferanse": "person_PERSON_BIDRAGSPLIKTIG_19720829_39"
-    },
-    {
-      "referanse": "innhentet_husstandsmedlem_person_PERSON_BIDRAGSPLIKTIG_19720829_39_person_PERSON_HUSSTANDSMEDLEM_20050916_65",
-      "type": "INNHENTET_HUSSTANDSMEDLEM",
-      "innhold": {
-        "grunnlag": {
-          "navn": "FIRKANTET LEVENDE SKIVE",
-          "perioder": [
-            {
-              "fom": "2024-02-01",
-              "til": null
-            }
-          ],
-          "relasjon": "BARN",
-          "fødselsdato": "2005-09-16",
-          "gjelderPerson": "person_PERSON_HUSSTANDSMEDLEM_20050916_65"
-        },
-        "datakilde": "PDL",
-        "hentetTidspunkt": "2024-07-22T12:17:48.29818"
-      },
-      "grunnlagsreferanseListe": [],
-      "gjelderReferanse": "person_PERSON_BIDRAGSPLIKTIG_19720829_39"
-    },
-    {
-      "referanse": "innhentet_husstandsmedlem_person_PERSON_BIDRAGSPLIKTIG_19720829_39_person_PERSON_HUSSTANDSMEDLEM_19790124_innhentet_746876731",
-      "type": "INNHENTET_HUSSTANDSMEDLEM",
-      "innhold": {
-        "grunnlag": {
-          "navn": "PRAGMATISK ROSIN",
-          "perioder": [
-            {
-              "fom": "2024-02-01",
-              "til": null
-            }
-          ],
-          "relasjon": "INGEN",
-          "fødselsdato": "1979-01-24",
-          "gjelderPerson": "person_PERSON_HUSSTANDSMEDLEM_19790124_innhentet_746876731"
-        },
-        "datakilde": "PDL",
-        "hentetTidspunkt": "2024-07-22T12:17:48.29818"
-      },
-      "grunnlagsreferanseListe": [],
-      "gjelderReferanse": "person_PERSON_BIDRAGSPLIKTIG_19720829_39"
-    },
-    {
-      "referanse": "innhentet_husstandsmedlem_person_PERSON_BIDRAGSPLIKTIG_19720829_39_person_PERSON_SØKNADSBARN_20220726_40",
-      "type": "INNHENTET_HUSSTANDSMEDLEM",
-      "innhold": {
-        "grunnlag": {
-          "navn": "GEOMETRISK DETALJ",
-          "perioder": [
-            {
-              "fom": "2024-02-01",
-              "til": null
-            }
-          ],
-          "relasjon": "BARN",
-          "fødselsdato": "2022-07-26",
-          "gjelderPerson": "person_PERSON_SØKNADSBARN_20220726_40"
-        },
-        "datakilde": "PDL",
-        "hentetTidspunkt": "2024-07-22T12:17:48.29818"
-      },
-      "grunnlagsreferanseListe": [],
-      "gjelderReferanse": "person_PERSON_BIDRAGSPLIKTIG_19720829_39"
-    },
-    {
-      "referanse": "innhentet_husstandsmedlem_person_PERSON_BIDRAGSPLIKTIG_19720829_39_person_PERSON_HUSSTANDSMEDLEM_19790227_innhentet_-2096642170",
-      "type": "INNHENTET_HUSSTANDSMEDLEM",
-      "innhold": {
-        "grunnlag": {
-          "navn": "TYPISK MANDAGSBIL",
-          "perioder": [
-            {
-              "fom": "2024-02-01",
-              "til": "2024-07-21"
-            }
-          ],
-          "relasjon": "INGEN",
-          "fødselsdato": "1979-02-27",
-          "gjelderPerson": "person_PERSON_HUSSTANDSMEDLEM_19790227_innhentet_-2096642170"
-        },
-        "datakilde": "PDL",
-        "hentetTidspunkt": "2024-07-22T12:17:48.29818"
-      },
-      "grunnlagsreferanseListe": [],
-      "gjelderReferanse": "person_PERSON_BIDRAGSPLIKTIG_19720829_39"
-    },
-    {
-      "referanse": "innhentet_husstandsmedlem_person_PERSON_BIDRAGSPLIKTIG_19720829_39_person_PERSON_HUSSTANDSMEDLEM_19780331_innhentet_1825089093",
-      "type": "INNHENTET_HUSSTANDSMEDLEM",
-      "innhold": {
-        "grunnlag": {
-          "navn": "ETTERPÅKLOK OVERSTRÅLENDE BJØRNEBÆR",
-          "perioder": [
-            {
+              "til": "2024-03-01"
+            },
+            "ainntektspostListe": [
+              {
+                "utbetalingsperiode": "2024-02",
+                "kategori": "YTELSE_FRA_OFFENTLIGE",
+                "opplysningspliktigId": "963743254",
+                "virksomhetId": "896929119",
+                "fordelType": "kontantytelse",
+                "beløp": 2000,
+                "beskrivelse": "overgangsstoenadTilEnsligMorEllerFarSomBegynteAaLoepe1April2014EllerSenere"
+              },
+              {
+                "utbetalingsperiode": "2024-02",
+                "kategori": "YTELSE_FRA_OFFENTLIGE",
+                "opplysningspliktigId": "963743254",
+                "virksomhetId": "972674818",
+                "fordelType": "kontantytelse",
+                "beløp": 3000,
+                "beskrivelse": "sykepenger"
+              }
+            ]
+          },
+          {
+            "periode": {
+              "fom": "2024-03-01",
+              "til": "2024-04-01"
+            },
+            "ainntektspostListe": [
+              {
+                "utbetalingsperiode": "2024-03",
+                "kategori": "YTELSE_FRA_OFFENTLIGE",
+                "opplysningspliktigId": "963743254",
+                "virksomhetId": "896929119",
+                "fordelType": "kontantytelse",
+                "beløp": 2000,
+                "beskrivelse": "overgangsstoenadTilEnsligMorEllerFarSomBegynteAaLoepe1April2014EllerSenere"
+              }
+            ]
+          },
+          {
+            "periode": {
+              "fom": "2024-04-01",
+              "til": "2024-05-01"
+            },
+            "ainntektspostListe": [
+              {
+                "utbetalingsperiode": "2024-04",
+                "kategori": "YTELSE_FRA_OFFENTLIGE",
+                "opplysningspliktigId": "963743254",
+                "virksomhetId": "896929119",
+                "fordelType": "kontantytelse",
+                "beløp": 2000,
+                "beskrivelse": "overgangsstoenadTilEnsligMorEllerFarSomBegynteAaLoepe1April2014EllerSenere"
+              },
+              {
+                "utbetalingsperiode": "2024-04",
+                "kategori": "LOENNSINNTEKT",
+                "opplysningspliktigId": "963743254",
+                "virksomhetId": "896929119",
+                "fordelType": "kontantytelse",
+                "beløp": 35000,
+                "beskrivelse": "fastloenn"
+              },
+              {
+                "utbetalingsperiode": "2024-04",
+                "kategori": "YTELSE_FRA_OFFENTLIGE",
+                "opplysningspliktigId": "963743254",
+                "virksomhetId": "896929119",
+                "fordelType": "kontantytelse",
+                "beløp": 3000,
+                "beskrivelse": "foreldrepenger"
+              },
+              {
+                "utbetalingsperiode": "2024-04",
+                "opptjeningsperiodeFra": "2024-06-01",
+                "opptjeningsperiodeTil": "2024-08-01",
+                "kategori": "YTELSE_FRA_OFFENTLIGE",
+                "opplysningspliktigId": "963743254",
+                "virksomhetId": "896929119",
+                "fordelType": "kontantytelse",
+                "beløp": 3000,
+                "beskrivelse": "sykepenger"
+              },
+              {
+                "utbetalingsperiode": "2024-04",
+                "opptjeningsperiodeFra": "2024-06-01",
+                "opptjeningsperiodeTil": "2025-01-01",
+                "kategori": "YTELSE_FRA_OFFENTLIGE",
+                "opplysningspliktigId": "963743254",
+                "virksomhetId": "896929119",
+                "fordelType": "kontantytelse",
+                "beløp": 2000,
+                "beskrivelse": "ufoeretrygd"
+              }
+            ]
+          },
+          {
+            "periode": {
+              "fom": "2024-05-01",
+              "til": "2024-06-01"
+            },
+            "ainntektspostListe": [
+              {
+                "utbetalingsperiode": "2024-05",
+                "kategori": "LOENNSINNTEKT",
+                "opplysningspliktigId": "963743254",
+                "virksomhetId": "896929119",
+                "fordelType": "kontantytelse",
+                "beløp": 35000,
+                "beskrivelse": "fastloenn"
+              },
+              {
+                "utbetalingsperiode": "2024-05",
+                "kategori": "YTELSE_FRA_OFFENTLIGE",
+                "opplysningspliktigId": "963743254",
+                "virksomhetId": "896929119",
+                "fordelType": "kontantytelse",
+                "beløp": 3000,
+                "beskrivelse": "foreldrepenger"
+              },
+              {
+                "utbetalingsperiode": "2024-05",
+                "opptjeningsperiodeFra": "2024-06-01",
+                "opptjeningsperiodeTil": "2024-08-01",
+                "kategori": "YTELSE_FRA_OFFENTLIGE",
+                "opplysningspliktigId": "963743254",
+                "virksomhetId": "896929119",
+                "fordelType": "kontantytelse",
+                "beløp": 3000,
+                "beskrivelse": "sykepenger"
+              },
+              {
+                "utbetalingsperiode": "2024-05",
+                "opptjeningsperiodeFra": "2024-06-01",
+                "opptjeningsperiodeTil": "2025-01-01",
+                "kategori": "YTELSE_FRA_OFFENTLIGE",
+                "opplysningspliktigId": "963743254",
+                "virksomhetId": "896929119",
+                "fordelType": "kontantytelse",
+                "beløp": 2000,
+                "beskrivelse": "ufoeretrygd"
+              }
+            ]
+          },
+          {
+            "periode": {
+              "fom": "2024-06-01",
+              "til": "2024-07-01"
+            },
+            "ainntektspostListe": [
+              {
+                "utbetalingsperiode": "2024-06",
+                "kategori": "LOENNSINNTEKT",
+                "opplysningspliktigId": "963743254",
+                "virksomhetId": "896929119",
+                "fordelType": "kontantytelse",
+                "beløp": 35000,
+                "beskrivelse": "fastloenn"
+              },
+              {
+                "utbetalingsperiode": "2024-06",
+                "kategori": "YTELSE_FRA_OFFENTLIGE",
+                "opplysningspliktigId": "963743254",
+                "virksomhetId": "896929119",
+                "fordelType": "kontantytelse",
+                "beløp": 3000,
+                "beskrivelse": "foreldrepenger"
+              },
+              {
+                "utbetalingsperiode": "2024-06",
+                "opptjeningsperiodeFra": "2024-06-01",
+                "opptjeningsperiodeTil": "2024-08-01",
+                "kategori": "YTELSE_FRA_OFFENTLIGE",
+                "opplysningspliktigId": "963743254",
+                "virksomhetId": "896929119",
+                "fordelType": "kontantytelse",
+                "beløp": 3000,
+                "beskrivelse": "sykepenger"
+              },
+              {
+                "utbetalingsperiode": "2024-06",
+                "opptjeningsperiodeFra": "2024-06-01",
+                "opptjeningsperiodeTil": "2025-01-01",
+                "kategori": "YTELSE_FRA_OFFENTLIGE",
+                "opplysningspliktigId": "963743254",
+                "virksomhetId": "896929119",
+                "fordelType": "kontantytelse",
+                "beløp": 2000,
+                "beskrivelse": "ufoeretrygd"
+              }
+            ]
+          },
+          {
+            "periode": {
               "fom": "2024-07-01",
-              "til": null
-            }
-          ],
-          "relasjon": "INGEN",
-          "fødselsdato": "1978-03-31",
-          "gjelderPerson": "person_PERSON_HUSSTANDSMEDLEM_19780331_innhentet_1825089093"
-        },
+              "til": "2024-08-01"
+            },
+            "ainntektspostListe": [
+              {
+                "utbetalingsperiode": "2024-07",
+                "kategori": "LOENNSINNTEKT",
+                "opplysningspliktigId": "963743254",
+                "virksomhetId": "896929119",
+                "fordelType": "kontantytelse",
+                "beløp": 35000,
+                "beskrivelse": "fastloenn"
+              },
+              {
+                "utbetalingsperiode": "2024-07",
+                "kategori": "YTELSE_FRA_OFFENTLIGE",
+                "opplysningspliktigId": "963743254",
+                "virksomhetId": "896929119",
+                "fordelType": "kontantytelse",
+                "beløp": 3000,
+                "beskrivelse": "foreldrepenger"
+              },
+              {
+                "utbetalingsperiode": "2024-07",
+                "opptjeningsperiodeFra": "2024-06-01",
+                "opptjeningsperiodeTil": "2024-08-01",
+                "kategori": "YTELSE_FRA_OFFENTLIGE",
+                "opplysningspliktigId": "963743254",
+                "virksomhetId": "896929119",
+                "fordelType": "kontantytelse",
+                "beløp": 3000,
+                "beskrivelse": "sykepenger"
+              },
+              {
+                "utbetalingsperiode": "2024-07",
+                "opptjeningsperiodeFra": "2024-06-01",
+                "opptjeningsperiodeTil": "2025-01-01",
+                "kategori": "YTELSE_FRA_OFFENTLIGE",
+                "opplysningspliktigId": "963743254",
+                "virksomhetId": "896929119",
+                "fordelType": "kontantytelse",
+                "beløp": 2000,
+                "beskrivelse": "ufoeretrygd"
+              }
+            ]
+          },
+          {
+            "periode": {
+              "fom": "2024-08-01",
+              "til": "2024-09-01"
+            },
+            "ainntektspostListe": [
+              {
+                "utbetalingsperiode": "2024-08",
+                "kategori": "LOENNSINNTEKT",
+                "opplysningspliktigId": "963743254",
+                "virksomhetId": "896929119",
+                "fordelType": "kontantytelse",
+                "beløp": 35000,
+                "beskrivelse": "fastloenn"
+              },
+              {
+                "utbetalingsperiode": "2024-08",
+                "kategori": "YTELSE_FRA_OFFENTLIGE",
+                "opplysningspliktigId": "963743254",
+                "virksomhetId": "896929119",
+                "fordelType": "kontantytelse",
+                "beløp": 3000,
+                "beskrivelse": "foreldrepenger"
+              },
+              {
+                "utbetalingsperiode": "2024-08",
+                "opptjeningsperiodeFra": "2024-06-01",
+                "opptjeningsperiodeTil": "2024-08-01",
+                "kategori": "YTELSE_FRA_OFFENTLIGE",
+                "opplysningspliktigId": "963743254",
+                "virksomhetId": "896929119",
+                "fordelType": "kontantytelse",
+                "beløp": 3000,
+                "beskrivelse": "sykepenger"
+              },
+              {
+                "utbetalingsperiode": "2024-08",
+                "opptjeningsperiodeFra": "2024-06-01",
+                "opptjeningsperiodeTil": "2025-01-01",
+                "kategori": "YTELSE_FRA_OFFENTLIGE",
+                "opplysningspliktigId": "963743254",
+                "virksomhetId": "896929119",
+                "fordelType": "kontantytelse",
+                "beløp": 2000,
+                "beskrivelse": "ufoeretrygd"
+              }
+            ]
+          }
+        ]
+      },
+      "grunnlagsreferanseListe": [],
+      "gjelderReferanse": "person_PERSON_BIDRAGSPLIKTIG_19790213_2107"
+    },
+    {
+      "referanse": "innhentet_arbeidsforhold_person_PERSON_BIDRAGSPLIKTIG_19790213_2107",
+      "type": "INNHENTET_ARBEIDSFORHOLD",
+      "innhold": {
+        "datakilde": "AAREG",
+        "grunnlag": [
+          {
+            "startdato": "2022-12-07",
+            "arbeidsgiverNavn": "SAUEFABRIKK",
+            "arbeidsgiverOrgnummer": "896929119",
+            "ansettelsesdetaljerListe": [
+              {
+                "periodeFra": "2022-12",
+                "arbeidsforholdType": "Forenklet",
+                "yrkeBeskrivelse": "BYGNINGSSNEKKER"
+              }
+            ],
+            "permisjonListe": [],
+            "permitteringListe": []
+          }
+        ],
+        "hentetTidspunkt": "2024-08-06T11:29:11.445742"
+      },
+      "grunnlagsreferanseListe": [],
+      "gjelderReferanse": "person_PERSON_BIDRAGSPLIKTIG_19790213_2107"
+    },
+    {
+      "referanse": "innhentet_arbeidsforhold_person_PERSON_BIDRAGSMOTTAKER_19890720_2109",
+      "type": "INNHENTET_ARBEIDSFORHOLD",
+      "innhold": {
+        "datakilde": "AAREG",
+        "grunnlag": [
+          {
+            "startdato": "2004-08-06",
+            "arbeidsgiverNavn": "SAUEFABRIKK",
+            "arbeidsgiverOrgnummer": "896929119",
+            "ansettelsesdetaljerListe": [
+              {
+                "periodeFra": "2004-08",
+                "arbeidsforholdType": "Ordinaer",
+                "arbeidstidsordningBeskrivelse": "Ikke skift",
+                "ansettelsesformBeskrivelse": "Fast ansettelse",
+                "yrkeBeskrivelse": "ALLMENNLÆRER",
+                "antallTimerPrUke": 37.5,
+                "avtaltStillingsprosent": 80
+              }
+            ],
+            "permisjonListe": [
+              {
+                "startdato": "2024-04-01",
+                "sluttdato": "2024-04-30",
+                "beskrivelse": "Permisjon",
+                "prosent": 100
+              }
+            ],
+            "permitteringListe": []
+          },
+          {
+            "startdato": "2024-05-17",
+            "arbeidsgiverNavn": "SJOKKERENDE ELEKTRIKER",
+            "arbeidsgiverOrgnummer": "947064649",
+            "ansettelsesdetaljerListe": [
+              {
+                "periodeFra": "2024-05",
+                "arbeidsforholdType": "Forenklet",
+                "yrkeBeskrivelse": "ALLMENNLÆRER"
+              }
+            ],
+            "permisjonListe": [],
+            "permitteringListe": []
+          }
+        ],
+        "hentetTidspunkt": "2024-08-06T11:29:11.445742"
+      },
+      "grunnlagsreferanseListe": [],
+      "gjelderReferanse": "person_PERSON_BIDRAGSMOTTAKER_19890720_2109"
+    },
+    {
+      "referanse": "innhentet_husstandsmedlem_person_PERSON_BIDRAGSPLIKTIG_19790213_2107_person_PERSON_HUSSTANDSMEDLEM_20150811_4604",
+      "type": "INNHENTET_HUSSTANDSMEDLEM",
+      "innhold": {
         "datakilde": "PDL",
-        "hentetTidspunkt": "2024-07-22T12:17:48.29818"
+        "grunnlag": {
+          "gjelderPerson": "person_PERSON_HUSSTANDSMEDLEM_20150811_4604",
+          "relasjon": "BARN",
+          "navn": "NYSGJERRIG HIKKENDE VALS",
+          "fødselsdato": "2015-08-11",
+          "perioder": [
+            {
+              "fom": "2015-08-11"
+            }
+          ]
+        },
+        "hentetTidspunkt": "2024-08-06T14:39:46.869576"
       },
       "grunnlagsreferanseListe": [],
-      "gjelderReferanse": "person_PERSON_BIDRAGSPLIKTIG_19720829_39"
+      "gjelderReferanse": "person_PERSON_BIDRAGSPLIKTIG_19790213_2107"
     },
     {
-      "referanse": "person_PERSON_HUSSTANDSMEDLEM_20131102_innhentet_1195901752",
-      "type": "PERSON_HUSSTANDSMEDLEM",
+      "referanse": "innhentet_husstandsmedlem_person_PERSON_BIDRAGSPLIKTIG_19790213_2107_person_PERSON_SØKNADSBARN_20051223_2108",
+      "type": "INNHENTET_HUSSTANDSMEDLEM",
       "innhold": {
-        "navn": null,
-        "ident": "02511378659",
-        "fødselsdato": "2013-11-02"
+        "datakilde": "PDL",
+        "grunnlag": {
+          "gjelderPerson": "person_PERSON_SØKNADSBARN_20051223_2108",
+          "relasjon": "BARN",
+          "navn": "KUNSTIG DANSENDE KALENDER",
+          "fødselsdato": "2005-12-23",
+          "perioder": [
+            {
+              "fom": "2010-10-06"
+            }
+          ]
+        },
+        "hentetTidspunkt": "2024-08-06T14:39:46.869576"
       },
       "grunnlagsreferanseListe": [],
-      "gjelderReferanse": null
+      "gjelderReferanse": "person_PERSON_BIDRAGSPLIKTIG_19790213_2107"
     },
     {
-      "referanse": "person_PERSON_HUSSTANDSMEDLEM_19631102_innhentet_1171330807",
-      "type": "PERSON_HUSSTANDSMEDLEM",
+      "referanse": "innhentet_husstandsmedlem_person_PERSON_BIDRAGSPLIKTIG_19790213_2107_person_PERSON_HUSSTANDSMEDLEM_20180224_4605",
+      "type": "INNHENTET_HUSSTANDSMEDLEM",
       "innhold": {
-        "navn": null,
-        "ident": "02516322643",
-        "fødselsdato": "1963-11-02"
+        "datakilde": "PDL",
+        "grunnlag": {
+          "gjelderPerson": "person_PERSON_HUSSTANDSMEDLEM_20180224_4605",
+          "relasjon": "BARN",
+          "navn": "HURTIG MEMORERENDE KALENDER",
+          "fødselsdato": "2018-02-24",
+          "perioder": [
+            {
+              "fom": "2018-02-24"
+            }
+          ]
+        },
+        "hentetTidspunkt": "2024-08-06T14:39:46.869576"
       },
       "grunnlagsreferanseListe": [],
-      "gjelderReferanse": null
+      "gjelderReferanse": "person_PERSON_BIDRAGSPLIKTIG_19790213_2107"
     },
     {
-      "referanse": "person_PERSON_HUSSTANDSMEDLEM_19530910_innhentet_1777934110",
-      "type": "PERSON_HUSSTANDSMEDLEM",
-      "innhold": {
-        "navn": null,
-        "ident": "10495327758",
-        "fødselsdato": "1953-09-10"
-      },
-      "grunnlagsreferanseListe": [],
-      "gjelderReferanse": null
-    },
-    {
-      "referanse": "person_PERSON_HUSSTANDSMEDLEM_19790124_innhentet_746876731",
-      "type": "PERSON_HUSSTANDSMEDLEM",
-      "innhold": {
-        "navn": null,
-        "ident": "24417901910",
-        "fødselsdato": "1979-01-24"
-      },
-      "grunnlagsreferanseListe": [],
-      "gjelderReferanse": null
-    },
-    {
-      "referanse": "person_PERSON_HUSSTANDSMEDLEM_19790227_innhentet_-2096642170",
-      "type": "PERSON_HUSSTANDSMEDLEM",
-      "innhold": {
-        "navn": null,
-        "ident": "27427924233",
-        "fødselsdato": "1979-02-27"
-      },
-      "grunnlagsreferanseListe": [],
-      "gjelderReferanse": null
-    },
-    {
-      "referanse": "person_PERSON_HUSSTANDSMEDLEM_19780331_innhentet_1825089093",
-      "type": "PERSON_HUSSTANDSMEDLEM",
-      "innhold": {
-        "navn": null,
-        "ident": "31437825052",
-        "fødselsdato": "1978-03-31"
-      },
-      "grunnlagsreferanseListe": [],
-      "gjelderReferanse": null
-    },
-    {
-      "referanse": "innhentet_husstandsmedlem_person_PERSON_BIDRAGSPLIKTIG_19720829_39_person_PERSON_BIDRAGSPLIKTIG_19720829_39",
+      "referanse": "innhentet_husstandsmedlem_person_PERSON_BIDRAGSPLIKTIG_19790213_2107_person_PERSON_BIDRAGSPLIKTIG_19790213_2107",
       "type": "INNHENTET_ANDRE_VOKSNE_I_HUSSTANDEN",
       "innhold": [
         {
-          "grunnlag": {
-            "navn": "AKTUELL MÅPENDE FUGLESKREMSEL",
-            "perioder": [
-              {
-                "fom": "2024-02-01",
-                "til": "2024-07-21"
-              }
-            ],
-            "relasjon": "INGEN",
-            "fødselsdato": "2013-11-02",
-            "gjelderPerson": "person_PERSON_BIDRAGSPLIKTIG_19720829_39"
-          },
           "datakilde": "PDL",
-          "hentetTidspunkt": "2024-07-22T12:17:48.298795"
-        },
-        {
           "grunnlag": {
-            "navn": "SYMPATISK TOMMEL",
-            "perioder": [
-              {
-                "fom": "2024-02-01",
-                "til": null
-              }
-            ],
-            "relasjon": "INGEN",
-            "fødselsdato": "1963-11-02",
-            "gjelderPerson": "person_PERSON_BIDRAGSPLIKTIG_19720829_39"
-          },
-          "datakilde": "PDL",
-          "hentetTidspunkt": "2024-07-22T12:17:48.298795"
-        },
-        {
-          "grunnlag": {
-            "navn": "STORARTET KILOMETER",
-            "perioder": [
-              {
-                "fom": "2024-02-01",
-                "til": null
-              }
-            ],
-            "relasjon": "INGEN",
-            "fødselsdato": "1953-09-10",
-            "gjelderPerson": "person_PERSON_BIDRAGSPLIKTIG_19720829_39"
-          },
-          "datakilde": "PDL",
-          "hentetTidspunkt": "2024-07-22T12:17:48.298795"
-        },
-        {
-          "grunnlag": {
-            "navn": "RAKRYGGET ETAT",
-            "perioder": [
-              {
-                "fom": "2024-02-01",
-                "til": null
-              }
-            ],
+            "gjelderPerson": "person_PERSON_BIDRAGSPLIKTIG_19790213_2107",
             "relasjon": "MOTPART_TIL_FELLES_BARN",
-            "fødselsdato": "1978-11-15",
-            "gjelderPerson": "person_PERSON_BIDRAGSPLIKTIG_19720829_39"
-          },
-          "datakilde": "PDL",
-          "hentetTidspunkt": "2024-07-22T12:17:48.298795"
-        },
-        {
-          "grunnlag": {
-            "navn": "PRAGMATISK ROSIN",
+            "navn": "GRETTEN HARMONI",
+            "fødselsdato": "1989-07-20",
             "perioder": [
               {
-                "fom": "2024-02-01",
-                "til": null
+                "fom": "2024-02-01"
               }
-            ],
-            "relasjon": "INGEN",
-            "fødselsdato": "1979-01-24",
-            "gjelderPerson": "person_PERSON_BIDRAGSPLIKTIG_19720829_39"
+            ]
           },
-          "datakilde": "PDL",
-          "hentetTidspunkt": "2024-07-22T12:17:48.298795"
+          "hentetTidspunkt": "2024-08-06T20:39:07.247778"
         },
         {
+          "datakilde": "PDL",
           "grunnlag": {
-            "navn": "TYPISK MANDAGSBIL",
+            "gjelderPerson": "person_PERSON_BIDRAGSPLIKTIG_19790213_2107",
+            "relasjon": "INGEN",
+            "navn": "SKJØR KOMMUNE",
+            "fødselsdato": "1979-02-23",
             "perioder": [
               {
-                "fom": "2024-02-01",
-                "til": "2024-07-21"
+                "fom": "2023-07-31"
               }
-            ],
-            "relasjon": "INGEN",
-            "fødselsdato": "1979-02-27",
-            "gjelderPerson": "person_PERSON_BIDRAGSPLIKTIG_19720829_39"
+            ]
           },
-          "datakilde": "PDL",
-          "hentetTidspunkt": "2024-07-22T12:17:48.298795"
-        },
-        {
-          "grunnlag": {
-            "navn": "ETTERPÅKLOK OVERSTRÅLENDE BJØRNEBÆR",
-            "perioder": [
-              {
-                "fom": "2024-07-01",
-                "til": null
-              }
-            ],
-            "relasjon": "INGEN",
-            "fødselsdato": "1978-03-31",
-            "gjelderPerson": "person_PERSON_BIDRAGSPLIKTIG_19720829_39"
-          },
-          "datakilde": "PDL",
-          "hentetTidspunkt": "2024-07-22T12:17:48.298795"
+          "hentetTidspunkt": "2024-08-06T20:39:07.247778"
         }
       ],
       "grunnlagsreferanseListe": [],
-      "gjelderReferanse": "person_PERSON_BIDRAGSPLIKTIG_19720829_39"
+      "gjelderReferanse": "person_PERSON_BIDRAGSPLIKTIG_19790213_2107"
     },
     {
-      "referanse": "notat_UTGIFTER_kun_i_notat",
-      "type": "NOTAT",
+      "referanse": "beregnet_inntekt_person_PERSON_BIDRAGSPLIKTIG_19790213_2107",
+      "type": "BEREGNET_INNTEKT",
       "innhold": {
-        "type": "UTGIFTER",
-        "innhold": "Dette er en begrunnelse på hvorfor utgifter ble beregnet slik",
-        "erMedIVedtaksdokumentet": false
+        "versjon": "2024.08.01.144303_14dcb50",
+        "summertMånedsinntektListe": [
+          {
+            "gjelderÅrMåned": "2023-01",
+            "sumInntekt": 50000,
+            "inntektPostListe": [
+              {
+                "kode": "fastloenn",
+                "beløp": 50000
+              }
+            ]
+          },
+          {
+            "gjelderÅrMåned": "2023-02",
+            "sumInntekt": 50000,
+            "inntektPostListe": [
+              {
+                "kode": "fastloenn",
+                "beløp": 50000
+              }
+            ]
+          },
+          {
+            "gjelderÅrMåned": "2023-03",
+            "sumInntekt": 60000,
+            "inntektPostListe": [
+              {
+                "kode": "fastloenn",
+                "beløp": 55000
+              },
+              {
+                "kode": "overgangsstoenadTilEnsligMorEllerFarSomBegynteAaLoepe1April2014EllerSenere",
+                "beløp": 5000
+              }
+            ]
+          },
+          {
+            "gjelderÅrMåned": "2023-04",
+            "sumInntekt": 55000,
+            "inntektPostListe": [
+              {
+                "kode": "fastloenn",
+                "beløp": 55000
+              }
+            ]
+          },
+          {
+            "gjelderÅrMåned": "2023-05",
+            "sumInntekt": 80000,
+            "inntektPostListe": [
+              {
+                "kode": "fastloenn",
+                "beløp": 80000
+              }
+            ]
+          },
+          {
+            "gjelderÅrMåned": "2023-07",
+            "sumInntekt": 64000,
+            "inntektPostListe": [
+              {
+                "kode": "fastloenn",
+                "beløp": 60000
+              },
+              {
+                "kode": "overgangsstoenadTilEnsligMorEllerFarSomBegynteAaLoepe1April2014EllerSenere",
+                "beløp": 4000
+              }
+            ]
+          },
+          {
+            "gjelderÅrMåned": "2023-08",
+            "sumInntekt": 60000,
+            "inntektPostListe": [
+              {
+                "kode": "fastloenn",
+                "beløp": 60000
+              }
+            ]
+          },
+          {
+            "gjelderÅrMåned": "2023-09",
+            "sumInntekt": 60000,
+            "inntektPostListe": [
+              {
+                "kode": "fastloenn",
+                "beløp": 60000
+              }
+            ]
+          },
+          {
+            "gjelderÅrMåned": "2023-10",
+            "sumInntekt": 80000,
+            "inntektPostListe": [
+              {
+                "kode": "fastloenn",
+                "beløp": 60000
+              },
+              {
+                "kode": "foreldrepenger",
+                "beløp": 15000
+              },
+              {
+                "kode": "sykepenger",
+                "beløp": 5000
+              }
+            ]
+          },
+          {
+            "gjelderÅrMåned": "2023-11",
+            "sumInntekt": 90000,
+            "inntektPostListe": [
+              {
+                "kode": "fastloenn",
+                "beløp": 70000
+              },
+              {
+                "kode": "foreldrepenger",
+                "beløp": 15000
+              },
+              {
+                "kode": "sykepenger",
+                "beløp": 5000
+              }
+            ]
+          },
+          {
+            "gjelderÅrMåned": "2023-12",
+            "sumInntekt": 83000,
+            "inntektPostListe": [
+              {
+                "kode": "fastloenn",
+                "beløp": 60000
+              },
+              {
+                "kode": "foreldrepenger",
+                "beløp": 15000
+              },
+              {
+                "kode": "sykepenger",
+                "beløp": 8000
+              }
+            ]
+          },
+          {
+            "gjelderÅrMåned": "2024-01",
+            "sumInntekt": 66111,
+            "inntektPostListe": [
+              {
+                "kode": "fastloenn",
+                "beløp": 60000
+              },
+              {
+                "kode": "overgangsstoenadTilEnsligMorEllerFarSomBegynteAaLoepe1April2014EllerSenere",
+                "beløp": 3111
+              },
+              {
+                "kode": "sykepenger",
+                "beløp": 3000
+              }
+            ]
+          },
+          {
+            "gjelderÅrMåned": "2024-02",
+            "sumInntekt": 5000,
+            "inntektPostListe": [
+              {
+                "kode": "overgangsstoenadTilEnsligMorEllerFarSomBegynteAaLoepe1April2014EllerSenere",
+                "beløp": 2000
+              },
+              {
+                "kode": "sykepenger",
+                "beløp": 3000
+              }
+            ]
+          },
+          {
+            "gjelderÅrMåned": "2024-03",
+            "sumInntekt": 2000,
+            "inntektPostListe": [
+              {
+                "kode": "overgangsstoenadTilEnsligMorEllerFarSomBegynteAaLoepe1April2014EllerSenere",
+                "beløp": 2000
+              }
+            ]
+          },
+          {
+            "gjelderÅrMåned": "2024-04",
+            "sumInntekt": 45000,
+            "inntektPostListe": [
+              {
+                "kode": "overgangsstoenadTilEnsligMorEllerFarSomBegynteAaLoepe1April2014EllerSenere",
+                "beløp": 2000
+              },
+              {
+                "kode": "fastloenn",
+                "beløp": 35000
+              },
+              {
+                "kode": "foreldrepenger",
+                "beløp": 3000
+              },
+              {
+                "kode": "sykepenger",
+                "beløp": 3000
+              },
+              {
+                "kode": "ufoeretrygd",
+                "beløp": 2000
+              }
+            ]
+          },
+          {
+            "gjelderÅrMåned": "2024-05",
+            "sumInntekt": 43000,
+            "inntektPostListe": [
+              {
+                "kode": "fastloenn",
+                "beløp": 35000
+              },
+              {
+                "kode": "foreldrepenger",
+                "beløp": 3000
+              },
+              {
+                "kode": "sykepenger",
+                "beløp": 3000
+              },
+              {
+                "kode": "ufoeretrygd",
+                "beløp": 2000
+              }
+            ]
+          },
+          {
+            "gjelderÅrMåned": "2024-06",
+            "sumInntekt": 43000,
+            "inntektPostListe": [
+              {
+                "kode": "fastloenn",
+                "beløp": 35000
+              },
+              {
+                "kode": "foreldrepenger",
+                "beløp": 3000
+              },
+              {
+                "kode": "sykepenger",
+                "beløp": 3000
+              },
+              {
+                "kode": "ufoeretrygd",
+                "beløp": 2000
+              }
+            ]
+          },
+          {
+            "gjelderÅrMåned": "2024-07",
+            "sumInntekt": 43000,
+            "inntektPostListe": [
+              {
+                "kode": "fastloenn",
+                "beløp": 35000
+              },
+              {
+                "kode": "foreldrepenger",
+                "beløp": 3000
+              },
+              {
+                "kode": "sykepenger",
+                "beløp": 3000
+              },
+              {
+                "kode": "ufoeretrygd",
+                "beløp": 2000
+              }
+            ]
+          },
+          {
+            "gjelderÅrMåned": "2024-08",
+            "sumInntekt": 43000,
+            "inntektPostListe": [
+              {
+                "kode": "fastloenn",
+                "beløp": 35000
+              },
+              {
+                "kode": "foreldrepenger",
+                "beløp": 3000
+              },
+              {
+                "kode": "sykepenger",
+                "beløp": 3000
+              },
+              {
+                "kode": "ufoeretrygd",
+                "beløp": 2000
+              }
+            ]
+          }
+        ]
       },
-      "grunnlagsreferanseListe": [],
-      "gjelderReferanse": null
+      "grunnlagsreferanseListe": [
+        "innhentet_ainntekt_person_PERSON_BIDRAGSPLIKTIG_19790213_2107"
+      ],
+      "gjelderReferanse": "person_PERSON_BIDRAGSPLIKTIG_19790213_2107"
     },
     {
-      "referanse": "søknad",
-      "type": "SØKNAD",
+      "referanse": "beregnet_inntekt_person_PERSON_BIDRAGSMOTTAKER_19890720_2109",
+      "type": "BEREGNET_INNTEKT",
       "innhold": {
-        "søktAv": "BIDRAGSPLIKTIG",
-        "mottattDato": "2024-01-15",
-        "søktFraDato": "2021-01-01"
+        "versjon": "2024.08.01.144303_14dcb50",
+        "summertMånedsinntektListe": [
+          {
+            "gjelderÅrMåned": "2023-02",
+            "sumInntekt": 110000,
+            "inntektPostListe": [
+              {
+                "kode": "fastloenn",
+                "beløp": 110000
+              }
+            ]
+          },
+          {
+            "gjelderÅrMåned": "2023-03",
+            "sumInntekt": 110000,
+            "inntektPostListe": [
+              {
+                "kode": "fastloenn",
+                "beløp": 110000
+              }
+            ]
+          },
+          {
+            "gjelderÅrMåned": "2023-04",
+            "sumInntekt": 110000,
+            "inntektPostListe": [
+              {
+                "kode": "fastloenn",
+                "beløp": 110000
+              }
+            ]
+          },
+          {
+            "gjelderÅrMåned": "2023-05",
+            "sumInntekt": 110000,
+            "inntektPostListe": [
+              {
+                "kode": "fastloenn",
+                "beløp": 110000
+              }
+            ]
+          },
+          {
+            "gjelderÅrMåned": "2023-06",
+            "sumInntekt": 110000,
+            "inntektPostListe": [
+              {
+                "kode": "fastloenn",
+                "beløp": 110000
+              }
+            ]
+          },
+          {
+            "gjelderÅrMåned": "2023-07",
+            "sumInntekt": 110000,
+            "inntektPostListe": [
+              {
+                "kode": "fastloenn",
+                "beløp": 110000
+              }
+            ]
+          },
+          {
+            "gjelderÅrMåned": "2023-08",
+            "sumInntekt": 110000,
+            "inntektPostListe": [
+              {
+                "kode": "fastloenn",
+                "beløp": 110000
+              }
+            ]
+          },
+          {
+            "gjelderÅrMåned": "2023-09",
+            "sumInntekt": 110000,
+            "inntektPostListe": [
+              {
+                "kode": "fastloenn",
+                "beløp": 110000
+              }
+            ]
+          },
+          {
+            "gjelderÅrMåned": "2023-10",
+            "sumInntekt": 110000,
+            "inntektPostListe": [
+              {
+                "kode": "fastloenn",
+                "beløp": 110000
+              }
+            ]
+          },
+          {
+            "gjelderÅrMåned": "2023-11",
+            "sumInntekt": 110000,
+            "inntektPostListe": [
+              {
+                "kode": "fastloenn",
+                "beløp": 110000
+              }
+            ]
+          },
+          {
+            "gjelderÅrMåned": "2023-12",
+            "sumInntekt": 110000,
+            "inntektPostListe": [
+              {
+                "kode": "fastloenn",
+                "beløp": 110000
+              }
+            ]
+          },
+          {
+            "gjelderÅrMåned": "2024-01",
+            "sumInntekt": 44000,
+            "inntektPostListe": [
+              {
+                "kode": "fastloenn",
+                "beløp": 35000
+              },
+              {
+                "kode": "foreldrepenger",
+                "beløp": 3000
+              },
+              {
+                "kode": "sykepenger",
+                "beløp": 6000
+              }
+            ]
+          },
+          {
+            "gjelderÅrMåned": "2024-02",
+            "sumInntekt": 44000,
+            "inntektPostListe": [
+              {
+                "kode": "fastloenn",
+                "beløp": 35000
+              },
+              {
+                "kode": "foreldrepenger",
+                "beløp": 3000
+              },
+              {
+                "kode": "sykepenger",
+                "beløp": 6000
+              }
+            ]
+          },
+          {
+            "gjelderÅrMåned": "2024-03",
+            "sumInntekt": 44000,
+            "inntektPostListe": [
+              {
+                "kode": "fastloenn",
+                "beløp": 35000
+              },
+              {
+                "kode": "foreldrepenger",
+                "beløp": 3000
+              },
+              {
+                "kode": "sykepenger",
+                "beløp": 6000
+              }
+            ]
+          },
+          {
+            "gjelderÅrMåned": "2024-04",
+            "sumInntekt": 44000,
+            "inntektPostListe": [
+              {
+                "kode": "fastloenn",
+                "beløp": 35000
+              },
+              {
+                "kode": "foreldrepenger",
+                "beløp": 3000
+              },
+              {
+                "kode": "sykepenger",
+                "beløp": 6000
+              }
+            ]
+          },
+          {
+            "gjelderÅrMåned": "2024-05",
+            "sumInntekt": 44000,
+            "inntektPostListe": [
+              {
+                "kode": "fastloenn",
+                "beløp": 35000
+              },
+              {
+                "kode": "foreldrepenger",
+                "beløp": 3000
+              },
+              {
+                "kode": "sykepenger",
+                "beløp": 6000
+              }
+            ]
+          },
+          {
+            "gjelderÅrMåned": "2024-06",
+            "sumInntekt": 44000,
+            "inntektPostListe": [
+              {
+                "kode": "fastloenn",
+                "beløp": 35000
+              },
+              {
+                "kode": "foreldrepenger",
+                "beløp": 3000
+              },
+              {
+                "kode": "sykepenger",
+                "beløp": 6000
+              }
+            ]
+          },
+          {
+            "gjelderÅrMåned": "2024-07",
+            "sumInntekt": 44000,
+            "inntektPostListe": [
+              {
+                "kode": "fastloenn",
+                "beløp": 35000
+              },
+              {
+                "kode": "foreldrepenger",
+                "beløp": 3000
+              },
+              {
+                "kode": "sykepenger",
+                "beløp": 6000
+              }
+            ]
+          },
+          {
+            "gjelderÅrMåned": "2024-08",
+            "sumInntekt": 47000,
+            "inntektPostListe": [
+              {
+                "kode": "fastloenn",
+                "beløp": 35000
+              },
+              {
+                "kode": "foreldrepenger",
+                "beløp": 6000
+              },
+              {
+                "kode": "sykepenger",
+                "beløp": 6000
+              }
+            ]
+          }
+        ]
       },
-      "grunnlagsreferanseListe": [],
-      "gjelderReferanse": null
-    },
-    {
-      "referanse": "virkningstidspunkt",
-      "type": "VIRKNINGSTIDSPUNKT",
-      "innhold": {
-        "avslag": null,
-        "årsak": null,
-        "virkningstidspunkt": "2024-07-01"
-      },
-      "grunnlagsreferanseListe": [],
-      "gjelderReferanse": null
-    },
-    {
-      "referanse": "utgift_direkte_betalt",
-      "type": "UTGIFT_DIREKTE_BETALT",
-      "innhold": {
-        "beløpDirekteBetalt": 2500
-      },
-      "grunnlagsreferanseListe": [],
-      "gjelderReferanse": null
+      "grunnlagsreferanseListe": [
+        "innhentet_ainntekt_person_PERSON_BIDRAGSMOTTAKER_19890720_2109"
+      ],
+      "gjelderReferanse": "person_PERSON_BIDRAGSMOTTAKER_19890720_2109"
     },
     {
       "referanse": "utgiftsposter",
@@ -1069,74 +2955,88 @@
       "innhold": [
         {
           "dato": "2024-05-06",
-          "type": "Ny høreapparat",
-          "betaltAvBp": false,
-          "kravbeløp": 9000,
-          "begrunnelse": "Inkluderer ikke frakt og andre kostnader",
-          "godkjentBeløp": 6000
+          "type": "OPTIKK",
+          "kravbeløp": 6000,
+          "godkjentBeløp": 2000,
+          "begrunnelse": "ad",
+          "betaltAvBp": false
         },
         {
-          "dato": "2024-05-08",
-          "type": "Medisiner",
-          "betaltAvBp": false,
-          "kravbeløp": 2000,
+          "dato": "2024-02-06",
+          "type": "OPTIKK",
+          "kravbeløp": 5000,
+          "godkjentBeløp": 5000,
           "begrunnelse": "",
-          "godkjentBeløp": 2000
-        },
-        {
-          "dato": "2024-05-01",
-          "type": "Batterier",
-          "betaltAvBp": false,
-          "kravbeløp": 1000,
-          "begrunnelse": "",
-          "godkjentBeløp": 1000
+          "betaltAvBp": false
         }
       ],
-      "grunnlagsreferanseListe": [],
-      "gjelderReferanse": null
+      "grunnlagsreferanseListe": []
+    },
+    {
+      "referanse": "utgift_direkte_betalt",
+      "type": "UTGIFT_DIREKTE_BETALT",
+      "innhold": {
+        "beløpDirekteBetalt": 1234
+      },
+      "grunnlagsreferanseListe": []
+    },
+    {
+      "referanse": "søknad",
+      "type": "SØKNAD",
+      "innhold": {
+        "mottattDato": "2024-01-01",
+        "søktFraDato": "2024-08-01",
+        "søktAv": "BIDRAGSMOTTAKER",
+        "klageMottattDato": "2024-01-08"
+      },
+      "grunnlagsreferanseListe": []
+    },
+    {
+      "referanse": "virkningstidspunkt",
+      "type": "VIRKNINGSTIDSPUNKT",
+      "innhold": {
+        "virkningstidspunkt": "2024-08-01"
+      },
+      "grunnlagsreferanseListe": []
     },
     {
       "referanse": "særbidrag_kategori",
       "type": "SÆRBIDRAG_KATEGORI",
       "innhold": {
-        "kategori": "ANNET",
-        "beskrivelse": "Utstyr til høreapparat"
+        "kategori": "OPTIKK"
       },
-      "grunnlagsreferanseListe": [],
-      "gjelderReferanse": null
+      "grunnlagsreferanseListe": []
     },
     {
-      "referanse": "delberegning_DELBEREGNING_BARN_I_HUSSTAND_person_PERSON_SØKNADSBARN_20220726_40_202407",
+      "referanse": "delberegning_DELBEREGNING_BARN_I_HUSSTAND_person_PERSON_BIDRAGSPLIKTIG_19790213_2107_person_PERSON_SØKNADSBARN_20051223_2108_202408",
       "type": "DELBEREGNING_BARN_I_HUSSTAND",
       "innhold": {
         "periode": {
-          "fom": "2024-07",
-          "til": null
+          "fom": "2024-08"
         },
-        "antallBarn": 3.0
+        "antallBarn": 2
       },
       "grunnlagsreferanseListe": [
-        "bostatus_person_PERSON_HUSSTANDSMEDLEM_20050916_65_20240701",
-        "bostatus_person_PERSON_HUSSTANDSMEDLEM_20150513_64_20240701",
-        "bostatus_person_PERSON_HUSSTANDSMEDLEM_20170707_63_20240701",
-        "bostatus_person_PERSON_SØKNADSBARN_20220726_40_20240701"
+        "bostatus_person_PERSON_HUSSTANDSMEDLEM_20150811_4604_20240801",
+        "bostatus_person_PERSON_HUSSTANDSMEDLEM_20180224_4605_20240801",
+        "bostatus_person_PERSON_SØKNADSBARN_20051223_2108_20240801"
       ],
-      "gjelderReferanse": "person_PERSON_BIDRAGSPLIKTIG_19720829_39"
+      "gjelderReferanse": "person_PERSON_BIDRAGSPLIKTIG_19790213_2107"
     },
     {
-      "referanse": "delberegning_DELBEREGNING_BIDRAGSEVNE_person_PERSON_SØKNADSBARN_20220726_40_202407_202408",
+      "referanse": "delberegning_DELBEREGNING_BIDRAGSEVNE_person_PERSON_SØKNADSBARN_20051223_2108_202408_202409",
       "type": "DELBEREGNING_BIDRAGSEVNE",
       "innhold": {
-        "beløp": 17214,
         "periode": {
-          "fom": "2024-07",
-          "til": "2024-08"
-        }
+          "fom": "2024-08",
+          "til": "2024-09"
+        },
+        "beløp": 16658
       },
       "grunnlagsreferanseListe": [
-        "delberegning_DELBEREGNING_BARN_I_HUSSTAND_person_PERSON_SØKNADSBARN_20220726_40_202407",
-        "delberegning_DELBEREGNING_SUM_INNTEKT_person_PERSON_BIDRAGSPLIKTIG_19720829_39_202407",
-        "delberegning_DELBEREGNING_VOKSNE_I_HUSSTAND_person_PERSON_SØKNADSBARN_20220726_40_202407",
+        "delberegning_DELBEREGNING_BARN_I_HUSSTAND_person_PERSON_BIDRAGSPLIKTIG_19790213_2107_person_PERSON_SØKNADSBARN_20051223_2108_202408",
+        "delberegning_DELBEREGNING_SUM_INNTEKT_person_PERSON_BIDRAGSPLIKTIG_19790213_2107_person_PERSON_SØKNADSBARN_20051223_2108_202408",
+        "delberegning_DELBEREGNING_VOKSNE_I_HUSSTAND_person_PERSON_BIDRAGSPLIKTIG_19790213_2107_person_PERSON_SØKNADSBARN_20051223_2108_202408",
         "Sjablon_Bidragsevne_20240701",
         "Sjablon_MinstefradragInntektBeløp_20230701",
         "Sjablon_MinstefradragInntektProsent_20220101",
@@ -1146,385 +3046,306 @@
         "Sjablon_TrygdeavgiftProsent_20240101",
         "Sjablon_UnderholdEgneBarnIHusstandBeløp_20240701"
       ],
-      "gjelderReferanse": "person_PERSON_BIDRAGSPLIKTIG_19720829_39"
+      "gjelderReferanse": "person_PERSON_BIDRAGSPLIKTIG_19790213_2107"
     },
     {
-      "referanse": "delberegning_DELBEREGNING_BIDRAGSPLIKTIGES_ANDEL_SÆRBIDRAG_person_PERSON_SØKNADSBARN_20220726_40_202407_202408",
+      "referanse": "delberegning_DELBEREGNING_BIDRAGSPLIKTIGES_ANDEL_SÆRBIDRAG_person_PERSON_SØKNADSBARN_20051223_2108_202408_202409",
       "type": "DELBEREGNING_BIDRAGSPLIKTIGES_ANDEL_SÆRBIDRAG",
       "innhold": {
         "periode": {
-          "fom": "2024-07",
-          "til": "2024-08"
+          "fom": "2024-08",
+          "til": "2024-09"
         },
-        "andelBeløp": 5796,
-        "andelProsent": 64.4,
+        "andelProsent": 44.9,
+        "andelBeløp": 3143,
         "barnetErSelvforsørget": false
       },
       "grunnlagsreferanseListe": [
-        "delberegning_DELBEREGNING_SUM_INNTEKT_person_PERSON_BIDRAGSMOTTAKER_19781115_41_202407",
-        "delberegning_DELBEREGNING_SUM_INNTEKT_person_PERSON_BIDRAGSPLIKTIG_19720829_39_202407",
-        "delberegning_DELBEREGNING_SUM_INNTEKT_person_PERSON_SØKNADSBARN_20220726_40_202407",
+        "delberegning_DELBEREGNING_SUM_INNTEKT_person_PERSON_BIDRAGSMOTTAKER_19890720_2109_person_PERSON_SØKNADSBARN_20051223_2108_202408",
+        "delberegning_DELBEREGNING_SUM_INNTEKT_person_PERSON_BIDRAGSPLIKTIG_19790213_2107_person_PERSON_SØKNADSBARN_20051223_2108_202408",
+        "delberegning_DELBEREGNING_SUM_INNTEKT_person_PERSON_SØKNADSBARN_20051223_2108_person_PERSON_SØKNADSBARN_20051223_2108_202408",
         "delberegning_utgift",
         "Sjablon_ForskuddssatsBeløp_20240701"
       ],
-      "gjelderReferanse": "person_PERSON_BIDRAGSPLIKTIG_19720829_39"
+      "gjelderReferanse": "person_PERSON_BIDRAGSPLIKTIG_19790213_2107"
     },
     {
-      "referanse": "delberegning_DELBEREGNING_SUM_INNTEKT_person_PERSON_BIDRAGSMOTTAKER_19781115_41_202407",
+      "referanse": "delberegning_DELBEREGNING_SUM_INNTEKT_person_PERSON_BIDRAGSMOTTAKER_19890720_2109_person_PERSON_SØKNADSBARN_20051223_2108_202408",
       "type": "DELBEREGNING_SUM_INNTEKT",
       "innhold": {
         "periode": {
-          "fom": "2024-07",
-          "til": null
+          "fom": "2024-08"
         },
-        "barnetillegg": null,
-        "totalinntekt": 442192,
-        "kontantstøtte": null,
-        "småbarnstillegg": null,
-        "utvidetBarnetrygd": 30192,
-        "skattepliktigInntekt": 412000
+        "totalinntekt": 858000,
+        "skattepliktigInntekt": 858000
       },
       "grunnlagsreferanseListe": [
-        "inntekt_LIGNINGSINNTEKT_person_PERSON_BIDRAGSMOTTAKER_19781115_41_20230101_20231231_134",
-        "inntekt_UTVIDET_BARNETRYGD_person_PERSON_BIDRAGSMOTTAKER_19781115_41_20230701_20350630_137"
+        "inntekt_AINNTEKT_BEREGNET_12MND_person_PERSON_BIDRAGSMOTTAKER_19890720_2109_20230801_20240731_8433"
       ],
-      "gjelderReferanse": "person_PERSON_BIDRAGSMOTTAKER_19781115_41"
+      "gjelderReferanse": "person_PERSON_BIDRAGSMOTTAKER_19890720_2109"
     },
     {
-      "referanse": "delberegning_DELBEREGNING_SUM_INNTEKT_person_PERSON_BIDRAGSPLIKTIG_19720829_39_202407",
+      "referanse": "delberegning_DELBEREGNING_SUM_INNTEKT_person_PERSON_BIDRAGSPLIKTIG_19790213_2107_person_PERSON_SØKNADSBARN_20051223_2108_202408",
       "type": "DELBEREGNING_SUM_INNTEKT",
       "innhold": {
         "periode": {
-          "fom": "2024-07",
-          "til": null
+          "fom": "2024-08"
         },
-        "barnetillegg": 1440,
-        "totalinntekt": 801440,
-        "kontantstøtte": null,
-        "småbarnstillegg": null,
-        "utvidetBarnetrygd": null,
-        "skattepliktigInntekt": 800000
+        "totalinntekt": 699466,
+        "skattepliktigInntekt": 699466
       },
       "grunnlagsreferanseListe": [
-        "inntekt_BARNETILLEGG_BARNETILLEGG_PENSJON_person_PERSON_BIDRAGSPLIKTIG_19720829_39_ba_person_PERSON_SØKNADSBARN_20220726_40_20240701_157",
-        "inntekt_LØNN_MANUELT_BEREGNET_person_PERSON_BIDRAGSPLIKTIG_19720829_39_20240701_156"
+        "inntekt_FORELDREPENGER_person_PERSON_BIDRAGSPLIKTIG_19790213_2107_20230101_20231231_8424",
+        "inntekt_KAPITALINNTEKT_person_PERSON_BIDRAGSPLIKTIG_19790213_2107_20230101_20231231_8426",
+        "inntekt_LØNN_MANUELT_BEREGNET_person_PERSON_BIDRAGSPLIKTIG_19790213_2107_20240801_8428",
+        "inntekt_OVERGANGSSTØNAD_person_PERSON_BIDRAGSPLIKTIG_19790213_2107_20230501_20240430_8422",
+        "inntekt_SYKEPENGER_person_PERSON_BIDRAGSPLIKTIG_19790213_2107_20230101_20231231_8423",
+        "sjablon_InnslagKapitalInntektBeløp_200301_999912"
       ],
-      "gjelderReferanse": "person_PERSON_BIDRAGSPLIKTIG_19720829_39"
+      "gjelderReferanse": "person_PERSON_BIDRAGSPLIKTIG_19790213_2107"
     },
     {
-      "referanse": "delberegning_DELBEREGNING_SUM_INNTEKT_person_PERSON_SØKNADSBARN_20220726_40_202407",
+      "referanse": "delberegning_DELBEREGNING_SUM_INNTEKT_person_PERSON_SØKNADSBARN_20051223_2108_person_PERSON_SØKNADSBARN_20051223_2108_202408",
       "type": "DELBEREGNING_SUM_INNTEKT",
       "innhold": {
         "periode": {
-          "fom": "2024-07",
-          "til": null
+          "fom": "2024-08"
         },
-        "barnetillegg": null,
-        "totalinntekt": 5000,
-        "kontantstøtte": null,
-        "småbarnstillegg": null,
-        "utvidetBarnetrygd": null,
-        "skattepliktigInntekt": 5000
+        "totalinntekt": 20000,
+        "skattepliktigInntekt": 20000
       },
       "grunnlagsreferanseListe": [
-        "inntekt_LØNN_MANUELT_BEREGNET_person_PERSON_SØKNADSBARN_20220726_40_20240701_158"
+        "inntekt_SKJØNN_MANGLENDE_DOKUMENTASJON_person_PERSON_SØKNADSBARN_20051223_2108_20240801_8436"
       ],
-      "gjelderReferanse": "person_PERSON_SØKNADSBARN_20220726_40"
+      "gjelderReferanse": "person_PERSON_SØKNADSBARN_20051223_2108"
     },
     {
       "referanse": "delberegning_utgift",
       "type": "DELBEREGNING_UTGIFT",
       "innhold": {
         "periode": {
-          "fom": "2024-07",
-          "til": "2024-08"
+          "fom": "2024-08",
+          "til": "2024-09"
         },
-        "sumGodkjent": 9000,
-        "sumBetaltAvBp": 2500
+        "sumBetaltAvBp": 1234,
+        "sumGodkjent": 7000
       },
-      "grunnlagsreferanseListe": [],
-      "gjelderReferanse": null
+      "grunnlagsreferanseListe": [
+        "utgiftsposter",
+        "utgift_direkte_betalt"
+      ]
     },
     {
-      "referanse": "delberegning_DELBEREGNING_VOKSNE_I_HUSSTAND_person_PERSON_SØKNADSBARN_20220726_40_202407",
+      "referanse": "delberegning_DELBEREGNING_VOKSNE_I_HUSSTAND_person_PERSON_BIDRAGSPLIKTIG_19790213_2107_person_PERSON_SØKNADSBARN_20051223_2108_202408",
       "type": "DELBEREGNING_VOKSNE_I_HUSSTAND",
       "innhold": {
         "periode": {
-          "fom": "2024-07",
-          "til": null
+          "fom": "2024-08"
         },
         "borMedAndreVoksne": true
       },
       "grunnlagsreferanseListe": [
-        "bostatus_person_PERSON_BIDRAGSPLIKTIG_19720829_39_20240701",
-        "bostatus_person_PERSON_HUSSTANDSMEDLEM_20050916_65_20240701"
+        "bostatus_person_PERSON_BIDRAGSPLIKTIG_19790213_2107_20240801",
+        "bostatus_person_PERSON_SØKNADSBARN_20051223_2108_20240801"
       ],
-      "gjelderReferanse": "person_PERSON_BIDRAGSPLIKTIG_19720829_39"
+      "gjelderReferanse": "person_PERSON_BIDRAGSPLIKTIG_19790213_2107"
+    },
+    {
+      "referanse": "Sjablon_ForskuddssatsBeløp_20240701",
+      "type": "SJABLON",
+      "innhold": {
+        "periode": {
+          "fom": "2024-07"
+        },
+        "sjablon": "FORSKUDDSSATS_BELØP",
+        "verdi": 1970
+      },
+      "grunnlagsreferanseListe": []
+    },
+    {
+      "referanse": "Sjablon_MinstefradragInntektBeløp_20230701",
+      "type": "SJABLON",
+      "innhold": {
+        "periode": {
+          "fom": "2023-07"
+        },
+        "sjablon": "MINSTEFRADRAG_INNTEKT_BELØP",
+        "verdi": 86250
+      },
+      "grunnlagsreferanseListe": []
+    },
+    {
+      "referanse": "Sjablon_MinstefradragInntektProsent_20220101",
+      "type": "SJABLON",
+      "innhold": {
+        "periode": {
+          "fom": "2022-01"
+        },
+        "sjablon": "MINSTEFRADRAG_INNTEKT_PROSENT",
+        "verdi": 40
+      },
+      "grunnlagsreferanseListe": []
+    },
+    {
+      "referanse": "Sjablon_PersonfradragKlasse1Beløp_20240701",
+      "type": "SJABLON",
+      "innhold": {
+        "periode": {
+          "fom": "2024-07"
+        },
+        "sjablon": "PERSONFRADRAG_KLASSE1_BELØP",
+        "verdi": 88250
+      },
+      "grunnlagsreferanseListe": []
+    },
+    {
+      "referanse": "Sjablon_SkattesatsAlminneligInntektProsent_20190101",
+      "type": "SJABLON",
+      "innhold": {
+        "periode": {
+          "fom": "2019-01"
+        },
+        "sjablon": "SKATTESATS_ALMINNELIG_INNTEKT_PROSENT",
+        "verdi": 22
+      },
+      "grunnlagsreferanseListe": []
+    },
+    {
+      "referanse": "Sjablon_TrygdeavgiftProsent_20240101",
+      "type": "SJABLON",
+      "innhold": {
+        "periode": {
+          "fom": "2024-01"
+        },
+        "sjablon": "TRYGDEAVGIFT_PROSENT",
+        "verdi": 7.8
+      },
+      "grunnlagsreferanseListe": []
+    },
+    {
+      "referanse": "Sjablon_UnderholdEgneBarnIHusstandBeløp_20240701",
+      "type": "SJABLON",
+      "innhold": {
+        "periode": {
+          "fom": "2024-07"
+        },
+        "sjablon": "UNDERHOLD_EGNE_BARN_I_HUSSTAND_BELØP",
+        "verdi": 4253
+      },
+      "grunnlagsreferanseListe": []
+    },
+    {
+      "referanse": "sjablon_InnslagKapitalInntektBeløp_200301_999912",
+      "type": "SJABLON",
+      "innhold": {
+        "periode": {
+          "fom": "2003-01",
+          "til": "9999-12"
+        },
+        "sjablon": "INNSLAG_KAPITALINNTEKT_BELØP",
+        "verdi": 10000
+      },
+      "grunnlagsreferanseListe": []
     },
     {
       "referanse": "Sjablon_Bidragsevne_20240701",
       "type": "SJABLON_BIDRAGSEVNE",
       "innhold": {
         "periode": {
-          "fom": "2024-07",
-          "til": null
+          "fom": "2024-07"
         },
-        "boutgiftBeløp": 7391.0,
-        "underholdBeløp": 9852.0
+        "boutgiftBeløp": 7391,
+        "underholdBeløp": 9852
       },
-      "grunnlagsreferanseListe": [],
-      "gjelderReferanse": null
-    },
-    {
-      "referanse": "Sjablon_ForskuddssatsBeløp_20240701",
-      "type": "SJABLON",
-      "innhold": {
-        "verdi": 1970.0,
-        "periode": {
-          "fom": "2024-07",
-          "til": null
-        },
-        "sjablon": "FORSKUDDSSATS_BELØP"
-      },
-      "grunnlagsreferanseListe": [],
-      "gjelderReferanse": null
-    },
-    {
-      "referanse": "Sjablon_MinstefradragInntektBeløp_20230701",
-      "type": "SJABLON",
-      "innhold": {
-        "verdi": 86250.0,
-        "periode": {
-          "fom": "2023-07",
-          "til": null
-        },
-        "sjablon": "MINSTEFRADRAG_INNTEKT_BELØP"
-      },
-      "grunnlagsreferanseListe": [],
-      "gjelderReferanse": null
-    },
-    {
-      "referanse": "Sjablon_MinstefradragInntektProsent_20220101",
-      "type": "SJABLON",
-      "innhold": {
-        "verdi": 40.0,
-        "periode": {
-          "fom": "2022-01",
-          "til": null
-        },
-        "sjablon": "MINSTEFRADRAG_INNTEKT_PROSENT"
-      },
-      "grunnlagsreferanseListe": [],
-      "gjelderReferanse": null
-    },
-    {
-      "referanse": "Sjablon_PersonfradragKlasse1Beløp_20240701",
-      "type": "SJABLON",
-      "innhold": {
-        "verdi": 88250.0,
-        "periode": {
-          "fom": "2024-07",
-          "til": null
-        },
-        "sjablon": "PERSONFRADRAG_KLASSE1_BELØP"
-      },
-      "grunnlagsreferanseListe": [],
-      "gjelderReferanse": null
-    },
-    {
-      "referanse": "Sjablon_SkattesatsAlminneligInntektProsent_20190101",
-      "type": "SJABLON",
-      "innhold": {
-        "verdi": 22.0,
-        "periode": {
-          "fom": "2019-01",
-          "til": null
-        },
-        "sjablon": "SKATTESATS_ALMINNELIG_INNTEKT_PROSENT"
-      },
-      "grunnlagsreferanseListe": [],
-      "gjelderReferanse": null
+      "grunnlagsreferanseListe": []
     },
     {
       "referanse": "Sjablon_TrinnvisSkattesats_20240101",
       "type": "SJABLON_TRINNVIS_SKATTESATS",
       "innhold": {
         "periode": {
-          "fom": "2024-01",
-          "til": null
+          "fom": "2024-01"
         },
         "trinnliste": [
           {
-            "sats": 1.7,
-            "inntekstgrense": 208050
+            "inntekstgrense": 208050,
+            "sats": 1.7
           },
           {
-            "sats": 4.0,
-            "inntekstgrense": 292850
+            "inntekstgrense": 292850,
+            "sats": 4
           },
           {
-            "sats": 13.6,
-            "inntekstgrense": 670000
+            "inntekstgrense": 670000,
+            "sats": 13.6
           },
           {
-            "sats": 16.6,
-            "inntekstgrense": 937900
+            "inntekstgrense": 937900,
+            "sats": 16.6
           },
           {
-            "sats": 17.6,
-            "inntekstgrense": 1350000
+            "inntekstgrense": 1350000,
+            "sats": 17.6
           }
         ]
       },
-      "grunnlagsreferanseListe": [],
-      "gjelderReferanse": null
+      "grunnlagsreferanseListe": []
     },
     {
-      "referanse": "Sjablon_TrygdeavgiftProsent_20240101",
-      "type": "SJABLON",
-      "innhold": {
-        "verdi": 7.8,
-        "periode": {
-          "fom": "2024-01",
-          "til": null
-        },
-        "sjablon": "TRYGDEAVGIFT_PROSENT"
-      },
-      "grunnlagsreferanseListe": [],
-      "gjelderReferanse": null
-    },
-    {
-      "referanse": "Sjablon_UnderholdEgneBarnIHusstandBeløp_20240701",
-      "type": "SJABLON",
-      "innhold": {
-        "verdi": 4253.0,
-        "periode": {
-          "fom": "2024-07",
-          "til": null
-        },
-        "sjablon": "UNDERHOLD_EGNE_BARN_I_HUSSTAND_BELØP"
-      },
-      "grunnlagsreferanseListe": [],
-      "gjelderReferanse": null
-    },
-    {
-      "referanse": "sluttberegning_person_PERSON_SØKNADSBARN_20220726_40_202407_202408",
+      "referanse": "sluttberegning_person_PERSON_SØKNADSBARN_20051223_2108_202408_202409",
       "type": "SLUTTBEREGNING_SÆRBIDRAG",
       "innhold": {
         "periode": {
-          "fom": "2024-07",
-          "til": "2024-08"
+          "fom": "2024-08",
+          "til": "2024-09"
         },
+        "beregnetBeløp": 3143,
         "resultatKode": "SÆRBIDRAG_INNVILGET",
-        "beregnetBeløp": 5796,
-        "resultatBeløp": 3296
+        "resultatBeløp": 1909
       },
       "grunnlagsreferanseListe": [
-        "delberegning_DELBEREGNING_BIDRAGSEVNE_person_PERSON_SØKNADSBARN_20220726_40_202407_202408",
-        "delberegning_DELBEREGNING_BIDRAGSPLIKTIGES_ANDEL_SÆRBIDRAG_person_PERSON_SØKNADSBARN_20220726_40_202407_202408",
+        "delberegning_DELBEREGNING_BIDRAGSEVNE_person_PERSON_SØKNADSBARN_20051223_2108_202408_202409",
+        "delberegning_DELBEREGNING_BIDRAGSPLIKTIGES_ANDEL_SÆRBIDRAG_person_PERSON_SØKNADSBARN_20051223_2108_202408_202409",
         "delberegning_utgift"
       ],
-      "gjelderReferanse": "person_PERSON_SØKNADSBARN_20220726_40"
+      "gjelderReferanse": "person_PERSON_SØKNADSBARN_20051223_2108"
     }
   ],
   "stønadsendringListe": [],
   "engangsbeløpListe": [
     {
       "type": "SÆRBIDRAG",
-      "sak": "1233333",
-      "skyldner": "29487249651",
-      "kravhaver": "26472252274",
-      "mottaker": "15517829118",
-      "beløp": 5796,
+      "sak": "2400067",
+      "skyldner": "{bpIdent}",
+      "kravhaver": "{barnId2}",
+      "mottaker": "{bmIdent}",
+      "beløp": 3143,
       "valutakode": "NOK",
       "resultatkode": "SÆRBIDRAG_INNVILGET",
       "innkreving": "MED_INNKREVING",
       "beslutning": "ENDRING",
-      "omgjørVedtakId": null,
-      "referanse": "3253ee93-c2d8-4a95-89da-e155ac84e48c",
-      "delytelseId": null,
-      "eksternReferanse": null,
+      "omgjørVedtakId": 360,
+      "referanse": "",
       "grunnlagReferanseListe": [
-        "person_PERSON_BIDRAGSMOTTAKER_19781115_41",
-        "person_PERSON_BIDRAGSPLIKTIG_19720829_39",
-        "person_PERSON_SØKNADSBARN_20220726_40",
-        "bostatus_person_PERSON_HUSSTANDSMEDLEM_20050916_65_20240701",
-        "bostatus_person_PERSON_SØKNADSBARN_20220726_40_20240701",
-        "bostatus_person_PERSON_HUSSTANDSMEDLEM_20170707_63_20240701",
-        "bostatus_person_PERSON_HUSSTANDSMEDLEM_20150513_64_20240701",
-        "bostatus_person_PERSON_BIDRAGSPLIKTIG_19720829_39_20240701",
-        "person_PERSON_HUSSTANDSMEDLEM_20050916_65",
-        "person_PERSON_HUSSTANDSMEDLEM_20170707_63",
-        "person_PERSON_HUSSTANDSMEDLEM_20150513_64",
-        "inntekt_BARNETILLEGG_BARNETILLEGG_PENSJON_person_PERSON_BIDRAGSPLIKTIG_19720829_39_ba_person_PERSON_SØKNADSBARN_20220726_40_20240701_157",
-        "inntekt_LØNN_MANUELT_BEREGNET_person_PERSON_BIDRAGSPLIKTIG_19720829_39_20240701_156",
-        "inntekt_LIGNINGSINNTEKT_person_PERSON_BIDRAGSMOTTAKER_19781115_41_20230101_20231231_134",
-        "inntekt_KAPITALINNTEKT_person_PERSON_BIDRAGSMOTTAKER_19781115_41_20220101_20221231_135",
-        "inntekt_KAPITALINNTEKT_person_PERSON_BIDRAGSMOTTAKER_19781115_41_20230101_20231231_136",
-        "inntekt_UTVIDET_BARNETRYGD_person_PERSON_BIDRAGSMOTTAKER_19781115_41_20230701_20350630_137",
-        "inntekt_LIGNINGSINNTEKT_person_PERSON_BIDRAGSMOTTAKER_19781115_41_20220101_20221231_133",
-        "inntekt_LØNN_MANUELT_BEREGNET_person_PERSON_SØKNADSBARN_20220726_40_20240701_158",
-        "innhentet_skattegrunnlag_person_PERSON_BIDRAGSMOTTAKER_19781115_41_2021",
-        "innhentet_skattegrunnlag_person_PERSON_BIDRAGSMOTTAKER_19781115_41_2022",
-        "innhentet_skattegrunnlag_person_PERSON_BIDRAGSMOTTAKER_19781115_41_2023",
-        "innhentet_ainntekt_person_PERSON_BIDRAGSMOTTAKER_19781115_41",
-        "innhentet_barnetillegg_person_PERSON_BIDRAGSMOTTAKER_19781115_41_PENSJON",
-        "innhentet_utvidetbarnetrygd_person_PERSON_BIDRAGSMOTTAKER_19781115_41",
-        "innhentet_arbeidsforhold_person_PERSON_BIDRAGSMOTTAKER_19781115_41",
-        "innhentet_husstandsmedlem_person_PERSON_BIDRAGSPLIKTIG_19720829_39_person_PERSON_HUSSTANDSMEDLEM_20131102_innhentet_1195901752",
-        "innhentet_husstandsmedlem_person_PERSON_BIDRAGSPLIKTIG_19720829_39_person_PERSON_HUSSTANDSMEDLEM_19631102_innhentet_1171330807",
-        "innhentet_husstandsmedlem_person_PERSON_BIDRAGSPLIKTIG_19720829_39_person_PERSON_HUSSTANDSMEDLEM_20170707_63",
-        "innhentet_husstandsmedlem_person_PERSON_BIDRAGSPLIKTIG_19720829_39_person_PERSON_HUSSTANDSMEDLEM_19530910_innhentet_1777934110",
-        "innhentet_husstandsmedlem_person_PERSON_BIDRAGSPLIKTIG_19720829_39_person_PERSON_HUSSTANDSMEDLEM_20150513_64",
-        "innhentet_husstandsmedlem_person_PERSON_BIDRAGSPLIKTIG_19720829_39_person_PERSON_BIDRAGSMOTTAKER_19781115_41",
-        "innhentet_husstandsmedlem_person_PERSON_BIDRAGSPLIKTIG_19720829_39_person_PERSON_HUSSTANDSMEDLEM_20050916_65",
-        "innhentet_husstandsmedlem_person_PERSON_BIDRAGSPLIKTIG_19720829_39_person_PERSON_HUSSTANDSMEDLEM_19790124_innhentet_746876731",
-        "innhentet_husstandsmedlem_person_PERSON_BIDRAGSPLIKTIG_19720829_39_person_PERSON_SØKNADSBARN_20220726_40",
-        "innhentet_husstandsmedlem_person_PERSON_BIDRAGSPLIKTIG_19720829_39_person_PERSON_HUSSTANDSMEDLEM_19790227_innhentet_-2096642170",
-        "innhentet_husstandsmedlem_person_PERSON_BIDRAGSPLIKTIG_19720829_39_person_PERSON_HUSSTANDSMEDLEM_19780331_innhentet_1825089093",
-        "person_PERSON_HUSSTANDSMEDLEM_20131102_innhentet_1195901752",
-        "person_PERSON_HUSSTANDSMEDLEM_19631102_innhentet_1171330807",
-        "person_PERSON_HUSSTANDSMEDLEM_19530910_innhentet_1777934110",
-        "person_PERSON_HUSSTANDSMEDLEM_19790124_innhentet_746876731",
-        "person_PERSON_HUSSTANDSMEDLEM_19790227_innhentet_-2096642170",
-        "person_PERSON_HUSSTANDSMEDLEM_19780331_innhentet_1825089093",
-        "innhentet_husstandsmedlem_person_PERSON_BIDRAGSPLIKTIG_19720829_39_person_PERSON_BIDRAGSPLIKTIG_19720829_39",
-        "notat_UTGIFTER_kun_i_notat",
         "søknad",
         "virkningstidspunkt",
-        "utgift_direkte_betalt",
-        "utgiftsposter",
         "særbidrag_kategori",
-        "delberegning_DELBEREGNING_BARN_I_HUSSTAND_person_PERSON_SØKNADSBARN_20220726_40_202407",
-        "delberegning_DELBEREGNING_BIDRAGSEVNE_person_PERSON_SØKNADSBARN_20220726_40_202407_202408",
-        "delberegning_DELBEREGNING_BIDRAGSPLIKTIGES_ANDEL_SÆRBIDRAG_person_PERSON_SØKNADSBARN_20220726_40_202407_202408",
-        "delberegning_DELBEREGNING_SUM_INNTEKT_person_PERSON_BIDRAGSMOTTAKER_19781115_41_202407",
-        "delberegning_DELBEREGNING_SUM_INNTEKT_person_PERSON_BIDRAGSPLIKTIG_19720829_39_202407",
-        "delberegning_DELBEREGNING_SUM_INNTEKT_person_PERSON_SØKNADSBARN_20220726_40_202407",
-        "delberegning_utgift",
-        "delberegning_DELBEREGNING_VOKSNE_I_HUSSTAND_person_PERSON_SØKNADSBARN_20220726_40_202407",
-        "Sjablon_Bidragsevne_20240701",
-        "Sjablon_ForskuddssatsBeløp_20240701",
-        "Sjablon_MinstefradragInntektBeløp_20230701",
-        "Sjablon_MinstefradragInntektProsent_20220101",
-        "Sjablon_PersonfradragKlasse1Beløp_20240701",
-        "Sjablon_SkattesatsAlminneligInntektProsent_20190101",
-        "Sjablon_TrinnvisSkattesats_20240101",
-        "Sjablon_TrygdeavgiftProsent_20240101",
-        "Sjablon_UnderholdEgneBarnIHusstandBeløp_20240701",
-        "sluttberegning_person_PERSON_SØKNADSBARN_20220726_40_202407_202408"
-      ],
-      "betaltBeløp": 2500
+        "sluttberegning_person_PERSON_SØKNADSBARN_20051223_2108_202408_202409"
+      ]
     }
   ],
   "behandlingsreferanseListe": [
     {
       "kilde": "BEHANDLING_ID",
-      "referanse": "12"
+      "referanse": "764"
     },
     {
       "kilde": "BISYS_SØKNAD",
-      "referanse": "101"
+      "referanse": "50003495"
+    },
+    {
+      "kilde": "BISYS_KLAGE_REF_SØKNAD",
+      "referanse": "50003480"
     }
   ]
 }

@@ -11,7 +11,7 @@ fun Inntektsrapportering.tilLegacyKode() =
         Inntektsrapportering.LIGNINGSINNTEKT -> "LIGS"
         Inntektsrapportering.KAPITALINNTEKT -> "KAPS"
         Inntektsrapportering.KAPITALINNTEKT_EGNE_OPPLYSNINGER -> "KIEO"
-        Inntektsrapportering.SKJØNN_MANGLENDE_DOKUMENTASJON -> "MDOK"
+        Inntektsrapportering.SKJØNN_MANGLER_DOKUMENTASJON -> "MDOK"
         Inntektsrapportering.SKJØNN_MANGLENDE_BRUK_AV_EVNE -> "EVNE"
         Inntektsrapportering.SYKEPENGER -> "SP"
         Inntektsrapportering.PENSJON -> "PE"
@@ -21,7 +21,7 @@ fun Inntektsrapportering.tilLegacyKode() =
         Inntektsrapportering.SAKSBEHANDLER_BEREGNET_INNTEKT -> "SAK"
         Inntektsrapportering.UTVIDET_BARNETRYGD -> "UBAT"
         Inntektsrapportering.OVERGANGSSTØNAD -> "EFOS"
-        else -> name
+        else -> this.legacyKode ?: name
     }
 
 val visningsnavnSomKreverÅrstall = listOf(Inntektsrapportering.LIGNINGSINNTEKT)
