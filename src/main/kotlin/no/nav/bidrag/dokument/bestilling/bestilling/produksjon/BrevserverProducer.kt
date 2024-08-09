@@ -228,7 +228,7 @@ class BrevserverProducer(
                             saksnr = dokumentBestilling.saksnummer
                         }
                         vedtakBarn.engangsbeløper.map { engangsbeløp ->
-                            if (engangsbeløp.type == Engangsbeløptype.SÆRBIDRAG) {
+                            if (engangsbeløp.type == Engangsbeløptype.SÆRBIDRAG && !engangsbeløp.erDirekteAvslag) {
                                 val beregning = engangsbeløp.særbidragBeregning!!
                                 vedtak {
                                     fomDato = engangsbeløp.periode.fom
@@ -236,43 +236,41 @@ class BrevserverProducer(
                                     fnr = vedtakBarn.fødselsnummer
                                     erInnkreving = engangsbeløp.medInnkreving
                                     belopBidrag = beregning.resultat
-                                    resultatKode = beregning.resultatKode?.legacyKodeBrev
+                                    resultatKode = beregning.resultatKode.legacyKodeBrev
                                 }
-                                if (!engangsbeløp.erDirekteAvslag) {
-                                    særbidrag {
-                                        antTermin = 1
-                                        bidrEvneSiVt = true
-                                        beløpSøkt = beregning.kravbeløp
-                                        beløpGodkjent = beregning.godkjentbeløp
-                                        fratrekk = beregning.beløpDirekteBetaltAvBp
-                                        beløpSærbidrag = beregning.resultat
-                                        beløpForskudd = engangsbeløp.sjablon.forskuddSats
-                                        beløpInntektsgrense = engangsbeløp.sjablon.inntektsgrense
-                                        fordNokkel = beregning.andelProsent
+                                særbidrag {
+                                    antTermin = 1
+                                    bidrEvneSiVt = true
+                                    beløpSøkt = beregning.kravbeløp
+                                    beløpGodkjent = beregning.godkjentbeløp
+                                    fratrekk = beregning.beløpDirekteBetaltAvBp
+                                    beløpSærbidrag = beregning.resultat
+                                    beløpForskudd = engangsbeløp.sjablon.forskuddSats
+                                    beløpInntektsgrense = engangsbeløp.sjablon.inntektsgrense
+                                    fordNokkel = beregning.andelProsent
 
-                                        val inntekt = beregning.inntekt
-                                        bmInntekt = inntekt.bmInntekt
-                                        bpInntekt = inntekt.bpInntekt
-                                        bbInntekt = inntekt.barnInntekt
-                                        sumInntekt = inntekt.totalInntekt
-                                    }
+                                    val inntekt = beregning.inntekt
+                                    bmInntekt = inntekt.bmInntekt
+                                    bpInntekt = inntekt.bpInntekt
+                                    bbInntekt = inntekt.barnInntekt
+                                    sumInntekt = inntekt.totalInntekt
+                                }
 
-                                    særbidragPeriode {
-                                        fomDato = engangsbeløp.periode.fom
-                                        tomDato = engangsbeløp.periode.til!!
-                                        beløp = beregning.resultat
-                                    }
-                                    engangsbeløp.inntekter.forEach {
-                                        inntektPeriode {
-                                            fomDato = it.periode?.tilLocalDateFom()
-                                            tomDato = it.periode.tilLocalDateTil()?.plusDays(1) ?: MAX_DATE
-                                            belopType = it.beløpKode
-                                            belopÅrsinntekt = it.beløp
-                                            beskrivelse = it.beskrivelse
-                                            rolle = it.rolle.toKode()
-                                            fnr = it.fødselsnummer
-                                            inntektGrense = engangsbeløp.sjablon.inntektsgrense
-                                        }
+                                særbidragPeriode {
+                                    fomDato = engangsbeløp.periode.fom
+                                    tomDato = engangsbeløp.periode.til!!
+                                    beløp = beregning.resultat
+                                }
+                                engangsbeløp.inntekter.forEach {
+                                    inntektPeriode {
+                                        fomDato = it.periode?.tilLocalDateFom()
+                                        tomDato = it.periode.tilLocalDateTil()?.plusDays(1) ?: MAX_DATE
+                                        belopType = it.beløpKode
+                                        belopÅrsinntekt = it.beløp
+                                        beskrivelse = it.beskrivelse
+                                        rolle = it.rolle.toKode()
+                                        fnr = it.fødselsnummer
+                                        inntektGrense = engangsbeløp.sjablon.inntektsgrense
                                     }
                                 }
                             }
