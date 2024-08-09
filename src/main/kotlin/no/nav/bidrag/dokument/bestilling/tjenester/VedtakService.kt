@@ -52,6 +52,7 @@ import no.nav.bidrag.transport.behandling.felles.grunnlag.personIdent
 import no.nav.bidrag.transport.behandling.felles.grunnlag.personObjekt
 import no.nav.bidrag.transport.behandling.felles.grunnlag.søknadsbarn
 import no.nav.bidrag.transport.behandling.felles.grunnlag.utgiftsposter
+import no.nav.bidrag.transport.behandling.vedtak.response.EngangsbeløpDto
 import no.nav.bidrag.transport.behandling.vedtak.response.StønadsendringDto
 import no.nav.bidrag.transport.behandling.vedtak.response.VedtakDto
 import no.nav.bidrag.transport.behandling.vedtak.response.særbidragsperiode
@@ -150,7 +151,8 @@ class VedtakService(
                     .find { it.sjablon == SjablonTallNavn.FORSKUDDSSATS_BELØP }
                     ?.verdi ?: sjablongService.hentForsuddsatsForPeriode(periode.til).verdi
             val inntektsgrense = sjablongService.hentInntektGrenseForPeriode(periode.til)
-            val erDirekteAvslag = Resultatkode.fraKode(engangsbeløp.resultatkode)!!.erDirekteAvslag()
+            val resultatkode = Resultatkode.fraKode(engangsbeløp.resultatkode)
+            val erDirekteAvslag = resultatkode!!.erDirekteAvslag()
             VedtakBarnEngangsbeløp(
                 type = engangsbeløp.type,
                 sjablon =
@@ -164,34 +166,53 @@ class VedtakService(
                 inntekter = grunnlagListe.mapInntekter(VedtakPeriodeReferanse(periode, vedtakDto.typeBehandling, engangsbeløp.grunnlagReferanseListe)),
                 særbidragBeregning =
                     if (engangsbeløp.type == Engangsbeløptype.SÆRBIDRAG) {
-                        if (!erDirekteAvslag) {
-                            val utgiftsposter = grunnlagListe.utgiftsposter
-                            val sluttberegning = grunnlagListe.filtrerBasertPåEgenReferanse(Grunnlagstype.SLUTTBEREGNING_SÆRBIDRAG).first().innholdTilObjekt<SluttberegningSærbidrag>()
-                            val delberegningUtgift = grunnlagListe.filtrerBasertPåEgenReferanse(Grunnlagstype.DELBEREGNING_UTGIFT).first().innholdTilObjekt<DelberegningUtgift>()
-                            val delberegning = grunnlagListe.finnDelberegningBidragspliktigesAndelSærbidrag(engangsbeløp.grunnlagReferanseListe)!!
-                            SærbidragBeregning(
-                                kravbeløp = utgiftsposter.sumOf { it.kravbeløp },
-                                godkjentbeløp = delberegningUtgift.sumGodkjent,
-                                andelProsent = if (sluttberegning.resultatKode.erAvslagEllerOpphør()) BigDecimal.ZERO else delberegning.andelProsent,
-                                resultat = sluttberegning.resultatBeløp,
-                                resultatKode = sluttberegning.resultatKode,
-                                beløpDirekteBetaltAvBp = delberegningUtgift.sumBetaltAvBp,
-                                inntekt =
-                                    SærbidragBeregning.Inntekt(
-                                        bmInntekt = grunnlagListe.finnTotalInntektForRolleEllerIdent(engangsbeløp.grunnlagReferanseListe, Rolletype.BIDRAGSMOTTAKER),
-                                        bpInntekt = grunnlagListe.finnTotalInntektForRolleEllerIdent(engangsbeløp.grunnlagReferanseListe, Rolletype.BIDRAGSPLIKTIG),
-                                        barnInntekt = grunnlagListe.finnTotalInntektForRolleEllerIdent(engangsbeløp.grunnlagReferanseListe, Rolletype.BARN),
-                                    ),
-                            )
-                        } else {
-                            SærbidragBeregning(
-                                resultat = engangsbeløp.beløp ?: BigDecimal.ZERO,
-                                resultatKode = Resultatkode.fraKode(engangsbeløp.resultatkode)!!,
-                            )
-                        }
+                        engangsbeløp.hentSærbidragBeregning(erDirekteAvslag, grunnlagListe)
                     } else {
                         null
                     },
+            )
+        }
+    }
+
+    fun EngangsbeløpDto.hentSærbidragBeregning(
+        erDirekteAvslag: Boolean,
+        grunnlagListe: List<GrunnlagDto>,
+    ): SærbidragBeregning {
+        val resultatkode = Resultatkode.fraKode(resultatkode)!!
+        val erResultatGodkjentbeløpLavereEnnForskuddssats = resultatkode == Resultatkode.GODKJENT_BELØP_ER_LAVERE_ENN_FORSKUDDSSATS
+        return if (!erDirekteAvslag && !erResultatGodkjentbeløpLavereEnnForskuddssats) {
+            val utgiftsposter = grunnlagListe.utgiftsposter
+            val sluttberegning = grunnlagListe.filtrerBasertPåEgenReferanse(Grunnlagstype.SLUTTBEREGNING_SÆRBIDRAG).first().innholdTilObjekt<SluttberegningSærbidrag>()
+            val delberegningUtgift = grunnlagListe.filtrerBasertPåEgenReferanse(Grunnlagstype.DELBEREGNING_UTGIFT).first().innholdTilObjekt<DelberegningUtgift>()
+            val delberegning = grunnlagListe.finnDelberegningBidragspliktigesAndelSærbidrag(grunnlagReferanseListe)!!
+            SærbidragBeregning(
+                kravbeløp = utgiftsposter.sumOf { it.kravbeløp },
+                godkjentbeløp = delberegningUtgift.sumGodkjent,
+                andelProsent = if (sluttberegning.resultatKode.erAvslagEllerOpphør()) BigDecimal.ZERO else delberegning.andelProsent,
+                resultat = sluttberegning.resultatBeløp,
+                resultatKode = sluttberegning.resultatKode,
+                beløpDirekteBetaltAvBp = delberegningUtgift.sumBetaltAvBp,
+                inntekt =
+                    SærbidragBeregning.Inntekt(
+                        bmInntekt = grunnlagListe.finnTotalInntektForRolleEllerIdent(grunnlagReferanseListe, Rolletype.BIDRAGSMOTTAKER),
+                        bpInntekt = grunnlagListe.finnTotalInntektForRolleEllerIdent(grunnlagReferanseListe, Rolletype.BIDRAGSPLIKTIG),
+                        barnInntekt = grunnlagListe.finnTotalInntektForRolleEllerIdent(grunnlagReferanseListe, Rolletype.BARN),
+                    ),
+            )
+        } else if (erResultatGodkjentbeløpLavereEnnForskuddssats) {
+            val utgiftsposter = grunnlagListe.utgiftsposter
+            val sluttberegning = grunnlagListe.filtrerBasertPåEgenReferanse(Grunnlagstype.SLUTTBEREGNING_SÆRBIDRAG).first().innholdTilObjekt<SluttberegningSærbidrag>()
+            val delberegningUtgift = grunnlagListe.filtrerBasertPåEgenReferanse(Grunnlagstype.DELBEREGNING_UTGIFT).first().innholdTilObjekt<DelberegningUtgift>()
+            SærbidragBeregning(
+                kravbeløp = utgiftsposter.sumOf { it.kravbeløp },
+                godkjentbeløp = delberegningUtgift.sumGodkjent,
+                resultat = sluttberegning.resultatBeløp,
+                resultatKode = sluttberegning.resultatKode,
+            )
+        } else {
+            SærbidragBeregning(
+                resultat = beløp ?: BigDecimal.ZERO,
+                resultatKode = resultatkode,
             )
         }
     }
