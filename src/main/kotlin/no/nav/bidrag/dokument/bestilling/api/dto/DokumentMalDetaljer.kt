@@ -9,6 +9,8 @@ data class DokumentMalDetaljer(
     val beskrivelse: String = tittel,
     val type: DokumentType,
     val kanBestilles: Boolean,
+    val kreverVedtak: Boolean,
+    val kreverBehandling: Boolean,
     val redigerbar: Boolean,
     val språk: List<StøttetSpråk>,
     val statiskInnhold: Boolean = false,

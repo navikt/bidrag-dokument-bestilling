@@ -235,6 +235,7 @@ data class VedtakBarnEngangsbeløp(
     val sjablon: BrevSjablonVerdier,
     val periode: Datoperiode,
     val medInnkreving: Boolean,
+    val erDirekteAvslag: Boolean,
     val særbidragBeregning: SærbidragBeregning? = null,
     val inntekter: List<InntektPeriode> = emptyList(),
 )
@@ -253,13 +254,13 @@ data class BrevSjablonVerdier(
 )
 
 data class SærbidragBeregning(
-    val kravbeløp: BigDecimal,
-    val godkjentbeløp: BigDecimal,
-    val resultat: BigDecimal,
-    val resultatKode: String,
-    val beløpDirekteBetaltAvBp: BigDecimal,
-    val andelProsent: BigDecimal,
-    val inntekt: Inntekt,
+    val kravbeløp: BigDecimal = BigDecimal.ZERO,
+    val godkjentbeløp: BigDecimal = BigDecimal.ZERO,
+    val resultat: BigDecimal = BigDecimal.ZERO,
+    val resultatKode: Resultatkode,
+    val beløpDirekteBetaltAvBp: BigDecimal = BigDecimal.ZERO,
+    val andelProsent: BigDecimal = BigDecimal.ZERO,
+    val inntekt: Inntekt = Inntekt(BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO),
 ) {
     data class Inntekt(
         val bmInntekt: BigDecimal,

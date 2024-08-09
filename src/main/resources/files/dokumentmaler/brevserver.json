@@ -1080,7 +1080,7 @@
     "kode": "BI01S04",
     "tittel": "NAV har mottatt søknad om bidrag til særlige utgifter",
     "kreverDataGrunnlag": {
-      "vedtak": true,
+      "vedtak": false,
       "behandling": false,
       "roller": true,
       "enhetKontaktInfo": true

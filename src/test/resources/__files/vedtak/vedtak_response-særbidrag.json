@@ -1,7 +1,8 @@
 {
   "kilde": "MANUELT",
   "type": "FASTSETTELSE",
-  "opprettetAv": "",
+  "opprettetAv": "Z99999",
+  "opprettetAvNavn": "Saksbehandlersen, Saksbehandler Mellomnavn",
   "kildeapplikasjon": "behandling",
   "vedtakstidspunkt": "2024-08-06T20:40:47.596115635",
   "enhetsnummer": "4806",
@@ -709,14 +710,14 @@
       "gjelderReferanse": "person_PERSON_BIDRAGSPLIKTIG_19790213_2107"
     },
     {
-      "referanse": "inntekt_SKJØNN_MANGLENDE_DOKUMENTASJON_person_PERSON_SØKNADSBARN_20051223_2108_20240801_8436",
+      "referanse": "inntekt_SKJØNN_MANGLER_DOKUMENTASJON_person_PERSON_SØKNADSBARN_20051223_2108_20240801_8436",
       "type": "INNTEKT_RAPPORTERING_PERIODE",
       "innhold": {
         "periode": {
           "fom": "2024-08"
         },
         "manueltRegistrert": true,
-        "inntektsrapportering": "SKJØNN_MANGLENDE_DOKUMENTASJON",
+        "inntektsrapportering": "SKJØNN_MANGLER_DOKUMENTASJON",
         "beløp": 30000,
         "valgt": true,
         "inntekstpostListe": []
@@ -3111,11 +3112,11 @@
         "periode": {
           "fom": "2024-08"
         },
-        "totalinntekt": 20000,
-        "skattepliktigInntekt": 20000
+        "totalinntekt": 30000,
+        "skattepliktigInntekt": 30000
       },
       "grunnlagsreferanseListe": [
-        "inntekt_SKJØNN_MANGLENDE_DOKUMENTASJON_person_PERSON_SØKNADSBARN_20051223_2108_20240801_8436"
+        "inntekt_SKJØNN_MANGLER_DOKUMENTASJON_person_PERSON_SØKNADSBARN_20051223_2108_20240801_8436"
       ],
       "gjelderReferanse": "person_PERSON_SØKNADSBARN_20051223_2108"
     },

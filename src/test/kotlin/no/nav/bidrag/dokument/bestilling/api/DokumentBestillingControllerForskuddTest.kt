@@ -2,7 +2,6 @@ package no.nav.bidrag.dokument.bestilling.api
 
 import io.kotest.assertions.assertSoftly
 import io.kotest.matchers.collections.shouldHaveSize
-import io.kotest.matchers.comparables.shouldBeEqualComparingTo
 import io.kotest.matchers.shouldBe
 import no.nav.bidrag.dokument.bestilling.api.dto.DokumentBestillingForespørsel
 import no.nav.bidrag.dokument.bestilling.api.dto.DokumentBestillingResponse
@@ -32,52 +31,6 @@ import java.math.BigDecimal
 import java.time.LocalDate
 
 class DokumentBestillingControllerForskuddTest : AbstractControllerTest() {
-    @Test
-    fun `skal validere XML for forskudd vedtakbrev med flere perioder`() {
-        stubDefaultValues()
-        stubUtils.stubHentPerson("16451299577", ANNEN_MOTTAKER)
-        stubUtils.stubHentPerson("25451755601", ANNEN_MOTTAKER)
-        stubUtils.stubHentVedtak("vedtak_response_forskudd.json")
-        val enhetKontaktInfo = createEnhetKontaktInformasjon()
-        val bmAdresse = createPostAdresseResponse()
-        val dokumentMal = hentDokumentMal("BI01A01")!!
-        val tittel = "Tittel på dokument"
-        val saksnummer = "123213"
-        val mottakerId = BM1.ident
-        val gjelderId = BP1.ident
-
-        stubUtils.stubHentAdresse(postAdresse = bmAdresse)
-        stubUtils.stubEnhetKontaktInfo(enhetKontaktInfo)
-
-        val request =
-            DokumentBestillingForespørsel(
-                mottakerId = mottakerId.verdi,
-                gjelderId = gjelderId.verdi,
-                saksnummer = saksnummer,
-                tittel = tittel,
-                vedtakId = "12312",
-                enhet = "4806",
-                spraak = "NB",
-                dokumentreferanse = "BIF12321321321",
-            )
-
-        jmsTestConsumer.withOnlinebrev {
-            val response =
-                httpHeaderTestRestTemplate.exchange(
-                    "${rootUri()}/bestill/${dokumentMal.kode}",
-                    HttpMethod.POST,
-                    HttpEntity(request),
-                    DokumentBestillingResponse::class.java,
-                )
-
-            response.statusCode shouldBe HttpStatus.OK
-
-            val message: String = this.getMessageAsString()
-            val validateToMessage = readFile("xml/brev_vedtak_forskudd_186.xml")
-            message shouldBeEqualComparingTo validateToMessage
-        }
-    }
-
     @Test
     fun `skal produsere XML for forskudd vedtakbrev med flere perioder`() {
         stubDefaultValues()

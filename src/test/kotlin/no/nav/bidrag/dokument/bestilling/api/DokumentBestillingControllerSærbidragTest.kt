@@ -188,7 +188,7 @@ class DokumentBestillingControllerSærbidragTest : AbstractControllerTest() {
                     this[0].tomDato shouldBe periode1.tomDato
                     this[0].inntektGrense shouldBe FORSKUDD_INNTEKTGRENSE_2024_2025
                     this[0].belopType shouldBe "MDOK"
-                    this[0].beskrivelse shouldBe "SkjÃ¸nnsfastsettelse av inntekt"
+                    this[0].beskrivelse shouldBe "SkjÃ¸nn - mangler dokumentasjon"
                     this[0].belopÅrsinntekt shouldBe BigDecimal(30000)
                     this[0].rolle shouldBe "04"
 
@@ -197,7 +197,7 @@ class DokumentBestillingControllerSærbidragTest : AbstractControllerTest() {
                     this[1].inntektGrense shouldBe FORSKUDD_INNTEKTGRENSE_2024_2025
                     this[1].belopType shouldBe "XINN"
                     this[1].beskrivelse shouldBe "Personens beregningsgrunnlag i perioden"
-                    this[1].belopÅrsinntekt shouldBe BigDecimal(20000)
+                    this[1].belopÅrsinntekt shouldBe BigDecimal(30000)
                     this[1].rolle shouldBe "04"
                 }
                 barn1.forskuddSivilstandPerioder shouldHaveSize 0
@@ -214,8 +214,8 @@ class DokumentBestillingControllerSærbidragTest : AbstractControllerTest() {
                     beløpInntektsgrense shouldBe BigDecimal(59100)
                     bpInntekt shouldBe BigDecimal(699466)
                     bmInntekt shouldBe BigDecimal(858000)
-                    bbInntekt shouldBe BigDecimal(20000)
-                    sumInntekt shouldBe BigDecimal(1577466)
+                    bbInntekt shouldBe BigDecimal(30000)
+                    sumInntekt shouldBe BigDecimal(1587466)
                     fordNokkel shouldBe BigDecimal(449)
                 }
 

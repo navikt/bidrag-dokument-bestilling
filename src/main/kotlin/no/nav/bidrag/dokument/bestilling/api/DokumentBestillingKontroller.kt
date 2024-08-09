@@ -124,6 +124,8 @@ class DokumentBestillingKontroller(
                         type = it.dokumentType,
                         kanBestilles = it.enabled,
                         redigerbar = it.redigerbar,
+                        kreverBehandling = it.kreverDataGrunnlag?.behandling ?: false,
+                        kreverVedtak = it.kreverDataGrunnlag?.vedtak ?: false,
                         språk =
                             if (it is DokumentMalBucket) {
                                 listOf(it.språk)

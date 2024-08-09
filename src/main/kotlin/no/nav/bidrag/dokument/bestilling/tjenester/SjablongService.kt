@@ -7,6 +7,7 @@ import no.nav.bidrag.dokument.bestilling.bestilling.dto.ForskuddInntektgrensePer
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.PeriodeFraTom
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.SjablonDetaljer
 import no.nav.bidrag.dokument.bestilling.consumer.SjablonConsumer
+import no.nav.bidrag.dokument.bestilling.consumer.dto.SjablonData
 import no.nav.bidrag.dokument.bestilling.consumer.dto.SjablongType
 import no.nav.bidrag.dokument.bestilling.consumer.dto.SjablongerDto
 import no.nav.bidrag.dokument.bestilling.consumer.dto.hentPerioderForSjabloner
@@ -30,6 +31,11 @@ class SjablongService(
             forskuddSats = sjablonger.hentSisteSjablong(SjablongType.FORSKUDDSSATS)?.verdi ?: BigDecimal(0),
             multiplikatorInnteksinslagBarn = sjablonger.hentSisteSjablong(SjablongType.MULTIPLIKATOR_INNTEKTSINNSLAG_BIDRAGSBARN)?.verdi ?: BigDecimal(0),
         )
+    }
+
+    fun hentForsuddsatsForPeriode(periodeTomDato: LocalDate?): SjablonData {
+        val sjablonger = sjablonConsumer.hentSjablonger()!!
+        return sjablonger.hentSjablongForTomDato(SjablongType.FORSKUDDSSATS, periodeTomDato)!!
     }
 
     fun hentInntektGrenseForPeriode(periodeTomDato: LocalDate?): BigDecimal {
