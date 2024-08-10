@@ -1053,6 +1053,7 @@
   {
     "kode": "BI01E02",
     "tittel": "Vedtak særtilskudd avslag",
+    "avslagsbrev": true,
     "kreverDataGrunnlag": {
       "vedtak": true,
       "behandling": false,

@@ -228,7 +228,7 @@ class BrevserverProducer(
                             saksnr = dokumentBestilling.saksnummer
                         }
                         vedtakBarn.engangsbeløper.map { engangsbeløp ->
-                            if (engangsbeløp.type == Engangsbeløptype.SÆRBIDRAG && !engangsbeløp.erDirekteAvslag) {
+                            if (engangsbeløp.type == Engangsbeløptype.SÆRBIDRAG && !engangsbeløp.erDirekteAvslag && !dokumentMal.avslagsbrev) {
                                 val beregning = engangsbeløp.særbidragBeregning!!
                                 vedtak {
                                     fomDato = engangsbeløp.periode.fom
