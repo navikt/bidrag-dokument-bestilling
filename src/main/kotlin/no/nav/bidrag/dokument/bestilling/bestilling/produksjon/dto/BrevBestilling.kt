@@ -9,6 +9,7 @@ import jakarta.xml.bind.annotation.adapters.XmlAdapter
 import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter
 import no.nav.bidrag.dokument.bestilling.model.LANDKODE3_NORGE
 import java.math.BigDecimal
+import java.math.MathContext
 import java.math.RoundingMode
 import java.text.ParseException
 import java.time.LocalDate
@@ -606,6 +607,7 @@ class BelopDecimalAdapter : XmlAdapter<String, BigDecimal?>() {
 class PercentageAdapter : XmlAdapter<String, BigDecimal?>() {
     override fun marshal(value: BigDecimal?): String =
         value
+            ?.round(MathContext(3))
             ?.multiply(BigDecimal.TEN)
             ?.setScale(0)
             ?.toString()
