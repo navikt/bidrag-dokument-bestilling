@@ -6,6 +6,7 @@ import com.github.tomakehurst.wiremock.client.WireMock.aResponse
 import com.github.tomakehurst.wiremock.matching.AnythingPattern
 import com.github.tomakehurst.wiremock.matching.ContainsPattern
 import com.github.tomakehurst.wiremock.matching.RequestPatternBuilder
+import no.nav.bidrag.dokument.bestilling.consumer.dto.BehandlingDetaljerDtoV2
 import no.nav.bidrag.dokument.bestilling.consumer.dto.EnhetInfo
 import no.nav.bidrag.dokument.bestilling.consumer.dto.EnhetKontaktInfoDto
 import no.nav.bidrag.dokument.bestilling.consumer.dto.SaksbehandlerInfoResponse
@@ -16,6 +17,7 @@ import no.nav.bidrag.dokument.bestilling.utils.createOpprettJournalpostResponse
 import no.nav.bidrag.dokument.bestilling.utils.createPostAdresseResponse
 import no.nav.bidrag.dokument.bestilling.utils.createSakResponse
 import no.nav.bidrag.dokument.bestilling.utils.lagVedtaksdata
+import no.nav.bidrag.dokument.bestilling.utils.opprettBehandlingDetaljer
 import no.nav.bidrag.transport.dokument.OpprettJournalpostResponse
 import no.nav.bidrag.transport.person.PersonAdresseDto
 import no.nav.bidrag.transport.person.PersonDto
@@ -91,6 +93,16 @@ class StubUtils {
                         .withStatus(status.value())
                         .withBody(convertObjectToString(postAdresse)),
                 ),
+        )
+    }
+
+    fun stubHentBehandling(response: BehandlingDetaljerDtoV2 = opprettBehandlingDetaljer()) {
+        WireMock.stubFor(
+            WireMock.get(WireMock.urlMatching("/behandling/.*")).willReturn(
+                aClosedJsonResponse()
+                    .withStatus(HttpStatus.OK.value())
+                    .withBody(convertObjectToString(response)),
+            ),
         )
     }
 
@@ -171,6 +183,16 @@ class StubUtils {
                         WireMock.urlMatching("/person/informasjon"),
                     ).withRequestBody(ContainsPattern(fnr))
             WireMock.verify(verify)
+        }
+
+        fun verifyBehandlingKalt(
+            vararg contains: String,
+        ) {
+            val verify =
+                WireMock.getRequestedFor(
+                    WireMock.urlMatching("/behandling/api/v2/behandling/detaljer/(.*)"),
+                )
+            verifyContains(verify, *contains)
         }
 
         fun verifyHentEnhetKontaktInfoCalledWith(
