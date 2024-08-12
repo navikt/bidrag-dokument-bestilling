@@ -33,7 +33,7 @@ import no.nav.bidrag.dokument.bestilling.utils.BARN1
 import no.nav.bidrag.dokument.bestilling.utils.BARN2
 import no.nav.bidrag.dokument.bestilling.utils.BM1
 import no.nav.bidrag.dokument.bestilling.utils.BP1
-import no.nav.bidrag.dokument.bestilling.utils.FASTSETTELSE_GEBYR_2023
+import no.nav.bidrag.dokument.bestilling.utils.FASTSETTELSE_GEBYR_2024
 import no.nav.bidrag.dokument.bestilling.utils.FORSKUDD_INNTEKTGRENSE_2019_2020
 import no.nav.bidrag.dokument.bestilling.utils.FORSKUDD_INNTEKTGRENSE_2020_2021
 import no.nav.bidrag.dokument.bestilling.utils.FORSKUDD_INNTEKTGRENSE_2021_2022
@@ -271,7 +271,7 @@ class DokumentBestillingControllerTest : AbstractControllerTest() {
                 soknadBost.hgKode shouldBe "FO"
                 soknadBost.ugKode shouldBe "S"
                 soknadBost.datoSakReg shouldBe SAK_OPPRETTET_DATO
-                soknadBost.gebyrsats shouldBe FASTSETTELSE_GEBYR_2023.toBigDecimal().setScale(1)
+                soknadBost.gebyrsats shouldBe FASTSETTELSE_GEBYR_2024.toBigDecimal().setScale(1)
                 soknadBost.virkningsDato shouldBe virkningDato
                 soknadBost.mottatDato shouldBe soknadDato
                 soknadBost.soknGrKode shouldBe "FO"
@@ -529,7 +529,7 @@ class DokumentBestillingControllerTest : AbstractControllerTest() {
                 soknadBost.hgKode shouldBe "FO"
                 soknadBost.ugKode shouldBe "S"
                 soknadBost.datoSakReg shouldBe SAK_OPPRETTET_DATO
-                soknadBost.gebyrsats shouldBe FASTSETTELSE_GEBYR_2023.toBigDecimal().setScale(1)
+                soknadBost.gebyrsats shouldBe FASTSETTELSE_GEBYR_2024.toBigDecimal().setScale(1)
                 soknadBost.virkningsDato shouldBe virkningDato
                 soknadBost.mottatDato shouldBe soknadDato
                 soknadBost.soknGrKode shouldBe "FO"

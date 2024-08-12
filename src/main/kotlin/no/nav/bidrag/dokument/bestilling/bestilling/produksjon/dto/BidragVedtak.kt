@@ -31,7 +31,8 @@ class BidragVedtak {
     var belopTillegg: String? = null
 
     @XmlElement(name = "innkr", nillable = true)
-    var erInnkreving: String? = null
+    @XmlJavaTypeAdapter(BooleanAdapter::class)
+    var erInnkreving: Boolean? = null
 
     @XmlElement(name = "soktTlgBidJN", nillable = true)
     @XmlJavaTypeAdapter(BooleanAdapter::class)

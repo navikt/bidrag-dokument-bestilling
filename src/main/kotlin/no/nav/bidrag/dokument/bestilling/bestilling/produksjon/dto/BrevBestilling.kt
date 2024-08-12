@@ -9,6 +9,7 @@ import jakarta.xml.bind.annotation.adapters.XmlAdapter
 import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter
 import no.nav.bidrag.dokument.bestilling.model.LANDKODE3_NORGE
 import java.math.BigDecimal
+import java.math.MathContext
 import java.math.RoundingMode
 import java.text.ParseException
 import java.time.LocalDate
@@ -583,8 +584,34 @@ class BelopDecimalSatsAdapter : XmlAdapter<String, BigDecimal?>() {
     override fun unmarshal(value: String?): BigDecimal? = value?.toBigDecimal()
 }
 
+class BelopNoDecimalAdapter : XmlAdapter<String, BigDecimal?>() {
+    override fun marshal(value: BigDecimal?): String? =
+        value
+            ?.multiply(BigDecimal.TEN)
+            ?.setScale(0, RoundingMode.FLOOR)
+            ?.divide(BigDecimal.TEN)
+            ?.toString()
+            ?.padStart(11, '0')
+
+    @Throws(ParseException::class)
+    override fun unmarshal(value: String?): BigDecimal? = value?.toBigDecimal()
+}
+
 class BelopDecimalAdapter : XmlAdapter<String, BigDecimal?>() {
     override fun marshal(value: BigDecimal?): String? = value?.setScale(2, RoundingMode.FLOOR).toString()?.padStart(11, '0')
+
+    @Throws(ParseException::class)
+    override fun unmarshal(value: String?): BigDecimal? = value?.toBigDecimal()
+}
+
+class PercentageAdapter : XmlAdapter<String, BigDecimal?>() {
+    override fun marshal(value: BigDecimal?): String =
+        value
+            ?.round(MathContext(3))
+            ?.multiply(BigDecimal.TEN)
+            ?.setScale(0)
+            ?.toString()
+            ?.padStart(4, '0') ?: "0000"
 
     @Throws(ParseException::class)
     override fun unmarshal(value: String?): BigDecimal? = value?.toBigDecimal()

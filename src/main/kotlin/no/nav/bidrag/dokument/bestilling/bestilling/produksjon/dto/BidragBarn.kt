@@ -39,10 +39,30 @@ class BidragBarn {
     @XmlElement(name = "perBidrEvne", nillable = true)
     var bidragEvnePerioder: MutableList<BidragEvnePeriode> = mutableListOf()
 
+    @XmlElement(name = "sertilsk", nillable = true)
+    var særbidrag: Særbidrag? = null
+
+    @XmlElement(name = "perSertilsk", nillable = true)
+    val særbidragPeriode: MutableList<SærbidragPeriode> = mutableListOf()
+
     fun barn(init: Barn.() -> Unit): Barn {
         val initValue = Barn()
         initValue.init()
         barn = initValue
+        return initValue
+    }
+
+    fun særbidrag(init: Særbidrag.() -> Unit): Særbidrag {
+        val initValue = Særbidrag()
+        initValue.init()
+        særbidrag = initValue
+        return initValue
+    }
+
+    fun særbidragPeriode(init: SærbidragPeriode.() -> Unit): SærbidragPeriode {
+        val initValue = SærbidragPeriode()
+        initValue.init()
+        særbidragPeriode.add(initValue)
         return initValue
     }
 

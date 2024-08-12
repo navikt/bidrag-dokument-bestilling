@@ -15,6 +15,7 @@ import no.nav.bidrag.dokument.bestilling.utils.createEnhetKontaktInformasjon
 import no.nav.bidrag.dokument.bestilling.utils.createOpprettJournalpostResponse
 import no.nav.bidrag.dokument.bestilling.utils.createPostAdresseResponse
 import no.nav.bidrag.dokument.bestilling.utils.createSakResponse
+import no.nav.bidrag.dokument.bestilling.utils.lagVedtaksdata
 import no.nav.bidrag.transport.dokument.OpprettJournalpostResponse
 import no.nav.bidrag.transport.person.PersonAdresseDto
 import no.nav.bidrag.transport.person.PersonDto
@@ -98,7 +99,7 @@ class StubUtils {
             WireMock.get(WireMock.urlMatching("/vedtak/.*")).willReturn(
                 aClosedJsonResponse()
                     .withStatus(HttpStatus.OK.value())
-                    .withBodyFile("vedtak/$vedtakFileName"),
+                    .withBody(convertObjectToString(lagVedtaksdata("vedtak/$vedtakFileName"))),
             ),
         )
     }

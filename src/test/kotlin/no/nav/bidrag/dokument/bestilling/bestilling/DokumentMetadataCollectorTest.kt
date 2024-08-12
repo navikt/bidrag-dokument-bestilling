@@ -128,7 +128,6 @@ internal class DokumentMetadataCollectorTest {
             sjablongService,
             saksbehandlerInfoManager,
             organisasjonService,
-            true,
         )
 
     @AfterEach

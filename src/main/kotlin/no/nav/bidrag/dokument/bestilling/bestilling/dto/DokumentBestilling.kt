@@ -3,6 +3,7 @@ package no.nav.bidrag.dokument.bestilling.bestilling.dto
 import no.nav.bidrag.dokument.bestilling.model.Saksbehandler
 import no.nav.bidrag.dokument.bestilling.model.tilLegacyKode
 import no.nav.bidrag.dokument.bestilling.model.visningsnavnBruker
+import no.nav.bidrag.domene.enums.behandling.TypeBehandling
 import no.nav.bidrag.domene.enums.beregning.Resultatkode
 import no.nav.bidrag.domene.enums.diverse.Språk
 import no.nav.bidrag.domene.enums.inntekt.Inntektsrapportering
@@ -14,8 +15,10 @@ import no.nav.bidrag.domene.enums.vedtak.Stønadstype
 import no.nav.bidrag.domene.enums.vedtak.Vedtakskilde
 import no.nav.bidrag.domene.enums.vedtak.Vedtakstype
 import no.nav.bidrag.domene.enums.vedtak.VirkningstidspunktÅrsakstype
+import no.nav.bidrag.domene.tid.Datoperiode
 import no.nav.bidrag.domene.tid.ÅrMånedsperiode
 import no.nav.bidrag.transport.behandling.felles.grunnlag.BostatusPeriode
+import no.nav.bidrag.transport.behandling.felles.grunnlag.Grunnlagsreferanse
 import no.nav.bidrag.transport.behandling.felles.grunnlag.SivilstandPeriode
 import java.math.BigDecimal
 import java.time.LocalDate
@@ -189,6 +192,7 @@ data class ForskuddInntektgrensePeriode(
 data class VedtakDetaljer(
     val årsakKode: VirkningstidspunktÅrsakstype?,
     val avslagsKode: Resultatkode?,
+    val type: TypeBehandling,
     val virkningstidspunkt: LocalDate?,
     val mottattDato: LocalDate?,
     val soktFraDato: LocalDate?,
@@ -223,7 +227,48 @@ data class VedtakBarn(
     val navn: String?,
     val bostatusPerioder: List<BostatusPeriode>,
     val stønadsendringer: List<VedtakBarnStonad> = emptyList(),
+    val engangsbeløper: List<VedtakBarnEngangsbeløp> = emptyList(),
 )
+
+data class VedtakBarnEngangsbeløp(
+    val type: Engangsbeløptype,
+    val sjablon: BrevSjablonVerdier,
+    val periode: Datoperiode,
+    val medInnkreving: Boolean,
+    val erDirekteAvslag: Boolean,
+    val særbidragBeregning: SærbidragBeregning? = null,
+    val inntekter: List<InntektPeriode> = emptyList(),
+)
+
+data class VedtakPeriodeReferanse(
+    val periode: ÅrMånedsperiode,
+    val typeBehandling: TypeBehandling,
+    val grunnlagReferanseListe: List<Grunnlagsreferanse> = emptyList(),
+) {
+    constructor(periode: Datoperiode, type: TypeBehandling, grunnlagReferanseListe: List<Grunnlagsreferanse>) : this(ÅrMånedsperiode(periode.fom, periode.til), type, grunnlagReferanseListe)
+}
+
+data class BrevSjablonVerdier(
+    val forskuddSats: BigDecimal,
+    val inntektsgrense: BigDecimal,
+)
+
+data class SærbidragBeregning(
+    val kravbeløp: BigDecimal = BigDecimal.ZERO,
+    val godkjentbeløp: BigDecimal = BigDecimal.ZERO,
+    val resultat: BigDecimal = BigDecimal.ZERO,
+    val resultatKode: Resultatkode,
+    val beløpDirekteBetaltAvBp: BigDecimal = BigDecimal.ZERO,
+    val andelProsent: BigDecimal = BigDecimal.ZERO,
+    val inntekt: Inntekt = Inntekt(BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO),
+) {
+    data class Inntekt(
+        val bmInntekt: BigDecimal,
+        val bpInntekt: BigDecimal,
+        val barnInntekt: BigDecimal,
+        val totalInntekt: BigDecimal = barnInntekt + bmInntekt + bpInntekt,
+    )
+}
 
 data class VedtakBarnStonad(
     val type: Stønadstype,

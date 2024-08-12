@@ -1028,7 +1028,7 @@
     "kode": "BI01E50",
     "tittel": "Klage - vedtak bidrag til særlige utgifter",
     "kreverDataGrunnlag": {
-      "vedtak": false,
+      "vedtak": true,
       "behandling": false,
       "roller": true,
       "enhetKontaktInfo": true
@@ -1041,7 +1041,7 @@
     "kode": "BI01E01",
     "tittel": "Vedtak bidrag til særlige utgifter",
     "kreverDataGrunnlag": {
-      "vedtak": false,
+      "vedtak": true,
       "behandling": false,
       "roller": true,
       "enhetKontaktInfo": true
@@ -1053,8 +1053,9 @@
   {
     "kode": "BI01E02",
     "tittel": "Vedtak særtilskudd avslag",
+    "avslagsbrev": true,
     "kreverDataGrunnlag": {
-      "vedtak": false,
+      "vedtak": true,
       "behandling": false,
       "roller": true,
       "enhetKontaktInfo": true
@@ -1067,7 +1068,7 @@
     "kode": "BI01E03",
     "tittel": "Vedtak bidrag til særlige utgifter tannregulering",
     "kreverDataGrunnlag": {
-      "vedtak": false,
+      "vedtak": true,
       "behandling": false,
       "roller": true,
       "enhetKontaktInfo": true

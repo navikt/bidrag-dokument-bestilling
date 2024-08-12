@@ -11,6 +11,7 @@ fun Rolletype.toKode() =
     when (this) {
         Rolletype.BIDRAGSMOTTAKER -> "02"
         Rolletype.BIDRAGSPLIKTIG -> "01"
+        Rolletype.BARN -> "04"
         else -> "00"
     }
 
@@ -40,5 +41,5 @@ fun Sivilstandskode.toKode() =
         else -> "NULL"
     }
 
-val VedtakDetaljer.behandlingType get(): BehandlingType? = stønadType?.let { type -> BehandlingType.from(type, engangsbelopType) }
+val VedtakDetaljer.behandlingType get(): BehandlingType? = stønadType?.let { type -> BehandlingType.from(type, engangsbelopType) } ?: engangsbelopType?.let { type -> BehandlingType.from(null, type) }
 val VedtakDetaljer.soknadType get(): SoknadType? = vedtakType.let { type -> SoknadType.fromVedtakType(type) }

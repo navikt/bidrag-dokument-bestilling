@@ -60,6 +60,7 @@ abstract class DokumentMal(
     open val dokumentType: DokumentType,
     open val bestillingSystem: BestillingSystemType,
     open val batchbrev: Boolean,
+    open val avslagsbrev: Boolean = false,
     open val enabled: Boolean,
     open val kreverDataGrunnlag: DokumentDataGrunnlag?,
     open val innholdType: InnholdType,

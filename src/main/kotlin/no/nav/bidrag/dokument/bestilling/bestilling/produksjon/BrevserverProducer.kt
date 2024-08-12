@@ -7,6 +7,7 @@ import no.nav.bidrag.dokument.bestilling.bestilling.dto.DokumentMal
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.DokumentType
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.EnhetKontaktInfo
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.Mottaker
+import no.nav.bidrag.dokument.bestilling.bestilling.dto.VedtakDetaljer
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.fraVerdi
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.tilVerdi
 import no.nav.bidrag.dokument.bestilling.bestilling.produksjon.dto.Brev
@@ -24,9 +25,11 @@ import no.nav.bidrag.dokument.bestilling.model.ResultatKoder
 import no.nav.bidrag.dokument.bestilling.model.legacyKodeBrev
 import no.nav.bidrag.dokument.bestilling.model.tilLocalDateFom
 import no.nav.bidrag.dokument.bestilling.model.tilLocalDateTil
+import no.nav.bidrag.domene.enums.behandling.TypeBehandling
 import no.nav.bidrag.domene.enums.beregning.Resultatkode
 import no.nav.bidrag.domene.enums.diverse.Språk
 import no.nav.bidrag.domene.enums.person.Sivilstandskode
+import no.nav.bidrag.domene.enums.vedtak.Engangsbeløptype
 import no.nav.bidrag.domene.util.visningsnavn
 import no.nav.bidrag.transport.dokument.AvsenderMottakerDto
 import no.nav.bidrag.transport.dokument.JournalpostType
@@ -175,6 +178,14 @@ class BrevserverProducer(
                                     ResultatKoder.UTENLANDSK_AVGJØRELSE,
                                 ).contains(resultatKode)
                             if (erInnkreving || erInnkrevingPrivatAvtale) ResultatKoder.VEDTAK_VANLIG_INNKREVING else resultatKode
+                        } else if (vedtakInfo?.type == TypeBehandling.SÆRBIDRAG) {
+                            vedtakInfo.vedtakBarn
+                                .first()
+                                .engangsbeløper
+                                .first()
+                                .særbidragBeregning
+                                ?.resultatKode
+                                ?.legacyKodeBrev
                         } else {
                             null
                         }
@@ -198,7 +209,7 @@ class BrevserverProducer(
                     soknad {
                         aarsakKd = it.årsakKode?.legacyKode ?: it.avslagsKode?.legacyKodeBrev // TODO: Oversett til riktig kode
                         undergrp = hgUgDto?.ug
-                        type = it.stønadType?.let { BehandlingType.valueOf(it.name).kode }
+                        type = it.stønadType?.let { BehandlingType.valueOf(it.name).kode } ?: hgUgDto?.hg
 
                         vedtattDato = it.vedtattDato
                         virkningDato = it.virkningstidspunkt
@@ -216,12 +227,62 @@ class BrevserverProducer(
                             fnr = vedtakBarn.fødselsnummer
                             saksnr = dokumentBestilling.saksnummer
                         }
+                        vedtakBarn.engangsbeløper.map { engangsbeløp ->
+                            if (engangsbeløp.type == Engangsbeløptype.SÆRBIDRAG && !engangsbeløp.erDirekteAvslag && !dokumentMal.avslagsbrev) {
+                                val beregning = engangsbeløp.særbidragBeregning!!
+                                vedtak {
+                                    fomDato = engangsbeløp.periode.fom
+                                    tomDato = engangsbeløp.periode.til?.plusDays(1)
+                                    fnr = vedtakBarn.fødselsnummer
+                                    erInnkreving = engangsbeløp.medInnkreving
+                                    belopBidrag = beregning.resultat
+                                    resultatKode = beregning.resultatKode.legacyKodeBrev
+                                }
+                                særbidrag {
+                                    antTermin = 1
+                                    bidrEvneSiVt = true
+                                    beløpSøkt = beregning.kravbeløp
+                                    beløpGodkjent = beregning.godkjentbeløp
+                                    fratrekk = beregning.beløpDirekteBetaltAvBp
+                                    beløpSærbidrag = beregning.resultat
+                                    beløpForskudd = engangsbeløp.sjablon.forskuddSats
+                                    beløpInntektsgrense = engangsbeløp.sjablon.inntektsgrense
+                                    fordNokkel = beregning.andelProsent
+
+                                    val inntekt = beregning.inntekt
+                                    bmInntekt = inntekt.bmInntekt
+                                    bpInntekt = inntekt.bpInntekt
+                                    bbInntekt = inntekt.barnInntekt
+                                    sumInntekt = inntekt.totalInntekt
+                                }
+
+                                særbidragPeriode {
+                                    fomDato = engangsbeløp.periode.fom
+                                    tomDato = engangsbeløp.periode.til!!
+                                    beløp = beregning.resultat
+                                }
+                                engangsbeløp.inntekter.forEach {
+                                    inntektPeriode {
+                                        fomDato = it.periode?.tilLocalDateFom()
+                                        tomDato = it.periode.tilLocalDateTil()?.plusDays(1) ?: MAX_DATE
+                                        belopType = it.beløpKode
+                                        belopÅrsinntekt = it.beløp
+                                        beskrivelse = it.beskrivelse
+                                        rolle = it.rolle.toKode()
+                                        fnr = it.fødselsnummer
+                                        inntektGrense = engangsbeløp.sjablon.inntektsgrense
+                                    }
+                                }
+                            }
+                        }
 
                         vedtakInfo.barnIHusstandPerioder.forEach {
-                            forskuddBarnPeriode {
-                                fomDato = it.periode.tilLocalDateFom()
-                                tomDato = it.periode.tilLocalDateTil() ?: MAX_DATE
-                                antallBarn = it.antall.toInt()
+                            if (vedtakInfo.type == TypeBehandling.FORSKUDD) {
+                                forskuddBarnPeriode {
+                                    fomDato = it.periode.tilLocalDateFom()
+                                    tomDato = it.periode.tilLocalDateTil() ?: MAX_DATE
+                                    antallBarn = it.antall.toInt()
+                                }
                             }
                         }
 
@@ -313,6 +374,9 @@ class BrevserverProducer(
                 }
             }
         }
+    }
+
+    fun VedtakDetaljer.mapForForskudd() {
     }
 
     fun mapKontaktInfo(

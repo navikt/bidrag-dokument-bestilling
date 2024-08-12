@@ -5,6 +5,7 @@ import no.nav.bidrag.dokument.bestilling.api.dto.DokumentBestillingForespørsel
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.Adresse
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.Barn
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.DokumentBestilling
+import no.nav.bidrag.dokument.bestilling.bestilling.dto.DokumentDataGrunnlag
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.DokumentMal
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.EnhetKontaktInfo
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.Gjelder
@@ -41,7 +42,6 @@ import no.nav.bidrag.domene.land.Landkode3
 import no.nav.bidrag.transport.person.PersonAdresseDto
 import no.nav.bidrag.transport.person.PersonDto
 import no.nav.bidrag.transport.sak.BidragssakDto
-import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Scope
 import org.springframework.stereotype.Component
 import java.time.LocalDate
@@ -56,7 +56,6 @@ class DokumentMetadataCollector(
     val sjablongService: SjablongService,
     val saksbehandlerInfoManager: SaksbehandlerInfoManager,
     val organisasjonService: OrganisasjonService,
-    @Value("\${ENABLE_HENT_VEDTAK:false}") val enableHentVedtak: Boolean,
 ) {
     private lateinit var enhet: String
     private lateinit var sak: BidragssakDto
@@ -91,7 +90,7 @@ class DokumentMetadataCollector(
                     .takeIf { it.enhetKontaktInfo }
                     ?.let { hentEnhetKontakInfo(forespørsel) },
             roller =
-                kreverDataGrunnlag.takeIf { it.roller }?.let { hentRolleData(forespørsel) }
+                kreverDataGrunnlag.takeIf { it.roller }?.let { hentRolleData(forespørsel, kreverDataGrunnlag) }
                     ?: Roller(),
             vedtakDetaljer =
                 kreverDataGrunnlag
@@ -105,8 +104,12 @@ class DokumentMetadataCollector(
         return vedtakService.hentVedtakDetaljer(vedtakId)
     }
 
-    private fun hentRolleData(forespørsel: DokumentBestillingForespørsel): Roller {
+    private fun hentRolleData(
+        forespørsel: DokumentBestillingForespørsel,
+        kreverDataGrunnlag: DokumentDataGrunnlag,
+    ): Roller {
         val roller = Roller()
+
         val bidragspliktig = hentBidragspliktig()
         val bidragsmottaker = hentBidragsmottaker()
 
@@ -142,7 +145,7 @@ class DokumentMetadataCollector(
         }
 
         val soknadsbarn = mutableListOf<String>()
-        if (!forespørsel.vedtakId.isNullOrEmpty() && enableHentVedtak) {
+        if (!forespørsel.vedtakId.isNullOrEmpty() && kreverDataGrunnlag.vedtak) {
             soknadsbarn.addAll(
                 vedtakService.hentIdentSøknadsbarn(forespørsel.vedtakId),
             )
