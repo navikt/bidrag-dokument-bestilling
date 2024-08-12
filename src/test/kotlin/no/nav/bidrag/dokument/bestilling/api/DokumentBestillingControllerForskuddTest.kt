@@ -24,6 +24,7 @@ import no.nav.bidrag.dokument.bestilling.utils.SAK_OPPRETTET_DATO
 import no.nav.bidrag.dokument.bestilling.utils.createEnhetKontaktInformasjon
 import no.nav.bidrag.dokument.bestilling.utils.createPostAdresseResponse
 import no.nav.bidrag.domene.enums.beregning.Resultatkode
+import no.nav.bidrag.domene.enums.vedtak.VirkningstidspunktÅrsakstype
 import org.junit.jupiter.api.Test
 import org.springframework.http.HttpEntity
 import org.springframework.http.HttpMethod
@@ -108,7 +109,6 @@ class DokumentBestillingControllerForskuddTest : AbstractControllerTest() {
                 val periode1 = PeriodeFraTom(virkningDato, LocalDate.parse("2023-02-28"))
                 val periode2 =
                     PeriodeFraTom(LocalDate.parse("2023-03-01"), LocalDate.parse("2023-06-30"))
-                val periode3 = PeriodeFraTom(LocalDate.parse("2023-07-01"), LocalDate.parse("2023-07-31"))
                 val periode4 = PeriodeFraTom(LocalDate.parse("2024-01-01"), LocalDate.parse("2024-01-31"))
                 val sistePeriode =
                     PeriodeFraTom(LocalDate.parse("2024-07-01"), MAX_DATE)
@@ -119,7 +119,7 @@ class DokumentBestillingControllerForskuddTest : AbstractControllerTest() {
                 val soknad = message.brev?.soknad!!
                 soknad.soknDato shouldBe soknadDato
                 soknad.type shouldBe "FO"
-                soknad.aarsakKd shouldBe "HF"
+                soknad.aarsakKd shouldBe VirkningstidspunktÅrsakstype.FRA_SØKNADSTIDSPUNKT.legacyKode
                 soknad.undergrp shouldBe "S"
                 soknad.saksnr shouldBe saksnummer
                 soknad.sendtDato shouldBe LocalDate.parse("2024-08-04")
@@ -154,21 +154,21 @@ class DokumentBestillingControllerForskuddTest : AbstractControllerTest() {
                     vedtakPeriode1.fomDato shouldBe periode1.fraDato
                     vedtakPeriode1.tomDato shouldBe periode1.tomDato
                     vedtakPeriode1.fnr shouldBe BARN1.ident.verdi
-                    vedtakPeriode1.resultatKode shouldBe "125"
+                    vedtakPeriode1.resultatKode shouldBe Resultatkode.FORHØYET_FORSKUDD_11_ÅR_125_PROSENT.legacyKode
 
                     val vedtakPeriode2 = this[1]
                     vedtakPeriode2.belopBidrag shouldBe BigDecimal(2200)
                     vedtakPeriode2.fomDato shouldBe periode2.fraDato
                     vedtakPeriode2.tomDato shouldBe periode2.tomDato
                     vedtakPeriode2.fnr shouldBe BARN1.ident.verdi
-                    vedtakPeriode2.resultatKode shouldBe "125"
+                    vedtakPeriode2.resultatKode shouldBe Resultatkode.FORHØYET_FORSKUDD_11_ÅR_125_PROSENT.legacyKode
 
                     val vedtakPeriodeSiste = this[7]
                     vedtakPeriodeSiste.belopBidrag shouldBe BigDecimal(0)
                     vedtakPeriodeSiste.fomDato shouldBe sistePeriode.fraDato
                     vedtakPeriodeSiste.tomDato shouldBe sistePeriode.tomDato
                     vedtakPeriodeSiste.fnr shouldBe BARN1.ident.verdi
-                    vedtakPeriodeSiste.resultatKode shouldBe "A18"
+                    vedtakPeriodeSiste.resultatKode shouldBe Resultatkode.AVSLAG_OVER_18_ÅR.legacyKode
                 }
 
                 assertSoftly(message.brev!!.vedtak.filter { it.fnr == BARN2.ident.verdi }) {
@@ -178,21 +178,21 @@ class DokumentBestillingControllerForskuddTest : AbstractControllerTest() {
                     vedtakPeriode1.fomDato shouldBe periode1.fraDato
                     vedtakPeriode1.tomDato shouldBe periode1.tomDato
                     vedtakPeriode1.fnr shouldBe BARN2.ident.verdi
-                    vedtakPeriode1.resultatKode shouldBe "100"
+                    vedtakPeriode1.resultatKode shouldBe Resultatkode.FORHØYET_FORSKUDD_100_PROSENT.legacyKode
 
                     val vedtakPeriode2 = this[1]
                     vedtakPeriode2.belopBidrag shouldBe BigDecimal(1760)
                     vedtakPeriode2.fomDato shouldBe periode2.fraDato
                     vedtakPeriode2.tomDato shouldBe periode2.tomDato
                     vedtakPeriode2.fnr shouldBe BARN2.ident.verdi
-                    vedtakPeriode2.resultatKode shouldBe "100"
+                    vedtakPeriode2.resultatKode shouldBe Resultatkode.FORHØYET_FORSKUDD_100_PROSENT.legacyKode
 
                     val vedtakPeriodeSiste = this[8]
                     vedtakPeriodeSiste.belopBidrag shouldBe BigDecimal(1480)
                     vedtakPeriodeSiste.fomDato shouldBe sistePeriode.fraDato
                     vedtakPeriodeSiste.tomDato shouldBe sistePeriode.tomDato
                     vedtakPeriodeSiste.fnr shouldBe BARN2.ident.verdi
-                    vedtakPeriodeSiste.resultatKode shouldBe "75"
+                    vedtakPeriodeSiste.resultatKode shouldBe Resultatkode.ORDINÆRT_FORSKUDD_75_PROSENT.legacyKode
                 }
 
                 message.brev?.forskuddVedtakPeriode!!.size shouldBe 17
@@ -203,7 +203,7 @@ class DokumentBestillingControllerForskuddTest : AbstractControllerTest() {
                     forskuddVedtakPeriode1.tomDato shouldBe periode1.tomDato
                     forskuddVedtakPeriode1.beløp shouldBe BigDecimal(1760)
                     forskuddVedtakPeriode1.fnr shouldBe BARN2.ident.verdi
-                    forskuddVedtakPeriode1.resultatKode shouldBe "100"
+                    forskuddVedtakPeriode1.resultatKode shouldBe Resultatkode.FORHØYET_FORSKUDD_100_PROSENT.legacyKode
                     forskuddVedtakPeriode1.prosent shouldBe "100"
                     forskuddVedtakPeriode1.maksInntekt shouldBe FORSKUDD_MAKS_INNTEKT_FORSKUDD_MOTTAKER_2022_2023
 
@@ -212,7 +212,7 @@ class DokumentBestillingControllerForskuddTest : AbstractControllerTest() {
                     forskuddVedtakPeriode4.tomDato shouldBe sistePeriode.tomDato
                     forskuddVedtakPeriode4.beløp shouldBe BigDecimal(1480)
                     forskuddVedtakPeriode4.fnr shouldBe BARN2.ident.verdi
-                    forskuddVedtakPeriode4.resultatKode shouldBe "75"
+                    forskuddVedtakPeriode4.resultatKode shouldBe Resultatkode.ORDINÆRT_FORSKUDD_75_PROSENT.legacyKode
                     forskuddVedtakPeriode4.forskKode shouldBe ""
                     forskuddVedtakPeriode4.prosent shouldBe "075"
                     forskuddVedtakPeriode4.maksInntekt shouldBe FORSKUDD_MAKS_INNTEKT_FORSKUDD_MOTTAKER_2024_2025
@@ -236,7 +236,7 @@ class DokumentBestillingControllerForskuddTest : AbstractControllerTest() {
                     forskuddVedtakPeriode1.tomDato shouldBe periode1.tomDato
                     forskuddVedtakPeriode1.beløp shouldBe BigDecimal(2200)
                     forskuddVedtakPeriode1.fnr shouldBe BARN1.ident.verdi
-                    forskuddVedtakPeriode1.resultatKode shouldBe "125"
+                    forskuddVedtakPeriode1.resultatKode shouldBe Resultatkode.FORHØYET_FORSKUDD_11_ÅR_125_PROSENT.legacyKode
                     forskuddVedtakPeriode1.prosent shouldBe "125"
                     forskuddVedtakPeriode1.maksInntekt shouldBe FORSKUDD_MAKS_INNTEKT_FORSKUDD_MOTTAKER_2022_2023
 
@@ -245,7 +245,7 @@ class DokumentBestillingControllerForskuddTest : AbstractControllerTest() {
                     forskuddVedtakPeriode4.tomDato shouldBe sistePeriode.tomDato
                     forskuddVedtakPeriode4.beløp shouldBe BigDecimal(0)
                     forskuddVedtakPeriode4.fnr shouldBe BARN1.ident.verdi
-                    forskuddVedtakPeriode4.resultatKode shouldBe "A18"
+                    forskuddVedtakPeriode4.resultatKode shouldBe Resultatkode.AVSLAG_OVER_18_ÅR.legacyKode
                     forskuddVedtakPeriode4.forskKode shouldBe "BOA"
                     forskuddVedtakPeriode4.prosent shouldBe "000"
                     forskuddVedtakPeriode4.maksInntekt shouldBe FORSKUDD_MAKS_INNTEKT_FORSKUDD_MOTTAKER_2024_2025

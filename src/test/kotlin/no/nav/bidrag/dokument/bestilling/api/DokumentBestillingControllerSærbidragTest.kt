@@ -129,7 +129,7 @@ class DokumentBestillingControllerSærbidragTest : AbstractControllerTest() {
                 soknadBost.virkningsDato shouldBe virkningDato
                 soknadBost.mottatDato shouldBe soknadDato
                 soknadBost.soknGrKode shouldBe "ST"
-                soknadBost.resKode shouldBe "VS"
+                soknadBost.resKode shouldBe Resultatkode.SÆRBIDRAG_INNVILGET.legacyKode
                 soknadBost.soknFraKode shouldBe "MO"
                 soknadBost.soknType shouldBe "FA"
 
@@ -147,7 +147,7 @@ class DokumentBestillingControllerSærbidragTest : AbstractControllerTest() {
                     vedtakPeriode1.tomDato shouldBe periode1.tomDato
                     vedtakPeriode1.fnr shouldBe BARN2.ident.verdi
                     vedtakPeriode1.erInnkreving shouldBe true
-                    vedtakPeriode1.resultatKode shouldBe "VS"
+                    vedtakPeriode1.resultatKode shouldBe Resultatkode.SÆRBIDRAG_INNVILGET.legacyKode
                 }
 
                 message.brev?.forskuddVedtakPeriode!!.size shouldBe 0
