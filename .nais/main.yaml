@@ -35,6 +35,7 @@ env:
   JAVA_TOOL_OPTIONS: -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005
 outbound-access-apps:
   - bidrag-vedtak-syntetisk
+  - bidrag-behandling
 outbound-access-hosts:
   - bidrag-dokument.dev-fss-pub.nais.io
   - bidrag-person.dev-fss-pub.nais.io
