@@ -135,6 +135,43 @@ class BrevserverProducer(
                 tknr = dokumentBestilling.enhet!!
                 mottaker = dokumentBestilling.mottaker?.let { mapBrevmottaker(this, it) }
                 kontaktInfo = mapKontaktInfo(this, dokumentBestilling.kontaktInfo)
+                dokumentBestilling.sjablonDetaljer.let {
+                    if (dokumentMal.kreverDataGrunnlag?.behandling == true) {
+                        it.forskuddInntektgrensePerioder.forEach {
+                            inntektGrunnlagForskuddPeriode {
+                                fomDato = it.fomDato
+                                tomDato = it.tomDato ?: MAX_DATE
+                                antallBarn = it.antallBarn
+                                forsorgerKode =
+                                    when (it.forsorgerType) {
+                                        Sivilstandskode.ENSLIG -> "EN"
+                                        Sivilstandskode.GIFT_SAMBOER -> "GS"
+                                        else -> ""
+                                    }
+                                belop50fra = it.beløp50Prosent.fraVerdi()
+                                belop50til = it.beløp50Prosent.tilVerdi()
+                                belop75fra = it.beløp75Prosent.fraVerdi()
+                                belop75til = it.beløp75Prosent.tilVerdi()
+                            }
+                        }
+                        sjablon {
+                            forskuddSats = it.forskuddSats
+                            inntektTillegsbidrag = it.inntektsintervallTillegsbidrag
+                            maksProsentInntektBp = it.maksProsentAvInntektBp
+                            multiplikatorHøyInntektBp = it.multiplikatorHøyInntektBp
+                            multiplikatorMaksBidrag = it.multiplikatorMaksBidrag
+                            multiplikatorMaksInntekBarn = it.multiplikatorMaksInntekBarn
+                            multiplikatorInntekstgrenseForskudd = it.multiplikatorInntekstgrenseForskudd
+                            nedreInntekstgrenseGebyr = it.nedreInntekstgrenseGebyr
+                            prosentTillegsgebyr = it.prosentsatsTilleggsbidrag
+                            maksgrenseHøyInntekt = it.maksgrenseHøyInntekt
+                            maksBidragsgrense = it.maksBidragsgrense
+                            maksInntektsgrense = it.maksInntektsgrense
+                            maksForskuddsgrense = it.maksForskuddsgrense
+                            maksInntektsgebyr = it.maksInntektsgebyr
+                        }
+                    }
+                }
                 soknadBost {
                     saksnr = dokumentBestilling.saksnummer
                     rmISak = dokumentBestilling.rmISak
@@ -180,10 +217,10 @@ class BrevserverProducer(
                             if (erInnkreving || erInnkrevingPrivatAvtale) ResultatKoder.VEDTAK_VANLIG_INNKREVING else resultatKode
                         } else if (vedtakInfo?.type == TypeBehandling.SÆRBIDRAG) {
                             vedtakInfo.vedtakBarn
-                                .first()
-                                .engangsbeløper
-                                .first()
-                                .særbidragBeregning
+                                .firstOrNull()
+                                ?.engangsbeløper
+                                ?.firstOrNull()
+                                ?.særbidragBeregning
                                 ?.resultatKode
                                 ?.legacyKodeBrev
                         } else {

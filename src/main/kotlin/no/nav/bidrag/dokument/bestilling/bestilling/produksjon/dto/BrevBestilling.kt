@@ -103,8 +103,21 @@ class Brev {
     @XmlElement(name = "Saksbehandl")
     var saksbehandler: BrevSaksbehandler? = null
 
+    @XmlElement(name = "sjablong")
+    var sjablon: BrevSjablon? = null
+
     @XmlElement(name = "bidrBarn")
     var bidragBarn: MutableList<BidragBarn> = mutableListOf()
+
+    @XmlElement(name = "perInGrForsk", nillable = true)
+    var inntektGrunnlagForskuddPerioder: MutableList<InntektGrunnlagForskuddPeriode> = mutableListOf()
+
+    fun inntektGrunnlagForskuddPeriode(init: InntektGrunnlagForskuddPeriode.() -> Unit): InntektGrunnlagForskuddPeriode {
+        val initValue = InntektGrunnlagForskuddPeriode()
+        initValue.init()
+        inntektGrunnlagForskuddPerioder.add(initValue)
+        return initValue
+    }
 
     fun brevKontaktinfo(init: BrevKontaktinfo.() -> Unit): BrevKontaktinfo {
         val brevKontaktinfo = BrevKontaktinfo()
@@ -118,6 +131,13 @@ class Brev {
         brevSaksbehandler.init()
         saksbehandler = brevSaksbehandler
         return brevSaksbehandler
+    }
+
+    fun sjablon(init: BrevSjablon.() -> Unit): BrevSjablon {
+        val initSjablon = BrevSjablon()
+        initSjablon.init()
+        sjablon = initSjablon
+        return initSjablon
     }
 
     fun soknad(init: Soknad.() -> Unit): Soknad {
@@ -175,6 +195,67 @@ class Brev {
         bidragBarn.add(initValue)
         return initValue
     }
+}
+
+@Suppress("unused")
+@XmlRootElement(name = "sjablong")
+@XmlAccessorType(XmlAccessType.FIELD)
+class BrevSjablon {
+    @XmlElement(name = "forskSats", nillable = true)
+    @XmlJavaTypeAdapter(BelopAdapter::class)
+    var forskuddSats: BigDecimal? = null
+
+    @XmlElement(name = "inntIntTb", nillable = true)
+    @XmlJavaTypeAdapter(BelopAdapter::class)
+    var inntektTillegsbidrag: BigDecimal? = null
+
+    @XmlElement(name = "prosInntBp", nillable = true)
+    @XmlJavaTypeAdapter(BelopAdapter::class)
+    var maksProsentInntektBp: BigDecimal? = null
+
+    @XmlElement(name = "multHoyInnt", nillable = true)
+    @XmlJavaTypeAdapter(BelopAdapter::class)
+    var multiplikatorHøyInntektBp: BigDecimal? = null
+
+    @XmlElement(name = "multMaxBidr", nillable = true)
+    @XmlJavaTypeAdapter(BelopAdapter::class)
+    var multiplikatorMaksBidrag: BigDecimal? = null
+
+    @XmlElement(name = "multMaxInnt", nillable = true)
+    @XmlJavaTypeAdapter(BelopAdapter::class)
+    var multiplikatorMaksInntekBarn: BigDecimal? = null
+
+    @XmlElement(name = "multMaxForsk", nillable = true)
+    @XmlJavaTypeAdapter(BelopAdapter::class)
+    var multiplikatorInntekstgrenseForskudd: BigDecimal? = null
+
+    @XmlElement(name = "multInntGeb", nillable = true)
+    @XmlJavaTypeAdapter(BelopAdapter::class)
+    var nedreInntekstgrenseGebyr: BigDecimal? = null
+
+    @XmlElement(name = "prosTb", nillable = true)
+    @XmlJavaTypeAdapter(BelopAdapter::class)
+    var prosentTillegsgebyr: BigDecimal? = null
+
+    @XmlElement(name = "belHoyInnt", nillable = true)
+    @XmlJavaTypeAdapter(BelopAdapter::class)
+    var maksgrenseHøyInntekt: BigDecimal? = null
+
+    @XmlElement(name = "belMaxBidr", nillable = true)
+    @XmlJavaTypeAdapter(BelopAdapter::class)
+    var maksBidragsgrense: BigDecimal? = null
+
+    @XmlElement(name = "belMaxInnt", nillable = true)
+    @XmlJavaTypeAdapter(BelopAdapter::class)
+    var maksInntektsgrense: BigDecimal? = null
+
+    @XmlElement(name = "belMaxForsk", nillable = true)
+    @XmlJavaTypeAdapter(BelopAdapter::class)
+    var maksForskuddsgrense: BigDecimal? = null
+
+    @XmlElement(name = "belInntGeb", nillable = true)
+    @XmlJavaTypeAdapter(BelopAdapter::class)
+    var maksInntektsgebyr: BigDecimal? = null
 }
 
 @Suppress("unused")

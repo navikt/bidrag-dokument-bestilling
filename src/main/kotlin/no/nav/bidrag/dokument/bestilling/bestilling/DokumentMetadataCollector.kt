@@ -28,6 +28,7 @@ import no.nav.bidrag.dokument.bestilling.model.SpråkKoder
 import no.nav.bidrag.dokument.bestilling.model.erDødfødt
 import no.nav.bidrag.dokument.bestilling.model.fantIkkeSak
 import no.nav.bidrag.dokument.bestilling.model.manglerVedtakId
+import no.nav.bidrag.dokument.bestilling.tjenester.BehandlingService
 import no.nav.bidrag.dokument.bestilling.tjenester.KodeverkService
 import no.nav.bidrag.dokument.bestilling.tjenester.OrganisasjonService
 import no.nav.bidrag.dokument.bestilling.tjenester.PersonService
@@ -53,6 +54,7 @@ class DokumentMetadataCollector(
     val sakService: SakService,
     val kodeverkService: KodeverkService,
     val vedtakService: VedtakService,
+    val behandlingService: BehandlingService,
     val sjablongService: SjablongService,
     val saksbehandlerInfoManager: SaksbehandlerInfoManager,
     val organisasjonService: OrganisasjonService,
@@ -95,13 +97,18 @@ class DokumentMetadataCollector(
             vedtakDetaljer =
                 kreverDataGrunnlag
                     .takeIf { it.vedtak }
-                    ?.let { hentVedtakData(forespørsel.vedtakId) },
+                    ?.let { hentVedtakData(forespørsel.vedtakId) } ?: kreverDataGrunnlag.takeIf { it.behandling }?.let { hentVedtakDataFraBehandling(forespørsel.behandlingId) },
         )
     }
 
     private fun hentVedtakData(vedtakId: String?): VedtakDetaljer {
         if (vedtakId.isNullOrEmpty()) manglerVedtakId()
         return vedtakService.hentVedtakDetaljer(vedtakId)
+    }
+
+    private fun hentVedtakDataFraBehandling(behandlingId: String?): VedtakDetaljer {
+        if (behandlingId.isNullOrEmpty()) manglerVedtakId()
+        return behandlingService.hentVedtakDetaljer(behandlingId)
     }
 
     private fun hentRolleData(
@@ -149,6 +156,8 @@ class DokumentMetadataCollector(
             soknadsbarn.addAll(
                 vedtakService.hentIdentSøknadsbarn(forespørsel.vedtakId),
             )
+        } else if (!forespørsel.behandlingId.isNullOrEmpty() && kreverDataGrunnlag.behandling) {
+            soknadsbarn.addAll(behandlingService.hentIdentSøknadsbarn(forespørsel.behandlingId))
         } else {
             soknadsbarn.addAll(forespørsel.barnIBehandling)
         }

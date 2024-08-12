@@ -1082,7 +1082,7 @@
     "tittel": "NAV har mottatt søknad om bidrag til særlige utgifter",
     "kreverDataGrunnlag": {
       "vedtak": false,
-      "behandling": false,
+      "behandling": true,
       "roller": true,
       "enhetKontaktInfo": true
     },
@@ -1095,7 +1095,7 @@
     "tittel": "Du har søkt om bidrag til særlige utgifter",
     "kreverDataGrunnlag": {
       "vedtak": false,
-      "behandling": false,
+      "behandling": true,
       "roller": true,
       "enhetKontaktInfo": true
     },

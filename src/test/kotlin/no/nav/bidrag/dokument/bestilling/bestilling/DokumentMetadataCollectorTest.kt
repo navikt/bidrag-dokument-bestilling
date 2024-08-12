@@ -19,6 +19,7 @@ import no.nav.bidrag.dokument.bestilling.bestilling.dto.DokumentBestilling
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.DokumentMal
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.hentDokumentMal
 import no.nav.bidrag.dokument.bestilling.config.SaksbehandlerInfoManager
+import no.nav.bidrag.dokument.bestilling.consumer.BidragBehandlingConsumer
 import no.nav.bidrag.dokument.bestilling.consumer.BidragVedtakConsumer
 import no.nav.bidrag.dokument.bestilling.consumer.KodeverkConsumer
 import no.nav.bidrag.dokument.bestilling.consumer.SjablonConsumer
@@ -27,6 +28,7 @@ import no.nav.bidrag.dokument.bestilling.consumer.dto.SjablongerDto
 import no.nav.bidrag.dokument.bestilling.consumer.dto.fornavnEtternavn
 import no.nav.bidrag.dokument.bestilling.model.Saksbehandler
 import no.nav.bidrag.dokument.bestilling.model.typeRef
+import no.nav.bidrag.dokument.bestilling.tjenester.BehandlingService
 import no.nav.bidrag.dokument.bestilling.tjenester.KodeverkService
 import no.nav.bidrag.dokument.bestilling.tjenester.OrganisasjonService
 import no.nav.bidrag.dokument.bestilling.tjenester.PersonService
@@ -80,6 +82,9 @@ internal class DokumentMetadataCollectorTest {
     lateinit var vedtakConsumer: BidragVedtakConsumer
 
     @MockK
+    lateinit var bidragBehandlingConsumer: BidragBehandlingConsumer
+
+    @MockK
     lateinit var sjablonConsumer: SjablonConsumer
 
     @MockK
@@ -96,6 +101,9 @@ internal class DokumentMetadataCollectorTest {
 
     @InjectMockKs
     lateinit var vedtakService: VedtakService
+
+    @MockK
+    lateinit var behandlingService: BehandlingService
 
     lateinit var metadataCollector: DokumentMetadataCollector
 
@@ -125,6 +133,7 @@ internal class DokumentMetadataCollectorTest {
             sakService,
             kodeverkService,
             vedtakService,
+            behandlingService,
             sjablongService,
             saksbehandlerInfoManager,
             organisasjonService,
