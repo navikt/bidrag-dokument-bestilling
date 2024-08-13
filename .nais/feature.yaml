@@ -19,6 +19,9 @@ env:
   BIDRAG_VEDTAK_URL: http://bidrag-vedtak
   BIDRAG_VEDTAK_SCOPE: dev-gcp.bidrag.bidrag-vedtak
 
+  BIDRAG_BEHANDLING_URL: http://bidrag-behandling-feature
+  BIDRAG_BEHANDLING_SCOPE: dev-gcp.bidrag.bidrag-behandling-feature
+
   SJABLON_URL: https://bidrag-sjablon.dev-fss-pub.nais.io/bidrag-sjablon
 
   KODEVERK_URL: https://kodeverk-api.nav.no
@@ -31,6 +34,7 @@ env:
   JAVA_TOOL_OPTIONS: -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005
 outbound-access-apps:
   - bidrag-vedtak
+  - bidrag-behandling-feature
 outbound-access-hosts:
   - bidrag-dokument-feature.dev-fss-pub.nais.io
   - bidrag-person-feature.dev-fss-pub.nais.io

@@ -7,6 +7,7 @@ import io.kotest.matchers.collections.shouldHaveAtLeastSize
 import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.collections.shouldNotBeIn
 import io.kotest.matchers.comparables.shouldBeEqualComparingTo
+import io.kotest.matchers.maps.shouldHaveSize
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
 import io.kotest.matchers.string.shouldContain
@@ -16,7 +17,7 @@ import no.nav.bidrag.dokument.bestilling.api.dto.DokumentBestillingResponse
 import no.nav.bidrag.dokument.bestilling.api.dto.DokumentMalDetaljer
 import no.nav.bidrag.dokument.bestilling.api.dto.MottakerTo
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.DokumentMalBrevserver
-import no.nav.bidrag.dokument.bestilling.bestilling.dto.InnholdType
+import no.nav.bidrag.dokument.bestilling.bestilling.dto.DokumentMalType
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.PeriodeFraTom
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.StøttetSpråk
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.alleDokumentmaler
@@ -111,19 +112,22 @@ class DokumentBestillingControllerTest : AbstractControllerTest() {
         responseDokumentMalerBucket["UTLAND_VEDLEGG_VEDTAK_BP_DE"]!!.språk shouldHaveSize 1
         responseDokumentMalerBucket["UTLAND_VEDLEGG_VEDTAK_BP_DE"]!!.språk shouldContain StøttetSpråk.DE
         responseDokumentMalerBucket["UTLAND_VEDLEGG_VEDTAK_BP_DE"]!!.statiskInnhold shouldBe true
-        responseDokumentMalerBucket["UTLAND_VEDLEGG_VEDTAK_BP_DE"]!!.innholdType shouldBe InnholdType.VEDLEGG_VEDTAK
+        responseDokumentMalerBucket["UTLAND_VEDLEGG_VEDTAK_BP_DE"]!!.innholdType shouldBe DokumentMalType.VEDLEGG_VEDTAK
 
         responseDokumentMalerBucket["FARSKAP_BIDRAGFORSKUDD_BOR_IKKE_SAMMEN"] shouldNotBe null
         responseDokumentMalerBucket["FARSKAP_BIDRAGFORSKUDD_BOR_IKKE_SAMMEN"]!!.gruppeVisningsnavn shouldBe "Innkalling"
         responseDokumentMalerBucket["FARSKAP_BIDRAGFORSKUDD_BOR_IKKE_SAMMEN"]!!.redigerbar shouldBe false
         responseDokumentMalerBucket["FARSKAP_BIDRAGFORSKUDD_BOR_IKKE_SAMMEN"]!!.statiskInnhold shouldBe true
-        responseDokumentMalerBucket["FARSKAP_BIDRAGFORSKUDD_BOR_IKKE_SAMMEN"]!!.innholdType shouldBe InnholdType.VEDLEGG_VARSEL
+        responseDokumentMalerBucket["FARSKAP_BIDRAGFORSKUDD_BOR_IKKE_SAMMEN"]!!.innholdType shouldBe DokumentMalType.VEDLEGG_VARSEL
 
         responseDokumentMalerBucket["FARSKAP_PROVETAKING_FARSKAP"] shouldNotBe null
         responseDokumentMalerBucket["FARSKAP_PROVETAKING_FARSKAP"]!!.gruppeVisningsnavn shouldBe "DNA"
         responseDokumentMalerBucket["FARSKAP_PROVETAKING_FARSKAP"]!!.redigerbar shouldBe true
         responseDokumentMalerBucket["FARSKAP_PROVETAKING_FARSKAP"]!!.statiskInnhold shouldBe true
-        responseDokumentMalerBucket["FARSKAP_PROVETAKING_FARSKAP"]!!.innholdType shouldBe InnholdType.SKJEMA
+        responseDokumentMalerBucket["FARSKAP_PROVETAKING_FARSKAP"]!!.innholdType shouldBe DokumentMalType.SKJEMA
+
+        responseDokumentMalerBrevserver.filter { it.value.kreverBehandling } shouldHaveSize 4
+        responseDokumentMalerBrevserver.filter { it.value.kreverVedtak } shouldHaveSize 18
     }
 
     @Test

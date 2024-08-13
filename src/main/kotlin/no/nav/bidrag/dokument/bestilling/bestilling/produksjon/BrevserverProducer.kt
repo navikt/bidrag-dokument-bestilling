@@ -1,13 +1,14 @@
 package no.nav.bidrag.dokument.bestilling.bestilling.produksjon
 
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.BestillingSystem
+import no.nav.bidrag.dokument.bestilling.bestilling.dto.DataGrunnlag
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.DokumentBestilling
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.DokumentBestillingResult
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.DokumentMal
-import no.nav.bidrag.dokument.bestilling.bestilling.dto.DokumentType
+import no.nav.bidrag.dokument.bestilling.bestilling.dto.DokumentMalType
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.EnhetKontaktInfo
+import no.nav.bidrag.dokument.bestilling.bestilling.dto.ForskuddInntektgrensePeriode
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.Mottaker
-import no.nav.bidrag.dokument.bestilling.bestilling.dto.VedtakDetaljer
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.fraVerdi
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.tilVerdi
 import no.nav.bidrag.dokument.bestilling.bestilling.produksjon.dto.Brev
@@ -93,9 +94,9 @@ class BrevserverProducer(
                                 dokumentBestilling.mottaker?.fodselsnummer!!,
                             ),
                         journalposttype =
-                            when (dokumentMal.dokumentType) {
-                                DokumentType.UTGÅENDE -> JournalpostType.UTGÅENDE
-                                DokumentType.NOTAT -> JournalpostType.NOTAT
+                            when (dokumentMal.type) {
+                                DokumentMalType.NOTAT -> JournalpostType.NOTAT
+                                else -> JournalpostType.UTGÅENDE
                             },
                         saksbehandlerIdent = dokumentBestilling.saksbehandler?.ident,
                     ),
@@ -135,6 +136,27 @@ class BrevserverProducer(
                 tknr = dokumentBestilling.enhet!!
                 mottaker = dokumentBestilling.mottaker?.let { mapBrevmottaker(this, it) }
                 kontaktInfo = mapKontaktInfo(this, dokumentBestilling.kontaktInfo)
+                dokumentBestilling.sjablonDetaljer.let {
+                    if (dokumentMal.inneholderDatagrunnlag(DataGrunnlag.SJABLON)) {
+                        mapInnteksgrenseSjabloner(it.forskuddInntektgrensePerioder)
+                        sjablon {
+                            forskuddSats = it.forskuddSats
+                            inntektTillegsbidrag = it.inntektsintervallTillegsbidrag
+                            maksProsentInntektBp = it.maksProsentAvInntektBp
+                            multiplikatorHøyInntektBp = it.multiplikatorHøyInntektBp
+                            multiplikatorMaksBidrag = it.multiplikatorMaksBidrag
+                            multiplikatorMaksInntekBarn = it.multiplikatorMaksInntekBarn
+                            multiplikatorInntekstgrenseForskudd = it.multiplikatorInntekstgrenseForskudd
+                            nedreInntekstgrenseGebyr = it.nedreInntekstgrenseGebyr
+                            prosentTillegsgebyr = it.prosentsatsTilleggsbidrag
+                            maksgrenseHøyInntekt = it.maksgrenseHøyInntekt
+                            maksBidragsgrense = it.maksBidragsgrense
+                            maksInntektsgrense = it.maksInntektsgrense
+                            maksForskuddsgrense = it.maksForskuddsgrense
+                            maksInntektsgebyr = it.maksInntektsgebyr
+                        }
+                    }
+                }
                 soknadBost {
                     saksnr = dokumentBestilling.saksnummer
                     rmISak = dokumentBestilling.rmISak
@@ -180,10 +202,10 @@ class BrevserverProducer(
                             if (erInnkreving || erInnkrevingPrivatAvtale) ResultatKoder.VEDTAK_VANLIG_INNKREVING else resultatKode
                         } else if (vedtakInfo?.type == TypeBehandling.SÆRBIDRAG) {
                             vedtakInfo.vedtakBarn
-                                .first()
-                                .engangsbeløper
-                                .first()
-                                .særbidragBeregning
+                                .firstOrNull()
+                                ?.engangsbeløper
+                                ?.firstOrNull()
+                                ?.særbidragBeregning
                                 ?.resultatKode
                                 ?.legacyKodeBrev
                         } else {
@@ -295,6 +317,7 @@ class BrevserverProducer(
                             }
                         }
                         vedtakBarn.stønadsendringer.forEach { detaljer ->
+//                            mapInnteksgrenseSjabloner(detaljer.forskuddInntektgrensePerioder)
                             detaljer.forskuddInntektgrensePerioder.forEach {
                                 inntektGrunnlagForskuddPeriode {
                                     fomDato = it.fomDato
@@ -312,7 +335,6 @@ class BrevserverProducer(
                                     belop75til = it.beløp75Prosent.tilVerdi()
                                 }
                             }
-
                             detaljer.vedtakPerioder.forEach { vedtakPeriode ->
                                 forskuddVedtakPeriode {
                                     fomDato = vedtakPeriode.fomDato
@@ -376,8 +398,24 @@ class BrevserverProducer(
         }
     }
 
-    fun VedtakDetaljer.mapForForskudd() {
-    }
+    fun Brev.mapInnteksgrenseSjabloner(forskuddInntektgrensePeriode: List<ForskuddInntektgrensePeriode>) =
+        forskuddInntektgrensePeriode.map {
+            inntektGrunnlagForskuddPeriode {
+                fomDato = it.fomDato
+                tomDato = it.tomDato ?: MAX_DATE
+                antallBarn = it.antallBarn
+                forsorgerKode =
+                    when (it.forsorgerType) {
+                        Sivilstandskode.ENSLIG -> "EN"
+                        Sivilstandskode.GIFT_SAMBOER -> "GS"
+                        else -> ""
+                    }
+                belop50fra = it.beløp50Prosent.fraVerdi()
+                belop50til = it.beløp50Prosent.tilVerdi()
+                belop75fra = it.beløp75Prosent.fraVerdi()
+                belop75til = it.beløp75Prosent.tilVerdi()
+            }
+        }
 
     fun mapKontaktInfo(
         brev: Brev,

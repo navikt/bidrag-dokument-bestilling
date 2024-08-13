@@ -38,7 +38,7 @@ class DokumentBestillingService(
         bestillingRequest: DokumentBestillingForespørsel?,
         dokumentMal: DokumentMal,
     ): ByteArray {
-        val kreverDataGrunnlag = dokumentMal.kreverDataGrunnlag != null
+        val kreverDataGrunnlag = dokumentMal.kreverDataGrunnlag
         if (kreverDataGrunnlag && bestillingRequest == null) manglerDataGrunnlag(dokumentMal)
         return fetchingManager.fetchDocumentByte(dokumentMal)
     }

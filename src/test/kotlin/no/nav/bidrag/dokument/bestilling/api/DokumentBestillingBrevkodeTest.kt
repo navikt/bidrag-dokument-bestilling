@@ -8,9 +8,10 @@ import io.kotest.matchers.shouldNotBe
 import io.mockk.verify
 import no.nav.bidrag.dokument.bestilling.api.dto.DokumentBestillingForespørsel
 import no.nav.bidrag.dokument.bestilling.api.dto.DokumentBestillingResponse
+import no.nav.bidrag.dokument.bestilling.bestilling.dto.DataGrunnlag
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.DokumentMal
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.DokumentMalBucket
-import no.nav.bidrag.dokument.bestilling.bestilling.dto.DokumentType
+import no.nav.bidrag.dokument.bestilling.bestilling.dto.DokumentMalType
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.alleDokumentmaler
 import no.nav.bidrag.dokument.bestilling.bestilling.produksjon.DokumentProducer
 import no.nav.bidrag.dokument.bestilling.consumer.dto.fornavnEtternavn
@@ -42,16 +43,16 @@ class DokumentBestillingBrevkodeTest : AbstractControllerTest() {
 
         @JvmStatic
         fun brevkoderUtgaaende() =
-            alleDokumentmaler.filter { it.dokumentType == DokumentType.UTGÅENDE }
+            alleDokumentmaler.filter { it.type != DokumentMalType.NOTAT }
 
         @JvmStatic
         fun brevkoderEnhetKontaktinfo() =
             brevkoderUtgaaende()
                 .filter { it !is DokumentMalBucket }
-                .filter { it.kreverDataGrunnlag!!.enhetKontaktInfo }
+                .filter { it.inneholderDatagrunnlag(DataGrunnlag.ENHET_KONTAKT_INFO) }
 
         @JvmStatic
-        fun brevkoderVedtak() = brevkoderUtgaaende().filter { it.kreverDataGrunnlag!!.vedtak }
+        fun brevkoderVedtak() = brevkoderUtgaaende().filter { it.type == DokumentMalType.VEDTAK }
     }
 
     @ParameterizedTest(name = "{index} - Should add default values with sak, saksbehandler, mottaker and gjelder for brevkode {argumentsWithNames}")

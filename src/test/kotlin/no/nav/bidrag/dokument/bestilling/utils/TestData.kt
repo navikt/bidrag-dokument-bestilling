@@ -5,18 +5,24 @@ import no.nav.bidrag.commons.web.mock.hentFil
 import no.nav.bidrag.dokument.bestilling.api.dto.MottakerAdresseTo
 import no.nav.bidrag.dokument.bestilling.api.dto.SamhandlerAdresse
 import no.nav.bidrag.dokument.bestilling.api.dto.SamhandlerInformasjon
+import no.nav.bidrag.dokument.bestilling.consumer.dto.BehandlingDetaljerDtoV2
 import no.nav.bidrag.dokument.bestilling.consumer.dto.EnhetKontaktInfoDto
 import no.nav.bidrag.dokument.bestilling.consumer.dto.EnhetPostadresseDto
 import no.nav.bidrag.domene.enums.adresse.Adressetype
+import no.nav.bidrag.domene.enums.behandling.TypeBehandling
 import no.nav.bidrag.domene.enums.person.Diskresjonskode
 import no.nav.bidrag.domene.enums.rolle.Rolletype
+import no.nav.bidrag.domene.enums.rolle.SøktAvType
 import no.nav.bidrag.domene.enums.sak.Bidragssakstatus
 import no.nav.bidrag.domene.enums.sak.Sakskategori
+import no.nav.bidrag.domene.enums.vedtak.Engangsbeløptype
+import no.nav.bidrag.domene.enums.vedtak.Vedtakstype
 import no.nav.bidrag.domene.ident.Personident
 import no.nav.bidrag.domene.land.Landkode2
 import no.nav.bidrag.domene.land.Landkode3
 import no.nav.bidrag.domene.organisasjon.Enhetsnummer
 import no.nav.bidrag.domene.sak.Saksnummer
+import no.nav.bidrag.organisasjon.dto.SaksbehandlerDto
 import no.nav.bidrag.transport.behandling.vedtak.response.VedtakDto
 import no.nav.bidrag.transport.dokument.OpprettDokumentDto
 import no.nav.bidrag.transport.dokument.OpprettJournalpostResponse
@@ -228,3 +234,50 @@ fun lagVedtaksdata(
     val grunnlag: VedtakDto = commonObjectmapper.readValue(stringValue)
     return grunnlag
 }
+
+fun opprettBehandlingDetaljer() =
+    BehandlingDetaljerDtoV2(
+        id = 1,
+        type = TypeBehandling.SÆRBIDRAG,
+        engangsbeløptype = Engangsbeløptype.SÆRBIDRAG,
+        årsak = null,
+        avslag = null,
+        vedtakstype = Vedtakstype.ENDRING,
+        opprettetAv =
+            SaksbehandlerDto(
+                SAKSBEHANDLER_IDENT,
+                SAKSBEHANDLER_NAVN,
+            ),
+        mottattdato = LocalDate.parse("2024-07-15"),
+        søktFomDato = LocalDate.parse("2024-08-01"),
+        opprettetTidspunkt = LocalDateTime.now(),
+        søktAv = SøktAvType.BIDRAGSMOTTAKER,
+        søknadsid = 1,
+        søknadRefId = 1,
+        vedtakRefId = 1,
+        erVedtakFattet = false,
+        behandlerenhet = "4806",
+        saksnummer = DEFAULT_SAKSNUMMER,
+        erKlageEllerOmgjøring = false,
+        roller =
+            setOf(
+                no.nav.bidrag.dokument.bestilling.consumer.dto.RolleDto(
+                    rolletype = Rolletype.BIDRAGSMOTTAKER,
+                    ident = BM1.ident.verdi,
+                    navn = BM1.navn,
+                    fødselsdato = BM1.fødselsdato,
+                ),
+                no.nav.bidrag.dokument.bestilling.consumer.dto.RolleDto(
+                    rolletype = Rolletype.BIDRAGSPLIKTIG,
+                    ident = BP1.ident.verdi,
+                    navn = BP1.navn,
+                    fødselsdato = BP1.fødselsdato,
+                ),
+                no.nav.bidrag.dokument.bestilling.consumer.dto.RolleDto(
+                    rolletype = Rolletype.BARN,
+                    ident = BARN1.ident.verdi,
+                    navn = BARN1.navn,
+                    fødselsdato = BARN1.fødselsdato,
+                ),
+            ),
+    )

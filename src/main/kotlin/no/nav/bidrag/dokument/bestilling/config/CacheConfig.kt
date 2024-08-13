@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Import
 import org.springframework.context.annotation.Profile
+import java.time.Duration
 
 @Configuration
 @EnableCaching
@@ -22,6 +23,7 @@ class CacheConfig {
         const val SJABLONGER_CACHE = "SJABLONGER_CACHE"
         const val PERSON_CACHE = "PERSON_CACHE"
         const val VEDTAK_CACHE = "VEDTAK_CACHE"
+        const val BEHANDLING_CACHE = "BEHANDLING_CACHE"
         const val PERSON_ADRESSE_CACHE = "PERSON_ADRESSE_CACHE"
         const val PERSON_SPRAAK_CACHE = "PERSON_SPRAAK_CACHE"
         const val SAKSBEHANDLERINFO_CACHE = "SAKSBEHANDLERINFO_CACHE"
@@ -51,6 +53,10 @@ class CacheConfig {
         caffeineCacheManager.registerCustomCache(
             VEDTAK_CACHE,
             Caffeine.newBuilder().expireAfter(InvaliderCacheFørStartenAvArbeidsdag()).build(),
+        )
+        caffeineCacheManager.registerCustomCache(
+            BEHANDLING_CACHE,
+            Caffeine.newBuilder().expireAfterWrite(Duration.ofMinutes(10)).build(),
         )
         caffeineCacheManager.registerCustomCache(
             PERSON_ADRESSE_CACHE,

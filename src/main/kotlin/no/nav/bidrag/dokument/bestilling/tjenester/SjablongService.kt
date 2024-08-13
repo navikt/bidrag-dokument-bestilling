@@ -29,7 +29,15 @@ class SjablongService(
             fastsettelseGebyr = sjablonger.hentSisteSjablong(SjablongType.BELØP_FASTSETTELSESGEBYR)?.verdi ?: BigDecimal(0),
             forskuddInntektIntervall = sjablonger.hentSisteSjablong(SjablongType.INNTEKTSINTERVALL_FORSKUDD)?.verdi ?: BigDecimal(0),
             forskuddSats = sjablonger.hentSisteSjablong(SjablongType.FORSKUDDSSATS)?.verdi ?: BigDecimal(0),
+            multiplikatorMaksBidrag = sjablonger.hentSisteSjablong(SjablongType.MULTIPLIKATOR_MAKS_BIDRAG)?.verdi ?: BigDecimal(0),
+            multiplikatorHøyInntektBp = sjablonger.hentSisteSjablong(SjablongType.MULTIPLIKATOR_HØY_INNTEKT_BIDRAGSPLIKTIG)?.verdi ?: BigDecimal(0),
+            inntektsintervallTillegsbidrag = sjablonger.hentSisteSjablong(SjablongType.INNTEKTSINTERVALL_TILLEGGSBIDRAG)?.verdi ?: BigDecimal(0),
             multiplikatorInnteksinslagBarn = sjablonger.hentSisteSjablong(SjablongType.MULTIPLIKATOR_INNTEKTSINNSLAG_BIDRAGSBARN)?.verdi ?: BigDecimal(0),
+            multiplikatorMaksInntekBarn = sjablonger.hentSisteSjablong(SjablongType.MULTIPLIKATOR_MAKS_INNTEKT_BIDRAGSBARN)?.verdi ?: BigDecimal(0),
+            nedreInntekstgrenseGebyr = sjablonger.hentSisteSjablong(SjablongType.NEDRE_INNTEKTSGRENSE_GEBYR)?.verdi ?: BigDecimal(0),
+            maksProsentAvInntektBp = sjablonger.hentSisteSjablong(SjablongType.MAKS_PROSENT_AV_INNTEKT_BIDRAGSPLIKTIG)?.verdi ?: BigDecimal(0),
+            prosentsatsTilleggsbidrag = sjablonger.hentSisteSjablong(SjablongType.PROSENTSATS_TILLEGGSBIDRAG)?.verdi ?: BigDecimal(0),
+            forskuddInntektgrensePerioder = hentSjablonGrunnlagForskuddSjablongForPeriode(PeriodeFraTom(LocalDate.now(), null)),
         )
     }
 

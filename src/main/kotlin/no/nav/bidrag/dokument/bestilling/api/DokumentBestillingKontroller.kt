@@ -9,8 +9,11 @@ import no.nav.bidrag.dokument.bestilling.SIKKER_LOGG
 import no.nav.bidrag.dokument.bestilling.api.dto.DokumentBestillingForespørsel
 import no.nav.bidrag.dokument.bestilling.api.dto.DokumentBestillingResponse
 import no.nav.bidrag.dokument.bestilling.api.dto.DokumentMalDetaljer
+import no.nav.bidrag.dokument.bestilling.bestilling.dto.DataGrunnlag
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.DokumentMalBrevserver
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.DokumentMalBucket
+import no.nav.bidrag.dokument.bestilling.bestilling.dto.DokumentMalType
+import no.nav.bidrag.dokument.bestilling.bestilling.dto.DokumentType
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.alleDokumentmaler
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.hentDokumentMal
 import no.nav.bidrag.dokument.bestilling.model.dokumentMalEksistererIkke
@@ -121,11 +124,15 @@ class DokumentBestillingKontroller(
                     DokumentMalDetaljer(
                         beskrivelse = it.beskrivelse,
                         tittel = it.tittel,
-                        type = it.dokumentType,
+                        type =
+                            when (it.type) {
+                                DokumentMalType.NOTAT -> DokumentType.NOTAT
+                                else -> DokumentType.UTGÅENDE
+                            },
                         kanBestilles = it.enabled,
                         redigerbar = it.redigerbar,
-                        kreverBehandling = it.kreverDataGrunnlag?.behandling ?: false,
-                        kreverVedtak = it.kreverDataGrunnlag?.vedtak ?: false,
+                        kreverBehandling = it.inneholderDatagrunnlag(DataGrunnlag.BEHANDLING) && listOf("BI01S04", "BI01S18", "BI01S08", "BI01S27").contains(it.kode),
+                        kreverVedtak = it.inneholderDatagrunnlag(DataGrunnlag.VEDTAK),
                         språk =
                             if (it is DokumentMalBucket) {
                                 listOf(it.språk)
@@ -134,7 +141,7 @@ class DokumentBestillingKontroller(
                             } else {
                                 emptyList()
                             },
-                        innholdType = it.innholdType,
+                        innholdType = it.type,
                         statiskInnhold = it is DokumentMalBucket,
                         gruppeVisningsnavn = if (it is DokumentMalBucket) it.gruppeVisningsnavn else null,
                         tilhorerEnheter = if (it is DokumentMalBucket) it.tilhørerEnheter else emptyList(),

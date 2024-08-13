@@ -3,13 +3,8 @@
     "kode": "BI01P11",
     "tittel": "Notat P11 T",
     "enabled": true,
-    "dokumentType": "NOTAT",
-    "kreverDataGrunnlag": {
-      "vedtak": false,
-      "behandling": false,
-      "roller": false,
-      "enhetKontaktInfo": true
-    },
+    "type": "NOTAT",
+    "kreverEkstraData": ["ENHET_KONTAKT_INFO"],
     "støttetSpråk": [
       "NB"
     ]
@@ -18,13 +13,7 @@
     "kode": "BI01P18",
     "tittel": "Saksbehandlingsnotat",
     "enabled": true,
-    "dokumentType": "NOTAT",
-    "kreverDataGrunnlag": {
-      "vedtak": false,
-      "behandling": false,
-      "roller": false,
-      "enhetKontaktInfo": false
-    },
+    "type": "NOTAT",
     "støttetSpråk": [
       "NB"
     ]
@@ -33,13 +22,7 @@
     "kode": "BI01X01",
     "tittel": "Referat fra samtale",
     "enabled": true,
-    "dokumentType": "NOTAT",
-    "kreverDataGrunnlag": {
-      "vedtak": false,
-      "behandling": false,
-      "roller": false,
-      "enhetKontaktInfo": false
-    },
+    "type": "NOTAT",
     "støttetSpråk": [
       "NB"
     ]
@@ -48,13 +31,7 @@
     "kode": "BI01X02",
     "tittel": "Elektronisk dialog",
     "enabled": true,
-    "dokumentType": "NOTAT",
-    "kreverDataGrunnlag": {
-      "vedtak": false,
-      "behandling": false,
-      "roller": false,
-      "enhetKontaktInfo": false
-    },
+    "type": "NOTAT",
     "støttetSpråk": [
       "NB"
     ]
@@ -62,13 +39,8 @@
   {
     "kode": "BI01S10",
     "tittel": "Oversendelse av informasjon",
+    "type": "VARSEL_STANDARD",
     "enabled": true,
-    "kreverDataGrunnlag": {
-      "vedtak": false,
-      "behandling": false,
-      "roller": true,
-      "enhetKontaktInfo": true
-    },
     "støttetSpråk": [
       "NB"
     ]
@@ -77,12 +49,7 @@
     "kode": "BI01S67",
     "tittel": "ADRESSEFORESPØRSEL",
     "enabled": true,
-    "kreverDataGrunnlag": {
-      "vedtak": false,
-      "behandling": false,
-      "roller": true,
-      "enhetKontaktInfo": true
-    },
+    "type": "VARSEL_STANDARD",
     "støttetSpråk": [
       "NB"
     ]
@@ -91,12 +58,7 @@
     "kode": "BI01S02",
     "tittel": "Fritekstbrev",
     "enabled": true,
-    "kreverDataGrunnlag": {
-      "vedtak": false,
-      "behandling": false,
-      "roller": true,
-      "enhetKontaktInfo": true
-    },
+    "type": "VARSEL_STANDARD",
     "støttetSpråk": [
       "NB",
       "DE",
@@ -108,12 +70,7 @@
   {
     "kode": "BI01A50",
     "tittel": "Klage - Vedtak bidragsforskudd",
-    "kreverDataGrunnlag": {
-      "vedtak": true,
-      "behandling": false,
-      "roller": true,
-      "enhetKontaktInfo": true
-    },
+    "type": "VEDTAK",
     "støttetSpråk": [
       "NB"
     ]
@@ -121,12 +78,7 @@
   {
     "kode": "BI01A01",
     "tittel": "Vedtak bidragsforskudd",
-    "kreverDataGrunnlag": {
-      "vedtak": true,
-      "behandling": false,
-      "roller": true,
-      "enhetKontaktInfo": true
-    },
+    "type": "VEDTAK",
     "støttetSpråk": [
       "NB"
     ]
@@ -134,12 +86,7 @@
   {
     "kode": "BI01A04",
     "tittel": "Revurdering av bidragsforskudd",
-    "kreverDataGrunnlag": {
-      "vedtak": true,
-      "behandling": false,
-      "roller": true,
-      "enhetKontaktInfo": true
-    },
+    "type": "VEDTAK",
     "støttetSpråk": [
       "NB"
     ]
@@ -147,12 +94,8 @@
   {
     "kode": "BI01S08",
     "tittel": "Varsel revurd forskudd",
-    "kreverDataGrunnlag": {
-      "vedtak": false,
-      "behandling": false,
-      "roller": true,
-      "enhetKontaktInfo": true
-    },
+    "kreverEkstraData": ["SJABLON"],
+    "type": "VARSEL",
     "støttetSpråk": [
       "NB"
     ]
@@ -160,12 +103,7 @@
   {
     "kode": "BI01S27",
     "tittel": "Varsel om ny beregning av bidragsforskudd og varsel om mulig tilbakebetaling",
-    "kreverDataGrunnlag": {
-      "vedtak": false,
-      "behandling": false,
-      "roller": true,
-      "enhetKontaktInfo": true
-    },
+    "type": "VARSEL",
     "støttetSpråk": [
       "NB"
     ]
@@ -173,12 +111,7 @@
   {
     "kode": "BI01S28",
     "tittel": "Varsel opphør av bidragsforskudd tilbake i tid",
-    "kreverDataGrunnlag": {
-      "vedtak": false,
-      "behandling": false,
-      "roller": true,
-      "enhetKontaktInfo": true
-    },
+    "type": "VARSEL",
     "støttetSpråk": [
       "NB"
     ]
@@ -186,12 +119,7 @@
   {
     "kode": "BI01S29",
     "tittel": "Varsel opphør av bidragsforskudd tilbake i tid",
-    "kreverDataGrunnlag": {
-      "vedtak": false,
-      "behandling": false,
-      "roller": true,
-      "enhetKontaktInfo": true
-    },
+    "type": "VARSEL",
     "støttetSpråk": [
       "NB"
     ]
@@ -199,12 +127,7 @@
   {
     "kode": "BI01S30",
     "tittel": "Varsel opphør av bidragsforskudd tilbake i tid",
-    "kreverDataGrunnlag": {
-      "vedtak": false,
-      "behandling": false,
-      "roller": true,
-      "enhetKontaktInfo": true
-    },
+    "type": "VARSEL",
     "støttetSpråk": [
       "NB"
     ]
@@ -212,12 +135,7 @@
   {
     "kode": "BI01G01",
     "tittel": "Vedtak innkreving av bidragsgjeld",
-    "kreverDataGrunnlag": {
-      "vedtak": true,
-      "behandling": false,
-      "roller": true,
-      "enhetKontaktInfo": true
-    },
+    "type": "VEDTAK",
     "støttetSpråk": [
       "NB"
     ]
@@ -225,12 +143,7 @@
   {
     "kode": "BI01G02",
     "tittel": "Vedtak innkreving opphør",
-    "kreverDataGrunnlag": {
-      "vedtak": true,
-      "behandling": false,
-      "roller": true,
-      "enhetKontaktInfo": true
-    },
+    "type": "VEDTAK",
     "støttetSpråk": [
       "NB"
     ]
@@ -238,12 +151,7 @@
   {
     "kode": "BI01S19",
     "tittel": "Innkreving varsel til motparten",
-    "kreverDataGrunnlag": {
-      "vedtak": false,
-      "behandling": false,
-      "roller": true,
-      "enhetKontaktInfo": true
-    },
+    "type": "VARSEL",
     "støttetSpråk": [
       "NB"
     ]
@@ -304,12 +212,7 @@
   {
     "kode": "BI01S21",
     "tittel": "Du har klaget på vedtaket",
-    "kreverDataGrunnlag": {
-      "vedtak": false,
-      "behandling": false,
-      "roller": true,
-      "enhetKontaktInfo": true
-    },
+    "type": "VARSEL",
     "støttetSpråk": [
       "NB"
     ]
@@ -317,12 +220,7 @@
   {
     "kode": "BI01S60",
     "tittel": "Klagen er sendt til NAV Klageinstans",
-    "kreverDataGrunnlag": {
-      "vedtak": false,
-      "behandling": false,
-      "roller": true,
-      "enhetKontaktInfo": true
-    },
+    "type": "VARSEL",
     "støttetSpråk": [
       "NB"
     ]
@@ -949,12 +847,8 @@
   {
     "kode": "BI01H02",
     "tittel": "Innkalling farskapssak oppgitt far",
-    "kreverDataGrunnlag": {
-      "vedtak": false,
-      "behandling": false,
-      "roller": true,
-      "enhetKontaktInfo": true
-    },
+    "type": "VEDTAK",
+    "inneholderData": ["ROLLER", "ENHET_KONTAKT_INFO"],
     "støttetSpråk": [
       "NB"
     ]
@@ -962,12 +856,8 @@
   {
     "kode": "BI01J50",
     "tittel": "Klage - vedtak gebyr",
-    "kreverDataGrunnlag": {
-      "vedtak": false,
-      "behandling": false,
-      "roller": true,
-      "enhetKontaktInfo": true
-    },
+    "type": "VEDTAK",
+    "inneholderData": ["ROLLER", "ENHET_KONTAKT_INFO"],
     "støttetSpråk": [
       "NB"
     ]
@@ -975,12 +865,8 @@
   {
     "kode": "BI01S03",
     "tittel": "NAV har mottatt søknad om barnebidrag etter fylte 18 år - forhåndsvarsel",
-    "kreverDataGrunnlag": {
-      "vedtak": false,
-      "behandling": false,
-      "roller": true,
-      "enhetKontaktInfo": true
-    },
+    "type": "VEDTAK",
+    "inneholderData": ["ROLLER", "ENHET_KONTAKT_INFO"],
     "støttetSpråk": [
       "NB"
     ]
@@ -988,12 +874,8 @@
   {
     "kode": "BI01K50",
     "tittel": "Klage - vedtak tilbakekreving",
-    "kreverDataGrunnlag": {
-      "vedtak": false,
-      "behandling": false,
-      "roller": true,
-      "enhetKontaktInfo": true
-    },
+    "type": "VEDTAK",
+    "inneholderData": ["ROLLER", "ENHET_KONTAKT_INFO"],
     "støttetSpråk": [
       "NB"
     ]
@@ -1001,12 +883,8 @@
   {
     "kode": "BI01A05",
     "tittel": "Vedtak ikke tilbakekreving",
-    "kreverDataGrunnlag": {
-      "vedtak": false,
-      "behandling": false,
-      "roller": true,
-      "enhetKontaktInfo": true
-    },
+    "type": "VEDTAK",
+    "inneholderData": ["ROLLER", "ENHET_KONTAKT_INFO"],
     "støttetSpråk": [
       "NB"
     ]
@@ -1014,12 +892,8 @@
   {
     "kode": "BI01G04",
     "tittel": "Vedtak innkreving særtilskudd",
-    "kreverDataGrunnlag": {
-      "vedtak": false,
-      "behandling": false,
-      "roller": true,
-      "enhetKontaktInfo": true
-    },
+    "type": "VEDTAK",
+    "inneholderData": ["ROLLER", "ENHET_KONTAKT_INFO"],
     "støttetSpråk": [
       "NB"
     ]
@@ -1027,12 +901,8 @@
   {
     "kode": "BI01E50",
     "tittel": "Klage - vedtak bidrag til særlige utgifter",
-    "kreverDataGrunnlag": {
-      "vedtak": true,
-      "behandling": false,
-      "roller": true,
-      "enhetKontaktInfo": true
-    },
+    "type": "VEDTAK",
+    "inneholderData": ["ROLLER", "ENHET_KONTAKT_INFO"],
     "støttetSpråk": [
       "NB"
     ]
@@ -1040,12 +910,8 @@
   {
     "kode": "BI01E01",
     "tittel": "Vedtak bidrag til særlige utgifter",
-    "kreverDataGrunnlag": {
-      "vedtak": true,
-      "behandling": false,
-      "roller": true,
-      "enhetKontaktInfo": true
-    },
+    "type": "VEDTAK",
+    "inneholderData": ["ROLLER", "ENHET_KONTAKT_INFO"],
     "støttetSpråk": [
       "NB"
     ]
@@ -1054,12 +920,8 @@
     "kode": "BI01E02",
     "tittel": "Vedtak særtilskudd avslag",
     "avslagsbrev": true,
-    "kreverDataGrunnlag": {
-      "vedtak": true,
-      "behandling": false,
-      "roller": true,
-      "enhetKontaktInfo": true
-    },
+    "type": "VEDTAK",
+    "inneholderData": ["ROLLER", "ENHET_KONTAKT_INFO"],
     "støttetSpråk": [
       "NB"
     ]
@@ -1067,12 +929,8 @@
   {
     "kode": "BI01E03",
     "tittel": "Vedtak bidrag til særlige utgifter tannregulering",
-    "kreverDataGrunnlag": {
-      "vedtak": true,
-      "behandling": false,
-      "roller": true,
-      "enhetKontaktInfo": true
-    },
+    "type": "VEDTAK",
+    "inneholderData": ["ROLLER", "ENHET_KONTAKT_INFO"],
     "støttetSpråk": [
       "NB"
     ]
@@ -1080,12 +938,8 @@
   {
     "kode": "BI01S04",
     "tittel": "NAV har mottatt søknad om bidrag til særlige utgifter",
-    "kreverDataGrunnlag": {
-      "vedtak": false,
-      "behandling": false,
-      "roller": true,
-      "enhetKontaktInfo": true
-    },
+    "type": "VARSEL",
+    "kreverEkstraData": ["SJABLON"],
     "støttetSpråk": [
       "NB"
     ]
@@ -1093,12 +947,8 @@
   {
     "kode": "BI01S18",
     "tittel": "Du har søkt om bidrag til særlige utgifter",
-    "kreverDataGrunnlag": {
-      "vedtak": false,
-      "behandling": false,
-      "roller": true,
-      "enhetKontaktInfo": true
-    },
+    "type": "VARSEL",
+    "kreverEkstraData": ["SJABLON"],
     "støttetSpråk": [
       "NB"
     ]
@@ -1106,12 +956,8 @@
   {
     "kode": "BI01F50",
     "tittel": "Klage - vedtak ettergivelse gjeld",
-    "kreverDataGrunnlag": {
-      "vedtak": false,
-      "behandling": false,
-      "roller": true,
-      "enhetKontaktInfo": true
-    },
+    "type": "VEDTAK",
+    "inneholderData": ["ROLLER", "ENHET_KONTAKT_INFO"],
     "støttetSpråk": [
       "NB"
     ]
@@ -1119,12 +965,8 @@
   {
     "kode": "BI01F01",
     "tittel": "Vedtak ettergivelse innvilget",
-    "kreverDataGrunnlag": {
-      "vedtak": false,
-      "behandling": false,
-      "roller": true,
-      "enhetKontaktInfo": true
-    },
+    "type": "VEDTAK",
+    "inneholderData": ["ROLLER", "ENHET_KONTAKT_INFO"],
     "støttetSpråk": [
       "NB"
     ]
@@ -1132,12 +974,8 @@
   {
     "kode": "BI01F02",
     "tittel": "Vedtak ettergivelse avslag",
-    "kreverDataGrunnlag": {
-      "vedtak": false,
-      "behandling": false,
-      "roller": true,
-      "enhetKontaktInfo": true
-    },
+    "type": "VEDTAK",
+    "inneholderData": ["ROLLER", "ENHET_KONTAKT_INFO"],
     "støttetSpråk": [
       "NB"
     ]

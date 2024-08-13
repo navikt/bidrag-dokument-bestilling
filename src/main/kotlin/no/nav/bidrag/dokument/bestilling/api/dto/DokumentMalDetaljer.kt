@@ -1,7 +1,7 @@
 package no.nav.bidrag.dokument.bestilling.api.dto
 
+import no.nav.bidrag.dokument.bestilling.bestilling.dto.DokumentMalType
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.DokumentType
-import no.nav.bidrag.dokument.bestilling.bestilling.dto.InnholdType
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.StøttetSpråk
 
 data class DokumentMalDetaljer(
@@ -14,7 +14,7 @@ data class DokumentMalDetaljer(
     val redigerbar: Boolean,
     val språk: List<StøttetSpråk>,
     val statiskInnhold: Boolean = false,
-    val innholdType: InnholdType,
+    val innholdType: DokumentMalType,
     val gruppeVisningsnavn: String? = null,
     val tilhorerEnheter: List<String> = emptyList(),
 )

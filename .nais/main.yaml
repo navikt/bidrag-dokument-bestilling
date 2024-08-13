@@ -20,6 +20,10 @@ env:
   BIDRAG_VEDTAK_URL: http://bidrag-vedtak-syntetisk
   BIDRAG_VEDTAK_SCOPE: dev-gcp.bidrag.bidrag-vedtak-syntetisk
 
+  BIDRAG_BEHANDLING_URL: http://bidrag-behandling
+  BIDRAG_BEHANDLING_SCOPE: dev-gcp.bidrag.bidrag-behandling
+
+
   SJABLON_URL: https://bidrag-sjablon.dev-fss-pub.nais.io/bidrag-sjablon
 
   BREVSERVER_ONLINEBREV_QUEUE: QA.Q2_475.BREVSERVER_ONLINEBREV
@@ -31,6 +35,7 @@ env:
   JAVA_TOOL_OPTIONS: -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005
 outbound-access-apps:
   - bidrag-vedtak-syntetisk
+  - bidrag-behandling
 outbound-access-hosts:
   - bidrag-dokument.dev-fss-pub.nais.io
   - bidrag-person.dev-fss-pub.nais.io
