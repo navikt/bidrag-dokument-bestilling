@@ -7,6 +7,7 @@ import io.kotest.matchers.collections.shouldHaveAtLeastSize
 import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.collections.shouldNotBeIn
 import io.kotest.matchers.comparables.shouldBeEqualComparingTo
+import io.kotest.matchers.maps.shouldHaveSize
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
 import io.kotest.matchers.string.shouldContain
@@ -124,6 +125,9 @@ class DokumentBestillingControllerTest : AbstractControllerTest() {
         responseDokumentMalerBucket["FARSKAP_PROVETAKING_FARSKAP"]!!.redigerbar shouldBe true
         responseDokumentMalerBucket["FARSKAP_PROVETAKING_FARSKAP"]!!.statiskInnhold shouldBe true
         responseDokumentMalerBucket["FARSKAP_PROVETAKING_FARSKAP"]!!.innholdType shouldBe DokumentMalType.SKJEMA
+
+        responseDokumentMalerBrevserver.filter { it.value.kreverBehandling } shouldHaveSize 4
+        responseDokumentMalerBrevserver.filter { it.value.kreverVedtak } shouldHaveSize 18
     }
 
     @Test

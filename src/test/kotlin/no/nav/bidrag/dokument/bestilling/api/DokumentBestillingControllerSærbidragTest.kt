@@ -25,7 +25,6 @@ import no.nav.bidrag.dokument.bestilling.utils.createEnhetKontaktInformasjon
 import no.nav.bidrag.dokument.bestilling.utils.createPostAdresseResponse
 import no.nav.bidrag.dokument.bestilling.utils.opprettBehandlingDetaljer
 import no.nav.bidrag.domene.enums.beregning.Resultatkode
-import no.nav.bidrag.domene.enums.vedtak.VirkningstidspunktÅrsakstype
 import org.junit.jupiter.api.Test
 import org.springframework.http.HttpEntity
 import org.springframework.http.HttpMethod
@@ -40,9 +39,7 @@ class DokumentBestillingControllerSærbidragTest : AbstractControllerTest() {
         stubUtils.stubHentPerson("16451299577", ANNEN_MOTTAKER)
         stubUtils.stubHentPerson("25451755601", ANNEN_MOTTAKER)
         val behandlingResponse =
-            opprettBehandlingDetaljer().copy(
-                årsak = VirkningstidspunktÅrsakstype.FRA_SØKNADSTIDSPUNKT,
-            )
+            opprettBehandlingDetaljer()
         stubUtils.stubHentBehandling(behandlingResponse)
         val enhetKontaktInfo = createEnhetKontaktInformasjon()
         val bmAdresse = createPostAdresseResponse()
@@ -121,7 +118,7 @@ class DokumentBestillingControllerSærbidragTest : AbstractControllerTest() {
                 val soknad = message.brev?.soknad!!
                 soknad.soknDato shouldBe soknadDato
                 soknad.type shouldBe "SB"
-                soknad.aarsakKd shouldBe VirkningstidspunktÅrsakstype.FRA_SØKNADSTIDSPUNKT.legacyKode
+                soknad.aarsakKd shouldBe ""
                 soknad.undergrp shouldBe "E"
                 soknad.saksnr shouldBe saksnummer
                 soknad.sendtDato shouldBe null
