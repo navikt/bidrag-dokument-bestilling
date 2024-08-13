@@ -4,8 +4,8 @@ import no.nav.bidrag.commons.util.secureLogger
 import no.nav.bidrag.dokument.bestilling.api.dto.DokumentBestillingForespørsel
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.Adresse
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.Barn
+import no.nav.bidrag.dokument.bestilling.bestilling.dto.DataGrunnlag
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.DokumentBestilling
-import no.nav.bidrag.dokument.bestilling.bestilling.dto.DokumentDataGrunnlag
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.DokumentMal
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.EnhetKontaktInfo
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.Gjelder
@@ -66,7 +66,6 @@ class DokumentMetadataCollector(
         forespørsel: DokumentBestillingForespørsel,
         dokumentMal: DokumentMal,
     ): DokumentBestilling {
-        val kreverDataGrunnlag = dokumentMal.kreverDataGrunnlag!!
         this.sak = sakService.hentSak(forespørsel.saksnummer) ?: fantIkkeSak(forespørsel.saksnummer)
         this.enhet = forespørsel.enhet ?: sak.eierfogd?.verdi ?: "9999"
         logIdenter(forespørsel)
@@ -88,16 +87,21 @@ class DokumentMetadataCollector(
             mottaker = hentMottakerData(forespørsel),
             gjelder = hentGjelderData(forespørsel),
             kontaktInfo =
-                kreverDataGrunnlag
-                    .takeIf { it.enhetKontaktInfo }
+                dokumentMal
+                    .takeIf { it.inneholderDatagrunnlag(DataGrunnlag.ENHET_KONTAKT_INFO) }
                     ?.let { hentEnhetKontakInfo(forespørsel) },
             roller =
-                kreverDataGrunnlag.takeIf { it.roller }?.let { hentRolleData(forespørsel, kreverDataGrunnlag) }
+                dokumentMal
+                    .takeIf { it.inneholderDatagrunnlag(DataGrunnlag.ROLLER) }
+                    ?.let { hentRolleData(forespørsel, dokumentMal) }
                     ?: Roller(),
             vedtakDetaljer =
-                kreverDataGrunnlag
-                    .takeIf { it.vedtak }
-                    ?.let { hentVedtakData(forespørsel.vedtakId) } ?: kreverDataGrunnlag.takeIf { it.behandling }?.let { hentVedtakDataFraBehandling(forespørsel.behandlingId) },
+                dokumentMal
+                    .takeIf { it.inneholderDatagrunnlag(DataGrunnlag.VEDTAK) }
+                    ?.let { hentVedtakData(forespørsel.vedtakId) }
+                    ?: dokumentMal
+                        .takeIf { it.inneholderDatagrunnlag(DataGrunnlag.BEHANDLING) }
+                        ?.let { hentVedtakDataFraBehandling(forespørsel.behandlingId) },
         )
     }
 
@@ -113,7 +117,7 @@ class DokumentMetadataCollector(
 
     private fun hentRolleData(
         forespørsel: DokumentBestillingForespørsel,
-        kreverDataGrunnlag: DokumentDataGrunnlag,
+        dokumentMal: DokumentMal,
     ): Roller {
         val roller = Roller()
 
@@ -152,11 +156,11 @@ class DokumentMetadataCollector(
         }
 
         val soknadsbarn = mutableListOf<String>()
-        if (!forespørsel.vedtakId.isNullOrEmpty() && kreverDataGrunnlag.vedtak) {
+        if (!forespørsel.vedtakId.isNullOrEmpty() && dokumentMal.inneholderDatagrunnlag(DataGrunnlag.VEDTAK)) {
             soknadsbarn.addAll(
                 vedtakService.hentIdentSøknadsbarn(forespørsel.vedtakId),
             )
-        } else if (!forespørsel.behandlingId.isNullOrEmpty() && kreverDataGrunnlag.behandling) {
+        } else if (!forespørsel.behandlingId.isNullOrEmpty() && dokumentMal.inneholderDatagrunnlag(DataGrunnlag.BEHANDLING)) {
             soknadsbarn.addAll(behandlingService.hentIdentSøknadsbarn(forespørsel.behandlingId))
         } else {
             soknadsbarn.addAll(forespørsel.barnIBehandling)

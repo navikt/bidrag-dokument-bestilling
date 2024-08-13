@@ -27,22 +27,16 @@ enum class DokumentType {
     NOTAT,
 }
 
-enum class InnholdType {
+enum class DokumentMalType {
+    NOTAT,
+
     VARSEL,
     VEDTAK,
-    VEDLEGG,
     VEDLEGG_VEDTAK,
     VEDLEGG_VARSEL,
     SKJEMA,
 }
 typealias BestillingSystemType = String
-
-data class DokumentDataGrunnlag(
-    val vedtak: Boolean = false,
-    val behandling: Boolean = false,
-    val roller: Boolean = true,
-    val enhetKontaktInfo: Boolean = true,
-)
 
 enum class StøttetSpråk {
     NB,
@@ -57,15 +51,34 @@ abstract class DokumentMal(
     open val kode: String,
     open val beskrivelse: String,
     open val tittel: String,
-    open val dokumentType: DokumentType,
     open val bestillingSystem: BestillingSystemType,
     open val batchbrev: Boolean,
-    open val avslagsbrev: Boolean = false,
     open val enabled: Boolean,
-    open val kreverDataGrunnlag: DokumentDataGrunnlag?,
-    open val innholdType: InnholdType,
+    open val avslagsbrev: Boolean = false,
+    open val kreverEkstraData: List<DataGrunnlag> = emptyList(),
+    open val type: DokumentMalType,
     open val redigerbar: Boolean,
-)
+) {
+    val kreverDataGrunnlag get() = type != DokumentMalType.NOTAT || kreverEkstraData.isNotEmpty()
+
+    fun inneholderDatagrunnlag(dataGrunnlag: DataGrunnlag) =
+        kreverEkstraData.contains(dataGrunnlag).takeIf { it }
+            ?: when (dataGrunnlag) {
+                DataGrunnlag.VEDTAK -> type == DokumentMalType.VEDTAK
+                DataGrunnlag.BEHANDLING -> type == DokumentMalType.VARSEL
+                DataGrunnlag.ROLLER -> listOf(DokumentMalType.VARSEL, DokumentMalType.VEDTAK).contains(type)
+                DataGrunnlag.ENHET_KONTAKT_INFO -> listOf(DokumentMalType.VARSEL, DokumentMalType.VEDTAK).contains(type)
+                else -> kreverEkstraData.contains(dataGrunnlag)
+            }
+}
+
+enum class DataGrunnlag {
+    VEDTAK,
+    BEHANDLING,
+    SJABLON,
+    ROLLER,
+    ENHET_KONTAKT_INFO,
+}
 
 data class DokumentMalBucketUtland(
     override val folderName: String = "vedlegg_utland",
@@ -74,7 +87,7 @@ data class DokumentMalBucketUtland(
     override val språk: StøttetSpråk,
     override val tittel: String = beskrivelse,
     override val tilhørerEnheter: List<String> = listOf(EnhetKode.UTLAND, EnhetKode.EGENANSATT),
-    override val innholdType: InnholdType = InnholdType.VARSEL,
+    override val type: DokumentMalType = DokumentMalType.VARSEL,
     override val gruppeVisningsnavn: String,
 ) : DokumentMalBucket(
         kode = kode,
@@ -83,7 +96,7 @@ data class DokumentMalBucketUtland(
         tittel = tittel,
         tilhørerEnheter = tilhørerEnheter,
         språk = språk,
-        innholdType = innholdType,
+        type = type,
         gruppeVisningsnavn = gruppeVisningsnavn,
     )
 
@@ -93,7 +106,7 @@ data class DokumentMalBucketFarskap(
     override val tittel: String,
     override val beskrivelse: String = tittel,
     override val tilhørerEnheter: List<String> = listOf(EnhetKode.FARSKAP),
-    override val innholdType: InnholdType = InnholdType.VARSEL,
+    override val type: DokumentMalType = DokumentMalType.VARSEL,
     override val gruppeVisningsnavn: String,
 ) : DokumentMalBucket(
         kode = kode,
@@ -101,7 +114,7 @@ data class DokumentMalBucketFarskap(
         folderName = folderName,
         tittel = tittel,
         tilhørerEnheter = tilhørerEnheter,
-        innholdType = innholdType,
+        type = type,
         gruppeVisningsnavn = gruppeVisningsnavn,
     )
 
@@ -111,10 +124,8 @@ open class DokumentMalBucket(
     override val tittel: String,
     override val batchbrev: Boolean = false,
     override val enabled: Boolean = true,
-    override val dokumentType: DokumentType = DokumentType.UTGÅENDE,
     override val redigerbar: Boolean = false,
-    override val innholdType: InnholdType = InnholdType.SKJEMA,
-    override val kreverDataGrunnlag: DokumentDataGrunnlag? = null,
+    override val type: DokumentMalType = DokumentMalType.SKJEMA,
     override val bestillingSystem: BestillingSystemType = BestillingSystem.BUCKET,
     open val folderName: String,
     open val filsti: String? = null,
@@ -125,12 +136,10 @@ open class DokumentMalBucket(
         kode = kode,
         beskrivelse = beskrivelse,
         tittel = tittel,
-        dokumentType = dokumentType,
         bestillingSystem = bestillingSystem,
         batchbrev = batchbrev,
         enabled = enabled,
-        kreverDataGrunnlag = kreverDataGrunnlag,
-        innholdType = innholdType,
+        type = type,
         redigerbar = redigerbar,
     ) {
     private val bucketFilename get() = filsti?.substringBefore(".pdf") ?: kode
@@ -144,21 +153,17 @@ data class DokumentMalBrevserver(
     override val batchbrev: Boolean = false,
     override val enabled: Boolean = false,
     override val redigerbar: Boolean = !batchbrev,
-    override var dokumentType: DokumentType = DokumentType.UTGÅENDE,
-    override val innholdType: InnholdType = InnholdType.VARSEL,
-    override val kreverDataGrunnlag: DokumentDataGrunnlag = DokumentDataGrunnlag(),
+    override val type: DokumentMalType = DokumentMalType.VARSEL,
     override val bestillingSystem: BestillingSystemType = BestillingSystem.BREVSERVER,
     val støttetSpråk: List<StøttetSpråk> = listOf(StøttetSpråk.NB),
 ) : DokumentMal(
         kode = kode,
         beskrivelse = beskrivelse,
         tittel = tittel,
-        dokumentType = dokumentType,
         bestillingSystem = bestillingSystem,
         batchbrev = batchbrev,
         enabled = enabled,
-        kreverDataGrunnlag = kreverDataGrunnlag,
-        innholdType = innholdType,
+        type = type,
         redigerbar = redigerbar,
     )
 
