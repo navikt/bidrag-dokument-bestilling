@@ -27,6 +27,7 @@ import no.nav.bidrag.dokument.bestilling.model.Saksbehandler
 import no.nav.bidrag.dokument.bestilling.model.SpråkKoder
 import no.nav.bidrag.dokument.bestilling.model.erDødfødt
 import no.nav.bidrag.dokument.bestilling.model.fantIkkeSak
+import no.nav.bidrag.dokument.bestilling.model.manglerBehandlingId
 import no.nav.bidrag.dokument.bestilling.model.manglerVedtakId
 import no.nav.bidrag.dokument.bestilling.tjenester.BehandlingService
 import no.nav.bidrag.dokument.bestilling.tjenester.KodeverkService
@@ -111,7 +112,7 @@ class DokumentMetadataCollector(
     }
 
     private fun hentVedtakDataFraBehandling(behandlingId: String?): VedtakDetaljer {
-        if (behandlingId.isNullOrEmpty()) manglerVedtakId()
+        if (behandlingId.isNullOrEmpty()) manglerBehandlingId()
         return behandlingService.hentVedtakDetaljer(behandlingId)
     }
 

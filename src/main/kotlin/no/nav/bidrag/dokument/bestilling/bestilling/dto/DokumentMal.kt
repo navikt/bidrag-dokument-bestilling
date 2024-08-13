@@ -30,6 +30,8 @@ enum class DokumentType {
 enum class DokumentMalType {
     NOTAT,
 
+    // Varselbrev som ikke er knyttet til en behandling
+    VARSEL_STANDARD,
     VARSEL,
     VEDTAK,
     VEDLEGG_VEDTAK,
@@ -59,15 +61,17 @@ abstract class DokumentMal(
     open val type: DokumentMalType,
     open val redigerbar: Boolean,
 ) {
-    val kreverDataGrunnlag get() = type != DokumentMalType.NOTAT || kreverEkstraData.isNotEmpty()
+    val kreverDataGrunnlag get() =
+        !listOf(DokumentMalType.NOTAT, DokumentMalType.VEDLEGG_VARSEL, DokumentMalType.VEDLEGG_VEDTAK, DokumentMalType.SKJEMA).contains(type) ||
+            kreverEkstraData.isNotEmpty()
 
     fun inneholderDatagrunnlag(dataGrunnlag: DataGrunnlag) =
         kreverEkstraData.contains(dataGrunnlag).takeIf { it }
             ?: when (dataGrunnlag) {
                 DataGrunnlag.VEDTAK -> type == DokumentMalType.VEDTAK
                 DataGrunnlag.BEHANDLING -> type == DokumentMalType.VARSEL
-                DataGrunnlag.ROLLER -> listOf(DokumentMalType.VARSEL, DokumentMalType.VEDTAK).contains(type)
-                DataGrunnlag.ENHET_KONTAKT_INFO -> listOf(DokumentMalType.VARSEL, DokumentMalType.VEDTAK).contains(type)
+                DataGrunnlag.ROLLER -> listOf(DokumentMalType.VARSEL, DokumentMalType.VEDTAK, DokumentMalType.VARSEL_STANDARD).contains(type)
+                DataGrunnlag.ENHET_KONTAKT_INFO -> listOf(DokumentMalType.VARSEL, DokumentMalType.VEDTAK, DokumentMalType.VARSEL_STANDARD).contains(type)
                 else -> kreverEkstraData.contains(dataGrunnlag)
             }
 }

@@ -39,7 +39,7 @@
   {
     "kode": "BI01S10",
     "tittel": "Oversendelse av informasjon",
-    "type": "VARSEL",
+    "type": "VARSEL_STANDARD",
     "enabled": true,
     "støttetSpråk": [
       "NB"
@@ -49,7 +49,7 @@
     "kode": "BI01S67",
     "tittel": "ADRESSEFORESPØRSEL",
     "enabled": true,
-    "type": "VARSEL",
+    "type": "VARSEL_STANDARD",
     "støttetSpråk": [
       "NB"
     ]
@@ -58,7 +58,7 @@
     "kode": "BI01S02",
     "tittel": "Fritekstbrev",
     "enabled": true,
-    "type": "VARSEL",
+    "type": "VARSEL_STANDARD",
     "støttetSpråk": [
       "NB",
       "DE",
