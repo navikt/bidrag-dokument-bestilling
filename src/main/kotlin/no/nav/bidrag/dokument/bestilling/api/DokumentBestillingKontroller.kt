@@ -131,7 +131,7 @@ class DokumentBestillingKontroller(
                             },
                         kanBestilles = it.enabled,
                         redigerbar = it.redigerbar,
-                        kreverBehandling = it.inneholderDatagrunnlag(DataGrunnlag.BEHANDLING) && listOf("BI01S04", "BI01S18").contains(it.kode),
+                        kreverBehandling = it.inneholderDatagrunnlag(DataGrunnlag.BEHANDLING) && listOf("BI01S04", "BI01S18", "BI01S08", "BI01S27").contains(it.kode),
                         kreverVedtak = it.inneholderDatagrunnlag(DataGrunnlag.VEDTAK),
                         språk =
                             if (it is DokumentMalBucket) {
