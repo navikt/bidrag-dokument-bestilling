@@ -135,12 +135,7 @@
   {
     "kode": "BI01G01",
     "tittel": "Vedtak innkreving av bidragsgjeld",
-    "kreverDataGrunnlag": {
-      "vedtak": true,
-      "behandling": false,
-      "roller": true,
-      "enhetKontaktInfo": true
-    },
+    "type": "VEDTAK",
     "støttetSpråk": [
       "NB"
     ]
@@ -148,12 +143,7 @@
   {
     "kode": "BI01G02",
     "tittel": "Vedtak innkreving opphør",
-    "kreverDataGrunnlag": {
-      "vedtak": true,
-      "behandling": false,
-      "roller": true,
-      "enhetKontaktInfo": true
-    },
+    "type": "VEDTAK",
     "støttetSpråk": [
       "NB"
     ]
@@ -161,12 +151,7 @@
   {
     "kode": "BI01S19",
     "tittel": "Innkreving varsel til motparten",
-    "kreverDataGrunnlag": {
-      "vedtak": false,
-      "behandling": false,
-      "roller": true,
-      "enhetKontaktInfo": true
-    },
+    "type": "VARSEL",
     "støttetSpråk": [
       "NB"
     ]
