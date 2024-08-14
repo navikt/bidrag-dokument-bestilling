@@ -10,6 +10,16 @@
     ]
   },
   {
+    "kode": "BI01P17",
+    "enabled": true,
+    "tittel": "Uttalelse til klageinstans",
+    "kreverEkstraData": ["ENHET_KONTAKT_INFO"],
+    "type": "NOTAT",
+    "støttetSpråk": [
+      "NB"
+    ]
+  },
+  {
     "kode": "BI01P18",
     "tittel": "Saksbehandlingsnotat",
     "enabled": true,
@@ -174,20 +184,6 @@
     "tittel": "Klage - vedtak innkreving",
     "kreverDataGrunnlag": {
       "vedtak": true,
-      "behandling": false,
-      "roller": true,
-      "enhetKontaktInfo": true
-    },
-    "støttetSpråk": [
-      "NB"
-    ]
-  },
-  {
-    "kode": "BI01P17",
-    "tittel": "Uttalelse til klageinstans",
-    "dokumentType": "NOTAT",
-    "kreverDataGrunnlag": {
-      "vedtak": false,
       "behandling": false,
       "roller": true,
       "enhetKontaktInfo": true
