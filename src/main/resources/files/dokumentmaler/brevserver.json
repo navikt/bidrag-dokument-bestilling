@@ -10,6 +10,15 @@
     ]
   },
   {
+    "kode": "BI01P17",
+    "enabled": true,
+    "tittel": "Uttalelse til klageinstans",
+    "type": "NOTAT",
+    "støttetSpråk": [
+      "NB"
+    ]
+  },
+  {
     "kode": "BI01P18",
     "tittel": "Saksbehandlingsnotat",
     "enabled": true,
@@ -178,14 +187,6 @@
       "roller": true,
       "enhetKontaktInfo": true
     },
-    "støttetSpråk": [
-      "NB"
-    ]
-  },
-  {
-    "kode": "BI01P17",
-    "tittel": "Uttalelse til klageinstans",
-    "type": "NOTAT",
     "støttetSpråk": [
       "NB"
     ]
