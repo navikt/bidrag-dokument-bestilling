@@ -13,6 +13,7 @@
     "kode": "BI01P17",
     "enabled": true,
     "tittel": "Uttalelse til klageinstans",
+    "kreverEkstraData": ["ENHET_KONTAKT_INFO"],
     "type": "NOTAT",
     "støttetSpråk": [
       "NB"
