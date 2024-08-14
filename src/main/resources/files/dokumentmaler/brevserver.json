@@ -186,12 +186,6 @@
     "kode": "BI01P17",
     "tittel": "Uttalelse til klageinstans",
     "type": "NOTAT",
-    "kreverDataGrunnlag": {
-      "vedtak": false,
-      "behandling": false,
-      "roller": true,
-      "enhetKontaktInfo": true
-    },
     "støttetSpråk": [
       "NB"
     ]
