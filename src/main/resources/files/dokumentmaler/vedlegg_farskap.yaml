@@ -10,6 +10,7 @@ Innkalling:
   - kode: FASTSETTELSE_OG_RETTSVIRKNINGER
     filsti: ikke_redigerbar/NAV 55-00.05 - Fastsettelse og rettsvirkninger av farskap når foreldrene ikke er gift med hverandre.pdf
     tittel: NAV 55-00.05 Fastsettelse og rettsvirkninger av farskap når foreldrene ikke er gift med hverandre
+    type: VEDLEGG_VARSEL
 Erklæring:
   - kode: ERKLARING_FARSKAP_NB
     filsti: redigerbar_skjema/nav_skjema/NAV 55-00.10 - Erklæring om farskap (bokmål).pdf
