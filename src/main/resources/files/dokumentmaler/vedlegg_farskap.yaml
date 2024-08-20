@@ -61,9 +61,11 @@ Henleggelse:
   - kode: BIDRAGFORSKUDD_BM_FARSKAP_HENLAGT
     filsti: ikke_redigerbar/Informasjon om forskudd til BM hvor farskap er henlagt.pdf
     tittel: Informasjon om forskudd til bidragsmottaker hvor farskap er henlagt
+    type: VEDLEGG_VARSEL
   - kode: VEDLEGG_BARNELOVEN_11
     filsti: ikke_redigerbar/Utdrag fra barneloven § 11.pdf
     tittel: 'Vedlegg: Utdrag fra barneloven § 11'
+    type: VEDLEGG_VARSEL
 Endring:
   - kode: BARNELOVEN_6_7
     filsti: ikke_redigerbar/Utdrag fra barnelova §§ 6 og 7.pdf
