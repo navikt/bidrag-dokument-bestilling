@@ -23,11 +23,11 @@ import no.nav.bidrag.dokument.bestilling.consumer.BidragDokumentConsumer
 import no.nav.bidrag.dokument.bestilling.model.BehandlingType
 import no.nav.bidrag.dokument.bestilling.model.MAX_DATE
 import no.nav.bidrag.dokument.bestilling.model.ResultatKoder
-import no.nav.bidrag.dokument.bestilling.model.legacyKodeBrev
 import no.nav.bidrag.dokument.bestilling.model.tilLocalDateFom
 import no.nav.bidrag.dokument.bestilling.model.tilLocalDateTil
 import no.nav.bidrag.domene.enums.behandling.TypeBehandling
 import no.nav.bidrag.domene.enums.beregning.Resultatkode
+import no.nav.bidrag.domene.enums.beregning.Resultatkode.Companion.tilBisysResultatkode
 import no.nav.bidrag.domene.enums.diverse.Språk
 import no.nav.bidrag.domene.enums.person.Sivilstandskode
 import no.nav.bidrag.domene.enums.vedtak.Engangsbeløptype
@@ -207,7 +207,7 @@ class BrevserverProducer(
                                 ?.firstOrNull()
                                 ?.særbidragBeregning
                                 ?.resultatKode
-                                ?.legacyKodeBrev
+                                ?.tilBisysResultatkode(dokumentBestilling.vedtakDetaljer.vedtakType)
                         } else {
                             null
                         }
@@ -229,7 +229,7 @@ class BrevserverProducer(
                 }
                 vedtakInfo?.let {
                     soknad {
-                        aarsakKd = it.årsakKode?.legacyKode ?: it.avslagsKode?.legacyKodeBrev // TODO: Oversett til riktig kode
+                        aarsakKd = it.årsakKode?.legacyKode ?: it.avslagsKode?.tilBisysResultatkode(dokumentBestilling.vedtakDetaljer.vedtakType) // TODO: Oversett til riktig kode
                         undergrp = hgUgDto?.ug
                         type = it.stønadType?.let { BehandlingType.valueOf(it.name).kode } ?: hgUgDto?.hg
 
@@ -258,7 +258,7 @@ class BrevserverProducer(
                                     fnr = vedtakBarn.fødselsnummer
                                     erInnkreving = engangsbeløp.medInnkreving
                                     belopBidrag = beregning.resultat
-                                    resultatKode = beregning.resultatKode.legacyKodeBrev
+                                    resultatKode = beregning.resultatKode.tilBisysResultatkode(dokumentBestilling.vedtakDetaljer.vedtakType)
                                 }
                                 særbidrag {
                                     antTermin = 1

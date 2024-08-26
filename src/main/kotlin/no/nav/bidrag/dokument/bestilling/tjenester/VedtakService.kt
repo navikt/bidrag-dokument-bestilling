@@ -20,7 +20,6 @@ import no.nav.bidrag.dokument.bestilling.model.hentSøknad
 import no.nav.bidrag.dokument.bestilling.model.hentTotalInntektForPeriode
 import no.nav.bidrag.dokument.bestilling.model.hentVirkningstidspunkt
 import no.nav.bidrag.dokument.bestilling.model.kapitalinntektTyper
-import no.nav.bidrag.dokument.bestilling.model.legacyKodeBrev
 import no.nav.bidrag.dokument.bestilling.model.mapBarnIHusstandPerioder
 import no.nav.bidrag.dokument.bestilling.model.mapSivilstand
 import no.nav.bidrag.dokument.bestilling.model.tilRolletype
@@ -29,6 +28,7 @@ import no.nav.bidrag.dokument.bestilling.model.toSet
 import no.nav.bidrag.domene.enums.beregning.Resultatkode
 import no.nav.bidrag.domene.enums.beregning.Resultatkode.Companion.erAvslagEllerOpphør
 import no.nav.bidrag.domene.enums.beregning.Resultatkode.Companion.erDirekteAvslag
+import no.nav.bidrag.domene.enums.beregning.Resultatkode.Companion.tilBisysResultatkode
 import no.nav.bidrag.domene.enums.grunnlag.Grunnlagstype
 import no.nav.bidrag.domene.enums.rolle.Rolletype
 import no.nav.bidrag.domene.enums.sjablon.SjablonTallNavn
@@ -188,7 +188,14 @@ class VedtakService(
             SærbidragBeregning(
                 kravbeløp = utgiftsposter.sumOf { it.kravbeløp },
                 godkjentbeløp = delberegningUtgift.sumGodkjent,
-                andelProsent = if (sluttberegning.resultatKode.erAvslagEllerOpphør()) BigDecimal.ZERO else delberegning.andelProsent,
+                andelProsent =
+                    if (sluttberegning.resultatKode.erAvslagEllerOpphør()) {
+                        BigDecimal.ZERO
+                    } else if (delberegning.andelProsent < BigDecimal.ONE) {
+                        delberegning.andelProsent.multiply(BigDecimal(100))
+                    } else {
+                        delberegning.andelProsent
+                    },
                 resultat = sluttberegning.resultatBeløp,
                 resultatKode = sluttberegning.resultatKode,
                 beløpDirekteBetaltAvBp = delberegningUtgift.sumBetaltAvBp,
@@ -233,7 +240,7 @@ class VedtakService(
                         // TODO: Er dette riktig??
                         tomDato = stønadperiode.periode.til?.atEndOfMonth(),
                         beløp = stønadperiode.beløp ?: BigDecimal.ZERO,
-                        resultatKode = resultatKode?.legacyKodeBrev ?: stønadperiode.resultatkode,
+                        resultatKode = resultatKode?.tilBisysResultatkode(vedtakDto.type) ?: stønadperiode.resultatkode,
                         inntekter = grunnlagListe.mapInntekter(VedtakPeriodeReferanse(stønadperiode.periode, vedtakDto.typeBehandling, stønadperiode.grunnlagReferanseListe)),
                         inntektGrense = sjablongService.hentInntektGrenseForPeriode(getLastDayOfPreviousMonth(stønadperiode.periode.til?.atEndOfMonth())),
                         maksInntekt = sjablongService.hentMaksInntektForPeriode(getLastDayOfPreviousMonth(stønadperiode.periode.til?.atEndOfMonth())),
@@ -291,12 +298,4 @@ fun List<InntektPeriode>.sammenstillDeMedSammeBeskrivelse() =
                 rolle = acc.rolle,
             )
         }
-    }
-
-fun Resultatkode.tilLegacy() =
-    when (this) {
-        Resultatkode.AVSLAG_OVER_18_ÅR -> "OHS"
-        Resultatkode.AVSLAG_HØY_INNTEKT -> "OHI"
-        Resultatkode.AVSLAG_IKKE_REGISTRERT_PÅ_ADRESSE -> "OIO"
-        else -> this?.legacyKodeBrev
     }
