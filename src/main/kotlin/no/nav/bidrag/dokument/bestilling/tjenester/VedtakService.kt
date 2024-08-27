@@ -26,7 +26,7 @@ import no.nav.bidrag.dokument.bestilling.model.tilRolletype
 import no.nav.bidrag.dokument.bestilling.model.tilSaksbehandler
 import no.nav.bidrag.dokument.bestilling.model.toSet
 import no.nav.bidrag.domene.enums.beregning.Resultatkode
-import no.nav.bidrag.domene.enums.beregning.Resultatkode.Companion.erAvslagEllerOpphør
+import no.nav.bidrag.domene.enums.beregning.Resultatkode.Companion.erAvslag
 import no.nav.bidrag.domene.enums.beregning.Resultatkode.Companion.erDirekteAvslag
 import no.nav.bidrag.domene.enums.beregning.Resultatkode.Companion.tilBisysResultatkode
 import no.nav.bidrag.domene.enums.grunnlag.Grunnlagstype
@@ -192,7 +192,7 @@ class VedtakService(
                 kravbeløp = utgiftsposter.sumOf { it.kravbeløp },
                 godkjentbeløp = delberegningUtgift.sumGodkjent,
                 andelProsent =
-                    if (sluttberegning.resultatKode.erAvslagEllerOpphør()) {
+                    if (sluttberegning.resultatKode.erAvslag()) {
                         BigDecimal.ZERO
                     } else if (delberegning.andelProsent < BigDecimal.ONE) {
                         delberegning.andelProsent.multiply(BigDecimal(100))
