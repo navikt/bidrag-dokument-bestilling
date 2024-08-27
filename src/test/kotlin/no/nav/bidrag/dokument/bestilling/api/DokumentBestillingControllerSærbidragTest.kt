@@ -448,7 +448,7 @@ class DokumentBestillingControllerSærbidragTest : AbstractControllerTest() {
                 barnISak1.belBidrag shouldBe null
 
                 message.brev?.soknadBost?.saksnr shouldBe saksnummer
-                message.brev?.soknadBost?.resKode shouldBe Resultatkode.ALLE_UTGIFTER_ER_FORELDET.legacyKode
+                message.brev?.soknadBost?.resKode shouldBe Resultatkode.PRIVAT_AVTALE.legacyKode
                 message.brev?.soknadBost?.rmISak shouldBe false
                 message.brev?.soknadBost?.gebyrsats shouldBe FASTSETTELSE_GEBYR_2024.toBigDecimal()
                 message.brev?.soknadBost?.sendtDato shouldBe LocalDate.now()
@@ -458,16 +458,16 @@ class DokumentBestillingControllerSærbidragTest : AbstractControllerTest() {
                 val virkningDato = LocalDate.parse("2024-08-01")
 
                 // Valider forskudd vedtak resultater
-                val soknadDato = LocalDate.parse("2024-07-13")
+                val soknadDato = LocalDate.parse("2024-01-15")
 
                 val soknad = message.brev?.soknad!!
                 soknad.soknDato shouldBe soknadDato
                 soknad.type shouldBe "SB"
-                soknad.aarsakKd shouldBe Resultatkode.ALLE_UTGIFTER_ER_FORELDET.legacyKode
+                soknad.aarsakKd shouldBe Resultatkode.PRIVAT_AVTALE.legacyKode
                 soknad.undergrp shouldBe "S"
                 soknad.saksnr shouldBe saksnummer
-                soknad.sendtDato shouldBe LocalDate.parse("2024-08-09")
-                soknad.vedtattDato shouldBe LocalDate.parse("2024-08-09")
+                soknad.sendtDato shouldBe LocalDate.parse("2024-08-27")
+                soknad.vedtattDato shouldBe LocalDate.parse("2024-08-27")
                 soknad.virkningDato shouldBe virkningDato
 
                 val soknadBost = message.brev?.soknadBost!!
@@ -478,8 +478,8 @@ class DokumentBestillingControllerSærbidragTest : AbstractControllerTest() {
                 soknadBost.virkningsDato shouldBe virkningDato
                 soknadBost.mottatDato shouldBe soknadDato
                 soknadBost.soknGrKode shouldBe "ST"
-                soknadBost.resKode shouldBe Resultatkode.ALLE_UTGIFTER_ER_FORELDET.legacyKode
-                soknadBost.soknFraKode shouldBe "MO"
+                soknadBost.resKode shouldBe Resultatkode.PRIVAT_AVTALE.legacyKode
+                soknadBost.soknFraKode shouldBe "PL"
                 soknadBost.soknType shouldBe "FA"
 
                 message.brev?.vedtak!! shouldHaveSize 0
