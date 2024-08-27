@@ -196,7 +196,7 @@ class VedtakService(
                     } else {
                         delberegning.andelProsent
                     },
-                resultat = sluttberegning.resultatBeløp,
+                resultat = sluttberegning.resultatBeløp ?: BigDecimal.ZERO,
                 resultatKode = sluttberegning.resultatKode,
                 beløpDirekteBetaltAvBp = delberegningUtgift.sumBetaltAvBp,
                 inntekt =
@@ -213,7 +213,7 @@ class VedtakService(
             SærbidragBeregning(
                 kravbeløp = utgiftsposter.sumOf { it.kravbeløp },
                 godkjentbeløp = delberegningUtgift.sumGodkjent,
-                resultat = sluttberegning.resultatBeløp,
+                resultat = sluttberegning.resultatBeløp ?: BigDecimal.ZERO,
                 resultatKode = sluttberegning.resultatKode,
             )
         } else {
