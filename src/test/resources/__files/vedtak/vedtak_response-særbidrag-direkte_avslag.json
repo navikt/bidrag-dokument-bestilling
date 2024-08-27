@@ -1,23 +1,35 @@
 {
   "kilde": "MANUELT",
   "type": "FASTSETTELSE",
-  "opprettetAv": "Z99999",
-  "opprettetAvNavn": "Saksbehandlersen, Saksbehandler Mellomnavn",
+  "opprettetAv": "Z994977",
+  "opprettetAvNavn": "F_Z994977 E_Z994977",
   "kildeapplikasjon": "bidrag-behandling",
-  "vedtakstidspunkt": "2024-08-09T15:44:59.197603",
+  "vedtakstidspunkt": "2024-08-27T11:55:03.837908",
   "enhetsnummer": "4806",
   "innkrevingUtsattTilDato": null,
   "fastsattILand": null,
-  "opprettetTidspunkt": "2024-08-09T15:45:01.182024",
+  "opprettetTidspunkt": "2024-08-27T11:55:05.585536",
   "grunnlagListe": [
+    {
+      "referanse": "notat_UTGIFTER_kun_i_notat",
+      "type": "NOTAT",
+      "innhold": {
+        "type": "UTGIFTER",
+        "innhold": "Utgifter dette er en kommentar på utgifter. Utgifter dette er en kommentar på utgifter. Utgifter dette er en kommentar på utgifter. Utgifter dette er en kommentar på utgifter. Utgifter dette er en kommentar på utgifter. Utgifter dette er en kommentar på utgifter. Utgifter dette er en kommentar på utgifter. ",
+        "erMedIVedtaksdokumentet": false
+      },
+      "grunnlagsreferanseListe": [],
+      "gjelderReferanse": null
+    },
     {
       "referanse": "søknad",
       "type": "SØKNAD",
       "innhold": {
-        "søktAv": "BIDRAGSMOTTAKER",
-        "mottattDato": "2024-07-13",
-        "søktFraDato": "2024-08-01",
-        "klageMottattDato": null
+        "søktAv": "BIDRAGSPLIKTIG",
+        "mottattDato": "2024-01-15",
+        "søktFraDato": "2021-01-01",
+        "klageMottattDato": null,
+        "opprinneligVedtakstype": null
       },
       "grunnlagsreferanseListe": [],
       "gjelderReferanse": null
@@ -26,7 +38,7 @@
       "referanse": "virkningstidspunkt",
       "type": "VIRKNINGSTIDSPUNKT",
       "innhold": {
-        "avslag": "ALLE_UTGIFTER_ER_FORELDET",
+        "avslag": "PRIVAT_AVTALE",
         "årsak": null,
         "virkningstidspunkt": "2024-08-01"
       },
@@ -37,14 +49,14 @@
       "referanse": "særbidrag_kategori",
       "type": "SÆRBIDRAG_KATEGORI",
       "innhold": {
-        "kategori": "TANNREGULERING",
+        "kategori": "KONFIRMASJON",
         "beskrivelse": null
       },
       "grunnlagsreferanseListe": [],
       "gjelderReferanse": null
     },
     {
-      "referanse": "person_PERSON_BIDRAGSMOTTAKER_19720829_2152",
+      "referanse": "person_PERSON_BIDRAGSMOTTAKER_19720829_100",
       "type": "PERSON_BIDRAGSMOTTAKER",
       "innhold": {
         "navn": null,
@@ -55,7 +67,7 @@
       "gjelderReferanse": null
     },
     {
-      "referanse": "person_PERSON_BIDRAGSPLIKTIG_19781115_2153",
+      "referanse": "person_PERSON_BIDRAGSPLIKTIG_19781115_99",
       "type": "PERSON_BIDRAGSPLIKTIG",
       "innhold": {
         "navn": null,
@@ -66,7 +78,7 @@
       "gjelderReferanse": null
     },
     {
-      "referanse": "person_PERSON_SØKNADSBARN_20050916_2151",
+      "referanse": "person_PERSON_SØKNADSBARN_20050916_101",
       "type": "PERSON_SØKNADSBARN",
       "innhold": {
         "navn": null,
@@ -87,14 +99,15 @@
       "mottaker": "{bmIdent}",
       "beløp": null,
       "valutakode": "NOK",
-      "resultatkode": "ALLE_UTGIFTER_ER_FORELDET",
+      "resultatkode": "PRIVAT_AVTALE",
       "innkreving": "MED_INNKREVING",
       "beslutning": "ENDRING",
       "omgjørVedtakId": null,
-      "referanse": "b03fa581-da31-48ef-8249-e70eaac649c0",
+      "referanse": "393d7a33-2cac-4d16-973e-1d3034dfe6c1",
       "delytelseId": null,
       "eksternReferanse": null,
       "grunnlagReferanseListe": [
+        "notat_UTGIFTER_kun_i_notat",
         "søknad",
         "virkningstidspunkt",
         "særbidrag_kategori"
@@ -105,11 +118,11 @@
   "behandlingsreferanseListe": [
     {
       "kilde": "BEHANDLING_ID",
-      "referanse": "779"
+      "referanse": "31"
     },
     {
       "kilde": "BISYS_SØKNAD",
-      "referanse": "50003540"
+      "referanse": "55312311"
     }
   ]
 }
