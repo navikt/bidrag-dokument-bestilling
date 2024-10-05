@@ -4,6 +4,11 @@ import com.fasterxml.jackson.annotation.JsonAlias
 import kotlin.io.encoding.Base64
 import kotlin.io.encoding.ExperimentalEncodingApi
 
+data class ExstreamTokenRequest(
+    val userName: String,
+    val password: String,
+)
+
 data class ExstreamHtmlResponseDto(
     val status: String,
     val data: ExstreamHtmlData,

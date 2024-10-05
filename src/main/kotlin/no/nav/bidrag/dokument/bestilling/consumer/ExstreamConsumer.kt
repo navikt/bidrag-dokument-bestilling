@@ -2,7 +2,9 @@ package no.nav.bidrag.dokument.bestilling.consumer
 
 import no.nav.bidrag.commons.web.HttpHeaderRestTemplate
 import no.nav.bidrag.dokument.bestilling.consumer.dto.ExstreamHtmlResponseDto
+import no.nav.bidrag.dokument.bestilling.consumer.dto.ExstreamTokenRequest
 import org.springframework.beans.factory.annotation.Value
+import org.springframework.http.HttpEntity
 import org.springframework.http.HttpHeaders
 import org.springframework.http.MediaType
 import org.springframework.stereotype.Service
@@ -28,9 +30,17 @@ class ExstreamConsumer(
     fun hentToken(): String {
         val restTemplate = HttpHeaderRestTemplate()
         restTemplate.uriTemplateHandler = DefaultUriBuilderFactory(url)
-        restTemplate.addHeaderGenerator("userName") { username }
-        restTemplate.addHeaderGenerator("password") { password }
-        val response = restTemplate.getForObject("/otdstenant/tenant5/otdsws/rest/authentication/credentials", TokenResponse::class.java)!!
+        val response =
+            restTemplate.postForObject(
+                "/otdstenant/tenant5/otdsws/rest/authentication/credentials",
+                HttpEntity(
+                    ExstreamTokenRequest(
+                        username,
+                        password,
+                    ),
+                ),
+                TokenResponse::class.java,
+            )!!
         return response.ticket
     }
 
