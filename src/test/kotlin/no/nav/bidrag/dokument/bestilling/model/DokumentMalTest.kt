@@ -16,10 +16,24 @@ import no.nav.bidrag.dokument.bestilling.bestilling.dto.dokumentmalerFarskap
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.dokumentmalerUtland
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
+import java.nio.charset.Charset
 
 private val LOGGER = KotlinLogging.logger {}
 
 class DokumentMalTest {
+    @Test
+    fun convert() {
+        val original = "æ"
+        val ibmCharset = Charset.forName("IBM037") // Replace with the appropriate IBM charset
+        val ibmBytes = original.toByteArray(ibmCharset)
+
+        println("Original: $original ${ibmBytes.toString(ibmCharset)}")
+        print("IBM Charset Bytes: ")
+        for (b in ibmBytes) {
+            print(String.format("%02X ", b))
+        }
+    }
+
     @Test
     @Disabled
     fun `skal mappe dokumentmaler to json`() {

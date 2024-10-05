@@ -9,6 +9,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses
 import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import no.nav.bidrag.dokument.bestilling.SIKKER_LOGG
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.hentDokumentMal
+import no.nav.bidrag.dokument.bestilling.consumer.ExstreamConsumer
+import no.nav.bidrag.dokument.bestilling.consumer.dto.ExstreamHtmlResponseDto
 import no.nav.bidrag.dokument.bestilling.model.dokumentMalEksistererIkke
 import no.nav.security.token.support.core.api.Protected
 import org.slf4j.LoggerFactory
@@ -24,6 +26,7 @@ import javax.xml.parsers.DocumentBuilderFactory
 @Timed
 class AdminKontroller(
     private val onlinebrevTemplate: JmsTemplate,
+    private val exstreamConsumer: ExstreamConsumer,
 ) {
     companion object {
         private val LOGGER = LoggerFactory.getLogger(AdminKontroller::class.java)
@@ -59,6 +62,28 @@ class AdminKontroller(
             SIKKER_LOGG.info("Sending message \n\n$xml\n\n")
             message
         }
+    }
+
+    @PostMapping("/bestill/html")
+    @Operation(
+        description = "Bestiller dokument for oppgitt brevkode/dokumentKode",
+        security = [SecurityRequirement(name = "bearer-key")],
+    )
+    @ApiResponses(
+        value = [
+            ApiResponse(
+                responseCode = "400",
+                description = "Dokument ble bestilt med ugyldig data",
+            ),
+        ],
+    )
+    fun bestillBrevForHtml(
+        @RequestBody xml: String,
+    ): ExstreamHtmlResponseDto? {
+        LOGGER.info("Bestiller dokument for HTML med XML som input")
+        SIKKER_LOGG.info("Bestiller dokument for HTML med XML $xml")
+        if (!isValidXml(xml)) throw IllegalArgumentException("Ugyldig XML")
+        return exstreamConsumer.hentBrevHtml(xml)
     }
 
     private fun isValidXml(xml: String): Boolean =
