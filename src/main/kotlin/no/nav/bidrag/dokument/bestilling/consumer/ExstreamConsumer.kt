@@ -1,6 +1,7 @@
 package no.nav.bidrag.dokument.bestilling.consumer
 
 import no.nav.bidrag.commons.web.HttpHeaderRestTemplate
+import no.nav.bidrag.dokument.bestilling.consumer.dto.ExstreamHtmDataContent
 import no.nav.bidrag.dokument.bestilling.consumer.dto.ExstreamHtmlResponseDto
 import no.nav.bidrag.dokument.bestilling.consumer.dto.ExstreamTokenRequest
 import org.springframework.beans.factory.annotation.Value
@@ -10,6 +11,8 @@ import org.springframework.http.MediaType
 import org.springframework.stereotype.Service
 import org.springframework.web.client.RestTemplate
 import org.springframework.web.util.DefaultUriBuilderFactory
+import kotlin.io.encoding.Base64
+import kotlin.io.encoding.ExperimentalEncodingApi
 
 @Service
 class ExstreamConsumer(
@@ -44,7 +47,19 @@ class ExstreamConsumer(
         return response.ticket
     }
 
-    fun hentBrevHtml(xml: String): ExstreamHtmlResponseDto? = restTemplate.postForEntity("/tenant5/sgw/v1/communications?name=bidrag_xml_html&version=1", xml, ExstreamHtmlResponseDto::class.java).body
+    @OptIn(ExperimentalEncodingApi::class)
+    fun hentBrevHtml(xml: String): ExstreamHtmlResponseDto? =
+        restTemplate
+            .postForEntity(
+                "/tenant5/sgw/v1/communications?name=bidrag_xml_html&version=1",
+                HttpEntity(
+                    ExstreamHtmDataContent(
+                        contentType = "text/xml",
+                        data = Base64.encode(xml.toByteArray()),
+                    ),
+                ),
+                ExstreamHtmlResponseDto::class.java,
+            ).body
 
     companion object {
         private const val DEFAULT_CACHE = "DEFAULT"

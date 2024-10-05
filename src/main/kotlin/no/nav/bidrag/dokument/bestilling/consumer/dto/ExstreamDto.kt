@@ -30,8 +30,8 @@ data class ExstreamHtmDataResult(
 data class ExstreamHtmDataContent(
     val data: String,
     val contentType: String,
-    val streamingFilePath: String?,
-    val empty: Boolean,
+    val streamingFilePath: String? = null,
+    val empty: Boolean = false,
 ) {
     val dataParsed get() = Base64.decode(data)
 }
