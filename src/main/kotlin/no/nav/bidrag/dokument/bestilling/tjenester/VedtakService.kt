@@ -22,13 +22,13 @@ import no.nav.bidrag.dokument.bestilling.model.hentVirkningstidspunkt
 import no.nav.bidrag.dokument.bestilling.model.kapitalinntektTyper
 import no.nav.bidrag.dokument.bestilling.model.mapBarnIHusstandPerioder
 import no.nav.bidrag.dokument.bestilling.model.mapSivilstand
+import no.nav.bidrag.dokument.bestilling.model.tilBisysResultatkodeForBrev
 import no.nav.bidrag.dokument.bestilling.model.tilRolletype
 import no.nav.bidrag.dokument.bestilling.model.tilSaksbehandler
 import no.nav.bidrag.dokument.bestilling.model.toSet
 import no.nav.bidrag.domene.enums.beregning.Resultatkode
 import no.nav.bidrag.domene.enums.beregning.Resultatkode.Companion.erAvslag
 import no.nav.bidrag.domene.enums.beregning.Resultatkode.Companion.erDirekteAvslag
-import no.nav.bidrag.domene.enums.beregning.Resultatkode.Companion.tilBisysResultatkode
 import no.nav.bidrag.domene.enums.grunnlag.Grunnlagstype
 import no.nav.bidrag.domene.enums.rolle.Rolletype
 import no.nav.bidrag.domene.enums.sjablon.SjablonTallNavn
@@ -253,7 +253,7 @@ class VedtakService(
                         // TODO: Er dette riktig??
                         tomDato = stønadperiode.periode.til?.atEndOfMonth(),
                         beløp = stønadperiode.beløp ?: BigDecimal.ZERO,
-                        resultatKode = resultatKode?.tilBisysResultatkode(vedtakDto.type) ?: stønadperiode.resultatkode,
+                        resultatKode = resultatKode?.tilBisysResultatkodeForBrev(vedtakDto.type) ?: stønadperiode.resultatkode,
                         inntekter = grunnlagListe.mapInntekter(VedtakPeriodeReferanse(stønadperiode.periode, vedtakDto.typeBehandling, stønadperiode.grunnlagReferanseListe)),
                         inntektGrense = sjablongService.hentInntektGrenseForPeriode(getLastDayOfPreviousMonth(stønadperiode.periode.til?.atEndOfMonth())),
                         maksInntekt = sjablongService.hentMaksInntektForPeriode(getLastDayOfPreviousMonth(stønadperiode.periode.til?.atEndOfMonth())),

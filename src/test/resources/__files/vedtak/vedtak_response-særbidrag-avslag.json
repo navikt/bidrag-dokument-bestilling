@@ -2833,14 +2833,16 @@
     },
     {
       "referanse": "delberegning_DELBEREGNING_BIDRAGSPLIKTIGES_ANDEL_SÆRBIDRAG_person_PERSON_SØKNADSBARN_20051223_115_202408_202409",
-      "type": "DELBEREGNING_BIDRAGSPLIKTIGES_ANDEL_SÆRBIDRAG",
+      "type": "DELBEREGNING_BIDRAGSPLIKTIGES_ANDEL",
       "innhold": {
         "periode": {
           "fom": "2024-08",
           "til": "2024-09"
         },
         "andelBeløp": 9648,
-        "andelProsent": 40.2,
+        "endeligAndelFaktor": 0.402,
+        "beregnetAndelFaktor": 0.402,
+        "barnEndeligInntekt": 0,
         "barnetErSelvforsørget": false
       },
       "grunnlagsreferanseListe": [

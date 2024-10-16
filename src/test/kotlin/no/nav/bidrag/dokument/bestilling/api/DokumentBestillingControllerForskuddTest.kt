@@ -518,6 +518,7 @@ class DokumentBestillingControllerForskuddTest : AbstractControllerTest() {
             )
 
         jmsTestConsumer.withOnlinebrev {
+            purge()
             val response =
                 httpHeaderTestRestTemplate.exchange(
                     "${rootUri()}/bestill/${dokumentMal.kode}",
