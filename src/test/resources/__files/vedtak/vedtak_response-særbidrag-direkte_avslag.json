@@ -99,7 +99,7 @@
       "mottaker": "{bmIdent}",
       "beløp": null,
       "valutakode": "NOK",
-      "resultatkode": "PRIVAT_AVTALE",
+      "resultatkode": "AVSLAG_PRIVAT_AVTALE_OM_SÆRBIDRAG",
       "innkreving": "MED_INNKREVING",
       "beslutning": "ENDRING",
       "omgjørVedtakId": null,

@@ -11,6 +11,7 @@ import no.nav.bidrag.dokument.bestilling.bestilling.dto.PeriodeFraTom
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.hentDokumentMal
 import no.nav.bidrag.dokument.bestilling.bestilling.produksjon.dto.BrevBestilling
 import no.nav.bidrag.dokument.bestilling.consumer.dto.fornavnEtternavn
+import no.nav.bidrag.dokument.bestilling.model.tilBisysResultatkodeForBrev
 import no.nav.bidrag.dokument.bestilling.utils.ANNEN_MOTTAKER
 import no.nav.bidrag.dokument.bestilling.utils.BARN1
 import no.nav.bidrag.dokument.bestilling.utils.BARN2
@@ -25,6 +26,7 @@ import no.nav.bidrag.dokument.bestilling.utils.createEnhetKontaktInformasjon
 import no.nav.bidrag.dokument.bestilling.utils.createPostAdresseResponse
 import no.nav.bidrag.dokument.bestilling.utils.opprettBehandlingDetaljer
 import no.nav.bidrag.domene.enums.beregning.Resultatkode
+import no.nav.bidrag.domene.enums.vedtak.Vedtakstype
 import org.junit.jupiter.api.Test
 import org.springframework.http.HttpEntity
 import org.springframework.http.HttpMethod
@@ -448,7 +450,7 @@ class DokumentBestillingControllerSærbidragTest : AbstractControllerTest() {
                 barnISak1.belBidrag shouldBe null
 
                 message.brev?.soknadBost?.saksnr shouldBe saksnummer
-                message.brev?.soknadBost?.resKode shouldBe Resultatkode.PRIVAT_AVTALE.legacyKode
+                message.brev?.soknadBost?.resKode shouldBe Resultatkode.AVSLAG_PRIVAT_AVTALE_OM_SÆRBIDRAG.tilBisysResultatkodeForBrev(Vedtakstype.FASTSETTELSE)
                 message.brev?.soknadBost?.rmISak shouldBe false
                 message.brev?.soknadBost?.gebyrsats shouldBe FASTSETTELSE_GEBYR_2024.toBigDecimal()
                 message.brev?.soknadBost?.sendtDato shouldBe LocalDate.now()
@@ -478,7 +480,7 @@ class DokumentBestillingControllerSærbidragTest : AbstractControllerTest() {
                 soknadBost.virkningsDato shouldBe virkningDato
                 soknadBost.mottatDato shouldBe soknadDato
                 soknadBost.soknGrKode shouldBe "ST"
-                soknadBost.resKode shouldBe Resultatkode.PRIVAT_AVTALE.legacyKode
+                soknadBost.resKode shouldBe Resultatkode.AVSLAG_PRIVAT_AVTALE_OM_SÆRBIDRAG.tilBisysResultatkodeForBrev(Vedtakstype.FASTSETTELSE)
                 soknadBost.soknFraKode shouldBe "PL"
                 soknadBost.soknType shouldBe "FA"
 
