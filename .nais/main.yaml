@@ -17,8 +17,8 @@ env:
   BIDRAG_SAK_SCOPE: dev-fss.bidrag.bidrag-sak
   KODEVERK_URL: https://kodeverk-api.nav.no
 
-  BIDRAG_VEDTAK_URL: http://bidrag-vedtak-syntetisk
-  BIDRAG_VEDTAK_SCOPE: dev-gcp.bidrag.bidrag-vedtak-syntetisk
+  BIDRAG_VEDTAK_URL: http://bidrag-vedtak-q2
+  BIDRAG_VEDTAK_SCOPE: dev-gcp.bidrag.bidrag-vedtak-q2
 
   BIDRAG_BEHANDLING_URL: http://bidrag-behandling
   BIDRAG_BEHANDLING_SCOPE: dev-gcp.bidrag.bidrag-behandling
@@ -34,7 +34,7 @@ env:
   MQ_CHANNEL: Q2_BDBESTILLING
   JAVA_TOOL_OPTIONS: -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005
 outbound-access-apps:
-  - bidrag-vedtak-syntetisk
+  - bidrag-vedtak-q2
   - bidrag-behandling
 outbound-access-hosts:
   - bidrag-dokument.dev-fss-pub.nais.io
