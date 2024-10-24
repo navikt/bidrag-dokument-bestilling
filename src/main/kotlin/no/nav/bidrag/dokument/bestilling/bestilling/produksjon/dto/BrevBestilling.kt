@@ -692,7 +692,7 @@ class PercentageAdapter : XmlAdapter<String, BigDecimal?>() {
             ?.multiply(BigDecimal(100))
             ?.setScale(0, RoundingMode.HALF_UP)
             ?.toString()
-            ?.padStart(5, '0') ?: "00000"
+            ?.padStart(6, '0') ?: "000000"
 
     @Throws(ParseException::class)
     override fun unmarshal(value: String?): BigDecimal? = value?.toBigDecimal()
