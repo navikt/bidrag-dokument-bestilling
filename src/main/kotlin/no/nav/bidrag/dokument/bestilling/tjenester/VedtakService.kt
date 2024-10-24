@@ -296,7 +296,7 @@ fun List<GrunnlagDto>.mapInntekter(periode: VedtakPeriodeReferanse): List<Inntek
 }
 
 fun List<InntektPeriode>.sammenstillDeMedSammeBeskrivelse() =
-    groupBy { it.beskrivelse }.map { (_, inntekter) ->
+    groupBy { Pair(it.beskrivelse, it.rolle) }.map { (_, inntekter) ->
         inntekter.reduce { acc, inntekt ->
             InntektPeriode(
                 inntektPerioder = acc.inntektPerioder + inntekt.inntektPerioder,
