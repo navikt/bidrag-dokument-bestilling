@@ -688,9 +688,9 @@ class BelopDecimalAdapter : XmlAdapter<String, BigDecimal?>() {
 class PercentageAdapter : XmlAdapter<String, BigDecimal?>() {
     override fun marshal(value: BigDecimal?): String =
         value
-            ?.round(MathContext(3))
-            ?.multiply(BigDecimal.TEN)
-            ?.setScale(0)
+            ?.round(MathContext(10))
+            ?.multiply(BigDecimal(100))
+            ?.setScale(0, RoundingMode.HALF_UP)
             ?.toString()
             ?.padStart(4, '0') ?: "0000"
 
