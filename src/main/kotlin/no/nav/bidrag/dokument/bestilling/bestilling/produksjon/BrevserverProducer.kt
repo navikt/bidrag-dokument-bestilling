@@ -270,6 +270,8 @@ class BrevserverProducer(
                                     beløpForskudd = engangsbeløp.sjablon.forskuddSats
                                     beløpInntektsgrense = engangsbeløp.sjablon.inntektsgrense
                                     fordNokkel = beregning.andelProsent
+                                    andelNevner = 5
+                                    andelTeller = 10
 
                                     val inntekt = beregning.inntekt
                                     bmInntekt = inntekt.bmInntekt
