@@ -4,8 +4,8 @@ min_replicas: 1
 ingresses:
   - https://bidrag-dokument-bestilling.intern.dev.nav.no
 env:
-  BIDRAG_PERSON_URL: https://bidrag-person.dev-fss-pub.nais.io/bidrag-person
-  BIDRAG_PERSON_SCOPE: dev-fss.bidrag.bidrag-person
+  BIDRAG_PERSON_URL: https://bidrag-person-q2.dev-fss-pub.nais.io/bidrag-person
+  BIDRAG_PERSON_SCOPE: dev-fss.bidrag.bidrag-person-q2
 
   BIDRAG_DOKUMENT_URL: https://bidrag-dokument.dev-fss-pub.nais.io/bidrag-dokument
   BIDRAG_DOKUMENT_SCOPE: dev-fss.bidrag.bidrag-dokument
@@ -13,15 +13,15 @@ env:
   BIDRAG_ORGANISASJON_URL: https://bidrag-organisasjon.dev-fss-pub.nais.io/bidrag-organisasjon
   BIDRAG_ORGANISASJON_SCOPE: dev-fss.bidrag.bidrag-organisasjon
 
-  BIDRAG_SAK_URL: https://bidrag-sak.dev-fss-pub.nais.io/bidrag-sak
-  BIDRAG_SAK_SCOPE: dev-fss.bidrag.bidrag-sak
+  BIDRAG_SAK_URL: https://bidrag-sak-q2.dev-fss-pub.nais.io/bidrag-sak
+  BIDRAG_SAK_SCOPE: dev-fss.bidrag.bidrag-sak-q2
   KODEVERK_URL: https://kodeverk-api.nav.no
 
   BIDRAG_VEDTAK_URL: http://bidrag-vedtak-q2
   BIDRAG_VEDTAK_SCOPE: dev-gcp.bidrag.bidrag-vedtak-q2
 
-  BIDRAG_BEHANDLING_URL: http://bidrag-behandling
-  BIDRAG_BEHANDLING_SCOPE: dev-gcp.bidrag.bidrag-behandling
+  BIDRAG_BEHANDLING_URL: http://bidrag-behandling-q2
+  BIDRAG_BEHANDLING_SCOPE: dev-gcp.bidrag.bidrag-behandling-q2
 
 
   SJABLON_URL: https://bidrag-sjablon.dev-fss-pub.nais.io/bidrag-sjablon
@@ -35,11 +35,11 @@ env:
   JAVA_TOOL_OPTIONS: -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005
 outbound-access-apps:
   - bidrag-vedtak-q2
-  - bidrag-behandling
+  - bidrag-behandling-q2
 outbound-access-hosts:
   - bidrag-dokument.dev-fss-pub.nais.io
-  - bidrag-person.dev-fss-pub.nais.io
-  - bidrag-sak.dev-fss-pub.nais.io
+  - bidrag-person-q2.dev-fss-pub.nais.io
+  - bidrag-sak-q2.dev-fss-pub.nais.io
   - bidrag-organisasjon.dev-fss-pub.nais.io
   - bidrag-sjablon.dev-fss-pub.nais.io
   - kodeverk-api.nav.no

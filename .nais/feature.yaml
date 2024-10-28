@@ -4,8 +4,8 @@ min_replicas: 1
 ingresses:
   - https://bidrag-dokument-bestilling-feature.intern.dev.nav.no
 env:
-  BIDRAG_PERSON_URL: https://bidrag-person-feature.dev-fss-pub.nais.io/bidrag-person
-  BIDRAG_PERSON_SCOPE: dev-fss.bidrag.bidrag-person-feature
+  BIDRAG_PERSON_URL: https://bidrag-person-q1.dev-fss-pub.nais.io/bidrag-person
+  BIDRAG_PERSON_SCOPE: dev-fss.bidrag.bidrag-person-q1
 
   BIDRAG_DOKUMENT_URL: https://bidrag-dokument-feature.dev-fss-pub.nais.io/bidrag-dokument
   BIDRAG_DOKUMENT_SCOPE: dev-fss.bidrag.bidrag-dokument-feature
@@ -13,14 +13,14 @@ env:
   BIDRAG_ORGANISASJON_URL: https://bidrag-organisasjon-feature.dev-fss-pub.nais.io/bidrag-organisasjon
   BIDRAG_ORGANISASJON_SCOPE: dev-fss.bidrag.bidrag-organisasjon-feature
 
-  BIDRAG_SAK_URL: https://bidrag-sak-feature.dev-fss-pub.nais.io/bidrag-sak
-  BIDRAG_SAK_SCOPE: dev-fss.bidrag.bidrag-sak-feature
+  BIDRAG_SAK_URL: https://bidrag-sak-q1.dev-fss-pub.nais.io/bidrag-sak
+  BIDRAG_SAK_SCOPE: dev-fss.bidrag.bidrag-sak-q1
 
-  BIDRAG_VEDTAK_URL: http://bidrag-vedtak
-  BIDRAG_VEDTAK_SCOPE: dev-gcp.bidrag.bidrag-vedtak
+  BIDRAG_VEDTAK_URL: http://bidrag-vedtak-q1
+  BIDRAG_VEDTAK_SCOPE: dev-gcp.bidrag.bidrag-vedtak-q1
 
-  BIDRAG_BEHANDLING_URL: http://bidrag-behandling-feature
-  BIDRAG_BEHANDLING_SCOPE: dev-gcp.bidrag.bidrag-behandling-feature
+  BIDRAG_BEHANDLING_URL: http://bidrag-behandling-q1
+  BIDRAG_BEHANDLING_SCOPE: dev-gcp.bidrag.bidrag-behandling-q1
 
   SJABLON_URL: https://bidrag-sjablon.dev-fss-pub.nais.io/bidrag-sjablon
 
@@ -33,12 +33,12 @@ env:
   MQ_CHANNEL: Q1_BDBESTILLING
   JAVA_TOOL_OPTIONS: -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005
 outbound-access-apps:
-  - bidrag-vedtak
-  - bidrag-behandling-feature
+  - bidrag-vedtak-q1
+  - bidrag-behandling-q1
 outbound-access-hosts:
   - bidrag-dokument-feature.dev-fss-pub.nais.io
-  - bidrag-person-feature.dev-fss-pub.nais.io
-  - bidrag-sak-feature.dev-fss-pub.nais.io
+  - bidrag-person-q1.dev-fss-pub.nais.io
+  - bidrag-sak-q1.dev-fss-pub.nais.io
   - bidrag-organisasjon-feature.dev-fss-pub.nais.io
   - bidrag-sjablon.dev-fss-pub.nais.io
   - kodeverk-api.nav.no
