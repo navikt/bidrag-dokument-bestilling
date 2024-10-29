@@ -689,10 +689,11 @@ class PercentageAdapter : XmlAdapter<String, BigDecimal?>() {
     override fun marshal(value: BigDecimal?): String =
         value
             ?.round(MathContext(10))
-            ?.multiply(BigDecimal(10))
+            ?.multiply(BigDecimal(100))
             ?.setScale(0, RoundingMode.HALF_UP)
             ?.toString()
-            ?.padStart(4, '0') ?: "0000"
+            ?.padStart(5, '0')
+            ?.let { it.substring(0, 4) + "." + it.substring(4) } ?: "0000"
 
     @Throws(ParseException::class)
     override fun unmarshal(value: String?): BigDecimal? = value?.toBigDecimal()
