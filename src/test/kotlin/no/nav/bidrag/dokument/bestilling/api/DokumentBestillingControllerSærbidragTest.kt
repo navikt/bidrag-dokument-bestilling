@@ -364,7 +364,7 @@ class DokumentBestillingControllerSærbidragTest : AbstractControllerTest() {
                     bmInntekt shouldBe BigDecimal(858000)
                     bbInntekt shouldBe BigDecimal(30000)
                     sumInntekt shouldBe BigDecimal(1587466)
-                    fordNokkel shouldBe BigDecimal(449)
+                    fordNokkel shouldBe BigDecimal("449.1")
                 }
 
                 assertSoftly(barn1.særbidragPeriode) {
@@ -633,7 +633,7 @@ class DokumentBestillingControllerSærbidragTest : AbstractControllerTest() {
                     bmInntekt shouldBe BigDecimal(0)
                     bbInntekt shouldBe BigDecimal(0)
                     sumInntekt shouldBe BigDecimal(0)
-                    fordNokkel shouldBe BigDecimal(0)
+                    fordNokkel shouldBe BigDecimal("0.0")
                 }
                 assertSoftly(barn1.særbidragPeriode) {
                     this.shouldHaveSize(1)
@@ -782,7 +782,7 @@ class DokumentBestillingControllerSærbidragTest : AbstractControllerTest() {
                     bmInntekt shouldBe BigDecimal(0)
                     bbInntekt shouldBe BigDecimal(0)
                     sumInntekt shouldBe BigDecimal(0)
-                    fordNokkel shouldBe BigDecimal(0)
+                    fordNokkel shouldBe BigDecimal("0.0")
                 }
                 assertSoftly(barn1.særbidragPeriode) {
                     this.shouldHaveSize(1)
