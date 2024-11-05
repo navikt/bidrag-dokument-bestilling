@@ -318,6 +318,9 @@ class BrevKontaktinfo {
     @XmlElement(name = "TelfAvsender", nillable = true)
     var tlfAvsender: TlfAvsender? = null
 
+    @XmlElement(name = "Besoksadr", nillable = true)
+    var besøkAdresse: Adresse? = null
+
     @XmlElement(name = "Returadr", nillable = true)
     var returAdresse: Adresse? = null
 
@@ -370,6 +373,7 @@ class BrevKontaktinfo {
         adresse.init()
         returAdresse = adresse
         postadresse = adresse
+        besøkAdresse = adresse
         return adresse
     }
 

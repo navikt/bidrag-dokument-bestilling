@@ -431,6 +431,7 @@ class BrevserverProducer(
                 postnummer = kontaktInfo.postadresse.postnummer
                 poststed = kontaktInfo.postadresse.poststed
                 land = kontaktInfo.postadresse.land
+                telefon = kontaktInfo.telefonnummer
             }
             avsender =
                 avsender {
