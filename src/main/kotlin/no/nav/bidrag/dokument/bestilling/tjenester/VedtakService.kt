@@ -149,7 +149,7 @@ class VedtakService(
             val periode = vedtakDto.særbidragsperiode!!
             val sjablonForskudd =
                 grunnlagListe
-                    .filtrerBasertPåEgenReferanse(Grunnlagstype.SJABLON)
+                    .filtrerBasertPåEgenReferanse(Grunnlagstype.SJABLON_SJABLONTALL)
                     .map { it.innholdTilObjekt<SjablonSjablontallPeriode>() }
                     .find { it.sjablon == SjablonTallNavn.FORSKUDDSSATS_BELØP }
                     ?.verdi ?: sjablongService.hentForsuddsatsForPeriode(periode.til).verdi
