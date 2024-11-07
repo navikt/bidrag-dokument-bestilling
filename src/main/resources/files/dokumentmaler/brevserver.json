@@ -194,7 +194,7 @@
   },
   {
     "kode": "BI01S20",
-    "tittel": "NAV har mottatt klage på vedtak",
+    "tittel": "Nav har mottatt klage på vedtak",
     "kreverDataGrunnlag": {
       "vedtak": false,
       "behandling": false,
@@ -215,7 +215,7 @@
   },
   {
     "kode": "BI01S60",
-    "tittel": "Klagen er sendt til NAV Klageinstans",
+    "tittel": "Klagen er sendt til Nav klageinstans",
     "type": "VARSEL",
     "støttetSpråk": [
       "NB"
@@ -504,7 +504,7 @@
   },
   {
     "kode": "BI01S01",
-    "tittel": "NAV har mottatt søknad om barnebidrag",
+    "tittel": "Nav har mottatt søknad om barnebidrag",
     "kreverDataGrunnlag": {
       "vedtak": false,
       "behandling": false,
@@ -582,7 +582,7 @@
   },
   {
     "kode": "BI01S05",
-    "tittel": "NAV har mottatt søknad om sletting av bidragsgjeld",
+    "tittel": "Nav har mottatt søknad om sletting av bidragsgjeld",
     "kreverDataGrunnlag": {
       "vedtak": false,
       "behandling": false,
@@ -860,7 +860,7 @@
   },
   {
     "kode": "BI01S03",
-    "tittel": "NAV har mottatt søknad om barnebidrag etter fylte 18 år - forhåndsvarsel",
+    "tittel": "Nav har mottatt søknad om barnebidrag etter fylte 18 år - forhåndsvarsel",
     "type": "VEDTAK",
     "inneholderData": ["ROLLER", "ENHET_KONTAKT_INFO"],
     "støttetSpråk": [
@@ -933,7 +933,7 @@
   },
   {
     "kode": "BI01S04",
-    "tittel": "NAV har mottatt søknad om bidrag til særlige utgifter",
+    "tittel": "Nav har mottatt søknad om bidrag til særlige utgifter",
     "type": "VARSEL",
     "kreverEkstraData": ["SJABLON"],
     "støttetSpråk": [
@@ -1108,7 +1108,7 @@
   },
   {
     "kode": "BI01S24",
-    "tittel": "NAV har mottatt søknad om barnebidrag etter fylte 18 år - innhenting av opplysninger",
+    "tittel": "Nav har mottatt søknad om barnebidrag etter fylte 18 år - innhenting av opplysninger",
     "kreverDataGrunnlag": {
       "vedtak": false,
       "behandling": false,

@@ -212,7 +212,7 @@ fun List<BaseGrunnlag>.finnGrunnlagMedType(
 }
 
 fun List<BaseGrunnlag>.finnSjablonMedType(type: SjablonTallNavn) =
-    filtrerBasertPåEgenReferanse(Grunnlagstype.SJABLON)
+    filtrerBasertPåEgenReferanse(Grunnlagstype.SJABLON_SJABLONTALL)
         .map { it.innholdTilObjekt<SjablonSjablontallPeriode>() }
         .find { it.sjablon == type }
 
