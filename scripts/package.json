@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev": "concurrently \"tsc --watch\" \"cross-env-shell NODE_ENV=development ts-node src/server.ts\"",
+    "dev": "concurrently "tsc --watch" "cross-env-shell NODE_ENV=development ts-node src/server.ts\"",
     "start": "ts-node sjablon_to_json.ts"
   },
   "dependencies": {

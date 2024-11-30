@@ -290,12 +290,7 @@
   {
     "kode": "BI01B01",
     "tittel": "Vedtak barnebidrag",
-    "kreverDataGrunnlag": {
-      "vedtak": false,
-      "behandling": false,
-      "roller": true,
-      "enhetKontaktInfo": true
-    },
+    "type": "VEDTAK",
     "støttetSpråk": [
       "NB"
     ]
@@ -304,12 +299,7 @@
     "kode": "BI01B04",
     "beskrivelse": "Vedtak begrenset revurdering",
     "tittel": "Vedtak barnebidrag",
-    "kreverDataGrunnlag": {
-      "vedtak": false,
-      "behandling": false,
-      "roller": true,
-      "enhetKontaktInfo": true
-    },
+    "type": "VEDTAK",
     "støttetSpråk": [
       "NB"
     ]
@@ -317,12 +307,7 @@
   {
     "kode": "BI01B20",
     "tittel": "Vedtak utland skjønn fastsettelse",
-    "kreverDataGrunnlag": {
-      "vedtak": false,
-      "behandling": false,
-      "roller": true,
-      "enhetKontaktInfo": true
-    },
+    "type": "VEDTAK",
     "støttetSpråk": [
       "NB"
     ]
@@ -330,12 +315,7 @@
   {
     "kode": "BI01B21",
     "tittel": "Vedtak utland skjønn endring",
-    "kreverDataGrunnlag": {
-      "vedtak": false,
-      "behandling": false,
-      "roller": true,
-      "enhetKontaktInfo": true
-    },
+    "type": "VEDTAK",
     "støttetSpråk": [
       "NB"
     ]
@@ -344,12 +324,7 @@
     "kode": "BI01S06",
     "beskrivelse": "Varsel om fastsettelse av barnebidrag fra barnets fødsel",
     "tittel": "Vi skal fastsette barnebidraget",
-    "kreverDataGrunnlag": {
-      "vedtak": false,
-      "behandling": false,
-      "roller": true,
-      "enhetKontaktInfo": true
-    },
+    "type": "VEDTAK",
     "støttetSpråk": [
       "NB"
     ]

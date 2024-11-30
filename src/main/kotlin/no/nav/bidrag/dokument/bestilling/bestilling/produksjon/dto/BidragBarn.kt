@@ -36,6 +36,9 @@ class BidragBarn {
     @XmlElement(name = "perUkost", nillable = true)
     var underholdkostnadPerioder: MutableList<UnderholdkostnadPeriode> = mutableListOf()
 
+    @XmlElement(name = "perSamvaer", nillable = true)
+    var samværPerioder: MutableList<SamvarPeriode> = mutableListOf()
+
     @XmlElement(name = "perBidrEvne", nillable = true)
     var bidragEvnePerioder: MutableList<BidragEvnePeriode> = mutableListOf()
 
@@ -112,6 +115,13 @@ class BidragBarn {
         val initValue = UnderholdkostnadPeriode()
         initValue.init()
         underholdkostnadPerioder.add(initValue)
+        return initValue
+    }
+
+    fun samværPeriode(init: SamvarPeriode.() -> Unit): SamvarPeriode {
+        val initValue = SamvarPeriode()
+        initValue.init()
+        samværPerioder.add(initValue)
         return initValue
     }
 

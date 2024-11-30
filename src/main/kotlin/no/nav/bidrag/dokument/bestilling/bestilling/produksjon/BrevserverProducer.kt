@@ -28,9 +28,11 @@ import no.nav.bidrag.dokument.bestilling.model.tilLocalDateFom
 import no.nav.bidrag.dokument.bestilling.model.tilLocalDateTil
 import no.nav.bidrag.domene.enums.behandling.TypeBehandling
 import no.nav.bidrag.domene.enums.beregning.Resultatkode
+import no.nav.bidrag.domene.enums.beregning.Samværsklasse
 import no.nav.bidrag.domene.enums.diverse.Språk
 import no.nav.bidrag.domene.enums.person.Sivilstandskode
 import no.nav.bidrag.domene.enums.vedtak.Engangsbeløptype
+import no.nav.bidrag.domene.enums.vedtak.Stønadstype
 import no.nav.bidrag.domene.util.visningsnavn
 import no.nav.bidrag.transport.dokument.AvsenderMottakerDto
 import no.nav.bidrag.transport.dokument.JournalpostType
@@ -336,17 +338,55 @@ class BrevserverProducer(
                                 }
                             }
                             detaljer.vedtakPerioder.forEach { vedtakPeriode ->
-                                forskuddVedtakPeriode {
-                                    fomDato = vedtakPeriode.fomDato
-                                    tomDato = vedtakPeriode.tomDato ?: MAX_DATE
-                                    fnr = vedtakBarn.fødselsnummer
-                                    resultatKode = vedtakPeriode.resultatKode
-                                    forskKode = Resultatkode.fraKode(vedtakPeriode.resultatKode)?.tilForskuddKode()
-                                    beløp = vedtakPeriode.beløp
-                                    prosent = if (vedtakPeriode.resultatKode.isNumeric) vedtakPeriode.resultatKode.padStart(3, '0') else "000"
-                                    maksInntekt = vedtakPeriode.maksInntekt
+                                if (detaljer.type == Stønadstype.FORSKUDD) {
+                                    forskuddVedtakPeriode {
+                                        fomDato = vedtakPeriode.fomDato
+                                        tomDato = vedtakPeriode.tomDato ?: MAX_DATE
+                                        fnr = vedtakBarn.fødselsnummer
+                                        resultatKode = vedtakPeriode.resultatKode
+                                        forskKode = Resultatkode.fraKode(vedtakPeriode.resultatKode)?.tilForskuddKode()
+                                        beløp = vedtakPeriode.beløp
+                                        prosent = if (vedtakPeriode.resultatKode.isNumeric) vedtakPeriode.resultatKode.padStart(3, '0') else "000"
+                                        maksInntekt = vedtakPeriode.maksInntekt
+                                    }
                                 }
-
+                                vedtakPeriode.bidragsevne?.let {
+                                    val delberegning = it.delberegningBidragsevne
+                                    bidragEvnePeriode {
+                                        fomDato = vedtakPeriode.fomDato
+                                        tomDato = vedtakPeriode.tomDato ?: MAX_DATE
+//                                        skatteklasse = ??
+                                        antallBarn = delberegning.underholdEgneBarnIHusstand.antallBarnIHusstanden
+                                        antallBarnDelt = delberegning.underholdEgneBarnIHusstand.antallBarnDeltBossted
+                                        bostatus = if (delberegning.utgifter.borMedAndreVoksne) "1" else "0"
+                                        flBarnSakJN = false // TODO
+                                        fullBiEvneJN = delberegning.harFullEvne
+                                        biEvneBeskr = "F" // TODO
+                                        belInntGrlag = delberegning.inntektBP
+                                        belTrygdeAvg = delberegning.skatt.trygdeavgift
+                                        belSkatt = delberegning.skatt.sumSkatt
+                                        belMinFradrg = delberegning.skatt.trinnskatt
+                                    }
+                                }
+                                vedtakPeriode.samvær?.let {
+                                    samværPeriode {
+                                        fomDato = vedtakPeriode.fomDato
+                                        tomDato = vedtakPeriode.tomDato ?: MAX_DATE
+                                        samvarKode = it.samværsklasse.bisysKode
+                                        aldersGruppe = "${it.aldersgruppe.first} - ${it.aldersgruppe.second}"
+                                        belSamvFradr = it.samværsfradragBeløp
+                                        samvBeskr =
+                                            when (it.samværsklasse) {
+                                                Samværsklasse.SAMVÆRSKLASSE_0 -> "0-1 netter pr mnd"
+                                                Samværsklasse.SAMVÆRSKLASSE_1 -> "2-3 netter pr mnd eller minst 2 dager pr mnd"
+                                                Samværsklasse.SAMVÆRSKLASSE_2 -> "4-8 netter pr mnd"
+                                                Samværsklasse.SAMVÆRSKLASSE_3 -> "9-13 netter pr mnd"
+                                                Samværsklasse.SAMVÆRSKLASSE_4 -> "14-15 netter pr mnd"
+                                                Samværsklasse.DELT_BOSTED -> "Delt samvær"
+                                            }
+                                        fodselsnummer = vedtakBarn.fødselsnummer
+                                    }
+                                }
                                 vedtakPeriode.inntekter.forEach {
                                     inntektPeriode {
                                         fomDato = it.periode?.tilLocalDateFom()
@@ -360,26 +400,28 @@ class BrevserverProducer(
                                     }
                                 }
                             }
-                        }
-                    }
-                    vedtakBarn.stønadsendringer.forEach { detaljer ->
-                        detaljer.vedtakPerioder.forEach {
-                            vedtak {
-                                fomDato = it.fomDato
-                                tomDato = it.tomDato ?: MAX_DATE
-                                fnr = vedtakBarn.fødselsnummer
-                                belopBidrag = it.beløp
-                                resultatKode = it.resultatKode
-                            }
-                            forskuddVedtak {
-                                fomDato = it.fomDato
-                                tomDato = it.tomDato ?: MAX_DATE
-                                fnr = vedtakBarn.fødselsnummer
-                                resultatKode = it.resultatKode
-                                forskKode = Resultatkode.fraKode(it.resultatKode)?.tilForskuddKode()
-                                beløp = it.beløp
-                                prosent = if (it.resultatKode.isNumeric) it.resultatKode.padStart(3, '0') else "000"
-                                maksInntekt = it.maksInntekt
+
+                            detaljer.vedtakPerioder.forEach {
+                                vedtak {
+                                    fomDato = it.fomDato
+                                    tomDato = it.tomDato ?: MAX_DATE
+                                    fnr = vedtakBarn.fødselsnummer
+                                    belopBidrag = it.beløp
+                                    resultatKode = it.resultatKode
+                                }
+
+                                if (detaljer.type == Stønadstype.FORSKUDD) {
+                                    forskuddVedtak {
+                                        fomDato = it.fomDato
+                                        tomDato = it.tomDato ?: MAX_DATE
+                                        fnr = vedtakBarn.fødselsnummer
+                                        resultatKode = it.resultatKode
+                                        forskKode = Resultatkode.fraKode(it.resultatKode)?.tilForskuddKode()
+                                        beløp = it.beløp
+                                        prosent = if (it.resultatKode.isNumeric) it.resultatKode.padStart(3, '0') else "000"
+                                        maksInntekt = it.maksInntekt
+                                    }
+                                }
                             }
                         }
                     }
