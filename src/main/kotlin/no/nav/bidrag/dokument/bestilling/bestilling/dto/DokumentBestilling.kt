@@ -3,6 +3,8 @@ package no.nav.bidrag.dokument.bestilling.bestilling.dto
 import no.nav.bidrag.dokument.bestilling.model.Saksbehandler
 import no.nav.bidrag.dokument.bestilling.model.tilLegacyKode
 import no.nav.bidrag.dokument.bestilling.model.visningsnavnBruker
+import no.nav.bidrag.domene.enums.barnetilsyn.Skolealder
+import no.nav.bidrag.domene.enums.barnetilsyn.Tilsynstype
 import no.nav.bidrag.domene.enums.behandling.TypeBehandling
 import no.nav.bidrag.domene.enums.beregning.Resultatkode
 import no.nav.bidrag.domene.enums.beregning.Samværsklasse
@@ -20,6 +22,7 @@ import no.nav.bidrag.domene.tid.Datoperiode
 import no.nav.bidrag.domene.tid.ÅrMånedsperiode
 import no.nav.bidrag.domene.util.årsbeløpTilMåndesbeløp
 import no.nav.bidrag.transport.behandling.felles.grunnlag.BostatusPeriode
+import no.nav.bidrag.transport.behandling.felles.grunnlag.DelberegningUnderholdskostnad
 import no.nav.bidrag.transport.behandling.felles.grunnlag.Grunnlagsreferanse
 import no.nav.bidrag.transport.behandling.felles.grunnlag.SivilstandPeriode
 import java.math.BigDecimal
@@ -149,17 +152,59 @@ data class VedtakPeriode(
     val inntekter: List<InntektPeriode> = emptyList(),
     val samvær: Samværsperiode?,
     val bidragsevne: BidragsevnePeriode? = null,
+    val underhold: UnderholdskostnaderPeriode? = null,
+    val andelUnderhold: AndelUnderholdskostnadPeriode? = null,
+)
+
+data class AndelUnderholdskostnadPeriode(
+    val periode: ÅrMånedsperiode,
+    val inntektBM: BigDecimal? = null,
+    val inntektBP: BigDecimal? = null,
+    val inntektBarn: BigDecimal? = null,
+    val barnEndeligInntekt: BigDecimal? = null,
+    val andelFaktor: BigDecimal? = null,
+    val beløpUnderholdskostnad: BigDecimal? = null,
+    val beløpBpsAndel: BigDecimal,
+) {
+    val totalEndeligInntekt get() =
+        (inntektBM ?: BigDecimal.ZERO) + (inntektBP ?: BigDecimal.ZERO) +
+            (barnEndeligInntekt ?: BigDecimal.ZERO)
+}
+
+data class UnderholdskostnaderPeriode(
+    val periode: ÅrMånedsperiode,
+    val tilsynstype: Tilsynstype?,
+    val skolealder: Skolealder?,
+    val harBarnetilsyn: Boolean = false,
+    val delberegning: DelberegningUnderholdskostnad,
+    val gjelderIdent: String,
+    val rolletype: Rolletype?,
 )
 
 data class BidragsevnePeriode(
     val periode: ÅrMånedsperiode,
-    val delberegningBidragsevne: DelberegningBidragsevneDto,
-)
+    val sjabloner: BidragsevneSjabloner,
+    val bidragsevne: BigDecimal,
+    val beløpBidrag: BigDecimal,
+    val harFullEvne: Boolean,
+    val inntektBP: BigDecimal,
+    val underholdEgneBarnIHusstand: UnderholdEgneBarnIHusstand,
+    val skatt: Skatt,
+    val borMedAndreVoksne: Boolean,
+) {
+    data class BidragsevneSjabloner(
+        val beløpMinstefradrag: BigDecimal,
+        val beløpKlassfradrag: BigDecimal,
+        val beløpUnderholdEgneBarnIHusstanden: BigDecimal,
+        val boutgiftBeløp: BigDecimal,
+        val underholdBeløp: BigDecimal,
+    )
+}
 
 data class Samværsperiode(
     val periode: ÅrMånedsperiode,
     val samværsklasse: Samværsklasse,
-    val aldersgruppe: Pair<Int, Int>,
+    val aldersgruppe: Pair<Int, Int>?,
     val samværsfradragBeløp: BigDecimal,
 )
 
@@ -324,40 +369,24 @@ data class VedtakSaksbehandlerInfo(
     val ident: String,
 )
 
-data class DelberegningBidragsevneDto(
-    val sumInntekt25Prosent: BigDecimal,
-    val bidragsevne: BigDecimal,
-    val harFullEvne: Boolean,
-    val inntektBP: BigDecimal,
-    val skatt: Skatt,
-    val underholdEgneBarnIHusstand: UnderholdEgneBarnIHusstand,
-    val utgifter: BidragsevneUtgifterBolig,
+data class UnderholdEgneBarnIHusstand(
+    val årsbeløp: BigDecimal,
+    val sjablon: BigDecimal,
+    val antallBarnIHusstanden: Int,
+    val antallBarnDeltBossted: Int,
 ) {
-    data class UnderholdEgneBarnIHusstand(
-        val årsbeløp: BigDecimal,
-        val sjablon: BigDecimal,
-        val antallBarnIHusstanden: Int,
-        val antallBarnDeltBossted: Int,
-    ) {
-        val måndesbeløp get() = årsbeløp.årsbeløpTilMåndesbeløp()
-    }
+    val måndesbeløp get() = årsbeløp.årsbeløpTilMåndesbeløp()
+}
 
-    data class Skatt(
-        val sumSkattFaktor: BigDecimal,
-        val sumSkatt: BigDecimal,
-        val skattAlminneligInntekt: BigDecimal,
-        val trinnskatt: BigDecimal,
-        val trygdeavgift: BigDecimal,
-    ) {
-        val skattMånedsbeløp get() = sumSkatt.årsbeløpTilMåndesbeløp()
-        val trinnskattMånedsbeløp get() = trinnskatt.årsbeløpTilMåndesbeløp()
-        val skattAlminneligInntektMånedsbeløp get() = skattAlminneligInntekt.årsbeløpTilMåndesbeløp()
-        val trygdeavgiftMånedsbeløp get() = trygdeavgift.årsbeløpTilMåndesbeløp()
-    }
-
-    data class BidragsevneUtgifterBolig(
-        val borMedAndreVoksne: Boolean,
-        val boutgiftBeløp: BigDecimal,
-        val underholdBeløp: BigDecimal,
-    )
+data class Skatt(
+    val sumSkattFaktor: BigDecimal,
+    val sumSkatt: BigDecimal,
+    val skattAlminneligInntekt: BigDecimal,
+    val trinnskatt: BigDecimal,
+    val trygdeavgift: BigDecimal,
+) {
+    val skattMånedsbeløp get() = sumSkatt.årsbeløpTilMåndesbeløp()
+    val trinnskattMånedsbeløp get() = trinnskatt.årsbeløpTilMåndesbeløp()
+    val skattAlminneligInntektMånedsbeløp get() = skattAlminneligInntekt.årsbeløpTilMåndesbeløp()
+    val trygdeavgiftMånedsbeløp get() = trygdeavgift.årsbeløpTilMåndesbeløp()
 }

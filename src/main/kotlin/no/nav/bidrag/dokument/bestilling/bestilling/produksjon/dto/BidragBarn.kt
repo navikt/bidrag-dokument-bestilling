@@ -318,12 +318,15 @@ class AndelUnderholdPeriode {
     var belopInntektSum: BigDecimal? = null
 
     @XmlElement(name = "fordNokkel", nillable = true)
-    var fordNokkel: Int? = null
+    @XmlJavaTypeAdapter(PercentageAdapter::class)
+    var fordNokkel: BigDecimal? = null
 
     @XmlElement(name = "andelTeller", nillable = true)
+    @XmlJavaTypeAdapter(NumberAdapter::class)
     var andelTeller: Int? = null
 
     @XmlElement(name = "andelNevner", nillable = true)
+    @XmlJavaTypeAdapter(NumberAdapter::class)
     var andelNevner: Int? = null
 
     @XmlElement(name = "belopUkost", nillable = true)

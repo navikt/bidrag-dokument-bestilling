@@ -26,6 +26,8 @@ import no.nav.bidrag.dokument.bestilling.model.ResultatKoder
 import no.nav.bidrag.dokument.bestilling.model.tilBisysResultatkodeForBrev
 import no.nav.bidrag.dokument.bestilling.model.tilLocalDateFom
 import no.nav.bidrag.dokument.bestilling.model.tilLocalDateTil
+import no.nav.bidrag.domene.enums.barnetilsyn.Skolealder
+import no.nav.bidrag.domene.enums.barnetilsyn.Tilsynstype
 import no.nav.bidrag.domene.enums.behandling.TypeBehandling
 import no.nav.bidrag.domene.enums.beregning.Resultatkode
 import no.nav.bidrag.domene.enums.beregning.Samværsklasse
@@ -34,6 +36,7 @@ import no.nav.bidrag.domene.enums.person.Sivilstandskode
 import no.nav.bidrag.domene.enums.vedtak.Engangsbeløptype
 import no.nav.bidrag.domene.enums.vedtak.Stønadstype
 import no.nav.bidrag.domene.util.visningsnavn
+import no.nav.bidrag.domene.util.årsbeløpTilMåndesbeløp
 import no.nav.bidrag.transport.dokument.AvsenderMottakerDto
 import no.nav.bidrag.transport.dokument.JournalpostType
 import no.nav.bidrag.transport.dokument.OpprettDokumentDto
@@ -42,6 +45,7 @@ import no.nav.bidrag.transport.dokument.isNumeric
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.jms.core.JmsTemplate
 import org.springframework.stereotype.Component
+import java.math.BigDecimal
 
 @Component(BestillingSystem.BREVSERVER)
 class BrevserverProducer(
@@ -350,22 +354,73 @@ class BrevserverProducer(
                                         maksInntekt = vedtakPeriode.maksInntekt
                                     }
                                 }
+                                vedtakPeriode.andelUnderhold?.let {
+                                    andelUnderholdPeriode {
+                                        fomDato = vedtakPeriode.fomDato
+                                        tomDato = vedtakPeriode.tomDato ?: MAX_DATE
+                                        belopInntektBp = it.inntektBP
+                                        belopInntektBm = it.inntektBM
+                                        belopInntektBarn = it.inntektBarn
+                                        belopInntektSum = it.totalEndeligInntekt
+                                        fordNokkel = it.andelFaktor
+                                        belopUnderholdKostnad = it.beløpUnderholdskostnad
+                                        belopBp = it.beløpBpsAndel
+                                    }
+                                }
+                                vedtakPeriode.underhold?.let {
+                                    underholdKostnadPeriode {
+                                        fomDato = vedtakPeriode.fomDato
+                                        tomDato = vedtakPeriode.tomDato ?: MAX_DATE
+                                        belopFbrKost = it.delberegning.forbruksutgift
+                                        belopBoutg = it.delberegning.boutgift
+                                        belGkjBTils = it.delberegning.nettoTilsynsutgift
+                                        belFaktBTils = it.delberegning.nettoTilsynsutgift
+                                        belopBTrygd = it.delberegning.barnetrygd
+                                        belopSmaBTil = BigDecimal.ZERO
+                                        belBerSumU = it.delberegning.underholdskostnad
+                                        belJustSumU = it.delberegning.underholdskostnad
+                                        fodselsnummer = it.gjelderIdent
+                                        rolle = it.rolletype?.toKode()
+                                        skolealderTp =
+                                            when (it.skolealder) {
+                                                Skolealder.OVER -> "O"
+                                                Skolealder.UNDER -> "U"
+                                                else -> null
+                                            }
+                                        tilsyntypKd =
+                                            when {
+                                                it.tilsynstype == Tilsynstype.HELTID && it.skolealder == Skolealder.OVER -> "HO"
+                                                it.tilsynstype == Tilsynstype.HELTID && it.skolealder == Skolealder.UNDER -> "HU"
+                                                it.tilsynstype == Tilsynstype.DELTID && it.skolealder == Skolealder.OVER -> "DO"
+                                                it.tilsynstype == Tilsynstype.DELTID && it.skolealder == Skolealder.UNDER -> "DU"
+                                                else -> null
+                                            }
+                                    }
+                                }
                                 vedtakPeriode.bidragsevne?.let {
-                                    val delberegning = it.delberegningBidragsevne
                                     bidragEvnePeriode {
                                         fomDato = vedtakPeriode.fomDato
                                         tomDato = vedtakPeriode.tomDato ?: MAX_DATE
 //                                        skatteklasse = ??
-                                        antallBarn = delberegning.underholdEgneBarnIHusstand.antallBarnIHusstanden
-                                        antallBarnDelt = delberegning.underholdEgneBarnIHusstand.antallBarnDeltBossted
-                                        bostatus = if (delberegning.utgifter.borMedAndreVoksne) "1" else "0"
+                                        antallBarn = it.underholdEgneBarnIHusstand.antallBarnIHusstanden
+                                        antallBarnDelt = it.underholdEgneBarnIHusstand.antallBarnDeltBossted
+                                        bostatus = if (it.borMedAndreVoksne) "1" else "0"
                                         flBarnSakJN = false // TODO
-                                        fullBiEvneJN = delberegning.harFullEvne
+                                        fullBiEvneJN = it.harFullEvne
                                         biEvneBeskr = "F" // TODO
-                                        belInntGrlag = delberegning.inntektBP
-                                        belTrygdeAvg = delberegning.skatt.trygdeavgift
-                                        belSkatt = delberegning.skatt.sumSkatt
-                                        belMinFradrg = delberegning.skatt.trinnskatt
+                                        belInntGrlag = it.inntektBP
+                                        belTrygdeAvg = it.skatt.trygdeavgift
+                                        belSkatt = it.skatt.sumSkatt
+                                        belMinFradrg = it.sjabloner.beløpMinstefradrag
+                                        belPerFradrg = it.sjabloner.beløpKlassfradrag
+                                        belBoutgift = it.underholdEgneBarnIHusstand.sjablon
+                                        belEgetUhold = it.sjabloner.underholdBeløp
+                                        belUholdBhus = it.sjabloner.beløpUnderholdEgneBarnIHusstanden
+                                        belAarEvne = it.bidragsevne
+                                        belMndEvne = it.bidragsevne.årsbeløpTilMåndesbeløp()
+                                        belSumBidrag = it.beløpBidrag // TODO
+                                        belBerBidrag = it.beløpBidrag // TODO
+                                        belJustBidr = it.beløpBidrag // TODO
                                     }
                                 }
                                 vedtakPeriode.samvær?.let {
@@ -373,7 +428,7 @@ class BrevserverProducer(
                                         fomDato = vedtakPeriode.fomDato
                                         tomDato = vedtakPeriode.tomDato ?: MAX_DATE
                                         samvarKode = it.samværsklasse.bisysKode
-                                        aldersGruppe = "${it.aldersgruppe.first} - ${it.aldersgruppe.second}"
+                                        aldersGruppe = it.aldersgruppe?.let { "${it.first} - ${it.second}" }
                                         belSamvFradr = it.samværsfradragBeløp
                                         samvBeskr =
                                             when (it.samværsklasse) {
