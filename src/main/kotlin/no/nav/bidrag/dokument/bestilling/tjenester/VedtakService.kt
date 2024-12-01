@@ -4,6 +4,7 @@ import no.nav.bidrag.dokument.bestilling.bestilling.dto.AndelUnderholdskostnadPe
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.BidragsevnePeriode
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.BrevSjablonVerdier
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.ForskuddInntektgrensePeriode
+import no.nav.bidrag.dokument.bestilling.bestilling.dto.GebyrInfoDto
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.InntektPeriode
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.Samværsperiode
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.Skatt
@@ -134,9 +135,19 @@ class VedtakService(
             engangsbelopType = vedtakDto.engangsbeløpListe.firstOrNull()?.type,
             stønadType = vedtakDto.stønadsendringListe.firstOrNull()?.type,
             søknadFra = soknadInfo.søktAv,
+            gebyr = vedtakDto.hentGebyrInfo(),
             sivilstandPerioder = vedtakDto.grunnlagListe.mapSivilstand(),
             vedtakBarn = vedtakBarnInfo.distinctBy { it.personIdent }.sortedBy { it.personObjekt.fødselsdato }.map { mapVedtakBarn(it, vedtakDto) },
             barnIHusstandPerioder = vedtakDto.grunnlagListe.mapBarnIHusstandPerioder(),
+        )
+    }
+
+    fun VedtakDto.hentGebyrInfo(): GebyrInfoDto {
+        val engangsbeløpGebyrBm = engangsbeløpListe.find { it.type == Engangsbeløptype.GEBYR_MOTTAKER }
+        val engangsbeløpGebyrBp = engangsbeløpListe.find { it.type == Engangsbeløptype.GEBYR_SKYLDNER }
+        return GebyrInfoDto(
+            bmGebyr = engangsbeløpGebyrBm?.beløp,
+            bpGebyr = engangsbeløpGebyrBp?.beløp,
         )
     }
 
@@ -278,16 +289,22 @@ class VedtakService(
                 stønadsendring.periodeListe.map { stønadperiode ->
 
                     val resultatKode = Resultatkode.fraKode(stønadperiode.resultatkode)
+                    val referanse = VedtakPeriodeReferanse(stønadperiode.periode, vedtakDto.typeBehandling, stønadperiode.grunnlagReferanseListe)
                     VedtakPeriode(
                         fomDato = stønadperiode.periode.fom.atDay(1),
                         // TODO: Er dette riktig??
                         tomDato = stønadperiode.periode.til?.atEndOfMonth(),
                         beløp = stønadperiode.beløp ?: BigDecimal.ZERO,
-                        andelUnderhold = grunnlagListe.tilAndelUnderholdskostnadPeriode(VedtakPeriodeReferanse(stønadperiode.periode, vedtakDto.typeBehandling, stønadperiode.grunnlagReferanseListe)),
-                        underhold = grunnlagListe.tilUnderholdskostnadPeriode(VedtakPeriodeReferanse(stønadperiode.periode, vedtakDto.typeBehandling, stønadperiode.grunnlagReferanseListe)),
-                        bidragsevne = grunnlagListe.finnDelberegningBidragsevne(VedtakPeriodeReferanse(stønadperiode.periode, vedtakDto.typeBehandling, stønadperiode.grunnlagReferanseListe)),
-                        samvær = grunnlagListe.mapSamvær(VedtakPeriodeReferanse(stønadperiode.periode, vedtakDto.typeBehandling, stønadperiode.grunnlagReferanseListe)),
-                        resultatKode = resultatKode?.tilBisysResultatkodeForBrev(vedtakDto.type) ?: stønadperiode.resultatkode,
+                        andelUnderhold = grunnlagListe.tilAndelUnderholdskostnadPeriode(referanse),
+                        underhold = grunnlagListe.tilUnderholdskostnadPeriode(referanse),
+                        bidragsevne = grunnlagListe.finnDelberegningBidragsevne(referanse),
+                        samvær = grunnlagListe.mapSamvær(referanse),
+                        resultatKode =
+                            if (stønadsendring.type == Stønadstype.BIDRAG) {
+                                grunnlagListe.tilBisysResultatkode(referanse)
+                            } else {
+                                resultatKode?.tilBisysResultatkodeForBrev(vedtakDto.type) ?: stønadperiode.resultatkode
+                            },
                         inntekter = grunnlagListe.mapInntekter(VedtakPeriodeReferanse(stønadperiode.periode, vedtakDto.typeBehandling, stønadperiode.grunnlagReferanseListe)),
                         inntektGrense = sjablongService.hentInntektGrenseForPeriode(getLastDayOfPreviousMonth(stønadperiode.periode.til?.atEndOfMonth())),
                         maksInntekt = sjablongService.hentMaksInntektForPeriode(getLastDayOfPreviousMonth(stønadperiode.periode.til?.atEndOfMonth())),
@@ -301,6 +318,11 @@ class VedtakService(
             )
         }
     }
+}
+
+fun List<GrunnlagDto>.tilBisysResultatkode(periode: VedtakPeriodeReferanse): String {
+    val sluttberegning = finnOgKonverterGrunnlagSomErReferertFraGrunnlagsreferanseListe<SluttberegningBarnebidrag>(Grunnlagstype.SLUTTBEREGNING_BARNEBIDRAG, periode.grunnlagReferanseListe).first()
+    return sluttberegning.innhold.bisysResultatkode
 }
 
 fun List<GrunnlagDto>.tilAndelUnderholdskostnadPeriode(periode: VedtakPeriodeReferanse): AndelUnderholdskostnadPeriode {

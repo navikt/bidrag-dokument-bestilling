@@ -63,8 +63,7 @@ import org.springframework.http.ResponseEntity
 import java.math.BigDecimal
 import java.time.LocalDate
 
-fun BidragBarn.hentInntektPerioder(periodeFraTom: PeriodeFraTom) =
-    inntektPerioder.filter { it.fomDato == periodeFraTom.fraDato && it.tomDato == periodeFraTom.tomDato }
+fun BidragBarn.hentInntektPerioder(periodeFraTom: PeriodeFraTom) = inntektPerioder.filter { it.fomDato == periodeFraTom.fraDato && it.tomDato == periodeFraTom.tomDato }
 
 class DokumentBestillingControllerTest : AbstractControllerTest() {
     @Test
@@ -127,7 +126,7 @@ class DokumentBestillingControllerTest : AbstractControllerTest() {
         responseDokumentMalerBucket["FARSKAP_PROVETAKING_FARSKAP"]!!.innholdType shouldBe DokumentMalType.SKJEMA
 
         responseDokumentMalerBrevserver.filter { it.value.kreverBehandling } shouldHaveSize 4
-        responseDokumentMalerBrevserver.filter { it.value.kreverVedtak } shouldHaveSize 18
+        responseDokumentMalerBrevserver.filter { it.value.kreverVedtak } shouldHaveSize 23
     }
 
     @Test

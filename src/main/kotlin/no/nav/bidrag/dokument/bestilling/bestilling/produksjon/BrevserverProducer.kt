@@ -229,6 +229,8 @@ class BrevserverProducer(
                     bplandkode = bp?.landkode3
                     bpdatodod = bp?.doedsdato
                     bmdatodod = bm?.doedsdato
+                    bmgebyr = vedtakInfo?.gebyr?.bmGebyr
+                    bpgebyr = vedtakInfo?.gebyr?.bpGebyr
                 }
                 brevSaksbehandler {
                     navn = saksbehandlerNavn

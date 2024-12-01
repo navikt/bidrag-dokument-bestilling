@@ -256,6 +256,7 @@ data class VedtakDetaljer(
     val årsakKode: VirkningstidspunktÅrsakstype?,
     val avslagsKode: Resultatkode?,
     val type: TypeBehandling,
+    val gebyr: GebyrInfoDto? = null,
     val virkningstidspunkt: LocalDate?,
     val mottattDato: LocalDate?,
     val soktFraDato: LocalDate?,
@@ -279,6 +280,11 @@ data class VedtakDetaljer(
             ?.find { it.tomDato == null }
             ?.beløp
 }
+
+data class GebyrInfoDto(
+    val bmGebyr: BigDecimal? = null,
+    val bpGebyr: BigDecimal? = null,
+)
 
 data class BarnIHusstandPeriode(
     val periode: ÅrMånedsperiode,

@@ -409,7 +409,8 @@ class Parter {
     var bpkravfremav: String? = null
 
     @XmlElement(name = "bpbelopGebyr", nillable = true)
-    var bpgebyr: String? = null
+    @XmlJavaTypeAdapter(BelopDecimalAdapter::class)
+    var bpgebyr: BigDecimal? = null
 
     @XmlElement(name = "bpLandKd", nillable = true)
     @XmlJavaTypeAdapter(LandkodeAdapter::class)
@@ -434,7 +435,8 @@ class Parter {
     var bmkravkfremav: String? = null
 
     @XmlElement(name = "bmbelopGebyr", nillable = true)
-    var bmgebyr: String? = null
+    @XmlJavaTypeAdapter(BelopDecimalAdapter::class)
+    var bmgebyr: BigDecimal? = null
 
     @XmlElement(name = "bmLandKd", nillable = true)
     @XmlJavaTypeAdapter(LandkodeAdapter::class)
