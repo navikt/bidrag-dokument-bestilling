@@ -426,7 +426,7 @@ class BrevserverProducer(
                                         antallBarn = it.underholdEgneBarnIHusstand.antallBarnIHusstanden
                                         antallBarnDelt = it.underholdEgneBarnIHusstand.antallBarnDeltBossted
                                         bostatus = if (it.borMedAndreVoksne) "1" else "0"
-                                        flBarnSakJN = false // TODO
+                                        flBarnSakJN = vedtakInfo.vedtakBarn.size > 1
                                         fullBiEvneJN = it.harFullEvne
                                         biEvneBeskr =
                                             when {
@@ -471,6 +471,8 @@ class BrevserverProducer(
                                     fnr = vedtakBarn.fødselsnummer
                                     belopBidrag = it.beløp
                                     resultatKode = it.resultatKode
+                                    søktTilleggsbidrag = false // TODO
+                                    erInnkreving = detaljer.innkreving
                                 }
 
                                 if (detaljer.type == Stønadstype.FORSKUDD) {
@@ -489,14 +491,16 @@ class BrevserverProducer(
                         }
                     }
                 }
-                dokumentBestilling.roller.barn.forEach {
+                dokumentBestilling.roller.barn.forEach { rolle ->
+                    val vedtakBarn = vedtakInfo?.vedtakBarn?.find { it.fødselsnummer == rolle.fodselsnummer }
                     barnISak {
-                        fnr = it.fodselsnummer
-                        navn = it.navn
-                        fDato = it.fodselsdato
-                        fornavn = it.fornavn
+                        fnr = rolle.fodselsnummer
+                        navn = rolle.navn
+                        fDato = rolle.fodselsdato
+                        fornavn = rolle.fornavn
+                        belBidrag = vedtakBarn?.løpendeBidrag
                         belForskudd =
-                            it.fodselsnummer?.let { it1 -> vedtakInfo?.hentForskuddBarn(it1) }
+                            rolle.fodselsnummer?.let { it1 -> vedtakInfo?.hentForskuddBarn(it1) }
                     }
                 }
             }

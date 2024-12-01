@@ -175,6 +175,12 @@ class VedtakService(
         return VedtakBarn(
             fødselsnummer = barnIdent,
             navn = personInfo.visningsnavn,
+            løpendeBidrag =
+                vedtak.stønadsendringListe
+                    .find { it.kravhaver.verdi == soknadBarn.personIdent }
+                    ?.periodeListe
+                    ?.maxByOrNull { it.periode.fom }
+                    ?.beløp,
             bostatusPerioder = bostatusSøknadsbarn?.bostatus ?: emptyList(),
             stønadsendringer = hentStønadsendringerForBarn(barnIdent, vedtak),
             engangsbeløper = hentEngagsbeløpForBarn(barnIdent, vedtak),

@@ -28,7 +28,7 @@ class BidragVedtak {
     var belopBidrag: BigDecimal? = null
 
     @XmlElement(name = "belopTlg", nillable = true)
-    var belopTillegg: String? = null
+    var beløpTilleggsbidrag: String? = null
 
     @XmlElement(name = "innkr", nillable = true)
     @XmlJavaTypeAdapter(BooleanAdapter::class)
@@ -36,7 +36,7 @@ class BidragVedtak {
 
     @XmlElement(name = "soktTlgBidJN", nillable = true)
     @XmlJavaTypeAdapter(BooleanAdapter::class)
-    var soktTillegg: Boolean? = null
+    var søktTilleggsbidrag: Boolean? = null
 
     @XmlElement(name = "resKd", nillable = true)
     var resultatKode: String? = null
