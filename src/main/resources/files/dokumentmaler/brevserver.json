@@ -4,7 +4,9 @@
     "tittel": "Notat P11 T",
     "enabled": true,
     "type": "NOTAT",
-    "kreverEkstraData": ["ENHET_KONTAKT_INFO"],
+    "kreverEkstraData": [
+      "ENHET_KONTAKT_INFO"
+    ],
     "støttetSpråk": [
       "NB"
     ]
@@ -13,7 +15,9 @@
     "kode": "BI01P17",
     "enabled": true,
     "tittel": "Uttalelse til klageinstans",
-    "kreverEkstraData": ["ENHET_KONTAKT_INFO"],
+    "kreverEkstraData": [
+      "ENHET_KONTAKT_INFO"
+    ],
     "type": "NOTAT",
     "støttetSpråk": [
       "NB"
@@ -104,7 +108,9 @@
   {
     "kode": "BI01S08",
     "tittel": "Varsel revurd forskudd",
-    "kreverEkstraData": ["SJABLON"],
+    "kreverEkstraData": [
+      "SJABLON"
+    ],
     "type": "VARSEL",
     "støttetSpråk": [
       "NB"
@@ -169,12 +175,7 @@
   {
     "kode": "BI01B50",
     "tittel": "Klage - Vedtak barnebidrag",
-    "kreverDataGrunnlag": {
-      "vedtak": true,
-      "behandling": false,
-      "roller": true,
-      "enhetKontaktInfo": true
-    },
+    "type": "VEDTAK",
     "støttetSpråk": [
       "NB"
     ]
@@ -182,12 +183,7 @@
   {
     "kode": "BI01G50",
     "tittel": "Klage - vedtak innkreving",
-    "kreverDataGrunnlag": {
-      "vedtak": true,
-      "behandling": false,
-      "roller": true,
-      "enhetKontaktInfo": true
-    },
+    "type": "VEDTAK",
     "støttetSpråk": [
       "NB"
     ]
@@ -195,12 +191,7 @@
   {
     "kode": "BI01S20",
     "tittel": "Nav har mottatt klage på vedtak",
-    "kreverDataGrunnlag": {
-      "vedtak": false,
-      "behandling": false,
-      "roller": true,
-      "enhetKontaktInfo": true
-    },
+    "type": "VARSEL",
     "støttetSpråk": [
       "NB"
     ]
@@ -224,12 +215,7 @@
   {
     "kode": "BI01S61",
     "tittel": "Innhenting opplysninger paragraf 10 i barnelova",
-    "kreverDataGrunnlag": {
-      "vedtak": false,
-      "behandling": false,
-      "roller": true,
-      "enhetKontaktInfo": true
-    },
+    "type": "VARSEL",
     "støttetSpråk": [
       "NB"
     ]
@@ -237,12 +223,7 @@
   {
     "kode": "BI01S64",
     "tittel": "Varsel klage fvt 35",
-    "kreverDataGrunnlag": {
-      "vedtak": false,
-      "behandling": false,
-      "roller": true,
-      "enhetKontaktInfo": true
-    },
+    "type": "VARSEL",
     "støttetSpråk": [
       "NB"
     ]
@@ -250,12 +231,7 @@
   {
     "kode": "BI01S65",
     "tittel": "Varsel om motregning",
-    "kreverDataGrunnlag": {
-      "vedtak": false,
-      "behandling": false,
-      "roller": true,
-      "enhetKontaktInfo": true
-    },
+    "type": "VARSEL",
     "støttetSpråk": [
       "NB"
     ]
@@ -263,12 +239,7 @@
   {
     "kode": "BI01B10",
     "tittel": "Opphørsvedtak",
-    "kreverDataGrunnlag": {
-      "vedtak": false,
-      "behandling": false,
-      "roller": true,
-      "enhetKontaktInfo": true
-    },
+    "type": "VEDTAK",
     "støttetSpråk": [
       "NB"
     ]
@@ -277,12 +248,7 @@
     "kode": "BI01S07",
     "beskrivelse": "Varsel om fastsettelse begrenset revurdering barnebidrag",
     "tittel": "Vi skal fastsette barnebidraget",
-    "kreverDataGrunnlag": {
-      "vedtak": false,
-      "behandling": false,
-      "roller": true,
-      "enhetKontaktInfo": true
-    },
+    "type": "VARSEL",
     "støttetSpråk": [
       "NB"
     ]
@@ -332,12 +298,7 @@
   {
     "kode": "BI01S31",
     "tittel": "Fasts. eget tiltak uten innkr varsel til partene",
-    "kreverDataGrunnlag": {
-      "vedtak": false,
-      "behandling": false,
-      "roller": true,
-      "enhetKontaktInfo": true
-    },
+    "type": "VARSEL",
     "støttetSpråk": [
       "NB"
     ]
@@ -345,12 +306,7 @@
   {
     "kode": "BI01S32",
     "tittel": "Fastsettelse eget tiltak varsel til Bidragsmottaker",
-    "kreverDataGrunnlag": {
-      "vedtak": false,
-      "behandling": false,
-      "roller": true,
-      "enhetKontaktInfo": true
-    },
+    "type": "VARSEL",
     "støttetSpråk": [
       "NB"
     ]
@@ -358,12 +314,7 @@
   {
     "kode": "BI01S33",
     "tittel": "Endring varsel eget tiltak pga 25%",
-    "kreverDataGrunnlag": {
-      "vedtak": false,
-      "behandling": false,
-      "roller": true,
-      "enhetKontaktInfo": true
-    },
+    "type": "VARSEL",
     "støttetSpråk": [
       "NB"
     ]
@@ -371,12 +322,7 @@
   {
     "kode": "BI01S34",
     "tittel": "Endring varsel eget tiltak pga barnetillegg",
-    "kreverDataGrunnlag": {
-      "vedtak": false,
-      "behandling": false,
-      "roller": true,
-      "enhetKontaktInfo": true
-    },
+    "type": "VARSEL",
     "støttetSpråk": [
       "NB"
     ]
@@ -385,12 +331,7 @@
     "kode": "BI01S35",
     "beskrivelse": "Varsel om endring av barnebidraget på grunn av forholdsmessig fordeling",
     "tittel": "Vi skal endre barnebidraget",
-    "kreverDataGrunnlag": {
-      "vedtak": false,
-      "behandling": false,
-      "roller": true,
-      "enhetKontaktInfo": true
-    },
+    "type": "VARSEL",
     "støttetSpråk": [
       "NB"
     ]
@@ -398,12 +339,7 @@
   {
     "kode": "BI01S36",
     "tittel": "Endring varsel eget tiltak pga forsørgingstillegg",
-    "kreverDataGrunnlag": {
-      "vedtak": false,
-      "behandling": false,
-      "roller": true,
-      "enhetKontaktInfo": true
-    },
+    "type": "VARSEL",
     "støttetSpråk": [
       "NB"
     ]
@@ -412,12 +348,7 @@
     "kode": "BI01S46",
     "beskrivelse": "Varsel om endring av oppfostringsbidraget på grunn av forholdsmessig fordeling",
     "tittel": "Vi skal endre oppfostringsbidraget",
-    "kreverDataGrunnlag": {
-      "vedtak": false,
-      "behandling": false,
-      "roller": true,
-      "enhetKontaktInfo": true
-    },
+    "type": "VARSEL",
     "støttetSpråk": [
       "NB"
     ]
@@ -426,12 +357,7 @@
     "kode": "BI01S62",
     "beskrivelse": "Varsel om fastsettelse av barnebidrag til den bidragspliktiges barnetillegg",
     "tittel": "Vi skal endre barnebidraget",
-    "kreverDataGrunnlag": {
-      "vedtak": false,
-      "behandling": false,
-      "roller": true,
-      "enhetKontaktInfo": true
-    },
+    "type": "VARSEL",
     "støttetSpråk": [
       "NB"
     ]
@@ -439,12 +365,7 @@
   {
     "kode": "BI01S63",
     "tittel": "Fastsettelse bidrag forsørgingstillegg varsel",
-    "kreverDataGrunnlag": {
-      "vedtak": false,
-      "behandling": false,
-      "roller": true,
-      "enhetKontaktInfo": true
-    },
+    "type": "VARSEL",
     "støttetSpråk": [
       "NB"
     ]
@@ -453,12 +374,7 @@
     "kode": "BI01S22",
     "beskrivelse": "Varsel om endring begrenset revurdering barnebidrag",
     "tittel": "Vi skal endre barnebidraget",
-    "kreverDataGrunnlag": {
-      "vedtak": false,
-      "behandling": false,
-      "roller": true,
-      "enhetKontaktInfo": true
-    },
+    "type": "VARSEL",
     "støttetSpråk": [
       "NB"
     ]
@@ -467,12 +383,7 @@
     "kode": "BI01S23",
     "beskrivelse": "Varsel om endring begrenset revurdering barnebidrag",
     "tittel": "Vi skal endre barnebidraget",
-    "kreverDataGrunnlag": {
-      "vedtak": false,
-      "behandling": false,
-      "roller": true,
-      "enhetKontaktInfo": true
-    },
+    "type": "VARSEL",
     "støttetSpråk": [
       "NB"
     ]
@@ -480,12 +391,7 @@
   {
     "kode": "BI01S01",
     "tittel": "Nav har mottatt søknad om barnebidrag",
-    "kreverDataGrunnlag": {
-      "vedtak": false,
-      "behandling": false,
-      "roller": true,
-      "enhetKontaktInfo": true
-    },
+    "type": "VARSEL",
     "støttetSpråk": [
       "NB"
     ]
@@ -493,12 +399,7 @@
   {
     "kode": "BI01S12",
     "tittel": "Du har søkt om barnebidrag",
-    "kreverDataGrunnlag": {
-      "vedtak": false,
-      "behandling": false,
-      "roller": true,
-      "enhetKontaktInfo": true
-    },
+    "type": "VARSEL",
     "støttetSpråk": [
       "NB"
     ]
@@ -506,12 +407,7 @@
   {
     "kode": "BI01S52",
     "tittel": "Forhåndsvarsel om mottatt søknad om oppfostringsbidrag",
-    "kreverDataGrunnlag": {
-      "vedtak": false,
-      "behandling": false,
-      "roller": true,
-      "enhetKontaktInfo": true
-    },
+    "type": "VARSEL",
     "støttetSpråk": [
       "NB"
     ]
@@ -519,12 +415,7 @@
   {
     "kode": "BI01S53",
     "tittel": "Forhåndsvarsel om mottatt søknad om oppfostringsbidrag",
-    "kreverDataGrunnlag": {
-      "vedtak": false,
-      "behandling": false,
-      "roller": true,
-      "enhetKontaktInfo": true
-    },
+    "type": "VARSEL",
     "støttetSpråk": [
       "NB"
     ]
@@ -532,12 +423,7 @@
   {
     "kode": "BI01S13",
     "tittel": "Du har søkt om barnebidrag",
-    "kreverDataGrunnlag": {
-      "vedtak": false,
-      "behandling": false,
-      "roller": true,
-      "enhetKontaktInfo": true
-    },
+    "type": "VARSEL",
     "støttetSpråk": [
       "NB"
     ]
@@ -545,12 +431,7 @@
   {
     "kode": "BI01B02",
     "tittel": "Vedtak tilleggsbidrag",
-    "kreverDataGrunnlag": {
-      "vedtak": false,
-      "behandling": false,
-      "roller": true,
-      "enhetKontaktInfo": true
-    },
+    "type": "VARSEL",
     "støttetSpråk": [
       "NB"
     ]
@@ -558,12 +439,7 @@
   {
     "kode": "BI01S05",
     "tittel": "Nav har mottatt søknad om sletting av bidragsgjeld",
-    "kreverDataGrunnlag": {
-      "vedtak": false,
-      "behandling": false,
-      "roller": true,
-      "enhetKontaktInfo": true
-    },
+    "type": "VARSEL",
     "støttetSpråk": [
       "NB"
     ]
@@ -571,12 +447,7 @@
   {
     "kode": "BI01S14",
     "tittel": "Du har søkt om endring av barnebidraget",
-    "kreverDataGrunnlag": {
-      "vedtak": false,
-      "behandling": false,
-      "roller": true,
-      "enhetKontaktInfo": true
-    },
+    "type": "VARSEL",
     "støttetSpråk": [
       "NB"
     ]
@@ -584,12 +455,7 @@
   {
     "kode": "BI01S26",
     "tittel": "Endring varsel til motparten",
-    "kreverDataGrunnlag": {
-      "vedtak": false,
-      "behandling": false,
-      "roller": true,
-      "enhetKontaktInfo": true
-    },
+    "type": "VARSEL",
     "støttetSpråk": [
       "NB"
     ]
@@ -597,12 +463,7 @@
   {
     "kode": "BI01S47",
     "tittel": "Forhåndsvarsel om mottatt søknad om endring av oppfostringsbidrag",
-    "kreverDataGrunnlag": {
-      "vedtak": false,
-      "behandling": false,
-      "roller": true,
-      "enhetKontaktInfo": true
-    },
+    "type": "VARSEL",
     "støttetSpråk": [
       "NB"
     ]
@@ -610,12 +471,7 @@
   {
     "kode": "BI01S48",
     "tittel": "Forhåndsvarsel om mottatt søknad om endring av oppfostringsbidrag",
-    "kreverDataGrunnlag": {
-      "vedtak": false,
-      "behandling": false,
-      "roller": true,
-      "enhetKontaktInfo": true
-    },
+    "type": "VARSEL",
     "støttetSpråk": [
       "NB"
     ]
@@ -623,12 +479,7 @@
   {
     "kode": "BI01S49",
     "tittel": "Forhåndsvarsel om mottatt søknad om endring av oppfostringsbidrag",
-    "kreverDataGrunnlag": {
-      "vedtak": false,
-      "behandling": false,
-      "roller": true,
-      "enhetKontaktInfo": true
-    },
+    "type": "VARSEL",
     "støttetSpråk": [
       "NB"
     ]
@@ -636,12 +487,7 @@
   {
     "kode": "BI01I50",
     "tittel": "Klage - vedtak ektefellebidrag",
-    "kreverDataGrunnlag": {
-      "vedtak": false,
-      "behandling": false,
-      "roller": true,
-      "enhetKontaktInfo": true
-    },
+    "type": "VEDTAK",
     "støttetSpråk": [
       "NB"
     ]
@@ -649,12 +495,7 @@
   {
     "kode": "BI01I01",
     "tittel": "Vedtak ektefellebidrag",
-    "kreverDataGrunnlag": {
-      "vedtak": false,
-      "behandling": false,
-      "roller": true,
-      "enhetKontaktInfo": true
-    },
+    "type": "VEDTAK",
     "støttetSpråk": [
       "NB"
     ]
@@ -662,12 +503,7 @@
   {
     "kode": "BI01S43",
     "tittel": "Fastsettelse ektefellebidrag orientering",
-    "kreverDataGrunnlag": {
-      "vedtak": false,
-      "behandling": false,
-      "roller": true,
-      "enhetKontaktInfo": true
-    },
+    "type": "VARSEL",
     "støttetSpråk": [
       "NB"
     ]
@@ -675,12 +511,7 @@
   {
     "kode": "BI01S44",
     "tittel": "Fastsettelse ektefellebidrag varsel til Bidragspliktig",
-    "kreverDataGrunnlag": {
-      "vedtak": false,
-      "behandling": false,
-      "roller": true,
-      "enhetKontaktInfo": true
-    },
+    "type": "VARSEL",
     "støttetSpråk": [
       "NB"
     ]
@@ -688,12 +519,7 @@
   {
     "kode": "BI01S37",
     "tittel": "Bortfall ektefellebidrag Bidragspliktig død orientering til Bidragsmottaker",
-    "kreverDataGrunnlag": {
-      "vedtak": false,
-      "behandling": false,
-      "roller": true,
-      "enhetKontaktInfo": true
-    },
+    "type": "VARSEL",
     "støttetSpråk": [
       "NB"
     ]
@@ -701,12 +527,7 @@
   {
     "kode": "BI01S38",
     "tittel": "Bortfall ektefellebidrag orientering til partene",
-    "kreverDataGrunnlag": {
-      "vedtak": false,
-      "behandling": false,
-      "roller": true,
-      "enhetKontaktInfo": true
-    },
+    "type": "VARSEL",
     "støttetSpråk": [
       "NB"
     ]
@@ -714,12 +535,7 @@
   {
     "kode": "BI01S39",
     "tittel": "Bortfall ektefellebidrag nytt ekteskap orientering",
-    "kreverDataGrunnlag": {
-      "vedtak": false,
-      "behandling": false,
-      "roller": true,
-      "enhetKontaktInfo": true
-    },
+    "type": "VARSEL",
     "støttetSpråk": [
       "NB"
     ]
@@ -727,12 +543,7 @@
   {
     "kode": "BI01S41",
     "tittel": "Vedtak - bortfall nytt ekteskap",
-    "kreverDataGrunnlag": {
-      "vedtak": false,
-      "behandling": false,
-      "roller": true,
-      "enhetKontaktInfo": true
-    },
+    "type": "VARSEL",
     "støttetSpråk": [
       "NB"
     ]
@@ -740,12 +551,7 @@
   {
     "kode": "BI01S42",
     "tittel": "Endring ektefellebidrag orientering til søkeren",
-    "kreverDataGrunnlag": {
-      "vedtak": false,
-      "behandling": false,
-      "roller": true,
-      "enhetKontaktInfo": true
-    },
+    "type": "VARSEL",
     "støttetSpråk": [
       "NB"
     ]
@@ -753,12 +559,7 @@
   {
     "kode": "BI01S45",
     "tittel": "Varsel om ny beregning av bidragsforskudd og varsel om mulig tilbakebetaling",
-    "kreverDataGrunnlag": {
-      "vedtak": false,
-      "behandling": false,
-      "roller": true,
-      "enhetKontaktInfo": true
-    },
+    "type": "VARSEL",
     "støttetSpråk": [
       "NB"
     ]
@@ -766,12 +567,7 @@
   {
     "kode": "BI01H01",
     "tittel": "Farskap innkalling mor",
-    "kreverDataGrunnlag": {
-      "vedtak": false,
-      "behandling": false,
-      "roller": true,
-      "enhetKontaktInfo": true
-    },
+    "type": "VARSEL",
     "støttetSpråk": [
       "NB"
     ]
@@ -779,12 +575,7 @@
   {
     "kode": "BI01H03",
     "tittel": "Melding om blodprøver i farskapsak",
-    "kreverDataGrunnlag": {
-      "vedtak": false,
-      "behandling": false,
-      "roller": true,
-      "enhetKontaktInfo": true
-    },
+    "type": "VARSEL",
     "støttetSpråk": [
       "NB"
     ]
@@ -792,12 +583,7 @@
   {
     "kode": "BI01H04",
     "tittel": "Pålegg om å framstille barn for å gi blodprøve",
-    "kreverDataGrunnlag": {
-      "vedtak": false,
-      "behandling": false,
-      "roller": true,
-      "enhetKontaktInfo": true
-    },
+    "type": "VARSEL",
     "støttetSpråk": [
       "NB"
     ]
@@ -805,12 +591,7 @@
   {
     "kode": "BI01H05",
     "tittel": "Pålegg om blodprøve i farskapssak",
-    "kreverDataGrunnlag": {
-      "vedtak": false,
-      "behandling": false,
-      "roller": true,
-      "enhetKontaktInfo": true
-    },
+    "type": "VARSEL",
     "støttetSpråk": [
       "NB"
     ]
@@ -819,7 +600,10 @@
     "kode": "BI01H02",
     "tittel": "Innkalling farskapssak oppgitt far",
     "type": "VEDTAK",
-    "inneholderData": ["ROLLER", "ENHET_KONTAKT_INFO"],
+    "inneholderData": [
+      "ROLLER",
+      "ENHET_KONTAKT_INFO"
+    ],
     "støttetSpråk": [
       "NB"
     ]
@@ -828,7 +612,10 @@
     "kode": "BI01J50",
     "tittel": "Klage - vedtak gebyr",
     "type": "VEDTAK",
-    "inneholderData": ["ROLLER", "ENHET_KONTAKT_INFO"],
+    "inneholderData": [
+      "ROLLER",
+      "ENHET_KONTAKT_INFO"
+    ],
     "støttetSpråk": [
       "NB"
     ]
@@ -837,7 +624,10 @@
     "kode": "BI01S03",
     "tittel": "Nav har mottatt søknad om barnebidrag etter fylte 18 år - forhåndsvarsel",
     "type": "VEDTAK",
-    "inneholderData": ["ROLLER", "ENHET_KONTAKT_INFO"],
+    "inneholderData": [
+      "ROLLER",
+      "ENHET_KONTAKT_INFO"
+    ],
     "støttetSpråk": [
       "NB"
     ]
@@ -846,7 +636,10 @@
     "kode": "BI01K50",
     "tittel": "Klage - vedtak tilbakekreving",
     "type": "VEDTAK",
-    "inneholderData": ["ROLLER", "ENHET_KONTAKT_INFO"],
+    "inneholderData": [
+      "ROLLER",
+      "ENHET_KONTAKT_INFO"
+    ],
     "støttetSpråk": [
       "NB"
     ]
@@ -855,7 +648,10 @@
     "kode": "BI01A05",
     "tittel": "Vedtak ikke tilbakekreving",
     "type": "VEDTAK",
-    "inneholderData": ["ROLLER", "ENHET_KONTAKT_INFO"],
+    "inneholderData": [
+      "ROLLER",
+      "ENHET_KONTAKT_INFO"
+    ],
     "støttetSpråk": [
       "NB"
     ]
@@ -864,7 +660,10 @@
     "kode": "BI01G04",
     "tittel": "Vedtak innkreving særtilskudd",
     "type": "VEDTAK",
-    "inneholderData": ["ROLLER", "ENHET_KONTAKT_INFO"],
+    "inneholderData": [
+      "ROLLER",
+      "ENHET_KONTAKT_INFO"
+    ],
     "støttetSpråk": [
       "NB"
     ]
@@ -873,7 +672,10 @@
     "kode": "BI01E50",
     "tittel": "Klage - vedtak bidrag til særlige utgifter",
     "type": "VEDTAK",
-    "inneholderData": ["ROLLER", "ENHET_KONTAKT_INFO"],
+    "inneholderData": [
+      "ROLLER",
+      "ENHET_KONTAKT_INFO"
+    ],
     "støttetSpråk": [
       "NB"
     ]
@@ -882,7 +684,10 @@
     "kode": "BI01E01",
     "tittel": "Vedtak bidrag til særlige utgifter",
     "type": "VEDTAK",
-    "inneholderData": ["ROLLER", "ENHET_KONTAKT_INFO"],
+    "inneholderData": [
+      "ROLLER",
+      "ENHET_KONTAKT_INFO"
+    ],
     "støttetSpråk": [
       "NB"
     ]
@@ -892,7 +697,10 @@
     "tittel": "Vedtak særtilskudd avslag",
     "avslagsbrev": true,
     "type": "VEDTAK",
-    "inneholderData": ["ROLLER", "ENHET_KONTAKT_INFO"],
+    "inneholderData": [
+      "ROLLER",
+      "ENHET_KONTAKT_INFO"
+    ],
     "støttetSpråk": [
       "NB"
     ]
@@ -901,7 +709,10 @@
     "kode": "BI01E03",
     "tittel": "Vedtak bidrag til særlige utgifter tannregulering",
     "type": "VEDTAK",
-    "inneholderData": ["ROLLER", "ENHET_KONTAKT_INFO"],
+    "inneholderData": [
+      "ROLLER",
+      "ENHET_KONTAKT_INFO"
+    ],
     "støttetSpråk": [
       "NB"
     ]
@@ -910,7 +721,9 @@
     "kode": "BI01S04",
     "tittel": "Nav har mottatt søknad om bidrag til særlige utgifter",
     "type": "VARSEL",
-    "kreverEkstraData": ["SJABLON"],
+    "kreverEkstraData": [
+      "SJABLON"
+    ],
     "støttetSpråk": [
       "NB"
     ]
@@ -919,7 +732,9 @@
     "kode": "BI01S18",
     "tittel": "Du har søkt om bidrag til særlige utgifter",
     "type": "VARSEL",
-    "kreverEkstraData": ["SJABLON"],
+    "kreverEkstraData": [
+      "SJABLON"
+    ],
     "støttetSpråk": [
       "NB"
     ]
@@ -928,7 +743,10 @@
     "kode": "BI01F50",
     "tittel": "Klage - vedtak ettergivelse gjeld",
     "type": "VEDTAK",
-    "inneholderData": ["ROLLER", "ENHET_KONTAKT_INFO"],
+    "inneholderData": [
+      "ROLLER",
+      "ENHET_KONTAKT_INFO"
+    ],
     "støttetSpråk": [
       "NB"
     ]
@@ -937,7 +755,10 @@
     "kode": "BI01F01",
     "tittel": "Vedtak ettergivelse innvilget",
     "type": "VEDTAK",
-    "inneholderData": ["ROLLER", "ENHET_KONTAKT_INFO"],
+    "inneholderData": [
+      "ROLLER",
+      "ENHET_KONTAKT_INFO"
+    ],
     "støttetSpråk": [
       "NB"
     ]
@@ -946,7 +767,10 @@
     "kode": "BI01F02",
     "tittel": "Vedtak ettergivelse avslag",
     "type": "VEDTAK",
-    "inneholderData": ["ROLLER", "ENHET_KONTAKT_INFO"],
+    "inneholderData": [
+      "ROLLER",
+      "ENHET_KONTAKT_INFO"
+    ],
     "støttetSpråk": [
       "NB"
     ]
@@ -954,12 +778,7 @@
   {
     "kode": "BI01S17",
     "tittel": "Informasjon om din søknad om sletting av bidragsgjeld",
-    "kreverDataGrunnlag": {
-      "vedtak": false,
-      "behandling": false,
-      "roller": true,
-      "enhetKontaktInfo": true
-    },
+    "type": "VARSEL",
     "støttetSpråk": [
       "NB"
     ]
@@ -967,12 +786,7 @@
   {
     "kode": "BI01S50",
     "tittel": "Ettergivelse oppfostringsbidrag orientering til Bidragspliktig",
-    "kreverDataGrunnlag": {
-      "vedtak": false,
-      "behandling": false,
-      "roller": true,
-      "enhetKontaktInfo": true
-    },
+    "type": "VARSEL",
     "støttetSpråk": [
       "NB"
     ]
@@ -980,12 +794,7 @@
   {
     "kode": "BI01S51",
     "tittel": "Ettergivelse oppfostringsbidrag varsel kommune",
-    "kreverDataGrunnlag": {
-      "vedtak": false,
-      "behandling": false,
-      "roller": true,
-      "enhetKontaktInfo": true
-    },
+    "type": "VARSEL",
     "støttetSpråk": [
       "NB"
     ]
@@ -993,12 +802,7 @@
   {
     "kode": "BI01A02",
     "tittel": "Vedtak tilbakekreving",
-    "kreverDataGrunnlag": {
-      "vedtak": false,
-      "behandling": false,
-      "roller": true,
-      "enhetKontaktInfo": true
-    },
+    "type": "VARSEL",
     "støttetSpråk": [
       "NB"
     ]
@@ -1006,12 +810,7 @@
   {
     "kode": "BI01S54",
     "tittel": "Varsel om tilbakekreving av bidragsforskudd - inntekt",
-    "kreverDataGrunnlag": {
-      "vedtak": false,
-      "behandling": false,
-      "roller": true,
-      "enhetKontaktInfo": true
-    },
+    "type": "VARSEL",
     "støttetSpråk": [
       "NB"
     ]
@@ -1019,12 +818,7 @@
   {
     "kode": "BI01S55",
     "tittel": "Varsel tilbakekreving av bidragsforskudd - partene bor sammen",
-    "kreverDataGrunnlag": {
-      "vedtak": false,
-      "behandling": false,
-      "roller": true,
-      "enhetKontaktInfo": true
-    },
+    "type": "VARSEL",
     "støttetSpråk": [
       "NB"
     ]
@@ -1032,12 +826,7 @@
   {
     "kode": "BI01S56",
     "tittel": "Varsel tilbakekreving av bidragsforskudd - ikke opphold i Riket",
-    "kreverDataGrunnlag": {
-      "vedtak": false,
-      "behandling": false,
-      "roller": true,
-      "enhetKontaktInfo": true
-    },
+    "type": "VARSEL",
     "støttetSpråk": [
       "NB"
     ]
@@ -1045,12 +834,7 @@
   {
     "kode": "BI01S57",
     "tittel": "Varsel tilbakekreving av bidragsforskudd - direkte betalinger",
-    "kreverDataGrunnlag": {
-      "vedtak": false,
-      "behandling": false,
-      "roller": true,
-      "enhetKontaktInfo": true
-    },
+    "type": "VARSEL",
     "støttetSpråk": [
       "NB"
     ]
@@ -1058,12 +842,7 @@
   {
     "kode": "BI01S58",
     "tittel": "Varsel tilbakekreving av bidragsforskudd - ikke omsorg",
-    "kreverDataGrunnlag": {
-      "vedtak": false,
-      "behandling": false,
-      "roller": true,
-      "enhetKontaktInfo": true
-    },
+    "type": "VARSEL",
     "støttetSpråk": [
       "NB"
     ]
@@ -1071,12 +850,7 @@
   {
     "kode": "BI01S59",
     "tittel": "Informasjon om din søknad om sletting av bidragsgjeld",
-    "kreverDataGrunnlag": {
-      "vedtak": false,
-      "behandling": false,
-      "roller": true,
-      "enhetKontaktInfo": true
-    },
+    "type": "VARSEL",
     "støttetSpråk": [
       "NB"
     ]
@@ -1084,12 +858,7 @@
   {
     "kode": "BI01S24",
     "tittel": "Nav har mottatt søknad om barnebidrag etter fylte 18 år - innhenting av opplysninger",
-    "kreverDataGrunnlag": {
-      "vedtak": false,
-      "behandling": false,
-      "roller": true,
-      "enhetKontaktInfo": true
-    },
+    "type": "VARSEL",
     "støttetSpråk": [
       "NB"
     ]
@@ -1097,12 +866,7 @@
   {
     "kode": "BI01B03",
     "tittel": "Vedtak barnebidrag etter fylte 18 år",
-    "kreverDataGrunnlag": {
-      "vedtak": false,
-      "behandling": false,
-      "roller": true,
-      "enhetKontaktInfo": true
-    },
+    "type": "VEDTAK",
     "støttetSpråk": [
       "NB"
     ]
@@ -1110,12 +874,7 @@
   {
     "kode": "BI01S15",
     "tittel": "Du har søkt om barnebidrag etter fylte 18 år",
-    "kreverDataGrunnlag": {
-      "vedtak": false,
-      "behandling": false,
-      "roller": true,
-      "enhetKontaktInfo": true
-    },
+    "type": "VARSEL",
     "støttetSpråk": [
       "NB"
     ]
@@ -1123,12 +882,7 @@
   {
     "kode": "BI01S16",
     "tittel": "Du har søkt om barnebidrag etter fylte 18 år",
-    "kreverDataGrunnlag": {
-      "vedtak": false,
-      "behandling": false,
-      "roller": true,
-      "enhetKontaktInfo": true
-    },
+    "type": "VARSEL",
     "støttetSpråk": [
       "NB"
     ]
@@ -1136,12 +890,7 @@
   {
     "kode": "BI01B11",
     "tittel": "Vedtak tilleggsbidrag over 18 år",
-    "kreverDataGrunnlag": {
-      "vedtak": false,
-      "behandling": false,
-      "roller": true,
-      "enhetKontaktInfo": true
-    },
+    "type": "VEDTAK",
     "støttetSpråk": [
       "NB"
     ]
@@ -1150,12 +899,7 @@
     "kode": "BI01B05",
     "tittel": "VEDTAK AUTOMATISK JUSTERING BARNEBIDRAG",
     "batchbrev": true,
-    "kreverDataGrunnlag": {
-      "vedtak": false,
-      "behandling": false,
-      "roller": true,
-      "enhetKontaktInfo": true
-    },
+    "type": "VEDTAK",
     "støttetSpråk": [
       "NB"
     ]
@@ -1164,12 +908,7 @@
     "kode": "BI01S09",
     "tittel": "Varsel om opphør barnebidrag etter fylte 18 år",
     "batchbrev": true,
-    "kreverDataGrunnlag": {
-      "vedtak": false,
-      "behandling": false,
-      "roller": true,
-      "enhetKontaktInfo": true
-    },
+    "type": "VARSEL",
     "støttetSpråk": [
       "NB"
     ]
