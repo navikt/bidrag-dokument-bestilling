@@ -18,6 +18,7 @@ import no.nav.bidrag.dokument.bestilling.bestilling.dto.VedtakPeriode
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.VedtakPeriodeReferanse
 import no.nav.bidrag.dokument.bestilling.consumer.BidragVedtakConsumer
 import no.nav.bidrag.dokument.bestilling.model.fantIkkeVedtak
+import no.nav.bidrag.dokument.bestilling.model.finnSjablonMedType
 import no.nav.bidrag.dokument.bestilling.model.getLastDayOfPreviousMonth
 import no.nav.bidrag.dokument.bestilling.model.hentBarnIHusstandPerioderForBarn
 import no.nav.bidrag.dokument.bestilling.model.hentInntekterForPeriode
@@ -43,12 +44,14 @@ import no.nav.bidrag.domene.enums.sjablon.SjablonTallNavn
 import no.nav.bidrag.domene.enums.vedtak.Engangsbeløptype
 import no.nav.bidrag.domene.enums.vedtak.Innkrevingstype
 import no.nav.bidrag.domene.enums.vedtak.Stønadstype
+import no.nav.bidrag.domene.tid.ÅrMånedsperiode
 import no.nav.bidrag.transport.behandling.felles.grunnlag.BarnetilsynMedStønadPeriode
 import no.nav.bidrag.transport.behandling.felles.grunnlag.BaseGrunnlag
 import no.nav.bidrag.transport.behandling.felles.grunnlag.BostatusPeriode
 import no.nav.bidrag.transport.behandling.felles.grunnlag.DelberegningBarnIHusstand
 import no.nav.bidrag.transport.behandling.felles.grunnlag.DelberegningBidragsevne
 import no.nav.bidrag.transport.behandling.felles.grunnlag.DelberegningBidragspliktigesAndel
+import no.nav.bidrag.transport.behandling.felles.grunnlag.DelberegningBoforhold
 import no.nav.bidrag.transport.behandling.felles.grunnlag.DelberegningSamværsfradrag
 import no.nav.bidrag.transport.behandling.felles.grunnlag.DelberegningSumInntekt
 import no.nav.bidrag.transport.behandling.felles.grunnlag.DelberegningUnderholdskostnad
@@ -301,16 +304,16 @@ class VedtakService(
 }
 
 fun List<GrunnlagDto>.tilAndelUnderholdskostnadPeriode(periode: VedtakPeriodeReferanse): AndelUnderholdskostnadPeriode {
-    val bpsAndel = finnDelberegningBidragspliktigesAndel(periode.grunnlagReferanseListe)
+    val bpsAndel = finnOgKonverterGrunnlagSomErReferertFraGrunnlagsreferanseListe<DelberegningBidragspliktigesAndel>(Grunnlagstype.DELBEREGNING_BIDRAGSPLIKTIGES_ANDEL, periode.grunnlagReferanseListe).first()
     val delberegningU =
         finnOgKonverterGrunnlagSomErReferertFraGrunnlagsreferanseListe<DelberegningUnderholdskostnad>(Grunnlagstype.DELBEREGNING_UNDERHOLDSKOSTNAD, periode.grunnlagReferanseListe).first()
     return AndelUnderholdskostnadPeriode(
         periode = periode.periode,
         inntektBarn = finnTotalInntektForRolle(periode.grunnlagReferanseListe, Rolletype.BARN),
-        barnEndeligInntekt = bpsAndel?.barnEndeligInntekt,
-        andelFaktor = bpsAndel?.andelProsent,
+        barnEndeligInntekt = bpsAndel.innhold.barnEndeligInntekt,
+        andelFaktor = bpsAndel.innhold.andelProsent,
         beløpUnderholdskostnad = delberegningU.innhold.underholdskostnad,
-        beløpBpsAndel = bpsAndel!!.andelBeløp,
+        beløpBpsAndel = bpsAndel.innhold.andelBeløp,
         inntektBP =
             finnTotalInntektForRolle(
                 periode.grunnlagReferanseListe,
@@ -322,20 +325,6 @@ fun List<GrunnlagDto>.tilAndelUnderholdskostnadPeriode(periode: VedtakPeriodeRef
                 Rolletype.BIDRAGSMOTTAKER,
             ),
     )
-}
-
-fun List<GrunnlagDto>.finnDelberegningBidragspliktigesAndel(
-    grunnlagsreferanseListe: List<Grunnlagsreferanse>,
-): DelberegningBidragspliktigesAndel? {
-    val sluttberegning = finnSluttberegningIReferanser(grunnlagsreferanseListe) ?: return null
-    val delberegningBidragspliktigesAndel =
-        find {
-            it.type == Grunnlagstype.DELBEREGNING_BIDRAGSPLIKTIGES_ANDEL &&
-                sluttberegning.grunnlagsreferanseListe.contains(
-                    it.referanse,
-                )
-        } ?: return null
-    return delberegningBidragspliktigesAndel.innholdTilObjekt<DelberegningBidragspliktigesAndel>()
 }
 
 fun List<GrunnlagDto>.tilUnderholdskostnadPeriode(periode: VedtakPeriodeReferanse): UnderholdskostnaderPeriode {
@@ -355,68 +344,33 @@ fun List<GrunnlagDto>.tilUnderholdskostnadPeriode(periode: VedtakPeriodeReferans
 }
 
 fun List<GrunnlagDto>.finnDelberegningBidragsevne(periode: VedtakPeriodeReferanse): BidragsevnePeriode? {
-    val sluttberegning = finnSluttberegningIReferanser(periode.grunnlagReferanseListe) ?: return null
-    val sluttberegningInnhold = sluttberegning.innholdTilObjekt<SluttberegningBarnebidrag>()
-    val delberegningBidragspliktigesAndel =
-        find {
-            it.type == Grunnlagstype.DELBEREGNING_BIDRAGSEVNE &&
-                sluttberegning.grunnlagsreferanseListe.contains(
-                    it.referanse,
-                )
-        } ?: return null
-    val delberegningBoforhold =
-        find {
-            it.type == Grunnlagstype.DELBEREGNING_BOFORHOLD &&
-                delberegningBidragspliktigesAndel.grunnlagsreferanseListe.contains(
-                    it.referanse,
-                )
-        } ?: return null
-    val delberegningVoksneIHusstand =
-        find {
-            it.type == Grunnlagstype.DELBEREGNING_VOKSNE_I_HUSSTAND &&
-                delberegningBoforhold.grunnlagsreferanseListe.contains(
-                    it.referanse,
-                )
-        }?.innholdTilObjekt<DelberegningVoksneIHusstand>() ?: return null
-    val delberegningBarnIHusstanden =
-        find {
-            it.type == Grunnlagstype.DELBEREGNING_BARN_I_HUSSTAND &&
-                delberegningBoforhold.grunnlagsreferanseListe.contains(
-                    it.referanse,
-                )
-        }?.innholdTilObjekt<DelberegningBarnIHusstand>() ?: return null
+    val sluttberegning = finnOgKonverterGrunnlagSomErReferertFraGrunnlagsreferanseListe<SluttberegningBarnebidrag>(Grunnlagstype.SLUTTBEREGNING_BARNEBIDRAG, periode.grunnlagReferanseListe).first()
+    val delberegningBidragsevne = finnOgKonverterGrunnlagSomErReferertAv<DelberegningBidragsevne>(Grunnlagstype.DELBEREGNING_BIDRAGSEVNE, sluttberegning.grunnlag).first()
+    val delberegningBoforhold = finnOgKonverterGrunnlagSomErReferertAv<DelberegningBoforhold>(Grunnlagstype.DELBEREGNING_BOFORHOLD, delberegningBidragsevne.grunnlag).first()
+    val delberegningVoksneIHusstand = finnOgKonverterGrunnlagSomErReferertAv<DelberegningVoksneIHusstand>(Grunnlagstype.DELBEREGNING_VOKSNE_I_HUSSTAND, delberegningBoforhold.grunnlag).first()
+    val delberegningBarnIHusstanden = finnOgKonverterGrunnlagSomErReferertAv<DelberegningBarnIHusstand>(Grunnlagstype.DELBEREGNING_BARN_I_HUSSTAND, delberegningBoforhold.grunnlag).first()
 
-    val bosstatusPeridoer = finnOgKonverterGrunnlagSomErReferertAv<BostatusPeriode>(Grunnlagstype.BOSTATUS_PERIODE, delberegningBoforhold)
+    val bosstatusPeridoer = finnOgKonverterGrunnlagSomErReferertAv<BostatusPeriode>(Grunnlagstype.BOSTATUS_PERIODE, delberegningBoforhold.grunnlag)
     val sjablonBidragsevne =
-        find {
-            it.type == Grunnlagstype.SJABLON_BIDRAGSEVNE &&
-                delberegningBidragspliktigesAndel.grunnlagsreferanseListe.contains(
-                    it.referanse,
-                )
-        }?.innholdTilObjekt<SjablonBidragsevnePeriode>() ?: return null
+        finnOgKonverterGrunnlagSomErReferertFraGrunnlagsreferanseListe<SjablonBidragsevnePeriode>(Grunnlagstype.SJABLON_BIDRAGSEVNE, delberegningBidragsevne.grunnlag.grunnlagsreferanseListe)
+            .firstOrNull() ?: return null
     val sjablonUnderholdEgnebarnIHusstand =
-        find {
-            it.type == Grunnlagstype.SJABLON_SJABLONTALL &&
-                delberegningBidragspliktigesAndel.grunnlagsreferanseListe.contains(
-                    it.referanse,
-                ) &&
-                it.innholdTilObjekt<SjablonSjablontallPeriode>().sjablon == SjablonTallNavn.UNDERHOLD_EGNE_BARN_I_HUSSTAND_BELØP
-        }?.innholdTilObjekt<SjablonSjablontallPeriode>() ?: return null
-    val delberegningBidragsevne = delberegningBidragspliktigesAndel.innholdTilObjekt<DelberegningBidragsevne>()
+        finnSjablonMedType(SjablonTallNavn.UNDERHOLD_EGNE_BARN_I_HUSSTAND_BELØP, delberegningBidragsevne.grunnlag.grunnlagsreferanseListe)
+            ?: return null
 
     val antallBarnDeltBossted = bosstatusPeridoer.count { it.innhold.bostatus == Bostatuskode.DELT_BOSTED }
-    val sjabloner = finnOgKonverterGrunnlagSomErReferertAv<SjablonSjablontallPeriode>(Grunnlagstype.SJABLON_SJABLONTALL, sluttberegning)
+    val sjabloner = finnOgKonverterGrunnlagSomErReferertAv<SjablonSjablontallPeriode>(Grunnlagstype.SJABLON_SJABLONTALL, sluttberegning.grunnlag)
     val sjablonKlasseFradrag =
         sjabloner
             .find { it.innhold.sjablon == SjablonTallNavn.PERSONFRADRAG_KLASSE1_BELØP || it.innhold.sjablon == SjablonTallNavn.PERSONFRADRAG_KLASSE2_BELØP }
     return BidragsevnePeriode(
         periode = periode.periode,
-        beløpBidrag = sluttberegningInnhold.resultatBeløp,
+        beløpBidrag = sluttberegning.innhold.resultatBeløp,
         sjabloner =
             BidragsevnePeriode.BidragsevneSjabloner(
                 beløpKlassfradrag = sjablonKlasseFradrag!!.innhold.verdi,
-                underholdBeløp = sjablonBidragsevne.underholdBeløp,
-                boutgiftBeløp = sjablonBidragsevne.boutgiftBeløp,
+                underholdBeløp = sjablonBidragsevne.innhold.underholdBeløp,
+                boutgiftBeløp = sjablonBidragsevne.innhold.boutgiftBeløp,
                 beløpMinstefradrag =
                     sjabloner
                         .find { it.innhold.sjablon == SjablonTallNavn.MINSTEFRADRAG_INNTEKT_BELØP }!!
@@ -426,24 +380,25 @@ fun List<GrunnlagDto>.finnDelberegningBidragsevne(periode: VedtakPeriodeReferans
                         .find { it.innhold.sjablon == SjablonTallNavn.UNDERHOLD_EGNE_BARN_I_HUSSTAND_BELØP }!!
                         .innhold.verdi,
             ),
-        bidragsevne = delberegningBidragsevne.beløp,
+        bidragsevne = delberegningBidragsevne.innhold.beløp,
         underholdEgneBarnIHusstand =
             UnderholdEgneBarnIHusstand(
-                årsbeløp = delberegningBidragsevne.underholdBarnEgenHusstand,
+                årsbeløp = delberegningBidragsevne.innhold.underholdBarnEgenHusstand,
                 sjablon = sjablonUnderholdEgnebarnIHusstand.verdi,
-                antallBarnIHusstanden = (delberegningBarnIHusstanden.antallBarn - antallBarnDeltBossted.toDouble()).toInt(),
+                antallBarnIHusstanden = delberegningBarnIHusstanden.innhold.antallBarn.toInt(),
                 antallBarnDeltBossted = antallBarnDeltBossted,
             ),
-        harFullEvne = !sluttberegningInnhold.bidragJustertNedTilEvne,
+        harFullEvne = !sluttberegning.innhold.bidragJustertNedTilEvne,
+        harDelvisEvne = sluttberegning.innhold.bidragJustertNedTilEvne && sluttberegning.innhold.resultatBeløp > BigDecimal.ZERO,
         inntektBP = finnTotalInntektForRolle(periode.grunnlagReferanseListe, Rolletype.BIDRAGSPLIKTIG),
-        borMedAndreVoksne = delberegningVoksneIHusstand.borMedAndreVoksne,
+        borMedAndreVoksne = delberegningVoksneIHusstand.innhold.borMedAndreVoksne,
         skatt =
             Skatt(
-                sumSkattFaktor = delberegningBidragsevne.skatt.sumSkattFaktor,
-                sumSkatt = delberegningBidragsevne.skatt.sumSkatt,
-                skattAlminneligInntekt = delberegningBidragsevne.skatt.skattAlminneligInntekt,
-                trinnskatt = delberegningBidragsevne.skatt.trinnskatt,
-                trygdeavgift = delberegningBidragsevne.skatt.trygdeavgift,
+                sumSkattFaktor = delberegningBidragsevne.innhold.skatt.sumSkattFaktor,
+                sumSkatt = delberegningBidragsevne.innhold.skatt.sumSkatt,
+                skattAlminneligInntekt = delberegningBidragsevne.innhold.skatt.skattAlminneligInntekt,
+                trinnskatt = delberegningBidragsevne.innhold.skatt.trinnskatt,
+                trygdeavgift = delberegningBidragsevne.innhold.skatt.trygdeavgift,
             ),
     )
 }
@@ -470,19 +425,13 @@ fun List<GrunnlagDto>.finnTotalInntektForRolle(
         ?: BigDecimal.ZERO
 }
 
-fun List<GrunnlagDto>.mapSamvær(periode: VedtakPeriodeReferanse): Samværsperiode {
-    val samværsperiode =
-        finnGrunnlagSomErReferertFraGrunnlagsreferanseListe(
-            Grunnlagstype.SAMVÆRSPERIODE,
-            periode.grunnlagReferanseListe,
-        ).firstOrNull()!!.innholdTilObjekt<SamværsperiodeGrunnlag>()
-    return Samværsperiode(
+fun List<GrunnlagDto>.mapSamvær(periode: VedtakPeriodeReferanse): Samværsperiode =
+    Samværsperiode(
         samværsfradragBeløp = finnSamværsfradrag(periode.grunnlagReferanseListe),
         samværsklasse = finnSamværsklasse(periode.grunnlagReferanseListe),
         aldersgruppe = finnSamværAldersgruppe(periode.grunnlagReferanseListe),
-        periode = samværsperiode.periode,
+        periode = periode.periode,
     )
-}
 
 fun List<GrunnlagDto>.finnSamværsklasse(
     grunnlagsreferanseListe: List<Grunnlagsreferanse>,
@@ -496,7 +445,7 @@ fun List<GrunnlagDto>.finnSamværsklasse(
     return samværsperiode!!.innholdTilObjekt<SamværsperiodeGrunnlag>().samværsklasse
 }
 
-fun List<GrunnlagDto>.finnSamværAldersgruppe(grunnlagsreferanseListe: List<Grunnlagsreferanse>): Pair<Int, Int>? {
+fun List<GrunnlagDto>.finnSamværAldersgruppe(grunnlagsreferanseListe: List<Grunnlagsreferanse>): Pair<Int, Int?>? {
     val samværsfradrag =
         finnGrunnlagSomErReferertFraGrunnlagsreferanseListe(Grunnlagstype.DELBEREGNING_SAMVÆRSFRADRAG, grunnlagsreferanseListe).firstOrNull()
 
@@ -504,12 +453,13 @@ fun List<GrunnlagDto>.finnSamværAldersgruppe(grunnlagsreferanseListe: List<Grun
     val alderTom = sjablonSamværsfradrag?.innhold?.alderTom ?: return null
     val alderFom =
         when (alderTom) {
-            5, 99 -> 0
+            5 -> 0
+            99 -> 19
             14 -> 11
             18 -> 13
             else -> alderTom - 4
         }
-    return Pair(alderFom, alderTom)
+    return Pair(alderFom, if (alderTom == 99) null else alderTom)
 }
 
 fun List<GrunnlagDto>.finnSamværsfradrag(grunnlagsreferanseListe: List<Grunnlagsreferanse>): BigDecimal {
@@ -547,6 +497,20 @@ fun List<GrunnlagDto>.mapInntekter(periode: VedtakPeriodeReferanse): List<Inntek
 
     return inntekter + hentTotalInntektForPeriode(periode)
 }
+
+fun List<Samværsperiode>.sammenstillDeMedSammeVerdi() =
+    this
+        .groupBy { "${it.samværsfradragBeløp}${it.aldersgruppe}${it.samværsklasse}" }
+        .map { (_, samværList) ->
+            samværList.reduce { acc, samvær ->
+                Samværsperiode(
+                    samværsfradragBeløp = acc.samværsfradragBeløp,
+                    samværsklasse = acc.samværsklasse,
+                    aldersgruppe = acc.aldersgruppe,
+                    periode = ÅrMånedsperiode(acc.periode.fom, samvær.periode.til),
+                )
+            }
+        }
 
 fun List<InntektPeriode>.sammenstillDeMedSammeBeskrivelse() =
     groupBy { Pair(it.beskrivelse, it.rolle) }.map { (_, inntekter) ->

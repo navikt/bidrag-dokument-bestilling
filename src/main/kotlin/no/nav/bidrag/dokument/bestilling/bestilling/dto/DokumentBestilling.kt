@@ -3,6 +3,7 @@ package no.nav.bidrag.dokument.bestilling.bestilling.dto
 import no.nav.bidrag.dokument.bestilling.model.Saksbehandler
 import no.nav.bidrag.dokument.bestilling.model.tilLegacyKode
 import no.nav.bidrag.dokument.bestilling.model.visningsnavnBruker
+import no.nav.bidrag.dokument.bestilling.tjenester.sammenstillDeMedSammeVerdi
 import no.nav.bidrag.domene.enums.barnetilsyn.Skolealder
 import no.nav.bidrag.domene.enums.barnetilsyn.Tilsynstype
 import no.nav.bidrag.domene.enums.behandling.TypeBehandling
@@ -187,6 +188,7 @@ data class BidragsevnePeriode(
     val bidragsevne: BigDecimal,
     val beløpBidrag: BigDecimal,
     val harFullEvne: Boolean,
+    val harDelvisEvne: Boolean,
     val inntektBP: BigDecimal,
     val underholdEgneBarnIHusstand: UnderholdEgneBarnIHusstand,
     val skatt: Skatt,
@@ -204,7 +206,7 @@ data class BidragsevnePeriode(
 data class Samværsperiode(
     val periode: ÅrMånedsperiode,
     val samværsklasse: Samværsklasse,
-    val aldersgruppe: Pair<Int, Int>?,
+    val aldersgruppe: Pair<Int, Int?>?,
     val samværsfradragBeløp: BigDecimal,
 )
 
@@ -289,7 +291,9 @@ data class VedtakBarn(
     val bostatusPerioder: List<BostatusPeriode>,
     val stønadsendringer: List<VedtakBarnStonad> = emptyList(),
     val engangsbeløper: List<VedtakBarnEngangsbeløp> = emptyList(),
-)
+) {
+    val samværsperioder = stønadsendringer.flatMap { it.vedtakPerioder.map { it.samvær } }.filterNotNull().sammenstillDeMedSammeVerdi()
+}
 
 data class VedtakBarnEngangsbeløp(
     val type: Engangsbeløptype,

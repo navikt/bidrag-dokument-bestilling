@@ -211,10 +211,19 @@ fun List<BaseGrunnlag>.finnGrunnlagMedType(
     return null
 }
 
-fun List<BaseGrunnlag>.finnSjablonMedType(type: SjablonTallNavn) =
-    filtrerBasertPåEgenReferanse(Grunnlagstype.SJABLON_SJABLONTALL)
-        .map { it.innholdTilObjekt<SjablonSjablontallPeriode>() }
-        .find { it.sjablon == type }
+fun List<BaseGrunnlag>.finnSjablonMedType(
+    type: SjablonTallNavn,
+    referanser: List<Grunnlagsreferanse>? = null,
+): SjablonSjablontallPeriode? =
+    if (referanser != null) {
+        finnGrunnlagSomErReferertFraGrunnlagsreferanseListe(Grunnlagstype.SJABLON_SJABLONTALL, referanser)
+            .map { it.innholdTilObjekt<SjablonSjablontallPeriode>() }
+            .find { it.sjablon == type }
+    } else {
+        filtrerBasertPåEgenReferanse(Grunnlagstype.SJABLON_SJABLONTALL)
+            .map { it.innholdTilObjekt<SjablonSjablontallPeriode>() }
+            .find { it.sjablon == type }
+    }
 
 fun List<BaseGrunnlag>.filtrerBasertPåEgenReferanser(
     type: Grunnlagstype,

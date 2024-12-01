@@ -322,6 +322,25 @@ class BrevserverProducer(
                                 beskrivelse = sivilstand.sivilstand.visningsnavn.bruker[Språk.NB]
                             }
                         }
+                        vedtakBarn.samværsperioder.forEach {
+                            samværPeriode {
+                                fomDato = it.periode.fom.atDay(1)
+                                tomDato = it.periode.til?.atEndOfMonth() ?: MAX_DATE
+                                samvarKode = it.samværsklasse.bisysKode
+                                aldersGruppe = it.aldersgruppe?.let { "${it.first} - ${it.second ?: ""}" }
+                                belSamvFradr = it.samværsfradragBeløp
+                                samvBeskr =
+                                    when (it.samværsklasse) {
+                                        Samværsklasse.SAMVÆRSKLASSE_0 -> "0-1 netter pr mnd"
+                                        Samværsklasse.SAMVÆRSKLASSE_1 -> "2-3 netter pr mnd eller minst 2 dager pr mnd"
+                                        Samværsklasse.SAMVÆRSKLASSE_2 -> "4-8 netter pr mnd"
+                                        Samværsklasse.SAMVÆRSKLASSE_3 -> "9-13 netter pr mnd"
+                                        Samværsklasse.SAMVÆRSKLASSE_4 -> "14-15 netter pr mnd"
+                                        Samværsklasse.DELT_BOSTED -> "Delt samvær"
+                                    }
+                                fodselsnummer = vedtakBarn.fødselsnummer
+                            }
+                        }
                         vedtakBarn.stønadsendringer.forEach { detaljer ->
 //                            mapInnteksgrenseSjabloner(detaljer.forskuddInntektgrensePerioder)
                             detaljer.forskuddInntektgrensePerioder.forEach {
@@ -407,7 +426,12 @@ class BrevserverProducer(
                                         bostatus = if (it.borMedAndreVoksne) "1" else "0"
                                         flBarnSakJN = false // TODO
                                         fullBiEvneJN = it.harFullEvne
-                                        biEvneBeskr = "F" // TODO
+                                        biEvneBeskr =
+                                            when {
+                                                it.harFullEvne -> "F"
+                                                it.harDelvisEvne -> "D"
+                                                else -> "I"
+                                            }
                                         belInntGrlag = it.inntektBP
                                         belTrygdeAvg = it.skatt.trygdeavgift
                                         belSkatt = it.skatt.sumSkatt
@@ -423,25 +447,7 @@ class BrevserverProducer(
                                         belJustBidr = it.beløpBidrag // TODO
                                     }
                                 }
-                                vedtakPeriode.samvær?.let {
-                                    samværPeriode {
-                                        fomDato = vedtakPeriode.fomDato
-                                        tomDato = vedtakPeriode.tomDato ?: MAX_DATE
-                                        samvarKode = it.samværsklasse.bisysKode
-                                        aldersGruppe = it.aldersgruppe?.let { "${it.first} - ${it.second}" }
-                                        belSamvFradr = it.samværsfradragBeløp
-                                        samvBeskr =
-                                            when (it.samværsklasse) {
-                                                Samværsklasse.SAMVÆRSKLASSE_0 -> "0-1 netter pr mnd"
-                                                Samværsklasse.SAMVÆRSKLASSE_1 -> "2-3 netter pr mnd eller minst 2 dager pr mnd"
-                                                Samværsklasse.SAMVÆRSKLASSE_2 -> "4-8 netter pr mnd"
-                                                Samværsklasse.SAMVÆRSKLASSE_3 -> "9-13 netter pr mnd"
-                                                Samværsklasse.SAMVÆRSKLASSE_4 -> "14-15 netter pr mnd"
-                                                Samværsklasse.DELT_BOSTED -> "Delt samvær"
-                                            }
-                                        fodselsnummer = vedtakBarn.fødselsnummer
-                                    }
-                                }
+
                                 vedtakPeriode.inntekter.forEach {
                                     inntektPeriode {
                                         fomDato = it.periode?.tilLocalDateFom()
