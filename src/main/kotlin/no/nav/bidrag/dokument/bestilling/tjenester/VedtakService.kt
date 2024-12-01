@@ -34,6 +34,7 @@ import no.nav.bidrag.dokument.bestilling.model.tilBisysResultatkodeForBrev
 import no.nav.bidrag.dokument.bestilling.model.tilRolletype
 import no.nav.bidrag.dokument.bestilling.model.tilSaksbehandler
 import no.nav.bidrag.dokument.bestilling.model.toSet
+import no.nav.bidrag.domene.enums.behandling.TypeBehandling
 import no.nav.bidrag.domene.enums.beregning.Resultatkode
 import no.nav.bidrag.domene.enums.beregning.Resultatkode.Companion.erAvslag
 import no.nav.bidrag.domene.enums.beregning.Resultatkode.Companion.erDirekteAvslag
@@ -325,10 +326,11 @@ fun List<GrunnlagDto>.tilBisysResultatkode(periode: VedtakPeriodeReferanse): Str
     return sluttberegning.innhold.bisysResultatkode
 }
 
-fun List<GrunnlagDto>.tilAndelUnderholdskostnadPeriode(periode: VedtakPeriodeReferanse): AndelUnderholdskostnadPeriode {
-    val bpsAndel = finnOgKonverterGrunnlagSomErReferertFraGrunnlagsreferanseListe<DelberegningBidragspliktigesAndel>(Grunnlagstype.DELBEREGNING_BIDRAGSPLIKTIGES_ANDEL, periode.grunnlagReferanseListe).first()
+fun List<GrunnlagDto>.tilAndelUnderholdskostnadPeriode(periode: VedtakPeriodeReferanse): AndelUnderholdskostnadPeriode? {
+    if (periode.typeBehandling != TypeBehandling.BIDRAG) return null
+    val bpsAndel = finnOgKonverterGrunnlagSomErReferertFraGrunnlagsreferanseListe<DelberegningBidragspliktigesAndel>(Grunnlagstype.DELBEREGNING_BIDRAGSPLIKTIGES_ANDEL, periode.grunnlagReferanseListe).firstOrNull() ?: return null
     val delberegningU =
-        finnOgKonverterGrunnlagSomErReferertFraGrunnlagsreferanseListe<DelberegningUnderholdskostnad>(Grunnlagstype.DELBEREGNING_UNDERHOLDSKOSTNAD, periode.grunnlagReferanseListe).first()
+        finnOgKonverterGrunnlagSomErReferertFraGrunnlagsreferanseListe<DelberegningUnderholdskostnad>(Grunnlagstype.DELBEREGNING_UNDERHOLDSKOSTNAD, periode.grunnlagReferanseListe).firstOrNull() ?: return null
     return AndelUnderholdskostnadPeriode(
         periode = periode.periode,
         inntektBarn = finnTotalInntektForRolle(periode.grunnlagReferanseListe, Rolletype.BARN),
@@ -349,9 +351,10 @@ fun List<GrunnlagDto>.tilAndelUnderholdskostnadPeriode(periode: VedtakPeriodeRef
     )
 }
 
-fun List<GrunnlagDto>.tilUnderholdskostnadPeriode(periode: VedtakPeriodeReferanse): UnderholdskostnaderPeriode {
+fun List<GrunnlagDto>.tilUnderholdskostnadPeriode(periode: VedtakPeriodeReferanse): UnderholdskostnaderPeriode? {
+    if (periode.typeBehandling != TypeBehandling.BIDRAG) return null
     val delberegningU =
-        finnOgKonverterGrunnlagSomErReferertFraGrunnlagsreferanseListe<DelberegningUnderholdskostnad>(Grunnlagstype.DELBEREGNING_UNDERHOLDSKOSTNAD, periode.grunnlagReferanseListe).first()
+        finnOgKonverterGrunnlagSomErReferertFraGrunnlagsreferanseListe<DelberegningUnderholdskostnad>(Grunnlagstype.DELBEREGNING_UNDERHOLDSKOSTNAD, periode.grunnlagReferanseListe).firstOrNull() ?: return null
     val gjelder = hentPersonMedReferanse(delberegningU.gjelderBarnReferanse)!!
     val barnetilsynPeriode = finnOgKonverterGrunnlagSomErReferertAv<BarnetilsynMedStønadPeriode>(Grunnlagstype.BARNETILSYN_MED_STØNAD_PERIODE, delberegningU.grunnlag)
     return UnderholdskostnaderPeriode(
@@ -366,6 +369,7 @@ fun List<GrunnlagDto>.tilUnderholdskostnadPeriode(periode: VedtakPeriodeReferans
 }
 
 fun List<GrunnlagDto>.finnDelberegningBidragsevne(periode: VedtakPeriodeReferanse): BidragsevnePeriode? {
+    if (periode.typeBehandling != TypeBehandling.BIDRAG) return null
     val sluttberegning = finnOgKonverterGrunnlagSomErReferertFraGrunnlagsreferanseListe<SluttberegningBarnebidrag>(Grunnlagstype.SLUTTBEREGNING_BARNEBIDRAG, periode.grunnlagReferanseListe).first()
     val delberegningBidragsevne = finnOgKonverterGrunnlagSomErReferertAv<DelberegningBidragsevne>(Grunnlagstype.DELBEREGNING_BIDRAGSEVNE, sluttberegning.grunnlag).first()
     val delberegningBoforhold = finnOgKonverterGrunnlagSomErReferertAv<DelberegningBoforhold>(Grunnlagstype.DELBEREGNING_BOFORHOLD, delberegningBidragsevne.grunnlag).first()
@@ -447,13 +451,17 @@ fun List<GrunnlagDto>.finnTotalInntektForRolle(
         ?: BigDecimal.ZERO
 }
 
-fun List<GrunnlagDto>.mapSamvær(periode: VedtakPeriodeReferanse): Samværsperiode =
-    Samværsperiode(
-        samværsfradragBeløp = finnSamværsfradrag(periode.grunnlagReferanseListe),
-        samværsklasse = finnSamværsklasse(periode.grunnlagReferanseListe),
-        aldersgruppe = finnSamværAldersgruppe(periode.grunnlagReferanseListe),
-        periode = periode.periode,
-    )
+fun List<GrunnlagDto>.mapSamvær(periode: VedtakPeriodeReferanse): Samværsperiode? =
+    if (periode.typeBehandling == TypeBehandling.BIDRAG) {
+        Samværsperiode(
+            samværsfradragBeløp = finnSamværsfradrag(periode.grunnlagReferanseListe),
+            samværsklasse = finnSamværsklasse(periode.grunnlagReferanseListe),
+            aldersgruppe = finnSamværAldersgruppe(periode.grunnlagReferanseListe),
+            periode = periode.periode,
+        )
+    } else {
+        null
+    }
 
 fun List<GrunnlagDto>.finnSamværsklasse(
     grunnlagsreferanseListe: List<Grunnlagsreferanse>,
