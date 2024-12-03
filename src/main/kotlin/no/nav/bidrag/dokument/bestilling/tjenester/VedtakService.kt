@@ -546,11 +546,20 @@ fun List<GrunnlagDto>.mapInntekter(
 
 fun List<InntektPeriode>.sammenstillDeMedSammeVerdiInntekter() =
     this
-        .groupBy { it.copy(periode = ÅrMånedsperiode(LocalDate.now(), null)) }
+        .groupBy { it.copy(periode = ÅrMånedsperiode(LocalDate.now(), null), beløpÅr = null, inntektPerioder = emptySet(), innteksgrense = BigDecimal.ZERO) }
         .map { (_, inntektList) ->
             inntektList.reduce { acc, inntekt ->
                 inntekt.copy(
                     periode = ÅrMånedsperiode(acc.periode.fom, inntekt.periode.til),
+                    innteksgrense = maxOf(acc.innteksgrense, inntekt.innteksgrense),
+                    beløpÅr =
+                        if (acc.beløpÅr == null) {
+                            inntekt.beløpÅr
+                        } else if (inntekt.beløpÅr == null) {
+                            acc.beløpÅr
+                        } else {
+                            maxOf(acc.beløpÅr, inntekt.beløpÅr)
+                        },
                 )
             }
         }

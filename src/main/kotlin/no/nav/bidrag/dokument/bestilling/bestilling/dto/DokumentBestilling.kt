@@ -306,7 +306,7 @@ data class VedtakBarn(
         stønadsendringer
             .flatMap { it.vedtakPerioder.flatMap { it.inntekter } }
             .sammenstillDeMedSammeVerdiInntekter()
-            .filter { it.rolle != Rolletype.BARN || it.rolle == Rolletype.BARN && it.beløp > BigDecimal.ZERO }
+            .filter { it.rolle != Rolletype.BARN || it.beløp > BigDecimal.ZERO }
 }
 
 data class VedtakBarnEngangsbeløp(
