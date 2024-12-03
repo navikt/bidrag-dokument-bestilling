@@ -658,7 +658,12 @@ class PeriodDateAdapter : XmlAdapter<String, LocalDate?>() {
 }
 
 class BelopAdapter : XmlAdapter<String, BigDecimal?>() {
-    override fun marshal(value: BigDecimal?): String? = value?.toBigInteger()?.toString()?.padStart(11, '0')
+    override fun marshal(value: BigDecimal?): String? =
+        value
+            ?.setScale(0, RoundingMode.HALF_UP)
+            ?.toBigInteger()
+            ?.toString()
+            ?.padStart(11, '0')
 
     @Throws(ParseException::class)
     override fun unmarshal(value: String?): BigDecimal? = value?.toBigDecimal()
