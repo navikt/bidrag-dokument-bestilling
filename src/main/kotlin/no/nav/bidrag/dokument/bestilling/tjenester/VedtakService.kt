@@ -458,7 +458,7 @@ fun List<GrunnlagDto>.finnTotalInntektForRolle(
 }
 
 fun List<GrunnlagDto>.mapSamvær(periode: VedtakPeriodeReferanse): Samværsperiode? =
-    if (periode.typeBehandling == TypeBehandling.BIDRAG) {
+    if (periode.typeBehandling == TypeBehandling.BIDRAG && periode.resultatKode?.erDirekteAvslag() == false) {
         Samværsperiode(
             samværsfradragBeløp = finnSamværsfradrag(periode.grunnlagReferanseListe),
             samværsklasse = finnSamværsklasse(periode.grunnlagReferanseListe),
