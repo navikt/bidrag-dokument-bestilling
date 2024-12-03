@@ -355,6 +355,36 @@ class BrevserverProducer(
                                 fodselsnummer = vedtakBarn.fødselsnummer
                             }
                         }
+                        vedtakBarn.underholdskostnadperioder.forEach {
+                            underholdKostnadPeriode {
+                                fomDato = it.periode.tilLocalDateFom()
+                                tomDato = it.periode.tilLocalDateTil() ?: MAX_DATE
+                                belopFbrKost = it.delberegning.forbruksutgift
+                                belopBoutg = it.delberegning.boutgift
+                                belGkjBTils = it.delberegning.nettoTilsynsutgift
+                                belFaktBTils = it.delberegning.nettoTilsynsutgift
+                                belopBTrygd = it.delberegning.barnetrygd
+                                belopSmaBTil = BigDecimal.ZERO
+                                belBerSumU = it.delberegning.underholdskostnad
+                                belJustSumU = it.delberegning.underholdskostnad
+                                fodselsnummer = it.gjelderIdent
+                                rolle = it.rolletype?.toKode()
+                                skolealderTp =
+                                    when (it.skolealder) {
+                                        Skolealder.OVER -> "O"
+                                        Skolealder.UNDER -> "U"
+                                        else -> null
+                                    }
+                                tilsyntypKd =
+                                    when {
+                                        it.tilsynstype == Tilsynstype.HELTID && it.skolealder == Skolealder.OVER -> "HO"
+                                        it.tilsynstype == Tilsynstype.HELTID && it.skolealder == Skolealder.UNDER -> "HU"
+                                        it.tilsynstype == Tilsynstype.DELTID && it.skolealder == Skolealder.OVER -> "DO"
+                                        it.tilsynstype == Tilsynstype.DELTID && it.skolealder == Skolealder.UNDER -> "DU"
+                                        else -> null
+                                    }
+                            }
+                        }
                         vedtakBarn.stønadsendringer.forEach { detaljer ->
 //                            mapInnteksgrenseSjabloner(detaljer.forskuddInntektgrensePerioder)
                             detaljer.forskuddInntektgrensePerioder.forEach {
@@ -400,7 +430,7 @@ class BrevserverProducer(
                                         belopBp = it.beløpBpsAndel
                                     }
                                 }
-                                vedtakPeriode.underhold?.let {
+                              /*  vedtakPeriode.underhold?.let {
                                     underholdKostnadPeriode {
                                         fomDato = vedtakPeriode.fomDato
                                         tomDato = vedtakPeriode.tomDato ?: MAX_DATE
@@ -429,7 +459,7 @@ class BrevserverProducer(
                                                 else -> null
                                             }
                                     }
-                                }
+                                }*/
                                 vedtakPeriode.bidragsevne?.let {
                                     bidragEvnePeriode {
                                         fomDato = it.periode.fom.atDay(1)
