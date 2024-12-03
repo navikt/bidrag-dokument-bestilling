@@ -38,6 +38,7 @@ import no.nav.bidrag.domene.enums.behandling.TypeBehandling
 import no.nav.bidrag.domene.enums.beregning.Resultatkode
 import no.nav.bidrag.domene.enums.beregning.Resultatkode.Companion.erAvslag
 import no.nav.bidrag.domene.enums.beregning.Resultatkode.Companion.erDirekteAvslag
+import no.nav.bidrag.domene.enums.beregning.Resultatkode.Companion.tilBisysResultatkode
 import no.nav.bidrag.domene.enums.beregning.Samværsklasse
 import no.nav.bidrag.domene.enums.grunnlag.Grunnlagstype
 import no.nav.bidrag.domene.enums.person.Bostatuskode
@@ -46,6 +47,7 @@ import no.nav.bidrag.domene.enums.sjablon.SjablonTallNavn
 import no.nav.bidrag.domene.enums.vedtak.Engangsbeløptype
 import no.nav.bidrag.domene.enums.vedtak.Innkrevingstype
 import no.nav.bidrag.domene.enums.vedtak.Stønadstype
+import no.nav.bidrag.domene.enums.vedtak.Vedtakstype
 import no.nav.bidrag.domene.tid.ÅrMånedsperiode
 import no.nav.bidrag.transport.behandling.felles.grunnlag.BarnetilsynMedStønadPeriode
 import no.nav.bidrag.transport.behandling.felles.grunnlag.BaseGrunnlag
@@ -308,7 +310,7 @@ class VedtakService(
                         samvær = grunnlagListe.mapSamvær(referanse),
                         resultatKode =
                             if (stønadsendring.type == Stønadstype.BIDRAG) {
-                                grunnlagListe.tilBisysResultatkode(referanse)
+                                grunnlagListe.tilBisysResultatkode(referanse, vedtakDto.type) ?: stønadperiode.resultatkode
                             } else {
                                 resultatKode?.tilBisysResultatkodeForBrev(vedtakDto.type) ?: stønadperiode.resultatkode
                             },
@@ -327,7 +329,11 @@ class VedtakService(
     }
 }
 
-fun List<GrunnlagDto>.tilBisysResultatkode(periode: VedtakPeriodeReferanse): String {
+fun List<GrunnlagDto>.tilBisysResultatkode(
+    periode: VedtakPeriodeReferanse,
+    type: Vedtakstype,
+): String? {
+    if (periode.resultatKode?.erDirekteAvslag() == true) return periode.resultatKode.tilBisysResultatkodeForBrev(type)
     val sluttberegning = finnOgKonverterGrunnlagSomErReferertFraGrunnlagsreferanseListe<SluttberegningBarnebidrag>(Grunnlagstype.SLUTTBEREGNING_BARNEBIDRAG, periode.grunnlagReferanseListe).first()
     return sluttberegning.innhold.bisysResultatkode
 }
