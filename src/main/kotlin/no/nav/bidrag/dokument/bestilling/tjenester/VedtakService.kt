@@ -296,7 +296,7 @@ class VedtakService(
                 stønadsendring.periodeListe.map { stønadperiode ->
 
                     val resultatKode = Resultatkode.fraKode(stønadperiode.resultatkode)
-                    val referanse = VedtakPeriodeReferanse(stønadperiode.periode, vedtakDto.typeBehandling, stønadperiode.grunnlagReferanseListe)
+                    val referanse = VedtakPeriodeReferanse(stønadperiode.periode, resultatKode, vedtakDto.typeBehandling, stønadperiode.grunnlagReferanseListe)
                     VedtakPeriode(
                         fomDato = stønadperiode.periode.fom.atDay(1),
                         // TODO: Er dette riktig??
@@ -312,7 +312,7 @@ class VedtakService(
                             } else {
                                 resultatKode?.tilBisysResultatkodeForBrev(vedtakDto.type) ?: stønadperiode.resultatkode
                             },
-                        inntekter = grunnlagListe.mapInntekter(VedtakPeriodeReferanse(stønadperiode.periode, vedtakDto.typeBehandling, stønadperiode.grunnlagReferanseListe)),
+                        inntekter = grunnlagListe.mapInntekter(referanse),
                         inntektGrense = sjablongService.hentInntektGrenseForPeriode(getLastDayOfPreviousMonth(stønadperiode.periode.til?.atEndOfMonth())),
                         maksInntekt = sjablongService.hentMaksInntektForPeriode(getLastDayOfPreviousMonth(stønadperiode.periode.til?.atEndOfMonth())),
                     )
@@ -333,7 +333,7 @@ fun List<GrunnlagDto>.tilBisysResultatkode(periode: VedtakPeriodeReferanse): Str
 }
 
 fun List<GrunnlagDto>.tilAndelUnderholdskostnadPeriode(periode: VedtakPeriodeReferanse): AndelUnderholdskostnadPeriode? {
-    if (periode.typeBehandling != TypeBehandling.BIDRAG) return null
+    if (periode.typeBehandling != TypeBehandling.BIDRAG && periode.resultatKode?.erDirekteAvslag() == true) return null
     val bpsAndel = finnOgKonverterGrunnlagSomErReferertFraGrunnlagsreferanseListe<DelberegningBidragspliktigesAndel>(Grunnlagstype.DELBEREGNING_BIDRAGSPLIKTIGES_ANDEL, periode.grunnlagReferanseListe).firstOrNull() ?: return null
     val delberegningU =
         finnOgKonverterGrunnlagSomErReferertFraGrunnlagsreferanseListe<DelberegningUnderholdskostnad>(Grunnlagstype.DELBEREGNING_UNDERHOLDSKOSTNAD, periode.grunnlagReferanseListe).firstOrNull() ?: return null
@@ -358,7 +358,7 @@ fun List<GrunnlagDto>.tilAndelUnderholdskostnadPeriode(periode: VedtakPeriodeRef
 }
 
 fun List<GrunnlagDto>.tilUnderholdskostnadPeriode(periode: VedtakPeriodeReferanse): UnderholdskostnaderPeriode? {
-    if (periode.typeBehandling != TypeBehandling.BIDRAG) return null
+    if (periode.typeBehandling != TypeBehandling.BIDRAG && periode.resultatKode?.erDirekteAvslag() == true) return null
     val delberegningU =
         finnOgKonverterGrunnlagSomErReferertFraGrunnlagsreferanseListe<DelberegningUnderholdskostnad>(Grunnlagstype.DELBEREGNING_UNDERHOLDSKOSTNAD, periode.grunnlagReferanseListe).firstOrNull() ?: return null
     val gjelder = hentPersonMedReferanse(delberegningU.gjelderBarnReferanse)!!
@@ -375,7 +375,7 @@ fun List<GrunnlagDto>.tilUnderholdskostnadPeriode(periode: VedtakPeriodeReferans
 }
 
 fun List<GrunnlagDto>.finnDelberegningBidragsevne(periode: VedtakPeriodeReferanse): BidragsevnePeriode? {
-    if (periode.typeBehandling != TypeBehandling.BIDRAG) return null
+    if (periode.typeBehandling != TypeBehandling.BIDRAG && periode.resultatKode?.erDirekteAvslag() == true) return null
     val sluttberegning = finnOgKonverterGrunnlagSomErReferertFraGrunnlagsreferanseListe<SluttberegningBarnebidrag>(Grunnlagstype.SLUTTBEREGNING_BARNEBIDRAG, periode.grunnlagReferanseListe).first()
     val delberegningBidragsevne = finnOgKonverterGrunnlagSomErReferertAv<DelberegningBidragsevne>(Grunnlagstype.DELBEREGNING_BIDRAGSEVNE, sluttberegning.grunnlag).first()
     val delberegningBoforhold = finnOgKonverterGrunnlagSomErReferertAv<DelberegningBoforhold>(Grunnlagstype.DELBEREGNING_BOFORHOLD, delberegningBidragsevne.grunnlag).first()

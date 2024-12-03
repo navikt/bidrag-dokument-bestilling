@@ -138,7 +138,8 @@ fun List<GrunnlagDto>.hentDelberegningInntektForPeriode(
 ): Set<BaseGrunnlag> {
     val sluttberegning =
         finnGrunnlagSomErReferertFraGrunnlagsreferanseListe(Grunnlagstype.SLUTTBEREGNING_FORSKUDD, periode.grunnlagReferanseListe).firstOrNull()
-            ?: finnGrunnlagSomErReferertFraGrunnlagsreferanseListe(Grunnlagstype.SLUTTBEREGNING_SÆRBIDRAG, periode.grunnlagReferanseListe).firstOrNull() ?: return emptySet()
+            ?: finnGrunnlagSomErReferertFraGrunnlagsreferanseListe(Grunnlagstype.SLUTTBEREGNING_SÆRBIDRAG, periode.grunnlagReferanseListe).firstOrNull()
+            ?: finnGrunnlagSomErReferertFraGrunnlagsreferanseListe(Grunnlagstype.SLUTTBEREGNING_BARNEBIDRAG, periode.grunnlagReferanseListe).firstOrNull() ?: return emptySet()
     return finnGrunnlagSomErReferertFraGrunnlagsreferanseListe(Grunnlagstype.DELBEREGNING_SUM_INNTEKT, sluttberegning.grunnlagsreferanseListe)
 }
 
