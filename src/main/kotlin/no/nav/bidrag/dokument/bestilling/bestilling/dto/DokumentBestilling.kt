@@ -4,6 +4,7 @@ import no.nav.bidrag.dokument.bestilling.model.Saksbehandler
 import no.nav.bidrag.dokument.bestilling.model.tilLegacyKode
 import no.nav.bidrag.dokument.bestilling.model.visningsnavnBruker
 import no.nav.bidrag.dokument.bestilling.tjenester.sammenstillDeMedSammeVerdi
+import no.nav.bidrag.dokument.bestilling.tjenester.sammenstillDeMedSammeVerdiInntekter
 import no.nav.bidrag.domene.enums.barnetilsyn.Skolealder
 import no.nav.bidrag.domene.enums.barnetilsyn.Tilsynstype
 import no.nav.bidrag.domene.enums.behandling.TypeBehandling
@@ -221,6 +222,7 @@ data class InntektPeriode(
     val fødselsnummer: String?,
     val beløp: BigDecimal,
     val rolle: Rolletype,
+    val innteksgrense: BigDecimal,
 ) {
     val type get() = typer.firstOrNull()
     val inntektPeriode get() = inntektPerioder.minByOrNull { it.fom }
@@ -300,6 +302,11 @@ data class VedtakBarn(
     val engangsbeløper: List<VedtakBarnEngangsbeløp> = emptyList(),
 ) {
     val samværsperioder = stønadsendringer.flatMap { it.vedtakPerioder.map { it.samvær } }.filterNotNull().sammenstillDeMedSammeVerdi()
+    val inntektsperioder =
+        stønadsendringer
+            .flatMap { it.vedtakPerioder.flatMap { it.inntekter } }
+            .sammenstillDeMedSammeVerdiInntekter()
+            .filter { it.rolle != Rolletype.BARN || it.rolle == Rolletype.BARN && it.beløp > BigDecimal.ZERO }
 }
 
 data class VedtakBarnEngangsbeløp(

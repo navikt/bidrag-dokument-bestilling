@@ -169,6 +169,7 @@ fun List<InntektsrapporteringPeriode>.totalKapitalinntekt(): BigDecimal =
 
 fun List<GrunnlagDto>.hentNettoKapitalinntektForRolle(
     vedtakPeriodeDto: VedtakPeriodeReferanse,
+    innteksgrense: BigDecimal,
 ): List<InntektPeriode> =
     hentKapitalinntekterForPeriode(vedtakPeriodeDto)
         .mapNotNull { (gjelderReferanse, grunnlag) ->
@@ -188,6 +189,7 @@ fun List<GrunnlagDto>.hentNettoKapitalinntektForRolle(
                             rolle = gjelderGrunnlag.type.tilRolletype(),
                             fødselsnummer = rollePersonInfo.ident!!.verdi,
                             beløp = it,
+                            innteksgrense = innteksgrense,
                         )
                     }
                 }
@@ -248,6 +250,7 @@ fun ÅrMånedsperiode?.tilLocalDateTil() = this?.til?.atEndOfMonth()
 
 fun List<GrunnlagDto>.hentTotalInntektForPeriode(
     vedtakPeriode: VedtakPeriodeReferanse,
+    innteksgrense: BigDecimal,
 ): List<InntektPeriode> =
     hentDelberegningInntektForPeriode(vedtakPeriode).groupBy { it.gjelderReferanse }.flatMap { (gjelderReferanse, inntektPeriode) ->
 //        val førsteInntekt = filtrerBasertPåFremmedReferanse(Grunnlagstype.INNTEKT_RAPPORTERING_PERIODE, inntektPeriode.grunnlagsreferanseListe).firstOrNull()
@@ -261,6 +264,7 @@ fun List<GrunnlagDto>.hentTotalInntektForPeriode(
                 beløpÅr = vedtakPeriode.periode.fom.year,
                 rolle = gjelderPersonGrunnlag.type.tilRolletype(),
                 fødselsnummer = gjelderPersonGrunnlag.personIdent,
+                innteksgrense = innteksgrense,
             ),
         )
     }

@@ -38,7 +38,6 @@ import no.nav.bidrag.domene.enums.behandling.TypeBehandling
 import no.nav.bidrag.domene.enums.beregning.Resultatkode
 import no.nav.bidrag.domene.enums.beregning.Resultatkode.Companion.erAvslag
 import no.nav.bidrag.domene.enums.beregning.Resultatkode.Companion.erDirekteAvslag
-import no.nav.bidrag.domene.enums.beregning.Resultatkode.Companion.tilBisysResultatkode
 import no.nav.bidrag.domene.enums.beregning.Samværsklasse
 import no.nav.bidrag.domene.enums.grunnlag.Grunnlagstype
 import no.nav.bidrag.domene.enums.person.Bostatuskode
@@ -93,6 +92,7 @@ import no.nav.bidrag.transport.behandling.vedtak.response.særbidragsperiode
 import no.nav.bidrag.transport.behandling.vedtak.response.typeBehandling
 import org.springframework.stereotype.Service
 import java.math.BigDecimal
+import java.time.LocalDate
 
 val særbidragDirekteAvslagskoderSomInneholderUtgifter =
     listOf(Resultatkode.GODKJENT_BELØP_ER_LAVERE_ENN_FORSKUDDSSATS, Resultatkode.ALLE_UTGIFTER_ER_FORELDET)
@@ -216,7 +216,7 @@ class VedtakService(
                 periode = periode,
                 erDirekteAvslag = erDirekteAvslag,
                 medInnkreving = engangsbeløp.innkreving == Innkrevingstype.MED_INNKREVING,
-                inntekter = grunnlagListe.mapInntekter(VedtakPeriodeReferanse(periode, vedtakDto.typeBehandling, engangsbeløp.grunnlagReferanseListe)),
+                inntekter = grunnlagListe.mapInntekter(VedtakPeriodeReferanse(periode, vedtakDto.typeBehandling, engangsbeløp.grunnlagReferanseListe), BigDecimal.ZERO),
                 særbidragBeregning =
                     if (engangsbeløp.type == Engangsbeløptype.SÆRBIDRAG) {
                         engangsbeløp.hentSærbidragBeregning(erDirekteAvslag, grunnlagListe)
@@ -296,7 +296,7 @@ class VedtakService(
         return stønadsendringerBarn.map { stønadsendring ->
             val vedtakPerioder =
                 stønadsendring.periodeListe.map { stønadperiode ->
-
+                    val innteksgrense = sjablongService.hentInntektGrenseForPeriode(getLastDayOfPreviousMonth(stønadperiode.periode.til?.atEndOfMonth()))
                     val resultatKode = Resultatkode.fraKode(stønadperiode.resultatkode)
                     val referanse = VedtakPeriodeReferanse(stønadperiode.periode, resultatKode, vedtakDto.typeBehandling, stønadperiode.grunnlagReferanseListe)
                     VedtakPeriode(
@@ -314,8 +314,8 @@ class VedtakService(
                             } else {
                                 resultatKode?.tilBisysResultatkodeForBrev(vedtakDto.type) ?: stønadperiode.resultatkode
                             },
-                        inntekter = grunnlagListe.mapInntekter(referanse),
-                        inntektGrense = sjablongService.hentInntektGrenseForPeriode(getLastDayOfPreviousMonth(stønadperiode.periode.til?.atEndOfMonth())),
+                        inntekter = grunnlagListe.mapInntekter(referanse, innteksgrense),
+                        inntektGrense = innteksgrense,
                         maksInntekt = sjablongService.hentMaksInntektForPeriode(getLastDayOfPreviousMonth(stønadperiode.periode.til?.atEndOfMonth())),
                     )
                 }
@@ -514,8 +514,11 @@ fun List<GrunnlagDto>.finnSamværsfradrag(grunnlagsreferanseListe: List<Grunnlag
         ?: BigDecimal.ZERO
 }
 
-fun List<GrunnlagDto>.mapInntekter(periode: VedtakPeriodeReferanse): List<InntektPeriode> {
-    val nettoKapitalInntekt = hentNettoKapitalinntektForRolle(periode)
+fun List<GrunnlagDto>.mapInntekter(
+    periode: VedtakPeriodeReferanse,
+    innteksgrense: BigDecimal,
+): List<InntektPeriode> {
+    val nettoKapitalInntekt = hentNettoKapitalinntektForRolle(periode, innteksgrense)
 
     val inntekter =
         hentInntekterForPeriode(periode)
@@ -533,12 +536,24 @@ fun List<GrunnlagDto>.mapInntekter(periode: VedtakPeriodeReferanse): List<Inntek
                     rolle = gjelderPersonGrunnlag.type.tilRolletype(),
                     fødselsnummer = gjelderPerson.ident!!.verdi,
                     beløp = inntekt.beløp,
+                    innteksgrense = innteksgrense,
                 )
             }.filterNotNull()
             .sammenstillDeMedSammeBeskrivelse() + nettoKapitalInntekt
 
-    return inntekter + hentTotalInntektForPeriode(periode)
+    return inntekter + hentTotalInntektForPeriode(periode, innteksgrense)
 }
+
+fun List<InntektPeriode>.sammenstillDeMedSammeVerdiInntekter() =
+    this
+        .groupBy { it.copy(periode = ÅrMånedsperiode(LocalDate.now(), null)) }
+        .map { (_, inntektList) ->
+            inntektList.reduce { acc, inntekt ->
+                inntekt.copy(
+                    periode = ÅrMånedsperiode(acc.periode.fom, inntekt.periode.til),
+                )
+            }
+        }
 
 fun List<Samværsperiode>.sammenstillDeMedSammeVerdi() =
     this
@@ -568,6 +583,7 @@ fun List<InntektPeriode>.sammenstillDeMedSammeBeskrivelse() =
                 fødselsnummer = acc.fødselsnummer,
                 beløp = acc.beløp + inntekt.beløp,
                 rolle = acc.rolle,
+                innteksgrense = acc.innteksgrense,
             )
         }
     }

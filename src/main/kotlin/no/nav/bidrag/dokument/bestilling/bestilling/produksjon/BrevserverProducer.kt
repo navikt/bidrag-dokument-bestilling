@@ -324,6 +324,18 @@ class BrevserverProducer(
                                 beskrivelse = sivilstand.sivilstand.visningsnavn.bruker[Språk.NB]
                             }
                         }
+                        vedtakBarn.inntektsperioder.forEach {
+                            inntektPeriode {
+                                fomDato = it.periode?.tilLocalDateFom()
+                                tomDato = it.periode.tilLocalDateTil() ?: MAX_DATE
+                                belopType = it.beløpKode
+                                belopÅrsinntekt = it.beløp
+                                beskrivelse = it.beskrivelse
+                                rolle = it.rolle.toKode()
+                                fnr = it.fødselsnummer
+                                inntektGrense = it.innteksgrense
+                            }
+                        }
                         vedtakBarn.samværsperioder.forEach {
                             samværPeriode {
                                 fomDato = it.periode.fom.atDay(1)
@@ -420,8 +432,8 @@ class BrevserverProducer(
                                 }
                                 vedtakPeriode.bidragsevne?.let {
                                     bidragEvnePeriode {
-                                        fomDato = vedtakPeriode.fomDato
-                                        tomDato = vedtakPeriode.tomDato ?: MAX_DATE
+                                        fomDato = it.periode.fom.atDay(1)
+                                        tomDato = it.periode.til?.atEndOfMonth() ?: MAX_DATE
 //                                        skatteklasse = ??
                                         antallBarn = it.underholdEgneBarnIHusstand.antallBarnIHusstanden
                                         antallBarnDelt = it.underholdEgneBarnIHusstand.antallBarnDeltBossted
@@ -450,7 +462,7 @@ class BrevserverProducer(
                                     }
                                 }
 
-                                vedtakPeriode.inntekter.forEach {
+                               /* vedtakPeriode.inntekter.forEach {
                                     inntektPeriode {
                                         fomDato = it.periode?.tilLocalDateFom()
                                         tomDato = it.periode.tilLocalDateTil() ?: MAX_DATE
@@ -461,7 +473,7 @@ class BrevserverProducer(
                                         fnr = it.fødselsnummer
                                         inntektGrense = vedtakPeriode.inntektGrense
                                     }
-                                }
+                                }*/
                             }
 
                             detaljer.vedtakPerioder.forEach {
