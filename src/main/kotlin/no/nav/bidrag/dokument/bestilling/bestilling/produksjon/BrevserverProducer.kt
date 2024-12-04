@@ -324,16 +324,18 @@ class BrevserverProducer(
                                 beskrivelse = sivilstand.sivilstand.visningsnavn.bruker[Språk.NB]
                             }
                         }
-                        vedtakBarn.inntektsperioder.forEach {
-                            inntektPeriode {
-                                fomDato = it.periode?.tilLocalDateFom()
-                                tomDato = it.periode.tilLocalDateTil() ?: MAX_DATE
-                                belopType = it.beløpKode
-                                belopÅrsinntekt = it.beløp
-                                beskrivelse = it.beskrivelse
-                                rolle = it.rolle.toKode()
-                                fnr = it.fødselsnummer
-                                inntektGrense = it.innteksgrense
+                        if (vedtakInfo.type == TypeBehandling.BIDRAG) {
+                            vedtakBarn.inntektsperioder.forEach {
+                                inntektPeriode {
+                                    fomDato = it.periode?.tilLocalDateFom()
+                                    tomDato = it.periode.tilLocalDateTil() ?: MAX_DATE
+                                    belopType = it.beløpKode
+                                    belopÅrsinntekt = it.beløp
+                                    beskrivelse = it.beskrivelse
+                                    rolle = it.rolle.toKode()
+                                    fnr = it.fødselsnummer
+                                    inntektGrense = it.innteksgrense
+                                }
                             }
                         }
                         vedtakBarn.samværsperioder.forEach {
@@ -386,7 +388,6 @@ class BrevserverProducer(
                             }
                         }
                         vedtakBarn.stønadsendringer.forEach { detaljer ->
-//                            mapInnteksgrenseSjabloner(detaljer.forskuddInntektgrensePerioder)
                             detaljer.forskuddInntektgrensePerioder.forEach {
                                 inntektGrunnlagForskuddPeriode {
                                     fomDato = it.fomDato
@@ -430,36 +431,6 @@ class BrevserverProducer(
                                         belopBp = it.beløpBpsAndel
                                     }
                                 }
-                              /*  vedtakPeriode.underhold?.let {
-                                    underholdKostnadPeriode {
-                                        fomDato = vedtakPeriode.fomDato
-                                        tomDato = vedtakPeriode.tomDato ?: MAX_DATE
-                                        belopFbrKost = it.delberegning.forbruksutgift
-                                        belopBoutg = it.delberegning.boutgift
-                                        belGkjBTils = it.delberegning.nettoTilsynsutgift
-                                        belFaktBTils = it.delberegning.nettoTilsynsutgift
-                                        belopBTrygd = it.delberegning.barnetrygd
-                                        belopSmaBTil = BigDecimal.ZERO
-                                        belBerSumU = it.delberegning.underholdskostnad
-                                        belJustSumU = it.delberegning.underholdskostnad
-                                        fodselsnummer = it.gjelderIdent
-                                        rolle = it.rolletype?.toKode()
-                                        skolealderTp =
-                                            when (it.skolealder) {
-                                                Skolealder.OVER -> "O"
-                                                Skolealder.UNDER -> "U"
-                                                else -> null
-                                            }
-                                        tilsyntypKd =
-                                            when {
-                                                it.tilsynstype == Tilsynstype.HELTID && it.skolealder == Skolealder.OVER -> "HO"
-                                                it.tilsynstype == Tilsynstype.HELTID && it.skolealder == Skolealder.UNDER -> "HU"
-                                                it.tilsynstype == Tilsynstype.DELTID && it.skolealder == Skolealder.OVER -> "DO"
-                                                it.tilsynstype == Tilsynstype.DELTID && it.skolealder == Skolealder.UNDER -> "DU"
-                                                else -> null
-                                            }
-                                    }
-                                }*/
                                 vedtakPeriode.bidragsevne?.let {
                                     bidragEvnePeriode {
                                         fomDato = it.periode.fom.atDay(1)
@@ -492,18 +463,20 @@ class BrevserverProducer(
                                     }
                                 }
 
-                               /* vedtakPeriode.inntekter.forEach {
-                                    inntektPeriode {
-                                        fomDato = it.periode?.tilLocalDateFom()
-                                        tomDato = it.periode.tilLocalDateTil() ?: MAX_DATE
-                                        belopType = it.beløpKode
-                                        belopÅrsinntekt = it.beløp
-                                        beskrivelse = it.beskrivelse
-                                        rolle = it.rolle.toKode()
-                                        fnr = it.fødselsnummer
-                                        inntektGrense = vedtakPeriode.inntektGrense
+                                if (vedtakInfo.type != TypeBehandling.BIDRAG) {
+                                    vedtakPeriode.inntekter.forEach {
+                                        inntektPeriode {
+                                            fomDato = it.periode?.tilLocalDateFom()
+                                            tomDato = it.periode.tilLocalDateTil() ?: MAX_DATE
+                                            belopType = it.beløpKode
+                                            belopÅrsinntekt = it.beløp
+                                            beskrivelse = it.beskrivelse
+                                            rolle = it.rolle.toKode()
+                                            fnr = it.fødselsnummer
+                                            inntektGrense = vedtakPeriode.inntektGrense
+                                        }
                                     }
-                                }*/
+                                }
                             }
 
                             detaljer.vedtakPerioder.forEach {
