@@ -84,10 +84,10 @@ class DokumentBestillingControllerSærbidragTest : AbstractControllerTest() {
                 message.validateKontaktInformasjon(enhetKontaktInfo, BM1, BP1, bmAdresse)
 
                 message.brev?.parter?.bmkravkfremav shouldBe ""
-                message.brev?.parter?.bmgebyr shouldBe ""
+                message.brev?.parter?.bmgebyr shouldBe null
                 message.brev?.parter?.bmlandkode shouldBe ""
                 message.brev?.parter?.bpkravfremav shouldBe ""
-                message.brev?.parter?.bpgebyr shouldBe ""
+                message.brev?.parter?.bpgebyr shouldBe null
                 message.brev?.parter?.bplandkode shouldBe ""
                 message.brev?.parter?.bmdatodod shouldBe null
                 message.brev?.parter?.bpdatodod shouldBe null
@@ -219,10 +219,10 @@ class DokumentBestillingControllerSærbidragTest : AbstractControllerTest() {
                 message.validateKontaktInformasjon(enhetKontaktInfo, BM1, BP1, bmAdresse)
 
                 message.brev?.parter?.bmkravkfremav shouldBe ""
-                message.brev?.parter?.bmgebyr shouldBe ""
+                message.brev?.parter?.bmgebyr shouldBe null
                 message.brev?.parter?.bmlandkode shouldBe ""
                 message.brev?.parter?.bpkravfremav shouldBe ""
-                message.brev?.parter?.bpgebyr shouldBe ""
+                message.brev?.parter?.bpgebyr shouldBe null
                 message.brev?.parter?.bplandkode shouldBe ""
                 message.brev?.parter?.bmdatodod shouldBe null
                 message.brev?.parter?.bpdatodod shouldBe null
@@ -430,10 +430,10 @@ class DokumentBestillingControllerSærbidragTest : AbstractControllerTest() {
                 message.validateKontaktInformasjon(enhetKontaktInfo, BM1, BP1, bmAdresse)
 
                 message.brev?.parter?.bmkravkfremav shouldBe ""
-                message.brev?.parter?.bmgebyr shouldBe ""
+                message.brev?.parter?.bmgebyr shouldBe null
                 message.brev?.parter?.bmlandkode shouldBe ""
                 message.brev?.parter?.bpkravfremav shouldBe ""
-                message.brev?.parter?.bpgebyr shouldBe ""
+                message.brev?.parter?.bpgebyr shouldBe null
                 message.brev?.parter?.bplandkode shouldBe ""
                 message.brev?.parter?.bmdatodod shouldBe null
                 message.brev?.parter?.bpdatodod shouldBe null
@@ -556,10 +556,10 @@ class DokumentBestillingControllerSærbidragTest : AbstractControllerTest() {
                 message.validateKontaktInformasjon(enhetKontaktInfo, BM1, BP1, bmAdresse)
 
                 message.brev?.parter?.bmkravkfremav shouldBe ""
-                message.brev?.parter?.bmgebyr shouldBe ""
+                message.brev?.parter?.bmgebyr shouldBe null
                 message.brev?.parter?.bmlandkode shouldBe ""
                 message.brev?.parter?.bpkravfremav shouldBe ""
-                message.brev?.parter?.bpgebyr shouldBe ""
+                message.brev?.parter?.bpgebyr shouldBe null
                 message.brev?.parter?.bplandkode shouldBe ""
                 message.brev?.parter?.bmdatodod shouldBe null
                 message.brev?.parter?.bpdatodod shouldBe null
@@ -698,10 +698,10 @@ class DokumentBestillingControllerSærbidragTest : AbstractControllerTest() {
                 message.validateKontaktInformasjon(enhetKontaktInfo, BM1, BP1, bmAdresse)
 
                 message.brev?.parter?.bmkravkfremav shouldBe ""
-                message.brev?.parter?.bmgebyr shouldBe ""
+                message.brev?.parter?.bmgebyr shouldBe null
                 message.brev?.parter?.bmlandkode shouldBe ""
                 message.brev?.parter?.bpkravfremav shouldBe ""
-                message.brev?.parter?.bpgebyr shouldBe ""
+                message.brev?.parter?.bpgebyr shouldBe null
                 message.brev?.parter?.bplandkode shouldBe ""
                 message.brev?.parter?.bmdatodod shouldBe null
                 message.brev?.parter?.bpdatodod shouldBe null
