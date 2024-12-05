@@ -179,6 +179,7 @@ class VedtakService(
             navn = personInfo.visningsnavn,
             løpendeBidrag =
                 vedtak.stønadsendringListe
+                    .filter { it.type == Stønadstype.BIDRAG }
                     .find { it.kravhaver.verdi == soknadBarn.personIdent }
                     ?.periodeListe
                     ?.maxByOrNull { it.periode.fom }
