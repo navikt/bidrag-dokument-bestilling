@@ -23,7 +23,7 @@ class DokumentBestillingControllerBidragTest : AbstractControllerTest() {
         stubDefaultValues()
         stubUtils.stubHentPerson("16451299577", ANNEN_MOTTAKER)
         stubUtils.stubHentPerson("25451755601", ANNEN_MOTTAKER)
-        stubUtils.stubHentVedtak("vedtak_response-bidrag.json")
+        stubUtils.stubHentVedtak("vedtak_response-bidrag-2.json")
         val enhetKontaktInfo = createEnhetKontaktInformasjon()
         val bmAdresse = createPostAdresseResponse()
         val dokumentMal = hentDokumentMal("BI01E01")!!

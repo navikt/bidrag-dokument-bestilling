@@ -3,6 +3,7 @@ package no.nav.bidrag.dokument.bestilling.tjenester
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.AndelUnderholdskostnadPeriode
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.BidragsevnePeriode
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.BrevSjablonVerdier
+import no.nav.bidrag.dokument.bestilling.bestilling.dto.DataPeriode
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.ForskuddInntektgrensePeriode
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.GebyrInfoDto
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.InntektPeriode
@@ -557,23 +558,46 @@ fun List<UnderholdskostnaderPeriode>.sammenstillDeMedSammeVerdiUnderhold() =
 
 fun List<InntektPeriode>.sammenstillDeMedSammeVerdiInntekter() =
     this
-        .groupBy { it.copy(periode = ÅrMånedsperiode(LocalDate.now(), null), beløpÅr = null, inntektPerioder = emptySet(), innteksgrense = BigDecimal.ZERO) }
-        .map { (_, inntektList) ->
-            inntektList.reduce { acc, inntekt ->
-                inntekt.copy(
-                    periode = ÅrMånedsperiode(acc.periode.fom, inntekt.periode.til),
-                    innteksgrense = maxOf(acc.innteksgrense, inntekt.innteksgrense),
-                    beløpÅr =
-                        if (acc.beløpÅr == null) {
-                            inntekt.beløpÅr
-                        } else if (inntekt.beløpÅr == null) {
-                            acc.beløpÅr
-                        } else {
-                            maxOf(acc.beløpÅr, inntekt.beløpÅr)
-                        },
-                )
+        .groupBy { it.rolle }
+        .flatMap { (_, rolleInntektList) ->
+            rolleInntektList.grupperPerioder().map {
+                it.reduce { acc, inntekt ->
+                    inntekt.copy(
+                        periode = ÅrMånedsperiode(acc.periode.fom, inntekt.periode.til),
+                        innteksgrense = maxOf(acc.innteksgrense, inntekt.innteksgrense),
+                        beløpÅr =
+                            if (acc.beløpÅr == null) {
+                                inntekt.beløpÅr
+                            } else if (inntekt.beløpÅr == null) {
+                                acc.beløpÅr
+                            } else {
+                                maxOf(acc.beløpÅr, inntekt.beløpÅr)
+                            },
+                    )
+                }
             }
         }
+
+fun <T : DataPeriode> List<T>.grupperPerioder(): List<List<T>> {
+    if (this.isEmpty()) return emptyList()
+
+    val sortedList = this.sortedBy { it.kopierTilGenerisk().toString() }
+    val result = mutableListOf<List<T>>()
+    var currentGroup = mutableListOf<T>()
+    for (periode in sortedList) {
+        if (currentGroup.isEmpty() || currentGroup.last().erLik(periode) && currentGroup.last().periode.til == periode.periode.fom) {
+            currentGroup.add(periode)
+        } else {
+            result.add(currentGroup)
+            currentGroup = mutableListOf(periode)
+        }
+    }
+    if (currentGroup.isNotEmpty()) {
+        result.add(currentGroup)
+    }
+
+    return result
+}
 
 fun List<Samværsperiode>.sammenstillDeMedSammeVerdi() =
     this

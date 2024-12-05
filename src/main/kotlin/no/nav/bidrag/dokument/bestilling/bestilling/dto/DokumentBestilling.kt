@@ -144,6 +144,14 @@ fun BeløpFraTil.fraVerdi() = this.first
 
 fun BeløpFraTil.tilVerdi() = this.second
 
+interface DataPeriode {
+    val periode: ÅrMånedsperiode
+
+    fun erLik(annen: DataPeriode) = this.kopierTilGenerisk() == annen.kopierTilGenerisk()
+
+    fun kopierTilGenerisk(): DataPeriode
+}
+
 data class VedtakPeriode(
     val fomDato: LocalDate,
     val tomDato: LocalDate? = null,
@@ -215,7 +223,7 @@ data class Samværsperiode(
 data class InntektPeriode(
     val inntektPerioder: Set<ÅrMånedsperiode> = emptySet(),
     val inntektOpprinneligPerioder: Set<ÅrMånedsperiode> = emptySet(),
-    val periode: ÅrMånedsperiode,
+    override val periode: ÅrMånedsperiode,
     val typer: Set<Inntektsrapportering> = emptySet(),
     val periodeTotalinntekt: Boolean? = false,
     val nettoKapitalInntekt: Boolean? = false,
@@ -224,7 +232,7 @@ data class InntektPeriode(
     val beløp: BigDecimal,
     val rolle: Rolletype,
     val innteksgrense: BigDecimal,
-) {
+) : DataPeriode {
     val type get() = typer.firstOrNull()
     val inntektPeriode get() = inntektPerioder.minByOrNull { it.fom }
     val opprinneligPeriode get() = inntektOpprinneligPerioder.minByOrNull { it.fom }
@@ -244,6 +252,8 @@ data class InntektPeriode(
                 nettoKapitalInntekt == true -> "XKAP"
                 else -> ""
             }
+
+    override fun kopierTilGenerisk() = copy(periode = ÅrMånedsperiode(LocalDate.now(), null), beløpÅr = null, inntektPerioder = emptySet(), innteksgrense = BigDecimal.ZERO)
 }
 
 data class ForskuddInntektgrensePeriode(
