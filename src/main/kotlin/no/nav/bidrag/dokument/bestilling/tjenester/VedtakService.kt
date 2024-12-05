@@ -576,7 +576,7 @@ fun List<InntektPeriode>.sammenstillDeMedSammeVerdiInntekter() =
                     )
                 }
             }
-        }
+        }.sortedBy { it.periode.fom }
 
 fun <T : DataPeriode> List<T>.grupperPerioder(): List<List<T>> {
     if (this.isEmpty()) return emptyList()
