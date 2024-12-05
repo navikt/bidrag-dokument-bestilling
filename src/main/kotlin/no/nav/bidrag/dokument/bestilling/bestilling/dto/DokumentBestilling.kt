@@ -183,14 +183,16 @@ data class AndelUnderholdskostnadPeriode(
 }
 
 data class UnderholdskostnaderPeriode(
-    val periode: ÅrMånedsperiode,
+    override val periode: ÅrMånedsperiode,
     val tilsynstype: Tilsynstype?,
     val skolealder: Skolealder?,
     val harBarnetilsyn: Boolean = false,
     val delberegning: DelberegningUnderholdskostnad,
     val gjelderIdent: String,
     val rolletype: Rolletype?,
-)
+) : DataPeriode {
+    override fun kopierTilGenerisk() = copy(periode = ÅrMånedsperiode(LocalDate.now(), null))
+}
 
 data class BidragsevnePeriode(
     val periode: ÅrMånedsperiode,
@@ -214,11 +216,13 @@ data class BidragsevnePeriode(
 }
 
 data class Samværsperiode(
-    val periode: ÅrMånedsperiode,
+    override val periode: ÅrMånedsperiode,
     val samværsklasse: Samværsklasse,
     val aldersgruppe: Pair<Int, Int?>?,
     val samværsfradragBeløp: BigDecimal,
-)
+) : DataPeriode {
+    override fun kopierTilGenerisk() = copy(periode = ÅrMånedsperiode(LocalDate.now(), null))
+}
 
 data class InntektPeriode(
     val inntektPerioder: Set<ÅrMånedsperiode> = emptySet(),

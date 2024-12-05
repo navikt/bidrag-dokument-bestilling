@@ -93,7 +93,6 @@ import no.nav.bidrag.transport.behandling.vedtak.response.særbidragsperiode
 import no.nav.bidrag.transport.behandling.vedtak.response.typeBehandling
 import org.springframework.stereotype.Service
 import java.math.BigDecimal
-import java.time.LocalDate
 
 val særbidragDirekteAvslagskoderSomInneholderUtgifter =
     listOf(Resultatkode.GODKJENT_BELØP_ER_LAVERE_ENN_FORSKUDDSSATS, Resultatkode.ALLE_UTGIFTER_ER_FORELDET)
@@ -547,14 +546,16 @@ fun List<GrunnlagDto>.mapInntekter(
 
 fun List<UnderholdskostnaderPeriode>.sammenstillDeMedSammeVerdiUnderhold() =
     this
-        .groupBy { it.copy(periode = ÅrMånedsperiode(LocalDate.now(), null)) }
-        .map { (_, underholdList) ->
-            underholdList.reduce { acc, underhold ->
-                underhold.copy(
-                    periode = ÅrMånedsperiode(acc.periode.fom, underhold.periode.til),
-                )
+        .groupBy { it.rolletype }
+        .flatMap { (_, underholdList) ->
+            underholdList.grupperPerioder().map {
+                it.reduce { acc, underhold ->
+                    underhold.copy(
+                        periode = ÅrMånedsperiode(acc.periode.fom, underhold.periode.til),
+                    )
+                }
             }
-        }
+        }.sortedBy { it.periode.fom }
 
 fun List<InntektPeriode>.sammenstillDeMedSammeVerdiInntekter() =
     this
@@ -601,8 +602,8 @@ fun <T : DataPeriode> List<T>.grupperPerioder(): List<List<T>> {
 
 fun List<Samværsperiode>.sammenstillDeMedSammeVerdi() =
     this
-        .groupBy { "${it.samværsfradragBeløp}${it.aldersgruppe}${it.samværsklasse}" }
-        .map { (_, samværList) ->
+        .grupperPerioder()
+        .map { samværList ->
             samværList.reduce { acc, samvær ->
                 Samværsperiode(
                     samværsfradragBeløp = acc.samværsfradragBeløp,
@@ -611,7 +612,7 @@ fun List<Samværsperiode>.sammenstillDeMedSammeVerdi() =
                     periode = ÅrMånedsperiode(acc.periode.fom, samvær.periode.til),
                 )
             }
-        }
+        }.sortedBy { it.periode.fom }
 
 fun List<InntektPeriode>.sammenstillDeMedSammeBeskrivelse() =
     groupBy { Pair(it.beskrivelse, it.rolle) }.map { (_, inntekter) ->
