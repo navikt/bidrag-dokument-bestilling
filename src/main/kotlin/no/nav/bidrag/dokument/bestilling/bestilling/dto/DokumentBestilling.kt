@@ -4,6 +4,7 @@ import no.nav.bidrag.dokument.bestilling.model.Saksbehandler
 import no.nav.bidrag.dokument.bestilling.model.tilLegacyKode
 import no.nav.bidrag.dokument.bestilling.model.visningsnavnBruker
 import no.nav.bidrag.dokument.bestilling.tjenester.sammenstillDeMedSammeVerdi
+import no.nav.bidrag.dokument.bestilling.tjenester.sammenstillDeMedSammeVerdiAndelUnderhold
 import no.nav.bidrag.dokument.bestilling.tjenester.sammenstillDeMedSammeVerdiInntekter
 import no.nav.bidrag.dokument.bestilling.tjenester.sammenstillDeMedSammeVerdiUnderhold
 import no.nav.bidrag.domene.enums.barnetilsyn.Skolealder
@@ -168,7 +169,7 @@ data class VedtakPeriode(
 )
 
 data class AndelUnderholdskostnadPeriode(
-    val periode: ÅrMånedsperiode,
+    override val periode: ÅrMånedsperiode,
     val inntektBM: BigDecimal? = null,
     val inntektBP: BigDecimal? = null,
     val inntektBarn: BigDecimal? = null,
@@ -176,7 +177,9 @@ data class AndelUnderholdskostnadPeriode(
     val andelFaktor: BigDecimal? = null,
     val beløpUnderholdskostnad: BigDecimal? = null,
     val beløpBpsAndel: BigDecimal,
-) {
+) : DataPeriode {
+    override fun kopierTilGenerisk() = copy(periode = ÅrMånedsperiode(LocalDate.now(), null))
+
     val totalEndeligInntekt get() =
         (inntektBM ?: BigDecimal.ZERO) + (inntektBP ?: BigDecimal.ZERO) +
             (barnEndeligInntekt ?: BigDecimal.ZERO)
@@ -318,6 +321,7 @@ data class VedtakBarn(
 ) {
     val samværsperioder = stønadsendringer.flatMap { it.vedtakPerioder.map { it.samvær } }.filterNotNull().sammenstillDeMedSammeVerdi()
     val underholdskostnadperioder = stønadsendringer.flatMap { it.vedtakPerioder.map { it.underhold } }.filterNotNull().sammenstillDeMedSammeVerdiUnderhold()
+    val andelUnderholdPerioder = stønadsendringer.flatMap { it.vedtakPerioder.map { it.andelUnderhold } }.filterNotNull().sammenstillDeMedSammeVerdiAndelUnderhold()
     val inntektsperioder =
         stønadsendringer
             .flatMap { it.vedtakPerioder.flatMap { it.inntekter } }

@@ -338,6 +338,19 @@ class BrevserverProducer(
                                 }
                             }
                         }
+                        vedtakBarn.andelUnderholdPerioder?.forEach {
+                            andelUnderholdPeriode {
+                                fomDato = it.periode.tilLocalDateFom()
+                                tomDato = it.periode.tilLocalDateTil()
+                                belopInntektBp = it.inntektBP
+                                belopInntektBm = it.inntektBM
+                                belopInntektBarn = it.inntektBarn
+                                belopInntektSum = it.totalEndeligInntekt
+                                fordNokkel = it.andelFaktor
+                                belopUnderholdKostnad = it.beløpUnderholdskostnad
+                                belopBp = it.beløpBpsAndel
+                            }
+                        }
                         vedtakBarn.samværsperioder.forEach {
                             samværPeriode {
                                 fomDato = it.periode.fom.atDay(1)
@@ -418,19 +431,7 @@ class BrevserverProducer(
                                         maksInntekt = vedtakPeriode.maksInntekt
                                     }
                                 }
-                                vedtakPeriode.andelUnderhold?.let {
-                                    andelUnderholdPeriode {
-                                        fomDato = vedtakPeriode.fomDato
-                                        tomDato = vedtakPeriode.tomDato ?: MAX_DATE
-                                        belopInntektBp = it.inntektBP
-                                        belopInntektBm = it.inntektBM
-                                        belopInntektBarn = it.inntektBarn
-                                        belopInntektSum = it.totalEndeligInntekt
-                                        fordNokkel = it.andelFaktor
-                                        belopUnderholdKostnad = it.beløpUnderholdskostnad
-                                        belopBp = it.beløpBpsAndel
-                                    }
-                                }
+
                                 vedtakPeriode.bidragsevne?.let {
                                     bidragEvnePeriode {
                                         fomDato = it.periode.fom.atDay(1)

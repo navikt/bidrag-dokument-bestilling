@@ -545,6 +545,17 @@ fun List<GrunnlagDto>.mapInntekter(
     return inntekter + hentTotalInntektForPeriode(periode, innteksgrense)
 }
 
+fun List<AndelUnderholdskostnadPeriode>.sammenstillDeMedSammeVerdiAndelUnderhold() =
+    this
+        .grupperPerioder()
+        .map {
+            it.reduce { acc, underhold ->
+                underhold.copy(
+                    periode = ÅrMånedsperiode(acc.periode.fom, underhold.periode.til),
+                )
+            }
+        }.sortedBy { it.periode.fom }
+
 fun List<UnderholdskostnaderPeriode>.sammenstillDeMedSammeVerdiUnderhold() =
     this
         .groupBy { it.rolletype }
