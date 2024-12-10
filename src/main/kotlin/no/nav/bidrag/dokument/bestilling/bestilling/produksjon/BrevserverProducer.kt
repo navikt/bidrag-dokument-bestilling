@@ -338,10 +338,10 @@ class BrevserverProducer(
                                 }
                             }
                         }
-                        vedtakBarn.andelUnderholdPerioder?.forEach {
+                        vedtakBarn.andelUnderholdPerioder.forEach {
                             andelUnderholdPeriode {
                                 fomDato = it.periode.tilLocalDateFom()
-                                tomDato = it.periode.tilLocalDateTil()
+                                tomDato = it.periode.tilLocalDateTil() ?: MAX_DATE
                                 belopInntektBp = it.inntektBP
                                 belopInntektBm = it.inntektBM
                                 belopInntektBarn = it.inntektBarn
