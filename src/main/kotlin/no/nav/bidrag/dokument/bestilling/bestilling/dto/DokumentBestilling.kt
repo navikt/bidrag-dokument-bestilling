@@ -178,7 +178,7 @@ data class AndelUnderholdskostnadPeriode(
     val beløpUnderholdskostnad: BigDecimal? = null,
     val beløpBpsAndel: BigDecimal,
 ) : DataPeriode {
-    override fun kopierTilGenerisk() = copy(periode = ÅrMånedsperiode(LocalDate.now(), null))
+    override fun kopierTilGenerisk() = copy(periode = ÅrMånedsperiode(LocalDate.now(), null), beløpUnderholdskostnad = BigDecimal.ZERO, beløpBpsAndel = BigDecimal.ZERO)
 
     val totalEndeligInntekt get() =
         (inntektBM ?: BigDecimal.ZERO) + (inntektBP ?: BigDecimal.ZERO) +
