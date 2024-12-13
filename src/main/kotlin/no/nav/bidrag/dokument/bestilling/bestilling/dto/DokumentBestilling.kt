@@ -3,8 +3,15 @@ package no.nav.bidrag.dokument.bestilling.bestilling.dto
 import no.nav.bidrag.dokument.bestilling.model.Saksbehandler
 import no.nav.bidrag.dokument.bestilling.model.tilLegacyKode
 import no.nav.bidrag.dokument.bestilling.model.visningsnavnBruker
+import no.nav.bidrag.dokument.bestilling.tjenester.sammenstillDeMedSammeVerdi
+import no.nav.bidrag.dokument.bestilling.tjenester.sammenstillDeMedSammeVerdiAndelUnderhold
+import no.nav.bidrag.dokument.bestilling.tjenester.sammenstillDeMedSammeVerdiInntekter
+import no.nav.bidrag.dokument.bestilling.tjenester.sammenstillDeMedSammeVerdiUnderhold
+import no.nav.bidrag.domene.enums.barnetilsyn.Skolealder
+import no.nav.bidrag.domene.enums.barnetilsyn.Tilsynstype
 import no.nav.bidrag.domene.enums.behandling.TypeBehandling
 import no.nav.bidrag.domene.enums.beregning.Resultatkode
+import no.nav.bidrag.domene.enums.beregning.Samværsklasse
 import no.nav.bidrag.domene.enums.diverse.Språk
 import no.nav.bidrag.domene.enums.inntekt.Inntektsrapportering
 import no.nav.bidrag.domene.enums.person.Sivilstandskode
@@ -17,7 +24,9 @@ import no.nav.bidrag.domene.enums.vedtak.Vedtakstype
 import no.nav.bidrag.domene.enums.vedtak.VirkningstidspunktÅrsakstype
 import no.nav.bidrag.domene.tid.Datoperiode
 import no.nav.bidrag.domene.tid.ÅrMånedsperiode
+import no.nav.bidrag.domene.util.årsbeløpTilMåndesbeløp
 import no.nav.bidrag.transport.behandling.felles.grunnlag.BostatusPeriode
+import no.nav.bidrag.transport.behandling.felles.grunnlag.DelberegningUnderholdskostnad
 import no.nav.bidrag.transport.behandling.felles.grunnlag.Grunnlagsreferanse
 import no.nav.bidrag.transport.behandling.felles.grunnlag.SivilstandPeriode
 import java.math.BigDecimal
@@ -136,6 +145,14 @@ fun BeløpFraTil.fraVerdi() = this.first
 
 fun BeløpFraTil.tilVerdi() = this.second
 
+interface DataPeriode {
+    val periode: ÅrMånedsperiode
+
+    fun erLik(annen: DataPeriode) = this.kopierTilGenerisk() == annen.kopierTilGenerisk()
+
+    fun kopierTilGenerisk(): DataPeriode
+}
+
 data class VedtakPeriode(
     val fomDato: LocalDate,
     val tomDato: LocalDate? = null,
@@ -145,12 +162,75 @@ data class VedtakPeriode(
     val inntektGrense: BigDecimal,
     val maksInntekt: BigDecimal,
     val inntekter: List<InntektPeriode> = emptyList(),
+    val samvær: Samværsperiode?,
+    val bidragsevne: BidragsevnePeriode? = null,
+    val underhold: UnderholdskostnaderPeriode? = null,
+    val andelUnderhold: AndelUnderholdskostnadPeriode? = null,
 )
+
+data class AndelUnderholdskostnadPeriode(
+    override val periode: ÅrMånedsperiode,
+    val inntektBM: BigDecimal? = null,
+    val inntektBP: BigDecimal? = null,
+    val inntektBarn: BigDecimal? = null,
+    val barnEndeligInntekt: BigDecimal? = null,
+    val andelFaktor: BigDecimal? = null,
+    val beløpUnderholdskostnad: BigDecimal? = null,
+    val beløpBpsAndel: BigDecimal,
+) : DataPeriode {
+    override fun kopierTilGenerisk() = copy(periode = ÅrMånedsperiode(LocalDate.now(), null), beløpUnderholdskostnad = BigDecimal.ZERO, beløpBpsAndel = BigDecimal.ZERO)
+
+    val totalEndeligInntekt get() =
+        (inntektBM ?: BigDecimal.ZERO) + (inntektBP ?: BigDecimal.ZERO) +
+            (barnEndeligInntekt ?: BigDecimal.ZERO)
+}
+
+data class UnderholdskostnaderPeriode(
+    override val periode: ÅrMånedsperiode,
+    val tilsynstype: Tilsynstype?,
+    val skolealder: Skolealder?,
+    val harBarnetilsyn: Boolean = false,
+    val delberegning: DelberegningUnderholdskostnad,
+    val gjelderIdent: String,
+    val rolletype: Rolletype?,
+) : DataPeriode {
+    override fun kopierTilGenerisk() = copy(periode = ÅrMånedsperiode(LocalDate.now(), null))
+}
+
+data class BidragsevnePeriode(
+    val periode: ÅrMånedsperiode,
+    val sjabloner: BidragsevneSjabloner,
+    val bidragsevne: BigDecimal,
+    val beløpBidrag: BigDecimal,
+    val harFullEvne: Boolean,
+    val harDelvisEvne: Boolean,
+    val inntektBP: BigDecimal,
+    val underholdEgneBarnIHusstand: UnderholdEgneBarnIHusstand,
+    val skatt: Skatt,
+    val borMedAndreVoksne: Boolean,
+) {
+    data class BidragsevneSjabloner(
+        val beløpMinstefradrag: BigDecimal,
+        val beløpKlassfradrag: BigDecimal,
+        val beløpUnderholdEgneBarnIHusstanden: BigDecimal,
+        val boutgiftBeløp: BigDecimal,
+        val underholdBeløp: BigDecimal,
+    )
+}
+
+data class Samværsperiode(
+    override val periode: ÅrMånedsperiode,
+    val samværsklasse: Samværsklasse,
+    val aldersgruppe: Pair<Int, Int?>?,
+    val samværsfradragBeløp: BigDecimal,
+) : DataPeriode {
+    override fun kopierTilGenerisk() = copy(periode = ÅrMånedsperiode(LocalDate.now(), null))
+}
 
 data class InntektPeriode(
     val inntektPerioder: Set<ÅrMånedsperiode> = emptySet(),
     val inntektOpprinneligPerioder: Set<ÅrMånedsperiode> = emptySet(),
-    val periode: ÅrMånedsperiode,
+    override val periode: ÅrMånedsperiode,
     val typer: Set<Inntektsrapportering> = emptySet(),
     val periodeTotalinntekt: Boolean? = false,
     val nettoKapitalInntekt: Boolean? = false,
@@ -158,7 +238,8 @@ data class InntektPeriode(
     val fødselsnummer: String?,
     val beløp: BigDecimal,
     val rolle: Rolletype,
-) {
+    val innteksgrense: BigDecimal,
+) : DataPeriode {
     val type get() = typer.firstOrNull()
     val inntektPeriode get() = inntektPerioder.minByOrNull { it.fom }
     val opprinneligPeriode get() = inntektOpprinneligPerioder.minByOrNull { it.fom }
@@ -178,6 +259,8 @@ data class InntektPeriode(
                 nettoKapitalInntekt == true -> "XKAP"
                 else -> ""
             }
+
+    override fun kopierTilGenerisk() = copy(periode = ÅrMånedsperiode(LocalDate.now(), null), beløpÅr = null, inntektPerioder = emptySet())
 }
 
 data class ForskuddInntektgrensePeriode(
@@ -193,6 +276,7 @@ data class VedtakDetaljer(
     val årsakKode: VirkningstidspunktÅrsakstype?,
     val avslagsKode: Resultatkode?,
     val type: TypeBehandling,
+    val gebyr: GebyrInfoDto? = null,
     val virkningstidspunkt: LocalDate?,
     val mottattDato: LocalDate?,
     val soktFraDato: LocalDate?,
@@ -217,6 +301,11 @@ data class VedtakDetaljer(
             ?.beløp
 }
 
+data class GebyrInfoDto(
+    val bmGebyr: BigDecimal? = null,
+    val bpGebyr: BigDecimal? = null,
+)
+
 data class BarnIHusstandPeriode(
     val periode: ÅrMånedsperiode,
     val antall: Double,
@@ -225,10 +314,21 @@ data class BarnIHusstandPeriode(
 data class VedtakBarn(
     val fødselsnummer: String,
     val navn: String?,
+    val løpendeBidrag: BigDecimal? = null,
     val bostatusPerioder: List<BostatusPeriode>,
     val stønadsendringer: List<VedtakBarnStonad> = emptyList(),
     val engangsbeløper: List<VedtakBarnEngangsbeløp> = emptyList(),
-)
+) {
+    val samværsperioder = stønadsendringer.flatMap { it.vedtakPerioder.map { it.samvær } }.filterNotNull().sammenstillDeMedSammeVerdi()
+    val underholdskostnadperioder = stønadsendringer.flatMap { it.vedtakPerioder.map { it.underhold } }.filterNotNull().sammenstillDeMedSammeVerdiUnderhold()
+    val andelUnderholdPerioder = stønadsendringer.flatMap { it.vedtakPerioder.map { it.andelUnderhold } }.filterNotNull().sammenstillDeMedSammeVerdiAndelUnderhold()
+    val inntektsperioder =
+        stønadsendringer
+            .flatMap { it.vedtakPerioder.flatMap { it.inntekter } }
+            .sammenstillDeMedSammeVerdiInntekter()
+            .sortedBy { it.rolle }
+            .filter { it.rolle != Rolletype.BARN || it.beløp > BigDecimal.ZERO }
+}
 
 data class VedtakBarnEngangsbeløp(
     val type: Engangsbeløptype,
@@ -242,10 +342,11 @@ data class VedtakBarnEngangsbeløp(
 
 data class VedtakPeriodeReferanse(
     val periode: ÅrMånedsperiode,
+    val resultatKode: Resultatkode?,
     val typeBehandling: TypeBehandling,
     val grunnlagReferanseListe: List<Grunnlagsreferanse> = emptyList(),
 ) {
-    constructor(periode: Datoperiode, type: TypeBehandling, grunnlagReferanseListe: List<Grunnlagsreferanse>) : this(ÅrMånedsperiode(periode.fom, periode.til), type, grunnlagReferanseListe)
+    constructor(periode: Datoperiode, type: TypeBehandling, grunnlagReferanseListe: List<Grunnlagsreferanse>) : this(ÅrMånedsperiode(periode.fom, periode.til), null, type, grunnlagReferanseListe)
 }
 
 data class BrevSjablonVerdier(
@@ -307,3 +408,25 @@ data class VedtakSaksbehandlerInfo(
     val navn: String,
     val ident: String,
 )
+
+data class UnderholdEgneBarnIHusstand(
+    val årsbeløp: BigDecimal,
+    val sjablon: BigDecimal,
+    val antallBarnIHusstanden: Int,
+    val antallBarnDeltBossted: Int,
+) {
+    val måndesbeløp get() = årsbeløp.årsbeløpTilMåndesbeløp()
+}
+
+data class Skatt(
+    val sumSkattFaktor: BigDecimal,
+    val sumSkatt: BigDecimal,
+    val skattAlminneligInntekt: BigDecimal,
+    val trinnskatt: BigDecimal,
+    val trygdeavgift: BigDecimal,
+) {
+    val skattMånedsbeløp get() = sumSkatt.årsbeløpTilMåndesbeløp()
+    val trinnskattMånedsbeløp get() = trinnskatt.årsbeløpTilMåndesbeløp()
+    val skattAlminneligInntektMånedsbeløp get() = skattAlminneligInntekt.årsbeløpTilMåndesbeløp()
+    val trygdeavgiftMånedsbeløp get() = trygdeavgift.årsbeløpTilMåndesbeløp()
+}

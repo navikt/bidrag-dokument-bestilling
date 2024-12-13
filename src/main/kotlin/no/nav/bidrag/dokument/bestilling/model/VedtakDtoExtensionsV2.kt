@@ -138,7 +138,8 @@ fun List<GrunnlagDto>.hentDelberegningInntektForPeriode(
 ): Set<BaseGrunnlag> {
     val sluttberegning =
         finnGrunnlagSomErReferertFraGrunnlagsreferanseListe(Grunnlagstype.SLUTTBEREGNING_FORSKUDD, periode.grunnlagReferanseListe).firstOrNull()
-            ?: finnGrunnlagSomErReferertFraGrunnlagsreferanseListe(Grunnlagstype.SLUTTBEREGNING_SÆRBIDRAG, periode.grunnlagReferanseListe).firstOrNull() ?: return emptySet()
+            ?: finnGrunnlagSomErReferertFraGrunnlagsreferanseListe(Grunnlagstype.SLUTTBEREGNING_SÆRBIDRAG, periode.grunnlagReferanseListe).firstOrNull()
+            ?: finnGrunnlagSomErReferertFraGrunnlagsreferanseListe(Grunnlagstype.SLUTTBEREGNING_BARNEBIDRAG, periode.grunnlagReferanseListe).firstOrNull() ?: return emptySet()
     return finnGrunnlagSomErReferertFraGrunnlagsreferanseListe(Grunnlagstype.DELBEREGNING_SUM_INNTEKT, sluttberegning.grunnlagsreferanseListe)
 }
 
@@ -168,6 +169,7 @@ fun List<InntektsrapporteringPeriode>.totalKapitalinntekt(): BigDecimal =
 
 fun List<GrunnlagDto>.hentNettoKapitalinntektForRolle(
     vedtakPeriodeDto: VedtakPeriodeReferanse,
+    innteksgrense: BigDecimal,
 ): List<InntektPeriode> =
     hentKapitalinntekterForPeriode(vedtakPeriodeDto)
         .mapNotNull { (gjelderReferanse, grunnlag) ->
@@ -187,6 +189,7 @@ fun List<GrunnlagDto>.hentNettoKapitalinntektForRolle(
                             rolle = gjelderGrunnlag.type.tilRolletype(),
                             fødselsnummer = rollePersonInfo.ident!!.verdi,
                             beløp = it,
+                            innteksgrense = innteksgrense,
                         )
                     }
                 }
@@ -211,10 +214,19 @@ fun List<BaseGrunnlag>.finnGrunnlagMedType(
     return null
 }
 
-fun List<BaseGrunnlag>.finnSjablonMedType(type: SjablonTallNavn) =
-    filtrerBasertPåEgenReferanse(Grunnlagstype.SJABLON_SJABLONTALL)
-        .map { it.innholdTilObjekt<SjablonSjablontallPeriode>() }
-        .find { it.sjablon == type }
+fun List<BaseGrunnlag>.finnSjablonMedType(
+    type: SjablonTallNavn,
+    referanser: List<Grunnlagsreferanse>? = null,
+): SjablonSjablontallPeriode? =
+    if (referanser != null) {
+        finnGrunnlagSomErReferertFraGrunnlagsreferanseListe(Grunnlagstype.SJABLON_SJABLONTALL, referanser)
+            .map { it.innholdTilObjekt<SjablonSjablontallPeriode>() }
+            .find { it.sjablon == type }
+    } else {
+        filtrerBasertPåEgenReferanse(Grunnlagstype.SJABLON_SJABLONTALL)
+            .map { it.innholdTilObjekt<SjablonSjablontallPeriode>() }
+            .find { it.sjablon == type }
+    }
 
 fun List<BaseGrunnlag>.filtrerBasertPåEgenReferanser(
     type: Grunnlagstype,
@@ -238,6 +250,7 @@ fun ÅrMånedsperiode?.tilLocalDateTil() = this?.til?.atEndOfMonth()
 
 fun List<GrunnlagDto>.hentTotalInntektForPeriode(
     vedtakPeriode: VedtakPeriodeReferanse,
+    innteksgrense: BigDecimal,
 ): List<InntektPeriode> =
     hentDelberegningInntektForPeriode(vedtakPeriode).groupBy { it.gjelderReferanse }.flatMap { (gjelderReferanse, inntektPeriode) ->
 //        val førsteInntekt = filtrerBasertPåFremmedReferanse(Grunnlagstype.INNTEKT_RAPPORTERING_PERIODE, inntektPeriode.grunnlagsreferanseListe).firstOrNull()
@@ -251,6 +264,7 @@ fun List<GrunnlagDto>.hentTotalInntektForPeriode(
                 beløpÅr = vedtakPeriode.periode.fom.year,
                 rolle = gjelderPersonGrunnlag.type.tilRolletype(),
                 fødselsnummer = gjelderPersonGrunnlag.personIdent,
+                innteksgrense = innteksgrense,
             ),
         )
     }

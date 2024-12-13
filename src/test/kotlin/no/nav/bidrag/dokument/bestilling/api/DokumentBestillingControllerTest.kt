@@ -63,8 +63,7 @@ import org.springframework.http.ResponseEntity
 import java.math.BigDecimal
 import java.time.LocalDate
 
-fun BidragBarn.hentInntektPerioder(periodeFraTom: PeriodeFraTom) =
-    inntektPerioder.filter { it.fomDato == periodeFraTom.fraDato && it.tomDato == periodeFraTom.tomDato }
+fun BidragBarn.hentInntektPerioder(periodeFraTom: PeriodeFraTom) = inntektPerioder.filter { it.fomDato == periodeFraTom.fraDato && it.tomDato == periodeFraTom.tomDato }
 
 class DokumentBestillingControllerTest : AbstractControllerTest() {
     @Test
@@ -127,7 +126,7 @@ class DokumentBestillingControllerTest : AbstractControllerTest() {
         responseDokumentMalerBucket["FARSKAP_PROVETAKING_FARSKAP"]!!.innholdType shouldBe DokumentMalType.SKJEMA
 
         responseDokumentMalerBrevserver.filter { it.value.kreverBehandling } shouldHaveSize 4
-        responseDokumentMalerBrevserver.filter { it.value.kreverVedtak } shouldHaveSize 18
+        responseDokumentMalerBrevserver.filter { it.value.kreverVedtak } shouldHaveSize 31
     }
 
     @Test
@@ -224,10 +223,10 @@ class DokumentBestillingControllerTest : AbstractControllerTest() {
                 message.validateKontaktInformasjon(enhetKontaktInfo, BM1, BP1, bmAdresse)
 
                 message.brev?.parter?.bmkravkfremav shouldBe ""
-                message.brev?.parter?.bmgebyr shouldBe ""
+                message.brev?.parter?.bmgebyr shouldBe null
                 message.brev?.parter?.bmlandkode shouldBe ""
                 message.brev?.parter?.bpkravfremav shouldBe ""
-                message.brev?.parter?.bpgebyr shouldBe ""
+                message.brev?.parter?.bpgebyr shouldBe null
                 message.brev?.parter?.bplandkode shouldBe ""
                 message.brev?.parter?.bmdatodod shouldBe null
                 message.brev?.parter?.bpdatodod shouldBe null
@@ -614,10 +613,10 @@ class DokumentBestillingControllerTest : AbstractControllerTest() {
                 )
 
                 message.brev?.parter?.bmkravkfremav shouldBe ""
-                message.brev?.parter?.bmgebyr shouldBe ""
+                message.brev?.parter?.bmgebyr shouldBe null
                 message.brev?.parter?.bmlandkode shouldBe ""
                 message.brev?.parter?.bpkravfremav shouldBe ""
-                message.brev?.parter?.bpgebyr shouldBe ""
+                message.brev?.parter?.bpgebyr shouldBe null
                 message.brev?.parter?.bplandkode shouldBe ""
                 message.brev?.parter?.bmdatodod shouldBe null
                 message.brev?.parter?.bpdatodod shouldBe null
