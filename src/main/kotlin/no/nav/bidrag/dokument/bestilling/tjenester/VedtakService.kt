@@ -589,7 +589,7 @@ fun List<InntektPeriode>.sammenstillDeMedSammeVerdiInntekter() =
                     )
                 }
             }
-        }.sortedBy { it.periode.fom }
+        }.sortedWith(compareBy({ it.rolle }, { it.periode.fom }, { it.beløp }))
 
 fun <T : DataPeriode> List<T>.grupperPerioder(): List<List<T>> {
     if (this.isEmpty()) return emptyList()
