@@ -109,6 +109,11 @@ Klage:
     filsti: ikke_redigerbar/Klage vedlegg.pdf
     tittel: Klage vedlegg
     type: VEDLEGG_VEDTAK
+  - kode: VEDLEGG_KLAGE_EN
+    filsti: ikke_redigerbar/Vedlegg orientering om klagerett (engelsk).pdf
+    tittel: 'Notification of the right to appeal against an administrative decision'
+    beskrivelse: 'Orientering om klagerett (engelsk)'
+    type: VEDLEGG_VEDTAK
 DNA:
   - kode: PROVETAKING_FARSKAP
     filsti: redigerbar_skjema/intern_skjema/Refusjonsskjema for prøvetaking i farskapssak.pdf
