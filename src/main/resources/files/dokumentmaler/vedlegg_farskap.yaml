@@ -112,7 +112,7 @@ Klage:
   - kode: VEDLEGG_KLAGE_EN
     filsti: ikke_redigerbar/Vedlegg orientering om klagerett (engelsk).pdf
     tittel: 'Notification of the right to appeal against an administrative decision'
-    beskrivelse: 'Orientering om klagerett (engelsk)'
+    beskrivelse: 'Klage vedlegg (engelsk)'
     type: VEDLEGG_VEDTAK
 DNA:
   - kode: PROVETAKING_FARSKAP
