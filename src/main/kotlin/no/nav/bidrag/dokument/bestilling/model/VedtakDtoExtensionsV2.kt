@@ -140,7 +140,15 @@ fun List<GrunnlagDto>.hentDelberegningInntektForPeriode(
         finnGrunnlagSomErReferertFraGrunnlagsreferanseListe(Grunnlagstype.SLUTTBEREGNING_FORSKUDD, periode.grunnlagReferanseListe).firstOrNull()
             ?: finnGrunnlagSomErReferertFraGrunnlagsreferanseListe(Grunnlagstype.SLUTTBEREGNING_SÆRBIDRAG, periode.grunnlagReferanseListe).firstOrNull()
             ?: finnGrunnlagSomErReferertFraGrunnlagsreferanseListe(Grunnlagstype.SLUTTBEREGNING_BARNEBIDRAG, periode.grunnlagReferanseListe).firstOrNull() ?: return emptySet()
-    return finnGrunnlagSomErReferertFraGrunnlagsreferanseListe(Grunnlagstype.DELBEREGNING_SUM_INNTEKT, sluttberegning.grunnlagsreferanseListe)
+
+    if (sluttberegning.type == Grunnlagstype.SLUTTBEREGNING_BARNEBIDRAG) {
+        finnGrunnlagSomErReferertFraGrunnlagsreferanseListe(Grunnlagstype.DELBEREGNING_BIDRAGSPLIKTIGES_ANDEL, sluttberegning.grunnlagsreferanseListe)
+            .let {
+                return finnGrunnlagSomErReferertFraGrunnlagsreferanseListe(Grunnlagstype.DELBEREGNING_SUM_INNTEKT, it.first().grunnlagsreferanseListe)
+            }
+    } else {
+        return finnGrunnlagSomErReferertFraGrunnlagsreferanseListe(Grunnlagstype.DELBEREGNING_SUM_INNTEKT, sluttberegning.grunnlagsreferanseListe)
+    }
 }
 
 fun List<GrunnlagDto>.hentInntekterForPeriode(

@@ -578,14 +578,8 @@ fun List<InntektPeriode>.sammenstillDeMedSammeVerdiInntekter() =
                     inntekt.copy(
                         periode = ÅrMånedsperiode(acc.periode.fom, inntekt.periode.til),
                         innteksgrense = maxOf(acc.innteksgrense, inntekt.innteksgrense),
-                        beløpÅr =
-                            if (acc.beløpÅr == null) {
-                                inntekt.beløpÅr
-                            } else if (inntekt.beløpÅr == null) {
-                                acc.beløpÅr
-                            } else {
-                                maxOf(acc.beløpÅr, inntekt.beløpÅr)
-                            },
+                        beløpÅr = acc.beløpÅr,
+                        inntektPerioder = acc.inntektPerioder,
                     )
                 }
             }
