@@ -324,20 +324,20 @@ class BrevserverProducer(
                                 beskrivelse = sivilstand.sivilstand.visningsnavn.bruker[Språk.NB]
                             }
                         }
-                        if (vedtakInfo.type == TypeBehandling.BIDRAG) {
-                            vedtakBarn.inntektsperioder.forEach {
-                                inntektPeriode {
-                                    fomDato = it.periode?.tilLocalDateFom()
-                                    tomDato = it.periode.tilLocalDateTil() ?: MAX_DATE
-                                    belopType = it.beløpKode
-                                    belopÅrsinntekt = it.beløp
-                                    beskrivelse = it.beskrivelse
-                                    rolle = it.rolle.toKode()
-                                    fnr = it.fødselsnummer
-                                    inntektGrense = it.innteksgrense
-                                }
-                            }
-                        }
+//                        if (vedtakInfo.type == TypeBehandling.BIDRAG) {
+//                            vedtakBarn.inntektsperioder.forEach {
+//                                inntektPeriode {
+//                                    fomDato = it.periode?.tilLocalDateFom()
+//                                    tomDato = it.periode.tilLocalDateTil() ?: MAX_DATE
+//                                    belopType = it.beløpKode
+//                                    belopÅrsinntekt = it.beløp
+//                                    beskrivelse = it.beskrivelse
+//                                    rolle = it.rolle.toKode()
+//                                    fnr = it.fødselsnummer
+//                                    inntektGrense = it.innteksgrense
+//                                }
+//                            }
+//                        }
                         vedtakBarn.andelUnderholdPerioder.forEach {
                             andelUnderholdPeriode {
                                 fomDato = it.periode.tilLocalDateFom()
@@ -464,20 +464,20 @@ class BrevserverProducer(
                                     }
                                 }
 
-                                if (vedtakInfo.type != TypeBehandling.BIDRAG) {
-                                    vedtakPeriode.inntekter.forEach {
-                                        inntektPeriode {
-                                            fomDato = it.periode?.tilLocalDateFom()
-                                            tomDato = it.periode.tilLocalDateTil() ?: MAX_DATE
-                                            belopType = it.beløpKode
-                                            belopÅrsinntekt = it.beløp
-                                            beskrivelse = it.beskrivelse
-                                            rolle = it.rolle.toKode()
-                                            fnr = it.fødselsnummer
-                                            inntektGrense = vedtakPeriode.inntektGrense
-                                        }
+//                                if (vedtakInfo.type != TypeBehandling.BIDRAG) {
+                                vedtakPeriode.inntekter.forEach {
+                                    inntektPeriode {
+                                        fomDato = it.periode?.tilLocalDateFom()
+                                        tomDato = it.periode.tilLocalDateTil() ?: MAX_DATE
+                                        belopType = it.beløpKode
+                                        belopÅrsinntekt = it.beløp
+                                        beskrivelse = it.beskrivelse
+                                        rolle = it.rolle.toKode()
+                                        fnr = it.fødselsnummer
+                                        inntektGrense = vedtakPeriode.inntektGrense
                                     }
                                 }
+//                                }
                             }
 
                             detaljer.vedtakPerioder.forEach {
