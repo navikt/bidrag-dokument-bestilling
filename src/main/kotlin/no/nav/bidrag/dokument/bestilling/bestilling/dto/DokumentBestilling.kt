@@ -260,7 +260,7 @@ data class InntektPeriode(
                 else -> ""
             }
 
-    override fun kopierTilGenerisk() = copy(periode = ÅrMånedsperiode(LocalDate.now(), null), beløpÅr = null, inntektPerioder = emptySet())
+    override fun kopierTilGenerisk() = copy()
 }
 
 data class ForskuddInntektgrensePeriode(
