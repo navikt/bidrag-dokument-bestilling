@@ -15,7 +15,7 @@ env:
 
   BIDRAG_SAK_URL: https://bidrag-sak-q2.dev-fss-pub.nais.io/bidrag-sak
   BIDRAG_SAK_SCOPE: dev-fss.bidrag.bidrag-sak-q2
-  KODEVERK_URL: https://kodeverk-api.nav.no
+  KODEVERK_URL: http://bidrag-kodeverk
 
   BIDRAG_VEDTAK_URL: http://bidrag-vedtak-q2
   BIDRAG_VEDTAK_SCOPE: dev-gcp.bidrag.bidrag-vedtak-q2
@@ -36,6 +36,7 @@ env:
 outbound-access-apps:
   - bidrag-vedtak-q2
   - bidrag-behandling-q2
+  - bidrag-kodeverk
 outbound-access-hosts:
   - bidrag-dokument.dev-fss-pub.nais.io
   - bidrag-person-q2.dev-fss-pub.nais.io
