@@ -1,7 +1,6 @@
 package no.nav.bidrag.dokument.bestilling.consumer
 
 import jakarta.annotation.PostConstruct
-import no.nav.bidrag.commons.CorrelationId
 import no.nav.bidrag.commons.web.HttpHeaderRestTemplate
 import no.nav.bidrag.dokument.bestilling.config.CacheConfig.Companion.LANDKODER_CACHE
 import no.nav.bidrag.dokument.bestilling.config.CacheConfig.Companion.LANDKODER_ISO2_CACHE
@@ -23,11 +22,7 @@ class KodeverkConsumer(
 
     init {
         val restTemplate = HttpHeaderRestTemplate()
-        restTemplate.uriTemplateHandler = DefaultUriBuilderFactory("$kodeverkUrl/api/v1/kodeverk")
-        restTemplate.addHeaderGenerator("Nav-Call-Id") {
-            CorrelationId.generateTimestamped("bidrag-dokument-bestilling").get()
-        }
-        restTemplate.addHeaderGenerator("Nav-Consumer-Id") { "bidrag-dokument-forsendelse" }
+        restTemplate.uriTemplateHandler = DefaultUriBuilderFactory("$kodeverkUrl/kodeverk")
         this.restTemplate = restTemplate
     }
 
@@ -41,7 +36,7 @@ class KodeverkConsumer(
         LOGGER.info("Henter Landkoder fra kodeverk")
         val response =
             restTemplate.exchange(
-                "/Landkoder/koder/betydninger?spraak=nb",
+                "/Landkoder",
                 HttpMethod.GET,
                 null,
                 KodeverkResponse::class.java,
@@ -56,10 +51,10 @@ class KodeverkConsumer(
             ?.get(DEFAULT_CACHE, KodeverkResponse::class.java)
 
     private fun loadLandkoderISO2() {
-        LOGGER.info("Henter Landkoder fra kodeverk")
+        LOGGER.info("Henter LandkoderISO2 fra kodeverk")
         val response =
             restTemplate.exchange(
-                "/LandkoderISO2/koder/betydninger?spraak=nb",
+                "/LandkoderISO2",
                 HttpMethod.GET,
                 null,
                 KodeverkResponse::class.java,
