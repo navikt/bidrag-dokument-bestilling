@@ -35,7 +35,6 @@ import no.nav.bidrag.domene.enums.diverse.Språk
 import no.nav.bidrag.domene.enums.person.Sivilstandskode
 import no.nav.bidrag.domene.enums.vedtak.Engangsbeløptype
 import no.nav.bidrag.domene.enums.vedtak.Stønadstype
-import no.nav.bidrag.domene.util.avrundetMedNullDesimaler
 import no.nav.bidrag.domene.util.visningsnavn
 import no.nav.bidrag.domene.util.årsbeløpTilMåndesbeløp
 import no.nav.bidrag.transport.dokument.AvsenderMottakerDto
@@ -438,11 +437,7 @@ class BrevserverProducer(
                                         fomDato = it.periode.fom.atDay(1)
                                         tomDato = it.periode.til?.atEndOfMonth() ?: MAX_DATE
 //                                        skatteklasse = ??
-                                        antallBarn =
-                                            it.underholdEgneBarnIHusstand.antallBarnIHusstanden
-                                                .toBigDecimal()
-                                                .avrundetMedNullDesimaler
-                                                .toInt()
+                                        antallBarn = it.underholdEgneBarnIHusstand.antallBarnIHusstanden
                                         antallBarnDelt = it.underholdEgneBarnIHusstand.antallBarnDeltBossted
                                         bostatus = if (it.borMedAndreVoksne) "1" else "0"
                                         flBarnSakJN = vedtakInfo.vedtakBarn.size > 1

@@ -425,7 +425,7 @@ class BidragEvnePeriode {
     var bostatus: String? = null
 
     @XmlElement(name = "antBarn", nillable = true)
-    var antallBarn: Int? = null
+    var antallBarn: Double? = null
 
     @XmlElement(name = "antBarnDelt", nillable = true)
     var antallBarnDelt: Int? = null
