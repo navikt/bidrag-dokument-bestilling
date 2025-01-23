@@ -424,7 +424,7 @@ fun List<GrunnlagDto>.finnDelberegningBidragsevne(periode: VedtakPeriodeReferans
             UnderholdEgneBarnIHusstand(
                 årsbeløp = delberegningBidragsevne.innhold.underholdBarnEgenHusstand,
                 sjablon = sjablonUnderholdEgnebarnIHusstand.verdi,
-                antallBarnIHusstanden = delberegningBarnIHusstanden.innhold.antallBarn.toInt(),
+                antallBarnIHusstanden = delberegningBarnIHusstanden.innhold.antallBarn,
                 antallBarnDeltBossted = antallBarnDeltBossted,
             ),
         harFullEvne = !sluttberegning.innhold.bidragJustertNedTilEvne,

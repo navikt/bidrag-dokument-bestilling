@@ -411,7 +411,7 @@ data class VedtakSaksbehandlerInfo(
 data class UnderholdEgneBarnIHusstand(
     val årsbeløp: BigDecimal,
     val sjablon: BigDecimal,
-    val antallBarnIHusstanden: Int,
+    val antallBarnIHusstanden: Double,
     val antallBarnDeltBossted: Int,
 ) {
     val måndesbeløp get() = årsbeløp.årsbeløpTilMåndesbeløp()
