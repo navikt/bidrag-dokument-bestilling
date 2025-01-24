@@ -425,9 +425,11 @@ class BidragEvnePeriode {
     var bostatus: String? = null
 
     @XmlElement(name = "antBarn", nillable = true)
+    @XmlJavaTypeAdapter(NumberAdapter::class)
     var antallBarn: Int? = null
 
     @XmlElement(name = "antBarnDelt", nillable = true)
+    @XmlJavaTypeAdapter(NumberAdapter::class)
     var antallBarnDelt: Int? = null
 
     @XmlElement(name = "flBarnSakJN", nillable = true)
