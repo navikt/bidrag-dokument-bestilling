@@ -54,6 +54,7 @@ spec:
     path: /actuator/health
     initialDelay: 60
     timeout: 1
+    failureThreshold: 10
   prometheus:
     enabled: true
     path: /actuator/prometheus
@@ -62,7 +63,7 @@ spec:
       cpu: 1000m
       memory: 1024Mi
     requests:
-      cpu: 500m
+      cpu: 600m
       memory: 512Mi
   gcp:
     buckets:
