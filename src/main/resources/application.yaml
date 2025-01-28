@@ -1,9 +1,11 @@
 management:
+  health:
+    jms:
+      enabled: false
   endpoints:
     web:
       exposure:
         include: "prometheus,health"
-
 springdoc:
   packages-to-scan: no.nav.bidrag.dokument.bestilling.api
 spring.main.banner-mode: off
