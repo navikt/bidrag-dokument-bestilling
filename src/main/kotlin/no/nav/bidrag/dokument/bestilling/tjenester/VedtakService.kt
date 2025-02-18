@@ -296,7 +296,7 @@ class VedtakService(
         val stønadsendringerBarn = vedtakDto.stønadsendringListe.filter { it.kravhaver.verdi == barnIdent }
         return stønadsendringerBarn.map { stønadsendring ->
             val vedtakPerioder =
-                stønadsendring.periodeListe.map { stønadperiode ->
+                stønadsendring.periodeListe.filter { it.resultatkode != Resultatkode.OPPHØR.name }.map { stønadperiode ->
                     val innteksgrense = sjablongService.hentInntektGrenseForPeriode(getLastDayOfPreviousMonth(stønadperiode.periode.til?.atEndOfMonth()))
                     val resultatKode = Resultatkode.fraKode(stønadperiode.resultatkode)
                     val referanse = VedtakPeriodeReferanse(stønadperiode.periode, resultatKode, vedtakDto.typeBehandling, stønadperiode.grunnlagReferanseListe)
