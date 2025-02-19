@@ -48,6 +48,8 @@ import org.springframework.jms.core.JmsTemplate
 import org.springframework.stereotype.Component
 import java.math.BigDecimal
 
+val bidragStønader = listOf(Stønadstype.BIDRAG, Stønadstype.BIDRAG18AAR)
+
 @Component(BestillingSystem.BREVSERVER)
 class BrevserverProducer(
     val onlinebrevTemplate: JmsTemplate,
@@ -325,6 +327,19 @@ class BrevserverProducer(
                                 beskrivelse = sivilstand.sivilstand.visningsnavn.bruker[Språk.NB]
                             }
                         }
+                        vedtakBarn.stønadsendringer.forEach { stønadsendring ->
+                            stønadsendring.vedtakPerioder.forEach {
+                                vedtakBarn {
+                                    fomDato = it.fomDato
+                                    tomDato = it.tomDato ?: MAX_DATE
+                                    fnr = vedtakBarn.fødselsnummer
+                                    belopBidrag = it.beløp
+                                    resultatKode = it.resultatKode
+                                    søktTilleggsbidrag = false // TODO
+                                    erInnkreving = stønadsendring.innkreving
+                                }
+                            }
+                        }
                         if (vedtakInfo.type == TypeBehandling.BIDRAG) {
                             vedtakBarn.inntektsperioder.forEach {
                                 inntektPeriode {
@@ -486,14 +501,16 @@ class BrevserverProducer(
                             }
 
                             detaljer.vedtakPerioder.forEach {
-                                vedtak {
-                                    fomDato = it.fomDato
-                                    tomDato = it.tomDato ?: MAX_DATE
-                                    fnr = vedtakBarn.fødselsnummer
-                                    belopBidrag = it.beløp
-                                    resultatKode = it.resultatKode
-                                    søktTilleggsbidrag = false // TODO
-                                    erInnkreving = detaljer.innkreving
+                                if (!bidragStønader.contains(detaljer.type)) {
+                                    vedtak {
+                                        fomDato = it.fomDato
+                                        tomDato = it.tomDato ?: MAX_DATE
+                                        fnr = vedtakBarn.fødselsnummer
+                                        belopBidrag = it.beløp
+                                        resultatKode = it.resultatKode
+                                        søktTilleggsbidrag = false // TODO
+                                        erInnkreving = detaljer.innkreving
+                                    }
                                 }
 
                                 if (detaljer.type == Stønadstype.FORSKUDD) {

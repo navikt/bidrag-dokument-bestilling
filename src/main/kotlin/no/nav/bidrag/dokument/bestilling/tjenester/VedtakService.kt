@@ -296,7 +296,7 @@ class VedtakService(
         val stønadsendringerBarn = vedtakDto.stønadsendringListe.filter { it.kravhaver.verdi == barnIdent }
         return stønadsendringerBarn.map { stønadsendring ->
             val vedtakPerioder =
-                stønadsendring.periodeListe.map { stønadperiode ->
+                stønadsendring.periodeListe.filter { it.resultatkode != Resultatkode.OPPHØR.name }.map { stønadperiode ->
                     val innteksgrense = sjablongService.hentInntektGrenseForPeriode(getLastDayOfPreviousMonth(stønadperiode.periode.til?.atEndOfMonth()))
                     val resultatKode = Resultatkode.fraKode(stønadperiode.resultatkode)
                     val referanse = VedtakPeriodeReferanse(stønadperiode.periode, resultatKode, vedtakDto.typeBehandling, stønadperiode.grunnlagReferanseListe)
@@ -404,7 +404,7 @@ fun List<GrunnlagDto>.finnDelberegningBidragsevne(periode: VedtakPeriodeReferans
             .find { it.innhold.sjablon == SjablonTallNavn.PERSONFRADRAG_KLASSE1_BELØP || it.innhold.sjablon == SjablonTallNavn.PERSONFRADRAG_KLASSE2_BELØP }
     return BidragsevnePeriode(
         periode = periode.periode,
-        beløpBidrag = sluttberegning.innhold.resultatBeløp,
+        beløpBidrag = sluttberegning.innhold.resultatBeløp ?: BigDecimal.ZERO,
         sjabloner =
             BidragsevnePeriode.BidragsevneSjabloner(
                 beløpKlassfradrag = sjablonKlasseFradrag!!.innhold.verdi,
@@ -428,7 +428,7 @@ fun List<GrunnlagDto>.finnDelberegningBidragsevne(periode: VedtakPeriodeReferans
                 antallBarnDeltBossted = antallBarnDeltBossted,
             ),
         harFullEvne = !sluttberegning.innhold.bidragJustertNedTilEvne,
-        harDelvisEvne = sluttberegning.innhold.bidragJustertNedTilEvne && sluttberegning.innhold.resultatBeløp > BigDecimal.ZERO,
+        harDelvisEvne = sluttberegning.innhold.bidragJustertNedTilEvne && sluttberegning.innhold.resultatBeløp!! > BigDecimal.ZERO,
         inntektBP = finnTotalInntektForRolle(periode.grunnlagReferanseListe, Rolletype.BIDRAGSPLIKTIG),
         borMedAndreVoksne = delberegningVoksneIHusstand.innhold.borMedAndreVoksne,
         skatt =
