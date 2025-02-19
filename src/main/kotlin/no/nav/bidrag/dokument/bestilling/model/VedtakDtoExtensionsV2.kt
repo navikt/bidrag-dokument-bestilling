@@ -64,7 +64,7 @@ fun List<GrunnlagDto>.mapSivilstand(): List<SivilstandPeriode> =
 
 fun List<GrunnlagDto>.mapHusstandsbarn(): List<Husstandsbarn> =
     filtrerBasertPåEgenReferanse(Grunnlagstype.BOSTATUS_PERIODE)
-        .groupBy { it.gjelderReferanse }
+        .groupBy { if (it.gjelderBarnReferanse.isNullOrEmpty()) it.gjelderReferanse else it.gjelderBarnReferanse }
         .map { (gjelderPersonReferanse, grunnlag) ->
             val person = hentPersonMedReferanse(gjelderPersonReferanse) ?: throw RuntimeException("Mangler person grunnlag for referanse $gjelderPersonReferanse")
             Husstandsbarn(
