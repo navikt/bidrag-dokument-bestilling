@@ -295,6 +295,7 @@ class VedtakService(
         val grunnlagListe = vedtakDto.grunnlagListe
         val stønadsendringerBarn = vedtakDto.stønadsendringListe.filter { it.kravhaver.verdi == barnIdent }
         return stønadsendringerBarn.map { stønadsendring ->
+            val harPerioderUtenAvslag = stønadsendring.periodeListe.any { Resultatkode.fraKode(it.resultatkode)?.erAvslag() == false }
             val vedtakPerioder =
                 stønadsendring.periodeListe.filter { it.resultatkode != Resultatkode.OPPHØR.name }.map { stønadperiode ->
                     val innteksgrense = sjablongService.hentInntektGrenseForPeriode(getLastDayOfPreviousMonth(stønadperiode.periode.til?.atEndOfMonth()))
@@ -311,7 +312,7 @@ class VedtakService(
                         samvær = grunnlagListe.mapSamvær(referanse),
                         resultatKode =
                             if (stønadsendring.type == Stønadstype.BIDRAG) {
-                                grunnlagListe.tilBisysResultatkode(referanse, vedtakDto.type) ?: stønadperiode.resultatkode
+                                grunnlagListe.tilBisysResultatkode(referanse, vedtakDto.type, harPerioderUtenAvslag) ?: stønadperiode.resultatkode
                             } else {
                                 resultatKode?.tilBisysResultatkodeForBrev(vedtakDto.type) ?: stønadperiode.resultatkode
                             },
@@ -333,8 +334,9 @@ class VedtakService(
 fun List<GrunnlagDto>.tilBisysResultatkode(
     periode: VedtakPeriodeReferanse,
     type: Vedtakstype,
+    harPerioderUtenAvslag: Boolean,
 ): String? {
-    if (periode.resultatKode?.erDirekteAvslag() == true) return periode.resultatKode.tilBisysResultatkodeForBrev(type)
+    if (periode.resultatKode?.erDirekteAvslag() == true) return if (harPerioderUtenAvslag) "KBB" else periode.resultatKode.tilBisysResultatkodeForBrev(type)
     val sluttberegning = finnOgKonverterGrunnlagSomErReferertFraGrunnlagsreferanseListe<SluttberegningBarnebidrag>(Grunnlagstype.SLUTTBEREGNING_BARNEBIDRAG, periode.grunnlagReferanseListe).first()
     return sluttberegning.innhold.bisysResultatkode
 }
