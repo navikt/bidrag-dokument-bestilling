@@ -89,6 +89,7 @@ import no.nav.bidrag.transport.behandling.felles.grunnlag.utgiftsposter
 import no.nav.bidrag.transport.behandling.vedtak.response.EngangsbeløpDto
 import no.nav.bidrag.transport.behandling.vedtak.response.StønadsendringDto
 import no.nav.bidrag.transport.behandling.vedtak.response.VedtakDto
+import no.nav.bidrag.transport.behandling.vedtak.response.erDirekteAvslag
 import no.nav.bidrag.transport.behandling.vedtak.response.særbidragsperiode
 import no.nav.bidrag.transport.behandling.vedtak.response.typeBehandling
 import org.springframework.stereotype.Service
@@ -288,6 +289,14 @@ class VedtakService(
         }
     }
 
+    fun VedtakDto.erDirekteAvslag(stønadsendringDto: StønadsendringDto): Boolean {
+        if (hentVirkningstidspunkt()?.avslag != null) return true
+        if (stønadsendringDto.periodeListe.size > 1) return false
+        val periode = stønadsendringDto.periodeListe.first()
+        val resultatKode = Resultatkode.fraKode(periode.resultatkode)
+        return resultatKode?.erDirekteAvslag() == true
+    }
+
     fun hentStønadsendringerForBarn(
         barnIdent: String,
         vedtakDto: VedtakDto,
@@ -295,7 +304,7 @@ class VedtakService(
         val grunnlagListe = vedtakDto.grunnlagListe
         val stønadsendringerBarn = vedtakDto.stønadsendringListe.filter { it.kravhaver.verdi == barnIdent }
         return stønadsendringerBarn.map { stønadsendring ->
-            val erDirekteAvslag = vedtakDto.hentVirkningstidspunkt()?.avslag != null
+            val erDirekteAvslag = vedtakDto.erDirekteAvslag(stønadsendring)
 
             val vedtakPerioder =
                 stønadsendring.periodeListe.filter { it.resultatkode != Resultatkode.OPPHØR.name }.map { stønadperiode ->
