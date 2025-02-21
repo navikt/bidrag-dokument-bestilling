@@ -305,7 +305,7 @@ class VedtakService(
                         fomDato = stønadperiode.periode.fom.atDay(1),
                         // TODO: Er dette riktig??
                         tomDato = stønadperiode.periode.til?.atEndOfMonth(),
-                        beløp = stønadperiode.beløp ?: BigDecimal.ZERO,
+                        beløp = stønadperiode.beløp ?: BigDecimal("1"),
                         andelUnderhold = grunnlagListe.tilAndelUnderholdskostnadPeriode(referanse),
                         underhold = grunnlagListe.tilUnderholdskostnadPeriode(referanse),
                         bidragsevne = grunnlagListe.finnDelberegningBidragsevne(referanse),
