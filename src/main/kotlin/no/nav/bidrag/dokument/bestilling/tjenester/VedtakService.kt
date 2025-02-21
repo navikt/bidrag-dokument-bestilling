@@ -295,7 +295,8 @@ class VedtakService(
         val grunnlagListe = vedtakDto.grunnlagListe
         val stønadsendringerBarn = vedtakDto.stønadsendringListe.filter { it.kravhaver.verdi == barnIdent }
         return stønadsendringerBarn.map { stønadsendring ->
-            val harPerioderUtenAvslag = stønadsendring.periodeListe.any { Resultatkode.fraKode(it.resultatkode)?.erAvslag() == false }
+            val erDirekteAvslag = vedtakDto.hentVirkningstidspunkt()?.avslag != null
+
             val vedtakPerioder =
                 stønadsendring.periodeListe.filter { it.resultatkode != Resultatkode.OPPHØR.name }.map { stønadperiode ->
                     val innteksgrense = sjablongService.hentInntektGrenseForPeriode(getLastDayOfPreviousMonth(stønadperiode.periode.til?.atEndOfMonth()))
@@ -305,14 +306,15 @@ class VedtakService(
                         fomDato = stønadperiode.periode.fom.atDay(1),
                         // TODO: Er dette riktig??
                         tomDato = stønadperiode.periode.til?.atEndOfMonth(),
-                        beløp = stønadperiode.beløp ?: BigDecimal("0.1"),
+                        // Bruker beløp 0.1 for å få alle beløpene i samme tabell hvis det er miks mellom perioder med avslag og innvilgelse
+                        beløp = stønadperiode.beløp ?: if (erDirekteAvslag) BigDecimal.ZERO else BigDecimal("0.1"),
                         andelUnderhold = grunnlagListe.tilAndelUnderholdskostnadPeriode(referanse),
                         underhold = grunnlagListe.tilUnderholdskostnadPeriode(referanse),
                         bidragsevne = grunnlagListe.finnDelberegningBidragsevne(referanse),
                         samvær = grunnlagListe.mapSamvær(referanse),
                         resultatKode =
                             if (stønadsendring.type == Stønadstype.BIDRAG) {
-                                grunnlagListe.tilBisysResultatkode(referanse, vedtakDto.type, harPerioderUtenAvslag) ?: stønadperiode.resultatkode
+                                grunnlagListe.tilBisysResultatkode(referanse, vedtakDto.type) ?: stønadperiode.resultatkode
                             } else {
                                 resultatKode?.tilBisysResultatkodeForBrev(vedtakDto.type) ?: stønadperiode.resultatkode
                             },
@@ -334,9 +336,8 @@ class VedtakService(
 fun List<GrunnlagDto>.tilBisysResultatkode(
     periode: VedtakPeriodeReferanse,
     type: Vedtakstype,
-    harPerioderUtenAvslag: Boolean,
 ): String? {
-    if (periode.resultatKode?.erDirekteAvslag() == true) return if (harPerioderUtenAvslag) "KBB" else periode.resultatKode.tilBisysResultatkodeForBrev(type)
+    if (periode.resultatKode?.erDirekteAvslag() == true) return periode.resultatKode.tilBisysResultatkodeForBrev(type)
     val sluttberegning = finnOgKonverterGrunnlagSomErReferertFraGrunnlagsreferanseListe<SluttberegningBarnebidrag>(Grunnlagstype.SLUTTBEREGNING_BARNEBIDRAG, periode.grunnlagReferanseListe).first()
     return sluttberegning.innhold.bisysResultatkode
 }
