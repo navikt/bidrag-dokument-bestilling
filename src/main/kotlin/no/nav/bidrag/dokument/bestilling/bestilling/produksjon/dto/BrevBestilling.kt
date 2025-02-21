@@ -670,7 +670,7 @@ class BelopAdapter : XmlAdapter<String, BigDecimal?>() {
             ?.setScale(0, RoundingMode.HALF_UP)
             ?.toString()
             ?.padStart(13, '0')
-            ?.let { it.substring(0, 11) + "." + it.substring(11) } ?: "0000"
+            ?.let { it.substring(0, 11) + "." + it.substring(11) } ?: "00000000000"
 
     @Throws(ParseException::class)
     override fun unmarshal(value: String?): BigDecimal? = value?.toBigDecimal()
