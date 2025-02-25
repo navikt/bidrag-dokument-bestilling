@@ -316,7 +316,9 @@ class VedtakService(
                         // TODO: Er dette riktig??
                         tomDato = stønadperiode.periode.til?.atEndOfMonth(),
                         // Bruker beløp 0.1 for å få alle beløpene i samme tabell hvis det er miks mellom perioder med avslag og innvilgelse
-                        beløp = stønadperiode.beløp ?: if (erDirekteAvslag) BigDecimal.ZERO else BigDecimal("0.1"),
+                        beløp =
+                            stønadperiode.beløp?.let { if (it == BigDecimal.ZERO) BigDecimal("0.1") else it }
+                                ?: if (erDirekteAvslag) BigDecimal.ZERO else BigDecimal("0.1"),
                         andelUnderhold = grunnlagListe.tilAndelUnderholdskostnadPeriode(referanse),
                         underhold = grunnlagListe.tilUnderholdskostnadPeriode(referanse),
                         bidragsevne = grunnlagListe.finnDelberegningBidragsevne(referanse),
