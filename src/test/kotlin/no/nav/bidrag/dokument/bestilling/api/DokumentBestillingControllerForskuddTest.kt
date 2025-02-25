@@ -601,7 +601,7 @@ class DokumentBestillingControllerForskuddTest : AbstractControllerTest() {
                 assertSoftly(message.brev!!.vedtak.filter { it.fnr == BARN1.ident.verdi }) {
                     shouldHaveSize(1)
                     val vedtakPeriode1 = this[0]
-                    vedtakPeriode1.belopBidrag shouldBe BigDecimal(0).setScale(2)
+                    vedtakPeriode1.belopBidrag shouldBe BigDecimal("0.00")
                     vedtakPeriode1.fomDato shouldBe periode1.fraDato
                     vedtakPeriode1.tomDato shouldBe MAX_DATE
                     vedtakPeriode1.fnr shouldBe BARN1.ident.verdi
@@ -611,7 +611,7 @@ class DokumentBestillingControllerForskuddTest : AbstractControllerTest() {
                 assertSoftly(message.brev!!.vedtak.filter { it.fnr == BARN2.ident.verdi }) {
                     shouldHaveSize(1)
                     val vedtakPeriode1 = this[0]
-                    vedtakPeriode1.belopBidrag shouldBe BigDecimal(0).setScale(2)
+                    vedtakPeriode1.belopBidrag shouldBe BigDecimal("0.00")
                     vedtakPeriode1.fomDato shouldBe periode1.fraDato
                     vedtakPeriode1.tomDato shouldBe MAX_DATE
                     vedtakPeriode1.fnr shouldBe BARN2.ident.verdi
@@ -624,7 +624,7 @@ class DokumentBestillingControllerForskuddTest : AbstractControllerTest() {
                     val forskuddVedtakPeriode1 = this[0]
                     forskuddVedtakPeriode1.fomDato shouldBe periode1.fraDato
                     forskuddVedtakPeriode1.tomDato shouldBe MAX_DATE
-                    forskuddVedtakPeriode1.beløp shouldBe BigDecimal(0).setScale(2)
+                    forskuddVedtakPeriode1.beløp shouldBe BigDecimal("0.00")
                     forskuddVedtakPeriode1.fnr shouldBe BARN2.ident.verdi
                     forskuddVedtakPeriode1.resultatKode shouldBe Resultatkode.IKKE_OMSORG.legacyKode
                     forskuddVedtakPeriode1.prosent shouldBe "000"
@@ -647,7 +647,7 @@ class DokumentBestillingControllerForskuddTest : AbstractControllerTest() {
                     val forskuddVedtakPeriode1 = this[0]
                     forskuddVedtakPeriode1.fomDato shouldBe periode1.fraDato
                     forskuddVedtakPeriode1.tomDato shouldBe periode1.tomDato
-                    forskuddVedtakPeriode1.beløp shouldBe BigDecimal("0.10")
+                    forskuddVedtakPeriode1.beløp shouldBe BigDecimal("0.00")
                     forskuddVedtakPeriode1.fnr shouldBe BARN1.ident.verdi
                     forskuddVedtakPeriode1.resultatKode shouldBe Resultatkode.IKKE_OMSORG.legacyKode
                     forskuddVedtakPeriode1.prosent shouldBe "000"
