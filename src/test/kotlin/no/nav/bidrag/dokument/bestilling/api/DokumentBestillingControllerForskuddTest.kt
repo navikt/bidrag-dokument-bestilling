@@ -320,21 +320,21 @@ class DokumentBestillingControllerForskuddTest : AbstractControllerTest() {
                 assertSoftly(message.brev!!.vedtak.filter { it.fnr == BARN1.ident.verdi }) {
                     shouldHaveSize(8)
                     val vedtakPeriode1 = this[0]
-                    vedtakPeriode1.belopBidrag shouldBe BigDecimal(2200)
+                    vedtakPeriode1.belopBidrag shouldBe BigDecimal(2200).setScale(2)
                     vedtakPeriode1.fomDato shouldBe periode1.fraDato
                     vedtakPeriode1.tomDato shouldBe periode1.tomDato
                     vedtakPeriode1.fnr shouldBe BARN1.ident.verdi
                     vedtakPeriode1.resultatKode shouldBe Resultatkode.FORHØYET_FORSKUDD_11_ÅR_125_PROSENT.legacyKode
 
                     val vedtakPeriode2 = this[1]
-                    vedtakPeriode2.belopBidrag shouldBe BigDecimal(2200)
+                    vedtakPeriode2.belopBidrag shouldBe BigDecimal(2200).setScale(2)
                     vedtakPeriode2.fomDato shouldBe periode2.fraDato
                     vedtakPeriode2.tomDato shouldBe periode2.tomDato
                     vedtakPeriode2.fnr shouldBe BARN1.ident.verdi
                     vedtakPeriode2.resultatKode shouldBe Resultatkode.FORHØYET_FORSKUDD_11_ÅR_125_PROSENT.legacyKode
 
                     val vedtakPeriodeSiste = this[7]
-                    vedtakPeriodeSiste.belopBidrag shouldBe BigDecimal(0)
+                    vedtakPeriodeSiste.belopBidrag shouldBe BigDecimal("0.10")
                     vedtakPeriodeSiste.fomDato shouldBe sistePeriode.fraDato
                     vedtakPeriodeSiste.tomDato shouldBe sistePeriode.tomDato
                     vedtakPeriodeSiste.fnr shouldBe BARN1.ident.verdi
@@ -344,21 +344,21 @@ class DokumentBestillingControllerForskuddTest : AbstractControllerTest() {
                 assertSoftly(message.brev!!.vedtak.filter { it.fnr == BARN2.ident.verdi }) {
                     shouldHaveSize(9)
                     val vedtakPeriode1 = this[0]
-                    vedtakPeriode1.belopBidrag shouldBe BigDecimal(1760)
+                    vedtakPeriode1.belopBidrag shouldBe BigDecimal(1760).setScale(2)
                     vedtakPeriode1.fomDato shouldBe periode1.fraDato
                     vedtakPeriode1.tomDato shouldBe periode1.tomDato
                     vedtakPeriode1.fnr shouldBe BARN2.ident.verdi
                     vedtakPeriode1.resultatKode shouldBe Resultatkode.FORHØYET_FORSKUDD_100_PROSENT.legacyKode
 
                     val vedtakPeriode2 = this[1]
-                    vedtakPeriode2.belopBidrag shouldBe BigDecimal(1760)
+                    vedtakPeriode2.belopBidrag shouldBe BigDecimal(1760).setScale(2)
                     vedtakPeriode2.fomDato shouldBe periode2.fraDato
                     vedtakPeriode2.tomDato shouldBe periode2.tomDato
                     vedtakPeriode2.fnr shouldBe BARN2.ident.verdi
                     vedtakPeriode2.resultatKode shouldBe Resultatkode.FORHØYET_FORSKUDD_100_PROSENT.legacyKode
 
                     val vedtakPeriodeSiste = this[8]
-                    vedtakPeriodeSiste.belopBidrag shouldBe BigDecimal(1480)
+                    vedtakPeriodeSiste.belopBidrag shouldBe BigDecimal(1480).setScale(2)
                     vedtakPeriodeSiste.fomDato shouldBe sistePeriode.fraDato
                     vedtakPeriodeSiste.tomDato shouldBe sistePeriode.tomDato
                     vedtakPeriodeSiste.fnr shouldBe BARN2.ident.verdi
@@ -371,7 +371,7 @@ class DokumentBestillingControllerForskuddTest : AbstractControllerTest() {
                     val forskuddVedtakPeriode1 = this[0]
                     forskuddVedtakPeriode1.fomDato shouldBe periode1.fraDato
                     forskuddVedtakPeriode1.tomDato shouldBe periode1.tomDato
-                    forskuddVedtakPeriode1.beløp shouldBe BigDecimal(1760)
+                    forskuddVedtakPeriode1.beløp shouldBe BigDecimal(1760).setScale(2)
                     forskuddVedtakPeriode1.fnr shouldBe BARN2.ident.verdi
                     forskuddVedtakPeriode1.resultatKode shouldBe Resultatkode.FORHØYET_FORSKUDD_100_PROSENT.legacyKode
                     forskuddVedtakPeriode1.prosent shouldBe "100"
@@ -380,7 +380,7 @@ class DokumentBestillingControllerForskuddTest : AbstractControllerTest() {
                     val forskuddVedtakPeriode4 = this[8]
                     forskuddVedtakPeriode4.fomDato shouldBe sistePeriode.fraDato
                     forskuddVedtakPeriode4.tomDato shouldBe sistePeriode.tomDato
-                    forskuddVedtakPeriode4.beløp shouldBe BigDecimal(1480)
+                    forskuddVedtakPeriode4.beløp shouldBe BigDecimal(1480).setScale(2)
                     forskuddVedtakPeriode4.fnr shouldBe BARN2.ident.verdi
                     forskuddVedtakPeriode4.resultatKode shouldBe Resultatkode.ORDINÆRT_FORSKUDD_75_PROSENT.legacyKode
                     forskuddVedtakPeriode4.forskKode shouldBe ""
@@ -404,7 +404,7 @@ class DokumentBestillingControllerForskuddTest : AbstractControllerTest() {
                     val forskuddVedtakPeriode1 = this[0]
                     forskuddVedtakPeriode1.fomDato shouldBe periode1.fraDato
                     forskuddVedtakPeriode1.tomDato shouldBe periode1.tomDato
-                    forskuddVedtakPeriode1.beløp shouldBe BigDecimal(2200)
+                    forskuddVedtakPeriode1.beløp shouldBe BigDecimal(2200).setScale(2)
                     forskuddVedtakPeriode1.fnr shouldBe BARN1.ident.verdi
                     forskuddVedtakPeriode1.resultatKode shouldBe Resultatkode.FORHØYET_FORSKUDD_11_ÅR_125_PROSENT.legacyKode
                     forskuddVedtakPeriode1.prosent shouldBe "125"
@@ -413,7 +413,7 @@ class DokumentBestillingControllerForskuddTest : AbstractControllerTest() {
                     val forskuddVedtakPeriode4 = this[7]
                     forskuddVedtakPeriode4.fomDato shouldBe sistePeriode.fraDato
                     forskuddVedtakPeriode4.tomDato shouldBe sistePeriode.tomDato
-                    forskuddVedtakPeriode4.beløp shouldBe BigDecimal(0)
+                    forskuddVedtakPeriode4.beløp shouldBe BigDecimal("0.10")
                     forskuddVedtakPeriode4.fnr shouldBe BARN1.ident.verdi
                     forskuddVedtakPeriode4.resultatKode shouldBe Resultatkode.AVSLAG_OVER_18_ÅR.legacyKode
                     forskuddVedtakPeriode4.forskKode shouldBe "BOA"
@@ -601,7 +601,7 @@ class DokumentBestillingControllerForskuddTest : AbstractControllerTest() {
                 assertSoftly(message.brev!!.vedtak.filter { it.fnr == BARN1.ident.verdi }) {
                     shouldHaveSize(1)
                     val vedtakPeriode1 = this[0]
-                    vedtakPeriode1.belopBidrag shouldBe BigDecimal(0)
+                    vedtakPeriode1.belopBidrag shouldBe BigDecimal(0).setScale(2)
                     vedtakPeriode1.fomDato shouldBe periode1.fraDato
                     vedtakPeriode1.tomDato shouldBe MAX_DATE
                     vedtakPeriode1.fnr shouldBe BARN1.ident.verdi
@@ -611,7 +611,7 @@ class DokumentBestillingControllerForskuddTest : AbstractControllerTest() {
                 assertSoftly(message.brev!!.vedtak.filter { it.fnr == BARN2.ident.verdi }) {
                     shouldHaveSize(1)
                     val vedtakPeriode1 = this[0]
-                    vedtakPeriode1.belopBidrag shouldBe BigDecimal(0)
+                    vedtakPeriode1.belopBidrag shouldBe BigDecimal(0).setScale(2)
                     vedtakPeriode1.fomDato shouldBe periode1.fraDato
                     vedtakPeriode1.tomDato shouldBe MAX_DATE
                     vedtakPeriode1.fnr shouldBe BARN2.ident.verdi
@@ -624,7 +624,7 @@ class DokumentBestillingControllerForskuddTest : AbstractControllerTest() {
                     val forskuddVedtakPeriode1 = this[0]
                     forskuddVedtakPeriode1.fomDato shouldBe periode1.fraDato
                     forskuddVedtakPeriode1.tomDato shouldBe MAX_DATE
-                    forskuddVedtakPeriode1.beløp shouldBe BigDecimal(0)
+                    forskuddVedtakPeriode1.beløp shouldBe BigDecimal(0).setScale(2)
                     forskuddVedtakPeriode1.fnr shouldBe BARN2.ident.verdi
                     forskuddVedtakPeriode1.resultatKode shouldBe Resultatkode.IKKE_OMSORG.legacyKode
                     forskuddVedtakPeriode1.prosent shouldBe "000"
@@ -635,7 +635,7 @@ class DokumentBestillingControllerForskuddTest : AbstractControllerTest() {
                     val barnForskuddVedtakPeriode1 = barn1.forskuddVedtakPerioder[0]
                     barnForskuddVedtakPeriode1.fomDato shouldBe forskuddVedtakPeriode1.fomDato
                     barnForskuddVedtakPeriode1.tomDato shouldBe MAX_DATE
-                    barnForskuddVedtakPeriode1.beløp shouldBe forskuddVedtakPeriode1.beløp
+                    barnForskuddVedtakPeriode1.beløp shouldBe forskuddVedtakPeriode1.beløp?.setScale(2)
                     barnForskuddVedtakPeriode1.fnr shouldBe forskuddVedtakPeriode1.fnr
                     barnForskuddVedtakPeriode1.resultatKode shouldBe forskuddVedtakPeriode1.resultatKode
                     barnForskuddVedtakPeriode1.prosent shouldBe forskuddVedtakPeriode1.prosent
@@ -647,7 +647,7 @@ class DokumentBestillingControllerForskuddTest : AbstractControllerTest() {
                     val forskuddVedtakPeriode1 = this[0]
                     forskuddVedtakPeriode1.fomDato shouldBe periode1.fraDato
                     forskuddVedtakPeriode1.tomDato shouldBe periode1.tomDato
-                    forskuddVedtakPeriode1.beløp shouldBe BigDecimal(0)
+                    forskuddVedtakPeriode1.beløp shouldBe BigDecimal("0.10")
                     forskuddVedtakPeriode1.fnr shouldBe BARN1.ident.verdi
                     forskuddVedtakPeriode1.resultatKode shouldBe Resultatkode.IKKE_OMSORG.legacyKode
                     forskuddVedtakPeriode1.prosent shouldBe "000"

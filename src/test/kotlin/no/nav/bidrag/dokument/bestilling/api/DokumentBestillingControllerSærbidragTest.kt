@@ -286,7 +286,7 @@ class DokumentBestillingControllerSærbidragTest : AbstractControllerTest() {
                 assertSoftly(message.brev!!.vedtak.filter { it.fnr == BARN2.ident.verdi }) {
                     shouldHaveSize(1)
                     val vedtakPeriode1 = this[0]
-                    vedtakPeriode1.belopBidrag shouldBe særbidragVerdi
+                    vedtakPeriode1.belopBidrag shouldBe særbidragVerdi.setScale(2)
                     vedtakPeriode1.fomDato shouldBe periode1.fraDato
                     vedtakPeriode1.tomDato shouldBe periode1.tomDato
                     vedtakPeriode1.fnr shouldBe BARN2.ident.verdi
@@ -755,7 +755,7 @@ class DokumentBestillingControllerSærbidragTest : AbstractControllerTest() {
 
                 message.brev?.vedtak!! shouldHaveSize 1
                 assertSoftly(message.brev?.vedtak!!) {
-                    this[0].belopBidrag shouldBe BigDecimal(0)
+                    this[0].belopBidrag shouldBe BigDecimal(0).setScale(2)
                     this[0].fomDato shouldBe LocalDate.parse("2024-08-01")
                     this[0].tomDato shouldBe LocalDate.parse("2024-08-31")
                     this[0].fnr shouldBe BARN2.ident.verdi
