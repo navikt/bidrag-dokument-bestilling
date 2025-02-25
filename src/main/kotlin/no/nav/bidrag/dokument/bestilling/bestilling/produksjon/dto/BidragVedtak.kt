@@ -24,7 +24,7 @@ class BidragVedtak {
     var fnr: String? = null
 
     @XmlElement(name = "belopBidr", nillable = true)
-    @XmlJavaTypeAdapter(BelopAdapter::class)
+    @XmlJavaTypeAdapter(BelopAdapterToDesimaler::class)
     var belopBidrag: BigDecimal? = null
 
     @XmlElement(name = "belopTlg", nillable = true)

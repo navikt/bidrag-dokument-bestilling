@@ -657,13 +657,8 @@ class PeriodDateAdapter : XmlAdapter<String, LocalDate?>() {
     override fun unmarshal(v: String): LocalDate = LocalDate.parse(v, BREV_SOKNAD_DATETIME_FORMAT)
 }
 
-class BelopAdapter : XmlAdapter<String, BigDecimal?>() {
+class BelopAdapterToDesimaler : XmlAdapter<String, BigDecimal?>() {
     override fun marshal(value: BigDecimal?): String? =
-//        value
-//            ?.setScale(0, RoundingMode.HALF_UP)
-//            ?.toBigInteger()
-//            ?.toString()
-//            ?.padStart(11, '0')
         value
             ?.round(MathContext(10))
             ?.multiply(BigDecimal(100))
@@ -671,6 +666,18 @@ class BelopAdapter : XmlAdapter<String, BigDecimal?>() {
             ?.toString()
             ?.padStart(13, '0')
             ?.let { it.substring(0, 11) + "." + it.substring(11) } ?: "00000000000"
+
+    @Throws(ParseException::class)
+    override fun unmarshal(value: String?): BigDecimal? = value?.toBigDecimal()
+}
+
+class BelopAdapter : XmlAdapter<String, BigDecimal?>() {
+    override fun marshal(value: BigDecimal?): String? =
+        value
+            ?.setScale(0, RoundingMode.HALF_UP)
+            ?.toBigInteger()
+            ?.toString()
+            ?.padStart(11, '0')
 
     @Throws(ParseException::class)
     override fun unmarshal(value: String?): BigDecimal? = value?.toBigDecimal()
