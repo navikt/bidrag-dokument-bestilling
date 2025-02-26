@@ -202,7 +202,7 @@ class ForskuddVedtakPeriode {
     var forskKode: String? = null
 
     @XmlElement(name = "forskBelop", nillable = true)
-    @XmlJavaTypeAdapter(BelopAdapter::class)
+    @XmlJavaTypeAdapter(BelopAdapterToDesimaler::class)
     var beløp: BigDecimal? = null
 
     @XmlElement(name = "forskPst", nillable = true)

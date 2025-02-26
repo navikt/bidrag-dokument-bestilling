@@ -89,6 +89,7 @@ import no.nav.bidrag.transport.behandling.felles.grunnlag.utgiftsposter
 import no.nav.bidrag.transport.behandling.vedtak.response.EngangsbeløpDto
 import no.nav.bidrag.transport.behandling.vedtak.response.StønadsendringDto
 import no.nav.bidrag.transport.behandling.vedtak.response.VedtakDto
+import no.nav.bidrag.transport.behandling.vedtak.response.erDirekteAvslag
 import no.nav.bidrag.transport.behandling.vedtak.response.særbidragsperiode
 import no.nav.bidrag.transport.behandling.vedtak.response.typeBehandling
 import org.springframework.stereotype.Service
@@ -288,6 +289,14 @@ class VedtakService(
         }
     }
 
+    fun VedtakDto.erDirekteAvslag(stønadsendringDto: StønadsendringDto): Boolean {
+        if (hentVirkningstidspunkt()?.avslag != null) return true
+        if (stønadsendringDto.periodeListe.size > 1) return false
+        val periode = stønadsendringDto.periodeListe.first()
+        val resultatKode = Resultatkode.fraKode(periode.resultatkode)
+        return resultatKode?.erDirekteAvslag() == true
+    }
+
     fun hentStønadsendringerForBarn(
         barnIdent: String,
         vedtakDto: VedtakDto,
@@ -295,6 +304,8 @@ class VedtakService(
         val grunnlagListe = vedtakDto.grunnlagListe
         val stønadsendringerBarn = vedtakDto.stønadsendringListe.filter { it.kravhaver.verdi == barnIdent }
         return stønadsendringerBarn.map { stønadsendring ->
+            val erDirekteAvslag = vedtakDto.erDirekteAvslag(stønadsendring)
+
             val vedtakPerioder =
                 stønadsendring.periodeListe.filter { it.resultatkode != Resultatkode.OPPHØR.name }.map { stønadperiode ->
                     val innteksgrense = sjablongService.hentInntektGrenseForPeriode(getLastDayOfPreviousMonth(stønadperiode.periode.til?.atEndOfMonth()))
@@ -304,7 +315,10 @@ class VedtakService(
                         fomDato = stønadperiode.periode.fom.atDay(1),
                         // TODO: Er dette riktig??
                         tomDato = stønadperiode.periode.til?.atEndOfMonth(),
-                        beløp = stønadperiode.beløp ?: BigDecimal.ZERO,
+                        // Bruker beløp 0.1 for å få alle beløpene i samme tabell hvis det er miks mellom perioder med avslag og innvilgelse
+                        beløp =
+                            stønadperiode.beløp?.let { if (it == BigDecimal.ZERO) BigDecimal("0.1") else it }
+                                ?: if (erDirekteAvslag) BigDecimal.ZERO else BigDecimal("0.1"),
                         andelUnderhold = grunnlagListe.tilAndelUnderholdskostnadPeriode(referanse),
                         underhold = grunnlagListe.tilUnderholdskostnadPeriode(referanse),
                         bidragsevne = grunnlagListe.finnDelberegningBidragsevne(referanse),

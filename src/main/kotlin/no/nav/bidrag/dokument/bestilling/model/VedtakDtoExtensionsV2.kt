@@ -144,7 +144,11 @@ fun List<GrunnlagDto>.hentDelberegningInntektForPeriode(
     if (sluttberegning.type == Grunnlagstype.SLUTTBEREGNING_BARNEBIDRAG) {
         finnGrunnlagSomErReferertFraGrunnlagsreferanseListe(Grunnlagstype.DELBEREGNING_BIDRAGSPLIKTIGES_ANDEL, sluttberegning.grunnlagsreferanseListe)
             .let {
-                return finnGrunnlagSomErReferertFraGrunnlagsreferanseListe(Grunnlagstype.DELBEREGNING_SUM_INNTEKT, it.first().grunnlagsreferanseListe)
+                if (it.isNotEmpty()) {
+                    return finnGrunnlagSomErReferertFraGrunnlagsreferanseListe(Grunnlagstype.DELBEREGNING_SUM_INNTEKT, it.first().grunnlagsreferanseListe)
+                } else {
+                    return emptySet()
+                }
             }
     } else {
         return finnGrunnlagSomErReferertFraGrunnlagsreferanseListe(Grunnlagstype.DELBEREGNING_SUM_INNTEKT, sluttberegning.grunnlagsreferanseListe)
