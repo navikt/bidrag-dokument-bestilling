@@ -373,6 +373,7 @@ data class SærbidragBeregning(
 data class VedtakBarnStonad(
     val type: Stønadstype,
     val innkreving: Boolean,
+    val direkteAvslag: Boolean,
     val vedtakPerioder: List<VedtakPeriode> = emptyList(),
     val forskuddInntektgrensePerioder: List<ForskuddInntektgrensePeriode> = emptyList(),
 )
