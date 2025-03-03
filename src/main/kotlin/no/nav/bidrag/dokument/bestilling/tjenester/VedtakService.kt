@@ -338,6 +338,7 @@ class VedtakService(
                 }
             VedtakBarnStonad(
                 type = stønadsendring.type,
+                direkteAvslag = erDirekteAvslag,
                 innkreving = stønadsendring.innkreving == Innkrevingstype.MED_INNKREVING,
                 forskuddInntektgrensePerioder = hentGrunnlagForskudd(stønadsendringerBarn),
                 vedtakPerioder = vedtakPerioder,

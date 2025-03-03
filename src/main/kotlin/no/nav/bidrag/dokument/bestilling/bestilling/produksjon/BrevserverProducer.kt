@@ -328,15 +328,17 @@ class BrevserverProducer(
                             }
                         }
                         vedtakBarn.stønadsendringer.forEach { stønadsendring ->
-                            stønadsendring.vedtakPerioder.forEach {
-                                vedtakBarn {
-                                    fomDato = it.fomDato
-                                    tomDato = it.tomDato ?: MAX_DATE
-                                    fnr = vedtakBarn.fødselsnummer
-                                    belopBidrag = it.beløp
-                                    resultatKode = it.resultatKode
-                                    søktTilleggsbidrag = false // TODO
-                                    erInnkreving = stønadsendring.innkreving
+                            if (!stønadsendring.direkteAvslag) {
+                                stønadsendring.vedtakPerioder.forEach {
+                                    vedtakBarn {
+                                        fomDato = it.fomDato
+                                        tomDato = it.tomDato ?: MAX_DATE
+                                        fnr = vedtakBarn.fødselsnummer
+                                        belopBidrag = it.beløp
+                                        resultatKode = it.resultatKode
+                                        søktTilleggsbidrag = false // TODO
+                                        erInnkreving = stønadsendring.innkreving
+                                    }
                                 }
                             }
                         }
