@@ -328,17 +328,15 @@ class BrevserverProducer(
                             }
                         }
                         vedtakBarn.stønadsendringer.forEach { stønadsendring ->
-                            if (!stønadsendring.direkteAvslag) {
-                                stønadsendring.vedtakPerioder.forEach {
-                                    vedtakBarn {
-                                        fomDato = it.fomDato
-                                        tomDato = it.tomDato ?: MAX_DATE
-                                        fnr = vedtakBarn.fødselsnummer
-                                        belopBidrag = it.beløp
-                                        resultatKode = it.resultatKode
-                                        søktTilleggsbidrag = false // TODO
-                                        erInnkreving = stønadsendring.innkreving
-                                    }
+                            stønadsendring.vedtakPerioder.forEach {
+                                vedtakBarn {
+                                    fomDato = it.fomDato
+                                    tomDato = it.tomDato ?: MAX_DATE
+                                    fnr = vedtakBarn.fødselsnummer
+                                    belopBidrag = it.beløp
+                                    resultatKode = it.resultatKode
+                                    søktTilleggsbidrag = false // TODO
+                                    erInnkreving = stønadsendring.innkreving
                                 }
                             }
                         }
@@ -503,17 +501,16 @@ class BrevserverProducer(
                             }
 
                             detaljer.vedtakPerioder.forEach {
-                                if (!detaljer.direkteAvslag) {
-                                    vedtak {
-                                        fomDato = it.fomDato
-                                        tomDato = it.tomDato ?: MAX_DATE
-                                        fnr = vedtakBarn.fødselsnummer
-                                        belopBidrag = it.beløp
-                                        resultatKode = it.resultatKode
-                                        søktTilleggsbidrag = false // TODO
-                                        erInnkreving = detaljer.innkreving
-                                    }
+                                vedtak {
+                                    fomDato = it.fomDato
+                                    tomDato = it.tomDato ?: MAX_DATE
+                                    fnr = vedtakBarn.fødselsnummer
+                                    belopBidrag = it.beløp
+                                    resultatKode = it.resultatKode
+                                    søktTilleggsbidrag = false // TODO
+                                    erInnkreving = detaljer.innkreving
                                 }
+
                                 if (detaljer.type == Stønadstype.FORSKUDD) {
                                     forskuddVedtak {
                                         fomDato = it.fomDato
