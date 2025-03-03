@@ -658,7 +658,7 @@
   },
   {
     "kode": "BI01G04",
-    "tittel": "Vedtak innkreving særtilskudd",
+    "tittel": "Vedtak innkreving særbidrag",
     "type": "VEDTAK",
     "inneholderData": [
       "ROLLER",
@@ -670,7 +670,7 @@
   },
   {
     "kode": "BI01E50",
-    "tittel": "Klage - vedtak bidrag til særlige utgifter",
+    "tittel": "Klage - vedtak bidrag til særbidrag",
     "type": "VEDTAK",
     "inneholderData": [
       "ROLLER",
@@ -682,7 +682,7 @@
   },
   {
     "kode": "BI01E01",
-    "tittel": "Vedtak bidrag til særlige utgifter",
+    "tittel": "Vedtak bidrag til særbidrag",
     "type": "VEDTAK",
     "inneholderData": [
       "ROLLER",
@@ -694,7 +694,7 @@
   },
   {
     "kode": "BI01E02",
-    "tittel": "Vedtak særtilskudd avslag",
+    "tittel": "Vedtak særbidrag avslag",
     "avslagsbrev": true,
     "type": "VEDTAK",
     "inneholderData": [
@@ -707,7 +707,7 @@
   },
   {
     "kode": "BI01E03",
-    "tittel": "Vedtak bidrag til særlige utgifter tannregulering",
+    "tittel": "Vedtak bidrag til særbidrag tannregulering",
     "type": "VEDTAK",
     "inneholderData": [
       "ROLLER",
@@ -719,7 +719,7 @@
   },
   {
     "kode": "BI01S04",
-    "tittel": "Nav har mottatt søknad om bidrag til særlige utgifter",
+    "tittel": "Nav har mottatt søknad om bidrag til særbidrag",
     "type": "VARSEL",
     "kreverEkstraData": [
       "SJABLON"
@@ -730,7 +730,7 @@
   },
   {
     "kode": "BI01S18",
-    "tittel": "Du har søkt om bidrag til særlige utgifter",
+    "tittel": "Du har søkt om bidrag til særbidrag",
     "type": "VARSEL",
     "kreverEkstraData": [
       "SJABLON"
