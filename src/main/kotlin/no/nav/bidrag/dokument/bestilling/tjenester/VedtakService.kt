@@ -98,6 +98,8 @@ import java.math.BigDecimal
 val særbidragDirekteAvslagskoderSomInneholderUtgifter =
     listOf(Resultatkode.GODKJENT_BELØP_ER_LAVERE_ENN_FORSKUDDSSATS, Resultatkode.ALLE_UTGIFTER_ER_FORELDET)
 
+val Stønadstype.erBidrag get() = listOf(Stønadstype.BIDRAG, Stønadstype.BIDRAG18AAR).contains(this)
+
 @Service
 class VedtakService(
     private val bidragVedtakConsumer: BidragVedtakConsumer,
@@ -324,7 +326,7 @@ class VedtakService(
                         bidragsevne = grunnlagListe.finnDelberegningBidragsevne(referanse),
                         samvær = grunnlagListe.mapSamvær(referanse),
                         resultatKode =
-                            if (stønadsendring.type == Stønadstype.BIDRAG) {
+                            if (stønadsendring.type.erBidrag) {
                                 grunnlagListe.tilBisysResultatkode(referanse, vedtakDto.type) ?: stønadperiode.resultatkode
                             } else {
                                 resultatKode?.tilBisysResultatkodeForBrev(vedtakDto.type) ?: stønadperiode.resultatkode

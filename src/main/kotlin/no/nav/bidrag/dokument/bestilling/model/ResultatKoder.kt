@@ -19,7 +19,17 @@ object ResultatKoder {
     const val FORSKUDD_250_PROSENT = "250"
 }
 
-private val resultatkoderSomIkkeErStøttetAvBrev = listOf(Resultatkode.IKKE_INNKREVING_AV_BIDRAG, Resultatkode.AVSLAG_IKKE_REGISTRERT_PÅ_ADRESSE, Resultatkode.AVSLAG_PRIVAT_AVTALE_BIDRAG, Resultatkode.SÆRBIDRAG_IKKE_FULL_BIDRAGSEVNE, Resultatkode.AVSLAG_PRIVAT_AVTALE_OM_SÆRBIDRAG, Resultatkode.PARTEN_BER_OM_OPPHØR)
+private val resultatkoderSomIkkeErStøttetAvBrev =
+    listOf(
+        Resultatkode.IKKE_DOKUMENTERT_SKOLEGANG,
+        Resultatkode.AVSLUTTET_SKOLEGANG,
+        Resultatkode.IKKE_INNKREVING_AV_BIDRAG,
+        Resultatkode.AVSLAG_IKKE_REGISTRERT_PÅ_ADRESSE,
+        Resultatkode.AVSLAG_PRIVAT_AVTALE_BIDRAG,
+        Resultatkode.SÆRBIDRAG_IKKE_FULL_BIDRAGSEVNE,
+        Resultatkode.AVSLAG_PRIVAT_AVTALE_OM_SÆRBIDRAG,
+        Resultatkode.PARTEN_BER_OM_OPPHØR,
+    )
 
 // "
 // Koder som er støttet av brev for forskudd
