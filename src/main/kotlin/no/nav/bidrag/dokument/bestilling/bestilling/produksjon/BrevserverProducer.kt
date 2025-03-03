@@ -503,16 +503,17 @@ class BrevserverProducer(
                             }
 
                             detaljer.vedtakPerioder.forEach {
-                                vedtak {
-                                    fomDato = it.fomDato
-                                    tomDato = it.tomDato ?: MAX_DATE
-                                    fnr = vedtakBarn.fødselsnummer
-                                    belopBidrag = it.beløp
-                                    resultatKode = it.resultatKode
-                                    søktTilleggsbidrag = false // TODO
-                                    erInnkreving = detaljer.innkreving
+                                if (!detaljer.direkteAvslag) {
+                                    vedtak {
+                                        fomDato = it.fomDato
+                                        tomDato = it.tomDato ?: MAX_DATE
+                                        fnr = vedtakBarn.fødselsnummer
+                                        belopBidrag = it.beløp
+                                        resultatKode = it.resultatKode
+                                        søktTilleggsbidrag = false // TODO
+                                        erInnkreving = detaljer.innkreving
+                                    }
                                 }
-
                                 if (detaljer.type == Stønadstype.FORSKUDD) {
                                     forskuddVedtak {
                                         fomDato = it.fomDato
