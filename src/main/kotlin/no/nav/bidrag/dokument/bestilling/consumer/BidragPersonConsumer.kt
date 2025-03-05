@@ -50,13 +50,29 @@ class BidragPersonConsumer(
 
     @Retryable(maxAttempts = 3, backoff = Backoff(delay = 500, maxDelay = 1500, multiplier = 2.0))
     @BrukerCacheable(PERSON_ADRESSE_CACHE)
-    fun hentAdresse(id: String): PersonAdresseDto? = postForEntity(createUri("/adresse/post"), PersonRequest(Personident(id)))
+    fun hentAdresse(id: String): PersonAdresseDto? =
+        try {
+            postForEntity(createUri("/adresse/post"), PersonRequest(Personident(id)))
+        } catch (e: HttpStatusCodeException) {
+            if (e.statusCode == HttpStatus.NOT_FOUND) {
+                null
+            } else {
+                throw HentPersonFeiletException("Henting av språk for person $id feilet", e)
+            }
+        }
 
     @Retryable(maxAttempts = 3, backoff = Backoff(delay = 500, maxDelay = 1500, multiplier = 2.0))
     @BrukerCacheable(PERSON_SPRAAK_CACHE)
     fun hentSpraak(id: String): String? {
         val headers = HttpHeaders()
         headers.accept = listOf(MediaType.TEXT_PLAIN)
-        return postForEntity(createUri("/spraak"), PersonRequest(Personident(id)), headers)
+        try {
+            return postForEntity(createUri("/spraak"), PersonRequest(Personident(id)), headers)
+        } catch (e: HttpStatusCodeException) {
+            if (e.statusCode == HttpStatus.NOT_FOUND) {
+                return null
+            }
+            throw HentPersonFeiletException("Henting av språk for person $id feilet", e)
+        }
     }
 }
