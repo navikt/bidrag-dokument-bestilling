@@ -89,7 +89,6 @@ import no.nav.bidrag.transport.behandling.felles.grunnlag.utgiftsposter
 import no.nav.bidrag.transport.behandling.vedtak.response.EngangsbeløpDto
 import no.nav.bidrag.transport.behandling.vedtak.response.StønadsendringDto
 import no.nav.bidrag.transport.behandling.vedtak.response.VedtakDto
-import no.nav.bidrag.transport.behandling.vedtak.response.erDirekteAvslag
 import no.nav.bidrag.transport.behandling.vedtak.response.særbidragsperiode
 import no.nav.bidrag.transport.behandling.vedtak.response.typeBehandling
 import org.springframework.stereotype.Service
@@ -313,6 +312,9 @@ class VedtakService(
                     val innteksgrense = sjablongService.hentInntektGrenseForPeriode(getLastDayOfPreviousMonth(stønadperiode.periode.til?.atEndOfMonth()))
                     val resultatKode = Resultatkode.fraKode(stønadperiode.resultatkode)
                     val referanse = VedtakPeriodeReferanse(stønadperiode.periode, resultatKode, vedtakDto.typeBehandling, stønadperiode.grunnlagReferanseListe)
+                    val sluttberegning = grunnlagListe.finnOgKonverterGrunnlagSomErReferertFraGrunnlagsreferanseListe<SluttberegningBarnebidrag>(Grunnlagstype.SLUTTBEREGNING_BARNEBIDRAG, stønadperiode.grunnlagReferanseListe).firstOrNull()
+
+                    val periodeInneholderGrunnlag = sluttberegning?.innhold?.barnetErSelvforsørget == true || resultatKode?.erDirekteAvslag() == true
                     VedtakPeriode(
                         fomDato = stønadperiode.periode.fom.atDay(1),
                         // TODO: Er dette riktig??
@@ -321,10 +323,10 @@ class VedtakService(
                         beløp =
                             stønadperiode.beløp?.let { if (it == BigDecimal.ZERO) BigDecimal("0.1") else it }
                                 ?: if (erDirekteAvslag) BigDecimal.ZERO else BigDecimal("0.1"),
-                        andelUnderhold = grunnlagListe.tilAndelUnderholdskostnadPeriode(referanse),
-                        underhold = grunnlagListe.tilUnderholdskostnadPeriode(referanse),
-                        bidragsevne = grunnlagListe.finnDelberegningBidragsevne(referanse),
-                        samvær = grunnlagListe.mapSamvær(referanse),
+                        andelUnderhold = if (!periodeInneholderGrunnlag) grunnlagListe.tilAndelUnderholdskostnadPeriode(referanse) else null,
+                        underhold = if (!periodeInneholderGrunnlag) grunnlagListe.tilUnderholdskostnadPeriode(referanse) else null,
+                        bidragsevne = if (!periodeInneholderGrunnlag) grunnlagListe.finnDelberegningBidragsevne(referanse) else null,
+                        samvær = if (!periodeInneholderGrunnlag) grunnlagListe.mapSamvær(referanse) else null,
                         resultatKode =
                             if (stønadsendring.type.erBidrag) {
                                 grunnlagListe.tilBisysResultatkode(referanse, vedtakDto.type) ?: stønadperiode.resultatkode
