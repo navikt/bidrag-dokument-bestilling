@@ -156,7 +156,7 @@ interface DataPeriode {
 data class VedtakPeriode(
     val fomDato: LocalDate,
     val tomDato: LocalDate? = null,
-    val beløp: BigDecimal?,
+    val beløp: BigDecimal,
     val innkreving: String? = null,
     val resultatKode: String,
     val inntektGrense: BigDecimal,

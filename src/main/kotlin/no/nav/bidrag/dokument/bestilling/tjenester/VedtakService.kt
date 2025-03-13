@@ -313,29 +313,22 @@ class VedtakService(
             val erDirekteAvslag = vedtakDto.erDirekteAvslag(stønadsendring)
 
             val vedtakPerioder =
-                stønadsendring.periodeListe.filter { it.resultatkode != Resultatkode.OPPHØR.name }.map { stønadperiode ->
+                stønadsendring.periodeListe.filter { it.resultatkode != Resultatkode.OPPHØR.name }.mapNotNull { stønadperiode ->
                     val innteksgrense = sjablongService.hentInntektGrenseForPeriode(getLastDayOfPreviousMonth(stønadperiode.periode.til?.atEndOfMonth()))
                     val resultatKode = Resultatkode.fraKode(stønadperiode.resultatkode)
                     val referanse = VedtakPeriodeReferanse(stønadperiode.periode, resultatKode, vedtakDto.typeBehandling, stønadperiode.grunnlagReferanseListe)
                     val sluttberegning = grunnlagListe.finnOgKonverterGrunnlagSomErReferertFraGrunnlagsreferanseListe<SluttberegningBarnebidrag>(Grunnlagstype.SLUTTBEREGNING_BARNEBIDRAG, stønadperiode.grunnlagReferanseListe).firstOrNull()
 
                     val erAvslagUtenGrunnlag = sluttberegning?.innhold?.barnetErSelvforsørget == true || resultatKode?.erDirekteAvslag() == true
+                    if (erAvslagUtenGrunnlag) return@mapNotNull null
                     VedtakPeriode(
                         fomDato = stønadperiode.periode.fom.atDay(1),
                         // TODO: Er dette riktig??
                         tomDato = stønadperiode.periode.til?.atEndOfMonth(),
                         // Bruker beløp 0.1 for å få alle beløpene i samme tabell hvis det er miks mellom perioder med avslag og innvilgelse
                         beløp =
-                            stønadperiode.beløp?.let {
-                                if (erAvslagUtenGrunnlag) {
-                                    null
-                                } else if (it == BigDecimal.ZERO) {
-                                    BigDecimal("0.1")
-                                } else {
-                                    it
-                                }
-                            }
-                                ?: if (erDirekteAvslag || erAvslagUtenGrunnlag) null else BigDecimal("0.1"),
+                            stønadperiode.beløp?.let { if (it == BigDecimal.ZERO) BigDecimal("0.1") else it }
+                                ?: if (erDirekteAvslag) BigDecimal.ZERO else BigDecimal("0.1"),
                         andelUnderhold = if (!erAvslagUtenGrunnlag) grunnlagListe.tilAndelUnderholdskostnadPeriode(referanse) else null,
                         underhold = if (!erAvslagUtenGrunnlag) grunnlagListe.tilUnderholdskostnadPeriode(referanse) else null,
                         bidragsevne = if (!erAvslagUtenGrunnlag) grunnlagListe.finnDelberegningBidragsevne(referanse) else null,
