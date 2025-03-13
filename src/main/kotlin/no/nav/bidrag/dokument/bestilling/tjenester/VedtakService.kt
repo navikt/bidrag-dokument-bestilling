@@ -313,7 +313,7 @@ class VedtakService(
             val erDirekteAvslag = vedtakDto.erDirekteAvslag(stønadsendring)
 
             val vedtakPerioder =
-                stønadsendring.periodeListe.filter { it.resultatkode != Resultatkode.OPPHØR.name && (it.resultatkode != Resultatkode.IKKE_OMSORG_FOR_BARNET.name || erDirekteAvslag) }.map { stønadperiode ->
+                stønadsendring.periodeListe.filter { it.resultatkode != Resultatkode.OPPHØR.name }.map { stønadperiode ->
                     val innteksgrense = sjablongService.hentInntektGrenseForPeriode(getLastDayOfPreviousMonth(stønadperiode.periode.til?.atEndOfMonth()))
                     val resultatKode = Resultatkode.fraKode(stønadperiode.resultatkode)
                     val referanse = VedtakPeriodeReferanse(stønadperiode.periode, resultatKode, vedtakDto.typeBehandling, stønadperiode.grunnlagReferanseListe)
@@ -327,7 +327,7 @@ class VedtakService(
                         // Bruker beløp 0.1 for å få alle beløpene i samme tabell hvis det er miks mellom perioder med avslag og innvilgelse
                         beløp =
                             stønadperiode.beløp?.let { if (it == BigDecimal.ZERO) BigDecimal("0.1") else it }
-                                ?: if (erDirekteAvslag) BigDecimal.ZERO else BigDecimal("0.1"),
+                                ?: if (erDirekteAvslag) null else BigDecimal("0.1"),
                         andelUnderhold = if (!periodeInneholderGrunnlag) grunnlagListe.tilAndelUnderholdskostnadPeriode(referanse) else null,
                         underhold = if (!periodeInneholderGrunnlag) grunnlagListe.tilUnderholdskostnadPeriode(referanse) else null,
                         bidragsevne = if (!periodeInneholderGrunnlag) grunnlagListe.finnDelberegningBidragsevne(referanse) else null,
