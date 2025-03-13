@@ -319,19 +319,27 @@ class VedtakService(
                     val referanse = VedtakPeriodeReferanse(stønadperiode.periode, resultatKode, vedtakDto.typeBehandling, stønadperiode.grunnlagReferanseListe)
                     val sluttberegning = grunnlagListe.finnOgKonverterGrunnlagSomErReferertFraGrunnlagsreferanseListe<SluttberegningBarnebidrag>(Grunnlagstype.SLUTTBEREGNING_BARNEBIDRAG, stønadperiode.grunnlagReferanseListe).firstOrNull()
 
-                    val periodeInneholderGrunnlag = sluttberegning?.innhold?.barnetErSelvforsørget == true || resultatKode?.erDirekteAvslag() == true
+                    val erAvslagUtenGrunnlag = sluttberegning?.innhold?.barnetErSelvforsørget == true || resultatKode?.erDirekteAvslag() == true
                     VedtakPeriode(
                         fomDato = stønadperiode.periode.fom.atDay(1),
                         // TODO: Er dette riktig??
                         tomDato = stønadperiode.periode.til?.atEndOfMonth(),
                         // Bruker beløp 0.1 for å få alle beløpene i samme tabell hvis det er miks mellom perioder med avslag og innvilgelse
                         beløp =
-                            stønadperiode.beløp?.let { if (it == BigDecimal.ZERO) BigDecimal("0.1") else it }
-                                ?: if (erDirekteAvslag) null else BigDecimal("0.1"),
-                        andelUnderhold = if (!periodeInneholderGrunnlag) grunnlagListe.tilAndelUnderholdskostnadPeriode(referanse) else null,
-                        underhold = if (!periodeInneholderGrunnlag) grunnlagListe.tilUnderholdskostnadPeriode(referanse) else null,
-                        bidragsevne = if (!periodeInneholderGrunnlag) grunnlagListe.finnDelberegningBidragsevne(referanse) else null,
-                        samvær = if (!periodeInneholderGrunnlag) grunnlagListe.mapSamvær(referanse) else null,
+                            stønadperiode.beløp?.let {
+                                if (erAvslagUtenGrunnlag) {
+                                    null
+                                } else if (it == BigDecimal.ZERO) {
+                                    BigDecimal("0.1")
+                                } else {
+                                    it
+                                }
+                            }
+                                ?: if (erDirekteAvslag || erAvslagUtenGrunnlag) null else BigDecimal("0.1"),
+                        andelUnderhold = if (!erAvslagUtenGrunnlag) grunnlagListe.tilAndelUnderholdskostnadPeriode(referanse) else null,
+                        underhold = if (!erAvslagUtenGrunnlag) grunnlagListe.tilUnderholdskostnadPeriode(referanse) else null,
+                        bidragsevne = if (!erAvslagUtenGrunnlag) grunnlagListe.finnDelberegningBidragsevne(referanse) else null,
+                        samvær = if (!erAvslagUtenGrunnlag) grunnlagListe.mapSamvær(referanse) else null,
                         resultatKode =
                             if (stønadsendring.type.erBidrag) {
                                 grunnlagListe.tilBisysResultatkode(referanse, vedtakDto.type) ?: stønadperiode.resultatkode
