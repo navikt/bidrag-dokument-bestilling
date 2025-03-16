@@ -319,7 +319,7 @@ class VedtakService(
                     val referanse = VedtakPeriodeReferanse(stønadperiode.periode, resultatKode, vedtakDto.typeBehandling, stønadperiode.grunnlagReferanseListe)
                     val sluttberegning = grunnlagListe.finnOgKonverterGrunnlagSomErReferertFraGrunnlagsreferanseListe<SluttberegningBarnebidrag>(Grunnlagstype.SLUTTBEREGNING_BARNEBIDRAG, stønadperiode.grunnlagReferanseListe).firstOrNull()
 
-                    val erAvslagUtenGrunnlag = sluttberegning?.innhold?.barnetErSelvforsørget == true || resultatKode?.erDirekteAvslag() == true
+                    val erAvslagUtenGrunnlag = sluttberegning?.innhold?.erResultatAvslag == true || resultatKode?.erDirekteAvslag() == true
                     if (erAvslagUtenGrunnlag && !erDirekteAvslag) return@mapNotNull null
                     VedtakPeriode(
                         fomDato = stønadperiode.periode.fom.atDay(1),
