@@ -42,8 +42,7 @@ class DokumentBestillingBrevkodeTest : AbstractControllerTest() {
         fun alleDokumentmaler() = alleDokumentmaler
 
         @JvmStatic
-        fun brevkoderUtgaaende() =
-            alleDokumentmaler.filter { it.type != DokumentMalType.NOTAT }
+        fun brevkoderUtgaaende() = alleDokumentmaler.filter { it.type != DokumentMalType.NOTAT }
 
         @JvmStatic
         fun brevkoderEnhetKontaktinfo() =

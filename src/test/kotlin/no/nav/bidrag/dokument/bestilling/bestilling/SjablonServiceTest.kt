@@ -301,11 +301,9 @@ class SjablonServiceTest {
         }
     }
 
-    fun List<ForskuddInntektgrensePeriode>.hentForPeriodeHvorDatoErInkludert(dato: LocalDate) =
-        this.filter { it.tomDato != null && it.tomDato!! >= dato && it.fomDato <= dato }
+    fun List<ForskuddInntektgrensePeriode>.hentForPeriodeHvorDatoErInkludert(dato: LocalDate) = this.filter { it.tomDato != null && it.tomDato!! >= dato && it.fomDato <= dato }
 
-    fun List<ForskuddInntektgrensePeriode>.hentForAntallBarn(antallBarn: Int) =
-        this.find { it.antallBarn == antallBarn }
+    fun List<ForskuddInntektgrensePeriode>.hentForAntallBarn(antallBarn: Int) = this.find { it.antallBarn == antallBarn }
 
     fun ForskuddInntektgrensePeriode.validerBelop50Prosent(belopFraTil: BeløpFraTil) {
         this.beløp50Prosent shouldBe belopFraTil
