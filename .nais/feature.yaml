@@ -1,6 +1,6 @@
 name: bidrag-dokument-bestilling-feature
 bucket_name: bidrag-dokument-bestilling-dev
-min_replicas: 2
+min_replicas: 1
 ingresses:
   - https://bidrag-dokument-bestilling-feature.intern.dev.nav.no
 env:

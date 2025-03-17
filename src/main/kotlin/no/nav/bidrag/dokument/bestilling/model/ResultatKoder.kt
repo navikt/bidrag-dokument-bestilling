@@ -21,6 +21,8 @@ object ResultatKoder {
 
 private val resultatkoderSomIkkeErStøttetAvBrev =
     listOf(
+        Resultatkode.BIDRAGSPLIKTIG_ER_DØD,
+        Resultatkode.IKKE_OMSORG_FOR_BARNET,
         Resultatkode.IKKE_DOKUMENTERT_SKOLEGANG,
         Resultatkode.AVSLUTTET_SKOLEGANG,
         Resultatkode.IKKE_INNKREVING_AV_BIDRAG,

@@ -291,6 +291,8 @@ data class VedtakDetaljer(
     val barnIHusstandPerioder: List<BarnIHusstandPeriode> = emptyList(),
     val sivilstandPerioder: List<SivilstandPeriode> = emptyList(),
 ) {
+    val erDirekteAvslagForAlleBarn: Boolean get() = vedtakBarn.all { it.erDirekteAvslag }
+
     fun hentForskuddBarn(fodselsnummer: String): BigDecimal? =
         vedtakBarn
             .find { it.fødselsnummer == fodselsnummer }
@@ -319,6 +321,7 @@ data class VedtakBarn(
     val stønadsendringer: List<VedtakBarnStonad> = emptyList(),
     val engangsbeløper: List<VedtakBarnEngangsbeløp> = emptyList(),
 ) {
+    val erDirekteAvslag get() = stønadsendringer.all { it.direkteAvslag }
     val samværsperioder = stønadsendringer.flatMap { it.vedtakPerioder.map { it.samvær } }.filterNotNull().sammenstillDeMedSammeVerdi()
     val underholdskostnadperioder = stønadsendringer.flatMap { it.vedtakPerioder.map { it.underhold } }.filterNotNull().sammenstillDeMedSammeVerdiUnderhold()
     val andelUnderholdPerioder = stønadsendringer.flatMap { it.vedtakPerioder.map { it.andelUnderhold } }.filterNotNull().sammenstillDeMedSammeVerdiAndelUnderhold()

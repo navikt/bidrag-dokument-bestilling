@@ -94,6 +94,11 @@ import no.nav.bidrag.transport.behandling.vedtak.response.typeBehandling
 import org.springframework.stereotype.Service
 import java.math.BigDecimal
 
+val resultatkoderOpphør =
+    listOf(
+        Resultatkode.OPPHØR,
+        Resultatkode.PARTEN_BER_OM_OPPHØR,
+    )
 val særbidragDirekteAvslagskoderSomInneholderUtgifter =
     listOf(Resultatkode.GODKJENT_BELØP_ER_LAVERE_ENN_FORSKUDDSSATS, Resultatkode.ALLE_UTGIFTER_ER_FORELDET)
 
@@ -308,13 +313,14 @@ class VedtakService(
             val erDirekteAvslag = vedtakDto.erDirekteAvslag(stønadsendring)
 
             val vedtakPerioder =
-                stønadsendring.periodeListe.filter { it.resultatkode != Resultatkode.OPPHØR.name }.map { stønadperiode ->
+                stønadsendring.periodeListe.filter { it.resultatkode != Resultatkode.OPPHØR.name }.mapNotNull { stønadperiode ->
                     val innteksgrense = sjablongService.hentInntektGrenseForPeriode(getLastDayOfPreviousMonth(stønadperiode.periode.til?.atEndOfMonth()))
                     val resultatKode = Resultatkode.fraKode(stønadperiode.resultatkode)
                     val referanse = VedtakPeriodeReferanse(stønadperiode.periode, resultatKode, vedtakDto.typeBehandling, stønadperiode.grunnlagReferanseListe)
                     val sluttberegning = grunnlagListe.finnOgKonverterGrunnlagSomErReferertFraGrunnlagsreferanseListe<SluttberegningBarnebidrag>(Grunnlagstype.SLUTTBEREGNING_BARNEBIDRAG, stønadperiode.grunnlagReferanseListe).firstOrNull()
 
-                    val periodeInneholderGrunnlag = sluttberegning?.innhold?.barnetErSelvforsørget == true || resultatKode?.erDirekteAvslag() == true
+                    val erAvslagUtenGrunnlag = sluttberegning?.innhold?.erResultatAvslag == true || resultatKode?.erDirekteAvslag() == true
+                    if (erAvslagUtenGrunnlag && !erDirekteAvslag) return@mapNotNull null
                     VedtakPeriode(
                         fomDato = stønadperiode.periode.fom.atDay(1),
                         // TODO: Er dette riktig??
@@ -323,10 +329,10 @@ class VedtakService(
                         beløp =
                             stønadperiode.beløp?.let { if (it == BigDecimal.ZERO) BigDecimal("0.1") else it }
                                 ?: if (erDirekteAvslag) BigDecimal.ZERO else BigDecimal("0.1"),
-                        andelUnderhold = if (!periodeInneholderGrunnlag) grunnlagListe.tilAndelUnderholdskostnadPeriode(referanse) else null,
-                        underhold = if (!periodeInneholderGrunnlag) grunnlagListe.tilUnderholdskostnadPeriode(referanse) else null,
-                        bidragsevne = if (!periodeInneholderGrunnlag) grunnlagListe.finnDelberegningBidragsevne(referanse) else null,
-                        samvær = if (!periodeInneholderGrunnlag) grunnlagListe.mapSamvær(referanse) else null,
+                        andelUnderhold = if (!erAvslagUtenGrunnlag) grunnlagListe.tilAndelUnderholdskostnadPeriode(referanse) else null,
+                        underhold = if (!erAvslagUtenGrunnlag) grunnlagListe.tilUnderholdskostnadPeriode(referanse) else null,
+                        bidragsevne = if (!erAvslagUtenGrunnlag) grunnlagListe.finnDelberegningBidragsevne(referanse) else null,
+                        samvær = if (!erAvslagUtenGrunnlag) grunnlagListe.mapSamvær(referanse) else null,
                         resultatKode =
                             if (stønadsendring.type.erBidrag) {
                                 grunnlagListe.tilBisysResultatkode(referanse, vedtakDto.type) ?: stønadperiode.resultatkode

@@ -7,11 +7,11 @@ import no.nav.bidrag.dokument.bestilling.config.CacheConfig.Companion.SJABLONGER
 import no.nav.bidrag.dokument.bestilling.consumer.dto.SjablongerDto
 import no.nav.bidrag.dokument.bestilling.model.parameterizedTypeReference
 import org.springframework.beans.factory.annotation.Value
-import org.springframework.boot.web.client.RootUriTemplateHandler
 import org.springframework.cache.CacheManager
 import org.springframework.http.HttpMethod
 import org.springframework.stereotype.Service
 import org.springframework.web.client.RestTemplate
+import org.springframework.web.util.DefaultUriBuilderFactory
 import javax.annotation.PostConstruct
 
 private val log = KotlinLogging.logger {}
@@ -25,7 +25,7 @@ class SjablonConsumer(
 
     init {
         val restTemplate = HttpHeaderRestTemplate()
-        restTemplate.uriTemplateHandler = RootUriTemplateHandler(url)
+        restTemplate.uriTemplateHandler = DefaultUriBuilderFactory(url)
         restTemplate.addHeaderGenerator("Nav-Call-Id") { CorrelationId.generateTimestamped("bidrag-dokument-bestilling").get() }
         restTemplate.addHeaderGenerator("Nav-Consumer-Id") { "bidrag-dokument-bestilling" }
         this.restTemplate = restTemplate
