@@ -670,7 +670,7 @@
   },
   {
     "kode": "BI01E50",
-    "tittel": "Klage - vedtak bidrag til særbidrag",
+    "tittel": "Klage - vedtak særbidrag",
     "type": "VEDTAK",
     "inneholderData": [
       "ROLLER",
@@ -682,7 +682,7 @@
   },
   {
     "kode": "BI01E01",
-    "tittel": "Vedtak bidrag til særbidrag",
+    "tittel": "Vedtak særbidrag",
     "type": "VEDTAK",
     "inneholderData": [
       "ROLLER",
@@ -707,7 +707,7 @@
   },
   {
     "kode": "BI01E03",
-    "tittel": "Vedtak bidrag til særbidrag tannregulering",
+    "tittel": "Vedtak særbidrag tannregulering",
     "type": "VEDTAK",
     "inneholderData": [
       "ROLLER",
