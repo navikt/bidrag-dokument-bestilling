@@ -38,8 +38,7 @@ data class DokumentBestillingForespørsel(
 
     fun hentSpråk() = språk ?: spraak
 
-    fun erMottakerSamhandler(): Boolean =
-        (mottaker?.ident?.erSamhandler ?: mottakerIdent?.erSamhandler) == true
+    fun erMottakerSamhandler(): Boolean = (mottaker?.ident?.erSamhandler ?: mottakerIdent?.erSamhandler) == true
 
     fun harMottakerKontaktinformasjon() = mottaker?.adresse != null
 
