@@ -334,7 +334,7 @@ class DokumentBestillingControllerForskuddTest : AbstractControllerTest() {
                     vedtakPeriode2.resultatKode shouldBe Resultatkode.FORHØYET_FORSKUDD_11_ÅR_125_PROSENT.legacyKode
 
                     val vedtakPeriodeSiste = this[7]
-                    vedtakPeriodeSiste.belopBidrag shouldBe BigDecimal("0.10")
+                    vedtakPeriodeSiste.belopBidrag shouldBe BigDecimal("0.00")
                     vedtakPeriodeSiste.fomDato shouldBe sistePeriode.fraDato
                     vedtakPeriodeSiste.tomDato shouldBe sistePeriode.tomDato
                     vedtakPeriodeSiste.fnr shouldBe BARN1.ident.verdi
@@ -413,7 +413,7 @@ class DokumentBestillingControllerForskuddTest : AbstractControllerTest() {
                     val forskuddVedtakPeriode4 = this[7]
                     forskuddVedtakPeriode4.fomDato shouldBe sistePeriode.fraDato
                     forskuddVedtakPeriode4.tomDato shouldBe sistePeriode.tomDato
-                    forskuddVedtakPeriode4.beløp shouldBe BigDecimal("0.10")
+                    forskuddVedtakPeriode4.beløp shouldBe BigDecimal("0.00")
                     forskuddVedtakPeriode4.fnr shouldBe BARN1.ident.verdi
                     forskuddVedtakPeriode4.resultatKode shouldBe Resultatkode.AVSLAG_OVER_18_ÅR.legacyKode
                     forskuddVedtakPeriode4.forskKode shouldBe "BOA"
