@@ -26,6 +26,7 @@ import no.nav.bidrag.dokument.bestilling.model.ResultatKoder
 import no.nav.bidrag.dokument.bestilling.model.tilBisysResultatkodeForBrev
 import no.nav.bidrag.dokument.bestilling.model.tilLocalDateFom
 import no.nav.bidrag.dokument.bestilling.model.tilLocalDateTil
+import no.nav.bidrag.dokument.bestilling.tjenester.erBidrag
 import no.nav.bidrag.domene.enums.barnetilsyn.Skolealder
 import no.nav.bidrag.domene.enums.barnetilsyn.Tilsynstype
 import no.nav.bidrag.domene.enums.behandling.TypeBehandling
@@ -171,7 +172,7 @@ class BrevserverProducer(
                     rmISak = dokumentBestilling.rmISak
                     datoSakReg = dokumentBestilling.datoSakOpprettet
                     hgKode = hgUgDto?.hg
-                    ugKode = if (dokumentBestilling.vedtakDetaljer?.erDirekteAvslagForAlleBarn == true && dokumentBestilling.vedtakDetaljer.stønadType != Stønadstype.FORSKUDD) "OH" else hgUgDto?.ug
+                    ugKode = if (dokumentBestilling.vedtakDetaljer?.erDirekteAvslagForAlleBarn == true && dokumentBestilling.vedtakDetaljer.stønadType?.erBidrag == true) "OH" else hgUgDto?.ug
                     sakstype =
                         if (dokumentBestilling.sakDetaljer.harUkjentPart) {
                             "X"
