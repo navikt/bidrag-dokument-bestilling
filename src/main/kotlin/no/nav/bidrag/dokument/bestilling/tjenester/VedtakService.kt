@@ -311,6 +311,7 @@ class VedtakService(
         val stønadsendringerBarn = vedtakDto.stønadsendringListe.filter { it.kravhaver.verdi == barnIdent }
         return stønadsendringerBarn.map { stønadsendring ->
             val erDirekteAvslag = vedtakDto.erDirekteAvslag(stønadsendring)
+            val allePerioderAvslag = stønadsendring.periodeListe.all { Resultatkode.fraKode(it.resultatkode)?.erAvslag() == true }
 
             val vedtakPerioder =
                 stønadsendring.periodeListe.filter { it.resultatkode != Resultatkode.OPPHØR.name }.mapNotNull { stønadperiode ->
@@ -328,7 +329,7 @@ class VedtakService(
                         // Bruker beløp 0.1 for å få alle beløpene i samme tabell hvis det er miks mellom perioder med avslag og innvilgelse
                         beløp =
                             stønadperiode.beløp?.let { if (it == BigDecimal.ZERO) BigDecimal("0.1") else it }
-                                ?: if (erDirekteAvslag) BigDecimal.ZERO else BigDecimal("0.1"),
+                                ?: if (erDirekteAvslag || allePerioderAvslag) BigDecimal.ZERO else BigDecimal("0.1"),
                         andelUnderhold = if (!erAvslagUtenGrunnlag) grunnlagListe.tilAndelUnderholdskostnadPeriode(referanse) else null,
                         underhold = if (!erAvslagUtenGrunnlag) grunnlagListe.tilUnderholdskostnadPeriode(referanse) else null,
                         bidragsevne = if (!erAvslagUtenGrunnlag) grunnlagListe.finnDelberegningBidragsevne(referanse) else null,

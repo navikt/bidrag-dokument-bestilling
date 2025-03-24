@@ -171,7 +171,7 @@ class BrevserverProducer(
                     rmISak = dokumentBestilling.rmISak
                     datoSakReg = dokumentBestilling.datoSakOpprettet
                     hgKode = hgUgDto?.hg
-                    ugKode = hgUgDto?.ug
+                    ugKode = if (dokumentBestilling.vedtakDetaljer?.erDirekteAvslagForAlleBarn == true) "OH" else hgUgDto?.ug
                     sakstype =
                         if (dokumentBestilling.sakDetaljer.harUkjentPart) {
                             "X"
