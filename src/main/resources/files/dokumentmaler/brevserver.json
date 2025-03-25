@@ -719,7 +719,7 @@
   },
   {
     "kode": "BI01S04",
-    "tittel": "Nav har mottatt søknad om bidrag til særbidrag",
+    "tittel": "Nav har mottatt søknad om særbidrag",
     "type": "VARSEL",
     "kreverEkstraData": [
       "SJABLON"
@@ -730,7 +730,7 @@
   },
   {
     "kode": "BI01S18",
-    "tittel": "Du har søkt om bidrag til særbidrag",
+    "tittel": "Du har søkt om særbidrag",
     "type": "VARSEL",
     "kreverEkstraData": [
       "SJABLON"
