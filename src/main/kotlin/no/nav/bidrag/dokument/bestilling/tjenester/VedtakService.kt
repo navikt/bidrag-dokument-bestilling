@@ -455,7 +455,7 @@ fun List<GrunnlagDto>.finnDelberegningBidragsevne(periode: VedtakPeriodeReferans
                 antallBarnDeltBossted = antallBarnDeltBossted,
             ),
         harFullEvne = !sluttberegning.innhold.bidragJustertNedTilEvne,
-        harDelvisEvne = sluttberegning.innhold.bidragJustertNedTilEvne && sluttberegning.innhold.resultatBeløp!! > BigDecimal.ZERO,
+        harDelvisEvne = sluttberegning.innhold.bidragJustertNedTilEvne && sluttberegning.innhold.bruttoBidragJustertForEvneOg25Prosent > BigDecimal.ZERO,
         inntektBP = finnTotalInntektForRolle(periode.grunnlagReferanseListe, Rolletype.BIDRAGSPLIKTIG),
         borMedAndreVoksne = delberegningVoksneIHusstand.innhold.borMedAndreVoksne,
         skatt =
