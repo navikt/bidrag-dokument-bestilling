@@ -241,7 +241,7 @@ class BrevserverProducer(
                 }
                 vedtakInfo?.let {
                     soknad {
-                        aarsakKd = it.årsakKode?.legacyKode ?: it.avslagsKode?.tilBisysResultatkodeForBrev(dokumentBestilling.vedtakDetaljer.vedtakType) // TODO: Oversett til riktig kode
+                        aarsakKd = it.årsakKode?.legacyKode?.firstOrNull() ?: it.avslagsKode?.tilBisysResultatkodeForBrev(dokumentBestilling.vedtakDetaljer.vedtakType) // TODO: Oversett til riktig kode
                         undergrp = hgUgDto?.ug
                         type = it.stønadType?.let { BehandlingType.valueOf(it.name).kode } ?: hgUgDto?.hg
 
