@@ -151,7 +151,7 @@ class DokumentBestillingControllerForskuddTest : AbstractControllerTest() {
                 val soknad = message.brev?.soknad!!
                 soknad.soknDato shouldBe soknadDato
                 soknad.type shouldBe "FO"
-                soknad.aarsakKd shouldBe VirkningstidspunktÅrsakstype.FRA_SØKNADSTIDSPUNKT.legacyKode
+                soknad.aarsakKd shouldBe VirkningstidspunktÅrsakstype.FRA_SØKNADSTIDSPUNKT.legacyKode.firstOrNull()
                 soknad.undergrp shouldBe "E"
                 soknad.saksnr shouldBe saksnummer
                 soknad.sendtDato shouldBe null
@@ -289,7 +289,7 @@ class DokumentBestillingControllerForskuddTest : AbstractControllerTest() {
                 val soknad = message.brev?.soknad!!
                 soknad.soknDato shouldBe soknadDato
                 soknad.type shouldBe "FO"
-                soknad.aarsakKd shouldBe VirkningstidspunktÅrsakstype.FRA_SØKNADSTIDSPUNKT.legacyKode
+                soknad.aarsakKd shouldBe VirkningstidspunktÅrsakstype.FRA_SØKNADSTIDSPUNKT.legacyKode.firstOrNull()
                 soknad.undergrp shouldBe "S"
                 soknad.saksnr shouldBe saksnummer
                 soknad.sendtDato shouldBe LocalDate.parse("2024-08-04")
