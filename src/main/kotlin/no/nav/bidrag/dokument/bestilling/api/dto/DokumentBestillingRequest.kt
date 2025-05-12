@@ -10,6 +10,7 @@ import no.nav.bidrag.transport.dokument.DokumentArkivSystemDto
 
 @Schema(description = "Metadata som brukes ved bestilling av ny dokument")
 data class DokumentBestillingForespørsel(
+    val erBatchBrev: Boolean = false,
     val mottakerId: Ident? = null,
     val mottaker: MottakerTo? = null,
     @Schema(

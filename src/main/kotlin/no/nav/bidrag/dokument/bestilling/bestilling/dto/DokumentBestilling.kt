@@ -39,6 +39,7 @@ data class DokumentBestillingResult(
 )
 
 data class DokumentBestilling(
+    val bestillBatch: Boolean,
     var mottaker: Mottaker? = null,
     var gjelder: Gjelder? = null,
     var kontaktInfo: EnhetKontaktInfo? = null,

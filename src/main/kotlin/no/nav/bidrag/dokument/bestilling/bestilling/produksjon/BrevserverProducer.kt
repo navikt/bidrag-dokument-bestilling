@@ -54,6 +54,7 @@ val bidragStønader = listOf(Stønadstype.BIDRAG, Stønadstype.BIDRAG18AAR)
 @Component(BestillingSystem.BREVSERVER)
 class BrevserverProducer(
     val onlinebrevTemplate: JmsTemplate,
+    val batchbrevTemplate: JmsTemplate,
     val bidragDokumentConsumer: BidragDokumentConsumer,
     val hgUgKodeService: HgUgKodeService,
     @Value("\${BREVSERVER_PASSORD}") val brevPassord: String,
@@ -64,12 +65,22 @@ class BrevserverProducer(
     ): DokumentBestillingResult {
         val journalpostId = opprettJournalpost(dokumentBestilling, dokumentMal)
 
-        onlinebrevTemplate.convertAndSend(
-            mapToBrevserverMessage(
-                dokumentBestilling,
-                dokumentMal,
-            ),
-        )
+        if (dokumentBestilling.bestillBatch) {
+            batchbrevTemplate.convertAndSend(
+                mapToBrevserverMessage(
+                    dokumentBestilling,
+                    dokumentMal,
+                ),
+            )
+        } else {
+            onlinebrevTemplate.convertAndSend(
+                mapToBrevserverMessage(
+                    dokumentBestilling,
+                    dokumentMal,
+                ),
+            )
+        }
+
         // TODO: Error handling
         return DokumentBestillingResult(
             dokumentReferanse = dokumentBestilling.dokumentreferanse!!,
