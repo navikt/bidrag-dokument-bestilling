@@ -1,5 +1,6 @@
 package no.nav.bidrag.dokument.bestilling.bestilling.produksjon
 
+import mu.KotlinLogging
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.BestillingSystem
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.DataGrunnlag
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.DokumentBestilling
@@ -50,6 +51,7 @@ import org.springframework.stereotype.Component
 import java.math.BigDecimal
 
 val bidragStønader = listOf(Stønadstype.BIDRAG, Stønadstype.BIDRAG18AAR)
+private val log = KotlinLogging.logger {}
 
 @Component(BestillingSystem.BREVSERVER)
 class BrevserverProducer(
@@ -66,6 +68,7 @@ class BrevserverProducer(
         val journalpostId = opprettJournalpost(dokumentBestilling, dokumentMal)
 
         if (dokumentBestilling.bestillBatch) {
+            log.info { "Sender melding til batch kø" }
             batchbrevTemplate.convertAndSend(
                 mapToBrevserverMessage(
                     dokumentBestilling,
