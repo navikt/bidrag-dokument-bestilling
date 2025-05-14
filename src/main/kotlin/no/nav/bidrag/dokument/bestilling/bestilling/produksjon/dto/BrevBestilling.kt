@@ -28,7 +28,7 @@ class BrevBestilling {
     var sysid: String = "BI12"
 
     @XmlAttribute
-    var arkiver: String = "ja"
+    var arkiver: String = "JA"
 
     @XmlAttribute
     var direkteutskrift: String = "NEI"
