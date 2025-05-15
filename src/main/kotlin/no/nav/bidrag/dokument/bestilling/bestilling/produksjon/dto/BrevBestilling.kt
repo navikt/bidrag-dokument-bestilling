@@ -31,16 +31,16 @@ class BrevBestilling {
     var arkiver: String = "JA"
 
     @XmlAttribute
-    var direkteutskrift: String = "JA"
+    var direkteutskrift: String = "NEI"
 
     @XmlAttribute
     var format: String = "ENSIDIG"
 
     @XmlAttribute
-    var skriver: String = "INGEN"
+    var skriver: String = ""
 
     @XmlAttribute
-    var skrivertype: String = "SENTRAL"
+    var skrivertype: String = "LOKAL"
 
     @XmlAttribute
     var skuff: String = ""

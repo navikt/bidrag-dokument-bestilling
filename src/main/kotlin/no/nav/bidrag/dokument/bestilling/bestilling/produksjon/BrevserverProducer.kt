@@ -69,12 +69,14 @@ class BrevserverProducer(
 
         if (dokumentBestilling.bestillBatch) {
             log.info { "Sender melding til batch kø" }
-            batchbrevTemplate.convertAndSend(
+            val melding =
                 mapToBrevserverMessage(
                     dokumentBestilling,
                     dokumentMal,
-                ),
-            )
+                )
+            melding.skrivertype = "SENTRAL"
+            melding.direkteutskrift = "JA"
+            batchbrevTemplate.convertAndSend(melding)
         } else {
             onlinebrevTemplate.convertAndSend(
                 mapToBrevserverMessage(
@@ -153,7 +155,7 @@ class BrevserverProducer(
                 }
             malpakke = "BI01.${dokumentMal.kode}"
             passord = brevPassord
-            saksbehandler = "RTV9999"
+            saksbehandler = dokumentBestilling.saksbehandler?.ident!!
             brev {
                 brevref = dokumentBestilling.dokumentreferanse!!
                 spraak = dokumentSpraak
