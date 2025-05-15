@@ -153,7 +153,7 @@ class BrevserverProducer(
                 }
             malpakke = "BI01.${dokumentMal.kode}"
             passord = brevPassord
-            saksbehandler = dokumentBestilling.saksbehandler?.ident!!
+            saksbehandler = "RTV9999"
             brev {
                 brevref = dokumentBestilling.dokumentreferanse!!
                 spraak = dokumentSpraak
