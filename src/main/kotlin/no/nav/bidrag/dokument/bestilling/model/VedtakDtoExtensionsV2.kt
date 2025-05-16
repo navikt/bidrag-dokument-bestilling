@@ -9,6 +9,7 @@ import no.nav.bidrag.domene.enums.behandling.TypeBehandling
 import no.nav.bidrag.domene.enums.grunnlag.Grunnlagstype
 import no.nav.bidrag.domene.enums.inntekt.Inntektsrapportering
 import no.nav.bidrag.domene.enums.rolle.Rolletype
+import no.nav.bidrag.domene.enums.rolle.SøktAvType
 import no.nav.bidrag.domene.enums.sjablon.SjablonTallNavn
 import no.nav.bidrag.domene.ident.Personident
 import no.nav.bidrag.domene.tid.ÅrMånedsperiode
@@ -54,8 +55,12 @@ fun VedtakDto.hentVirkningstidspunkt(): VirkningstidspunktGrunnlag? =
 fun VedtakDto.hentSøknad(): SøknadGrunnlag =
     grunnlagListe
         .filtrerBasertPåEgenReferanse(Grunnlagstype.SØKNAD)
-        .first()
-        .innholdTilObjekt<SøknadGrunnlag>()
+        .firstOrNull()
+        ?.innholdTilObjekt<SøknadGrunnlag>() ?: SøknadGrunnlag(
+        mottattDato = vedtakstidspunkt?.toLocalDate() ?: opprettetTidspunkt.toLocalDate(),
+        søktFraDato = vedtakstidspunkt?.toLocalDate() ?: opprettetTidspunkt.toLocalDate(),
+        søktAv = SøktAvType.NAV_BIDRAG,
+    )
 
 fun List<GrunnlagDto>.mapSivilstand(): List<SivilstandPeriode> =
     filtrerBasertPåEgenReferanse(Grunnlagstype.SIVILSTAND_PERIODE)

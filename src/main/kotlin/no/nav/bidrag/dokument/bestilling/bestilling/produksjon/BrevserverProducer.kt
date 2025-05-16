@@ -1,5 +1,6 @@
 package no.nav.bidrag.dokument.bestilling.bestilling.produksjon
 
+import mu.KotlinLogging
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.BestillingSystem
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.DataGrunnlag
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.DokumentBestilling
@@ -50,10 +51,12 @@ import org.springframework.stereotype.Component
 import java.math.BigDecimal
 
 val bidragStønader = listOf(Stønadstype.BIDRAG, Stønadstype.BIDRAG18AAR)
+private val log = KotlinLogging.logger {}
 
 @Component(BestillingSystem.BREVSERVER)
 class BrevserverProducer(
     val onlinebrevTemplate: JmsTemplate,
+    val batchbrevTemplate: JmsTemplate,
     val bidragDokumentConsumer: BidragDokumentConsumer,
     val hgUgKodeService: HgUgKodeService,
     @Value("\${BREVSERVER_PASSORD}") val brevPassord: String,
@@ -64,12 +67,25 @@ class BrevserverProducer(
     ): DokumentBestillingResult {
         val journalpostId = opprettJournalpost(dokumentBestilling, dokumentMal)
 
-        onlinebrevTemplate.convertAndSend(
-            mapToBrevserverMessage(
-                dokumentBestilling,
-                dokumentMal,
-            ),
-        )
+        if (dokumentBestilling.bestillBatch) {
+            log.info { "Sender melding til batch kø" }
+            val melding =
+                mapToBrevserverMessage(
+                    dokumentBestilling,
+                    dokumentMal,
+                )
+            melding.skrivertype = "SENTRAL"
+            melding.direkteutskrift = "JA"
+            batchbrevTemplate.convertAndSend(melding)
+        } else {
+            onlinebrevTemplate.convertAndSend(
+                mapToBrevserverMessage(
+                    dokumentBestilling,
+                    dokumentMal,
+                ),
+            )
+        }
+
         // TODO: Error handling
         return DokumentBestillingResult(
             dokumentReferanse = dokumentBestilling.dokumentreferanse!!,

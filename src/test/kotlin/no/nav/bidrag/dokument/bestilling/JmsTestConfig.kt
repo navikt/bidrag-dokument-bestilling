@@ -43,6 +43,11 @@ class JmsTestConfig {
     ): Queue = ActiveMQQueue(queuename)
 
     @Bean
+    fun batchBrevQueue(
+        @Value("\${BREVSERVER_BATCHBREV_QUEUE}") queuename: String,
+    ): Queue = ActiveMQQueue(queuename)
+
+    @Bean
     @Profile("test")
     fun cacheManager(): CacheManager = NoOpCacheManager()
 }

@@ -64,12 +64,14 @@ import no.nav.bidrag.transport.behandling.felles.grunnlag.DelberegningVoksneIHus
 import no.nav.bidrag.transport.behandling.felles.grunnlag.GrunnlagDto
 import no.nav.bidrag.transport.behandling.felles.grunnlag.Grunnlagsreferanse
 import no.nav.bidrag.transport.behandling.felles.grunnlag.InntektsrapporteringPeriode
+import no.nav.bidrag.transport.behandling.felles.grunnlag.KopiSamværsperiodeGrunnlag
 import no.nav.bidrag.transport.behandling.felles.grunnlag.Person
 import no.nav.bidrag.transport.behandling.felles.grunnlag.SamværsperiodeGrunnlag
 import no.nav.bidrag.transport.behandling.felles.grunnlag.SjablonBidragsevnePeriode
 import no.nav.bidrag.transport.behandling.felles.grunnlag.SjablonSamværsfradragPeriode
 import no.nav.bidrag.transport.behandling.felles.grunnlag.SjablonSjablontallPeriode
 import no.nav.bidrag.transport.behandling.felles.grunnlag.SluttberegningBarnebidrag
+import no.nav.bidrag.transport.behandling.felles.grunnlag.SluttberegningBarnebidragAldersjustering
 import no.nav.bidrag.transport.behandling.felles.grunnlag.SluttberegningSærbidrag
 import no.nav.bidrag.transport.behandling.felles.grunnlag.filtrerBasertPåEgenReferanse
 import no.nav.bidrag.transport.behandling.felles.grunnlag.finnDelberegningBidragspliktigesAndelSærbidrag
@@ -320,8 +322,10 @@ class VedtakService(
                     val resultatKode = Resultatkode.fraKode(stønadperiode.resultatkode)
                     val referanse = VedtakPeriodeReferanse(stønadperiode.periode, resultatKode, vedtakDto.typeBehandling, stønadperiode.grunnlagReferanseListe)
                     val sluttberegning = grunnlagListe.finnOgKonverterGrunnlagSomErReferertFraGrunnlagsreferanseListe<SluttberegningBarnebidrag>(Grunnlagstype.SLUTTBEREGNING_BARNEBIDRAG, stønadperiode.grunnlagReferanseListe).firstOrNull()
+                    val sluttberegningAldersjustering = grunnlagListe.finnOgKonverterGrunnlagSomErReferertFraGrunnlagsreferanseListe<SluttberegningBarnebidragAldersjustering>(Grunnlagstype.SLUTTBEREGNING_BARNEBIDRAG_ALDERSJUSTERING, stønadperiode.grunnlagReferanseListe).firstOrNull()
 
                     val erAvslagUtenGrunnlag = sluttberegning?.innhold?.erResultatAvslag == true || resultatKode?.erDirekteAvslag() == true
+                    val erAldersjustering = sluttberegningAldersjustering != null
                     if (erAvslagUtenGrunnlag && !erDirekteAvslag) return@mapNotNull null
                     VedtakPeriode(
                         fomDato = stønadperiode.periode.fom.atDay(1),
@@ -333,8 +337,15 @@ class VedtakService(
                                 ?: if (erDirekteAvslag || allePerioderAvslag || erForskudd) BigDecimal.ZERO else BigDecimal("0.1"),
                         andelUnderhold = if (!erAvslagUtenGrunnlag) grunnlagListe.tilAndelUnderholdskostnadPeriode(referanse) else null,
                         underhold = if (!erAvslagUtenGrunnlag) grunnlagListe.tilUnderholdskostnadPeriode(referanse) else null,
-                        bidragsevne = if (!erAvslagUtenGrunnlag) grunnlagListe.finnDelberegningBidragsevne(referanse) else null,
-                        samvær = if (!erAvslagUtenGrunnlag) grunnlagListe.mapSamvær(referanse) else null,
+                        bidragsevne = if (!erAvslagUtenGrunnlag && !erAldersjustering) grunnlagListe.finnDelberegningBidragsevne(referanse) else null,
+                        samvær =
+                            if (erAldersjustering) {
+                                grunnlagListe.mapSamværAldersjustering(referanse)
+                            } else if (!erAvslagUtenGrunnlag) {
+                                grunnlagListe.mapSamvær(referanse)
+                            } else {
+                                null
+                            },
                         resultatKode =
                             if (stønadsendring.type.erBidrag) {
                                 grunnlagListe.tilBisysResultatkode(referanse, vedtakDto.type) ?: stønadperiode.resultatkode
@@ -362,8 +373,11 @@ fun List<GrunnlagDto>.tilBisysResultatkode(
     type: Vedtakstype,
 ): String? {
     if (periode.resultatKode?.erDirekteAvslag() == true) return periode.resultatKode.tilBisysResultatkodeForBrev(type)
-    val sluttberegning = finnOgKonverterGrunnlagSomErReferertFraGrunnlagsreferanseListe<SluttberegningBarnebidrag>(Grunnlagstype.SLUTTBEREGNING_BARNEBIDRAG, periode.grunnlagReferanseListe).first()
-    return sluttberegning.innhold.bisysResultatkode
+    return finnOgKonverterGrunnlagSomErReferertFraGrunnlagsreferanseListe<SluttberegningBarnebidrag>(Grunnlagstype.SLUTTBEREGNING_BARNEBIDRAG, periode.grunnlagReferanseListe).firstOrNull()?.innhold?.bisysResultatkode
+        ?: finnOgKonverterGrunnlagSomErReferertFraGrunnlagsreferanseListe<SluttberegningBarnebidragAldersjustering>(Grunnlagstype.SLUTTBEREGNING_BARNEBIDRAG_ALDERSJUSTERING, periode.grunnlagReferanseListe)
+            .firstOrNull()
+            ?.innhold
+            ?.bisysResultatkode
 }
 
 fun List<GrunnlagDto>.tilAndelUnderholdskostnadPeriode(periode: VedtakPeriodeReferanse): AndelUnderholdskostnadPeriode? {
@@ -491,6 +505,18 @@ fun List<GrunnlagDto>.finnTotalInntektForRolle(
         ?: BigDecimal.ZERO
 }
 
+fun List<GrunnlagDto>.mapSamværAldersjustering(periode: VedtakPeriodeReferanse): Samværsperiode? =
+    if (periode.typeBehandling == TypeBehandling.BIDRAG && periode.resultatKode?.erDirekteAvslag() == false) {
+        Samværsperiode(
+            samværsfradragBeløp = finnSamværsfradrag(periode.grunnlagReferanseListe),
+            samværsklasse = finnSamværsklasse(periode.grunnlagReferanseListe),
+            aldersgruppe = null,
+            periode = periode.periode,
+        )
+    } else {
+        null
+    }
+
 fun List<GrunnlagDto>.mapSamvær(periode: VedtakPeriodeReferanse): Samværsperiode? =
     if (periode.typeBehandling == TypeBehandling.BIDRAG && periode.resultatKode?.erDirekteAvslag() == false) {
         Samværsperiode(
@@ -510,7 +536,12 @@ fun List<GrunnlagDto>.finnSamværsklasse(
         finnGrunnlagSomErReferertFraGrunnlagsreferanseListe(
             Grunnlagstype.SAMVÆRSPERIODE,
             grunnlagsreferanseListe,
-        ).firstOrNull()
+        ).firstOrNull() ?: run {
+            return finnGrunnlagSomErReferertFraGrunnlagsreferanseListe(
+                Grunnlagstype.KOPI_SAMVÆRSPERIODE,
+                grunnlagsreferanseListe,
+            ).firstOrNull()?.innholdTilObjekt<KopiSamværsperiodeGrunnlag>()?.samværsklasse ?: Samværsklasse.SAMVÆRSKLASSE_0
+        }
 
     return samværsperiode!!.innholdTilObjekt<SamværsperiodeGrunnlag>().samværsklasse
 }

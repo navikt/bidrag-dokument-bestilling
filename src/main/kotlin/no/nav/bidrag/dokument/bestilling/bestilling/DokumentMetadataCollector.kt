@@ -71,6 +71,7 @@ class DokumentMetadataCollector(
         this.enhet = forespørsel.enhet ?: sak.eierfogd?.verdi ?: "9999"
         logIdenter(forespørsel)
         return DokumentBestilling(
+            bestillBatch = forespørsel.erBatchBrev,
             dokumentreferanse = forespørsel.dokumentreferanse ?: forespørsel.dokumentReferanse,
             tittel = forespørsel.tittel,
             saksnummer = forespørsel.saksnummer,

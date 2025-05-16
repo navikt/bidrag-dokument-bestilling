@@ -897,7 +897,7 @@
   },
   {
     "kode": "BI01B05",
-    "tittel": "VEDTAK AUTOMATISK JUSTERING BARNEBIDRAG",
+    "tittel": "Vedtak automatisk justering av barnebidrag",
     "batchbrev": true,
     "type": "VEDTAK",
     "støttetSpråk": [
