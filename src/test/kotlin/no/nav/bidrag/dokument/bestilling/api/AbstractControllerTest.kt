@@ -98,6 +98,7 @@ abstract class AbstractControllerTest {
     fun resetMocks() {
         WireMock.reset()
         clearAllMocks()
+        jmsTestConsumer.withOnlinebrev { purge() }
     }
 
     fun rootUri(): String = "http://localhost:$port"
