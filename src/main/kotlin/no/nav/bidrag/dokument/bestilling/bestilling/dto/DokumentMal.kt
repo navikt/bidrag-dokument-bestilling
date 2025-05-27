@@ -47,6 +47,9 @@ enum class StøttetSpråk {
     DE,
     PL,
     FR,
+    ES,
+    IT,
+    PT,
 }
 
 abstract class DokumentMal(
