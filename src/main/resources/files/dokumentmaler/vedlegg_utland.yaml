@@ -44,6 +44,7 @@ Skjema:
       språk: PL
       tittel: Formularz dla rodzica zobowiązanego do płacenia alimentów
       type: SKJEMA
+Redigerbar skjema:
     - kode: FORKYNNINGSSKJEMA_DE_EN_FR
       beskrivelse: Forkynningsskjema (Tysk, Engelsk, Fransk)
       filsti: redigerbar_skjema/Forkynningsskjema DE-EN-FR.pdf
@@ -99,6 +100,62 @@ Skjema:
       språk: PT
       redigerbar: true
       tittel: Solicitação para citação, intimação ou notificação no estrangeiro de documentos judiciais ou extrajudiciais
+      type: SKJEMA
+    - kode: FORKYNNINGSSKJEMA_PT_EN_FR
+      beskrivelse: Forkynningsskjema (Portugisisk, Fransk, Engelsk)
+      filsti: redigerbar_skjema/Forkynningsskjema PT-EN-FR.pdf
+      språk: PT
+      redigerbar: true
+      tittel: Solicitação para citação, intimação ou notificação no estrangeiro de documentos judiciais ou extrajudiciais
+      type: SKJEMA
+    - kode: FORKYNNINGSSKJEMA_PT_EN_FR
+      beskrivelse: Forkynningsskjema (Portugisisk, Fransk, Engelsk)
+      filsti: redigerbar_skjema/Forkynningsskjema PT-EN-FR.pdf
+      språk: PT
+      redigerbar: true
+      tittel: Solicitação para citação, intimação ou notificação no estrangeiro de documentos judiciais ou extrajudiciais
+      type: SKJEMA
+    - kode: REQUEST_FOR_SPECIFIC_MEASURES
+      beskrivelse: Request for Specific Measures
+      filsti: redigerbar_skjema/Request for Specific Measures & Response.pdf
+      språk: EN
+      redigerbar: true
+      tittel: Transmittal form under Article 12(2)
+      type: SKJEMA
+    - kode: TRANSMITTAL_FORM_UNDER_ARTICLE_12
+      beskrivelse: Transmittal form under Article 12(2)
+      filsti: redigerbar_skjema/Transmittal Form under Article 12.pdf
+      språk: EN
+      redigerbar: true
+      tittel: Request for Specific Measures
+      type: SKJEMA
+    - kode: FORMS_ANNEX_A
+      beskrivelse: Statement of Enforceability of a Decision
+      filsti: redigerbar_skjema/forms_annexa.pdf
+      språk: EN
+      redigerbar: true
+      tittel: Statement of Enforceability of a Decision
+      type: SKJEMA
+    - kode: FORMS_ANNEX_C
+      beskrivelse: Application for Establishment of a Decision
+      filsti: redigerbar_skjema/forms_annexc.pdf
+      språk: EN
+      redigerbar: true
+      tittel: Application for Establishment of a Decision
+      type: SKJEMA
+    - kode: FORMS_ANNEX_D
+      beskrivelse: Statement of Enforceability of a Decision
+      filsti: redigerbar_skjema/forms_annexd.pdf
+      språk: EN
+      redigerbar: true
+      tittel: Application for Modification of a Decision
+      type: SKJEMA
+    - kode: FORMS_ANNEX_E
+      beskrivelse: Financial Circumstances Form
+      filsti: redigerbar_skjema/forms_annexe.pdf
+      språk: EN
+      redigerbar: true
+      tittel: Financial Circumstances Form
       type: SKJEMA
 Vedlegg til varselbrev:
     - kode: VEDLEGG_VARSEL_NB
