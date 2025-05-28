@@ -50,47 +50,55 @@ Skjema:
       språk: DE
       tittel: Antrag auf zustellung einesgerichtlichen oder aussergerichtlichen schriftstücks im ausland
       type: SKJEMA
+      redigerbar: true
     - kode: FORKYNNINGSSKJEMA_EN_FR
       beskrivelse: Forkynningsskjema (Engelsk, Fransk)
       filsti: Forkynningsskjema EN-FR.pdf
       språk: DE
+      redigerbar: true
       tittel: Antrag auf zustellung einesgerichtlichen oder aussergerichtlichen schriftstücks im ausland
       type: SKJEMA
     - kode: FORKYNNINGSSKJEMA_EN_FR
       beskrivelse: Forkynningsskjema (Engelsk, Fransk)
       filsti: Forkynningsskjema EN-FR.pdf
       språk: EN
-      tittel: REQUEST FOR SERVICE ABROAD OF JUDICIAL OR EXTRAJUDICIAL DOCUMENTS
+      redigerbar: true
+      tittel: Request for service abroad of judicial or extrajudicial documents
       type: SKJEMA
     - kode: FORKYNNINGSSKJEMA_ES_EN_FR
       beskrivelse: Forkynningsskjema (Spansk, Engelsk, Fransk)
       filsti: Forkynningsskjema ES-EN-FR.pdf
       språk: ES
-      tittel: SOLICITUD DE NOTIFICACIÓN O TRASLADO EN EL EXTRANJERO DE UN DOCUMENTO JUDICIAL O EXTRAJUDICIAL
+      redigerbar: true
+      tittel: Solicitud de notificación o traslado en el extranjero de un documento judicial o extrajudicial
       type: SKJEMA
     - kode: FORKYNNINGSSKJEMA_FR_EN
       beskrivelse: Forkynningsskjema (Fransk, Engelsk)
       filsti: Forkynningsskjema FR-EN.pdf
       språk: FR
-      tittel: DEMANDE AUX FINS DE SIGNIFICATION OU DE NOTIFICATION À L’ÉTRANGER D’UN ACTE JUDICIAIRE OU EXTRAJUDICIAIRE
+      redigerbar: true
+      tittel: Demande aux fins de signification ou de notification à l’étranger d’un acte judiciaire ou extrajudiciaire
       type: SKJEMA
     - kode: FORKYNNINGSSKJEMA_IT_EN_FR
       beskrivelse: Forkynningsskjema (Italiensk, Fransk, Engelsk)
       filsti: Forkynningsskjema IT-EN-FR.pdf
       språk: IT
-      tittel: DOMANDA AI FINI DELLA NOTIFICA O DELLA COMUNICAZIONE ALL’ESTERO DI UN ATTO GIUDIZIARIO O EXTRAGIUDIZIARIO
+      redigerbar: true
+      tittel: Domanda ai fini della notifica o della comunicazione all’estero di un atto giudiziario o extragiudiziario
       type: SKJEMA
     - kode: FORKYNNINGSSKJEMA_PL_EN_FR
       beskrivelse: Forkynningsskjema (Polsk, Fransk, Engelsk)
       filsti: Forkynningsskjema PL-EN-FR.pdf
       språk: PL
-      tittel: WNIOSEK O DORĘCZENIE ZA GRANICĄ DOKUMENTÓW SĄDOWYCH I POZASĄDOWYCH
+      redigerbar: true
+      tittel: Wniosek o doręczenie za granicą dokumentów sądowych i pozasądowych
       type: SKJEMA
     - kode: FORKYNNINGSSKJEMA_PT_EN_FR
       beskrivelse: Forkynningsskjema (Portugisisk, Fransk, Engelsk)
       filsti: Forkynningsskjema PT-EN-FR.pdf
       språk: PT
-      tittel: SOLICITAÇÃO PARA CITAÇÃO, INTIMAÇÃO OU NOTIFICAÇÃO NO ESTRANGEIRO DE DOCUMENTOS JUDICIAIS OU EXTRAJUDICIAIS
+      redigerbar: true
+      tittel: Solicitação para citação, intimação ou notificação no estrangeiro de documentos judiciais ou extrajudiciais
       type: SKJEMA
 Vedlegg til varselbrev:
     - kode: VEDLEGG_VARSEL_NB
