@@ -46,96 +46,84 @@ Skjema:
       type: SKJEMA
 Redigerbar skjema:
     - kode: FORKYNNINGSSKJEMA_DE_EN_FR
-      beskrivelse: Forkynningsskjema (Tysk, Engelsk, Fransk)
       filsti: redigerbar_skjema/Forkynningsskjema DE-EN-FR.pdf
       språk: DE
       tittel: Forkynningsskjema (Tysk, Engelsk, Fransk)
       type: SKJEMA
       redigerbar: true
     - kode: FORKYNNINGSSKJEMA_EN_FR
-      beskrivelse: Forkynningsskjema (Engelsk, Fransk)
       filsti: redigerbar_skjema/Forkynningsskjema EN-FR.pdf
       språk: EN
       redigerbar: true
       tittel: Forkynningsskjema (Engelsk, Fransk)
       type: SKJEMA
     - kode: FORKYNNINGSSKJEMA_ES_EN_FR
-      beskrivelse: Forkynningsskjema (Spansk, Engelsk, Fransk)
       filsti: redigerbar_skjema/Forkynningsskjema ES-EN-FR.pdf
       språk: ES
       redigerbar: true
       tittel: Forkynningsskjema (Spansk, Engelsk, Fransk)
       type: SKJEMA
     - kode: FORKYNNINGSSKJEMA_FR_EN
-      beskrivelse: Forkynningsskjema (Fransk, Engelsk)
       filsti: redigerbar_skjema/Forkynningsskjema FR-EN.pdf
       språk: FR
       redigerbar: true
       tittel: Forkynningsskjema (Fransk, Engelsk)
       type: SKJEMA
     - kode: FORKYNNINGSSKJEMA_IT_EN_FR
-      beskrivelse: Forkynningsskjema (Italiensk, Fransk, Engelsk)
       filsti: redigerbar_skjema/Forkynningsskjema IT-EN-FR.pdf
       språk: IT
       redigerbar: true
       tittel: Forkynningsskjema (Italiensk, Fransk, Engelsk)
       type: SKJEMA
     - kode: FORKYNNINGSSKJEMA_PL_EN_FR
-      beskrivelse: Forkynningsskjema (Polsk, Fransk, Engelsk)
       filsti: redigerbar_skjema/Forkynningsskjema PL-EN-FR.pdf
       språk: PL
       redigerbar: true
       tittel: Forkynningsskjema (Polsk, Fransk, Engelsk)
       type: SKJEMA
     - kode: FORKYNNINGSSKJEMA_PT_EN_FR
-      beskrivelse: Forkynningsskjema (Portugisisk, Fransk, Engelsk)
       filsti: redigerbar_skjema/Forkynningsskjema PT-EN-FR.pdf
       språk: PT
       redigerbar: true
       tittel: Forkynningsskjema (Portugisisk, Fransk, Engelsk)
       type: SKJEMA
-    - kode: REQUEST_FOR_SPECIFIC_MEASURES
-      beskrivelse: Request for Specific Measures & Response
-      filsti: redigerbar_skjema/Request for Specific Measures & Response.pdf
-      språk: EN
-      redigerbar: true
-      tittel: Request for Specific Measures & Response
-      type: SKJEMA
-    - kode: TRANSMITTAL_FORM_UNDER_ARTICLE_12
-      beskrivelse: Transmittal form under Article 12(2)
-      filsti: redigerbar_skjema/Transmittal Form under Article 12.pdf
-      språk: EN
-      redigerbar: true
-      tittel: Transmittal form under Article 12(2)
-      type: SKJEMA
-    - kode: FORMS_ANNEX_A
-      beskrivelse: Statement of Enforceability of a Decision
-      filsti: redigerbar_skjema/forms_annexa.pdf
-      språk: EN
-      redigerbar: true
-      tittel: Statement of Enforceability of a Decision
-      type: SKJEMA
-    - kode: FORMS_ANNEX_C
-      beskrivelse: Application for Establishment of a Decision
-      filsti: redigerbar_skjema/forms_annexc.pdf
-      språk: EN
-      redigerbar: true
-      tittel: Application for Establishment of a Decision
-      type: SKJEMA
-    - kode: FORMS_ANNEX_D
-      beskrivelse: Statement of Enforceability of a Decision
-      filsti: redigerbar_skjema/forms_annexd.pdf
-      språk: EN
-      redigerbar: true
-      tittel: Application for Modification of a Decision
-      type: SKJEMA
-    - kode: FORMS_ANNEX_E
-      beskrivelse: Financial Circumstances Form
-      filsti: redigerbar_skjema/forms_annexe.pdf
-      språk: EN
-      redigerbar: true
-      tittel: Financial Circumstances Form
-      type: SKJEMA
+#    - kode: REQUEST_FOR_SPECIFIC_MEASURES
+#      beskrivelse: Request for Specific Measures & Response
+#      filsti: redigerbar_skjema/Request for Specific Measures & Response.pdf
+#      språk: EN
+#      redigerbar: true
+#      tittel: Request for Specific Measures & Response
+#      type: SKJEMA
+#    - kode: TRANSMITTAL_FORM_UNDER_ARTICLE_12
+#      filsti: redigerbar_skjema/Transmittal Form under Article 12.pdf
+#      språk: EN
+#      redigerbar: true
+#      tittel: Transmittal form under Article 12(2)
+#      type: SKJEMA
+#    - kode: FORMS_ANNEX_A
+#      filsti: redigerbar_skjema/forms_annexa.pdf
+#      språk: EN
+#      redigerbar: true
+#      tittel: Statement of Enforceability of a Decision
+#      type: SKJEMA
+#    - kode: FORMS_ANNEX_C
+#      filsti: redigerbar_skjema/forms_annexc.pdf
+#      språk: EN
+#      redigerbar: true
+#      tittel: Application for Establishment of a Decision
+#      type: SKJEMA
+#    - kode: FORMS_ANNEX_D
+#      filsti: redigerbar_skjema/forms_annexd.pdf
+#      språk: EN
+#      redigerbar: true
+#      tittel: Application for Modification of a Decision
+#      type: SKJEMA
+#    - kode: FORMS_ANNEX_E
+#      filsti: redigerbar_skjema/forms_annexe.pdf
+#      språk: EN
+#      redigerbar: true
+#      tittel: Financial Circumstances Form
+#      type: SKJEMA
 Vedlegg til varselbrev:
     - kode: VEDLEGG_VARSEL_NB
       beskrivelse: Vedlegg til forhåndsvarsel
