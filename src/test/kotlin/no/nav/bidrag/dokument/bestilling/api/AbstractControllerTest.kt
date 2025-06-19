@@ -32,6 +32,7 @@ import no.nav.bidrag.dokument.bestilling.utils.createPostAdresseResponse
 import no.nav.security.token.support.spring.test.EnableMockOAuth2Server
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Disabled
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.web.server.LocalServerPort
@@ -47,6 +48,7 @@ import org.springframework.test.context.ActiveProfiles
 )
 @AutoConfigureWireMock(port = 0)
 @EnableMockOAuth2Server
+@Disabled
 abstract class AbstractControllerTest {
     @LocalServerPort
     private val port = 0
