@@ -48,44 +48,44 @@ Redigerbar skjema:
     - kode: FORKYNNINGSSKJEMA_DE_EN_FR
       filsti: redigerbar_skjema/Forkynningsskjema DE-EN-FR.pdf
       språk: DE
-      tittel: Forkynningsskjema (Tysk, Engelsk, Fransk)
+      beskrivelse: Forkynningsskjema (Tysk, Engelsk, Fransk)
       type: SKJEMA
       redigerbar: true
     - kode: FORKYNNINGSSKJEMA_EN_FR
       filsti: redigerbar_skjema/Forkynningsskjema EN-FR.pdf
       språk: EN
       redigerbar: true
-      tittel: Forkynningsskjema (Engelsk, Fransk)
+      beskrivelse: Forkynningsskjema (Engelsk, Fransk)
       type: SKJEMA
     - kode: FORKYNNINGSSKJEMA_ES_EN_FR
       filsti: redigerbar_skjema/Forkynningsskjema ES-EN-FR.pdf
       språk: ES
       redigerbar: true
-      tittel: Forkynningsskjema (Spansk, Engelsk, Fransk)
+      beskrivelse: Forkynningsskjema (Spansk, Engelsk, Fransk)
       type: SKJEMA
     - kode: FORKYNNINGSSKJEMA_FR_EN
       filsti: redigerbar_skjema/Forkynningsskjema FR-EN.pdf
       språk: FR
       redigerbar: true
-      tittel: Forkynningsskjema (Fransk, Engelsk)
+      beskrivelse: Forkynningsskjema (Fransk, Engelsk)
       type: SKJEMA
     - kode: FORKYNNINGSSKJEMA_IT_EN_FR
       filsti: redigerbar_skjema/Forkynningsskjema IT-EN-FR.pdf
       språk: IT
       redigerbar: true
-      tittel: Forkynningsskjema (Italiensk, Fransk, Engelsk)
+      beskrivelse: Forkynningsskjema (Italiensk, Fransk, Engelsk)
       type: SKJEMA
     - kode: FORKYNNINGSSKJEMA_PL_EN_FR
       filsti: redigerbar_skjema/Forkynningsskjema PL-EN-FR.pdf
       språk: PL
       redigerbar: true
-      tittel: Forkynningsskjema (Polsk, Fransk, Engelsk)
+      beskrivelse: Forkynningsskjema (Polsk, Fransk, Engelsk)
       type: SKJEMA
     - kode: FORKYNNINGSSKJEMA_PT_EN_FR
       filsti: redigerbar_skjema/Forkynningsskjema PT-EN-FR.pdf
       språk: PT
       redigerbar: true
-      tittel: Forkynningsskjema (Portugisisk, Fransk, Engelsk)
+      beskrivelse: Forkynningsskjema (Portugisisk, Fransk, Engelsk)
       type: SKJEMA
 #    - kode: REQUEST_FOR_SPECIFIC_MEASURES
 #      beskrivelse: Request for Specific Measures & Response
