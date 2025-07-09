@@ -510,7 +510,7 @@ fun List<GrunnlagDto>.mapSamværAldersjustering(periode: VedtakPeriodeReferanse)
         Samværsperiode(
             samværsfradragBeløp = finnSamværsfradrag(periode.grunnlagReferanseListe),
             samværsklasse = finnSamværsklasse(periode.grunnlagReferanseListe),
-            aldersgruppe = null,
+            aldersgruppe = finnSamværAldersgruppe(periode.grunnlagReferanseListe),
             periode = periode.periode,
         )
     } else {
@@ -703,6 +703,7 @@ fun List<GrunnlagDto>.finnSluttberegningIReferanser(grunnlagsreferanseListe: Lis
             Grunnlagstype.SLUTTBEREGNING_FORSKUDD,
             Grunnlagstype.SLUTTBEREGNING_SÆRBIDRAG,
             Grunnlagstype.SLUTTBEREGNING_BARNEBIDRAG,
+            Grunnlagstype.SLUTTBEREGNING_BARNEBIDRAG_ALDERSJUSTERING,
         ).contains(it.type) &&
             grunnlagsreferanseListe.contains(it.referanse)
     }
