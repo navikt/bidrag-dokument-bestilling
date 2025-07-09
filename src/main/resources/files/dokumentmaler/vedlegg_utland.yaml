@@ -48,81 +48,87 @@ Redigerbar skjema:
     - kode: FORKYNNINGSSKJEMA_DE_EN_FR
       filsti: redigerbar_skjema/Forkynningsskjema DE-EN-FR.pdf
       språk: DE
-      beskrivelse: Forkynningsskjema (Tysk, Engelsk, Fransk)
+      beskrivelse: Tysk, Engelsk, Fransk
+      tittel: Forkynningsskjema
       type: SKJEMA
       redigerbar: true
     - kode: FORKYNNINGSSKJEMA_EN_FR
       filsti: redigerbar_skjema/Forkynningsskjema EN-FR.pdf
       språk: EN
       redigerbar: true
-      beskrivelse: Forkynningsskjema (Engelsk, Fransk)
+      beskrivelse: Engelsk, Fransk
+      tittel: Forkynningsskjema
       type: SKJEMA
     - kode: FORKYNNINGSSKJEMA_ES_EN_FR
       filsti: redigerbar_skjema/Forkynningsskjema ES-EN-FR.pdf
       språk: ES
       redigerbar: true
-      beskrivelse: Forkynningsskjema (Spansk, Engelsk, Fransk)
+      beskrivelse: Spansk, Engelsk, Fransk
+      tittel: Forkynningsskjema
       type: SKJEMA
     - kode: FORKYNNINGSSKJEMA_FR_EN
       filsti: redigerbar_skjema/Forkynningsskjema FR-EN.pdf
       språk: FR
       redigerbar: true
-      beskrivelse: Forkynningsskjema (Fransk, Engelsk)
+      beskrivelse: Fransk, Engelsk
+      tittel: Forkynningsskjema
       type: SKJEMA
     - kode: FORKYNNINGSSKJEMA_IT_EN_FR
       filsti: redigerbar_skjema/Forkynningsskjema IT-EN-FR.pdf
       språk: IT
       redigerbar: true
-      beskrivelse: Forkynningsskjema (Italiensk, Fransk, Engelsk)
+      beskrivelse: Italiensk, Fransk, Engelsk
+      tittel: Forkynningsskjema
       type: SKJEMA
     - kode: FORKYNNINGSSKJEMA_PL_EN_FR
       filsti: redigerbar_skjema/Forkynningsskjema PL-EN-FR.pdf
       språk: PL
       redigerbar: true
-      beskrivelse: Forkynningsskjema (Polsk, Fransk, Engelsk)
+      beskrivelse: Polsk, Fransk, Engelsk
+      tittel: Forkynningsskjema
       type: SKJEMA
     - kode: FORKYNNINGSSKJEMA_PT_EN_FR
       filsti: redigerbar_skjema/Forkynningsskjema PT-EN-FR.pdf
       språk: PT
       redigerbar: true
-      beskrivelse: Forkynningsskjema (Portugisisk, Fransk, Engelsk)
+      beskrivelse: Portugisisk, Fransk, Engelsk
+      tittel: Forkynningsskjema
       type: SKJEMA
     - kode: REQUEST_FOR_SPECIFIC_MEASURES
-      beskrivelse: Request for Specific Measures & Response
+      tittel: Request for Specific Measures & Response
       filsti: redigerbar_skjema/Request for Specific Measures & Response.pdf
       språk: EN
       redigerbar: true
-      tittel: Request for Specific Measures & Response
       type: SKJEMA
     - kode: TRANSMITTAL_FORM_UNDER_ARTICLE_12
       filsti: redigerbar_skjema/Transmittal Form under Article 12.pdf
       språk: EN
       redigerbar: true
-      beskrivelse: Transmittal form under Article 12(2)
+      tittel: Transmittal form under Article 12(2)
       type: SKJEMA
     - kode: FORMS_ANNEX_A
       filsti: redigerbar_skjema/forms_annexa.pdf
       språk: EN
       redigerbar: true
-      beskrivelse: Statement of Enforceability of a Decision
+      tittel: Statement of Enforceability of a Decision
       type: SKJEMA
     - kode: FORMS_ANNEX_C
       filsti: redigerbar_skjema/forms_annexc.pdf
       språk: EN
       redigerbar: true
-      beskrivelse: Application for Establishment of a Decision
+      tittel: Application for Establishment of a Decision
       type: SKJEMA
     - kode: FORMS_ANNEX_D
       filsti: redigerbar_skjema/forms_annexd.pdf
       språk: EN
       redigerbar: true
-      beskrivelse: Application for Modification of a Decision
+      tittel: Application for Modification of a Decision
       type: SKJEMA
     - kode: FORMS_ANNEX_E
       filsti: redigerbar_skjema/forms_annexe.pdf
       språk: EN
       redigerbar: true
-      beskrivelse: Financial Circumstances Form
+      tittel: Financial Circumstances Form
       type: SKJEMA
 Vedlegg til varselbrev:
     - kode: VEDLEGG_VARSEL_NB
