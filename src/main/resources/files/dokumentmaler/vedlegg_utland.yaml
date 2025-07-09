@@ -48,51 +48,44 @@ Redigerbar skjema:
     - kode: FORKYNNINGSSKJEMA_DE_EN_FR
       filsti: redigerbar_skjema/Forkynningsskjema DE-EN-FR.pdf
       språk: DE
-      beskrivelse: Tysk, Engelsk, Fransk
-      tittel: Forkynningsskjema
+      tittel: Forkynningsskjema (Tysk, Engelsk, Fransk)
       type: SKJEMA
       redigerbar: true
     - kode: FORKYNNINGSSKJEMA_EN_FR
       filsti: redigerbar_skjema/Forkynningsskjema EN-FR.pdf
       språk: EN
       redigerbar: true
-      beskrivelse: Engelsk, Fransk
-      tittel: Forkynningsskjema
+      tittel: Forkynningsskjema (Engelsk, Fransk)
       type: SKJEMA
     - kode: FORKYNNINGSSKJEMA_ES_EN_FR
       filsti: redigerbar_skjema/Forkynningsskjema ES-EN-FR.pdf
       språk: ES
       redigerbar: true
-      beskrivelse: Spansk, Engelsk, Fransk
-      tittel: Forkynningsskjema
+      tittel: Forkynningsskjema (Spansk, Engelsk, Fransk)
       type: SKJEMA
     - kode: FORKYNNINGSSKJEMA_FR_EN
       filsti: redigerbar_skjema/Forkynningsskjema FR-EN.pdf
       språk: FR
       redigerbar: true
-      beskrivelse: Fransk, Engelsk
-      tittel: Forkynningsskjema
+      tittel: Forkynningsskjema (Fransk, Engelsk)
       type: SKJEMA
     - kode: FORKYNNINGSSKJEMA_IT_EN_FR
       filsti: redigerbar_skjema/Forkynningsskjema IT-EN-FR.pdf
       språk: IT
       redigerbar: true
-      beskrivelse: Italiensk, Fransk, Engelsk
-      tittel: Forkynningsskjema
+      tittel: Forkynningsskjema (Italiensk, Fransk, Engelsk)
       type: SKJEMA
     - kode: FORKYNNINGSSKJEMA_PL_EN_FR
       filsti: redigerbar_skjema/Forkynningsskjema PL-EN-FR.pdf
       språk: PL
       redigerbar: true
-      beskrivelse: Polsk, Fransk, Engelsk
-      tittel: Forkynningsskjema
+      tittel: Forkynningsskjema (Polsk, Fransk, Engelsk)
       type: SKJEMA
     - kode: FORKYNNINGSSKJEMA_PT_EN_FR
       filsti: redigerbar_skjema/Forkynningsskjema PT-EN-FR.pdf
       språk: PT
       redigerbar: true
-      beskrivelse: Portugisisk, Fransk, Engelsk
-      tittel: Forkynningsskjema
+      tittel: Forkynningsskjema (Portugisisk, Fransk, Engelsk)
       type: SKJEMA
     - kode: REQUEST_FOR_SPECIFIC_MEASURES
       tittel: Request for Specific Measures & Response
