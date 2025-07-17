@@ -10,6 +10,10 @@ object SpråkKoder {
     val NYNORSK = "NN"
     val TYSK = "DE"
     val ENGELSK = "EN"
+    val SPANSK = "ES"
+    val PORTUGISISK = "PT"
+    val POLSK = "PL"
+    val ITALIENSK = "IT"
 }
 
 object FeilSpråkKoder {

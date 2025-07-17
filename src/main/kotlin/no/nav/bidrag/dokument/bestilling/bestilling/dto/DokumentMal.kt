@@ -47,6 +47,9 @@ enum class StøttetSpråk {
     DE,
     PL,
     FR,
+    ES,
+    IT,
+    PT,
 }
 
 abstract class DokumentMal(
@@ -87,9 +90,9 @@ enum class DataGrunnlag {
 data class DokumentMalBucketUtland(
     override val folderName: String = "vedlegg_utland",
     override val kode: String,
-    override val beskrivelse: String,
+    override val tittel: String,
+    override val beskrivelse: String = tittel,
     override val språk: StøttetSpråk,
-    override val tittel: String = beskrivelse,
     override val tilhørerEnheter: List<String> = listOf(EnhetKode.UTLAND, EnhetKode.EGENANSATT),
     override val type: DokumentMalType = DokumentMalType.VARSEL,
     override val gruppeVisningsnavn: String,

@@ -95,7 +95,7 @@ class DokumentMalTest {
 
     @Test
     fun `Skal hente dokumentmaler utland`() {
-        dokumentmalerUtland.filter { it.kode.startsWith("UTLAND_") }.size shouldBe 17
+        dokumentmalerUtland.filter { it.kode.startsWith("UTLAND_") }.size shouldBe 24
     }
 
     @Test
