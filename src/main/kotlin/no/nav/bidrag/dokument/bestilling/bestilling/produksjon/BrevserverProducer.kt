@@ -625,7 +625,7 @@ class BrevserverProducer(
                 adresselinje4 = adresse.adresselinje4
                 boligNr = adresse.bruksenhetsnummer
                 postnummer = adresse.postnummer ?: ""
-                landkode = adresse.landkode3
+//            landkode = adresse.landkode3
             }
         }
 }
