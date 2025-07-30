@@ -578,7 +578,8 @@ class SoknadBost {
     var b4Kode: String? = null
 
     @XmlElement(name = "b4Belop", nillable = true)
-    var b4Belop: String? = null
+    @XmlJavaTypeAdapter(BelopDecimalSatsAdapter::class)
+    var b4Belop: BigDecimal? = null
 }
 
 @Suppress("unused")

@@ -317,6 +317,7 @@ data class BarnIHusstandPeriode(
 data class VedtakBarn(
     val fødselsnummer: String,
     val navn: String?,
+    val sumAvregning: BigDecimal,
     val løpendeBidrag: BigDecimal? = null,
     val bostatusPerioder: List<BostatusPeriode>,
     val stønadsendringer: List<VedtakBarnStonad> = emptyList(),
