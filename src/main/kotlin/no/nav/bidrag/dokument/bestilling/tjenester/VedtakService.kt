@@ -48,6 +48,7 @@ import no.nav.bidrag.domene.enums.vedtak.Engangsbeløptype
 import no.nav.bidrag.domene.enums.vedtak.Innkrevingstype
 import no.nav.bidrag.domene.enums.vedtak.Stønadstype
 import no.nav.bidrag.domene.enums.vedtak.Vedtakstype
+import no.nav.bidrag.domene.sak.Stønadsid
 import no.nav.bidrag.domene.tid.ÅrMånedsperiode
 import no.nav.bidrag.transport.behandling.felles.grunnlag.BarnetilsynMedStønadPeriode
 import no.nav.bidrag.transport.behandling.felles.grunnlag.BaseGrunnlag
@@ -111,6 +112,7 @@ class VedtakService(
     private val bidragVedtakConsumer: BidragVedtakConsumer,
     private val sjablongService: SjablongService,
     private val personService: PersonService,
+    private val reskontroService: ReskontroService,
 ) {
     fun hentVedtak(vedtakId: String): VedtakDto = bidragVedtakConsumer.hentVedtak(vedtakId) ?: fantIkkeVedtak(vedtakId)
 
@@ -183,19 +185,31 @@ class VedtakService(
         val barnIdent = soknadBarn.personIdent!!
         val bostatusSøknadsbarn = vedtak.grunnlagListe.hentBarnIHusstandPerioderForBarn(barnIdent)
         val personInfo = personService.hentPerson(barnIdent)
+        val stønadsendring =
+            vedtak.stønadsendringListe
+                .filter { it.type == Stønadstype.BIDRAG }
+                .find { it.kravhaver.verdi == soknadBarn.personIdent }
+        val stønad =
+            stønadsendring?.let {
+                Stønadsid(
+                    sak = it.sak,
+                    kravhaver = it.kravhaver,
+                    skyldner = it.skyldner,
+                    type = it.type,
+                )
+            }
         return VedtakBarn(
             fødselsnummer = barnIdent,
             navn = personInfo.visningsnavn,
             løpendeBidrag =
-                vedtak.stønadsendringListe
-                    .filter { it.type == Stønadstype.BIDRAG }
-                    .find { it.kravhaver.verdi == soknadBarn.personIdent }
+                stønadsendring
                     ?.periodeListe
                     ?.maxByOrNull { it.periode.fom }
                     ?.beløp,
             bostatusPerioder = bostatusSøknadsbarn?.bostatus ?: emptyList(),
             stønadsendringer = hentStønadsendringerForBarn(barnIdent, vedtak),
             engangsbeløper = hentEngagsbeløpForBarn(barnIdent, vedtak),
+            sumAvregning = stønad?.let { reskontroService.hentSumAvregningForStønad(stønad, vedtak.opprettetTidspunkt.toLocalDate()) } ?: BigDecimal.ZERO,
         )
     }
 
