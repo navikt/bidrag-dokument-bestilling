@@ -4,6 +4,7 @@ BIDRAG_ORGANISASJON_URL: http://localhost:${wiremock.server.port}/organisasjon
 BIDRAG_SAK_URL: http://localhost:${wiremock.server.port}/sak
 BIDRAG_VEDTAK_URL: http://localhost:${wiremock.server.port}/vedtak
 BIDRAG_BEHANDLING_URL: http://localhost:${wiremock.server.port}/behandling
+BIDRAG_RESKONTRO_URL: http://localhost:${wiremock.server.port}/reskontro
 SJABLON_URL: http://localhost:${wiremock.server.port}/sjablon
 KODEVERK_URL: http://localhost:${wiremock.server.port}/kodeverk
 BUCKET_NAME: bidrag-dokument-bestilling-local
@@ -82,6 +83,16 @@ no.nav.security.jwt:
           client-auth-method: client_secret_basic
       bidrag-behandling:
         resource-url: ${BIDRAG_BEHANDLING_URL}
+        token-endpoint-url: http://localhost:${mock-oauth2-server.port:1234}/aad/token
+        grant-type: urn:ietf:params:oauth:grant-type:jwt-bearer
+        scope: api://123/.default
+        authentication:
+          client-id: 123
+          client-secret: 123
+          client-auth-method: client_secret_basic
+
+      bidrag-reskontro:
+        resource-url: ${BIDRAG_RESKONTRO_URL}
         token-endpoint-url: http://localhost:${mock-oauth2-server.port:1234}/aad/token
         grant-type: urn:ietf:params:oauth:grant-type:jwt-bearer
         scope: api://123/.default

@@ -32,6 +32,7 @@ import no.nav.bidrag.dokument.bestilling.tjenester.BehandlingService
 import no.nav.bidrag.dokument.bestilling.tjenester.KodeverkService
 import no.nav.bidrag.dokument.bestilling.tjenester.OrganisasjonService
 import no.nav.bidrag.dokument.bestilling.tjenester.PersonService
+import no.nav.bidrag.dokument.bestilling.tjenester.ReskontroService
 import no.nav.bidrag.dokument.bestilling.tjenester.SakService
 import no.nav.bidrag.dokument.bestilling.tjenester.SjablongService
 import no.nav.bidrag.dokument.bestilling.tjenester.VedtakService
@@ -92,6 +93,9 @@ internal class DokumentMetadataCollectorTest {
 
     @MockK
     lateinit var organisasjonService: OrganisasjonService
+
+    @MockK
+    lateinit var reskontroService: ReskontroService
 
     @InjectMockKs
     lateinit var kodeverkService: KodeverkService
