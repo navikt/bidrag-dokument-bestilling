@@ -204,7 +204,8 @@ class BrevserverProducer(
                         soknType = it.soknadType?.kode
                         virkningsDato = it.virkningstidspunkt
                         mottatDato = it.mottattDato
-                        b4Belop = BigDecimal(100) // it.vedtakBarn.sumOf { it.sumAvregning }.takeIf { it > BigDecimal.ZERO }
+                        b4Kode = "0"
+                        b4Belop = BigDecimal(1000) // it.vedtakBarn.sumOf { it.sumAvregning }.takeIf { it > BigDecimal.ZERO }
                     }
                     forskUtBet = vedtakInfo != null
                     // Kode fra beslutningårsak i Bisys.
