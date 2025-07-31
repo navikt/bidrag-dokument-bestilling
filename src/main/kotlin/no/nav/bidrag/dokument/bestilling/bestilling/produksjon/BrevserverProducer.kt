@@ -1,6 +1,7 @@
 package no.nav.bidrag.dokument.bestilling.bestilling.produksjon
 
 import mu.KotlinLogging
+import no.nav.bidrag.commons.util.secureLogger
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.BestillingSystem
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.DataGrunnlag
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.DokumentBestilling
@@ -199,13 +200,15 @@ class BrevserverProducer(
                         }
                     gebyrsats = dokumentBestilling.sjablonDetaljer.fastsettelseGebyr
                     vedtakInfo?.let {
+                        val sumAvregning = it.vedtakBarn.sumOf { it.sumAvregning }.takeIf { it > BigDecimal.ZERO }
+                        secureLogger.info { "Skriv sum avregning $sumAvregning for brev ${dokumentBestilling.tittel} i sak ${dokumentBestilling.saksnummer}" }
                         soknGrKode = it.behandlingType?.kode
                         soknFraKode = it.søknadFra?.kode
                         soknType = it.soknadType?.kode
                         virkningsDato = it.virkningstidspunkt
                         mottatDato = it.mottattDato
-                        b4Kode = "1"
-                        b4Belop = BigDecimal(1000) // it.vedtakBarn.sumOf { it.sumAvregning }.takeIf { it > BigDecimal.ZERO }
+//                        b4Kode = if (sumAvregning != null) "1" else "0"
+//                        b4Belop = sumAvregning
                     }
                     forskUtBet = vedtakInfo != null
                     // Kode fra beslutningårsak i Bisys.
