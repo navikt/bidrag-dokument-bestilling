@@ -204,7 +204,7 @@ class BrevserverProducer(
                         soknType = it.soknadType?.kode
                         virkningsDato = it.virkningstidspunkt
                         mottatDato = it.mottattDato
-                        b4Kode = "0"
+                        b4Kode = "1"
                         b4Belop = BigDecimal(1000) // it.vedtakBarn.sumOf { it.sumAvregning }.takeIf { it > BigDecimal.ZERO }
                     }
                     forskUtBet = vedtakInfo != null
