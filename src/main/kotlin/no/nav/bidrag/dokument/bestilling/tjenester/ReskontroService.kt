@@ -37,7 +37,7 @@ class ReskontroService(
             secureLogger.info { "Fant sum avregning $sumAvregning for stønad $stønadsid og vedtakstidspunkt $vedtakstidspunkt fra transaksjoner med avskrivning ${commonObjectmapper.writeValueAsString(transaksjonerMedAvskrivning)}" }
             return sumAvregning
         } catch (e: Exception) {
-            secureLogger.error(e) { "Det skejdde en feil ved uthenting av sum avregning for stønad $stønadsid og vedtakstidspunkt $vedtakstidspunkt" }
+            secureLogger.error(e) { "Det skjedde en feil ved uthenting av sum avregning for stønad $stønadsid og vedtakstidspunkt $vedtakstidspunkt" }
             return BigDecimal.ZERO
         }
     }
