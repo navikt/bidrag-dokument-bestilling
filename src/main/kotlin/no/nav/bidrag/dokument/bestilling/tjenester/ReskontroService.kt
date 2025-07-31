@@ -25,16 +25,19 @@ class ReskontroService(
         try {
             val transaksjoner = reskontroConsumer.transaksjoner(stønadsid.sak.verdi) ?: return BigDecimal.ZERO
 
-            val sumAvregning =
+            val transaksjonerMedAvskrivning =
                 transaksjoner.transaksjoner
-                    .filter { it.skyldner == stønadsid.skyldner && it.barn == stønadsid.kravhaver && it.dato == vedtakstidspunkt }
                     .filter { isAvskrivning(it) }
+
+            val sumAvregning =
+                transaksjonerMedAvskrivning
+                    .filter { it.skyldner == stønadsid.skyldner && it.barn == stønadsid.kravhaver && it.dato == vedtakstidspunkt }
                     .sumOf { it.beløp ?: BigDecimal.ZERO }
 
-            secureLogger.info { "Fant transaksjoner ${commonObjectmapper.writeValueAsString(transaksjoner)} og sum avregning $sumAvregning for stønad $stønadsid og vedtakstidspunkt $vedtakstidspunkt" }
+            secureLogger.info { "Fant sum avregning $sumAvregning for stønad $stønadsid og vedtakstidspunkt $vedtakstidspunkt fra transaksjoner med avskrivning ${commonObjectmapper.writeValueAsString(transaksjonerMedAvskrivning)}" }
             return sumAvregning
         } catch (e: Exception) {
-            secureLogger.error(e) { "Det skejdde en feil ved uthenting av sum avregning for stønad $stønadsid og vedtakstidspunkt $vedtakstidspunkt" }
+            secureLogger.error(e) { "Det skjedde en feil ved uthenting av sum avregning for stønad $stønadsid og vedtakstidspunkt $vedtakstidspunkt" }
             return BigDecimal.ZERO
         }
     }
