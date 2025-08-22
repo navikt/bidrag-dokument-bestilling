@@ -100,16 +100,19 @@ class DokumentMetadataCollector(
             vedtakDetaljer =
                 dokumentMal
                     .takeIf { it.inneholderDatagrunnlag(DataGrunnlag.VEDTAK) }
-                    ?.let { hentVedtakData(forespørsel.vedtakId) }
+                    ?.let { hentVedtakData(forespørsel.vedtakId, dokumentMal) }
                     ?: dokumentMal
                         .takeIf { it.inneholderDatagrunnlag(DataGrunnlag.BEHANDLING) }
                         ?.let { hentVedtakDataFraBehandling(forespørsel.behandlingId) },
         )
     }
 
-    private fun hentVedtakData(vedtakId: Int?): VedtakDetaljer {
+    private fun hentVedtakData(
+        vedtakId: Int?,
+        dokumentMal: DokumentMal,
+    ): VedtakDetaljer {
         if (vedtakId == null) manglerVedtakId()
-        return vedtakService.hentVedtakDetaljer(vedtakId)
+        return vedtakService.hentVedtakDetaljer(vedtakId, dokumentMal)
     }
 
     private fun hentVedtakDataFraBehandling(behandlingId: Int?): VedtakDetaljer {

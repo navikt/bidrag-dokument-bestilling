@@ -4,6 +4,7 @@ import no.nav.bidrag.dokument.bestilling.bestilling.dto.AndelUnderholdskostnadPe
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.BidragsevnePeriode
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.BrevSjablonVerdier
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.DataPeriode
+import no.nav.bidrag.dokument.bestilling.bestilling.dto.DokumentMal
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.ForskuddInntektgrensePeriode
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.GebyrInfoDto
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.InntektPeriode
@@ -94,6 +95,7 @@ import no.nav.bidrag.transport.behandling.vedtak.response.StønadsendringDto
 import no.nav.bidrag.transport.behandling.vedtak.response.VedtakDto
 import no.nav.bidrag.transport.behandling.vedtak.response.erDelvedtak
 import no.nav.bidrag.transport.behandling.vedtak.response.erOrkestrertVedtak
+import no.nav.bidrag.transport.behandling.vedtak.response.finnAldersjusteringVedtaksidForStønad
 import no.nav.bidrag.transport.behandling.vedtak.response.harResultatFraAnnenVedtak
 import no.nav.bidrag.transport.behandling.vedtak.response.referertVedtaksid
 import no.nav.bidrag.transport.behandling.vedtak.response.særbidragsperiode
@@ -101,6 +103,7 @@ import no.nav.bidrag.transport.behandling.vedtak.response.typeBehandling
 import org.springframework.stereotype.Service
 import java.math.BigDecimal
 
+private val brevkodeAldersjustering = "BI01B05"
 val resultatkoderOpphør =
     listOf(
         Resultatkode.OPPHØR,
@@ -134,14 +137,17 @@ class VedtakService(
             .map { it.innholdTilObjekt<Person>() }
     }
 
-    fun hentVedtakDetaljer(vedtakId: Int): VedtakDetaljer {
+    fun hentVedtakDetaljer(
+        vedtakId: Int,
+        dokumentMal: DokumentMal,
+    ): VedtakDetaljer {
         val vedtakDto =
             hentVedtak(vedtakId).let { vedtak ->
                 if (vedtak.harResultatFraAnnenVedtak &&
                     (vedtak.erOrkestrertVedtak || vedtak.erDelvedtak) &&
                     vedtak.type != Vedtakstype.INNKREVING
                 ) {
-                    hentVedtak(vedtak.referertVedtaksid!!)
+                    if (dokumentMal.kode == brevkodeAldersjustering && vedtak.finnAldersjusteringVedtaksidForStønad() != null) hentVedtak(vedtak.finnAldersjusteringVedtaksidForStønad()!!) else hentVedtak(vedtak.referertVedtaksid!!)
                 } else {
                     vedtak
                 }
