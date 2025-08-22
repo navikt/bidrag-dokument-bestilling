@@ -137,7 +137,8 @@ class VedtakService(
     fun hentVedtakDetaljer(vedtakId: Int): VedtakDetaljer {
         val vedtakDto =
             hentVedtak(vedtakId).let { vedtak ->
-                if (vedtak.harResultatFraAnnenVedtak && (vedtak.erOrkestrertVedtak || vedtak.erDelvedtak) &&
+                if (vedtak.harResultatFraAnnenVedtak &&
+                    (vedtak.erOrkestrertVedtak || vedtak.erDelvedtak) &&
                     vedtak.type != Vedtakstype.INNKREVING
                 ) {
                     hentVedtak(vedtak.referertVedtaksid!!)
