@@ -22,8 +22,8 @@ data class DokumentBestillingForespørsel(
     val saksbehandler: Saksbehandler? = null,
     val gjelderId: Ident? = null,
     val saksnummer: String,
-    val vedtakId: String? = null,
-    val behandlingId: String? = null,
+    val vedtakId: Int? = null,
+    val behandlingId: Int? = null,
     @Schema(deprecated = true)
     val dokumentReferanse: String? = null,
     @Schema(description = "Dokumentreferanse dokumentet skal bli opprettet med. Det vil ikke bli opprettet ny journalpost hvis dette er satt.")

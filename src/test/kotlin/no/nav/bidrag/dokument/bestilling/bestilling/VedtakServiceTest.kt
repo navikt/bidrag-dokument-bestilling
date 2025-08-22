@@ -97,9 +97,9 @@ class VedtakServiceTest {
         mockDefaultValues()
         val virkningDato = LocalDate.parse("2023-01-01")
         val vedtakResponse = lagVedtaksdata("vedtak/vedtak_forskudd_flere_ytelser.json")
-        every { vedtakConsumer.hentVedtak(eq("108")) } returns vedtakResponse
+        every { vedtakConsumer.hentVedtak(eq(108)) } returns vedtakResponse
 
-        val vedtakDetaljer = vedtakService.hentVedtakDetaljer("108")
+        val vedtakDetaljer = vedtakService.hentVedtakDetaljer(108)
 
         assertSoftly {
             vedtakDetaljer shouldNotBe null
@@ -161,9 +161,9 @@ class VedtakServiceTest {
         mockDefaultValues()
         val virkningDato = LocalDate.parse("2024-08-01")
         val vedtakResponse = lagVedtaksdata("vedtak/vedtak_response-særbidrag.json")
-        every { vedtakConsumer.hentVedtak(eq("108")) } returns vedtakResponse
+        every { vedtakConsumer.hentVedtak(eq(108)) } returns vedtakResponse
 
-        val vedtakDetaljer = vedtakService.hentVedtakDetaljer("108")
+        val vedtakDetaljer = vedtakService.hentVedtakDetaljer(108)
 
         assertSoftly {
             vedtakDetaljer shouldNotBe null
@@ -277,9 +277,9 @@ class VedtakServiceTest {
         mockDefaultValues()
         val virkningDato = LocalDate.parse("2024-08-01")
         val vedtakResponse = lagVedtaksdata("vedtak/vedtak_response-særbidrag-avslag.json")
-        every { vedtakConsumer.hentVedtak(eq("108")) } returns vedtakResponse
+        every { vedtakConsumer.hentVedtak(eq(108)) } returns vedtakResponse
 
-        val vedtakDetaljer = vedtakService.hentVedtakDetaljer("108")
+        val vedtakDetaljer = vedtakService.hentVedtakDetaljer(108)
 
         assertSoftly {
             vedtakDetaljer shouldNotBe null

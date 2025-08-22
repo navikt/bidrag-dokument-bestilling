@@ -92,6 +92,10 @@ import no.nav.bidrag.transport.behandling.felles.grunnlag.utgiftsposter
 import no.nav.bidrag.transport.behandling.vedtak.response.EngangsbeløpDto
 import no.nav.bidrag.transport.behandling.vedtak.response.StønadsendringDto
 import no.nav.bidrag.transport.behandling.vedtak.response.VedtakDto
+import no.nav.bidrag.transport.behandling.vedtak.response.erDelvedtak
+import no.nav.bidrag.transport.behandling.vedtak.response.erOrkestrertVedtak
+import no.nav.bidrag.transport.behandling.vedtak.response.harResultatFraAnnenVedtak
+import no.nav.bidrag.transport.behandling.vedtak.response.referertVedtaksid
 import no.nav.bidrag.transport.behandling.vedtak.response.særbidragsperiode
 import no.nav.bidrag.transport.behandling.vedtak.response.typeBehandling
 import org.springframework.stereotype.Service
@@ -114,15 +118,15 @@ class VedtakService(
     private val personService: PersonService,
     private val reskontroService: ReskontroService,
 ) {
-    fun hentVedtak(vedtakId: String): VedtakDto = bidragVedtakConsumer.hentVedtak(vedtakId) ?: fantIkkeVedtak(vedtakId)
+    fun hentVedtak(vedtakId: Int): VedtakDto = bidragVedtakConsumer.hentVedtak(vedtakId) ?: fantIkkeVedtak(vedtakId)
 
-    fun hentIdentSøknadsbarn(vedtakId: String): List<String> {
+    fun hentIdentSøknadsbarn(vedtakId: Int): List<String> {
         val vedtakDto = hentVedtak(vedtakId)
         val vedtakBarnInfo = vedtakDto.grunnlagListe.søknadsbarn
         return vedtakBarnInfo.map { it.personIdent!! }
     }
 
-    fun hentVedtakRoller(vedtakId: String): List<Person> {
+    fun hentVedtakRoller(vedtakId: Int): List<Person> {
         val vedtakDto = hentVedtak(vedtakId)
         return vedtakDto.grunnlagListe
             .hentAllePersoner()
@@ -130,8 +134,17 @@ class VedtakService(
             .map { it.innholdTilObjekt<Person>() }
     }
 
-    fun hentVedtakDetaljer(vedtakId: String): VedtakDetaljer {
-        val vedtakDto = hentVedtak(vedtakId)
+    fun hentVedtakDetaljer(vedtakId: Int): VedtakDetaljer {
+        val vedtakDto =
+            hentVedtak(vedtakId).let { vedtak ->
+                if (vedtak.harResultatFraAnnenVedtak && (vedtak.erOrkestrertVedtak || vedtak.erDelvedtak) &&
+                    vedtak.type != Vedtakstype.INNKREVING
+                ) {
+                    hentVedtak(vedtak.referertVedtaksid!!)
+                } else {
+                    vedtak
+                }
+            }
         val virkningstidspunktInfo = vedtakDto.hentVirkningstidspunkt()
         val soknadInfo = vedtakDto.hentSøknad()
         val vedtakBarnInfo = vedtakDto.grunnlagListe.søknadsbarn
