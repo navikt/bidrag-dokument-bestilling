@@ -41,7 +41,7 @@ class DokumentBestillingControllerBidragTest : AbstractControllerTest() {
                 gjelderId = gjelderId.verdi,
                 saksnummer = saksnummer,
                 tittel = tittel,
-                vedtakId = "12312",
+                vedtakId = 12312,
                 enhet = "4806",
                 spraak = "NB",
                 dokumentreferanse = "BIF12321321321",

@@ -16,6 +16,7 @@ import no.nav.bidrag.dokument.bestilling.bestilling.dto.InntektPeriode
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.PeriodeFraTom
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.VedtakBarnStonad
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.VedtakDetaljer
+import no.nav.bidrag.dokument.bestilling.bestilling.dto.hentDokumentMal
 import no.nav.bidrag.dokument.bestilling.consumer.BidragVedtakConsumer
 import no.nav.bidrag.dokument.bestilling.consumer.SjablonConsumer
 import no.nav.bidrag.dokument.bestilling.consumer.dto.SjablongerDto
@@ -97,9 +98,9 @@ class VedtakServiceTest {
         mockDefaultValues()
         val virkningDato = LocalDate.parse("2023-01-01")
         val vedtakResponse = lagVedtaksdata("vedtak/vedtak_forskudd_flere_ytelser.json")
-        every { vedtakConsumer.hentVedtak(eq("108")) } returns vedtakResponse
+        every { vedtakConsumer.hentVedtak(eq(108)) } returns vedtakResponse
 
-        val vedtakDetaljer = vedtakService.hentVedtakDetaljer("108")
+        val vedtakDetaljer = vedtakService.hentVedtakDetaljer(108, hentDokumentMal("BI01S02")!!)
 
         assertSoftly {
             vedtakDetaljer shouldNotBe null
@@ -161,9 +162,9 @@ class VedtakServiceTest {
         mockDefaultValues()
         val virkningDato = LocalDate.parse("2024-08-01")
         val vedtakResponse = lagVedtaksdata("vedtak/vedtak_response-særbidrag.json")
-        every { vedtakConsumer.hentVedtak(eq("108")) } returns vedtakResponse
+        every { vedtakConsumer.hentVedtak(eq(108)) } returns vedtakResponse
 
-        val vedtakDetaljer = vedtakService.hentVedtakDetaljer("108")
+        val vedtakDetaljer = vedtakService.hentVedtakDetaljer(108, hentDokumentMal("BI01S02")!!)
 
         assertSoftly {
             vedtakDetaljer shouldNotBe null
@@ -277,9 +278,9 @@ class VedtakServiceTest {
         mockDefaultValues()
         val virkningDato = LocalDate.parse("2024-08-01")
         val vedtakResponse = lagVedtaksdata("vedtak/vedtak_response-særbidrag-avslag.json")
-        every { vedtakConsumer.hentVedtak(eq("108")) } returns vedtakResponse
+        every { vedtakConsumer.hentVedtak(eq(108)) } returns vedtakResponse
 
-        val vedtakDetaljer = vedtakService.hentVedtakDetaljer("108")
+        val vedtakDetaljer = vedtakService.hentVedtakDetaljer(108, hentDokumentMal("BI01S02")!!)
 
         assertSoftly {
             vedtakDetaljer shouldNotBe null

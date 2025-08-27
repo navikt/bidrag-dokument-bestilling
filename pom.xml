@@ -6,7 +6,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.4.3</version>
+        <version>3.5.4</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>no.nav</groupId>
@@ -16,14 +16,15 @@
     <properties>
         <java.version>21</java.version>
         <kotlin.version>2.2.10</kotlin.version>
-        <bidrag-felles.version>2025.08.19.141150</bidrag-felles.version>
+        <bidrag-felles.version>2025.08.22.151943</bidrag-felles.version>
         <logback-encoder.version>8.0</logback-encoder.version>
-        <token-support.version>5.0.25</token-support.version>
+        <token-support.version>5.0.28</token-support.version>
         <springframework-cloud.version>4.1.4</springframework-cloud.version>
         <springdoc.version>2.2.0</springdoc.version>
         <ibmmq.version>9.3.0.1</ibmmq.version>
         <kotlin-logging-jvm.version>3.0.5</kotlin-logging-jvm.version>
         <google-api-extention.version>2.63.1</google-api-extention.version>
+        <artemis.version>2.42.0</artemis.version>
     </properties>
 
     <repositories>
@@ -48,7 +49,7 @@
             <dependency>
                 <groupId>com.google.cloud</groupId>
                 <artifactId>libraries-bom</artifactId>
-                <version>26.37.0</version>
+                <version>26.61.0</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -98,8 +99,26 @@
         </dependency>
         <dependency>
             <groupId>org.apache.activemq</groupId>
+            <artifactId>artemis-commons</artifactId>
+            <version>${artemis.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.activemq</groupId>
+            <artifactId>artemis-core-client</artifactId>
+            <version>${artemis.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.activemq</groupId>
+            <artifactId>artemis-jms-client</artifactId>
+            <version>${artemis.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.activemq</groupId>
             <artifactId>artemis-server</artifactId>
-            <version>2.37.0</version>
+            <version>${artemis.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -113,7 +132,7 @@
         <dependency>
             <groupId>org.springframework.retry</groupId>
             <artifactId>spring-retry</artifactId>
-            <version>2.0.5</version>
+            <version>2.0.12</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -189,7 +208,7 @@
         <dependency>
             <groupId>org.springdoc</groupId>
             <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
-            <version>2.6.0</version>
+            <version>2.8.9</version>
         </dependency>
 
         <!--Sikkerhet-->
@@ -253,12 +272,12 @@
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-core</artifactId>
-            <version>1.5.17</version>
+            <version>1.5.18</version>
         </dependency>
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
-            <version>1.5.17</version>
+            <version>1.5.18</version>
         </dependency>
         <dependency>
             <groupId>net.logstash.logback</groupId>
@@ -315,7 +334,7 @@
         <dependency>
             <groupId>io.kotest</groupId>
             <artifactId>kotest-assertions-core-jvm</artifactId>
-            <version>5.8.1</version>
+            <version>5.9.1</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -439,7 +458,7 @@
                     <dependency>
                         <groupId>com.pinterest.ktlint</groupId>
                         <artifactId>ktlint-cli</artifactId>
-                        <version>1.5.0</version>
+                        <version>1.7.1</version>
                     </dependency>
                     <!-- additional 3rd party ruleset(s) can be specified here -->
                 </dependencies>

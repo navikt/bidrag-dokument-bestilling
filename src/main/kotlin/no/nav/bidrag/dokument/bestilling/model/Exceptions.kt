@@ -45,7 +45,7 @@ class ManglerGjelderException(
 
 class BestillingManglerMottaker : RuntimeException("Bestilling mangler mottaker")
 
-fun fantIkkeVedtak(vedtakId: String): Nothing = throw HttpClientErrorException(HttpStatus.BAD_REQUEST, "Fant ikke vedtak med id $vedtakId")
+fun fantIkkeVedtak(vedtakId: Int): Nothing = throw HttpClientErrorException(HttpStatus.BAD_REQUEST, "Fant ikke vedtak med id $vedtakId")
 
 fun manglerBehandlingId(): Nothing =
     throw HttpClientErrorException(

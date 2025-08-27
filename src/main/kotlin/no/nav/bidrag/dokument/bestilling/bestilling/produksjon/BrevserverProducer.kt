@@ -68,7 +68,7 @@ class BrevserverProducer(
     ): DokumentBestillingResult {
         val journalpostId = opprettJournalpost(dokumentBestilling, dokumentMal)
 
-        if (dokumentBestilling.bestillBatch) {
+        if (dokumentBestilling.bestillBatch || dokumentMal.batchbrev) {
             log.info { "Sender melding til batch kø" }
             val melding =
                 mapToBrevserverMessage(

@@ -12,14 +12,14 @@ import org.springframework.stereotype.Service
 class BehandlingService(
     private val bidragBehandlingConsumer: BidragBehandlingConsumer,
 ) {
-    fun hentBehandling(behandlingId: String): BehandlingDetaljerDtoV2 = bidragBehandlingConsumer.hentBehandling(behandlingId) ?: fantIkkeVedtak(behandlingId)
+    fun hentBehandling(behandlingId: Int): BehandlingDetaljerDtoV2 = bidragBehandlingConsumer.hentBehandling(behandlingId) ?: fantIkkeVedtak(behandlingId)
 
-    fun hentIdentSøknadsbarn(behandlingId: String): List<String> {
+    fun hentIdentSøknadsbarn(behandlingId: Int): List<String> {
         val behandlingDto = hentBehandling(behandlingId)
         return behandlingDto.roller.filter { it.rolletype == Rolletype.BARN }.map { it.ident!! }
     }
 
-    fun hentVedtakDetaljer(behandlingId: String): VedtakDetaljer {
+    fun hentVedtakDetaljer(behandlingId: Int): VedtakDetaljer {
         val behandlingDto = hentBehandling(behandlingId)
         return VedtakDetaljer(
             årsakKode = behandlingDto.årsak,

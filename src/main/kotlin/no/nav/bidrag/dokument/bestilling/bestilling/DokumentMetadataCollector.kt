@@ -100,20 +100,23 @@ class DokumentMetadataCollector(
             vedtakDetaljer =
                 dokumentMal
                     .takeIf { it.inneholderDatagrunnlag(DataGrunnlag.VEDTAK) }
-                    ?.let { hentVedtakData(forespørsel.vedtakId) }
+                    ?.let { hentVedtakData(forespørsel.vedtakId, dokumentMal) }
                     ?: dokumentMal
                         .takeIf { it.inneholderDatagrunnlag(DataGrunnlag.BEHANDLING) }
                         ?.let { hentVedtakDataFraBehandling(forespørsel.behandlingId) },
         )
     }
 
-    private fun hentVedtakData(vedtakId: String?): VedtakDetaljer {
-        if (vedtakId.isNullOrEmpty()) manglerVedtakId()
-        return vedtakService.hentVedtakDetaljer(vedtakId)
+    private fun hentVedtakData(
+        vedtakId: Int?,
+        dokumentMal: DokumentMal,
+    ): VedtakDetaljer {
+        if (vedtakId == null) manglerVedtakId()
+        return vedtakService.hentVedtakDetaljer(vedtakId, dokumentMal)
     }
 
-    private fun hentVedtakDataFraBehandling(behandlingId: String?): VedtakDetaljer {
-        if (behandlingId.isNullOrEmpty()) manglerBehandlingId()
+    private fun hentVedtakDataFraBehandling(behandlingId: Int?): VedtakDetaljer {
+        if (behandlingId == null) manglerBehandlingId()
         return behandlingService.hentVedtakDetaljer(behandlingId)
     }
 
@@ -158,11 +161,11 @@ class DokumentMetadataCollector(
         }
 
         val soknadsbarn = mutableListOf<String>()
-        if (!forespørsel.vedtakId.isNullOrEmpty() && dokumentMal.inneholderDatagrunnlag(DataGrunnlag.VEDTAK)) {
+        if (forespørsel.vedtakId != null && dokumentMal.inneholderDatagrunnlag(DataGrunnlag.VEDTAK)) {
             soknadsbarn.addAll(
                 vedtakService.hentIdentSøknadsbarn(forespørsel.vedtakId),
             )
-        } else if (!forespørsel.behandlingId.isNullOrEmpty() && dokumentMal.inneholderDatagrunnlag(DataGrunnlag.BEHANDLING)) {
+        } else if (forespørsel.behandlingId != null && dokumentMal.inneholderDatagrunnlag(DataGrunnlag.BEHANDLING)) {
             soknadsbarn.addAll(behandlingService.hentIdentSøknadsbarn(forespørsel.behandlingId))
         } else {
             soknadsbarn.addAll(forespørsel.barnIBehandling)
@@ -219,7 +222,7 @@ class DokumentMetadataCollector(
 
     private fun logIdenter(forespørsel: DokumentBestillingForespørsel) {
         try {
-            if (!forespørsel.vedtakId.isNullOrEmpty()) {
+            if (forespørsel.vedtakId != null) {
                 val søknadsbarnFraVedtak = vedtakService.hentIdentSøknadsbarn(forespørsel.vedtakId)
                 secureLogger.info { "Søknadsbarn fra vedtak: ${søknadsbarnFraVedtak.joinToString(",")} og fra forespørsel ${forespørsel.barnIBehandling.joinToString(",")}" }
             }
