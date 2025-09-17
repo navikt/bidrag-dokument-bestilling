@@ -17,7 +17,9 @@ data class DokumentBestillingResult(
     val journalpostId: String? = null,
     val innhold: ByteArray? = null,
     val bestillingSystem: String,
-)
+) {
+    override fun toString(): String = "dokumentReferanse='$dokumentReferanse', journalpostId=$journalpostId, innhold=${innhold?.size}, bestillingSystem='$bestillingSystem'"
+}
 
 val InntektPeriode.opprinneligPeriode get() = inntektOpprinneligPerioder.minByOrNull { it.fom }
 val InntektPeriode.inntektPeriode get() = inntektPerioder.minByOrNull { it.fom }
