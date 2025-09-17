@@ -41,5 +41,5 @@ fun Sivilstandskode.toKode() =
         else -> "NULL"
     }
 
-val VedtakDetaljer.behandlingType get(): BehandlingType? = stønadType?.let { type -> BehandlingType.from(type, engangsbelopType) } ?: engangsbelopType?.let { type -> BehandlingType.from(null, type) }
-val VedtakDetaljer.soknadType get(): SoknadType? = vedtakType.let { type -> SoknadType.fromVedtakType(type) }
+val VedtakDetaljer.behandlingType get(): BehandlingType? = stønadstype?.let { type -> BehandlingType.from(type, engangsbeløptype) } ?: engangsbeløptype?.let { type -> BehandlingType.from(null, type) }
+val VedtakDetaljer.soknadType get(): SoknadType? = vedtakstype.let { type -> SoknadType.fromVedtakType(type) }
