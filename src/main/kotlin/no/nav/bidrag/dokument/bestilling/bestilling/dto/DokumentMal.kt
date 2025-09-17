@@ -157,7 +157,7 @@ data class DokumentMalProduksjon(
     override val beskrivelse: String = tittel,
     override val batchbrev: Boolean = false,
     override val enabled: Boolean = true,
-    override val redigerbar: Boolean = !batchbrev,
+    override val redigerbar: Boolean = false,
     override val type: DokumentMalType = DokumentMalType.VARSEL,
     override val bestillingSystem: BestillingSystemType = BestillingSystem.DOKUMENT_PRODUKSJON,
     val støttetSpråk: List<StøttetSpråk> = listOf(StøttetSpråk.NB),

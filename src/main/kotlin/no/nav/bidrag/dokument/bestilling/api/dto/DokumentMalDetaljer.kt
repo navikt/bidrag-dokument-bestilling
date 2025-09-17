@@ -14,6 +14,7 @@ data class DokumentMalDetaljer(
     val redigerbar: Boolean,
     val språk: List<StøttetSpråk>,
     val statiskInnhold: Boolean = false,
+    val nyDokumentProduksjon: Boolean = false,
     val innholdType: DokumentMalType,
     val gruppeVisningsnavn: String? = null,
     val tilhorerEnheter: List<String> = emptyList(),
