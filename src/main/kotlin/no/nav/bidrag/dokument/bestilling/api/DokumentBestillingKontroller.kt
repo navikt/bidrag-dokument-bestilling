@@ -12,6 +12,7 @@ import no.nav.bidrag.dokument.bestilling.api.dto.DokumentMalDetaljer
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.DataGrunnlag
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.DokumentMalBrevserver
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.DokumentMalBucket
+import no.nav.bidrag.dokument.bestilling.bestilling.dto.DokumentMalProduksjon
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.DokumentMalType
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.DokumentType
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.alleDokumentmaler
@@ -173,6 +174,7 @@ class DokumentBestillingKontroller(
                                 emptyList()
                             },
                         innholdType = it.type,
+                        nyDokumentProduksjon = it is DokumentMalProduksjon,
                         statiskInnhold = it is DokumentMalBucket,
                         gruppeVisningsnavn = if (it is DokumentMalBucket) it.gruppeVisningsnavn else null,
                         tilhorerEnheter = if (it is DokumentMalBucket) it.tilhørerEnheter else emptyList(),
