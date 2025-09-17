@@ -1,5 +1,5 @@
 FORSIDE:
-  - kode: FORSIDE_ORKESTRERT_OMGJØRING
+  - kode: VOFORSIDE
     tittel: Forside for omgjøring/klagevedtak
     type: "VEDTAK"
     malId: "forside"
