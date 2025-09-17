@@ -18,7 +18,6 @@ import no.nav.bidrag.dokument.bestilling.api.dto.DokumentMalDetaljer
 import no.nav.bidrag.dokument.bestilling.api.dto.MottakerTo
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.DokumentMalBrevserver
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.DokumentMalType
-import no.nav.bidrag.dokument.bestilling.bestilling.dto.PeriodeFraTom
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.StøttetSpråk
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.alleDokumentmaler
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.dokumentmalerBrevserver
@@ -51,6 +50,7 @@ import no.nav.bidrag.dokument.bestilling.utils.createPostAdresseResponse
 import no.nav.bidrag.dokument.bestilling.utils.createPostAdresseResponseUtenlandsk
 import no.nav.bidrag.dokument.bestilling.utils.createSakResponse
 import no.nav.bidrag.domene.enums.rolle.Rolletype
+import no.nav.bidrag.transport.dokumentmaler.PeriodeFraTom
 import no.nav.bidrag.transport.sak.RolleDto
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test

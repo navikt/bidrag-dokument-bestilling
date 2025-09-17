@@ -2,7 +2,6 @@ package no.nav.bidrag.dokument.bestilling.api
 
 import io.kotest.matchers.equality.shouldBeEqualToComparingFields
 import io.kotest.matchers.shouldBe
-import no.nav.bidrag.dokument.bestilling.bestilling.dto.PeriodeFraTom
 import no.nav.bidrag.dokument.bestilling.bestilling.produksjon.dto.BidragBarn
 import no.nav.bidrag.dokument.bestilling.bestilling.produksjon.dto.BrevBestilling
 import no.nav.bidrag.dokument.bestilling.bestilling.produksjon.dto.BrevKontaktinfo
@@ -10,6 +9,7 @@ import no.nav.bidrag.dokument.bestilling.consumer.dto.EnhetKontaktInfoDto
 import no.nav.bidrag.dokument.bestilling.consumer.dto.fornavnEtternavn
 import no.nav.bidrag.dokument.bestilling.utils.BREVREF
 import no.nav.bidrag.dokument.bestilling.utils.FORSKUDD_INNTEKTGRENSE_2020_2021
+import no.nav.bidrag.transport.dokumentmaler.PeriodeFraTom
 import no.nav.bidrag.transport.person.PersonAdresseDto
 import no.nav.bidrag.transport.person.PersonDto
 import java.math.BigDecimal

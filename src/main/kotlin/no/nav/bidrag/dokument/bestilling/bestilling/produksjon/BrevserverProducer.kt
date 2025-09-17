@@ -4,15 +4,15 @@ import mu.KotlinLogging
 import no.nav.bidrag.commons.util.secureLogger
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.BestillingSystem
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.DataGrunnlag
-import no.nav.bidrag.dokument.bestilling.bestilling.dto.DokumentBestilling
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.DokumentBestillingResult
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.DokumentMal
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.DokumentMalType
-import no.nav.bidrag.dokument.bestilling.bestilling.dto.EnhetKontaktInfo
-import no.nav.bidrag.dokument.bestilling.bestilling.dto.ForskuddInntektgrensePeriode
-import no.nav.bidrag.dokument.bestilling.bestilling.dto.Mottaker
-import no.nav.bidrag.dokument.bestilling.bestilling.dto.fraVerdi
-import no.nav.bidrag.dokument.bestilling.bestilling.dto.tilVerdi
+import no.nav.bidrag.dokument.bestilling.bestilling.dto.andelUnderholdPerioder
+import no.nav.bidrag.dokument.bestilling.bestilling.dto.beløpKode
+import no.nav.bidrag.dokument.bestilling.bestilling.dto.beskrivelse
+import no.nav.bidrag.dokument.bestilling.bestilling.dto.inntektsperioder
+import no.nav.bidrag.dokument.bestilling.bestilling.dto.samværsperioder
+import no.nav.bidrag.dokument.bestilling.bestilling.dto.underholdskostnadperioder
 import no.nav.bidrag.dokument.bestilling.bestilling.produksjon.dto.Brev
 import no.nav.bidrag.dokument.bestilling.bestilling.produksjon.dto.BrevBestilling
 import no.nav.bidrag.dokument.bestilling.bestilling.produksjon.dto.BrevKontaktinfo
@@ -46,6 +46,12 @@ import no.nav.bidrag.transport.dokument.JournalpostType
 import no.nav.bidrag.transport.dokument.OpprettDokumentDto
 import no.nav.bidrag.transport.dokument.OpprettJournalpostRequest
 import no.nav.bidrag.transport.dokument.isNumeric
+import no.nav.bidrag.transport.dokumentmaler.DokumentBestilling
+import no.nav.bidrag.transport.dokumentmaler.EnhetKontaktInfo
+import no.nav.bidrag.transport.dokumentmaler.ForskuddInntektgrensePeriode
+import no.nav.bidrag.transport.dokumentmaler.Mottaker
+import no.nav.bidrag.transport.dokumentmaler.fraVerdi
+import no.nav.bidrag.transport.dokumentmaler.tilVerdi
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.jms.core.JmsTemplate
 import org.springframework.stereotype.Component
@@ -189,7 +195,7 @@ class BrevserverProducer(
                     rmISak = dokumentBestilling.rmISak
                     datoSakReg = dokumentBestilling.datoSakOpprettet
                     hgKode = hgUgDto?.hg
-                    ugKode = if (dokumentBestilling.vedtakDetaljer?.erDirekteAvslagForAlleBarn == true && dokumentBestilling.vedtakDetaljer.stønadType?.erBidrag == true) "OH" else hgUgDto?.ug
+                    ugKode = if (dokumentBestilling.vedtakDetaljer?.erDirekteAvslagForAlleBarn == true && dokumentBestilling.vedtakDetaljer!!.stønadstype?.erBidrag == true) "OH" else hgUgDto?.ug
                     sakstype =
                         if (dokumentBestilling.sakDetaljer.harUkjentPart) {
                             "X"
@@ -239,7 +245,7 @@ class BrevserverProducer(
                                 ?.firstOrNull()
                                 ?.særbidragBeregning
                                 ?.resultatKode
-                                ?.tilBisysResultatkodeForBrev(dokumentBestilling.vedtakDetaljer.vedtakType)
+                                ?.tilBisysResultatkodeForBrev(dokumentBestilling.vedtakDetaljer!!.vedtakstype)
                         } else {
                             null
                         }
@@ -263,9 +269,9 @@ class BrevserverProducer(
                 }
                 vedtakInfo?.let {
                     soknad {
-                        aarsakKd = it.årsakKode?.legacyKode?.firstOrNull() ?: it.avslagsKode?.tilBisysResultatkodeForBrev(dokumentBestilling.vedtakDetaljer.vedtakType) // TODO: Oversett til riktig kode
+                        aarsakKd = it.årsakKode?.legacyKode?.firstOrNull() ?: it.avslagsKode?.tilBisysResultatkodeForBrev(dokumentBestilling.vedtakDetaljer!!.vedtakstype) // TODO: Oversett til riktig kode
                         undergrp = hgUgDto?.ug
-                        type = it.stønadType?.let { BehandlingType.valueOf(it.name).kode } ?: hgUgDto?.hg
+                        type = it.stønadstype?.let { BehandlingType.valueOf(it.name).kode } ?: hgUgDto?.hg
 
                         vedtattDato = it.vedtattDato
                         virkningDato = it.virkningstidspunkt
@@ -292,7 +298,7 @@ class BrevserverProducer(
                                     fnr = vedtakBarn.fødselsnummer
                                     erInnkreving = engangsbeløp.medInnkreving
                                     belopBidrag = beregning.resultat
-                                    resultatKode = beregning.resultatKode.tilBisysResultatkodeForBrev(dokumentBestilling.vedtakDetaljer.vedtakType)
+                                    resultatKode = beregning.resultatKode.tilBisysResultatkodeForBrev(dokumentBestilling.vedtakDetaljer!!.vedtakstype)
                                 }
                                 særbidrag {
                                     antTermin = 1

@@ -19,6 +19,7 @@ object EnhetKode {
 
 object BestillingSystem {
     const val BREVSERVER = "BREVSERVER"
+    const val DOKUMENT_PRODUKSJON = "DOKUMENT_PRODUKSJON"
     const val BUCKET = "BUCKET"
 }
 
@@ -150,6 +151,34 @@ open class DokumentMalBucket(
     val filePath get() = "$folderName/$bucketFilename.pdf"
 }
 
+data class DokumentMalProduksjon(
+    override val kode: String,
+    override val tittel: String,
+    override val beskrivelse: String = tittel,
+    override val batchbrev: Boolean = false,
+    override val enabled: Boolean = false,
+    override val redigerbar: Boolean = !batchbrev,
+    override val type: DokumentMalType = DokumentMalType.VARSEL,
+    override val bestillingSystem: BestillingSystemType = BestillingSystem.DOKUMENT_PRODUKSJON,
+    val støttetSpråk: List<StøttetSpråk> = listOf(StøttetSpråk.NB),
+    val forOrkestrertVedtak: Boolean = false,
+    val innhold: InnholdType = InnholdType.FORSIDE,
+    val malId: String,
+) : DokumentMal(
+        kode = kode,
+        beskrivelse = beskrivelse,
+        tittel = tittel,
+        bestillingSystem = bestillingSystem,
+        batchbrev = batchbrev,
+        enabled = enabled,
+        type = type,
+        redigerbar = redigerbar,
+    ) {
+    enum class InnholdType {
+        FORSIDE,
+    }
+}
+
 data class DokumentMalBrevserver(
     override val kode: String,
     override val tittel: String,
@@ -180,7 +209,7 @@ private inline fun <reified T : DokumentMal> lastDokumentMalerFraFil(
     filnavn: String,
     prefiks: String? = null,
     type: FilType = FilType.JSON,
-    withGroupname: Boolean = false,
+    groupname: String? = null,
 ): List<T> =
     try {
         val fileending = if (type == FilType.JSON) "json" else "yaml"
@@ -191,8 +220,8 @@ private inline fun <reified T : DokumentMal> lastDokumentMalerFraFil(
         val inputstream = ClassPathResource("files/dokumentmaler/$filnavn.$fileending").inputStream
         val text = String(inputstream.readAllBytes(), StandardCharsets.UTF_8)
         val textConverted =
-            if (withGroupname) {
-                konverterGruppeNavnTilParameter(text, "gruppeVisningsnavn")
+            if (groupname != null) {
+                konverterGruppeNavnTilParameter(text, groupname)
             } else {
                 text
             }
@@ -255,9 +284,11 @@ private fun konverterGruppeNavnTilParameter(
 
 val dokumentmalerBrevserver: List<DokumentMalBrevserver> = lastDokumentMalerFraFil("brevserver")
 val dokumentmalerUtland: List<DokumentMalBucketUtland> =
-    lastDokumentMalerFraFil("vedlegg_utland", "UTLAND", type = FilType.YAML, true)
+    lastDokumentMalerFraFil("vedlegg_utland", "UTLAND", type = FilType.YAML, "gruppeVisningsnavn")
 val dokumentmalerFarskap: List<DokumentMalBucketFarskap> =
-    lastDokumentMalerFraFil("vedlegg_farskap", "FARSKAP", type = FilType.YAML, true)
-val alleDokumentmaler = dokumentmalerBrevserver + dokumentmalerUtland + dokumentmalerFarskap
+    lastDokumentMalerFraFil("vedlegg_farskap", "FARSKAP", type = FilType.YAML, "gruppeVisningsnavn")
+val dokumentmalerProduksjon: List<DokumentMalProduksjon> =
+    lastDokumentMalerFraFil("vedtak", null, type = FilType.YAML, "innhold")
+val alleDokumentmaler = dokumentmalerBrevserver + dokumentmalerUtland + dokumentmalerFarskap + dokumentmalerProduksjon
 
 fun hentDokumentMal(kode: String): DokumentMal? = alleDokumentmaler.find { it.kode == kode }

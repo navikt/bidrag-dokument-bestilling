@@ -72,7 +72,7 @@ class BidragPersonConsumer(
             if (e.statusCode == HttpStatus.NOT_FOUND) {
                 return null
             }
-            throw HentPersonFeiletException("Henting av språk for person $id feilet", e)
+            return null
         }
     }
 }

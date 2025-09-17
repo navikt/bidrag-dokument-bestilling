@@ -2,10 +2,6 @@ package no.nav.bidrag.dokument.bestilling.tjenester
 
 import no.nav.bidrag.commons.service.AppContext
 import no.nav.bidrag.commons.util.secureLogger
-import no.nav.bidrag.dokument.bestilling.bestilling.dto.BeløpFraTil
-import no.nav.bidrag.dokument.bestilling.bestilling.dto.ForskuddInntektgrensePeriode
-import no.nav.bidrag.dokument.bestilling.bestilling.dto.PeriodeFraTom
-import no.nav.bidrag.dokument.bestilling.bestilling.dto.SjablonDetaljer
 import no.nav.bidrag.dokument.bestilling.consumer.SjablonConsumer
 import no.nav.bidrag.dokument.bestilling.consumer.dto.SjablonData
 import no.nav.bidrag.dokument.bestilling.consumer.dto.SjablongType
@@ -14,6 +10,10 @@ import no.nav.bidrag.dokument.bestilling.consumer.dto.hentPerioderForSjabloner
 import no.nav.bidrag.dokument.bestilling.consumer.dto.hentSisteSjablong
 import no.nav.bidrag.dokument.bestilling.consumer.dto.hentSjablongForTomDato
 import no.nav.bidrag.domene.enums.person.Sivilstandskode
+import no.nav.bidrag.transport.dokumentmaler.BeløpFraTil
+import no.nav.bidrag.transport.dokumentmaler.ForskuddInntektgrensePeriode
+import no.nav.bidrag.transport.dokumentmaler.PeriodeFraTom
+import no.nav.bidrag.transport.dokumentmaler.SjablonDetaljer
 import org.springframework.stereotype.Service
 import java.math.BigDecimal
 import java.time.LocalDate

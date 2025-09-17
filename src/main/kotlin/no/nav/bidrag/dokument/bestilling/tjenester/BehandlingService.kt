@@ -1,11 +1,11 @@
 package no.nav.bidrag.dokument.bestilling.tjenester
 
-import no.nav.bidrag.dokument.bestilling.bestilling.dto.VedtakDetaljer
-import no.nav.bidrag.dokument.bestilling.bestilling.dto.VedtakSaksbehandlerInfo
 import no.nav.bidrag.dokument.bestilling.consumer.BidragBehandlingConsumer
 import no.nav.bidrag.dokument.bestilling.consumer.dto.BehandlingDetaljerDtoV2
 import no.nav.bidrag.dokument.bestilling.model.fantIkkeVedtak
 import no.nav.bidrag.domene.enums.rolle.Rolletype
+import no.nav.bidrag.transport.dokumentmaler.VedtakDetaljer
+import no.nav.bidrag.transport.dokumentmaler.VedtakSaksbehandlerInfo
 import org.springframework.stereotype.Service
 
 @Service
@@ -34,9 +34,10 @@ class BehandlingService(
                     navn = behandlingDto.opprettetAv.navn ?: "",
                     ident = behandlingDto.opprettetAv.ident,
                 ),
-            engangsbelopType = behandlingDto.engangsbeløptype,
-            stønadType = behandlingDto.stønadstype,
-            vedtakType = behandlingDto.vedtakstype,
+            engangsbeløptype = behandlingDto.engangsbeløptype,
+            stønadstype = behandlingDto.stønadstype,
+            vedtakstype = behandlingDto.vedtakstype,
+            resultat = emptyList(),
         )
     }
 }

@@ -1,9 +1,5 @@
 package no.nav.bidrag.dokument.bestilling.model
 
-import no.nav.bidrag.dokument.bestilling.bestilling.dto.BarnIHusstandPeriode
-import no.nav.bidrag.dokument.bestilling.bestilling.dto.InntektPeriode
-import no.nav.bidrag.dokument.bestilling.bestilling.dto.VedtakPeriodeReferanse
-import no.nav.bidrag.dokument.bestilling.bestilling.dto.VedtakSaksbehandlerInfo
 import no.nav.bidrag.dokument.bestilling.tjenester.hentInnslagKapitalinntekt
 import no.nav.bidrag.domene.enums.behandling.TypeBehandling
 import no.nav.bidrag.domene.enums.grunnlag.Grunnlagstype
@@ -34,6 +30,10 @@ import no.nav.bidrag.transport.behandling.felles.grunnlag.personIdent
 import no.nav.bidrag.transport.behandling.felles.grunnlag.personObjekt
 import no.nav.bidrag.transport.behandling.vedtak.response.VedtakDto
 import no.nav.bidrag.transport.behandling.vedtak.response.VedtakPeriodeDto
+import no.nav.bidrag.transport.dokumentmaler.BarnIHusstandPeriode
+import no.nav.bidrag.transport.dokumentmaler.InntektPeriode
+import no.nav.bidrag.transport.dokumentmaler.VedtakPeriodeReferanse
+import no.nav.bidrag.transport.dokumentmaler.VedtakSaksbehandlerInfo
 import java.math.BigDecimal
 
 val kapitalinntektTyper = listOf(Inntektsrapportering.KAPITALINNTEKT, Inntektsrapportering.KAPITALINNTEKT_EGNE_OPPLYSNINGER)

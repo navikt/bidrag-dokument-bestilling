@@ -12,10 +12,7 @@ import io.mockk.every
 import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
 import io.mockk.junit5.MockKExtension
-import no.nav.bidrag.dokument.bestilling.bestilling.dto.InntektPeriode
-import no.nav.bidrag.dokument.bestilling.bestilling.dto.PeriodeFraTom
-import no.nav.bidrag.dokument.bestilling.bestilling.dto.VedtakBarnStonad
-import no.nav.bidrag.dokument.bestilling.bestilling.dto.VedtakDetaljer
+import no.nav.bidrag.dokument.bestilling.bestilling.dto.beskrivelse
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.hentDokumentMal
 import no.nav.bidrag.dokument.bestilling.consumer.BidragVedtakConsumer
 import no.nav.bidrag.dokument.bestilling.consumer.SjablonConsumer
@@ -53,6 +50,10 @@ import no.nav.bidrag.domene.enums.vedtak.Stønadstype
 import no.nav.bidrag.domene.enums.vedtak.Vedtakskilde
 import no.nav.bidrag.domene.enums.vedtak.Vedtakstype
 import no.nav.bidrag.domene.enums.vedtak.VirkningstidspunktÅrsakstype
+import no.nav.bidrag.transport.dokumentmaler.InntektPeriode
+import no.nav.bidrag.transport.dokumentmaler.PeriodeFraTom
+import no.nav.bidrag.transport.dokumentmaler.VedtakBarnStonad
+import no.nav.bidrag.transport.dokumentmaler.VedtakDetaljer
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test

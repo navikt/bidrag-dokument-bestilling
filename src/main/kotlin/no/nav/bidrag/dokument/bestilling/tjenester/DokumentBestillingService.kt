@@ -5,6 +5,7 @@ import no.nav.bidrag.dokument.bestilling.api.dto.DokumentBestillingResponse
 import no.nav.bidrag.dokument.bestilling.bestilling.DokumentBestillingManager
 import no.nav.bidrag.dokument.bestilling.bestilling.DokumentFetchingManager
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.BestillingSystem
+import no.nav.bidrag.dokument.bestilling.bestilling.dto.DokumentBestillingResult
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.DokumentMal
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.DokumentMalBucket
 import no.nav.bidrag.dokument.bestilling.model.kanIkkeBestilleDokumentMal
@@ -25,7 +26,7 @@ class DokumentBestillingService(
         val result = dokumentBestillingManager.bestill(bestillingRequest, dokumentMal)
         return DokumentBestillingResponse(
             dokumentId = result.dokumentReferanse,
-            journalpostId = result.journalpostId,
+            journalpostId = result.journalpostId!!,
             arkivSystem =
                 when (result.bestillingSystem) {
                     BestillingSystem.BREVSERVER -> DokumentArkivSystemDto.MIDLERTIDLIG_BREVLAGER
@@ -46,16 +47,5 @@ class DokumentBestillingService(
     fun bestillOgHent(
         bestillingRequest: DokumentBestillingForespørsel,
         dokumentMal: DokumentMal,
-    ): DokumentBestillingResponse {
-        val result = dokumentBestillingManager.bestill(bestillingRequest, dokumentMal)
-        return DokumentBestillingResponse(
-            dokumentId = result.dokumentReferanse,
-            journalpostId = result.journalpostId,
-            arkivSystem =
-                when (result.bestillingSystem) {
-                    BestillingSystem.BREVSERVER -> DokumentArkivSystemDto.MIDLERTIDLIG_BREVLAGER
-                    else -> null
-                },
-        )
-    }
+    ): DokumentBestillingResult = dokumentBestillingManager.bestill(bestillingRequest, dokumentMal)
 }

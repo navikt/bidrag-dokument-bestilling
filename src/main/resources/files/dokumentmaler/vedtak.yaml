@@ -1,0 +1,6 @@
+FORSIDE:
+  - kode: FORSIDE_ORKESTRERT_OMGJØRING
+    tittel: Forside - Orkestrert omgjøring
+    type: "VEDTAK"
+    malId: "forside"
+    forOrkestrertVedtak: true

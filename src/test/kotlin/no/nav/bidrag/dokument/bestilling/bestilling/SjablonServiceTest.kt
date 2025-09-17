@@ -10,8 +10,6 @@ import io.mockk.every
 import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
 import io.mockk.junit5.MockKExtension
-import no.nav.bidrag.dokument.bestilling.bestilling.dto.BeløpFraTil
-import no.nav.bidrag.dokument.bestilling.bestilling.dto.ForskuddInntektgrensePeriode
 import no.nav.bidrag.dokument.bestilling.consumer.SjablonConsumer
 import no.nav.bidrag.dokument.bestilling.consumer.dto.SjablongerDto
 import no.nav.bidrag.dokument.bestilling.model.MAX_DATE
@@ -19,6 +17,8 @@ import no.nav.bidrag.dokument.bestilling.model.typeRef
 import no.nav.bidrag.dokument.bestilling.tjenester.SjablongService
 import no.nav.bidrag.dokument.bestilling.utils.readFile
 import no.nav.bidrag.domene.enums.person.Sivilstandskode
+import no.nav.bidrag.transport.dokumentmaler.BeløpFraTil
+import no.nav.bidrag.transport.dokumentmaler.ForskuddInntektgrensePeriode
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith

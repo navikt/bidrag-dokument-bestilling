@@ -1,10 +1,8 @@
 package no.nav.bidrag.dokument.bestilling.consumer
 
-import no.nav.bidrag.commons.util.secureLogger
+import mu.KotlinLogging
 import no.nav.bidrag.commons.web.client.AbstractRestClient
-import no.nav.bidrag.domene.sak.Saksnummer
-import no.nav.bidrag.transport.reskontro.request.SaksnummerRequest
-import no.nav.bidrag.transport.reskontro.response.transaksjoner.TransaksjonerDto
+import no.nav.bidrag.transport.dokumentmaler.DokumentBestilling
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.retry.annotation.Backoff
@@ -15,11 +13,13 @@ import org.springframework.web.client.RestOperations
 import org.springframework.web.util.UriComponentsBuilder
 import java.net.URI
 
+private val log = KotlinLogging.logger {}
+
 @Service
-class BidragReskontroConsumer(
-    @Value("\${BIDRAG_RESKONTRO_URL}") val url: URI,
+class BidragDokumentProduksjonConsumer(
+    @Value("\${BIDRAG_DOKUMENT_PRODUKSJON_URL}") val url: URI,
     @Qualifier("azure") private val restTemplate: RestOperations,
-) : AbstractRestClient(restTemplate, "bidrag-reskontro") {
+) : AbstractRestClient(restTemplate, "bidrag-dokument-produksjon") {
     private fun createUri(path: String?) =
         UriComponentsBuilder
             .fromUri(url)
@@ -28,12 +28,13 @@ class BidragReskontroConsumer(
             .toUri()
 
     @Retryable(maxAttempts = 3, backoff = Backoff(delay = 500, maxDelay = 1500, multiplier = 2.0))
-    fun transaksjoner(saksnr: String): TransaksjonerDto? {
+    fun opprettPDF(
+        malId: String,
+        request: DokumentBestilling,
+    ): ByteArray =
         try {
-            return null // postForNonNullEntity(createUri("/transaksjoner/bidragssak"), SaksnummerRequest(Saksnummer(saksnr)))
+            postForNonNullEntity(createUri("/api/v2/dokumentmal/pdf/$malId"), request)
         } catch (e: HttpStatusCodeException) {
-            secureLogger.warn(e) { "Det skjedde en feil ved henting av transaksjoner fra bidrag-reskontro for sak $saksnr" }
-            return null
+            throw e
         }
-    }
 }

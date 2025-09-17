@@ -1,0 +1,34 @@
+package no.nav.bidrag.dokument.bestilling.bestilling.produksjon
+
+import mu.KotlinLogging
+import no.nav.bidrag.commons.util.secureLogger
+import no.nav.bidrag.dokument.bestilling.bestilling.dto.BestillingSystem
+import no.nav.bidrag.dokument.bestilling.bestilling.dto.DokumentBestillingResult
+import no.nav.bidrag.dokument.bestilling.bestilling.dto.DokumentMal
+import no.nav.bidrag.dokument.bestilling.bestilling.dto.DokumentMalProduksjon
+import no.nav.bidrag.dokument.bestilling.consumer.BidragDokumentProduksjonConsumer
+import no.nav.bidrag.transport.dokumentmaler.DokumentBestilling
+import no.nav.bidrag.transport.felles.commonObjectmapper
+import org.springframework.stereotype.Component
+
+private val log = KotlinLogging.logger { }
+
+@Component(BestillingSystem.DOKUMENT_PRODUKSJON)
+class BidragDokumentProduksjonProducer(
+    val bidragDokumentProduksjonConsumer: BidragDokumentProduksjonConsumer,
+) : DokumentProducer {
+    override fun produser(
+        dokumentBestilling: DokumentBestilling,
+        dokumentMal: DokumentMal,
+    ): DokumentBestillingResult {
+        val pdf = bidragDokumentProduksjonConsumer.opprettPDF((dokumentMal as DokumentMalProduksjon).malId, dokumentBestilling)
+        secureLogger.info { "${commonObjectmapper.writerWithDefaultPrettyPrinter().writeValueAsString(dokumentBestilling) }" }
+
+        // TODO: Error handling
+        return DokumentBestillingResult(
+            dokumentReferanse = dokumentBestilling.dokumentreferanse!!,
+            innhold = pdf,
+            bestillingSystem = BestillingSystem.DOKUMENT_PRODUKSJON,
+        )
+    }
+}
