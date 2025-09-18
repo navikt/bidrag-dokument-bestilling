@@ -13,6 +13,7 @@ import no.nav.bidrag.dokument.bestilling.bestilling.dto.DokumentMal
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.DokumentMalBucket
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.DokumentMalType
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.alleDokumentmaler
+import no.nav.bidrag.dokument.bestilling.bestilling.produksjon.BrevserverProducer
 import no.nav.bidrag.dokument.bestilling.bestilling.produksjon.DokumentProducer
 import no.nav.bidrag.dokument.bestilling.consumer.dto.fornavnEtternavn
 import no.nav.bidrag.dokument.bestilling.utils.BARN1
@@ -33,7 +34,7 @@ import kotlin.jvm.JvmStatic
 
 class DokumentBestillingBrevkodeTest : AbstractControllerTest() {
     @SpykBean
-    lateinit var dokumentProducer: DokumentProducer
+    lateinit var dokumentProducer: BrevserverProducer
 
     private val ignoreBrevkoders =
         listOf("BI01A50", "BI01A01", "BI01A04")

@@ -198,8 +198,8 @@ class VedtakService(
             søknadFra = soknadInfo.søktAv,
             gebyr = vedtakDto.hentGebyrInfo(),
             sivilstandPerioder = vedtakDto.grunnlagListe.mapSivilstand(),
-            resultat = vedtakBarnInfo.distinctBy { it.personIdent }.sortedBy { it.personObjekt.fødselsdato }.map { mapVedtakResultatBarn(it, vedtakDto) },
-            vedtakBarn = if (erVedtakProduksjon) emptyList() else vedtakBarnInfo.distinctBy { it.personIdent }.sortedBy { it.personObjekt.fødselsdato }.map { mapVedtakBarn(it, vedtakDto) },
+            resultat = if (erVedtakProduksjon) vedtakBarnInfo.distinctBy { it.personIdent }.sortedBy { it.personObjekt.fødselsdato }.map { mapVedtakResultatBarn(it, vedtakDto) } else emptyList(),
+            vedtakBarn = if (!erVedtakProduksjon) vedtakBarnInfo.distinctBy { it.personIdent }.sortedBy { it.personObjekt.fødselsdato }.map { mapVedtakBarn(it, vedtakDto) } else emptyList(),
             barnIHusstandPerioder = vedtakDto.grunnlagListe.mapBarnIHusstandPerioder(),
         )
     }
