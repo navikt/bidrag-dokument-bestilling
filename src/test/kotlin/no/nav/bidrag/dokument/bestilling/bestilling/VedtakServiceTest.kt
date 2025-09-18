@@ -107,8 +107,8 @@ class VedtakServiceTest {
             vedtakDetaljer shouldNotBe null
 
             vedtakDetaljer.kilde shouldBe Vedtakskilde.MANUELT
-            vedtakDetaljer.vedtakType shouldBe Vedtakstype.FASTSETTELSE
-            vedtakDetaljer.stønadType shouldBe Stønadstype.FORSKUDD
+            vedtakDetaljer.vedtakstype shouldBe Vedtakstype.FASTSETTELSE
+            vedtakDetaljer.stønadstype shouldBe Stønadstype.FORSKUDD
             vedtakDetaljer.søknadFra shouldBe SøktAvType.BIDRAGSMOTTAKER
             vedtakDetaljer.årsakKode shouldBe VirkningstidspunktÅrsakstype.FRA_SØKNADSTIDSPUNKT
             vedtakDetaljer.virkningstidspunkt!! shouldBe virkningDato
@@ -171,11 +171,11 @@ class VedtakServiceTest {
             vedtakDetaljer shouldNotBe null
 
             vedtakDetaljer.kilde shouldBe Vedtakskilde.MANUELT
-            vedtakDetaljer.vedtakType shouldBe Vedtakstype.FASTSETTELSE
+            vedtakDetaljer.vedtakstype shouldBe Vedtakstype.FASTSETTELSE
             vedtakDetaljer.type shouldBe TypeBehandling.SÆRBIDRAG
-            vedtakDetaljer.stønadType.shouldBeNull()
+            vedtakDetaljer.stønadstype.shouldBeNull()
             vedtakDetaljer.søknadFra shouldBe SøktAvType.BIDRAGSMOTTAKER
-            vedtakDetaljer.engangsbelopType shouldBe Engangsbeløptype.SÆRBIDRAG
+            vedtakDetaljer.engangsbeløptype shouldBe Engangsbeløptype.SÆRBIDRAG
             vedtakDetaljer.årsakKode.shouldBeNull()
             vedtakDetaljer.virkningstidspunkt!! shouldBe virkningDato
             vedtakDetaljer.mottattDato!! shouldBe LocalDate.parse("2024-01-01")
@@ -287,8 +287,8 @@ class VedtakServiceTest {
             vedtakDetaljer shouldNotBe null
 
             vedtakDetaljer.kilde shouldBe Vedtakskilde.MANUELT
-            vedtakDetaljer.vedtakType shouldBe Vedtakstype.ENDRING
-            vedtakDetaljer.stønadType shouldBe null
+            vedtakDetaljer.vedtakstype shouldBe Vedtakstype.ENDRING
+            vedtakDetaljer.stønadstype shouldBe null
             vedtakDetaljer.søknadFra shouldBe SøktAvType.BIDRAGSPLIKTIG
             vedtakDetaljer.årsakKode shouldBe null
             vedtakDetaljer.virkningstidspunkt!! shouldBe virkningDato
