@@ -30,7 +30,7 @@ class BidragReskontroConsumer(
     @Retryable(maxAttempts = 3, backoff = Backoff(delay = 500, maxDelay = 1500, multiplier = 2.0))
     fun transaksjoner(saksnr: String): TransaksjonerDto? {
         try {
-            return null // postForNonNullEntity(createUri("/transaksjoner/bidragssak"), SaksnummerRequest(Saksnummer(saksnr)))
+            return postForNonNullEntity(createUri("/transaksjoner/bidragssak"), SaksnummerRequest(Saksnummer(saksnr)))
         } catch (e: HttpStatusCodeException) {
             secureLogger.warn(e) { "Det skjedde en feil ved henting av transaksjoner fra bidrag-reskontro for sak $saksnr" }
             return null
