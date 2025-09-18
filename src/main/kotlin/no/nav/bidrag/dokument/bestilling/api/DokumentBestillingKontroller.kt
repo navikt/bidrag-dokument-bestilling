@@ -154,6 +154,7 @@ class DokumentBestillingKontroller(
             .associate {
                 it.kode to
                     DokumentMalDetaljer(
+                        malId = it.kode,
                         beskrivelse = it.beskrivelse,
                         tittel = it.tittel,
                         type =

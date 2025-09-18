@@ -5,6 +5,7 @@ import no.nav.bidrag.dokument.bestilling.bestilling.dto.DokumentType
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.StøttetSpråk
 
 data class DokumentMalDetaljer(
+    val malId: String,
     val tittel: String,
     val beskrivelse: String = tittel,
     val type: DokumentType,
