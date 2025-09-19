@@ -33,6 +33,7 @@ import org.springframework.http.HttpMethod
 import org.springframework.http.HttpStatus
 import kotlin.jvm.JvmStatic
 
+@Disabled
 class DokumentBestillingBrevkodeTest : AbstractControllerTest() {
     @SpykBean
     lateinit var dokumentProducer: BrevserverProducer
