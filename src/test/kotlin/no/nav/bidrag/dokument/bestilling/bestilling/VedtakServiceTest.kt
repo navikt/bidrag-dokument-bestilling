@@ -17,6 +17,7 @@ import no.nav.bidrag.dokument.bestilling.bestilling.dto.hentDokumentMal
 import no.nav.bidrag.dokument.bestilling.consumer.BidragVedtakConsumer
 import no.nav.bidrag.dokument.bestilling.consumer.SjablonConsumer
 import no.nav.bidrag.dokument.bestilling.consumer.dto.SjablongerDto
+import no.nav.bidrag.dokument.bestilling.model.SpråkKoder
 import no.nav.bidrag.dokument.bestilling.model.tilLocalDateFom
 import no.nav.bidrag.dokument.bestilling.model.tilLocalDateTil
 import no.nav.bidrag.dokument.bestilling.model.typeRef
@@ -101,7 +102,7 @@ class VedtakServiceTest {
         val vedtakResponse = lagVedtaksdata("vedtak/vedtak_forskudd_flere_ytelser.json")
         every { vedtakConsumer.hentVedtak(eq(108)) } returns vedtakResponse
 
-        val vedtakDetaljer = vedtakService.hentVedtakDetaljer(108, hentDokumentMal("BI01S02")!!)
+        val vedtakDetaljer = vedtakService.hentVedtakDetaljer(108, hentDokumentMal("BI01S02")!!, SpråkKoder.BOKMAL)
 
         assertSoftly {
             vedtakDetaljer shouldNotBe null
@@ -165,7 +166,7 @@ class VedtakServiceTest {
         val vedtakResponse = lagVedtaksdata("vedtak/vedtak_response-særbidrag.json")
         every { vedtakConsumer.hentVedtak(eq(108)) } returns vedtakResponse
 
-        val vedtakDetaljer = vedtakService.hentVedtakDetaljer(108, hentDokumentMal("BI01S02")!!)
+        val vedtakDetaljer = vedtakService.hentVedtakDetaljer(108, hentDokumentMal("BI01S02")!!, SpråkKoder.BOKMAL)
 
         assertSoftly {
             vedtakDetaljer shouldNotBe null
@@ -281,7 +282,7 @@ class VedtakServiceTest {
         val vedtakResponse = lagVedtaksdata("vedtak/vedtak_response-særbidrag-avslag.json")
         every { vedtakConsumer.hentVedtak(eq(108)) } returns vedtakResponse
 
-        val vedtakDetaljer = vedtakService.hentVedtakDetaljer(108, hentDokumentMal("BI01S02")!!)
+        val vedtakDetaljer = vedtakService.hentVedtakDetaljer(108, hentDokumentMal("BI01S02")!!, SpråkKoder.BOKMAL)
 
         assertSoftly {
             vedtakDetaljer shouldNotBe null

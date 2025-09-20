@@ -8,6 +8,7 @@ import no.nav.bidrag.dokument.bestilling.model.fantIkkeVedtak
 import no.nav.bidrag.dokument.bestilling.model.finnSjablonMedType
 import no.nav.bidrag.dokument.bestilling.model.getLastDayOfPreviousMonth
 import no.nav.bidrag.dokument.bestilling.model.hentBarnIHusstandPerioderForBarn
+import no.nav.bidrag.dokument.bestilling.model.hentFodselsdato
 import no.nav.bidrag.dokument.bestilling.model.hentInntekterForPeriode
 import no.nav.bidrag.dokument.bestilling.model.hentNettoKapitalinntektForRolle
 import no.nav.bidrag.dokument.bestilling.model.hentSøknad
@@ -19,8 +20,8 @@ import no.nav.bidrag.dokument.bestilling.model.mapSivilstand
 import no.nav.bidrag.dokument.bestilling.model.tilBisysResultatkodeForBrev
 import no.nav.bidrag.dokument.bestilling.model.tilRolletype
 import no.nav.bidrag.dokument.bestilling.model.tilSaksbehandler
+import no.nav.bidrag.dokument.bestilling.model.tilVisningsnavnBarn
 import no.nav.bidrag.dokument.bestilling.model.toSet
-import no.nav.bidrag.dokument.bestilling.tjenester.grupperPerioder
 import no.nav.bidrag.domene.enums.behandling.TypeBehandling
 import no.nav.bidrag.domene.enums.beregning.Resultatkode
 import no.nav.bidrag.domene.enums.beregning.Resultatkode.Companion.erAvslag
@@ -54,7 +55,6 @@ import no.nav.bidrag.transport.behandling.felles.grunnlag.Grunnlagsreferanse
 import no.nav.bidrag.transport.behandling.felles.grunnlag.InntektsrapporteringPeriode
 import no.nav.bidrag.transport.behandling.felles.grunnlag.KopiSamværsperiodeGrunnlag
 import no.nav.bidrag.transport.behandling.felles.grunnlag.Person
-import no.nav.bidrag.transport.behandling.felles.grunnlag.ResultatFraVedtakGrunnlag
 import no.nav.bidrag.transport.behandling.felles.grunnlag.SamværsperiodeGrunnlag
 import no.nav.bidrag.transport.behandling.felles.grunnlag.SjablonBidragsevnePeriode
 import no.nav.bidrag.transport.behandling.felles.grunnlag.SjablonSamværsfradragPeriode
@@ -65,7 +65,6 @@ import no.nav.bidrag.transport.behandling.felles.grunnlag.SluttberegningSærbidr
 import no.nav.bidrag.transport.behandling.felles.grunnlag.erResultatEndringUnderGrense
 import no.nav.bidrag.transport.behandling.felles.grunnlag.filtrerBasertPåEgenReferanse
 import no.nav.bidrag.transport.behandling.felles.grunnlag.finnDelberegningBidragspliktigesAndelSærbidrag
-import no.nav.bidrag.transport.behandling.felles.grunnlag.finnDelberegningSjekkGrensePeriode
 import no.nav.bidrag.transport.behandling.felles.grunnlag.finnGrunnlagSomErReferertAv
 import no.nav.bidrag.transport.behandling.felles.grunnlag.finnGrunnlagSomErReferertFraGrunnlagsreferanseListe
 import no.nav.bidrag.transport.behandling.felles.grunnlag.finnOgKonverterGrunnlagSomErReferertAv
@@ -123,7 +122,6 @@ import no.nav.bidrag.transport.notat.NotatResultatBidragsberegningBarnDto.Result
 import no.nav.bidrag.transport.notat.VedtakResultatInnhold
 import org.springframework.stereotype.Service
 import java.math.BigDecimal
-import kotlin.compareTo
 
 private val brevkodeAldersjustering = "BI01B05"
 val resultatkoderOpphør =
@@ -162,6 +160,7 @@ class VedtakService(
     fun hentVedtakDetaljer(
         vedtakId: Int,
         dokumentMal: DokumentMal,
+        hentRiktigSpråkkode: String,
     ): VedtakDetaljer {
         val erVedtakProduksjon = dokumentMal is DokumentMalProduksjon
         val vedtakDto =
@@ -198,8 +197,8 @@ class VedtakService(
             søknadFra = soknadInfo.søktAv,
             gebyr = vedtakDto.hentGebyrInfo(),
             sivilstandPerioder = vedtakDto.grunnlagListe.mapSivilstand(),
-            resultat = if (erVedtakProduksjon) vedtakBarnInfo.distinctBy { it.personIdent }.sortedBy { it.personObjekt.fødselsdato }.map { mapVedtakResultatBarn(it, vedtakDto) } else emptyList(),
-            vedtakBarn = if (!erVedtakProduksjon) vedtakBarnInfo.distinctBy { it.personIdent }.sortedBy { it.personObjekt.fødselsdato }.map { mapVedtakBarn(it, vedtakDto) } else emptyList(),
+            resultat = if (erVedtakProduksjon) vedtakBarnInfo.distinctBy { it.personIdent }.sortedBy { it.personObjekt.fødselsdato }.map { mapVedtakResultatBarn(it, vedtakDto, hentRiktigSpråkkode) } else emptyList(),
+            vedtakBarn = if (!erVedtakProduksjon) vedtakBarnInfo.distinctBy { it.personIdent }.sortedBy { it.personObjekt.fødselsdato }.map { mapVedtakBarn(it, vedtakDto, hentRiktigSpråkkode) } else emptyList(),
             barnIHusstandPerioder = vedtakDto.grunnlagListe.mapBarnIHusstandPerioder(),
         )
     }
@@ -229,6 +228,7 @@ class VedtakService(
     fun mapVedtakResultatBarn(
         soknadBarn: BaseGrunnlag,
         vedtak: VedtakDto,
+        hentRiktigSpråkkode: String,
     ): VedtakResultatInnhold {
         val barnIdent = soknadBarn.personIdent!!
         val personInfo = personService.hentPerson(barnIdent)
@@ -242,9 +242,9 @@ class VedtakService(
             barn =
                 NotatPersonDto(
                     rolle = Rolletype.BARN,
-                    fødselsdato = personInfo.fødselsdato,
+                    fødselsdato = personInfo.hentFodselsdato(),
                     ident = personInfo.ident,
-                    navn = personInfo.visningsnavn,
+                    navn = personInfo.tilVisningsnavnBarn(hentRiktigSpråkkode),
                 ),
             orkestrertVedtak =
                 EndeligOrkestrertVedtak(
@@ -258,6 +258,7 @@ class VedtakService(
     fun mapVedtakBarn(
         soknadBarn: BaseGrunnlag,
         vedtak: VedtakDto,
+        hentRiktigSpråkkode: String,
     ): VedtakBarn {
         val barnIdent = soknadBarn.personIdent!!
         val bostatusSøknadsbarn = vedtak.grunnlagListe.hentBarnIHusstandPerioderForBarn(barnIdent)
@@ -277,7 +278,7 @@ class VedtakService(
             }
         return VedtakBarn(
             fødselsnummer = barnIdent,
-            navn = personInfo.visningsnavn,
+            navn = personInfo.tilVisningsnavnBarn(hentRiktigSpråkkode),
             løpendeBidrag =
                 stønadsendring
                     ?.periodeListe

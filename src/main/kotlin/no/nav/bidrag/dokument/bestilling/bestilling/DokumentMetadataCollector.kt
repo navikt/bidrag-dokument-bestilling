@@ -13,11 +13,13 @@ import no.nav.bidrag.dokument.bestilling.model.FantIkkeEnhetException
 import no.nav.bidrag.dokument.bestilling.model.Ident
 import no.nav.bidrag.dokument.bestilling.model.LANDNAVN_NORGE
 import no.nav.bidrag.dokument.bestilling.model.ManglerGjelderException
-import no.nav.bidrag.dokument.bestilling.model.SpråkKoder
 import no.nav.bidrag.dokument.bestilling.model.erDødfødt
 import no.nav.bidrag.dokument.bestilling.model.fantIkkeSak
+import no.nav.bidrag.dokument.bestilling.model.hentFodselsdato
+import no.nav.bidrag.dokument.bestilling.model.hentKode6NavnBarn
 import no.nav.bidrag.dokument.bestilling.model.manglerBehandlingId
 import no.nav.bidrag.dokument.bestilling.model.manglerVedtakId
+import no.nav.bidrag.dokument.bestilling.model.tilVisningsnavnBarn
 import no.nav.bidrag.dokument.bestilling.tjenester.BehandlingService
 import no.nav.bidrag.dokument.bestilling.tjenester.KodeverkService
 import no.nav.bidrag.dokument.bestilling.tjenester.OrganisasjonService
@@ -47,7 +49,6 @@ import no.nav.bidrag.transport.person.PersonDto
 import no.nav.bidrag.transport.sak.BidragssakDto
 import org.springframework.context.annotation.Scope
 import org.springframework.stereotype.Component
-import java.time.LocalDate
 
 @Component
 @Scope("prototype")
@@ -106,7 +107,7 @@ class DokumentMetadataCollector(
             vedtakDetaljer =
                 dokumentMal
                     .takeIf { it.inneholderDatagrunnlag(DataGrunnlag.VEDTAK) }
-                    ?.let { hentVedtakData(forespørsel.vedtakId, dokumentMal) }
+                    ?.let { hentVedtakData(forespørsel.vedtakId, dokumentMal, forespørsel.hentRiktigSpråkkode()) }
                     ?: dokumentMal
                         .takeIf { it.inneholderDatagrunnlag(DataGrunnlag.BEHANDLING) }
                         ?.let { hentVedtakDataFraBehandling(forespørsel.behandlingId) },
@@ -116,9 +117,10 @@ class DokumentMetadataCollector(
     private fun hentVedtakData(
         vedtakId: Int?,
         dokumentMal: DokumentMal,
+        hentRiktigSpråkkode: String,
     ): VedtakDetaljer {
         if (vedtakId == null) manglerVedtakId()
-        return vedtakService.hentVedtakDetaljer(vedtakId, dokumentMal)
+        return vedtakService.hentVedtakDetaljer(vedtakId, dokumentMal, hentRiktigSpråkkode)
     }
 
     private fun hentVedtakDataFraBehandling(behandlingId: Int?): VedtakDetaljer {
@@ -141,7 +143,7 @@ class DokumentMetadataCollector(
                     rolle = Rolletype.BIDRAGSMOTTAKER,
                     ident = bidragsmottaker.ident,
                     navn = if (bidragsmottaker.isKode6()) "" else bidragsmottaker.fornavnEtternavn(),
-                    fødselsdato = hentFodselsdato(bidragsmottaker),
+                    fødselsdato = bidragsmottaker.hentFodselsdato(),
                 ),
             )
         }
@@ -152,7 +154,7 @@ class DokumentMetadataCollector(
                     rolle = Rolletype.BIDRAGSPLIKTIG,
                     ident = bidragspliktig.ident,
                     navn = if (bidragspliktig.isKode6()) "" else bidragspliktig.fornavnEtternavn(),
-                    fødselsdato = hentFodselsdato(bidragspliktig),
+                    fødselsdato = bidragspliktig.hentFodselsdato(),
                 ),
             )
         }
@@ -187,17 +189,8 @@ class DokumentMetadataCollector(
                             rolle = Rolletype.BARN,
                             ident = it.fødselsnummer!!,
                             navn =
-                                barnInfo?.let {
-                                    if (barnInfo.isKode6()) {
-                                        hentKode6NavnBarn(
-                                            barnInfo,
-                                            forespørsel,
-                                        )
-                                    } else {
-                                        barnInfo.fornavnEtternavn()
-                                    }
-                                } ?: "",
-                            fødselsdato = barnInfo?.let { hentFodselsdato(barnInfo) },
+                                barnInfo?.tilVisningsnavnBarn(forespørsel.hentRiktigSpråkkode()) ?: "",
+                            fødselsdato = barnInfo?.hentFodselsdato(),
                         ),
                     )
                 }
@@ -224,7 +217,7 @@ class DokumentMetadataCollector(
                     rolle = Rolletype.BIDRAGSMOTTAKER,
                     fodselsnummer = bidragsmottaker.ident.verdi,
                     navn = if (bidragsmottaker.isKode6()) "" else bidragsmottaker.fornavnEtternavn(),
-                    fodselsdato = hentFodselsdato(bidragsmottaker),
+                    fodselsdato = bidragsmottaker.hentFodselsdato(),
                     doedsdato = bidragsmottaker.dødsdato,
                     landkode = bidragsmottakerAdresse?.land?.verdi,
                     landkode3 = bidragsmottakerAdresse?.land3?.verdi,
@@ -238,7 +231,7 @@ class DokumentMetadataCollector(
                     rolle = Rolletype.BIDRAGSPLIKTIG,
                     fodselsnummer = bidragspliktig.ident.verdi,
                     navn = if (bidragspliktig.isKode6()) "" else bidragspliktig.fornavnEtternavn(),
-                    fodselsdato = hentFodselsdato(bidragspliktig),
+                    fodselsdato = bidragspliktig.hentFodselsdato(),
                     doedsdato = bidragspliktig.dødsdato,
                     landkode = bidragspliktigAdresse?.land?.verdi,
                     landkode3 = bidragspliktigAdresse?.land3?.verdi,
@@ -275,23 +268,13 @@ class DokumentMetadataCollector(
                         Barn(
                             fodselsnummer = it.fødselsnummer!!.verdi,
                             navn =
-                                barnInfo?.let {
-                                    if (barnInfo.isKode6()) {
-                                        hentKode6NavnBarn(
-                                            barnInfo,
-                                            forespørsel,
-                                        )
-                                    } else {
-                                        barnInfo.fornavnEtternavn()
-                                    }
-                                } ?: "",
-                            fodselsdato = barnInfo?.let { hentFodselsdato(barnInfo) },
+                                barnInfo?.tilVisningsnavnBarn(forespørsel.hentRiktigSpråkkode()) ?: "",
+                            fodselsdato = barnInfo?.hentFodselsdato(),
                             fornavn =
                                 barnInfo?.let {
                                     if (barnInfo.isKode6()) {
-                                        hentKode6NavnBarn(
-                                            barnInfo,
-                                            forespørsel,
+                                        it.hentKode6NavnBarn(
+                                            forespørsel.hentRiktigSpråkkode(),
                                         )
                                     } else {
                                         barnInfo.fornavn
@@ -427,20 +410,6 @@ class DokumentMetadataCollector(
         get() =
             (if (hentRolle(this.gjelderId) != null) this.gjelderId else hentGjelderFraRoller())
                 ?: throw ManglerGjelderException("Fant ingen gjelder")
-
-    private fun hentFodselsdato(person: PersonDto): LocalDate? = if (person.isKode6()) null else person.fødselsdato
-
-    private fun hentKode6NavnBarn(
-        person: PersonDto,
-        forespørsel: DokumentBestillingForespørsel,
-    ): String {
-        val fodtaar = person.fødselsdato?.year
-        return when (forespørsel.hentRiktigSpråkkode()) {
-            SpråkKoder.BOKMAL -> if (fodtaar == null) "(BARN)" else "(BARN FØDT I $fodtaar)"
-            SpråkKoder.NYNORSK -> if (fodtaar == null) "(BARN)" else "(BARN FØDD I $fodtaar)"
-            else -> if (fodtaar == null) "(CHILD)" else "(CHILD BORN IN $fodtaar)"
-        }
-    }
 
     private fun hentRolle(ident: String?): Rolletype? = sak.roller.find { it.fødselsnummer?.verdi == ident }?.type
 
