@@ -4,6 +4,7 @@ import no.nav.bidrag.dokument.bestilling.bestilling.dto.DokumentMal
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.DokumentMalProduksjon
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.beskrivelse
 import no.nav.bidrag.dokument.bestilling.consumer.BidragVedtakConsumer
+import no.nav.bidrag.dokument.bestilling.consumer.dto.isKode6
 import no.nav.bidrag.dokument.bestilling.model.fantIkkeVedtak
 import no.nav.bidrag.dokument.bestilling.model.finnSjablonMedType
 import no.nav.bidrag.dokument.bestilling.model.getLastDayOfPreviousMonth
@@ -245,6 +246,7 @@ class VedtakService(
                     fødselsdato = personInfo.hentFodselsdato(),
                     ident = personInfo.ident,
                     navn = personInfo.tilVisningsnavnBarn(hentRiktigSpråkkode),
+                    erBeskyttet = personInfo.isKode6(),
                 ),
             orkestrertVedtak =
                 EndeligOrkestrertVedtak(

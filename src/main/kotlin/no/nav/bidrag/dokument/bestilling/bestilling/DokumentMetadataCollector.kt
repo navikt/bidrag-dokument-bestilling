@@ -144,6 +144,7 @@ class DokumentMetadataCollector(
                     ident = bidragsmottaker.ident,
                     navn = bidragsmottaker.tilVisningsnavnVoksen(),
                     fødselsdato = bidragsmottaker.hentFodselsdato(),
+                    erBeskyttet = bidragsmottaker.isKode6(),
                 ),
             )
         }
@@ -155,6 +156,7 @@ class DokumentMetadataCollector(
                     ident = bidragspliktig.ident,
                     navn = bidragspliktig.tilVisningsnavnVoksen(),
                     fødselsdato = bidragspliktig.hentFodselsdato(),
+                    erBeskyttet = bidragspliktig.isKode6(),
                 ),
             )
         }
@@ -191,6 +193,7 @@ class DokumentMetadataCollector(
                             navn =
                                 barnInfo?.tilVisningsnavnBarn(forespørsel.hentRiktigSpråkkode()) ?: "",
                             fødselsdato = barnInfo?.hentFodselsdato(),
+                            erBeskyttet = barnInfo?.isKode6() == true,
                         ),
                     )
                 }
