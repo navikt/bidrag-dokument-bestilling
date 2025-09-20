@@ -5,7 +5,6 @@ import no.nav.bidrag.dokument.bestilling.api.dto.DokumentBestillingForespørsel
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.DataGrunnlag
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.DokumentMal
 import no.nav.bidrag.dokument.bestilling.config.SaksbehandlerInfoManager
-import no.nav.bidrag.dokument.bestilling.consumer.dto.fornavnEtternavn
 import no.nav.bidrag.dokument.bestilling.consumer.dto.isDod
 import no.nav.bidrag.dokument.bestilling.consumer.dto.isKode6
 import no.nav.bidrag.dokument.bestilling.model.BRUKSHENETSNUMMER_STANDARD
@@ -20,6 +19,7 @@ import no.nav.bidrag.dokument.bestilling.model.hentKode6NavnBarn
 import no.nav.bidrag.dokument.bestilling.model.manglerBehandlingId
 import no.nav.bidrag.dokument.bestilling.model.manglerVedtakId
 import no.nav.bidrag.dokument.bestilling.model.tilVisningsnavnBarn
+import no.nav.bidrag.dokument.bestilling.model.tilVisningsnavnVoksen
 import no.nav.bidrag.dokument.bestilling.tjenester.BehandlingService
 import no.nav.bidrag.dokument.bestilling.tjenester.KodeverkService
 import no.nav.bidrag.dokument.bestilling.tjenester.OrganisasjonService
@@ -142,7 +142,7 @@ class DokumentMetadataCollector(
                 NotatPersonDto(
                     rolle = Rolletype.BIDRAGSMOTTAKER,
                     ident = bidragsmottaker.ident,
-                    navn = if (bidragsmottaker.isKode6()) "" else bidragsmottaker.fornavnEtternavn(),
+                    navn = bidragsmottaker.tilVisningsnavnVoksen(),
                     fødselsdato = bidragsmottaker.hentFodselsdato(),
                 ),
             )
@@ -153,7 +153,7 @@ class DokumentMetadataCollector(
                 NotatPersonDto(
                     rolle = Rolletype.BIDRAGSPLIKTIG,
                     ident = bidragspliktig.ident,
-                    navn = if (bidragspliktig.isKode6()) "" else bidragspliktig.fornavnEtternavn(),
+                    navn = bidragspliktig.tilVisningsnavnVoksen(),
                     fødselsdato = bidragspliktig.hentFodselsdato(),
                 ),
             )
@@ -216,7 +216,7 @@ class DokumentMetadataCollector(
                 PartInfo(
                     rolle = Rolletype.BIDRAGSMOTTAKER,
                     fodselsnummer = bidragsmottaker.ident.verdi,
-                    navn = if (bidragsmottaker.isKode6()) "" else bidragsmottaker.fornavnEtternavn(),
+                    navn = bidragsmottaker.tilVisningsnavnVoksen(),
                     fodselsdato = bidragsmottaker.hentFodselsdato(),
                     doedsdato = bidragsmottaker.dødsdato,
                     landkode = bidragsmottakerAdresse?.land?.verdi,
@@ -230,7 +230,7 @@ class DokumentMetadataCollector(
                 PartInfo(
                     rolle = Rolletype.BIDRAGSPLIKTIG,
                     fodselsnummer = bidragspliktig.ident.verdi,
-                    navn = if (bidragspliktig.isKode6()) "" else bidragspliktig.fornavnEtternavn(),
+                    navn = bidragspliktig.tilVisningsnavnVoksen(),
                     fodselsdato = bidragspliktig.hentFodselsdato(),
                     doedsdato = bidragspliktig.dødsdato,
                     landkode = bidragspliktigAdresse?.land?.verdi,
