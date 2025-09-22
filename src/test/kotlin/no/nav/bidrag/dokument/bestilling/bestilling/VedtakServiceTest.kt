@@ -12,14 +12,12 @@ import io.mockk.every
 import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
 import io.mockk.junit5.MockKExtension
-import no.nav.bidrag.dokument.bestilling.bestilling.dto.InntektPeriode
-import no.nav.bidrag.dokument.bestilling.bestilling.dto.PeriodeFraTom
-import no.nav.bidrag.dokument.bestilling.bestilling.dto.VedtakBarnStonad
-import no.nav.bidrag.dokument.bestilling.bestilling.dto.VedtakDetaljer
+import no.nav.bidrag.dokument.bestilling.bestilling.dto.beskrivelse
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.hentDokumentMal
 import no.nav.bidrag.dokument.bestilling.consumer.BidragVedtakConsumer
 import no.nav.bidrag.dokument.bestilling.consumer.SjablonConsumer
 import no.nav.bidrag.dokument.bestilling.consumer.dto.SjablongerDto
+import no.nav.bidrag.dokument.bestilling.model.SpråkKoder
 import no.nav.bidrag.dokument.bestilling.model.tilLocalDateFom
 import no.nav.bidrag.dokument.bestilling.model.tilLocalDateTil
 import no.nav.bidrag.dokument.bestilling.model.typeRef
@@ -53,6 +51,10 @@ import no.nav.bidrag.domene.enums.vedtak.Stønadstype
 import no.nav.bidrag.domene.enums.vedtak.Vedtakskilde
 import no.nav.bidrag.domene.enums.vedtak.Vedtakstype
 import no.nav.bidrag.domene.enums.vedtak.VirkningstidspunktÅrsakstype
+import no.nav.bidrag.transport.dokumentmaler.InntektPeriode
+import no.nav.bidrag.transport.dokumentmaler.PeriodeFraTom
+import no.nav.bidrag.transport.dokumentmaler.VedtakBarnStonad
+import no.nav.bidrag.transport.dokumentmaler.VedtakDetaljer
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
@@ -100,14 +102,14 @@ class VedtakServiceTest {
         val vedtakResponse = lagVedtaksdata("vedtak/vedtak_forskudd_flere_ytelser.json")
         every { vedtakConsumer.hentVedtak(eq(108)) } returns vedtakResponse
 
-        val vedtakDetaljer = vedtakService.hentVedtakDetaljer(108, hentDokumentMal("BI01S02")!!)
+        val vedtakDetaljer = vedtakService.hentVedtakDetaljer(108, hentDokumentMal("BI01S02")!!, SpråkKoder.BOKMAL)
 
         assertSoftly {
             vedtakDetaljer shouldNotBe null
 
             vedtakDetaljer.kilde shouldBe Vedtakskilde.MANUELT
-            vedtakDetaljer.vedtakType shouldBe Vedtakstype.FASTSETTELSE
-            vedtakDetaljer.stønadType shouldBe Stønadstype.FORSKUDD
+            vedtakDetaljer.vedtakstype shouldBe Vedtakstype.FASTSETTELSE
+            vedtakDetaljer.stønadstype shouldBe Stønadstype.FORSKUDD
             vedtakDetaljer.søknadFra shouldBe SøktAvType.BIDRAGSMOTTAKER
             vedtakDetaljer.årsakKode shouldBe VirkningstidspunktÅrsakstype.FRA_SØKNADSTIDSPUNKT
             vedtakDetaljer.virkningstidspunkt!! shouldBe virkningDato
@@ -164,17 +166,17 @@ class VedtakServiceTest {
         val vedtakResponse = lagVedtaksdata("vedtak/vedtak_response-særbidrag.json")
         every { vedtakConsumer.hentVedtak(eq(108)) } returns vedtakResponse
 
-        val vedtakDetaljer = vedtakService.hentVedtakDetaljer(108, hentDokumentMal("BI01S02")!!)
+        val vedtakDetaljer = vedtakService.hentVedtakDetaljer(108, hentDokumentMal("BI01S02")!!, SpråkKoder.BOKMAL)
 
         assertSoftly {
             vedtakDetaljer shouldNotBe null
 
             vedtakDetaljer.kilde shouldBe Vedtakskilde.MANUELT
-            vedtakDetaljer.vedtakType shouldBe Vedtakstype.FASTSETTELSE
+            vedtakDetaljer.vedtakstype shouldBe Vedtakstype.FASTSETTELSE
             vedtakDetaljer.type shouldBe TypeBehandling.SÆRBIDRAG
-            vedtakDetaljer.stønadType.shouldBeNull()
+            vedtakDetaljer.stønadstype.shouldBeNull()
             vedtakDetaljer.søknadFra shouldBe SøktAvType.BIDRAGSMOTTAKER
-            vedtakDetaljer.engangsbelopType shouldBe Engangsbeløptype.SÆRBIDRAG
+            vedtakDetaljer.engangsbeløptype shouldBe Engangsbeløptype.SÆRBIDRAG
             vedtakDetaljer.årsakKode.shouldBeNull()
             vedtakDetaljer.virkningstidspunkt!! shouldBe virkningDato
             vedtakDetaljer.mottattDato!! shouldBe LocalDate.parse("2024-01-01")
@@ -280,14 +282,14 @@ class VedtakServiceTest {
         val vedtakResponse = lagVedtaksdata("vedtak/vedtak_response-særbidrag-avslag.json")
         every { vedtakConsumer.hentVedtak(eq(108)) } returns vedtakResponse
 
-        val vedtakDetaljer = vedtakService.hentVedtakDetaljer(108, hentDokumentMal("BI01S02")!!)
+        val vedtakDetaljer = vedtakService.hentVedtakDetaljer(108, hentDokumentMal("BI01S02")!!, SpråkKoder.BOKMAL)
 
         assertSoftly {
             vedtakDetaljer shouldNotBe null
 
             vedtakDetaljer.kilde shouldBe Vedtakskilde.MANUELT
-            vedtakDetaljer.vedtakType shouldBe Vedtakstype.ENDRING
-            vedtakDetaljer.stønadType shouldBe null
+            vedtakDetaljer.vedtakstype shouldBe Vedtakstype.ENDRING
+            vedtakDetaljer.stønadstype shouldBe null
             vedtakDetaljer.søknadFra shouldBe SøktAvType.BIDRAGSPLIKTIG
             vedtakDetaljer.årsakKode shouldBe null
             vedtakDetaljer.virkningstidspunkt!! shouldBe virkningDato

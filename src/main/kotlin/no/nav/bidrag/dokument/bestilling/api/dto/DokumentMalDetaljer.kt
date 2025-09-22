@@ -5,6 +5,7 @@ import no.nav.bidrag.dokument.bestilling.bestilling.dto.DokumentType
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.StøttetSpråk
 
 data class DokumentMalDetaljer(
+    val malId: String,
     val tittel: String,
     val beskrivelse: String = tittel,
     val type: DokumentType,
@@ -14,6 +15,7 @@ data class DokumentMalDetaljer(
     val redigerbar: Boolean,
     val språk: List<StøttetSpråk>,
     val statiskInnhold: Boolean = false,
+    val nyDokumentProduksjon: Boolean = false,
     val innholdType: DokumentMalType,
     val gruppeVisningsnavn: String? = null,
     val tilhorerEnheter: List<String> = emptyList(),

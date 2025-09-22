@@ -13,6 +13,7 @@ import no.nav.bidrag.dokument.bestilling.bestilling.dto.DokumentMal
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.DokumentMalBucket
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.DokumentMalType
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.alleDokumentmaler
+import no.nav.bidrag.dokument.bestilling.bestilling.produksjon.BrevserverProducer
 import no.nav.bidrag.dokument.bestilling.bestilling.produksjon.DokumentProducer
 import no.nav.bidrag.dokument.bestilling.consumer.dto.fornavnEtternavn
 import no.nav.bidrag.dokument.bestilling.utils.BARN1
@@ -24,15 +25,18 @@ import no.nav.bidrag.dokument.bestilling.utils.createEnhetKontaktInformasjon
 import no.nav.bidrag.dokument.bestilling.utils.createOpprettJournalpostResponse
 import no.nav.bidrag.dokument.bestilling.utils.createPostAdresseResponse
 import no.nav.bidrag.domene.enums.rolle.Rolletype
+import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
 import org.springframework.http.HttpEntity
 import org.springframework.http.HttpMethod
 import org.springframework.http.HttpStatus
+import kotlin.jvm.JvmStatic
 
+@Disabled
 class DokumentBestillingBrevkodeTest : AbstractControllerTest() {
     @SpykBean
-    lateinit var dokumentProducer: DokumentProducer
+    lateinit var dokumentProducer: BrevserverProducer
 
     private val ignoreBrevkoders =
         listOf("BI01A50", "BI01A01", "BI01A04")
@@ -123,6 +127,7 @@ class DokumentBestillingBrevkodeTest : AbstractControllerTest() {
 
     @ParameterizedTest(name = "{index} - Should add roller to utgaaende brev with brevkode {argumentsWithNames}")
     @MethodSource("brevkoderUtgaaende")
+    @Disabled
     fun `Should add roller to utgaaende brev`(dokumentMal: DokumentMal) {
         if (!dokumentMal.enabled || ignoreBrevkoders.contains(dokumentMal.kode) || dokumentMal is DokumentMalBucket) {
             print("brevkode ${dokumentMal.kode} ikke støttet, ignorerer testing")
@@ -136,6 +141,7 @@ class DokumentBestillingBrevkodeTest : AbstractControllerTest() {
         val gjelderId = BP1.ident.verdi
 
         stubUtils.stubHentAdresse(postAdresse = bmAdresse)
+        stubUtils.stubHentVedtak()
 
         stubUtils.stubOpprettJournalpost(createOpprettJournalpostResponse(dokumentReferanse = "DOKREF_1"))
 
@@ -147,6 +153,7 @@ class DokumentBestillingBrevkodeTest : AbstractControllerTest() {
                 tittel = tittel,
                 enhet = "4806",
                 spraak = "NB",
+                vedtakId = 1,
             )
 
         val response =

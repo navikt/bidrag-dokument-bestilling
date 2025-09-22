@@ -15,7 +15,6 @@ import io.mockk.junit5.MockKExtension
 import no.nav.bidrag.dokument.bestilling.api.dto.DokumentBestillingForespørsel
 import no.nav.bidrag.dokument.bestilling.api.dto.MottakerAdresseTo
 import no.nav.bidrag.dokument.bestilling.api.dto.MottakerTo
-import no.nav.bidrag.dokument.bestilling.bestilling.dto.DokumentBestilling
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.DokumentMal
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.hentDokumentMal
 import no.nav.bidrag.dokument.bestilling.config.SaksbehandlerInfoManager
@@ -59,6 +58,7 @@ import no.nav.bidrag.domene.ident.Personident
 import no.nav.bidrag.domene.land.Landkode2
 import no.nav.bidrag.domene.land.Landkode3
 import no.nav.bidrag.domene.organisasjon.Enhetsnummer
+import no.nav.bidrag.transport.dokumentmaler.DokumentBestilling
 import no.nav.bidrag.transport.sak.RolleDto
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach

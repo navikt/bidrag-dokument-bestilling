@@ -20,6 +20,9 @@ env:
   BIDRAG_VEDTAK_URL: http://bidrag-vedtak
   BIDRAG_VEDTAK_SCOPE: prod-gcp.bidrag.bidrag-vedtak
 
+  BIDRAG_DOKUMENT_PRODUKSJON_URL: http://bidrag-dokument-produksjon
+  BIDRAG_DOKUMENT_PRODUKSJON_SCOPE: prod-gcp.bidrag.bidrag-dokument-produksjon
+
   BIDRAG_RESKONTRO_URL: http://bidrag-reskontro
   BIDRAG_RESKONTRO_SCOPE: prod-gcp.bidrag.bidrag-reskontro
 
@@ -40,6 +43,7 @@ outbound-access-apps:
   - bidrag-behandling
   - bidrag-kodeverk
   - bidrag-reskontro
+  - bidrag-dokument-produksjon
 outbound-access-hosts:
   - bidrag-dokument.prod-fss-pub.nais.io
   - bidrag-person.prod-fss-pub.nais.io

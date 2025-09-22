@@ -12,6 +12,7 @@ import no.nav.bidrag.dokument.bestilling.api.dto.DokumentMalDetaljer
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.DataGrunnlag
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.DokumentMalBrevserver
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.DokumentMalBucket
+import no.nav.bidrag.dokument.bestilling.bestilling.dto.DokumentMalProduksjon
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.DokumentMalType
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.DokumentType
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.alleDokumentmaler
@@ -98,6 +99,37 @@ class DokumentBestillingKontroller(
             .body(result)
     }
 
+    @PostMapping("/produser/{dokumentMalKode}")
+    @Operation(
+        description = "Henter dokument for oppgitt brevkode/dokumentKode",
+        security = [SecurityRequirement(name = "bearer-key")],
+    )
+    @ApiResponses(
+        value = [
+            ApiResponse(
+                responseCode = "400",
+                description = "Dokument ble bestilt med ugyldig data",
+            ),
+        ],
+    )
+    fun produserOgHent(
+        @RequestBody(required = false) bestillingRequest: DokumentBestillingForespørsel,
+        @PathVariable dokumentMalKode: String,
+    ): ResponseEntity<ByteArray> {
+        val dokumentMal =
+            hentDokumentMal(dokumentMalKode) ?: dokumentMalEksistererIkke(dokumentMalKode)
+
+        LOGGER.info("Henter dokument for dokumentmal $dokumentMal og enhet ${bestillingRequest?.enhet}")
+        SIKKER_LOGG.info("Henter dokument for dokumentmal $dokumentMal med data $bestillingRequest og enhet ${bestillingRequest?.enhet}")
+        val result = dokumentBestillingService.bestillOgHent(bestillingRequest, dokumentMal)
+        LOGGER.info("Hentet dokument for dokumentmal $dokumentMal og enhet ${bestillingRequest?.enhet} med respons $result")
+        return ResponseEntity
+            .ok()
+            .contentType(MediaType.APPLICATION_PDF)
+            .header(HttpHeaders.CONTENT_DISPOSITION, dokumentMal.tittel)
+            .body(result.innhold)
+    }
+
     @RequestMapping("/brevkoder", method = [RequestMethod.OPTIONS])
     @Operation(
         description = "Henter brevkoder som er støttet av applikasjonen",
@@ -122,6 +154,7 @@ class DokumentBestillingKontroller(
             .associate {
                 it.kode to
                     DokumentMalDetaljer(
+                        malId = it.kode,
                         beskrivelse = it.beskrivelse,
                         tittel = it.tittel,
                         type =
@@ -142,6 +175,7 @@ class DokumentBestillingKontroller(
                                 emptyList()
                             },
                         innholdType = it.type,
+                        nyDokumentProduksjon = it is DokumentMalProduksjon,
                         statiskInnhold = it is DokumentMalBucket,
                         gruppeVisningsnavn = if (it is DokumentMalBucket) it.gruppeVisningsnavn else null,
                         tilhorerEnheter = if (it is DokumentMalBucket) it.tilhørerEnheter else emptyList(),

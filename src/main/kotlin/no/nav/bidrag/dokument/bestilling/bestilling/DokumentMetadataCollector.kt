@@ -2,20 +2,9 @@ package no.nav.bidrag.dokument.bestilling.bestilling
 
 import no.nav.bidrag.commons.util.secureLogger
 import no.nav.bidrag.dokument.bestilling.api.dto.DokumentBestillingForespørsel
-import no.nav.bidrag.dokument.bestilling.bestilling.dto.Adresse
-import no.nav.bidrag.dokument.bestilling.bestilling.dto.Barn
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.DataGrunnlag
-import no.nav.bidrag.dokument.bestilling.bestilling.dto.DokumentBestilling
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.DokumentMal
-import no.nav.bidrag.dokument.bestilling.bestilling.dto.EnhetKontaktInfo
-import no.nav.bidrag.dokument.bestilling.bestilling.dto.Gjelder
-import no.nav.bidrag.dokument.bestilling.bestilling.dto.Mottaker
-import no.nav.bidrag.dokument.bestilling.bestilling.dto.PartInfo
-import no.nav.bidrag.dokument.bestilling.bestilling.dto.Roller
-import no.nav.bidrag.dokument.bestilling.bestilling.dto.SakDetaljer
-import no.nav.bidrag.dokument.bestilling.bestilling.dto.VedtakDetaljer
 import no.nav.bidrag.dokument.bestilling.config.SaksbehandlerInfoManager
-import no.nav.bidrag.dokument.bestilling.consumer.dto.fornavnEtternavn
 import no.nav.bidrag.dokument.bestilling.consumer.dto.isDod
 import no.nav.bidrag.dokument.bestilling.consumer.dto.isKode6
 import no.nav.bidrag.dokument.bestilling.model.BRUKSHENETSNUMMER_STANDARD
@@ -23,12 +12,14 @@ import no.nav.bidrag.dokument.bestilling.model.FantIkkeEnhetException
 import no.nav.bidrag.dokument.bestilling.model.Ident
 import no.nav.bidrag.dokument.bestilling.model.LANDNAVN_NORGE
 import no.nav.bidrag.dokument.bestilling.model.ManglerGjelderException
-import no.nav.bidrag.dokument.bestilling.model.Saksbehandler
-import no.nav.bidrag.dokument.bestilling.model.SpråkKoder
 import no.nav.bidrag.dokument.bestilling.model.erDødfødt
 import no.nav.bidrag.dokument.bestilling.model.fantIkkeSak
+import no.nav.bidrag.dokument.bestilling.model.hentFodselsdato
+import no.nav.bidrag.dokument.bestilling.model.hentKode6NavnBarn
 import no.nav.bidrag.dokument.bestilling.model.manglerBehandlingId
 import no.nav.bidrag.dokument.bestilling.model.manglerVedtakId
+import no.nav.bidrag.dokument.bestilling.model.tilVisningsnavnBarn
+import no.nav.bidrag.dokument.bestilling.model.tilVisningsnavnVoksen
 import no.nav.bidrag.dokument.bestilling.tjenester.BehandlingService
 import no.nav.bidrag.dokument.bestilling.tjenester.KodeverkService
 import no.nav.bidrag.dokument.bestilling.tjenester.OrganisasjonService
@@ -41,12 +32,23 @@ import no.nav.bidrag.domene.enums.rolle.Rolletype
 import no.nav.bidrag.domene.ident.Personident
 import no.nav.bidrag.domene.land.Landkode2
 import no.nav.bidrag.domene.land.Landkode3
+import no.nav.bidrag.transport.dokumentmaler.Adresse
+import no.nav.bidrag.transport.dokumentmaler.Barn
+import no.nav.bidrag.transport.dokumentmaler.DokumentBestilling
+import no.nav.bidrag.transport.dokumentmaler.EnhetKontaktInfo
+import no.nav.bidrag.transport.dokumentmaler.Gjelder
+import no.nav.bidrag.transport.dokumentmaler.Mottaker
+import no.nav.bidrag.transport.dokumentmaler.PartInfo
+import no.nav.bidrag.transport.dokumentmaler.Roller
+import no.nav.bidrag.transport.dokumentmaler.SakDetaljer
+import no.nav.bidrag.transport.dokumentmaler.Saksbehandler
+import no.nav.bidrag.transport.dokumentmaler.VedtakDetaljer
+import no.nav.bidrag.transport.notat.NotatPersonDto
 import no.nav.bidrag.transport.person.PersonAdresseDto
 import no.nav.bidrag.transport.person.PersonDto
 import no.nav.bidrag.transport.sak.BidragssakDto
 import org.springframework.context.annotation.Scope
 import org.springframework.stereotype.Component
-import java.time.LocalDate
 
 @Component
 @Scope("prototype")
@@ -97,10 +99,15 @@ class DokumentMetadataCollector(
                     .takeIf { it.inneholderDatagrunnlag(DataGrunnlag.ROLLER) }
                     ?.let { hentRolleData(forespørsel, dokumentMal) }
                     ?: Roller(),
+            rollerV2 =
+                dokumentMal
+                    .takeIf { it.inneholderDatagrunnlag(DataGrunnlag.ROLLER) }
+                    ?.let { hentRolleDataV2(forespørsel, dokumentMal) }
+                    ?: emptyList(),
             vedtakDetaljer =
                 dokumentMal
                     .takeIf { it.inneholderDatagrunnlag(DataGrunnlag.VEDTAK) }
-                    ?.let { hentVedtakData(forespørsel.vedtakId, dokumentMal) }
+                    ?.let { hentVedtakData(forespørsel.vedtakId, dokumentMal, forespørsel.hentRiktigSpråkkode()) }
                     ?: dokumentMal
                         .takeIf { it.inneholderDatagrunnlag(DataGrunnlag.BEHANDLING) }
                         ?.let { hentVedtakDataFraBehandling(forespørsel.behandlingId) },
@@ -110,14 +117,89 @@ class DokumentMetadataCollector(
     private fun hentVedtakData(
         vedtakId: Int?,
         dokumentMal: DokumentMal,
+        hentRiktigSpråkkode: String,
     ): VedtakDetaljer {
         if (vedtakId == null) manglerVedtakId()
-        return vedtakService.hentVedtakDetaljer(vedtakId, dokumentMal)
+        return vedtakService.hentVedtakDetaljer(vedtakId, dokumentMal, hentRiktigSpråkkode)
     }
 
     private fun hentVedtakDataFraBehandling(behandlingId: Int?): VedtakDetaljer {
         if (behandlingId == null) manglerBehandlingId()
         return behandlingService.hentVedtakDetaljer(behandlingId)
+    }
+
+    private fun hentRolleDataV2(
+        forespørsel: DokumentBestillingForespørsel,
+        dokumentMal: DokumentMal,
+    ): List<NotatPersonDto> {
+        val roller = mutableListOf<NotatPersonDto>()
+
+        val bidragspliktig = hentBidragspliktig()
+        val bidragsmottaker = hentBidragsmottaker()
+
+        if (bidragsmottaker != null) {
+            roller.add(
+                NotatPersonDto(
+                    rolle = Rolletype.BIDRAGSMOTTAKER,
+                    ident = bidragsmottaker.ident,
+                    navn = bidragsmottaker.tilVisningsnavnVoksen(),
+                    fødselsdato = bidragsmottaker.hentFodselsdato(),
+                    erBeskyttet = bidragsmottaker.isKode6(),
+                ),
+            )
+        }
+
+        if (bidragspliktig != null) {
+            roller.add(
+                NotatPersonDto(
+                    rolle = Rolletype.BIDRAGSPLIKTIG,
+                    ident = bidragspliktig.ident,
+                    navn = bidragspliktig.tilVisningsnavnVoksen(),
+                    fødselsdato = bidragspliktig.hentFodselsdato(),
+                    erBeskyttet = bidragspliktig.isKode6(),
+                ),
+            )
+        }
+
+        val soknadsbarn = mutableListOf<String>()
+        if (forespørsel.vedtakId != null && dokumentMal.inneholderDatagrunnlag(DataGrunnlag.VEDTAK)) {
+            soknadsbarn.addAll(
+                vedtakService.hentIdentSøknadsbarn(forespørsel.vedtakId),
+            )
+        } else if (forespørsel.behandlingId != null && dokumentMal.inneholderDatagrunnlag(DataGrunnlag.BEHANDLING)) {
+            soknadsbarn.addAll(behandlingService.hentIdentSøknadsbarn(forespørsel.behandlingId))
+        } else {
+            soknadsbarn.addAll(forespørsel.barnIBehandling)
+        }
+
+        val barn = sak.roller.filter { it.type == Rolletype.BARN }
+        barn
+            .filter { it.fødselsnummer != null && (soknadsbarn.isEmpty() || soknadsbarn.contains(it.fødselsnummer?.verdi)) }
+            .forEach {
+                val barnInfo =
+                    if (it.fødselsnummer!!.verdi.erDødfødt) {
+                        null
+                    } else {
+                        personService.hentPerson(
+                            it.fødselsnummer!!.verdi,
+                            "Barn",
+                        )
+                    }
+                if (barnInfo == null || !barnInfo.isDod()) {
+                    roller.add(
+                        NotatPersonDto(
+                            rolle = Rolletype.BARN,
+                            ident = it.fødselsnummer!!,
+                            navn =
+                                barnInfo?.tilVisningsnavnBarn(forespørsel.hentRiktigSpråkkode()) ?: "",
+                            fødselsdato = barnInfo?.hentFodselsdato(),
+                            erBeskyttet = barnInfo?.isKode6() == true,
+                        ),
+                    )
+                }
+            }
+
+        return roller
     }
 
     private fun hentRolleData(
@@ -137,8 +219,8 @@ class DokumentMetadataCollector(
                 PartInfo(
                     rolle = Rolletype.BIDRAGSMOTTAKER,
                     fodselsnummer = bidragsmottaker.ident.verdi,
-                    navn = if (bidragsmottaker.isKode6()) "" else bidragsmottaker.fornavnEtternavn(),
-                    fodselsdato = hentFodselsdato(bidragsmottaker),
+                    navn = bidragsmottaker.tilVisningsnavnVoksen(),
+                    fodselsdato = bidragsmottaker.hentFodselsdato(),
                     doedsdato = bidragsmottaker.dødsdato,
                     landkode = bidragsmottakerAdresse?.land?.verdi,
                     landkode3 = bidragsmottakerAdresse?.land3?.verdi,
@@ -151,8 +233,8 @@ class DokumentMetadataCollector(
                 PartInfo(
                     rolle = Rolletype.BIDRAGSPLIKTIG,
                     fodselsnummer = bidragspliktig.ident.verdi,
-                    navn = if (bidragspliktig.isKode6()) "" else bidragspliktig.fornavnEtternavn(),
-                    fodselsdato = hentFodselsdato(bidragspliktig),
+                    navn = bidragspliktig.tilVisningsnavnVoksen(),
+                    fodselsdato = bidragspliktig.hentFodselsdato(),
                     doedsdato = bidragspliktig.dødsdato,
                     landkode = bidragspliktigAdresse?.land?.verdi,
                     landkode3 = bidragspliktigAdresse?.land3?.verdi,
@@ -189,23 +271,13 @@ class DokumentMetadataCollector(
                         Barn(
                             fodselsnummer = it.fødselsnummer!!.verdi,
                             navn =
-                                barnInfo?.let {
-                                    if (barnInfo.isKode6()) {
-                                        hentKode6NavnBarn(
-                                            barnInfo,
-                                            forespørsel,
-                                        )
-                                    } else {
-                                        barnInfo.fornavnEtternavn()
-                                    }
-                                } ?: "",
-                            fodselsdato = barnInfo?.let { hentFodselsdato(barnInfo) },
+                                barnInfo?.tilVisningsnavnBarn(forespørsel.hentRiktigSpråkkode()) ?: "",
+                            fodselsdato = barnInfo?.hentFodselsdato(),
                             fornavn =
                                 barnInfo?.let {
                                     if (barnInfo.isKode6()) {
-                                        hentKode6NavnBarn(
-                                            barnInfo,
-                                            forespørsel,
+                                        it.hentKode6NavnBarn(
+                                            forespørsel.hentRiktigSpråkkode(),
                                         )
                                     } else {
                                         barnInfo.fornavn
@@ -341,20 +413,6 @@ class DokumentMetadataCollector(
         get() =
             (if (hentRolle(this.gjelderId) != null) this.gjelderId else hentGjelderFraRoller())
                 ?: throw ManglerGjelderException("Fant ingen gjelder")
-
-    private fun hentFodselsdato(person: PersonDto): LocalDate? = if (person.isKode6()) null else person.fødselsdato
-
-    private fun hentKode6NavnBarn(
-        person: PersonDto,
-        forespørsel: DokumentBestillingForespørsel,
-    ): String {
-        val fodtaar = person.fødselsdato?.year
-        return when (forespørsel.hentRiktigSpråkkode()) {
-            SpråkKoder.BOKMAL -> if (fodtaar == null) "(BARN)" else "(BARN FØDT I $fodtaar)"
-            SpråkKoder.NYNORSK -> if (fodtaar == null) "(BARN)" else "(BARN FØDD I $fodtaar)"
-            else -> if (fodtaar == null) "(CHILD)" else "(CHILD BORN IN $fodtaar)"
-        }
-    }
 
     private fun hentRolle(ident: String?): Rolletype? = sak.roller.find { it.fødselsnummer?.verdi == ident }?.type
 

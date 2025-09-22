@@ -19,6 +19,9 @@ env:
   BIDRAG_RESKONTRO_URL: http://bidrag-reskontro-q1
   BIDRAG_RESKONTRO_SCOPE: dev-gcp.bidrag.bidrag-reskontro-q1
 
+  BIDRAG_DOKUMENT_PRODUKSJON_URL: http://bidrag-dokument-produksjon
+  BIDRAG_DOKUMENT_PRODUKSJON_SCOPE: dev-gcp.bidrag.bidrag-dokument-produksjon
+
   BIDRAG_VEDTAK_URL: http://bidrag-vedtak-q1
   BIDRAG_VEDTAK_SCOPE: dev-gcp.bidrag.bidrag-vedtak-q1
 
@@ -41,6 +44,7 @@ outbound-access-apps:
   - bidrag-behandling-q1
   - bidrag-kodeverk
   - bidrag-reskontro-q1
+  - bidrag-dokument-produksjon
 outbound-access-hosts:
   - bidrag-dokument-feature.dev-fss-pub.nais.io
   - bidrag-person-q1.dev-fss-pub.nais.io

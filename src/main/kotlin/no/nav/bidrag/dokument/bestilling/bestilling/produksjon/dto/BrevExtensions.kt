@@ -1,11 +1,11 @@
 package no.nav.bidrag.dokument.bestilling.bestilling.produksjon.dto
 
-import no.nav.bidrag.dokument.bestilling.bestilling.dto.VedtakDetaljer
 import no.nav.bidrag.dokument.bestilling.model.BehandlingType
 import no.nav.bidrag.dokument.bestilling.model.SoknadType
 import no.nav.bidrag.domene.enums.person.Sivilstandskode
 import no.nav.bidrag.domene.enums.rolle.Rolle
 import no.nav.bidrag.domene.enums.rolle.Rolletype
+import no.nav.bidrag.transport.dokumentmaler.VedtakDetaljer
 
 fun Rolletype.toKode() =
     when (this) {
@@ -41,5 +41,5 @@ fun Sivilstandskode.toKode() =
         else -> "NULL"
     }
 
-val VedtakDetaljer.behandlingType get(): BehandlingType? = stønadType?.let { type -> BehandlingType.from(type, engangsbelopType) } ?: engangsbelopType?.let { type -> BehandlingType.from(null, type) }
-val VedtakDetaljer.soknadType get(): SoknadType? = vedtakType.let { type -> SoknadType.fromVedtakType(type) }
+val VedtakDetaljer.behandlingType get(): BehandlingType? = stønadstype?.let { type -> BehandlingType.from(type, engangsbeløptype) } ?: engangsbeløptype?.let { type -> BehandlingType.from(null, type) }
+val VedtakDetaljer.soknadType get(): SoknadType? = vedtakstype.let { type -> SoknadType.fromVedtakType(type) }

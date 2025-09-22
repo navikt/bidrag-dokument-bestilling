@@ -6,7 +6,6 @@ import io.kotest.matchers.comparables.shouldBeGreaterThan
 import io.kotest.matchers.shouldBe
 import no.nav.bidrag.dokument.bestilling.api.dto.DokumentBestillingForespørsel
 import no.nav.bidrag.dokument.bestilling.api.dto.DokumentBestillingResponse
-import no.nav.bidrag.dokument.bestilling.bestilling.dto.PeriodeFraTom
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.hentDokumentMal
 import no.nav.bidrag.dokument.bestilling.bestilling.produksjon.dto.BrevBestilling
 import no.nav.bidrag.dokument.bestilling.consumer.dto.fornavnEtternavn
@@ -32,6 +31,7 @@ import no.nav.bidrag.domene.enums.beregning.Resultatkode
 import no.nav.bidrag.domene.enums.rolle.Rolletype
 import no.nav.bidrag.domene.enums.vedtak.Stønadstype
 import no.nav.bidrag.domene.enums.vedtak.VirkningstidspunktÅrsakstype
+import no.nav.bidrag.transport.dokumentmaler.PeriodeFraTom
 import org.junit.jupiter.api.Test
 import org.springframework.http.HttpEntity
 import org.springframework.http.HttpMethod

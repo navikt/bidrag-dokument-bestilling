@@ -17,12 +17,13 @@ import no.nav.bidrag.dokument.bestilling.api.dto.DokumentBestillingResponse
 import no.nav.bidrag.dokument.bestilling.api.dto.DokumentMalDetaljer
 import no.nav.bidrag.dokument.bestilling.api.dto.MottakerTo
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.DokumentMalBrevserver
+import no.nav.bidrag.dokument.bestilling.bestilling.dto.DokumentMalProduksjon
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.DokumentMalType
-import no.nav.bidrag.dokument.bestilling.bestilling.dto.PeriodeFraTom
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.StøttetSpråk
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.alleDokumentmaler
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.dokumentmalerBrevserver
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.dokumentmalerFarskap
+import no.nav.bidrag.dokument.bestilling.bestilling.dto.dokumentmalerProduksjon
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.dokumentmalerUtland
 import no.nav.bidrag.dokument.bestilling.bestilling.dto.hentDokumentMal
 import no.nav.bidrag.dokument.bestilling.bestilling.produksjon.dto.BidragBarn
@@ -51,6 +52,7 @@ import no.nav.bidrag.dokument.bestilling.utils.createPostAdresseResponse
 import no.nav.bidrag.dokument.bestilling.utils.createPostAdresseResponseUtenlandsk
 import no.nav.bidrag.dokument.bestilling.utils.createSakResponse
 import no.nav.bidrag.domene.enums.rolle.Rolletype
+import no.nav.bidrag.transport.dokumentmaler.PeriodeFraTom
 import no.nav.bidrag.transport.sak.RolleDto
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
@@ -84,7 +86,7 @@ class DokumentBestillingControllerTest : AbstractControllerTest() {
                     .map { bk -> bk.kode }
         }
 
-        response.body?.shouldHaveSize(alleDokumentmaler.filter { it.enabled && it is DokumentMalBrevserver }.size)
+        response.body?.shouldHaveSize(alleDokumentmaler.filter { it.enabled && (it is DokumentMalBrevserver || it is DokumentMalProduksjon) }.size)
     }
 
     @Test
@@ -105,7 +107,7 @@ class DokumentBestillingControllerTest : AbstractControllerTest() {
         val responseDokumentMalerBucket = responseBody.filter { it.value.statiskInnhold }
 
         responseDokumentMalerBucket.size shouldBe dokumentmalerUtland.size + dokumentmalerFarskap.size
-        responseDokumentMalerBrevserver.size shouldBe dokumentmalerBrevserver.size
+        responseDokumentMalerBrevserver.size shouldBe dokumentmalerBrevserver.size + dokumentmalerProduksjon.size
 
         responseDokumentMalerBucket["UTLAND_VEDLEGG_VEDTAK_BP_DE"] shouldNotBe null
         responseDokumentMalerBucket["UTLAND_VEDLEGG_VEDTAK_BP_DE"]!!.språk shouldHaveSize 1
@@ -126,7 +128,7 @@ class DokumentBestillingControllerTest : AbstractControllerTest() {
         responseDokumentMalerBucket["FARSKAP_PROVETAKING_FARSKAP"]!!.innholdType shouldBe DokumentMalType.SKJEMA
 
         responseDokumentMalerBrevserver.filter { it.value.kreverBehandling } shouldHaveSize 4
-        responseDokumentMalerBrevserver.filter { it.value.kreverVedtak } shouldHaveSize 31
+        responseDokumentMalerBrevserver.filter { it.value.kreverVedtak } shouldHaveSize 32
     }
 
     @Test

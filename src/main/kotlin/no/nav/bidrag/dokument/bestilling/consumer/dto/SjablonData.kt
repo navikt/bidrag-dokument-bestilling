@@ -1,7 +1,7 @@
 package no.nav.bidrag.dokument.bestilling.consumer.dto
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
-import no.nav.bidrag.dokument.bestilling.bestilling.dto.PeriodeFraTom
+import no.nav.bidrag.transport.dokumentmaler.PeriodeFraTom
 import java.math.BigDecimal
 import java.time.LocalDate
 
