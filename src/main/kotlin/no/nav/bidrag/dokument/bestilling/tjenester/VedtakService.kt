@@ -251,7 +251,7 @@ class VedtakService(
         val personInfo = personService.hentPerson(barnIdent)
         val stønadsendring =
             vedtak.stønadsendringListe
-                .filter { it.type == Stønadstype.BIDRAG }
+                .filter { it.type.erBidrag }
                 .find { it.kravhaver.verdi == soknadBarn.personIdent }!!
         val delvedtak = vedtak.hentDelvedtak(stønadsendring, erMalRettetMotBruker)
         val endeligVedtak = delvedtak.find { it.endeligVedtak }
