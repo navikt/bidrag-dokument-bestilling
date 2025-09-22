@@ -198,7 +198,22 @@ class VedtakService(
             søknadFra = soknadInfo.søktAv,
             gebyr = vedtakDto.hentGebyrInfo(),
             sivilstandPerioder = vedtakDto.grunnlagListe.mapSivilstand(),
-            resultat = if (erVedtakProduksjon) vedtakBarnInfo.distinctBy { it.personIdent }.sortedBy { it.personObjekt.fødselsdato }.map { mapVedtakResultatBarn(it, vedtakDto, hentRiktigSpråkkode) } else emptyList(),
+            resultat =
+                if (erVedtakProduksjon) {
+                    vedtakBarnInfo
+                        .distinctBy { it.personIdent }
+                        .sortedBy { it.personObjekt.fødselsdato }
+                        .map {
+                            mapVedtakResultatBarn(
+                                it,
+                                vedtakDto,
+                                hentRiktigSpråkkode,
+                                true,
+                            )
+                        }
+                } else {
+                    emptyList()
+                },
             vedtakBarn = if (!erVedtakProduksjon) vedtakBarnInfo.distinctBy { it.personIdent }.sortedBy { it.personObjekt.fødselsdato }.map { mapVedtakBarn(it, vedtakDto, hentRiktigSpråkkode) } else emptyList(),
             barnIHusstandPerioder = vedtakDto.grunnlagListe.mapBarnIHusstandPerioder(),
         )
@@ -230,14 +245,15 @@ class VedtakService(
         soknadBarn: BaseGrunnlag,
         vedtak: VedtakDto,
         hentRiktigSpråkkode: String,
+        erMalRettetMotBruker: Boolean,
     ): VedtakResultatInnhold {
         val barnIdent = soknadBarn.personIdent!!
         val personInfo = personService.hentPerson(barnIdent)
         val stønadsendring =
             vedtak.stønadsendringListe
-                .filter { it.type == Stønadstype.BIDRAG }
+                .filter { it.type.erBidrag }
                 .find { it.kravhaver.verdi == soknadBarn.personIdent }!!
-        val delvedtak = vedtak.hentDelvedtak(stønadsendring)
+        val delvedtak = vedtak.hentDelvedtak(stønadsendring, erMalRettetMotBruker)
         val endeligVedtak = delvedtak.find { it.endeligVedtak }
         return NotatResultatBidragsberegningBarnDto(
             barn =
@@ -435,7 +451,10 @@ class VedtakService(
         }
     }
 
-    internal fun VedtakDto.hentDelvedtak(stønadsendring: StønadsendringDto): List<DelvedtakDto> {
+    internal fun VedtakDto.hentDelvedtak(
+        stønadsendring: StønadsendringDto,
+        erMalRettetMotBruker: Boolean,
+    ): List<DelvedtakDto> {
         val barnIdent = stønadsendring.kravhaver
 
         val søknadsbarnGrunnlag = grunnlagListe.hentPerson(stønadsendring.kravhaver.verdi)
@@ -447,9 +466,10 @@ class VedtakService(
                     grunnlagListe.finnResultatFraAnnenVedtak(periode.grunnlagReferanseListe)?.let {
                         if (it.vedtaksid == null) {
                             return@let DelvedtakDto(
-                                type = Vedtakstype.OPPHØR,
-                                omgjøringsvedtak = false,
-                                vedtaksid = it.vedtaksid,
+                                // For visning til bruker så er opphør del av klage/omgjøring vedtaket
+                                type = if (erMalRettetMotBruker) type else Vedtakstype.OPPHØR,
+                                omgjøringsvedtak = erMalRettetMotBruker,
+                                vedtaksid = null,
                                 delvedtak = true,
                                 beregnet = true,
                                 indeksår = 1,
@@ -457,10 +477,13 @@ class VedtakService(
                                     listOf(
                                         ResultatBarnebidragsberegningPeriodeDto(
                                             periode.periode,
-                                            vedtakstype = Vedtakstype.OPPHØR,
+                                            vedtakstype = if (erMalRettetMotBruker) type else Vedtakstype.OPPHØR,
                                             resultatKode = Resultatkode.OPPHØR,
                                             erOpphør = true,
-                                            resultatFraVedtak = it,
+                                            resultatFraVedtak =
+                                                it.copy(
+                                                    omgjøringsvedtak = erMalRettetMotBruker,
+                                                ),
                                         ),
                                     ),
                             )
