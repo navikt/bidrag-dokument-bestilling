@@ -100,6 +100,9 @@ import no.nav.bidrag.transport.dokumentmaler.BidragsevnePeriode
 import no.nav.bidrag.transport.dokumentmaler.BrevSjablonVerdier
 import no.nav.bidrag.transport.dokumentmaler.DataPeriode
 import no.nav.bidrag.transport.dokumentmaler.DelvedtakDto
+import no.nav.bidrag.transport.dokumentmaler.DokumentmalPersonDto
+import no.nav.bidrag.transport.dokumentmaler.DokumentmalResultatBidragsberegningBarnDto
+import no.nav.bidrag.transport.dokumentmaler.DokumentmalResultatBidragsberegningBarnDto.ResultatBarnebidragsberegningPeriodeDto
 import no.nav.bidrag.transport.dokumentmaler.ForskuddInntektgrensePeriode
 import no.nav.bidrag.transport.dokumentmaler.GebyrInfoDto
 import no.nav.bidrag.transport.dokumentmaler.InntektPeriode
@@ -115,12 +118,9 @@ import no.nav.bidrag.transport.dokumentmaler.VedtakDetaljer
 import no.nav.bidrag.transport.dokumentmaler.VedtakPeriode
 import no.nav.bidrag.transport.dokumentmaler.VedtakPeriodeReferanse
 import no.nav.bidrag.transport.dokumentmaler.finnAldersjusteringDetaljerGrunnlag
+import no.nav.bidrag.transport.dokumentmaler.notat.EndeligOrkestrertVedtak
+import no.nav.bidrag.transport.dokumentmaler.notat.VedtakResultatInnhold
 import no.nav.bidrag.transport.felles.toYearMonth
-import no.nav.bidrag.transport.notat.EndeligOrkestrertVedtak
-import no.nav.bidrag.transport.notat.NotatPersonDto
-import no.nav.bidrag.transport.notat.NotatResultatBidragsberegningBarnDto
-import no.nav.bidrag.transport.notat.NotatResultatBidragsberegningBarnDto.ResultatBarnebidragsberegningPeriodeDto
-import no.nav.bidrag.transport.notat.VedtakResultatInnhold
 import org.springframework.stereotype.Service
 import java.math.BigDecimal
 
@@ -255,9 +255,9 @@ class VedtakService(
                 .find { it.kravhaver.verdi == soknadBarn.personIdent }!!
         val delvedtak = vedtak.hentDelvedtak(stønadsendring, erMalRettetMotBruker)
         val endeligVedtak = delvedtak.find { it.endeligVedtak }
-        return NotatResultatBidragsberegningBarnDto(
+        return DokumentmalResultatBidragsberegningBarnDto(
             barn =
-                NotatPersonDto(
+                DokumentmalPersonDto(
                     rolle = Rolletype.BARN,
                     fødselsdato = personInfo.hentFodselsdato(),
                     ident = personInfo.ident,
