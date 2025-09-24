@@ -35,6 +35,7 @@ import no.nav.bidrag.domene.land.Landkode3
 import no.nav.bidrag.transport.dokumentmaler.Adresse
 import no.nav.bidrag.transport.dokumentmaler.Barn
 import no.nav.bidrag.transport.dokumentmaler.DokumentBestilling
+import no.nav.bidrag.transport.dokumentmaler.DokumentmalPersonDto
 import no.nav.bidrag.transport.dokumentmaler.EnhetKontaktInfo
 import no.nav.bidrag.transport.dokumentmaler.Gjelder
 import no.nav.bidrag.transport.dokumentmaler.Mottaker
@@ -43,7 +44,6 @@ import no.nav.bidrag.transport.dokumentmaler.Roller
 import no.nav.bidrag.transport.dokumentmaler.SakDetaljer
 import no.nav.bidrag.transport.dokumentmaler.Saksbehandler
 import no.nav.bidrag.transport.dokumentmaler.VedtakDetaljer
-import no.nav.bidrag.transport.notat.NotatPersonDto
 import no.nav.bidrag.transport.person.PersonAdresseDto
 import no.nav.bidrag.transport.person.PersonDto
 import no.nav.bidrag.transport.sak.BidragssakDto
@@ -131,15 +131,15 @@ class DokumentMetadataCollector(
     private fun hentRolleDataV2(
         forespørsel: DokumentBestillingForespørsel,
         dokumentMal: DokumentMal,
-    ): List<NotatPersonDto> {
-        val roller = mutableListOf<NotatPersonDto>()
+    ): List<DokumentmalPersonDto> {
+        val roller = mutableListOf<DokumentmalPersonDto>()
 
         val bidragspliktig = hentBidragspliktig()
         val bidragsmottaker = hentBidragsmottaker()
 
         if (bidragsmottaker != null) {
             roller.add(
-                NotatPersonDto(
+                DokumentmalPersonDto(
                     rolle = Rolletype.BIDRAGSMOTTAKER,
                     ident = bidragsmottaker.ident,
                     navn = bidragsmottaker.tilVisningsnavnVoksen(),
@@ -151,7 +151,7 @@ class DokumentMetadataCollector(
 
         if (bidragspliktig != null) {
             roller.add(
-                NotatPersonDto(
+                DokumentmalPersonDto(
                     rolle = Rolletype.BIDRAGSPLIKTIG,
                     ident = bidragspliktig.ident,
                     navn = bidragspliktig.tilVisningsnavnVoksen(),
@@ -187,7 +187,7 @@ class DokumentMetadataCollector(
                     }
                 if (barnInfo == null || !barnInfo.isDod()) {
                     roller.add(
-                        NotatPersonDto(
+                        DokumentmalPersonDto(
                             rolle = Rolletype.BARN,
                             ident = it.fødselsnummer!!,
                             navn =
