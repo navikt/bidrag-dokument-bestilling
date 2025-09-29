@@ -56,6 +56,7 @@ import no.nav.bidrag.transport.behandling.felles.grunnlag.Grunnlagsreferanse
 import no.nav.bidrag.transport.behandling.felles.grunnlag.InntektsrapporteringPeriode
 import no.nav.bidrag.transport.behandling.felles.grunnlag.KopiSamværsperiodeGrunnlag
 import no.nav.bidrag.transport.behandling.felles.grunnlag.Person
+import no.nav.bidrag.transport.behandling.felles.grunnlag.ResultatFraVedtakGrunnlag
 import no.nav.bidrag.transport.behandling.felles.grunnlag.SamværsperiodeGrunnlag
 import no.nav.bidrag.transport.behandling.felles.grunnlag.SjablonBidragsevnePeriode
 import no.nav.bidrag.transport.behandling.felles.grunnlag.SjablonSamværsfradragPeriode
@@ -532,7 +533,6 @@ class VedtakService(
                                             Resultatkode.fraKode(vedtakPeriode.resultatkode) == Resultatkode.INGEN_ENDRING_UNDER_GRENSE,
                                             vedtak.type,
                                             barnIdent = stønadsendring.kravhaver,
-                                        ).copy(
                                             resultatFraVedtak =
                                                 it.copy(
                                                     vedtakstidspunkt = it.vedtakstidspunkt ?: vedtak.vedtakstidspunkt,
@@ -595,6 +595,8 @@ class VedtakService(
         erResultatEndringUnderGrense: Boolean,
         vedtakstype: Vedtakstype,
         barnIdent: Personident? = null,
+        resultatFraVedtak: ResultatFraVedtakGrunnlag? = null,
+        klageOmgjøringDetaljer: ResultatBarnebidragsberegningPeriodeDto.KlageOmgjøringDetaljer? = null,
     ): ResultatBarnebidragsberegningPeriodeDto {
         if (vedtakstype == Vedtakstype.ALDERSJUSTERING) {
             val sluttberegningGrunnlag = finnSluttberegningIReferanser(grunnlagsreferanseListe)
@@ -610,6 +612,8 @@ class VedtakService(
                 samværsfradrag = finnSamværsfradrag(grunnlagsreferanseListe),
                 bpsAndelBeløp = sluttberegning.bpAndelBeløp,
                 erOpphør = resultat == null,
+                resultatFraVedtak = resultatFraVedtak,
+                klageOmgjøringDetaljer = klageOmgjøringDetaljer,
             )
         } else if (vedtakstype == Vedtakstype.INDEKSREGULERING) {
             return ResultatBarnebidragsberegningPeriodeDto(
@@ -617,6 +621,8 @@ class VedtakService(
                 periode = periode,
                 faktiskBidrag = resultat ?: BigDecimal.ZERO,
                 resultatKode = Resultatkode.BEREGNET_BIDRAG,
+                resultatFraVedtak = resultatFraVedtak,
+                klageOmgjøringDetaljer = klageOmgjøringDetaljer,
             )
         } else {
             finnResultatFraAnnenVedtak(grunnlagsreferanseListe)?.let {
@@ -648,6 +654,8 @@ class VedtakService(
                         barn?.let { vedtak.grunnlagListe.erResultatEndringUnderGrense(barn.referanse) } ?: false,
                         vedtak.type,
                         barnIdent,
+                        resultatFraVedtak,
+                        klageOmgjøringDetaljer,
                     )
             }
             val sluttberegningGrunnlag =
@@ -663,6 +671,8 @@ class VedtakService(
                 periode = periode,
                 faktiskBidrag = resultat ?: BigDecimal.ZERO,
                 erOpphør = resultat == null,
+                resultatFraVedtak = resultatFraVedtak,
+                klageOmgjøringDetaljer = klageOmgjøringDetaljer,
                 resultatKode =
                     if (erResultatEndringUnderGrense) {
                         Resultatkode.INGEN_ENDRING_UNDER_GRENSE
