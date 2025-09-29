@@ -1,6 +1,6 @@
 FORSIDE:
   - kode: VOFORSIDE
-    tittel: Forside for omgjøringsvedtak
+    tittel: Forside til omgjøringsvedtak om barnebidrag
     type: "VEDTAK"
     malId: "forside"
     forOrkestrertVedtak: true
