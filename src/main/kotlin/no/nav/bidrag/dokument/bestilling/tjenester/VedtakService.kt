@@ -716,7 +716,7 @@ class VedtakService(
                     val sluttberegning = grunnlagListe.finnOgKonverterGrunnlagSomErReferertFraGrunnlagsreferanseListe<SluttberegningBarnebidrag>(Grunnlagstype.SLUTTBEREGNING_BARNEBIDRAG, stønadperiode.grunnlagReferanseListe).firstOrNull()
                     val sluttberegningAldersjustering = grunnlagListe.finnOgKonverterGrunnlagSomErReferertFraGrunnlagsreferanseListe<SluttberegningBarnebidragAldersjustering>(Grunnlagstype.SLUTTBEREGNING_BARNEBIDRAG_ALDERSJUSTERING, stønadperiode.grunnlagReferanseListe).firstOrNull()
 
-                    val erInnkreving = vedtakDto.erInnkrevingsgrunnlag()
+                    val erInnkreving = vedtakDto.erInnkrevingsgrunnlag() || vedtakDto.type == Vedtakstype.INNKREVING
                     val erAvslagUtenGrunnlag = sluttberegning?.innhold?.erResultatAvslag == true || resultatKode?.erDirekteAvslag() == true
                     val erAldersjustering = sluttberegningAldersjustering != null
                     if (erAvslagUtenGrunnlag && !erDirekteAvslag) return@mapNotNull null
@@ -838,7 +838,7 @@ fun List<GrunnlagDto>.finnDelberegningBidragsevne(periode: VedtakPeriodeReferans
             .find { it.innhold.sjablon == SjablonTallNavn.PERSONFRADRAG_KLASSE1_BELØP || it.innhold.sjablon == SjablonTallNavn.PERSONFRADRAG_KLASSE2_BELØP }
     return BidragsevnePeriode(
         periode = periode.periode,
-        beløpBidrag = sluttberegning.innhold.resultatBeløp ?: BigDecimal.ZERO,
+        beløpBidrag = sluttberegning?.innhold?.resultatBeløp ?: BigDecimal.ZERO,
         sjabloner =
             BidragsevnePeriode.BidragsevneSjabloner(
                 beløpKlassfradrag = sjablonKlasseFradrag!!.innhold.verdi,
