@@ -86,11 +86,13 @@ import no.nav.bidrag.transport.behandling.vedtak.response.StønadsendringDto
 import no.nav.bidrag.transport.behandling.vedtak.response.VedtakDto
 import no.nav.bidrag.transport.behandling.vedtak.response.VedtakPeriodeDto
 import no.nav.bidrag.transport.behandling.vedtak.response.erDelvedtak
+import no.nav.bidrag.transport.behandling.vedtak.response.erInnkrevingsgrunnlag
 import no.nav.bidrag.transport.behandling.vedtak.response.erOrkestrertVedtak
 import no.nav.bidrag.transport.behandling.vedtak.response.finnAldersjusteringVedtaksidForStønad
 import no.nav.bidrag.transport.behandling.vedtak.response.finnOrkestreringDetaljer
 import no.nav.bidrag.transport.behandling.vedtak.response.finnResultatFraAnnenVedtak
 import no.nav.bidrag.transport.behandling.vedtak.response.finnSistePeriode
+import no.nav.bidrag.transport.behandling.vedtak.response.finnSøknadGrunnlag
 import no.nav.bidrag.transport.behandling.vedtak.response.harResultatFraAnnenVedtak
 import no.nav.bidrag.transport.behandling.vedtak.response.referertVedtaksid
 import no.nav.bidrag.transport.behandling.vedtak.response.særbidragsperiode
@@ -714,6 +716,7 @@ class VedtakService(
                     val sluttberegning = grunnlagListe.finnOgKonverterGrunnlagSomErReferertFraGrunnlagsreferanseListe<SluttberegningBarnebidrag>(Grunnlagstype.SLUTTBEREGNING_BARNEBIDRAG, stønadperiode.grunnlagReferanseListe).firstOrNull()
                     val sluttberegningAldersjustering = grunnlagListe.finnOgKonverterGrunnlagSomErReferertFraGrunnlagsreferanseListe<SluttberegningBarnebidragAldersjustering>(Grunnlagstype.SLUTTBEREGNING_BARNEBIDRAG_ALDERSJUSTERING, stønadperiode.grunnlagReferanseListe).firstOrNull()
 
+                    val erInnkreving = vedtakDto.erInnkrevingsgrunnlag() || vedtakDto.type == Vedtakstype.INNKREVING
                     val erAvslagUtenGrunnlag = sluttberegning?.innhold?.erResultatAvslag == true || resultatKode?.erDirekteAvslag() == true
                     val erAldersjustering = sluttberegningAldersjustering != null
                     if (erAvslagUtenGrunnlag && !erDirekteAvslag) return@mapNotNull null
@@ -725,13 +728,13 @@ class VedtakService(
                         beløp =
                             stønadperiode.beløp?.let { if (it == BigDecimal.ZERO) BigDecimal("0.1") else it }
                                 ?: if (erDirekteAvslag || allePerioderAvslag || erForskudd) BigDecimal.ZERO else BigDecimal("0.1"),
-                        andelUnderhold = if (!erAvslagUtenGrunnlag) grunnlagListe.tilAndelUnderholdskostnadPeriode(referanse) else null,
-                        underhold = if (!erAvslagUtenGrunnlag) grunnlagListe.tilUnderholdskostnadPeriode(referanse) else null,
-                        bidragsevne = if (!erAvslagUtenGrunnlag && !erAldersjustering) grunnlagListe.finnDelberegningBidragsevne(referanse) else null,
+                        andelUnderhold = if (!erAvslagUtenGrunnlag && !erInnkreving) grunnlagListe.tilAndelUnderholdskostnadPeriode(referanse) else null,
+                        underhold = if (!erAvslagUtenGrunnlag && !erInnkreving) grunnlagListe.tilUnderholdskostnadPeriode(referanse) else null,
+                        bidragsevne = if (!erAvslagUtenGrunnlag && !erAldersjustering && !erInnkreving) grunnlagListe.finnDelberegningBidragsevne(referanse) else null,
                         samvær =
                             if (erAldersjustering) {
                                 grunnlagListe.mapSamværAldersjustering(referanse)
-                            } else if (!erAvslagUtenGrunnlag) {
+                            } else if (!erAvslagUtenGrunnlag && !erInnkreving) {
                                 grunnlagListe.mapSamvær(referanse)
                             } else {
                                 null
@@ -742,7 +745,7 @@ class VedtakService(
                             } else {
                                 resultatKode?.tilBisysResultatkodeForBrev(vedtakDto.type) ?: stønadperiode.resultatkode
                             },
-                        inntekter = grunnlagListe.mapInntekter(referanse, innteksgrense),
+                        inntekter = if (!erInnkreving) grunnlagListe.mapInntekter(referanse, innteksgrense) else emptyList(),
                         inntektGrense = innteksgrense,
                         maksInntekt = sjablongService.hentMaksInntektForPeriode(getLastDayOfPreviousMonth(stønadperiode.periode.til?.atEndOfMonth())),
                     )
@@ -835,7 +838,7 @@ fun List<GrunnlagDto>.finnDelberegningBidragsevne(periode: VedtakPeriodeReferans
             .find { it.innhold.sjablon == SjablonTallNavn.PERSONFRADRAG_KLASSE1_BELØP || it.innhold.sjablon == SjablonTallNavn.PERSONFRADRAG_KLASSE2_BELØP }
     return BidragsevnePeriode(
         periode = periode.periode,
-        beløpBidrag = sluttberegning.innhold.resultatBeløp ?: BigDecimal.ZERO,
+        beløpBidrag = sluttberegning?.innhold?.resultatBeløp ?: BigDecimal.ZERO,
         sjabloner =
             BidragsevnePeriode.BidragsevneSjabloner(
                 beløpKlassfradrag = sjablonKlasseFradrag!!.innhold.verdi,
