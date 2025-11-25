@@ -217,7 +217,16 @@ class VedtakService(
                 } else {
                     emptyList()
                 },
-            vedtakBarn = if (!erVedtakProduksjon) vedtakBarnInfo.distinctBy { it.personIdent }.sortedBy { it.personObjekt.fødselsdato }.map { mapVedtakBarn(it, vedtakDto, hentRiktigSpråkkode) } else emptyList(),
+            vedtakBarn =
+                if (!erVedtakProduksjon) {
+                    vedtakBarnInfo
+                        .distinctBy { it.personIdent }
+                        .sortedBy { it.personObjekt.fødselsdato }
+                        .map { mapVedtakBarn(it, vedtakDto, hentRiktigSpråkkode) }
+                        .sortedBy { it.stønadsendringer.flatMap { it.vedtakPerioder.map { it.fomDato } }.min() }
+                } else {
+                    emptyList()
+                },
             barnIHusstandPerioder = vedtakDto.grunnlagListe.mapBarnIHusstandPerioder(),
         )
     }
