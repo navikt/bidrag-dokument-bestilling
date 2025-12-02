@@ -9,12 +9,13 @@ import no.nav.bidrag.dokument.bestilling.model.fantIkkeVedtak
 import no.nav.bidrag.dokument.bestilling.model.finnSjablonMedType
 import no.nav.bidrag.dokument.bestilling.model.getLastDayOfPreviousMonth
 import no.nav.bidrag.dokument.bestilling.model.hentBarnIHusstandPerioderForBarn
+import no.nav.bidrag.dokument.bestilling.model.hentEldsteVirkningstidspunkt
 import no.nav.bidrag.dokument.bestilling.model.hentFodselsdato
 import no.nav.bidrag.dokument.bestilling.model.hentInntekterForPeriode
 import no.nav.bidrag.dokument.bestilling.model.hentNettoKapitalinntektForRolle
 import no.nav.bidrag.dokument.bestilling.model.hentSøknad
 import no.nav.bidrag.dokument.bestilling.model.hentTotalInntektForPeriode
-import no.nav.bidrag.dokument.bestilling.model.hentVirkningstidspunkt
+import no.nav.bidrag.dokument.bestilling.model.hentVirkningstidspunktIkkeFF
 import no.nav.bidrag.dokument.bestilling.model.kapitalinntektTyper
 import no.nav.bidrag.dokument.bestilling.model.mapBarnIHusstandPerioder
 import no.nav.bidrag.dokument.bestilling.model.mapSivilstand
@@ -182,13 +183,14 @@ class VedtakService(
                     }
                 }
             }
-        val virkningstidspunktInfo = vedtakDto.hentVirkningstidspunkt()
+        val virkningstidspunkt = vedtakDto.hentEldsteVirkningstidspunkt()
+        val virkningstidspunktInfo = vedtakDto.hentVirkningstidspunktIkkeFF()
         val soknadInfo = vedtakDto.hentSøknad()
         val vedtakBarnInfo = vedtakDto.grunnlagListe.søknadsbarn
         return VedtakDetaljer(
             årsakKode = virkningstidspunktInfo?.årsak,
             avslagsKode = virkningstidspunktInfo?.avslag,
-            virkningstidspunkt = virkningstidspunktInfo?.virkningstidspunkt,
+            virkningstidspunkt = virkningstidspunkt,
             mottattDato = soknadInfo.mottattDato,
             soktFraDato = soknadInfo.søktFraDato,
             vedtattDato = vedtakDto.opprettetTidspunkt.toLocalDate(),
@@ -695,7 +697,7 @@ class VedtakService(
     }
 
     fun VedtakDto.erDirekteAvslag(stønadsendringDto: StønadsendringDto): Boolean {
-        if (hentVirkningstidspunkt()?.avslag != null) return true
+        if (hentVirkningstidspunktIkkeFF()?.avslag != null) return true
         if (stønadsendringDto.periodeListe.size > 1) return false
         val periode = stønadsendringDto.periodeListe.first()
         val resultatKode = Resultatkode.fraKode(periode.resultatkode)
