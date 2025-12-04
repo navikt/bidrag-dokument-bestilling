@@ -16,7 +16,7 @@
     <properties>
         <java.version>21</java.version>
         <kotlin.version>2.2.10</kotlin.version>
-        <bidrag-felles.version>2025.11.26.150324</bidrag-felles.version>
+        <bidrag-felles.version>2025.12.02.161914</bidrag-felles.version>
         <logback-encoder.version>9.0</logback-encoder.version>
         <token-support.version>5.0.28</token-support.version>
         <springframework-cloud.version>4.1.4</springframework-cloud.version>
