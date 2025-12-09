@@ -7,6 +7,7 @@ import no.nav.bidrag.domene.enums.inntekt.Inntektsrapportering
 import no.nav.bidrag.domene.enums.rolle.Rolletype
 import no.nav.bidrag.domene.enums.rolle.SøktAvType
 import no.nav.bidrag.domene.enums.sjablon.SjablonTallNavn
+import no.nav.bidrag.domene.enums.vedtak.VirkningstidspunktÅrsakstype
 import no.nav.bidrag.domene.ident.Personident
 import no.nav.bidrag.domene.tid.ÅrMånedsperiode
 import no.nav.bidrag.transport.behandling.felles.grunnlag.BaseGrunnlag
@@ -35,6 +36,7 @@ import no.nav.bidrag.transport.dokumentmaler.InntektPeriode
 import no.nav.bidrag.transport.dokumentmaler.VedtakPeriodeReferanse
 import no.nav.bidrag.transport.dokumentmaler.VedtakSaksbehandlerInfo
 import java.math.BigDecimal
+import java.time.LocalDate
 
 val kapitalinntektTyper = listOf(Inntektsrapportering.KAPITALINNTEKT, Inntektsrapportering.KAPITALINNTEKT_EGNE_OPPLYSNINGER)
 
@@ -46,11 +48,17 @@ fun VedtakDto.tilSaksbehandler() =
         ident = opprettetAv,
     )
 
-fun VedtakDto.hentVirkningstidspunkt(): VirkningstidspunktGrunnlag? =
+fun VedtakDto.hentEldsteVirkningstidspunkt(): LocalDate? =
     grunnlagListe
         .filtrerBasertPåEgenReferanse(Grunnlagstype.VIRKNINGSTIDSPUNKT)
-        .firstOrNull()
-        ?.innholdTilObjekt<VirkningstidspunktGrunnlag>()
+        .map { it.innholdTilObjekt<VirkningstidspunktGrunnlag>().virkningstidspunkt }
+        .minOfOrNull { it }
+
+fun VedtakDto.hentVirkningstidspunktIkkeFF(): VirkningstidspunktGrunnlag? =
+    grunnlagListe
+        .filtrerBasertPåEgenReferanse(Grunnlagstype.VIRKNINGSTIDSPUNKT)
+        .map { it.innholdTilObjekt<VirkningstidspunktGrunnlag>() }
+        .firstOrNull { it.årsak != VirkningstidspunktÅrsakstype.REVURDERING_MÅNEDEN_ETTER }
 
 fun VedtakDto.hentSøknad(): SøknadGrunnlag =
     grunnlagListe
