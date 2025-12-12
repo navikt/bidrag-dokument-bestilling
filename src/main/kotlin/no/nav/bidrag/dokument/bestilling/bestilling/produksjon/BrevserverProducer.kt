@@ -282,6 +282,7 @@ class BrevserverProducer(
                 }
 
                 vedtakInfo?.vedtakBarn?.forEach { vedtakBarn ->
+                    if (vedtakBarn.erDirekteAvslag == true) return@forEach
 
                     bidragBarn {
                         barn {
