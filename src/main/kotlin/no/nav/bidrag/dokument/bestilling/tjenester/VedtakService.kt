@@ -716,7 +716,7 @@ class VedtakService(
 
             val erForskudd = stønadsendring.type == Stønadstype.FORSKUDD
             val vedtakPerioder =
-                stønadsendring.periodeListe.filter { it.resultatkode != Resultatkode.OPPHØR.name }.mapNotNull { stønadperiode ->
+                stønadsendring.periodeListe.mapNotNull { stønadperiode ->
                     val innteksgrense = sjablongService.hentInntektGrenseForPeriode(getLastDayOfPreviousMonth(stønadperiode.periode.til?.atEndOfMonth()))
                     val resultatKode = Resultatkode.fraKode(stønadperiode.resultatkode)
                     val referanse = VedtakPeriodeReferanse(stønadperiode.periode, resultatKode, vedtakDto.typeBehandling, stønadperiode.grunnlagReferanseListe)
