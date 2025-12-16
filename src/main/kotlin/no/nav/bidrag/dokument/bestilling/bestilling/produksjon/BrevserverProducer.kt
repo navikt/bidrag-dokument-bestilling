@@ -282,7 +282,6 @@ class BrevserverProducer(
                 }
 
                 vedtakInfo?.vedtakBarn?.forEach { vedtakBarn ->
-                    if (vedtakInfo.type == TypeBehandling.BIDRAG && vedtakBarn.erDirekteAvslag) return@forEach
 
                     bidragBarn {
                         barn {
@@ -339,6 +338,7 @@ class BrevserverProducer(
                             }
                         }
                         vedtakBarn.stønadsendringer.forEach { detaljer ->
+                            if (vedtakInfo.type == TypeBehandling.BIDRAG && vedtakBarn.erDirekteAvslag) return@forEach
                             detaljer.vedtakPerioder.forEach { vedtakPeriode ->
                                 vedtak {
                                     fomDato = vedtakPeriode.fomDato
