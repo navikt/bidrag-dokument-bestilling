@@ -282,6 +282,20 @@ class BrevserverProducer(
                 }
 
                 vedtakInfo?.vedtakBarn?.forEach { vedtakBarn ->
+                    vedtakBarn.stønadsendringer.forEach { detaljer ->
+                        detaljer.vedtakPerioder.forEach { vedtakPeriode ->
+                            vedtak {
+                                fomDato = vedtakPeriode.fomDato
+                                tomDato = vedtakPeriode.tomDato ?: MAX_DATE
+                                fnr = vedtakBarn.fødselsnummer
+                                belopBidrag = vedtakPeriode.beløp
+                                resultatKode = vedtakPeriode.resultatKode
+                                søktTilleggsbidrag = false // TODO
+                                erInnkreving = detaljer.innkreving
+                            }
+                        }
+                    }
+                    if (vedtakInfo.type == TypeBehandling.BIDRAG && vedtakBarn.erDirekteAvslag) return@forEach
 
                     bidragBarn {
                         barn {
@@ -337,20 +351,7 @@ class BrevserverProducer(
                                 }
                             }
                         }
-                        vedtakBarn.stønadsendringer.forEach { detaljer ->
-                            if (vedtakInfo.type == TypeBehandling.BIDRAG && vedtakBarn.erDirekteAvslag) return@forEach
-                            detaljer.vedtakPerioder.forEach { vedtakPeriode ->
-                                vedtak {
-                                    fomDato = vedtakPeriode.fomDato
-                                    tomDato = vedtakPeriode.tomDato ?: MAX_DATE
-                                    fnr = vedtakBarn.fødselsnummer
-                                    belopBidrag = vedtakPeriode.beløp
-                                    resultatKode = vedtakPeriode.resultatKode
-                                    søktTilleggsbidrag = false // TODO
-                                    erInnkreving = detaljer.innkreving
-                                }
-                            }
-                        }
+
                         if (vedtakInfo.type == TypeBehandling.FORSKUDD) {
                             vedtakInfo.barnIHusstandPerioder.forEach {
                                 forskuddBarnPeriode {
