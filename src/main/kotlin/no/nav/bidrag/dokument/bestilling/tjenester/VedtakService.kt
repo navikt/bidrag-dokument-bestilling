@@ -697,7 +697,7 @@ class VedtakService(
     }
 
     fun VedtakDto.erDirekteAvslag(stønadsendringDto: StønadsendringDto): Boolean {
-        if (hentVirkningstidspunktIkkeFF()?.avslag != null) return true
+        if (hentVirkningstidspunktIkkeFF(stønadsendringDto.kravhaver.verdi)?.avslag != null) return true
         if (stønadsendringDto.periodeListe.size > 1) return false
         val periode = stønadsendringDto.periodeListe.first()
         val resultatKode = Resultatkode.fraKode(periode.resultatkode)

@@ -25,6 +25,7 @@ import no.nav.bidrag.transport.behandling.felles.grunnlag.VirkningstidspunktGrun
 import no.nav.bidrag.transport.behandling.felles.grunnlag.bidragsmottaker
 import no.nav.bidrag.transport.behandling.felles.grunnlag.filtrerBasertPåEgenReferanse
 import no.nav.bidrag.transport.behandling.felles.grunnlag.finnGrunnlagSomErReferertFraGrunnlagsreferanseListe
+import no.nav.bidrag.transport.behandling.felles.grunnlag.hentPerson
 import no.nav.bidrag.transport.behandling.felles.grunnlag.hentPersonMedReferanse
 import no.nav.bidrag.transport.behandling.felles.grunnlag.innholdTilObjekt
 import no.nav.bidrag.transport.behandling.felles.grunnlag.personIdent
@@ -54,11 +55,14 @@ fun VedtakDto.hentEldsteVirkningstidspunkt(): LocalDate? =
         .map { it.innholdTilObjekt<VirkningstidspunktGrunnlag>().virkningstidspunkt }
         .minOfOrNull { it }
 
-fun VedtakDto.hentVirkningstidspunktIkkeFF(): VirkningstidspunktGrunnlag? =
-    grunnlagListe
+fun VedtakDto.hentVirkningstidspunktIkkeFF(søknadsbarn: String? = null): VirkningstidspunktGrunnlag? {
+    val søknadsbarnReferanse = søknadsbarn?.let { grunnlagListe.hentPerson(søknadsbarn)?.referanse }
+    return grunnlagListe
         .filtrerBasertPåEgenReferanse(Grunnlagstype.VIRKNINGSTIDSPUNKT)
+        .filter { søknadsbarnReferanse == null || søknadsbarnReferanse == it.gjelderBarnReferanse }
         .map { it.innholdTilObjekt<VirkningstidspunktGrunnlag>() }
         .firstOrNull { it.årsak != VirkningstidspunktÅrsakstype.REVURDERING_MÅNEDEN_ETTER }
+}
 
 fun VedtakDto.hentSøknad(): SøknadGrunnlag =
     grunnlagListe
