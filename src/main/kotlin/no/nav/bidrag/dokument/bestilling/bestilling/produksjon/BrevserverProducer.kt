@@ -282,6 +282,7 @@ class BrevserverProducer(
                 }
 
                 vedtakInfo?.vedtakBarn?.forEach { vedtakBarn ->
+                    if (vedtakInfo.type == TypeBehandling.BIDRAG && vedtakBarn.erDirekteAvslag) return@forEach
 
                     bidragBarn {
                         barn {
@@ -460,7 +461,7 @@ class BrevserverProducer(
                             }
                         }
 
-                        if (vedtakInfo.type == TypeBehandling.BIDRAG && !vedtakBarn.erDirekteAvslag) {
+                        if (vedtakInfo.type == TypeBehandling.BIDRAG) {
                             vedtakBarn.stønadsendringer.forEach { stønadsendring ->
                                 stønadsendring.forskuddInntektgrensePerioder.forEach {
                                     inntektGrunnlagForskuddPeriode {
