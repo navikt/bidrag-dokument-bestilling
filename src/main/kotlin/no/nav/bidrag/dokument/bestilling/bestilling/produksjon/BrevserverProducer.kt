@@ -337,6 +337,19 @@ class BrevserverProducer(
                                 }
                             }
                         }
+                        vedtakBarn.stønadsendringer.forEach { detaljer ->
+                            detaljer.vedtakPerioder.forEach { vedtakPeriode ->
+                                vedtak {
+                                    fomDato = vedtakPeriode.fomDato
+                                    tomDato = vedtakPeriode.tomDato ?: MAX_DATE
+                                    fnr = vedtakBarn.fødselsnummer
+                                    belopBidrag = vedtakPeriode.beløp
+                                    resultatKode = vedtakPeriode.resultatKode
+                                    søktTilleggsbidrag = false // TODO
+                                    erInnkreving = detaljer.innkreving
+                                }
+                            }
+                        }
                         if (vedtakInfo.type == TypeBehandling.FORSKUDD) {
                             vedtakInfo.barnIHusstandPerioder.forEach {
                                 forskuddBarnPeriode {
@@ -373,16 +386,6 @@ class BrevserverProducer(
                                     }
                                 }
                                 detaljer.vedtakPerioder.forEach { vedtakPeriode ->
-                                    vedtak {
-                                        fomDato = vedtakPeriode.fomDato
-                                        tomDato = vedtakPeriode.tomDato ?: MAX_DATE
-                                        fnr = vedtakBarn.fødselsnummer
-                                        belopBidrag = vedtakPeriode.beløp
-                                        resultatKode = vedtakPeriode.resultatKode
-                                        søktTilleggsbidrag = false // TODO
-                                        erInnkreving = detaljer.innkreving
-                                    }
-
                                     forskuddVedtak {
                                         fomDato = vedtakPeriode.fomDato
                                         tomDato = vedtakPeriode.tomDato ?: MAX_DATE
