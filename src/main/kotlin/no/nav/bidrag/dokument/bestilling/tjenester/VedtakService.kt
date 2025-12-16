@@ -726,14 +726,14 @@ class VedtakService(
                     val erInnkreving = vedtakDto.erInnkrevingsgrunnlag()
                     val erAvslagUtenGrunnlag = sluttberegning?.erResultatAvslag == true || resultatKode?.erDirekteAvslag() == true
                     val erAldersjustering = sluttberegningAldersjustering != null
-                    if (erAvslagUtenGrunnlag && !erDirekteAvslag) return@mapNotNull null
+//                    if (erAvslagUtenGrunnlag && !erDirekteAvslag) return@mapNotNull null
                     VedtakPeriode(
                         fomDato = stønadperiode.periode.fom.atDay(1),
                         // TODO: Er dette riktig??
                         tomDato = stønadperiode.periode.til?.atEndOfMonth(),
                         // Bruker beløp 0.1 for å få alle beløpene i samme tabell hvis det er miks mellom perioder med avslag og innvilgelse
                         beløp =
-                            stønadperiode.beløp?.let { if (it == BigDecimal.ZERO) BigDecimal("0.1") else it }
+                            stønadperiode.beløp?.let { if (it.setScale(0) == BigDecimal.ZERO) BigDecimal("0.1") else it }
                                 ?: if (erDirekteAvslag || allePerioderAvslag || erForskudd) BigDecimal.ZERO else BigDecimal("0.1"),
                         andelUnderhold = if (!erAvslagUtenGrunnlag && !erInnkreving) grunnlagListe.tilAndelUnderholdskostnadPeriode(referanse) else null,
                         underhold = if (!erAvslagUtenGrunnlag && !erInnkreving) grunnlagListe.tilUnderholdskostnadPeriode(referanse) else null,
