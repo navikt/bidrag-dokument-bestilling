@@ -282,6 +282,20 @@ class BrevserverProducer(
                 }
 
                 vedtakInfo?.vedtakBarn?.forEach { vedtakBarn ->
+                    vedtakBarn.stønadsendringer.forEach { detaljer ->
+                        detaljer.vedtakPerioder.forEach { vedtakPeriode ->
+                            vedtak {
+                                fomDato = vedtakPeriode.fomDato
+                                tomDato = vedtakPeriode.tomDato ?: MAX_DATE
+                                fnr = vedtakBarn.fødselsnummer
+                                belopBidrag = vedtakPeriode.beløp
+                                resultatKode = vedtakPeriode.resultatKode
+                                søktTilleggsbidrag = false // TODO
+                                erInnkreving = detaljer.innkreving
+                            }
+                        }
+                    }
+                    if (vedtakInfo.type == TypeBehandling.BIDRAG && vedtakBarn.erDirekteAvslag) return@forEach
 
                     bidragBarn {
                         barn {
@@ -289,7 +303,7 @@ class BrevserverProducer(
                             fnr = vedtakBarn.fødselsnummer
                             saksnr = dokumentBestilling.saksnummer
                         }
-                        vedtakBarn.engangsbeløper.map { engangsbeløp ->
+                        vedtakBarn.engangsbeløper.forEach { engangsbeløp ->
                             if (engangsbeløp.type == Engangsbeløptype.SÆRBIDRAG && !engangsbeløp.erDirekteAvslag && !dokumentMal.avslagsbrev) {
                                 val beregning = engangsbeløp.særbidragBeregning!!
                                 vedtak {
@@ -338,133 +352,53 @@ class BrevserverProducer(
                             }
                         }
 
-                        vedtakInfo.barnIHusstandPerioder.forEach {
-                            if (vedtakInfo.type == TypeBehandling.FORSKUDD) {
+                        if (vedtakInfo.type == TypeBehandling.FORSKUDD) {
+                            vedtakInfo.barnIHusstandPerioder.forEach {
                                 forskuddBarnPeriode {
                                     fomDato = it.periode.tilLocalDateFom()
                                     tomDato = it.periode.tilLocalDateTil() ?: MAX_DATE
                                     antallBarn = it.antall.toInt()
                                 }
                             }
-                        }
 
-                        vedtakInfo.sivilstandPerioder.forEach { sivilstand ->
-                            forskuddSivilstandPeriode {
-                                fomDato = sivilstand.periode.tilLocalDateFom()
-                                tomDato = sivilstand.periode.tilLocalDateTil() ?: MAX_DATE
-                                kode = sivilstand.sivilstand.toKode()
-                                beskrivelse = sivilstand.sivilstand.visningsnavn.bruker[Språk.NB]
-                            }
-                        }
-                        vedtakBarn.stønadsendringer.forEach { stønadsendring ->
-                            stønadsendring.vedtakPerioder.forEach {
-                                vedtakBarn {
-                                    fomDato = it.fomDato
-                                    tomDato = it.tomDato ?: MAX_DATE
-                                    fnr = vedtakBarn.fødselsnummer
-                                    belopBidrag = it.beløp
-                                    resultatKode = it.resultatKode
-                                    søktTilleggsbidrag = false // TODO
-                                    erInnkreving = stønadsendring.innkreving
+                            vedtakInfo.sivilstandPerioder.forEach { sivilstand ->
+                                forskuddSivilstandPeriode {
+                                    fomDato = sivilstand.periode.tilLocalDateFom()
+                                    tomDato = sivilstand.periode.tilLocalDateTil() ?: MAX_DATE
+                                    kode = sivilstand.sivilstand.toKode()
+                                    beskrivelse = sivilstand.sivilstand.visningsnavn.bruker[Språk.NB]
                                 }
                             }
-                        }
-                        if (vedtakInfo.type == TypeBehandling.BIDRAG) {
-                            vedtakBarn.inntektsperioder.forEach {
-                                inntektPeriode {
-                                    fomDato = it.periode?.tilLocalDateFom()
-                                    tomDato = it.periode.tilLocalDateTil() ?: MAX_DATE
-                                    belopType = it.beløpKode
-                                    belopÅrsinntekt = it.beløp
-                                    beskrivelse = it.beskrivelse
-                                    rolle = it.rolle.toKode()
-                                    fnr = it.fødselsnummer
-                                    inntektGrense = it.innteksgrense
+                            vedtakBarn.stønadsendringer.forEach { detaljer ->
+                                detaljer.forskuddInntektgrensePerioder.forEach {
+                                    inntektGrunnlagForskuddPeriode {
+                                        fomDato = it.fomDato
+                                        tomDato = it.tomDato ?: MAX_DATE
+                                        antallBarn = it.antallBarn
+                                        forsorgerKode =
+                                            when (it.forsorgerType) {
+                                                Sivilstandskode.ENSLIG -> "EN"
+                                                Sivilstandskode.GIFT_SAMBOER -> "GS"
+                                                else -> ""
+                                            }
+                                        belop50fra = it.beløp50Prosent.fraVerdi()
+                                        belop50til = it.beløp50Prosent.tilVerdi()
+                                        belop75fra = it.beløp75Prosent.fraVerdi()
+                                        belop75til = it.beløp75Prosent.tilVerdi()
+                                    }
                                 }
-                            }
-                        }
-                        vedtakBarn.andelUnderholdPerioder.forEach {
-                            andelUnderholdPeriode {
-                                fomDato = it.periode.tilLocalDateFom()
-                                tomDato = it.periode.tilLocalDateTil() ?: MAX_DATE
-                                belopInntektBp = it.inntektBP
-                                belopInntektBm = it.inntektBM
-                                belopInntektBarn = it.inntektBarn
-                                belopInntektSum = it.totalEndeligInntekt
-                                fordNokkel = it.andelFaktor
-                                belopUnderholdKostnad = it.beløpUnderholdskostnad
-                                belopBp = it.beløpBpsAndel
-                            }
-                        }
-                        vedtakBarn.samværsperioder.forEach {
-                            samværPeriode {
-                                fomDato = it.periode.fom.atDay(1)
-                                tomDato = it.periode.til?.atEndOfMonth() ?: MAX_DATE
-                                samvarKode = it.samværsklasse.bisysKode
-                                aldersGruppe = it.aldersgruppe?.let { "${it.first} - ${it.second ?: ""}" }
-                                belSamvFradr = it.samværsfradragBeløp
-                                samvBeskr =
-                                    when (it.samværsklasse) {
-                                        Samværsklasse.SAMVÆRSKLASSE_0 -> "0-1 netter pr mnd"
-                                        Samværsklasse.SAMVÆRSKLASSE_1 -> "2-3 netter pr mnd eller minst 2 dager pr mnd"
-                                        Samværsklasse.SAMVÆRSKLASSE_2 -> "4-8 netter pr mnd"
-                                        Samværsklasse.SAMVÆRSKLASSE_3 -> "9-13 netter pr mnd"
-                                        Samværsklasse.SAMVÆRSKLASSE_4 -> "14-15 netter pr mnd"
-                                        Samværsklasse.DELT_BOSTED -> "Delt samvær"
+                                detaljer.vedtakPerioder.forEach { vedtakPeriode ->
+                                    forskuddVedtak {
+                                        fomDato = vedtakPeriode.fomDato
+                                        tomDato = vedtakPeriode.tomDato ?: MAX_DATE
+                                        fnr = vedtakBarn.fødselsnummer
+                                        resultatKode = vedtakPeriode.resultatKode
+                                        forskKode = Resultatkode.fraKode(vedtakPeriode.resultatKode)?.tilForskuddKode()
+                                        beløp = vedtakPeriode.beløp
+                                        prosent = if (vedtakPeriode.resultatKode.isNumeric) vedtakPeriode.resultatKode.padStart(3, '0') else "000"
+                                        maksInntekt = vedtakPeriode.maksInntekt
                                     }
-                                fodselsnummer = vedtakBarn.fødselsnummer
-                            }
-                        }
-                        vedtakBarn.underholdskostnadperioder.forEach {
-                            underholdKostnadPeriode {
-                                fomDato = it.periode.tilLocalDateFom()
-                                tomDato = it.periode.tilLocalDateTil() ?: MAX_DATE
-                                belopFbrKost = it.delberegning.forbruksutgift
-                                belopBoutg = it.delberegning.boutgift
-                                belGkjBTils = it.delberegning.nettoTilsynsutgift
-                                belFaktBTils = it.delberegning.nettoTilsynsutgift
-                                belopBTrygd = it.delberegning.barnetrygd
-                                belopSmaBTil = BigDecimal.ZERO
-                                belBerSumU = it.delberegning.underholdskostnad
-                                belJustSumU = it.delberegning.underholdskostnad
-                                fodselsnummer = it.gjelderIdent
-                                rolle = it.rolletype?.toKode()
-                                skolealderTp =
-                                    when (it.skolealder) {
-                                        Skolealder.OVER -> "O"
-                                        Skolealder.UNDER -> "U"
-                                        else -> null
-                                    }
-                                tilsyntypKd =
-                                    when {
-                                        it.tilsynstype == Tilsynstype.HELTID && it.skolealder == Skolealder.OVER -> "HO"
-                                        it.tilsynstype == Tilsynstype.HELTID && it.skolealder == Skolealder.UNDER -> "HU"
-                                        it.tilsynstype == Tilsynstype.DELTID && it.skolealder == Skolealder.OVER -> "DO"
-                                        it.tilsynstype == Tilsynstype.DELTID && it.skolealder == Skolealder.UNDER -> "DU"
-                                        else -> null
-                                    }
-                            }
-                        }
-                        vedtakBarn.stønadsendringer.forEach { detaljer ->
-                            detaljer.forskuddInntektgrensePerioder.forEach {
-                                inntektGrunnlagForskuddPeriode {
-                                    fomDato = it.fomDato
-                                    tomDato = it.tomDato ?: MAX_DATE
-                                    antallBarn = it.antallBarn
-                                    forsorgerKode =
-                                        when (it.forsorgerType) {
-                                            Sivilstandskode.ENSLIG -> "EN"
-                                            Sivilstandskode.GIFT_SAMBOER -> "GS"
-                                            else -> ""
-                                        }
-                                    belop50fra = it.beløp50Prosent.fraVerdi()
-                                    belop50til = it.beløp50Prosent.tilVerdi()
-                                    belop75fra = it.beløp75Prosent.fraVerdi()
-                                    belop75til = it.beløp75Prosent.tilVerdi()
-                                }
-                            }
-                            detaljer.vedtakPerioder.forEach { vedtakPeriode ->
-                                if (detaljer.type == Stønadstype.FORSKUDD) {
+
                                     forskuddVedtakPeriode {
                                         fomDato = vedtakPeriode.fomDato
                                         tomDato = vedtakPeriode.tomDato ?: MAX_DATE
@@ -475,45 +409,43 @@ class BrevserverProducer(
                                         prosent = if (vedtakPeriode.resultatKode.isNumeric) vedtakPeriode.resultatKode.padStart(3, '0') else "000"
                                         maksInntekt = vedtakPeriode.maksInntekt
                                     }
-                                }
 
-                                vedtakPeriode.bidragsevne?.let {
-                                    bidragEvnePeriode {
-                                        fomDato = it.periode.fom.atDay(1)
-                                        tomDato = it.periode.til?.atEndOfMonth() ?: MAX_DATE
-//                                        skatteklasse = ??
-                                        antallBarn =
-                                            it.underholdEgneBarnIHusstand.antallBarnIHusstanden
-                                                .toBigDecimal()
-                                                .avrundetMedNullDesimaler
-                                                .toInt()
-                                        antallBarnDelt = it.underholdEgneBarnIHusstand.antallBarnDeltBossted
-                                        bostatus = if (it.borMedAndreVoksne) "1" else "0"
-                                        flBarnSakJN = vedtakInfo.vedtakBarn.size > 1
-                                        fullBiEvneJN = it.harFullEvne
-                                        biEvneBeskr =
-                                            when {
-                                                it.harFullEvne -> "F"
-                                                it.harDelvisEvne -> "D"
-                                                else -> "I"
-                                            }
-                                        belInntGrlag = it.inntektBP
-                                        belTrygdeAvg = it.skatt.trygdeavgift
-                                        belSkatt = it.skatt.sumSkatt
-                                        belMinFradrg = it.sjabloner.beløpMinstefradrag
-                                        belPerFradrg = it.sjabloner.beløpKlassfradrag
-                                        belBoutgift = it.underholdEgneBarnIHusstand.sjablon
-                                        belEgetUhold = it.sjabloner.underholdBeløp
-                                        belUholdBhus = it.sjabloner.beløpUnderholdEgneBarnIHusstanden
-                                        belAarEvne = it.bidragsevne
-                                        belMndEvne = it.bidragsevne.årsbeløpTilMåndesbeløp()
-                                        belSumBidrag = it.beløpBidrag // TODO
-                                        belBerBidrag = it.beløpBidrag // TODO
-                                        belJustBidr = it.beløpBidrag // TODO
+                                    vedtakPeriode.bidragsevne?.let {
+//                                        bidragEvnePeriode {
+//                                            fomDato = it.periode.fom.atDay(1)
+//                                            tomDato = it.periode.til?.atEndOfMonth() ?: MAX_DATE
+// //                                        skatteklasse = ??
+//                                            antallBarn =
+//                                                it.underholdEgneBarnIHusstand.antallBarnIHusstanden
+//                                                    .toBigDecimal()
+//                                                    .avrundetMedNullDesimaler
+//                                                    .toInt()
+//                                            antallBarnDelt = it.underholdEgneBarnIHusstand.antallBarnDeltBossted
+//                                            bostatus = if (it.borMedAndreVoksne) "1" else "0"
+//                                            flBarnSakJN = vedtakInfo.vedtakBarn.size > 1
+//                                            fullBiEvneJN = it.harFullEvne
+//                                            biEvneBeskr =
+//                                                when {
+//                                                    it.harFullEvne -> "F"
+//                                                    it.harDelvisEvne -> "D"
+//                                                    else -> "I"
+//                                                }
+//                                            belInntGrlag = it.inntektBP
+//                                            belTrygdeAvg = it.skatt.trygdeavgift
+//                                            belSkatt = it.skatt.sumSkatt
+//                                            belMinFradrg = it.sjabloner.beløpMinstefradrag
+//                                            belPerFradrg = it.sjabloner.beløpKlassfradrag
+//                                            belBoutgift = it.underholdEgneBarnIHusstand.sjablon
+//                                            belEgetUhold = it.sjabloner.underholdBeløp
+//                                            belUholdBhus = it.sjabloner.beløpUnderholdEgneBarnIHusstanden
+//                                            belAarEvne = it.bidragsevne
+//                                            belMndEvne = it.bidragsevne.årsbeløpTilMåndesbeløp()
+//                                            belSumBidrag = it.beløpBidrag // TODO
+//                                            belBerBidrag = it.beløpBidrag // TODO
+//                                            belJustBidr = it.beløpBidrag // TODO
+//                                        }
                                     }
-                                }
 
-                                if (vedtakInfo.type != TypeBehandling.BIDRAG) {
                                     vedtakPeriode.inntekter.forEach {
                                         inntektPeriode {
                                             fomDato = it.periode?.tilLocalDateFom()
@@ -528,29 +460,148 @@ class BrevserverProducer(
                                     }
                                 }
                             }
+                        }
 
-                            detaljer.vedtakPerioder.forEach {
-                                vedtak {
-                                    fomDato = it.fomDato
-                                    tomDato = it.tomDato ?: MAX_DATE
-                                    fnr = vedtakBarn.fødselsnummer
-                                    belopBidrag = it.beløp
-                                    resultatKode = it.resultatKode
-                                    søktTilleggsbidrag = false // TODO
-                                    erInnkreving = detaljer.innkreving
-                                }
-
-                                if (detaljer.type == Stønadstype.FORSKUDD) {
-                                    forskuddVedtak {
+                        if (vedtakInfo.type == TypeBehandling.BIDRAG) {
+                            vedtakBarn.stønadsendringer.forEach { stønadsendring ->
+                                stønadsendring.forskuddInntektgrensePerioder.forEach {
+                                    inntektGrunnlagForskuddPeriode {
                                         fomDato = it.fomDato
                                         tomDato = it.tomDato ?: MAX_DATE
-                                        fnr = vedtakBarn.fødselsnummer
-                                        resultatKode = it.resultatKode
-                                        forskKode = Resultatkode.fraKode(it.resultatKode)?.tilForskuddKode()
-                                        beløp = it.beløp
-                                        prosent = if (it.resultatKode.isNumeric) it.resultatKode.padStart(3, '0') else "000"
-                                        maksInntekt = it.maksInntekt
+                                        antallBarn = it.antallBarn
+                                        forsorgerKode =
+                                            when (it.forsorgerType) {
+                                                Sivilstandskode.ENSLIG -> "EN"
+                                                Sivilstandskode.GIFT_SAMBOER -> "GS"
+                                                else -> ""
+                                            }
+                                        belop50fra = it.beløp50Prosent.fraVerdi()
+                                        belop50til = it.beløp50Prosent.tilVerdi()
+                                        belop75fra = it.beløp75Prosent.fraVerdi()
+                                        belop75til = it.beløp75Prosent.tilVerdi()
                                     }
+                                }
+
+                                vedtakBarn.inntektsperioder.forEach {
+                                    inntektPeriode {
+                                        fomDato = it.periode?.tilLocalDateFom()
+                                        tomDato = it.periode.tilLocalDateTil() ?: MAX_DATE
+                                        belopType = it.beløpKode
+                                        belopÅrsinntekt = it.beløp
+                                        beskrivelse = it.beskrivelse
+                                        rolle = it.rolle.toKode()
+                                        fnr = it.fødselsnummer
+                                        inntektGrense = it.innteksgrense
+                                    }
+                                }
+
+                                stønadsendring.vedtakPerioder.forEach { vedtakPeriode ->
+                                    vedtakBarn {
+                                        fomDato = vedtakPeriode.fomDato
+                                        tomDato = vedtakPeriode.tomDato ?: MAX_DATE
+                                        fnr = vedtakBarn.fødselsnummer
+                                        belopBidrag = vedtakPeriode.beløp
+                                        resultatKode = vedtakPeriode.resultatKode
+                                        søktTilleggsbidrag = false // TODO
+                                        erInnkreving = stønadsendring.innkreving
+                                    }
+                                    vedtakPeriode.bidragsevne?.let {
+                                        bidragEvnePeriode {
+                                            fomDato = it.periode.fom.atDay(1)
+                                            tomDato = it.periode.til?.atEndOfMonth() ?: MAX_DATE
+//                                        skatteklasse = ??
+                                            antallBarn =
+                                                it.underholdEgneBarnIHusstand.antallBarnIHusstanden
+                                                    .toBigDecimal()
+                                                    .avrundetMedNullDesimaler
+                                                    .toInt()
+                                            antallBarnDelt = it.underholdEgneBarnIHusstand.antallBarnDeltBossted
+                                            bostatus = if (it.borMedAndreVoksne) "1" else "0"
+                                            flBarnSakJN = vedtakInfo.vedtakBarn.size > 1
+                                            fullBiEvneJN = it.harFullEvne
+                                            biEvneBeskr =
+                                                when {
+                                                    it.harFullEvne -> "F"
+                                                    it.harDelvisEvne -> "D"
+                                                    else -> "I"
+                                                }
+                                            belInntGrlag = it.inntektBP
+                                            belTrygdeAvg = it.skatt.trygdeavgift
+                                            belSkatt = it.skatt.sumSkatt
+                                            belMinFradrg = it.sjabloner.beløpMinstefradrag
+                                            belPerFradrg = it.sjabloner.beløpKlassfradrag
+                                            belBoutgift = it.underholdEgneBarnIHusstand.sjablon
+                                            belEgetUhold = it.sjabloner.underholdBeløp
+                                            belUholdBhus = it.sjabloner.beløpUnderholdEgneBarnIHusstanden
+                                            belAarEvne = it.bidragsevne
+                                            belMndEvne = it.bidragsevne.årsbeløpTilMåndesbeløp()
+                                            belSumBidrag = it.beløpBidrag // TODO
+                                            belBerBidrag = it.beløpBidrag // TODO
+                                            belJustBidr = it.beløpBidrag // TODO
+                                        }
+                                    }
+                                }
+                            }
+                            vedtakBarn.andelUnderholdPerioder.forEach {
+                                andelUnderholdPeriode {
+                                    fomDato = it.periode.tilLocalDateFom()
+                                    tomDato = it.periode.tilLocalDateTil() ?: MAX_DATE
+                                    belopInntektBp = it.inntektBP
+                                    belopInntektBm = it.inntektBM
+                                    belopInntektBarn = it.inntektBarn
+                                    belopInntektSum = it.totalEndeligInntekt
+                                    fordNokkel = it.andelFaktor
+                                    belopUnderholdKostnad = it.beløpUnderholdskostnad
+                                    belopBp = it.beløpBpsAndel
+                                }
+                            }
+                            vedtakBarn.samværsperioder.forEach {
+                                samværPeriode {
+                                    fomDato = it.periode.fom.atDay(1)
+                                    tomDato = it.periode.til?.atEndOfMonth() ?: MAX_DATE
+                                    samvarKode = it.samværsklasse.bisysKode
+                                    aldersGruppe = it.aldersgruppe?.let { "${it.first} - ${it.second ?: ""}" }
+                                    belSamvFradr = it.samværsfradragBeløp
+                                    samvBeskr =
+                                        when (it.samværsklasse) {
+                                            Samværsklasse.SAMVÆRSKLASSE_0 -> "0-1 netter pr mnd"
+                                            Samværsklasse.SAMVÆRSKLASSE_1 -> "2-3 netter pr mnd eller minst 2 dager pr mnd"
+                                            Samværsklasse.SAMVÆRSKLASSE_2 -> "4-8 netter pr mnd"
+                                            Samværsklasse.SAMVÆRSKLASSE_3 -> "9-13 netter pr mnd"
+                                            Samværsklasse.SAMVÆRSKLASSE_4 -> "14-15 netter pr mnd"
+                                            Samværsklasse.DELT_BOSTED -> "Delt samvær"
+                                        }
+                                    fodselsnummer = vedtakBarn.fødselsnummer
+                                }
+                            }
+                            vedtakBarn.underholdskostnadperioder.forEach {
+                                underholdKostnadPeriode {
+                                    fomDato = it.periode.tilLocalDateFom()
+                                    tomDato = it.periode.tilLocalDateTil() ?: MAX_DATE
+                                    belopFbrKost = it.delberegning.forbruksutgift
+                                    belopBoutg = it.delberegning.boutgift
+                                    belGkjBTils = it.delberegning.nettoTilsynsutgift
+                                    belFaktBTils = it.delberegning.nettoTilsynsutgift
+                                    belopBTrygd = it.delberegning.barnetrygd
+                                    belopSmaBTil = BigDecimal.ZERO
+                                    belBerSumU = it.delberegning.underholdskostnad
+                                    belJustSumU = it.delberegning.underholdskostnad
+                                    fodselsnummer = it.gjelderIdent
+                                    rolle = it.rolletype?.toKode()
+                                    skolealderTp =
+                                        when (it.skolealder) {
+                                            Skolealder.OVER -> "O"
+                                            Skolealder.UNDER -> "U"
+                                            else -> null
+                                        }
+                                    tilsyntypKd =
+                                        when {
+                                            it.tilsynstype == Tilsynstype.HELTID && it.skolealder == Skolealder.OVER -> "HO"
+                                            it.tilsynstype == Tilsynstype.HELTID && it.skolealder == Skolealder.UNDER -> "HU"
+                                            it.tilsynstype == Tilsynstype.DELTID && it.skolealder == Skolealder.OVER -> "DO"
+                                            it.tilsynstype == Tilsynstype.DELTID && it.skolealder == Skolealder.UNDER -> "DU"
+                                            else -> null
+                                        }
                                 }
                             }
                         }

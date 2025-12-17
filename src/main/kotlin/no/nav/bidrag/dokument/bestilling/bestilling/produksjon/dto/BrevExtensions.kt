@@ -27,10 +27,14 @@ fun Rolle.toKode() =
 fun Sivilstandskode.toKode() =
     when (this) {
         Sivilstandskode.ENSLIG -> "ENKE"
+
         Sivilstandskode.GIFT_SAMBOER -> "GIFT"
+
         Sivilstandskode.SAMBOER -> "SAMB"
+
         Sivilstandskode.BOR_ALENE_MED_BARN -> "SEPA"
-//        Sivilstandskode.GJENLEVENDE_PARTNER -> "GJPA"
+
+        //        Sivilstandskode.GJENLEVENDE_PARTNER -> "GJPA"
 // //                                    SivilstandKode.GIFT_LEVER_ADSKILT -> "GLAD"
 //        Sivilstandskode.REGISTRERT_PARTNER -> "REPA"
 //        Sivilstandskode.SEPARERT_PARTNER -> "SEPA"

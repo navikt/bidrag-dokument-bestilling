@@ -225,7 +225,7 @@ class VedtakService(
                         .distinctBy { it.personIdent }
                         .sortedBy { it.personObjekt.fødselsdato }
                         .map { mapVedtakBarn(it, vedtakDto, hentRiktigSpråkkode) }
-                        .sortedBy { it.stønadsendringer.flatMap { it.vedtakPerioder.map { it.fomDato } }.min() }
+                        .sortedBy { it.stønadsendringer.flatMap { it.vedtakPerioder.map { it.fomDato } }.minOrNull() }
                 } else {
                     emptyList()
                 },
@@ -697,7 +697,7 @@ class VedtakService(
     }
 
     fun VedtakDto.erDirekteAvslag(stønadsendringDto: StønadsendringDto): Boolean {
-        if (hentVirkningstidspunktIkkeFF()?.avslag != null) return true
+        if (hentVirkningstidspunktIkkeFF(stønadsendringDto.kravhaver.verdi)?.avslag != null) return true
         if (stønadsendringDto.periodeListe.size > 1) return false
         val periode = stønadsendringDto.periodeListe.first()
         val resultatKode = Resultatkode.fraKode(periode.resultatkode)
@@ -716,7 +716,7 @@ class VedtakService(
 
             val erForskudd = stønadsendring.type == Stønadstype.FORSKUDD
             val vedtakPerioder =
-                stønadsendring.periodeListe.filter { it.resultatkode != Resultatkode.OPPHØR.name }.mapNotNull { stønadperiode ->
+                stønadsendring.periodeListe.mapNotNull { stønadperiode ->
                     val innteksgrense = sjablongService.hentInntektGrenseForPeriode(getLastDayOfPreviousMonth(stønadperiode.periode.til?.atEndOfMonth()))
                     val resultatKode = Resultatkode.fraKode(stønadperiode.resultatkode)
                     val referanse = VedtakPeriodeReferanse(stønadperiode.periode, resultatKode, vedtakDto.typeBehandling, stønadperiode.grunnlagReferanseListe)
@@ -725,16 +725,17 @@ class VedtakService(
 
                     val erInnkreving = vedtakDto.erInnkrevingsgrunnlag()
                     val erAvslagUtenGrunnlag = sluttberegning?.erResultatAvslag == true || resultatKode?.erDirekteAvslag() == true
+                    val erResultatPeriodeOpphør = sluttberegning != null && sluttberegning.erResultatAvslag == true
                     val erAldersjustering = sluttberegningAldersjustering != null
-                    if (erAvslagUtenGrunnlag && !erDirekteAvslag) return@mapNotNull null
+//                    if (erAvslagUtenGrunnlag && !erDirekteAvslag) return@mapNotNull null
                     VedtakPeriode(
                         fomDato = stønadperiode.periode.fom.atDay(1),
                         // TODO: Er dette riktig??
                         tomDato = stønadperiode.periode.til?.atEndOfMonth(),
                         // Bruker beløp 0.1 for å få alle beløpene i samme tabell hvis det er miks mellom perioder med avslag og innvilgelse
                         beløp =
-                            stønadperiode.beløp?.let { if (it == BigDecimal.ZERO) BigDecimal("0.1") else it }
-                                ?: if (erDirekteAvslag || allePerioderAvslag || erForskudd) BigDecimal.ZERO else BigDecimal("0.1"),
+                            stønadperiode.beløp?.let { if (it.setScale(0) == BigDecimal.ZERO) BigDecimal("0.1") else it }
+                                ?: if (erDirekteAvslag || allePerioderAvslag || erForskudd || erResultatPeriodeOpphør) BigDecimal.ZERO else BigDecimal("0.1"),
                         andelUnderhold = if (!erAvslagUtenGrunnlag && !erInnkreving) grunnlagListe.tilAndelUnderholdskostnadPeriode(referanse) else null,
                         underhold = if (!erAvslagUtenGrunnlag && !erInnkreving) grunnlagListe.tilUnderholdskostnadPeriode(referanse) else null,
                         bidragsevne = if (!erAvslagUtenGrunnlag && !erAldersjustering && !erInnkreving) grunnlagListe.finnDelberegningBidragsevne(referanse) else null,
@@ -1051,7 +1052,7 @@ fun <T : DataPeriode> List<T>.grupperPerioder(): List<List<T>> {
     val result = mutableListOf<List<T>>()
     var currentGroup = mutableListOf<T>()
     for (periode in sortedList) {
-        if (currentGroup.isEmpty() || currentGroup.last().erLik(periode) && currentGroup.last().periode.til == periode.periode.fom) {
+        if (currentGroup.isEmpty() || (currentGroup.last().erLik(periode) && currentGroup.last().periode.til == periode.periode.fom)) {
             currentGroup.add(periode)
         } else {
             result.add(currentGroup)

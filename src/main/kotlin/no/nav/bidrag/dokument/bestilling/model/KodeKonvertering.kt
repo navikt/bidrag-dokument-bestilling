@@ -1,3 +1,5 @@
+@file:Suppress("ktlint:standard:kdoc")
+
 package no.nav.bidrag.dokument.bestilling.model
 
 import no.nav.bidrag.domene.enums.diverse.Språk
@@ -67,4 +69,4 @@ fun Inntektsrapportering.visningsnavnBruker(
  * THEN
  * INCLUDE
  * ENDIF
- */
+ **/
