@@ -225,7 +225,7 @@ class VedtakService(
                         .distinctBy { it.personIdent }
                         .sortedBy { it.personObjekt.fødselsdato }
                         .map { mapVedtakBarn(it, vedtakDto, hentRiktigSpråkkode) }
-                        .sortedBy { it.stønadsendringer.flatMap { it.vedtakPerioder.map { it.fomDato } }.min() }
+                        .sortedBy { it.stønadsendringer.flatMap { it.vedtakPerioder.map { it.fomDato } }.minOrNull() }
                 } else {
                     emptyList()
                 },
