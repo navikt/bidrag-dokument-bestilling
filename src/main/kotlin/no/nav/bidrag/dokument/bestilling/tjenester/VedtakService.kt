@@ -738,11 +738,11 @@ class VedtakService(
                                 ?: if (erDirekteAvslag || allePerioderAvslag || erForskudd || erResultatPeriodeOpphør) BigDecimal.ZERO else BigDecimal("0.1"),
                         andelUnderhold = if (!erAvslagUtenGrunnlag && !erInnkreving) grunnlagListe.tilAndelUnderholdskostnadPeriode(referanse) else null,
                         underhold = if (!erAvslagUtenGrunnlag && !erInnkreving) grunnlagListe.tilUnderholdskostnadPeriode(referanse) else null,
-                        bidragsevne = if (!erAvslagUtenGrunnlag && !erAldersjustering && !erInnkreving) grunnlagListe.finnDelberegningBidragsevne(referanse) else null,
+                        bidragsevne = if (!erAvslagUtenGrunnlag && !erAldersjustering && !erInnkreving && !erResultatPeriodeOpphør) grunnlagListe.finnDelberegningBidragsevne(referanse) else null,
                         samvær =
                             if (erAldersjustering) {
                                 grunnlagListe.mapSamværAldersjustering(referanse)
-                            } else if (!erAvslagUtenGrunnlag && !erInnkreving) {
+                            } else if (!erAvslagUtenGrunnlag && !erInnkreving && !erResultatPeriodeOpphør) {
                                 grunnlagListe.mapSamvær(referanse)
                             } else {
                                 null
@@ -753,7 +753,7 @@ class VedtakService(
                             } else {
                                 resultatKode?.tilBisysResultatkodeForBrev(vedtakDto.type) ?: stønadperiode.resultatkode
                             },
-                        inntekter = if (!erInnkreving) grunnlagListe.mapInntekter(referanse, innteksgrense) else emptyList(),
+                        inntekter = if (!erInnkreving && !erResultatPeriodeOpphør) grunnlagListe.mapInntekter(referanse, innteksgrense) else emptyList(),
                         inntektGrense = innteksgrense,
                         maksInntekt = sjablongService.hentMaksInntektForPeriode(getLastDayOfPreviousMonth(stønadperiode.periode.til?.atEndOfMonth())),
                     )
