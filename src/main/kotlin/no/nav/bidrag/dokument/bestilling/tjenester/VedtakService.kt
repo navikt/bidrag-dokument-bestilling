@@ -1052,7 +1052,7 @@ fun <T : DataPeriode> List<T>.grupperPerioder(): List<List<T>> {
     val result = mutableListOf<List<T>>()
     var currentGroup = mutableListOf<T>()
     for (periode in sortedList) {
-        if (currentGroup.isEmpty() || currentGroup.last().erLik(periode) && currentGroup.last().periode.til == periode.periode.fom) {
+        if (currentGroup.isEmpty() || (currentGroup.last().erLik(periode) && currentGroup.last().periode.til == periode.periode.fom)) {
             currentGroup.add(periode)
         } else {
             result.add(currentGroup)
