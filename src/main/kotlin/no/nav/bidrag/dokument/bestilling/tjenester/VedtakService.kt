@@ -825,7 +825,7 @@ fun List<GrunnlagDto>.tilUnderholdskostnadPeriode(periode: VedtakPeriodeReferans
 
 fun List<GrunnlagDto>.finnDelberegningBidragsevne(periode: VedtakPeriodeReferanse): BidragsevnePeriode? {
     if (periode.typeBehandling != TypeBehandling.BIDRAG || periode.resultatKode?.erDirekteAvslag() == true) return null
-    val sluttberegningGrunnlag = finnSluttberegningIReferanser(periode.grunnlagReferanseListe)!!
+    val sluttberegningGrunnlag = finnSluttberegningIReferanser(periode.grunnlagReferanseListe) ?: return null
     val sluttberegning = byggSluttberegningBarnebidragDetaljer(periode.grunnlagReferanseListe)!!
     val delberegningBidragsevne = finnOgKonverterGrunnlagSomErReferertAv<DelberegningBidragsevne>(Grunnlagstype.DELBEREGNING_BIDRAGSEVNE, sluttberegningGrunnlag).first()
     val delberegningBoforhold = finnOgKonverterGrunnlagSomErReferertAv<DelberegningBoforhold>(Grunnlagstype.DELBEREGNING_BOFORHOLD, delberegningBidragsevne.grunnlag).first()
