@@ -506,7 +506,7 @@ class DokumentMetadataCollector(
         if (request.saksbehandler != null && !request.saksbehandler.ident.isNullOrEmpty()) {
             val saksbehandlerNavn =
                 request.saksbehandler.navn
-                    ?: saksbehandlerInfoManager.hentSaksbehandler(request.saksbehandler.ident)?.navn
+                    ?: saksbehandlerInfoManager.hentSaksbehandler(request.saksbehandler.ident)?.fornavnEtternavn
                     ?: saksbehandlerInfoManager.hentSaksbehandlerBrukerId()
             return Saksbehandler(request.saksbehandler.ident, saksbehandlerNavn)
         }
