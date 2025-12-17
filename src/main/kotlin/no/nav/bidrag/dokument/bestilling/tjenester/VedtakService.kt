@@ -950,9 +950,9 @@ fun List<GrunnlagDto>.finnSamværsklasse(
 
 fun List<GrunnlagDto>.finnSamværAldersgruppe(grunnlagsreferanseListe: List<Grunnlagsreferanse>): Pair<Int, Int?>? {
     val samværsfradrag =
-        finnGrunnlagSomErReferertFraGrunnlagsreferanseListe(Grunnlagstype.DELBEREGNING_SAMVÆRSFRADRAG, grunnlagsreferanseListe).firstOrNull()
+        finnGrunnlagSomErReferertFraGrunnlagsreferanseListe(Grunnlagstype.DELBEREGNING_SAMVÆRSFRADRAG, grunnlagsreferanseListe).firstOrNull() ?: return null
 
-    val sjablonSamværsfradrag = finnOgKonverterGrunnlagSomErReferertAv<SjablonSamværsfradragPeriode>(Grunnlagstype.SJABLON_SAMVARSFRADRAG, samværsfradrag!!).firstOrNull()
+    val sjablonSamværsfradrag = finnOgKonverterGrunnlagSomErReferertAv<SjablonSamværsfradragPeriode>(Grunnlagstype.SJABLON_SAMVARSFRADRAG, samværsfradrag).firstOrNull()
     val alderTom = sjablonSamværsfradrag?.innhold?.alderTom ?: return null
     val alderFom =
         when (alderTom) {
