@@ -15,7 +15,7 @@
     <name>bidrag-dokument-bestilling</name>
     <properties>
         <java.version>21</java.version>
-        <kotlin.version>2.2.10</kotlin.version>
+        <kotlin.version>2.3.0</kotlin.version>
         <bidrag-felles.version>2026.01.02.133642</bidrag-felles.version>
         <logback-encoder.version>9.0</logback-encoder.version>
         <token-support.version>5.0.28</token-support.version>
